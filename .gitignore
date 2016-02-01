@@ -26,3 +26,16 @@
 *.exe
 *.out
 *.app
+
+# visual studio
+*.suo
+*.sdf
+*.user
+*.exp
+*.pdb
+*.log
+*.tlog
+*.idb
+*.ilk
+*.ipdb
+*.iobj

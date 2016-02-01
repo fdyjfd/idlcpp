@@ -1,0 +1,399 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Interface Files">
+      <UniqueIdentifier>{f730f100-3794-4153-b12c-83594f37eadf}</UniqueIdentifier>
+      <Extensions>i</Extensions>
+    </Filter>
+    <Filter Include="Meta Files">
+      <UniqueIdentifier>{490b70be-c074-4ef8-8c23-5fcec7f36154}</UniqueIdentifier>
+      <Extensions>mh;mc;ic</Extensions>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\src\pafcore\ClassType.ic">
+      <Filter>Meta Files</Filter>
+    </None>
+    <None Include="..\..\..\src\pafcore\ClassType.mc">
+      <Filter>Meta Files</Filter>
+    </None>
+    <None Include="..\..\..\src\pafcore\ClassType.mh">
+      <Filter>Meta Files</Filter>
+    </None>
+    <None Include="..\..\..\src\pafcore\Enumerator.ic">
+      <Filter>Meta Files</Filter>
+    </None>
+    <None Include="..\..\..\src\pafcore\Enumerator.mc">
+      <Filter>Meta Files</Filter>
+    </None>
+    <None Include="..\..\..\src\pafcore\Enumerator.mh">
+      <Filter>Meta Files</Filter>
+    </None>
+    <None Include="..\..\..\src\pafcore\EnumType.ic">
+      <Filter>Meta Files</Filter>
+    </None>
+    <None Include="..\..\..\src\pafcore\EnumType.mc">
+      <Filter>Meta Files</Filter>
+    </None>
+    <None Include="..\..\..\src\pafcore\EnumType.mh">
+      <Filter>Meta Files</Filter>
+    </None>
+    <None Include="..\..\..\src\pafcore\InstanceField.ic">
+      <Filter>Meta Files</Filter>
+    </None>
+    <None Include="..\..\..\src\pafcore\InstanceField.mc">
+      <Filter>Meta Files</Filter>
+    </None>
+    <None Include="..\..\..\src\pafcore\InstanceField.mh">
+      <Filter>Meta Files</Filter>
+    </None>
+    <None Include="..\..\..\src\pafcore\InstanceMethod.ic">
+      <Filter>Meta Files</Filter>
+    </None>
+    <None Include="..\..\..\src\pafcore\InstanceMethod.mc">
+      <Filter>Meta Files</Filter>
+    </None>
+    <None Include="..\..\..\src\pafcore\InstanceMethod.mh">
+      <Filter>Meta Files</Filter>
+    </None>
+    <None Include="..\..\..\src\pafcore\InstanceProperty.ic">
+      <Filter>Meta Files</Filter>
+    </None>
+    <None Include="..\..\..\src\pafcore\InstanceProperty.mc">
+      <Filter>Meta Files</Filter>
+    </None>
+    <None Include="..\..\..\src\pafcore\InstanceProperty.mh">
+      <Filter>Meta Files</Filter>
+    </None>
+    <None Include="..\..\..\src\pafcore\Metadata.ic">
+      <Filter>Meta Files</Filter>
+    </None>
+    <None Include="..\..\..\src\pafcore\Metadata.mc">
+      <Filter>Meta Files</Filter>
+    </None>
+    <None Include="..\..\..\src\pafcore\Metadata.mh">
+      <Filter>Meta Files</Filter>
+    </None>
+    <None Include="..\..\..\src\pafcore\NameSpace.ic">
+      <Filter>Meta Files</Filter>
+    </None>
+    <None Include="..\..\..\src\pafcore\NameSpace.mc">
+      <Filter>Meta Files</Filter>
+    </None>
+    <None Include="..\..\..\src\pafcore\NameSpace.mh">
+      <Filter>Meta Files</Filter>
+    </None>
+    <None Include="..\..\..\src\pafcore\NullType.ic">
+      <Filter>Meta Files</Filter>
+    </None>
+    <None Include="..\..\..\src\pafcore\NullType.mc">
+      <Filter>Meta Files</Filter>
+    </None>
+    <None Include="..\..\..\src\pafcore\NullType.mh">
+      <Filter>Meta Files</Filter>
+    </None>
+    <None Include="..\..\..\src\pafcore\PrimitiveType.ic">
+      <Filter>Meta Files</Filter>
+    </None>
+    <None Include="..\..\..\src\pafcore\PrimitiveType.mc">
+      <Filter>Meta Files</Filter>
+    </None>
+    <None Include="..\..\..\src\pafcore\PrimitiveType.mh">
+      <Filter>Meta Files</Filter>
+    </None>
+    <None Include="..\..\..\src\pafcore\Reference.ic">
+      <Filter>Meta Files</Filter>
+    </None>
+    <None Include="..\..\..\src\pafcore\Reference.mc">
+      <Filter>Meta Files</Filter>
+    </None>
+    <None Include="..\..\..\src\pafcore\Reference.mh">
+      <Filter>Meta Files</Filter>
+    </None>
+    <None Include="..\..\..\src\pafcore\Result.ic">
+      <Filter>Meta Files</Filter>
+    </None>
+    <None Include="..\..\..\src\pafcore\Result.mc">
+      <Filter>Meta Files</Filter>
+    </None>
+    <None Include="..\..\..\src\pafcore\Result.mh">
+      <Filter>Meta Files</Filter>
+    </None>
+    <None Include="..\..\..\src\pafcore\StaticField.ic">
+      <Filter>Meta Files</Filter>
+    </None>
+    <None Include="..\..\..\src\pafcore\StaticField.mc">
+      <Filter>Meta Files</Filter>
+    </None>
+    <None Include="..\..\..\src\pafcore\StaticField.mh">
+      <Filter>Meta Files</Filter>
+    </None>
+    <None Include="..\..\..\src\pafcore\StaticMethod.ic">
+      <Filter>Meta Files</Filter>
+    </None>
+    <None Include="..\..\..\src\pafcore\StaticMethod.mc">
+      <Filter>Meta Files</Filter>
+    </None>
+    <None Include="..\..\..\src\pafcore\StaticMethod.mh">
+      <Filter>Meta Files</Filter>
+    </None>
+    <None Include="..\..\..\src\pafcore\StaticProperty.ic">
+      <Filter>Meta Files</Filter>
+    </None>
+    <None Include="..\..\..\src\pafcore\StaticProperty.mc">
+      <Filter>Meta Files</Filter>
+    </None>
+    <None Include="..\..\..\src\pafcore\StaticProperty.mh">
+      <Filter>Meta Files</Filter>
+    </None>
+    <None Include="..\..\..\src\pafcore\Type.ic">
+      <Filter>Meta Files</Filter>
+    </None>
+    <None Include="..\..\..\src\pafcore\Type.mc">
+      <Filter>Meta Files</Filter>
+    </None>
+    <None Include="..\..\..\src\pafcore\Type.mh">
+      <Filter>Meta Files</Filter>
+    </None>
+    <None Include="..\..\..\src\pafcore\TypeAlias.ic">
+      <Filter>Meta Files</Filter>
+    </None>
+    <None Include="..\..\..\src\pafcore\TypeAlias.mc">
+      <Filter>Meta Files</Filter>
+    </None>
+    <None Include="..\..\..\src\pafcore\TypeAlias.mh">
+      <Filter>Meta Files</Filter>
+    </None>
+    <None Include="..\..\..\src\pafcore\Typedef.ic">
+      <Filter>Meta Files</Filter>
+    </None>
+    <None Include="..\..\..\src\pafcore\Typedef.mc">
+      <Filter>Meta Files</Filter>
+    </None>
+    <None Include="..\..\..\src\pafcore\Typedef.mh">
+      <Filter>Meta Files</Filter>
+    </None>
+    <None Include="..\..\..\src\pafcore\Argument.ic">
+      <Filter>Meta Files</Filter>
+    </None>
+    <None Include="..\..\..\src\pafcore\Argument.mc">
+      <Filter>Meta Files</Filter>
+    </None>
+    <None Include="..\..\..\src\pafcore\Argument.mh">
+      <Filter>Meta Files</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\src\pafcore\Enumerator.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\pafcore\EnumType.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\pafcore\InstanceField.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\pafcore\InstanceMethod.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\pafcore\InstanceProperty.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\pafcore\Metadata.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\pafcore\NameSpace.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\pafcore\NullType.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\pafcore\PrimitiveType.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\pafcore\Reference.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\pafcore\Result.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\pafcore\StaticField.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\pafcore\StaticMethod.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\pafcore\StaticProperty.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\pafcore\Type.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\pafcore\TypeAlias.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\pafcore\Typedef.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\pafcore\Utility.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\pafcore\Variant.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\pafcore\Argument.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\pafcore\ClassType.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\src\pafcore\Enumerator.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\pafcore\EnumType.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\pafcore\InstanceField.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\pafcore\InstanceMethod.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\pafcore\InstanceProperty.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\pafcore\Metadata.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\pafcore\NameSpace.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\pafcore\NullType.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\pafcore\PrimitiveType.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\pafcore\RefCount.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\pafcore\Reference.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\pafcore\Result.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\pafcore\StaticField.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\pafcore\StaticMethod.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\pafcore\StaticProperty.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\pafcore\SubclassInvoker.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\pafcore\Type.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\pafcore\TypeAlias.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\pafcore\Typedef.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\pafcore\Utility.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\pafcore\Variant.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\pafcore\VectorSet.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\pafcore\Argument.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\pafcore\AutoRun.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\pafcore\ClassType.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="..\..\..\src\pafcore\Argument.i">
+      <Filter>Interface Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\..\..\src\pafcore\ClassType.i">
+      <Filter>Interface Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\..\..\src\pafcore\Enumerator.i">
+      <Filter>Interface Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\..\..\src\pafcore\EnumType.i">
+      <Filter>Interface Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\..\..\src\pafcore\InstanceField.i">
+      <Filter>Interface Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\..\..\src\pafcore\InstanceMethod.i">
+      <Filter>Interface Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\..\..\src\pafcore\InstanceProperty.i">
+      <Filter>Interface Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\..\..\src\pafcore\Metadata.i">
+      <Filter>Interface Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\..\..\src\pafcore\NameSpace.i">
+      <Filter>Interface Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\..\..\src\pafcore\NullType.i">
+      <Filter>Interface Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\..\..\src\pafcore\PrimitiveType.i">
+      <Filter>Interface Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\..\..\src\pafcore\Reference.i">
+      <Filter>Interface Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\..\..\src\pafcore\Result.i">
+      <Filter>Interface Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\..\..\src\pafcore\StaticField.i">
+      <Filter>Interface Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\..\..\src\pafcore\StaticMethod.i">
+      <Filter>Interface Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\..\..\src\pafcore\StaticProperty.i">
+      <Filter>Interface Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\..\..\src\pafcore\Type.i">
+      <Filter>Interface Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\..\..\src\pafcore\TypeAlias.i">
+      <Filter>Interface Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\..\..\src\pafcore\Typedef.i">
+      <Filter>Interface Files</Filter>
+    </CustomBuild>
+  </ItemGroup>
+</Project>

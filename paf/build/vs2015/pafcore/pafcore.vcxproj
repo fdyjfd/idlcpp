@@ -1,0 +1,320 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{010217BD-B83C-4013-B55B-EC74DF74809D}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>pafcore</RootNamespace>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="pafcore.props" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="pafcore.props" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="pafcore.props" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="pafcore.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+    <OutDir>..\..\..\bin\</OutDir>
+    <TargetName>$(ProjectName)_d</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+    <OutDir>..\..\..\bin\</OutDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;PAFCORE_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>_DEBUG;_WINDOWS;_USRDLL;PAFCORE_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;PAFCORE_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>NDEBUG;_WINDOWS;_USRDLL;PAFCORE_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <CustomBuild Include="..\..\..\src\pafcore\Argument.i">
+      <FileType>Document</FileType>
+    </CustomBuild>
+    <None Include="..\..\..\src\pafcore\Argument.ic" />
+    <None Include="..\..\..\src\pafcore\Argument.mc" />
+    <None Include="..\..\..\src\pafcore\Argument.mh" />
+    <CustomBuild Include="..\..\..\src\pafcore\ClassType.i">
+      <FileType>Document</FileType>
+    </CustomBuild>
+    <None Include="..\..\..\src\pafcore\ClassType.ic" />
+    <None Include="..\..\..\src\pafcore\ClassType.mc" />
+    <None Include="..\..\..\src\pafcore\ClassType.mh" />
+    <CustomBuild Include="..\..\..\src\pafcore\Enumerator.i">
+      <FileType>Document</FileType>
+    </CustomBuild>
+    <None Include="..\..\..\src\pafcore\Enumerator.ic" />
+    <None Include="..\..\..\src\pafcore\Enumerator.mc" />
+    <None Include="..\..\..\src\pafcore\Enumerator.mh" />
+    <CustomBuild Include="..\..\..\src\pafcore\EnumType.i">
+      <FileType>Document</FileType>
+    </CustomBuild>
+    <None Include="..\..\..\src\pafcore\EnumType.ic" />
+    <None Include="..\..\..\src\pafcore\EnumType.mc" />
+    <None Include="..\..\..\src\pafcore\EnumType.mh" />
+    <CustomBuild Include="..\..\..\src\pafcore\InstanceField.i">
+      <FileType>Document</FileType>
+    </CustomBuild>
+    <None Include="..\..\..\src\pafcore\InstanceField.ic" />
+    <None Include="..\..\..\src\pafcore\InstanceField.mc" />
+    <None Include="..\..\..\src\pafcore\InstanceField.mh" />
+    <CustomBuild Include="..\..\..\src\pafcore\InstanceMethod.i">
+      <FileType>Document</FileType>
+    </CustomBuild>
+    <None Include="..\..\..\src\pafcore\InstanceMethod.ic" />
+    <None Include="..\..\..\src\pafcore\InstanceMethod.mc" />
+    <None Include="..\..\..\src\pafcore\InstanceMethod.mh" />
+    <CustomBuild Include="..\..\..\src\pafcore\InstanceProperty.i">
+      <FileType>Document</FileType>
+    </CustomBuild>
+    <None Include="..\..\..\src\pafcore\InstanceProperty.ic" />
+    <None Include="..\..\..\src\pafcore\InstanceProperty.mc" />
+    <None Include="..\..\..\src\pafcore\InstanceProperty.mh" />
+    <CustomBuild Include="..\..\..\src\pafcore\Metadata.i">
+      <FileType>Document</FileType>
+    </CustomBuild>
+    <None Include="..\..\..\src\pafcore\Metadata.ic" />
+    <None Include="..\..\..\src\pafcore\Metadata.mc" />
+    <None Include="..\..\..\src\pafcore\Metadata.mh" />
+    <CustomBuild Include="..\..\..\src\pafcore\NameSpace.i">
+      <FileType>Document</FileType>
+    </CustomBuild>
+    <None Include="..\..\..\src\pafcore\NameSpace.ic" />
+    <None Include="..\..\..\src\pafcore\NameSpace.mc" />
+    <None Include="..\..\..\src\pafcore\NameSpace.mh" />
+    <CustomBuild Include="..\..\..\src\pafcore\NullType.i">
+      <FileType>Document</FileType>
+    </CustomBuild>
+    <None Include="..\..\..\src\pafcore\NullType.ic" />
+    <None Include="..\..\..\src\pafcore\NullType.mc" />
+    <None Include="..\..\..\src\pafcore\NullType.mh" />
+    <CustomBuild Include="..\..\..\src\pafcore\PrimitiveType.i">
+      <FileType>Document</FileType>
+    </CustomBuild>
+    <None Include="..\..\..\src\pafcore\PrimitiveType.ic" />
+    <None Include="..\..\..\src\pafcore\PrimitiveType.mc" />
+    <None Include="..\..\..\src\pafcore\PrimitiveType.mh" />
+    <CustomBuild Include="..\..\..\src\pafcore\Reference.i">
+      <FileType>Document</FileType>
+    </CustomBuild>
+    <None Include="..\..\..\src\pafcore\Reference.ic" />
+    <None Include="..\..\..\src\pafcore\Reference.mc" />
+    <None Include="..\..\..\src\pafcore\Reference.mh" />
+    <CustomBuild Include="..\..\..\src\pafcore\Result.i">
+      <FileType>Document</FileType>
+    </CustomBuild>
+    <None Include="..\..\..\src\pafcore\Result.ic" />
+    <None Include="..\..\..\src\pafcore\Result.mc" />
+    <None Include="..\..\..\src\pafcore\Result.mh" />
+    <CustomBuild Include="..\..\..\src\pafcore\StaticField.i">
+      <FileType>Document</FileType>
+    </CustomBuild>
+    <None Include="..\..\..\src\pafcore\StaticField.ic" />
+    <None Include="..\..\..\src\pafcore\StaticField.mc" />
+    <None Include="..\..\..\src\pafcore\StaticField.mh" />
+    <CustomBuild Include="..\..\..\src\pafcore\StaticMethod.i">
+      <FileType>Document</FileType>
+    </CustomBuild>
+    <None Include="..\..\..\src\pafcore\StaticMethod.ic" />
+    <None Include="..\..\..\src\pafcore\StaticMethod.mc" />
+    <None Include="..\..\..\src\pafcore\StaticMethod.mh" />
+    <CustomBuild Include="..\..\..\src\pafcore\StaticProperty.i">
+      <FileType>Document</FileType>
+    </CustomBuild>
+    <None Include="..\..\..\src\pafcore\StaticProperty.ic" />
+    <None Include="..\..\..\src\pafcore\StaticProperty.mc" />
+    <None Include="..\..\..\src\pafcore\StaticProperty.mh" />
+    <CustomBuild Include="..\..\..\src\pafcore\Type.i">
+      <FileType>Document</FileType>
+    </CustomBuild>
+    <None Include="..\..\..\src\pafcore\Type.ic" />
+    <None Include="..\..\..\src\pafcore\Type.mc" />
+    <None Include="..\..\..\src\pafcore\Type.mh" />
+    <CustomBuild Include="..\..\..\src\pafcore\TypeAlias.i">
+      <FileType>Document</FileType>
+    </CustomBuild>
+    <None Include="..\..\..\src\pafcore\TypeAlias.ic" />
+    <None Include="..\..\..\src\pafcore\TypeAlias.mc" />
+    <None Include="..\..\..\src\pafcore\TypeAlias.mh" />
+    <CustomBuild Include="..\..\..\src\pafcore\Typedef.i">
+      <FileType>Document</FileType>
+    </CustomBuild>
+    <None Include="..\..\..\src\pafcore\Typedef.ic" />
+    <None Include="..\..\..\src\pafcore\Typedef.mc" />
+    <None Include="..\..\..\src\pafcore\Typedef.mh" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\src\pafcore\Argument.cpp" />
+    <ClCompile Include="..\..\..\src\pafcore\ClassType.cpp" />
+    <ClCompile Include="..\..\..\src\pafcore\Enumerator.cpp" />
+    <ClCompile Include="..\..\..\src\pafcore\EnumType.cpp" />
+    <ClCompile Include="..\..\..\src\pafcore\InstanceField.cpp" />
+    <ClCompile Include="..\..\..\src\pafcore\InstanceMethod.cpp" />
+    <ClCompile Include="..\..\..\src\pafcore\InstanceProperty.cpp" />
+    <ClCompile Include="..\..\..\src\pafcore\Metadata.cpp" />
+    <ClCompile Include="..\..\..\src\pafcore\NameSpace.cpp" />
+    <ClCompile Include="..\..\..\src\pafcore\NullType.cpp" />
+    <ClCompile Include="..\..\..\src\pafcore\PrimitiveType.cpp" />
+    <ClCompile Include="..\..\..\src\pafcore\Reference.cpp" />
+    <ClCompile Include="..\..\..\src\pafcore\Result.cpp" />
+    <ClCompile Include="..\..\..\src\pafcore\StaticField.cpp" />
+    <ClCompile Include="..\..\..\src\pafcore\StaticMethod.cpp" />
+    <ClCompile Include="..\..\..\src\pafcore\StaticProperty.cpp" />
+    <ClCompile Include="..\..\..\src\pafcore\Type.cpp" />
+    <ClCompile Include="..\..\..\src\pafcore\TypeAlias.cpp" />
+    <ClCompile Include="..\..\..\src\pafcore\Typedef.cpp" />
+    <ClCompile Include="..\..\..\src\pafcore\Utility.cpp" />
+    <ClCompile Include="..\..\..\src\pafcore\Variant.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\src\pafcore\Argument.h" />
+    <ClInclude Include="..\..\..\src\pafcore\AutoRun.h" />
+    <ClInclude Include="..\..\..\src\pafcore\ClassType.h" />
+    <ClInclude Include="..\..\..\src\pafcore\Enumerator.h" />
+    <ClInclude Include="..\..\..\src\pafcore\EnumType.h" />
+    <ClInclude Include="..\..\..\src\pafcore\InstanceField.h" />
+    <ClInclude Include="..\..\..\src\pafcore\InstanceMethod.h" />
+    <ClInclude Include="..\..\..\src\pafcore\InstanceProperty.h" />
+    <ClInclude Include="..\..\..\src\pafcore\Metadata.h" />
+    <ClInclude Include="..\..\..\src\pafcore\NameSpace.h" />
+    <ClInclude Include="..\..\..\src\pafcore\NullType.h" />
+    <ClInclude Include="..\..\..\src\pafcore\PrimitiveType.h" />
+    <ClInclude Include="..\..\..\src\pafcore\RefCount.h" />
+    <ClInclude Include="..\..\..\src\pafcore\Reference.h" />
+    <ClInclude Include="..\..\..\src\pafcore\Result.h" />
+    <ClInclude Include="..\..\..\src\pafcore\StaticField.h" />
+    <ClInclude Include="..\..\..\src\pafcore\StaticMethod.h" />
+    <ClInclude Include="..\..\..\src\pafcore\StaticProperty.h" />
+    <ClInclude Include="..\..\..\src\pafcore\SubclassInvoker.h" />
+    <ClInclude Include="..\..\..\src\pafcore\Type.h" />
+    <ClInclude Include="..\..\..\src\pafcore\TypeAlias.h" />
+    <ClInclude Include="..\..\..\src\pafcore\Typedef.h" />
+    <ClInclude Include="..\..\..\src\pafcore\Utility.h" />
+    <ClInclude Include="..\..\..\src\pafcore\Variant.h" />
+    <ClInclude Include="..\..\..\src\pafcore\VectorSet.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
