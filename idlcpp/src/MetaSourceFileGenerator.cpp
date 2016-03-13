@@ -238,7 +238,7 @@ void writeOverrideFunction(ClassNode* classNode, TemplateArgumentMap* templateAr
 		}
 		else
 		{
-			sprintf_s(buf, "delete reinterpret_cast<::pafcore::RefCountObject<%s>*>(address);\n", className.c_str());
+			sprintf_s(buf, "reinterpret_cast<::pafcore::Reference*>(address)->release();\n");
 		}
 		writeStringToFile(buf, file, indentation + 1);
 		writeStringToFile("}\n\n", file, indentation);
@@ -1857,9 +1857,18 @@ void writeMetaGetSingletonImpls(MemberNode* memberNode, FILE* file, int indentat
 	sprintf_s(buf, "%s* %s::GetSingleton()\n", metaClassName.c_str(), metaClassName.c_str());
 	writeStringToFile(buf, file, indentation);
 	writeStringToFile("{\n", file, indentation);
-	sprintf_s(buf, "static %s s_instance;\n", metaClassName.c_str());
+	sprintf_s(buf, "static %s* s_instance = 0;\n", metaClassName.c_str());
 	writeStringToFile(buf, file, indentation + 1);
-	writeStringToFile("return &s_instance;\n", file, indentation + 1);
+	sprintf_s(buf, "static char s_buffer[sizeof(%s)];\n", metaClassName.c_str());
+	writeStringToFile(buf, file, indentation + 1);
+	writeStringToFile("if(0 == s_instance)\n", file, indentation + 1);
+	writeStringToFile("{\n", file, indentation + 1);
+	sprintf_s(buf, "s_instance = (%s*)s_buffer;\n", metaClassName.c_str());
+	writeStringToFile(buf, file, indentation + 2);
+	sprintf_s(buf, "new (s_buffer)%s;\n", metaClassName.c_str());
+	writeStringToFile(buf, file, indentation + 2);
+	writeStringToFile("}\n", file, indentation + 1);
+	writeStringToFile("return s_instance;\n", file, indentation + 1);
 	writeStringToFile("}\n\n", file, indentation);
 }
 

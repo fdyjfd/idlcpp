@@ -39,3 +39,5 @@
 *.ilk
 *.ipdb
 *.iobj
+*.opensdf
+*.pyc

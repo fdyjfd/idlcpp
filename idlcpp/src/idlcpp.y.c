@@ -68,13 +68,13 @@
 /* Copy the first part of user declarations.  */
 
 /* Line 189 of yacc.c  */
-#line 1 "D:\\idlcpp\\src\\idlcpp.y"
+#line 1 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.y"
 
 #include "yyfuncs.h"
 
 
 /* Line 189 of yacc.c  */
-#line 78 "D:\\idlcpp\\src\\idlcpp.y.c"
+#line 78 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
 
 /* Enabling traces.  */
 #ifndef YYDEBUG
@@ -146,14 +146,14 @@ typedef union YYSTYPE
 {
 
 /* Line 214 of yacc.c  */
-#line 6 "D:\\idlcpp\\src\\idlcpp.y"
+#line 6 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.y"
 
 	struct SyntaxNode* sn;
 
 
 
 /* Line 214 of yacc.c  */
-#line 157 "D:\\idlcpp\\src\\idlcpp.y.c"
+#line 157 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
@@ -165,7 +165,7 @@ typedef union YYSTYPE
 
 
 /* Line 264 of yacc.c  */
-#line 169 "D:\\idlcpp\\src\\idlcpp.y.c"
+#line 169 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
 
 #ifdef short
 # undef short
@@ -1670,1078 +1670,1078 @@ yyreduce:
         case 2:
 
 /* Line 1455 of yacc.c  */
-#line 23 "D:\\idlcpp\\src\\idlcpp.y"
+#line 23 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.y"
     {(yyval.sn) = newPrimitiveType((yyvsp[(1) - (1)].sn), pt_bool);;}
     break;
 
   case 3:
 
 /* Line 1455 of yacc.c  */
-#line 24 "D:\\idlcpp\\src\\idlcpp.y"
+#line 24 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.y"
     {(yyval.sn) = newPrimitiveType((yyvsp[(1) - (1)].sn), pt_char);;}
     break;
 
   case 4:
 
 /* Line 1455 of yacc.c  */
-#line 25 "D:\\idlcpp\\src\\idlcpp.y"
+#line 25 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.y"
     {(yyval.sn) = newPrimitiveType((yyvsp[(1) - (2)].sn), pt_schar);;}
     break;
 
   case 5:
 
 /* Line 1455 of yacc.c  */
-#line 26 "D:\\idlcpp\\src\\idlcpp.y"
+#line 26 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.y"
     {(yyval.sn) = newPrimitiveType((yyvsp[(1) - (2)].sn), pt_uchar);;}
     break;
 
   case 6:
 
 /* Line 1455 of yacc.c  */
-#line 27 "D:\\idlcpp\\src\\idlcpp.y"
+#line 27 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.y"
     {(yyval.sn) = newPrimitiveType((yyvsp[(1) - (1)].sn), pt_wchar_t);;}
     break;
 
   case 7:
 
 /* Line 1455 of yacc.c  */
-#line 28 "D:\\idlcpp\\src\\idlcpp.y"
+#line 28 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.y"
     {(yyval.sn) = newPrimitiveType((yyvsp[(1) - (1)].sn), pt_short);;}
     break;
 
   case 8:
 
 /* Line 1455 of yacc.c  */
-#line 29 "D:\\idlcpp\\src\\idlcpp.y"
+#line 29 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.y"
     {(yyval.sn) = newPrimitiveType((yyvsp[(1) - (2)].sn), pt_short);;}
     break;
 
   case 9:
 
 /* Line 1455 of yacc.c  */
-#line 30 "D:\\idlcpp\\src\\idlcpp.y"
+#line 30 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.y"
     {(yyval.sn) = newPrimitiveType((yyvsp[(1) - (2)].sn), pt_ushort);;}
     break;
 
   case 10:
 
 /* Line 1455 of yacc.c  */
-#line 31 "D:\\idlcpp\\src\\idlcpp.y"
+#line 31 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.y"
     {(yyval.sn) = newPrimitiveType((yyvsp[(1) - (1)].sn), pt_long);;}
     break;
 
   case 11:
 
 /* Line 1455 of yacc.c  */
-#line 32 "D:\\idlcpp\\src\\idlcpp.y"
+#line 32 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.y"
     {(yyval.sn) = newPrimitiveType((yyvsp[(1) - (2)].sn), pt_long);;}
     break;
 
   case 12:
 
 /* Line 1455 of yacc.c  */
-#line 33 "D:\\idlcpp\\src\\idlcpp.y"
+#line 33 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.y"
     {(yyval.sn) = newPrimitiveType((yyvsp[(1) - (2)].sn), pt_ulong);;}
     break;
 
   case 13:
 
 /* Line 1455 of yacc.c  */
-#line 34 "D:\\idlcpp\\src\\idlcpp.y"
+#line 34 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.y"
     {(yyval.sn) = newPrimitiveType((yyvsp[(1) - (2)].sn), pt_longlong);;}
     break;
 
   case 14:
 
 /* Line 1455 of yacc.c  */
-#line 35 "D:\\idlcpp\\src\\idlcpp.y"
+#line 35 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.y"
     {(yyval.sn) = newPrimitiveType((yyvsp[(1) - (3)].sn), pt_longlong);;}
     break;
 
   case 15:
 
 /* Line 1455 of yacc.c  */
-#line 36 "D:\\idlcpp\\src\\idlcpp.y"
+#line 36 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.y"
     {(yyval.sn) = newPrimitiveType((yyvsp[(1) - (3)].sn), pt_ulonglong);;}
     break;
 
   case 16:
 
 /* Line 1455 of yacc.c  */
-#line 37 "D:\\idlcpp\\src\\idlcpp.y"
+#line 37 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.y"
     {(yyval.sn) = newPrimitiveType((yyvsp[(1) - (1)].sn), pt_int);;}
     break;
 
   case 17:
 
 /* Line 1455 of yacc.c  */
-#line 38 "D:\\idlcpp\\src\\idlcpp.y"
+#line 38 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.y"
     {(yyval.sn) = newPrimitiveType((yyvsp[(1) - (2)].sn), pt_int);;}
     break;
 
   case 18:
 
 /* Line 1455 of yacc.c  */
-#line 39 "D:\\idlcpp\\src\\idlcpp.y"
+#line 39 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.y"
     {(yyval.sn) = newPrimitiveType((yyvsp[(1) - (1)].sn), pt_int);;}
     break;
 
   case 19:
 
 /* Line 1455 of yacc.c  */
-#line 40 "D:\\idlcpp\\src\\idlcpp.y"
+#line 40 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.y"
     {(yyval.sn) = newPrimitiveType((yyvsp[(1) - (2)].sn), pt_uint);;}
     break;
 
   case 20:
 
 /* Line 1455 of yacc.c  */
-#line 41 "D:\\idlcpp\\src\\idlcpp.y"
+#line 41 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.y"
     {(yyval.sn) = newPrimitiveType((yyvsp[(1) - (1)].sn), pt_uint);;}
     break;
 
   case 21:
 
 /* Line 1455 of yacc.c  */
-#line 42 "D:\\idlcpp\\src\\idlcpp.y"
+#line 42 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.y"
     {(yyval.sn) = newPrimitiveType((yyvsp[(1) - (1)].sn), pt_float);;}
     break;
 
   case 22:
 
 /* Line 1455 of yacc.c  */
-#line 43 "D:\\idlcpp\\src\\idlcpp.y"
+#line 43 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.y"
     {(yyval.sn) = newPrimitiveType((yyvsp[(1) - (1)].sn), pt_double);;}
     break;
 
   case 23:
 
 /* Line 1455 of yacc.c  */
-#line 44 "D:\\idlcpp\\src\\idlcpp.y"
+#line 44 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.y"
     {(yyval.sn) = newPrimitiveType((yyvsp[(1) - (1)].sn), pt_void);;}
     break;
 
   case 24:
 
 /* Line 1455 of yacc.c  */
-#line 47 "D:\\idlcpp\\src\\idlcpp.y"
+#line 47 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.y"
     {(yyval.sn) = newEnumeratorList(NULL, NULL, (yyvsp[(1) - (1)].sn));;}
     break;
 
   case 25:
 
 /* Line 1455 of yacc.c  */
-#line 48 "D:\\idlcpp\\src\\idlcpp.y"
+#line 48 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.y"
     {(yyval.sn) = newEnumeratorList((yyvsp[(1) - (3)].sn), (yyvsp[(2) - (3)].sn), (yyvsp[(3) - (3)].sn));;}
     break;
 
   case 26:
 
 /* Line 1455 of yacc.c  */
-#line 51 "D:\\idlcpp\\src\\idlcpp.y"
+#line 51 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.y"
     {(yyval.sn) = newEnum((yyvsp[(1) - (6)].sn), (yyvsp[(2) - (6)].sn), (yyvsp[(3) - (6)].sn), (yyvsp[(4) - (6)].sn), (yyvsp[(5) - (6)].sn), (yyvsp[(6) - (6)].sn));;}
     break;
 
   case 27:
 
 /* Line 1455 of yacc.c  */
-#line 52 "D:\\idlcpp\\src\\idlcpp.y"
+#line 52 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.y"
     {(yyval.sn) = newEnum((yyvsp[(1) - (7)].sn), (yyvsp[(2) - (7)].sn), (yyvsp[(3) - (7)].sn), (yyvsp[(4) - (7)].sn), (yyvsp[(6) - (7)].sn), (yyvsp[(7) - (7)].sn));;}
     break;
 
   case 28:
 
 /* Line 1455 of yacc.c  */
-#line 53 "D:\\idlcpp\\src\\idlcpp.y"
+#line 53 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.y"
     {(yyval.sn) = newEnum((yyvsp[(1) - (5)].sn), (yyvsp[(2) - (5)].sn), (yyvsp[(3) - (5)].sn), NULL, (yyvsp[(4) - (5)].sn), (yyvsp[(5) - (5)].sn));;}
     break;
 
   case 29:
 
 /* Line 1455 of yacc.c  */
-#line 56 "D:\\idlcpp\\src\\idlcpp.y"
+#line 56 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.y"
     {(yyval.sn) = newScopeList(NULL, (yyvsp[(1) - (1)].sn));;}
     break;
 
   case 30:
 
 /* Line 1455 of yacc.c  */
-#line 57 "D:\\idlcpp\\src\\idlcpp.y"
+#line 57 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.y"
     {(yyval.sn) = newScopeList((yyvsp[(1) - (3)].sn), (yyvsp[(3) - (3)].sn));;}
     break;
 
   case 31:
 
 /* Line 1455 of yacc.c  */
-#line 60 "D:\\idlcpp\\src\\idlcpp.y"
+#line 60 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.y"
     {(yyval.sn) = (yyvsp[(1) - (1)].sn);;}
     break;
 
   case 32:
 
 /* Line 1455 of yacc.c  */
-#line 61 "D:\\idlcpp\\src\\idlcpp.y"
+#line 61 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.y"
     {(yyval.sn) = (yyvsp[(2) - (2)].sn); setScopeListGlobal((yyval.sn));;}
     break;
 
   case 33:
 
 /* Line 1455 of yacc.c  */
-#line 64 "D:\\idlcpp\\src\\idlcpp.y"
+#line 64 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.y"
     {(yyval.sn) = (yyvsp[(1) - (1)].sn);;}
     break;
 
   case 34:
 
 /* Line 1455 of yacc.c  */
-#line 65 "D:\\idlcpp\\src\\idlcpp.y"
+#line 65 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.y"
     {(yyval.sn) = newTypeName((yyvsp[(1) - (1)].sn));;}
     break;
 
   case 35:
 
 /* Line 1455 of yacc.c  */
-#line 66 "D:\\idlcpp\\src\\idlcpp.y"
+#line 66 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.y"
     {(yyval.sn) = newTemplateTypeName((yyvsp[(1) - (4)].sn), (yyvsp[(2) - (4)].sn), (yyvsp[(3) - (4)].sn), (yyvsp[(4) - (4)].sn));;}
     break;
 
   case 36:
 
 /* Line 1455 of yacc.c  */
-#line 69 "D:\\idlcpp\\src\\idlcpp.y"
+#line 69 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.y"
     {(yyval.sn) = newTypeNameList(NULL, NULL, (yyvsp[(1) - (1)].sn));;}
     break;
 
   case 37:
 
 /* Line 1455 of yacc.c  */
-#line 70 "D:\\idlcpp\\src\\idlcpp.y"
+#line 70 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.y"
     {(yyval.sn) = newTypeNameList((yyvsp[(1) - (3)].sn), (yyvsp[(2) - (3)].sn), (yyvsp[(3) - (3)].sn));;}
     break;
 
   case 38:
 
 /* Line 1455 of yacc.c  */
-#line 73 "D:\\idlcpp\\src\\idlcpp.y"
+#line 73 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.y"
     {(yyval.sn) = newField((yyvsp[(1) - (3)].sn), (yyvsp[(2) - (3)].sn), NULL, NULL, (yyvsp[(3) - (3)].sn));;}
     break;
 
   case 39:
 
 /* Line 1455 of yacc.c  */
-#line 74 "D:\\idlcpp\\src\\idlcpp.y"
+#line 74 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.y"
     {(yyval.sn) = newField((yyvsp[(1) - (5)].sn), (yyvsp[(2) - (5)].sn), (yyvsp[(3) - (5)].sn), (yyvsp[(4) - (5)].sn), (yyvsp[(5) - (5)].sn));;}
     break;
 
   case 40:
 
 /* Line 1455 of yacc.c  */
-#line 77 "D:\\idlcpp\\src\\idlcpp.y"
+#line 77 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.y"
     {(yyval.sn) = (yyvsp[(1) - (1)].sn);;}
     break;
 
   case 41:
 
 /* Line 1455 of yacc.c  */
-#line 78 "D:\\idlcpp\\src\\idlcpp.y"
+#line 78 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.y"
     {(yyval.sn) = (yyvsp[(2) - (2)].sn); setFieldConstant((yyval.sn), (yyvsp[(1) - (2)].sn));;}
     break;
 
   case 42:
 
 /* Line 1455 of yacc.c  */
-#line 81 "D:\\idlcpp\\src\\idlcpp.y"
+#line 81 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.y"
     {(yyval.sn) = (yyvsp[(1) - (1)].sn);;}
     break;
 
   case 43:
 
 /* Line 1455 of yacc.c  */
-#line 82 "D:\\idlcpp\\src\\idlcpp.y"
+#line 82 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.y"
     {(yyval.sn) = (yyvsp[(2) - (2)].sn); setFieldStatic((yyval.sn), (yyvsp[(1) - (2)].sn));;}
     break;
 
   case 44:
 
 /* Line 1455 of yacc.c  */
-#line 85 "D:\\idlcpp\\src\\idlcpp.y"
+#line 85 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.y"
     {(yyval.sn) = newGetterSetter((yyvsp[(1) - (1)].sn), NULL, NULL, NULL);;}
     break;
 
   case 45:
 
 /* Line 1455 of yacc.c  */
-#line 86 "D:\\idlcpp\\src\\idlcpp.y"
+#line 86 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.y"
     {(yyval.sn) = newGetterSetter((yyvsp[(1) - (4)].sn), NULL, (yyvsp[(3) - (4)].sn), NULL);;}
     break;
 
   case 46:
 
 /* Line 1455 of yacc.c  */
-#line 87 "D:\\idlcpp\\src\\idlcpp.y"
+#line 87 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.y"
     {(yyval.sn) = newGetterSetter((yyvsp[(1) - (5)].sn), NULL, (yyvsp[(3) - (5)].sn), (yyvsp[(4) - (5)].sn));;}
     break;
 
   case 47:
 
 /* Line 1455 of yacc.c  */
-#line 88 "D:\\idlcpp\\src\\idlcpp.y"
+#line 88 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.y"
     {(yyval.sn) = newGetterSetter((yyvsp[(1) - (5)].sn), NULL, (yyvsp[(3) - (5)].sn), (yyvsp[(4) - (5)].sn));;}
     break;
 
   case 48:
 
 /* Line 1455 of yacc.c  */
-#line 89 "D:\\idlcpp\\src\\idlcpp.y"
+#line 89 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.y"
     {(yyval.sn) = newGetterSetter((yyvsp[(1) - (6)].sn), (yyvsp[(3) - (6)].sn), (yyvsp[(4) - (6)].sn), (yyvsp[(5) - (6)].sn));;}
     break;
 
   case 49:
 
 /* Line 1455 of yacc.c  */
-#line 90 "D:\\idlcpp\\src\\idlcpp.y"
+#line 90 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.y"
     {(yyval.sn) = newGetterSetter((yyvsp[(1) - (6)].sn), (yyvsp[(3) - (6)].sn), (yyvsp[(4) - (6)].sn), (yyvsp[(5) - (6)].sn));;}
     break;
 
   case 50:
 
 /* Line 1455 of yacc.c  */
-#line 93 "D:\\idlcpp\\src\\idlcpp.y"
+#line 93 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.y"
     {(yyval.sn) = newGetterSetter((yyvsp[(1) - (1)].sn), NULL, NULL, NULL);;}
     break;
 
   case 51:
 
 /* Line 1455 of yacc.c  */
-#line 94 "D:\\idlcpp\\src\\idlcpp.y"
+#line 94 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.y"
     {(yyval.sn) = newGetterSetter((yyvsp[(1) - (4)].sn), NULL, (yyvsp[(3) - (4)].sn), NULL);;}
     break;
 
   case 52:
 
 /* Line 1455 of yacc.c  */
-#line 95 "D:\\idlcpp\\src\\idlcpp.y"
+#line 95 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.y"
     {(yyval.sn) = newGetterSetter((yyvsp[(1) - (5)].sn), NULL, (yyvsp[(3) - (5)].sn), (yyvsp[(4) - (5)].sn));;}
     break;
 
   case 53:
 
 /* Line 1455 of yacc.c  */
-#line 96 "D:\\idlcpp\\src\\idlcpp.y"
+#line 96 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.y"
     {(yyval.sn) = newGetterSetter((yyvsp[(1) - (5)].sn), NULL, (yyvsp[(3) - (5)].sn), (yyvsp[(4) - (5)].sn));;}
     break;
 
   case 54:
 
 /* Line 1455 of yacc.c  */
-#line 97 "D:\\idlcpp\\src\\idlcpp.y"
+#line 97 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.y"
     {(yyval.sn) = newGetterSetter((yyvsp[(1) - (6)].sn), (yyvsp[(3) - (6)].sn), (yyvsp[(4) - (6)].sn), (yyvsp[(5) - (6)].sn));;}
     break;
 
   case 55:
 
 /* Line 1455 of yacc.c  */
-#line 98 "D:\\idlcpp\\src\\idlcpp.y"
+#line 98 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.y"
     {(yyval.sn) = newGetterSetter((yyvsp[(1) - (6)].sn), (yyvsp[(3) - (6)].sn), (yyvsp[(4) - (6)].sn), (yyvsp[(5) - (6)].sn));;}
     break;
 
   case 56:
 
 /* Line 1455 of yacc.c  */
-#line 102 "D:\\idlcpp\\src\\idlcpp.y"
+#line 102 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.y"
     {(yyval.sn) = newProperty(NULL, (yyvsp[(1) - (2)].sn), NULL, (yyvsp[(2) - (2)].sn));;}
     break;
 
   case 57:
 
 /* Line 1455 of yacc.c  */
-#line 103 "D:\\idlcpp\\src\\idlcpp.y"
+#line 103 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.y"
     {(yyval.sn) = newProperty(NULL, (yyvsp[(1) - (3)].sn), (yyvsp[(2) - (3)].sn), (yyvsp[(3) - (3)].sn));;}
     break;
 
   case 58:
 
 /* Line 1455 of yacc.c  */
-#line 104 "D:\\idlcpp\\src\\idlcpp.y"
+#line 104 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.y"
     {(yyval.sn) = newProperty(NULL, (yyvsp[(1) - (3)].sn), (yyvsp[(2) - (3)].sn), (yyvsp[(3) - (3)].sn));;}
     break;
 
   case 59:
 
 /* Line 1455 of yacc.c  */
-#line 105 "D:\\idlcpp\\src\\idlcpp.y"
+#line 105 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.y"
     {(yyval.sn) = newProperty((yyvsp[(1) - (4)].sn), (yyvsp[(2) - (4)].sn), (yyvsp[(3) - (4)].sn), (yyvsp[(4) - (4)].sn));;}
     break;
 
   case 60:
 
 /* Line 1455 of yacc.c  */
-#line 106 "D:\\idlcpp\\src\\idlcpp.y"
+#line 106 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.y"
     {(yyval.sn) = newProperty((yyvsp[(1) - (4)].sn), (yyvsp[(2) - (4)].sn), (yyvsp[(3) - (4)].sn), (yyvsp[(4) - (4)].sn));;}
     break;
 
   case 61:
 
 /* Line 1455 of yacc.c  */
-#line 110 "D:\\idlcpp\\src\\idlcpp.y"
+#line 110 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.y"
     {(yyval.sn) = (yyvsp[(1) - (3)].sn); setPropertyGetter((yyvsp[(1) - (3)].sn), (yyvsp[(2) - (3)].sn));;}
     break;
 
   case 62:
 
 /* Line 1455 of yacc.c  */
-#line 111 "D:\\idlcpp\\src\\idlcpp.y"
+#line 111 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.y"
     {(yyval.sn) = (yyvsp[(1) - (3)].sn); setPropertySetter((yyvsp[(1) - (3)].sn), (yyvsp[(2) - (3)].sn));;}
     break;
 
   case 63:
 
 /* Line 1455 of yacc.c  */
-#line 112 "D:\\idlcpp\\src\\idlcpp.y"
+#line 112 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.y"
     {(yyval.sn) = (yyvsp[(1) - (4)].sn); setPropertyGetter((yyvsp[(1) - (4)].sn), (yyvsp[(2) - (4)].sn)); setPropertySetter((yyvsp[(1) - (4)].sn), (yyvsp[(3) - (4)].sn));;}
     break;
 
   case 64:
 
 /* Line 1455 of yacc.c  */
-#line 113 "D:\\idlcpp\\src\\idlcpp.y"
+#line 113 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.y"
     {(yyval.sn) = (yyvsp[(1) - (4)].sn); setPropertyGetter((yyvsp[(1) - (4)].sn), (yyvsp[(3) - (4)].sn)); setPropertySetter((yyvsp[(1) - (4)].sn), (yyvsp[(2) - (4)].sn));;}
     break;
 
   case 65:
 
 /* Line 1455 of yacc.c  */
-#line 117 "D:\\idlcpp\\src\\idlcpp.y"
+#line 117 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.y"
     {(yyval.sn) = (yyvsp[(1) - (1)].sn);;}
     break;
 
   case 66:
 
 /* Line 1455 of yacc.c  */
-#line 118 "D:\\idlcpp\\src\\idlcpp.y"
+#line 118 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.y"
     {(yyval.sn) = (yyvsp[(2) - (2)].sn); setPropertyModifier((yyval.sn), (yyvsp[(1) - (2)].sn));;}
     break;
 
   case 67:
 
 /* Line 1455 of yacc.c  */
-#line 121 "D:\\idlcpp\\src\\idlcpp.y"
+#line 121 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.y"
     {(yyval.sn) = newParameter((yyvsp[(1) - (2)].sn), NULL, NULL, (yyvsp[(2) - (2)].sn));;}
     break;
 
   case 68:
 
 /* Line 1455 of yacc.c  */
-#line 122 "D:\\idlcpp\\src\\idlcpp.y"
+#line 122 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.y"
     {(yyval.sn) = newParameter((yyvsp[(1) - (3)].sn), NULL, (yyvsp[(2) - (3)].sn), (yyvsp[(3) - (3)].sn));;}
     break;
 
   case 69:
 
 /* Line 1455 of yacc.c  */
-#line 123 "D:\\idlcpp\\src\\idlcpp.y"
+#line 123 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.y"
     {(yyval.sn) = newParameter((yyvsp[(1) - (3)].sn), NULL, (yyvsp[(2) - (3)].sn), (yyvsp[(3) - (3)].sn));;}
     break;
 
   case 70:
 
 /* Line 1455 of yacc.c  */
-#line 124 "D:\\idlcpp\\src\\idlcpp.y"
+#line 124 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.y"
     {(yyval.sn) = newParameter((yyvsp[(1) - (4)].sn), (yyvsp[(2) - (4)].sn), (yyvsp[(3) - (4)].sn), (yyvsp[(4) - (4)].sn));;}
     break;
 
   case 71:
 
 /* Line 1455 of yacc.c  */
-#line 125 "D:\\idlcpp\\src\\idlcpp.y"
+#line 125 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.y"
     {(yyval.sn) = newParameter((yyvsp[(1) - (4)].sn), (yyvsp[(2) - (4)].sn), (yyvsp[(3) - (4)].sn), (yyvsp[(4) - (4)].sn));;}
     break;
 
   case 72:
 
 /* Line 1455 of yacc.c  */
-#line 126 "D:\\idlcpp\\src\\idlcpp.y"
+#line 126 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.y"
     {(yyval.sn) = newParameter((yyvsp[(1) - (6)].sn), (yyvsp[(2) - (6)].sn), (yyvsp[(5) - (6)].sn), (yyvsp[(6) - (6)].sn)); setParameterArray((yyval.sn));;}
     break;
 
   case 73:
 
 /* Line 1455 of yacc.c  */
-#line 127 "D:\\idlcpp\\src\\idlcpp.y"
+#line 127 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.y"
     {(yyval.sn) = newParameter((yyvsp[(1) - (4)].sn), (yyvsp[(2) - (4)].sn), (yyvsp[(3) - (4)].sn), (yyvsp[(4) - (4)].sn));;}
     break;
 
   case 74:
 
 /* Line 1455 of yacc.c  */
-#line 128 "D:\\idlcpp\\src\\idlcpp.y"
+#line 128 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.y"
     {(yyval.sn) = newParameter((yyvsp[(1) - (4)].sn), (yyvsp[(2) - (4)].sn), (yyvsp[(3) - (4)].sn), (yyvsp[(4) - (4)].sn));;}
     break;
 
   case 75:
 
 /* Line 1455 of yacc.c  */
-#line 129 "D:\\idlcpp\\src\\idlcpp.y"
+#line 129 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.y"
     {(yyval.sn) = newParameter((yyvsp[(1) - (6)].sn), (yyvsp[(2) - (6)].sn), (yyvsp[(5) - (6)].sn), (yyvsp[(6) - (6)].sn)); setParameterArray((yyval.sn));;}
     break;
 
   case 76:
 
 /* Line 1455 of yacc.c  */
-#line 132 "D:\\idlcpp\\src\\idlcpp.y"
+#line 132 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.y"
     {(yyval.sn) = (yyvsp[(1) - (1)].sn);;}
     break;
 
   case 77:
 
 /* Line 1455 of yacc.c  */
-#line 133 "D:\\idlcpp\\src\\idlcpp.y"
+#line 133 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.y"
     {(yyval.sn) = (yyvsp[(2) - (2)].sn); setParameterConst((yyval.sn), (yyvsp[(1) - (2)].sn));;}
     break;
 
   case 78:
 
 /* Line 1455 of yacc.c  */
-#line 136 "D:\\idlcpp\\src\\idlcpp.y"
+#line 136 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.y"
     {(yyval.sn) = newParameterList(NULL, NULL, (yyvsp[(1) - (1)].sn));;}
     break;
 
   case 79:
 
 /* Line 1455 of yacc.c  */
-#line 137 "D:\\idlcpp\\src\\idlcpp.y"
+#line 137 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.y"
     {(yyval.sn) = newParameterList((yyvsp[(1) - (3)].sn), (yyvsp[(2) - (3)].sn), (yyvsp[(3) - (3)].sn));;}
     break;
 
   case 80:
 
 /* Line 1455 of yacc.c  */
-#line 140 "D:\\idlcpp\\src\\idlcpp.y"
+#line 140 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.y"
     {(yyval.sn) = newMethod((yyvsp[(1) - (4)].sn), (yyvsp[(2) - (4)].sn), NULL, (yyvsp[(3) - (4)].sn), NULL, (yyvsp[(4) - (4)].sn));;}
     break;
 
   case 81:
 
 /* Line 1455 of yacc.c  */
-#line 141 "D:\\idlcpp\\src\\idlcpp.y"
+#line 141 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.y"
     {(yyval.sn) = newMethod((yyvsp[(1) - (5)].sn), (yyvsp[(2) - (5)].sn), (yyvsp[(3) - (5)].sn), (yyvsp[(4) - (5)].sn), NULL, (yyvsp[(5) - (5)].sn));;}
     break;
 
   case 82:
 
 /* Line 1455 of yacc.c  */
-#line 142 "D:\\idlcpp\\src\\idlcpp.y"
+#line 142 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.y"
     {(yyval.sn) = newMethod((yyvsp[(1) - (5)].sn), (yyvsp[(2) - (5)].sn), NULL, (yyvsp[(3) - (5)].sn), (yyvsp[(4) - (5)].sn), (yyvsp[(5) - (5)].sn));;}
     break;
 
   case 83:
 
 /* Line 1455 of yacc.c  */
-#line 143 "D:\\idlcpp\\src\\idlcpp.y"
+#line 143 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.y"
     {(yyval.sn) = newMethod((yyvsp[(1) - (6)].sn), (yyvsp[(2) - (6)].sn), (yyvsp[(3) - (6)].sn), (yyvsp[(4) - (6)].sn), (yyvsp[(5) - (6)].sn), (yyvsp[(6) - (6)].sn));;}
     break;
 
   case 84:
 
 /* Line 1455 of yacc.c  */
-#line 146 "D:\\idlcpp\\src\\idlcpp.y"
+#line 146 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.y"
     {(yyval.sn) = (yyvsp[(1) - (1)].sn);;}
     break;
 
   case 85:
 
 /* Line 1455 of yacc.c  */
-#line 147 "D:\\idlcpp\\src\\idlcpp.y"
+#line 147 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.y"
     {(yyval.sn) = (yyvsp[(2) - (2)].sn); setMethodResult((yyval.sn), (yyvsp[(1) - (2)].sn), NULL);;}
     break;
 
   case 86:
 
 /* Line 1455 of yacc.c  */
-#line 148 "D:\\idlcpp\\src\\idlcpp.y"
+#line 148 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.y"
     {(yyval.sn) = (yyvsp[(3) - (3)].sn); setMethodResult((yyval.sn), (yyvsp[(1) - (3)].sn), (yyvsp[(2) - (3)].sn));;}
     break;
 
   case 87:
 
 /* Line 1455 of yacc.c  */
-#line 149 "D:\\idlcpp\\src\\idlcpp.y"
+#line 149 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.y"
     {(yyval.sn) = (yyvsp[(3) - (3)].sn); setMethodResult((yyval.sn), (yyvsp[(1) - (3)].sn), (yyvsp[(2) - (3)].sn));;}
     break;
 
   case 88:
 
 /* Line 1455 of yacc.c  */
-#line 150 "D:\\idlcpp\\src\\idlcpp.y"
+#line 150 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.y"
     {(yyval.sn) = (yyvsp[(3) - (3)].sn); setMethodResult((yyval.sn), (yyvsp[(1) - (3)].sn), (yyvsp[(2) - (3)].sn));;}
     break;
 
   case 89:
 
 /* Line 1455 of yacc.c  */
-#line 151 "D:\\idlcpp\\src\\idlcpp.y"
+#line 151 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.y"
     {(yyval.sn) = (yyvsp[(5) - (5)].sn); setMethodResult((yyval.sn), (yyvsp[(1) - (5)].sn), (yyvsp[(2) - (5)].sn)); setMethodResultArray((yyval.sn));;}
     break;
 
   case 90:
 
 /* Line 1455 of yacc.c  */
-#line 154 "D:\\idlcpp\\src\\idlcpp.y"
+#line 154 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.y"
     {(yyval.sn) = (yyvsp[(1) - (1)].sn);;}
     break;
 
   case 91:
 
 /* Line 1455 of yacc.c  */
-#line 155 "D:\\idlcpp\\src\\idlcpp.y"
+#line 155 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.y"
     {(yyval.sn) = (yyvsp[(2) - (2)].sn); setMethodResultConst((yyval.sn), (yyvsp[(1) - (2)].sn));;}
     break;
 
   case 92:
 
 /* Line 1455 of yacc.c  */
-#line 158 "D:\\idlcpp\\src\\idlcpp.y"
+#line 158 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.y"
     {(yyval.sn) = (yyvsp[(1) - (1)].sn);;}
     break;
 
   case 93:
 
 /* Line 1455 of yacc.c  */
-#line 159 "D:\\idlcpp\\src\\idlcpp.y"
+#line 159 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.y"
     {(yyval.sn) = (yyvsp[(2) - (2)].sn); setMethodModifier((yyval.sn), (yyvsp[(1) - (2)].sn));;}
     break;
 
   case 94:
 
 /* Line 1455 of yacc.c  */
-#line 160 "D:\\idlcpp\\src\\idlcpp.y"
+#line 160 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.y"
     {(yyval.sn) = (yyvsp[(2) - (2)].sn); setMethodModifier((yyval.sn), (yyvsp[(1) - (2)].sn));;}
     break;
 
   case 95:
 
 /* Line 1455 of yacc.c  */
-#line 161 "D:\\idlcpp\\src\\idlcpp.y"
+#line 161 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.y"
     {(yyval.sn) = (yyvsp[(2) - (2)].sn); setMethodModifier((yyval.sn), (yyvsp[(1) - (2)].sn));;}
     break;
 
   case 96:
 
 /* Line 1455 of yacc.c  */
-#line 164 "D:\\idlcpp\\src\\idlcpp.y"
+#line 164 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.y"
     {(yyval.sn) = (yyvsp[(1) - (1)].sn);;}
     break;
 
   case 97:
 
 /* Line 1455 of yacc.c  */
-#line 165 "D:\\idlcpp\\src\\idlcpp.y"
+#line 165 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.y"
     {(yyval.sn) = (yyvsp[(2) - (2)].sn); setMethodExport((yyval.sn));;}
     break;
 
   case 98:
 
 /* Line 1455 of yacc.c  */
-#line 168 "D:\\idlcpp\\src\\idlcpp.y"
+#line 168 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.y"
     {(yyval.sn) = newFilter(1, 1);;}
     break;
 
   case 99:
 
 /* Line 1455 of yacc.c  */
-#line 169 "D:\\idlcpp\\src\\idlcpp.y"
+#line 169 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.y"
     {(yyval.sn) = newFilter(1, 0);;}
     break;
 
   case 100:
 
 /* Line 1455 of yacc.c  */
-#line 170 "D:\\idlcpp\\src\\idlcpp.y"
+#line 170 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.y"
     {(yyval.sn) = newFilter(0, 1);;}
     break;
 
   case 101:
 
 /* Line 1455 of yacc.c  */
-#line 173 "D:\\idlcpp\\src\\idlcpp.y"
+#line 173 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.y"
     {(yyval.sn) = newClassMemberList(NULL, (yyvsp[(1) - (1)].sn));;}
     break;
 
   case 102:
 
 /* Line 1455 of yacc.c  */
-#line 174 "D:\\idlcpp\\src\\idlcpp.y"
+#line 174 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.y"
     {(yyval.sn) = newClassMemberList(NULL, (yyvsp[(1) - (1)].sn));;}
     break;
 
   case 103:
 
 /* Line 1455 of yacc.c  */
-#line 175 "D:\\idlcpp\\src\\idlcpp.y"
+#line 175 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.y"
     {(yyval.sn) = newClassMemberList(NULL, (yyvsp[(1) - (1)].sn));;}
     break;
 
   case 104:
 
 /* Line 1455 of yacc.c  */
-#line 176 "D:\\idlcpp\\src\\idlcpp.y"
+#line 176 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.y"
     {(yyval.sn) = newClassMemberList(NULL, (yyvsp[(1) - (1)].sn));;}
     break;
 
   case 105:
 
 /* Line 1455 of yacc.c  */
-#line 177 "D:\\idlcpp\\src\\idlcpp.y"
+#line 177 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.y"
     {(yyval.sn) = newClassMemberList(NULL, (yyvsp[(1) - (1)].sn));;}
     break;
 
   case 106:
 
 /* Line 1455 of yacc.c  */
-#line 178 "D:\\idlcpp\\src\\idlcpp.y"
+#line 178 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.y"
     {(yyval.sn) = newClassMemberList(NULL, (yyvsp[(1) - (1)].sn));;}
     break;
 
   case 107:
 
 /* Line 1455 of yacc.c  */
-#line 179 "D:\\idlcpp\\src\\idlcpp.y"
+#line 179 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.y"
     {(yyval.sn) = NULL;;}
     break;
 
   case 108:
 
 /* Line 1455 of yacc.c  */
-#line 180 "D:\\idlcpp\\src\\idlcpp.y"
+#line 180 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.y"
     {(yyval.sn) = newClassMemberList((yyvsp[(1) - (2)].sn), (yyvsp[(2) - (2)].sn));;}
     break;
 
   case 109:
 
 /* Line 1455 of yacc.c  */
-#line 181 "D:\\idlcpp\\src\\idlcpp.y"
+#line 181 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.y"
     {(yyval.sn) = newClassMemberList((yyvsp[(1) - (2)].sn), (yyvsp[(2) - (2)].sn));;}
     break;
 
   case 110:
 
 /* Line 1455 of yacc.c  */
-#line 182 "D:\\idlcpp\\src\\idlcpp.y"
+#line 182 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.y"
     {(yyval.sn) = newClassMemberList((yyvsp[(1) - (2)].sn), (yyvsp[(2) - (2)].sn));;}
     break;
 
   case 111:
 
 /* Line 1455 of yacc.c  */
-#line 183 "D:\\idlcpp\\src\\idlcpp.y"
+#line 183 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.y"
     {(yyval.sn) = newClassMemberList((yyvsp[(1) - (2)].sn), (yyvsp[(2) - (2)].sn));;}
     break;
 
   case 112:
 
 /* Line 1455 of yacc.c  */
-#line 184 "D:\\idlcpp\\src\\idlcpp.y"
+#line 184 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.y"
     {(yyval.sn) = newClassMemberList((yyvsp[(1) - (2)].sn), (yyvsp[(2) - (2)].sn));;}
     break;
 
   case 113:
 
 /* Line 1455 of yacc.c  */
-#line 185 "D:\\idlcpp\\src\\idlcpp.y"
+#line 185 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.y"
     {(yyval.sn) = newClassMemberList((yyvsp[(1) - (2)].sn), (yyvsp[(2) - (2)].sn));;}
     break;
 
   case 114:
 
 /* Line 1455 of yacc.c  */
-#line 186 "D:\\idlcpp\\src\\idlcpp.y"
+#line 186 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.y"
     {(yyval.sn) = (yyvsp[(1) - (2)].sn);;}
     break;
 
   case 115:
 
 /* Line 1455 of yacc.c  */
-#line 189 "D:\\idlcpp\\src\\idlcpp.y"
+#line 189 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.y"
     {(yyval.sn) = newTemplateParameter((yyvsp[(1) - (2)].sn), (yyvsp[(2) - (2)].sn));;}
     break;
 
   case 116:
 
 /* Line 1455 of yacc.c  */
-#line 190 "D:\\idlcpp\\src\\idlcpp.y"
+#line 190 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.y"
     {(yyval.sn) = newTemplateParameter((yyvsp[(1) - (2)].sn), (yyvsp[(2) - (2)].sn));;}
     break;
 
   case 117:
 
 /* Line 1455 of yacc.c  */
-#line 193 "D:\\idlcpp\\src\\idlcpp.y"
+#line 193 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.y"
     {(yyval.sn) = newTemplateParameterList(NULL, NULL, (yyvsp[(1) - (1)].sn));;}
     break;
 
   case 118:
 
 /* Line 1455 of yacc.c  */
-#line 194 "D:\\idlcpp\\src\\idlcpp.y"
+#line 194 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.y"
     {(yyval.sn) = newTemplateParameterList((yyvsp[(1) - (3)].sn), (yyvsp[(2) - (3)].sn), (yyvsp[(3) - (3)].sn));;}
     break;
 
   case 119:
 
 /* Line 1455 of yacc.c  */
-#line 197 "D:\\idlcpp\\src\\idlcpp.y"
+#line 197 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.y"
     {(yyval.sn) = newTemplateParameters((yyvsp[(1) - (4)].sn), (yyvsp[(2) - (4)].sn), (yyvsp[(3) - (4)].sn), (yyvsp[(4) - (4)].sn));;}
     break;
 
   case 120:
 
 /* Line 1455 of yacc.c  */
-#line 200 "D:\\idlcpp\\src\\idlcpp.y"
+#line 200 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.y"
     {(yyval.sn) = newClass((yyvsp[(1) - (2)].sn), (yyvsp[(2) - (2)].sn), NULL);;}
     break;
 
   case 121:
 
 /* Line 1455 of yacc.c  */
-#line 201 "D:\\idlcpp\\src\\idlcpp.y"
+#line 201 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.y"
     {(yyval.sn) = newClass((yyvsp[(1) - (5)].sn), (yyvsp[(2) - (5)].sn), (yyvsp[(4) - (5)].sn));;}
     break;
 
   case 122:
 
 /* Line 1455 of yacc.c  */
-#line 202 "D:\\idlcpp\\src\\idlcpp.y"
+#line 202 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.y"
     {(yyval.sn) = newClass((yyvsp[(1) - (2)].sn), (yyvsp[(2) - (2)].sn), NULL);;}
     break;
 
   case 123:
 
 /* Line 1455 of yacc.c  */
-#line 203 "D:\\idlcpp\\src\\idlcpp.y"
+#line 203 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.y"
     {(yyval.sn) = newClass((yyvsp[(1) - (5)].sn), (yyvsp[(2) - (5)].sn), (yyvsp[(4) - (5)].sn));;}
     break;
 
   case 124:
 
 /* Line 1455 of yacc.c  */
-#line 206 "D:\\idlcpp\\src\\idlcpp.y"
+#line 206 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.y"
     {(yyval.sn) = (yyvsp[(1) - (1)].sn);;}
     break;
 
   case 125:
 
 /* Line 1455 of yacc.c  */
-#line 207 "D:\\idlcpp\\src\\idlcpp.y"
+#line 207 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.y"
     {(yyval.sn) = (yyvsp[(1) - (3)].sn); setClassBaseList((yyval.sn), (yyvsp[(2) - (3)].sn), (yyvsp[(3) - (3)].sn));;}
     break;
 
   case 126:
 
 /* Line 1455 of yacc.c  */
-#line 210 "D:\\idlcpp\\src\\idlcpp.y"
+#line 210 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.y"
     {(yyval.sn) = (yyvsp[(1) - (4)].sn); setClassMemberList((yyval.sn), (yyvsp[(2) - (4)].sn), NULL, (yyvsp[(3) - (4)].sn), (yyvsp[(4) - (4)].sn));;}
     break;
 
   case 127:
 
 /* Line 1455 of yacc.c  */
-#line 211 "D:\\idlcpp\\src\\idlcpp.y"
+#line 211 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.y"
     {(yyval.sn) = (yyvsp[(1) - (5)].sn); setClassMemberList((yyval.sn), (yyvsp[(2) - (5)].sn), (yyvsp[(3) - (5)].sn), (yyvsp[(4) - (5)].sn), (yyvsp[(5) - (5)].sn));;}
     break;
 
   case 128:
 
 /* Line 1455 of yacc.c  */
-#line 214 "D:\\idlcpp\\src\\idlcpp.y"
+#line 214 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.y"
     {(yyval.sn) = (yyvsp[(1) - (1)].sn);;}
     break;
 
   case 129:
 
 /* Line 1455 of yacc.c  */
-#line 215 "D:\\idlcpp\\src\\idlcpp.y"
+#line 215 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.y"
     {(yyval.sn) = (yyvsp[(2) - (2)].sn); setClassModifier((yyval.sn), (yyvsp[(1) - (2)].sn));;}
     break;
 
   case 130:
 
 /* Line 1455 of yacc.c  */
-#line 218 "D:\\idlcpp\\src\\idlcpp.y"
+#line 218 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.y"
     {(yyval.sn) = (yyvsp[(1) - (1)].sn);;}
     break;
 
   case 131:
 
 /* Line 1455 of yacc.c  */
-#line 219 "D:\\idlcpp\\src\\idlcpp.y"
+#line 219 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.y"
     {(yyval.sn) = (yyvsp[(2) - (2)].sn); setClassExport((yyval.sn));;}
     break;
 
   case 132:
 
 /* Line 1455 of yacc.c  */
-#line 222 "D:\\idlcpp\\src\\idlcpp.y"
+#line 222 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.y"
     {(yyval.sn) = (yyvsp[(1) - (1)].sn);;}
     break;
 
   case 133:
 
 /* Line 1455 of yacc.c  */
-#line 223 "D:\\idlcpp\\src\\idlcpp.y"
+#line 223 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.y"
     {(yyval.sn) = (yyvsp[(2) - (2)].sn); setClassTemplateParameters((yyval.sn), (yyvsp[(1) - (2)].sn));;}
     break;
 
   case 134:
 
 /* Line 1455 of yacc.c  */
-#line 226 "D:\\idlcpp\\src\\idlcpp.y"
+#line 226 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.y"
     {(yyval.sn) = newTemplateClassInstance((yyvsp[(1) - (7)].sn), (yyvsp[(2) - (7)].sn), (yyvsp[(3) - (7)].sn), (yyvsp[(4) - (7)].sn), (yyvsp[(5) - (7)].sn), (yyvsp[(6) - (7)].sn), (yyvsp[(7) - (7)].sn));;}
     break;
 
   case 135:
 
 /* Line 1455 of yacc.c  */
-#line 227 "D:\\idlcpp\\src\\idlcpp.y"
+#line 227 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.y"
     {(yyval.sn) = newTemplateClassInstance((yyvsp[(1) - (7)].sn), (yyvsp[(2) - (7)].sn), (yyvsp[(3) - (7)].sn), (yyvsp[(4) - (7)].sn), (yyvsp[(5) - (7)].sn), (yyvsp[(6) - (7)].sn), (yyvsp[(7) - (7)].sn));;}
     break;
 
   case 136:
 
 /* Line 1455 of yacc.c  */
-#line 230 "D:\\idlcpp\\src\\idlcpp.y"
+#line 230 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.y"
     {(yyval.sn) = newTypeAlias((yyvsp[(2) - (3)].sn), primitive_type);;}
     break;
 
   case 137:
 
 /* Line 1455 of yacc.c  */
-#line 231 "D:\\idlcpp\\src\\idlcpp.y"
+#line 231 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.y"
     {(yyval.sn) = newTypeAlias((yyvsp[(3) - (4)].sn), value_type);;}
     break;
 
   case 138:
 
 /* Line 1455 of yacc.c  */
-#line 232 "D:\\idlcpp\\src\\idlcpp.y"
+#line 232 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.y"
     {(yyval.sn) = newTypeAlias((yyvsp[(3) - (4)].sn), reference_type);;}
     break;
 
   case 139:
 
 /* Line 1455 of yacc.c  */
-#line 233 "D:\\idlcpp\\src\\idlcpp.y"
+#line 233 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.y"
     {(yyval.sn) = newTypeDef((yyvsp[(1) - (4)].sn), (yyvsp[(3) - (4)].sn), (yyvsp[(2) - (4)].sn));;}
     break;
 
   case 140:
 
 /* Line 1455 of yacc.c  */
-#line 236 "D:\\idlcpp\\src\\idlcpp.y"
+#line 236 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.y"
     {(yyval.sn) = newNamespaceMemberList(NULL, (yyvsp[(1) - (1)].sn));;}
     break;
 
   case 141:
 
 /* Line 1455 of yacc.c  */
-#line 237 "D:\\idlcpp\\src\\idlcpp.y"
+#line 237 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.y"
     {(yyval.sn) = newNamespaceMemberList(NULL, (yyvsp[(1) - (1)].sn));;}
     break;
 
   case 142:
 
 /* Line 1455 of yacc.c  */
-#line 238 "D:\\idlcpp\\src\\idlcpp.y"
+#line 238 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.y"
     {(yyval.sn) = newNamespaceMemberList(NULL, (yyvsp[(1) - (1)].sn));;}
     break;
 
   case 143:
 
 /* Line 1455 of yacc.c  */
-#line 239 "D:\\idlcpp\\src\\idlcpp.y"
+#line 239 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.y"
     {(yyval.sn) = newNamespaceMemberList(NULL, (yyvsp[(1) - (1)].sn));;}
     break;
 
   case 144:
 
 /* Line 1455 of yacc.c  */
-#line 240 "D:\\idlcpp\\src\\idlcpp.y"
+#line 240 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.y"
     {(yyval.sn) = newNamespaceMemberList(NULL, (yyvsp[(1) - (1)].sn));;}
     break;
 
   case 145:
 
 /* Line 1455 of yacc.c  */
-#line 241 "D:\\idlcpp\\src\\idlcpp.y"
+#line 241 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.y"
     {(yyval.sn) = NULL;;}
     break;
 
   case 146:
 
 /* Line 1455 of yacc.c  */
-#line 242 "D:\\idlcpp\\src\\idlcpp.y"
+#line 242 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.y"
     {(yyval.sn) = newNamespaceMemberList((yyvsp[(1) - (2)].sn), (yyvsp[(2) - (2)].sn));;}
     break;
 
   case 147:
 
 /* Line 1455 of yacc.c  */
-#line 243 "D:\\idlcpp\\src\\idlcpp.y"
+#line 243 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.y"
     {(yyval.sn) = newNamespaceMemberList((yyvsp[(1) - (2)].sn), (yyvsp[(2) - (2)].sn));;}
     break;
 
   case 148:
 
 /* Line 1455 of yacc.c  */
-#line 244 "D:\\idlcpp\\src\\idlcpp.y"
+#line 244 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.y"
     {(yyval.sn) = newNamespaceMemberList((yyvsp[(1) - (2)].sn), (yyvsp[(2) - (2)].sn));;}
     break;
 
   case 149:
 
 /* Line 1455 of yacc.c  */
-#line 245 "D:\\idlcpp\\src\\idlcpp.y"
+#line 245 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.y"
     {(yyval.sn) = newNamespaceMemberList((yyvsp[(1) - (2)].sn), (yyvsp[(2) - (2)].sn));;}
     break;
 
   case 150:
 
 /* Line 1455 of yacc.c  */
-#line 246 "D:\\idlcpp\\src\\idlcpp.y"
+#line 246 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.y"
     {(yyval.sn) = newNamespaceMemberList((yyvsp[(1) - (2)].sn), (yyvsp[(2) - (2)].sn));;}
     break;
 
   case 151:
 
 /* Line 1455 of yacc.c  */
-#line 247 "D:\\idlcpp\\src\\idlcpp.y"
+#line 247 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.y"
     {(yyval.sn) = (yyvsp[(1) - (2)].sn);;}
     break;
 
   case 152:
 
 /* Line 1455 of yacc.c  */
-#line 250 "D:\\idlcpp\\src\\idlcpp.y"
+#line 250 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.y"
     {(yyval.sn) = newNamespace((yyvsp[(1) - (4)].sn), (yyvsp[(2) - (4)].sn), (yyvsp[(3) - (4)].sn), NULL, (yyvsp[(4) - (4)].sn));;}
     break;
 
   case 153:
 
 /* Line 1455 of yacc.c  */
-#line 251 "D:\\idlcpp\\src\\idlcpp.y"
+#line 251 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.y"
     {(yyval.sn) = newNamespace((yyvsp[(1) - (5)].sn), (yyvsp[(2) - (5)].sn), (yyvsp[(3) - (5)].sn), (yyvsp[(4) - (5)].sn), (yyvsp[(5) - (5)].sn));;}
     break;
 
   case 154:
 
 /* Line 1455 of yacc.c  */
-#line 254 "D:\\idlcpp\\src\\idlcpp.y"
+#line 254 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.y"
     {(yyval.sn) = newProgram((yyvsp[(1) - (1)].sn)); attachSyntaxTree((yyval.sn));;}
     break;
 
 
 
 /* Line 1455 of yacc.c  */
-#line 2745 "D:\\idlcpp\\src\\idlcpp.y.c"
+#line 2745 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
       default: break;
     }
   YY_SYMBOL_PRINT ("-> $$ =", yyr1[yyn], &yyval, &yyloc);

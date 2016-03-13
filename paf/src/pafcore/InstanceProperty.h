@@ -4,8 +4,8 @@
 #pragma once
 
 #include "./Metadata.h"
-namespace pafcore{ class ClassType; }
 namespace pafcore{ class Type; }
+namespace pafcore{ class ClassType; }
 
 namespace pafcore
 {

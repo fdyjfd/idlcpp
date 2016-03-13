@@ -14,7 +14,7 @@ const char* g_keywordTokens[] =
 	"static ",
 	"const ",
 	"get_",
-	"set_",
+	"void set_",
 	"*",
 	"*",
 	"&",

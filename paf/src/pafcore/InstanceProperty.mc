@@ -75,7 +75,7 @@ namespace idlcpp
 
 	void __pafcore__InstanceProperty_Type::destroyInstance(void* address)
 	{
-		delete reinterpret_cast<::pafcore::RefCountObject<::pafcore::InstanceProperty>*>(address);
+		reinterpret_cast<::pafcore::Reference*>(address)->release();
 	}
 
 	void __pafcore__InstanceProperty_Type::destroyArray(void* address)
@@ -246,8 +246,14 @@ namespace idlcpp
 
 	__pafcore__InstanceProperty_Type* __pafcore__InstanceProperty_Type::GetSingleton()
 	{
-		static __pafcore__InstanceProperty_Type s_instance;
-		return &s_instance;
+		static __pafcore__InstanceProperty_Type* s_instance = 0;
+		static char s_buffer[sizeof(__pafcore__InstanceProperty_Type)];
+		if(0 == s_instance)
+		{
+			s_instance = (__pafcore__InstanceProperty_Type*)s_buffer;
+			new (s_buffer)__pafcore__InstanceProperty_Type;
+		}
+		return s_instance;
 	}
 
 }

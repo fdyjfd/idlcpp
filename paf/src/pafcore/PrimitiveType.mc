@@ -3,9 +3,9 @@
 
 #pragma once
 
-#include "./Type.mh"
-#include "./Typedef.mh"
 #include "./Metadata.mh"
+#include "./Typedef.mh"
+#include "./Type.mh"
 #include "PrimitiveType.mh"
 #include "AutoRun.h"
 #include "NameSpace.h"
@@ -78,7 +78,7 @@ namespace idlcpp
 
 	void __pafcore__PrimitiveType_Type::destroyInstance(void* address)
 	{
-		delete reinterpret_cast<::pafcore::RefCountObject<::pafcore::PrimitiveType>*>(address);
+		reinterpret_cast<::pafcore::Reference*>(address)->release();
 	}
 
 	void __pafcore__PrimitiveType_Type::destroyArray(void* address)
@@ -163,8 +163,14 @@ namespace idlcpp
 
 	__pafcore__PrimitiveType_Type* __pafcore__PrimitiveType_Type::GetSingleton()
 	{
-		static __pafcore__PrimitiveType_Type s_instance;
-		return &s_instance;
+		static __pafcore__PrimitiveType_Type* s_instance = 0;
+		static char s_buffer[sizeof(__pafcore__PrimitiveType_Type)];
+		if(0 == s_instance)
+		{
+			s_instance = (__pafcore__PrimitiveType_Type*)s_buffer;
+			new (s_buffer)__pafcore__PrimitiveType_Type;
+		}
+		return s_instance;
 	}
 
 }

@@ -3,8 +3,8 @@
 
 #pragma once
 
-#include "./Metadata.mh"
 #include "./Type.mh"
+#include "./Metadata.mh"
 #include "./Typedef.mh"
 #include "StaticField.mh"
 #include "AutoRun.h"
@@ -57,7 +57,7 @@ namespace idlcpp
 
 	void __pafcore__StaticField_Type::destroyInstance(void* address)
 	{
-		delete reinterpret_cast<::pafcore::RefCountObject<::pafcore::StaticField>*>(address);
+		reinterpret_cast<::pafcore::Reference*>(address)->release();
 	}
 
 	void __pafcore__StaticField_Type::destroyArray(void* address)
@@ -120,8 +120,14 @@ namespace idlcpp
 
 	__pafcore__StaticField_Type* __pafcore__StaticField_Type::GetSingleton()
 	{
-		static __pafcore__StaticField_Type s_instance;
-		return &s_instance;
+		static __pafcore__StaticField_Type* s_instance = 0;
+		static char s_buffer[sizeof(__pafcore__StaticField_Type)];
+		if(0 == s_instance)
+		{
+			s_instance = (__pafcore__StaticField_Type*)s_buffer;
+			new (s_buffer)__pafcore__StaticField_Type;
+		}
+		return s_instance;
 	}
 
 }

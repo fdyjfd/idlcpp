@@ -3,9 +3,9 @@
 
 #pragma once
 
-#include "./Result.mh"
 #include "./Argument.mh"
 #include "./Metadata.mh"
+#include "./Result.mh"
 #include "./Typedef.mh"
 #include "InstanceMethod.mh"
 #include "AutoRun.h"
@@ -91,7 +91,7 @@ namespace idlcpp
 
 	void __pafcore__InstanceMethod_Type::destroyInstance(void* address)
 	{
-		delete reinterpret_cast<::pafcore::RefCountObject<::pafcore::InstanceMethod>*>(address);
+		reinterpret_cast<::pafcore::Reference*>(address)->release();
 	}
 
 	void __pafcore__InstanceMethod_Type::destroyArray(void* address)
@@ -198,8 +198,14 @@ namespace idlcpp
 
 	__pafcore__InstanceMethod_Type* __pafcore__InstanceMethod_Type::GetSingleton()
 	{
-		static __pafcore__InstanceMethod_Type s_instance;
-		return &s_instance;
+		static __pafcore__InstanceMethod_Type* s_instance = 0;
+		static char s_buffer[sizeof(__pafcore__InstanceMethod_Type)];
+		if(0 == s_instance)
+		{
+			s_instance = (__pafcore__InstanceMethod_Type*)s_buffer;
+			new (s_buffer)__pafcore__InstanceMethod_Type;
+		}
+		return s_instance;
 	}
 
 }

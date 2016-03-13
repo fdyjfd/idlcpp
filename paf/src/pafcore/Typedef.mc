@@ -29,8 +29,14 @@ namespace idlcpp
 
 	__bool_t_Type* __bool_t_Type::GetSingleton()
 	{
-		static __bool_t_Type s_instance;
-		return &s_instance;
+		static __bool_t_Type* s_instance = 0;
+		static char s_buffer[sizeof(__bool_t_Type)];
+		if(0 == s_instance)
+		{
+			s_instance = (__bool_t_Type*)s_buffer;
+			new (s_buffer)__bool_t_Type;
+		}
+		return s_instance;
 	}
 
 	__char_t_Type::__char_t_Type() : TypeAlias("char_t", RuntimeTypeOf<::char_t>::RuntimeType::GetSingleton())
@@ -40,8 +46,14 @@ namespace idlcpp
 
 	__char_t_Type* __char_t_Type::GetSingleton()
 	{
-		static __char_t_Type s_instance;
-		return &s_instance;
+		static __char_t_Type* s_instance = 0;
+		static char s_buffer[sizeof(__char_t_Type)];
+		if(0 == s_instance)
+		{
+			s_instance = (__char_t_Type*)s_buffer;
+			new (s_buffer)__char_t_Type;
+		}
+		return s_instance;
 	}
 
 	__schar_t_Type::__schar_t_Type() : TypeAlias("schar_t", RuntimeTypeOf<::schar_t>::RuntimeType::GetSingleton())
@@ -51,8 +63,14 @@ namespace idlcpp
 
 	__schar_t_Type* __schar_t_Type::GetSingleton()
 	{
-		static __schar_t_Type s_instance;
-		return &s_instance;
+		static __schar_t_Type* s_instance = 0;
+		static char s_buffer[sizeof(__schar_t_Type)];
+		if(0 == s_instance)
+		{
+			s_instance = (__schar_t_Type*)s_buffer;
+			new (s_buffer)__schar_t_Type;
+		}
+		return s_instance;
 	}
 
 	__uchar_t_Type::__uchar_t_Type() : TypeAlias("uchar_t", RuntimeTypeOf<::uchar_t>::RuntimeType::GetSingleton())
@@ -62,8 +80,14 @@ namespace idlcpp
 
 	__uchar_t_Type* __uchar_t_Type::GetSingleton()
 	{
-		static __uchar_t_Type s_instance;
-		return &s_instance;
+		static __uchar_t_Type* s_instance = 0;
+		static char s_buffer[sizeof(__uchar_t_Type)];
+		if(0 == s_instance)
+		{
+			s_instance = (__uchar_t_Type*)s_buffer;
+			new (s_buffer)__uchar_t_Type;
+		}
+		return s_instance;
 	}
 
 	__short_t_Type::__short_t_Type() : TypeAlias("short_t", RuntimeTypeOf<::short_t>::RuntimeType::GetSingleton())
@@ -73,8 +97,14 @@ namespace idlcpp
 
 	__short_t_Type* __short_t_Type::GetSingleton()
 	{
-		static __short_t_Type s_instance;
-		return &s_instance;
+		static __short_t_Type* s_instance = 0;
+		static char s_buffer[sizeof(__short_t_Type)];
+		if(0 == s_instance)
+		{
+			s_instance = (__short_t_Type*)s_buffer;
+			new (s_buffer)__short_t_Type;
+		}
+		return s_instance;
 	}
 
 	__ushort_t_Type::__ushort_t_Type() : TypeAlias("ushort_t", RuntimeTypeOf<::ushort_t>::RuntimeType::GetSingleton())
@@ -84,8 +114,14 @@ namespace idlcpp
 
 	__ushort_t_Type* __ushort_t_Type::GetSingleton()
 	{
-		static __ushort_t_Type s_instance;
-		return &s_instance;
+		static __ushort_t_Type* s_instance = 0;
+		static char s_buffer[sizeof(__ushort_t_Type)];
+		if(0 == s_instance)
+		{
+			s_instance = (__ushort_t_Type*)s_buffer;
+			new (s_buffer)__ushort_t_Type;
+		}
+		return s_instance;
 	}
 
 	__long_t_Type::__long_t_Type() : TypeAlias("long_t", RuntimeTypeOf<::long_t>::RuntimeType::GetSingleton())
@@ -95,8 +131,14 @@ namespace idlcpp
 
 	__long_t_Type* __long_t_Type::GetSingleton()
 	{
-		static __long_t_Type s_instance;
-		return &s_instance;
+		static __long_t_Type* s_instance = 0;
+		static char s_buffer[sizeof(__long_t_Type)];
+		if(0 == s_instance)
+		{
+			s_instance = (__long_t_Type*)s_buffer;
+			new (s_buffer)__long_t_Type;
+		}
+		return s_instance;
 	}
 
 	__ulong_t_Type::__ulong_t_Type() : TypeAlias("ulong_t", RuntimeTypeOf<::ulong_t>::RuntimeType::GetSingleton())
@@ -106,8 +148,14 @@ namespace idlcpp
 
 	__ulong_t_Type* __ulong_t_Type::GetSingleton()
 	{
-		static __ulong_t_Type s_instance;
-		return &s_instance;
+		static __ulong_t_Type* s_instance = 0;
+		static char s_buffer[sizeof(__ulong_t_Type)];
+		if(0 == s_instance)
+		{
+			s_instance = (__ulong_t_Type*)s_buffer;
+			new (s_buffer)__ulong_t_Type;
+		}
+		return s_instance;
 	}
 
 	__longlong_t_Type::__longlong_t_Type() : TypeAlias("longlong_t", RuntimeTypeOf<::longlong_t>::RuntimeType::GetSingleton())
@@ -117,8 +165,14 @@ namespace idlcpp
 
 	__longlong_t_Type* __longlong_t_Type::GetSingleton()
 	{
-		static __longlong_t_Type s_instance;
-		return &s_instance;
+		static __longlong_t_Type* s_instance = 0;
+		static char s_buffer[sizeof(__longlong_t_Type)];
+		if(0 == s_instance)
+		{
+			s_instance = (__longlong_t_Type*)s_buffer;
+			new (s_buffer)__longlong_t_Type;
+		}
+		return s_instance;
 	}
 
 	__ulonglong_t_Type::__ulonglong_t_Type() : TypeAlias("ulonglong_t", RuntimeTypeOf<::ulonglong_t>::RuntimeType::GetSingleton())
@@ -128,8 +182,14 @@ namespace idlcpp
 
 	__ulonglong_t_Type* __ulonglong_t_Type::GetSingleton()
 	{
-		static __ulonglong_t_Type s_instance;
-		return &s_instance;
+		static __ulonglong_t_Type* s_instance = 0;
+		static char s_buffer[sizeof(__ulonglong_t_Type)];
+		if(0 == s_instance)
+		{
+			s_instance = (__ulonglong_t_Type*)s_buffer;
+			new (s_buffer)__ulonglong_t_Type;
+		}
+		return s_instance;
 	}
 
 	__int_t_Type::__int_t_Type() : TypeAlias("int_t", RuntimeTypeOf<::int_t>::RuntimeType::GetSingleton())
@@ -139,8 +199,14 @@ namespace idlcpp
 
 	__int_t_Type* __int_t_Type::GetSingleton()
 	{
-		static __int_t_Type s_instance;
-		return &s_instance;
+		static __int_t_Type* s_instance = 0;
+		static char s_buffer[sizeof(__int_t_Type)];
+		if(0 == s_instance)
+		{
+			s_instance = (__int_t_Type*)s_buffer;
+			new (s_buffer)__int_t_Type;
+		}
+		return s_instance;
 	}
 
 	__uint_t_Type::__uint_t_Type() : TypeAlias("uint_t", RuntimeTypeOf<::uint_t>::RuntimeType::GetSingleton())
@@ -150,8 +216,14 @@ namespace idlcpp
 
 	__uint_t_Type* __uint_t_Type::GetSingleton()
 	{
-		static __uint_t_Type s_instance;
-		return &s_instance;
+		static __uint_t_Type* s_instance = 0;
+		static char s_buffer[sizeof(__uint_t_Type)];
+		if(0 == s_instance)
+		{
+			s_instance = (__uint_t_Type*)s_buffer;
+			new (s_buffer)__uint_t_Type;
+		}
+		return s_instance;
 	}
 
 	__float_t_Type::__float_t_Type() : TypeAlias("float_t", RuntimeTypeOf<::float_t>::RuntimeType::GetSingleton())
@@ -161,8 +233,14 @@ namespace idlcpp
 
 	__float_t_Type* __float_t_Type::GetSingleton()
 	{
-		static __float_t_Type s_instance;
-		return &s_instance;
+		static __float_t_Type* s_instance = 0;
+		static char s_buffer[sizeof(__float_t_Type)];
+		if(0 == s_instance)
+		{
+			s_instance = (__float_t_Type*)s_buffer;
+			new (s_buffer)__float_t_Type;
+		}
+		return s_instance;
 	}
 
 	__double_t_Type::__double_t_Type() : TypeAlias("double_t", RuntimeTypeOf<::double_t>::RuntimeType::GetSingleton())
@@ -172,8 +250,14 @@ namespace idlcpp
 
 	__double_t_Type* __double_t_Type::GetSingleton()
 	{
-		static __double_t_Type s_instance;
-		return &s_instance;
+		static __double_t_Type* s_instance = 0;
+		static char s_buffer[sizeof(__double_t_Type)];
+		if(0 == s_instance)
+		{
+			s_instance = (__double_t_Type*)s_buffer;
+			new (s_buffer)__double_t_Type;
+		}
+		return s_instance;
 	}
 
 	__byte_t_Type::__byte_t_Type() : TypeAlias("byte_t", RuntimeTypeOf<::byte_t>::RuntimeType::GetSingleton())
@@ -183,8 +267,14 @@ namespace idlcpp
 
 	__byte_t_Type* __byte_t_Type::GetSingleton()
 	{
-		static __byte_t_Type s_instance;
-		return &s_instance;
+		static __byte_t_Type* s_instance = 0;
+		static char s_buffer[sizeof(__byte_t_Type)];
+		if(0 == s_instance)
+		{
+			s_instance = (__byte_t_Type*)s_buffer;
+			new (s_buffer)__byte_t_Type;
+		}
+		return s_instance;
 	}
 
 	__size_t_Type::__size_t_Type() : TypeAlias("size_t", RuntimeTypeOf<::size_t>::RuntimeType::GetSingleton())
@@ -194,8 +284,14 @@ namespace idlcpp
 
 	__size_t_Type* __size_t_Type::GetSingleton()
 	{
-		static __size_t_Type s_instance;
-		return &s_instance;
+		static __size_t_Type* s_instance = 0;
+		static char s_buffer[sizeof(__size_t_Type)];
+		if(0 == s_instance)
+		{
+			s_instance = (__size_t_Type*)s_buffer;
+			new (s_buffer)__size_t_Type;
+		}
+		return s_instance;
 	}
 
 	__ptrdiff_t_Type::__ptrdiff_t_Type() : TypeAlias("ptrdiff_t", RuntimeTypeOf<::ptrdiff_t>::RuntimeType::GetSingleton())
@@ -205,8 +301,14 @@ namespace idlcpp
 
 	__ptrdiff_t_Type* __ptrdiff_t_Type::GetSingleton()
 	{
-		static __ptrdiff_t_Type s_instance;
-		return &s_instance;
+		static __ptrdiff_t_Type* s_instance = 0;
+		static char s_buffer[sizeof(__ptrdiff_t_Type)];
+		if(0 == s_instance)
+		{
+			s_instance = (__ptrdiff_t_Type*)s_buffer;
+			new (s_buffer)__ptrdiff_t_Type;
+		}
+		return s_instance;
 	}
 
 }

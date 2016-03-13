@@ -3,8 +3,8 @@
 
 #pragma once
 
-#include "./Type.mh"
 #include "./Metadata.mh"
+#include "./Type.mh"
 #include "Enumerator.mh"
 #include "AutoRun.h"
 #include "NameSpace.h"
@@ -52,7 +52,7 @@ namespace idlcpp
 
 	void __pafcore__Enumerator_Type::destroyInstance(void* address)
 	{
-		delete reinterpret_cast<::pafcore::RefCountObject<::pafcore::Enumerator>*>(address);
+		reinterpret_cast<::pafcore::Reference*>(address)->release();
 	}
 
 	void __pafcore__Enumerator_Type::destroyArray(void* address)
@@ -91,8 +91,14 @@ namespace idlcpp
 
 	__pafcore__Enumerator_Type* __pafcore__Enumerator_Type::GetSingleton()
 	{
-		static __pafcore__Enumerator_Type s_instance;
-		return &s_instance;
+		static __pafcore__Enumerator_Type* s_instance = 0;
+		static char s_buffer[sizeof(__pafcore__Enumerator_Type)];
+		if(0 == s_instance)
+		{
+			s_instance = (__pafcore__Enumerator_Type*)s_buffer;
+			new (s_buffer)__pafcore__Enumerator_Type;
+		}
+		return s_instance;
 	}
 
 }

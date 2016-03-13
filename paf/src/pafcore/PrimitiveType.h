@@ -3,8 +3,8 @@
 
 #pragma once
 
-#include "./Type.h"
 #include "./Typedef.h"
+#include "./Type.h"
 namespace pafcore{ class Metadata; }
 
 
@@ -564,8 +564,14 @@ namespace pafcore
 		{}
 		static ThisType* GetSingleton()
 		{
-			static ThisType s_instance(PrimitiveTypeTraits<T>::s_typeName);
-			return &s_instance;
+			static ThisType* s_instance = 0;
+			static char s_buffer[sizeof(ThisType)];
+			if (0 == s_instance)
+			{
+				s_instance = (ThisType*)s_buffer;
+				new (s_buffer)ThisType(PrimitiveTypeTraits<T>::s_typeName);
+			}
+			return s_instance;
 		}
 		virtual void _op_inc_(void* dst, void* arg)
 		{}
@@ -601,8 +607,14 @@ namespace pafcore
 		{}
 		static ThisType* GetSingleton()
 		{
-			static ThisType s_instance(PrimitiveTypeTraits<T>::s_typeName);
-			return &s_instance;
+			static ThisType* s_instance = 0;
+			static char s_buffer[sizeof(ThisType)];
+			if (0 == s_instance)
+			{
+				s_instance = (ThisType*)s_buffer;
+				new (s_buffer)ThisType(PrimitiveTypeTraits<T>::s_typeName);
+			}
+			return s_instance;
 		}
 		virtual void _op_inc_(void* dst, void* arg)
 		{
@@ -660,8 +672,14 @@ namespace pafcore
 		{}
 		static ThisType* GetSingleton()
 		{
-			static ThisType s_instance(PrimitiveTypeTraits<T>::s_typeName);
-			return &s_instance;
+			static ThisType* s_instance = 0;
+			static char s_buffer[sizeof(ThisType)];
+			if (0 == s_instance)
+			{
+				s_instance = (ThisType*)s_buffer;
+				new (s_buffer)ThisType(PrimitiveTypeTraits<T>::s_typeName);
+			}
+			return s_instance;
 		}
 		virtual void _op_inc_(void* dst, void* arg)
 		{}

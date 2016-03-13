@@ -91,7 +91,7 @@ namespace idlcpp
 
 	void __pafcore__StaticMethod_Type::destroyInstance(void* address)
 	{
-		delete reinterpret_cast<::pafcore::RefCountObject<::pafcore::StaticMethod>*>(address);
+		reinterpret_cast<::pafcore::Reference*>(address)->release();
 	}
 
 	void __pafcore__StaticMethod_Type::destroyArray(void* address)
@@ -198,8 +198,14 @@ namespace idlcpp
 
 	__pafcore__StaticMethod_Type* __pafcore__StaticMethod_Type::GetSingleton()
 	{
-		static __pafcore__StaticMethod_Type s_instance;
-		return &s_instance;
+		static __pafcore__StaticMethod_Type* s_instance = 0;
+		static char s_buffer[sizeof(__pafcore__StaticMethod_Type)];
+		if(0 == s_instance)
+		{
+			s_instance = (__pafcore__StaticMethod_Type*)s_buffer;
+			new (s_buffer)__pafcore__StaticMethod_Type;
+		}
+		return s_instance;
 	}
 
 }

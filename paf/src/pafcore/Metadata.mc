@@ -57,8 +57,14 @@ namespace idlcpp
 
 	__pafcore__Category_Type* __pafcore__Category_Type::GetSingleton()
 	{
-		static __pafcore__Category_Type s_instance;
-		return &s_instance;
+		static __pafcore__Category_Type* s_instance = 0;
+		static char s_buffer[sizeof(__pafcore__Category_Type)];
+		if(0 == s_instance)
+		{
+			s_instance = (__pafcore__Category_Type*)s_buffer;
+			new (s_buffer)__pafcore__Category_Type;
+		}
+		return s_instance;
 	}
 
 	__pafcore__Metadata_Type::__pafcore__Metadata_Type() : ::pafcore::ClassType("Metadata", ::pafcore::reference_object)
@@ -91,7 +97,7 @@ namespace idlcpp
 
 	void __pafcore__Metadata_Type::destroyInstance(void* address)
 	{
-		delete reinterpret_cast<::pafcore::RefCountObject<::pafcore::Metadata>*>(address);
+		reinterpret_cast<::pafcore::Reference*>(address)->release();
 	}
 
 	void __pafcore__Metadata_Type::destroyArray(void* address)
@@ -142,8 +148,14 @@ namespace idlcpp
 
 	__pafcore__Metadata_Type* __pafcore__Metadata_Type::GetSingleton()
 	{
-		static __pafcore__Metadata_Type s_instance;
-		return &s_instance;
+		static __pafcore__Metadata_Type* s_instance = 0;
+		static char s_buffer[sizeof(__pafcore__Metadata_Type)];
+		if(0 == s_instance)
+		{
+			s_instance = (__pafcore__Metadata_Type*)s_buffer;
+			new (s_buffer)__pafcore__Metadata_Type;
+		}
+		return s_instance;
 	}
 
 }

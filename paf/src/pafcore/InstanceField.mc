@@ -3,10 +3,10 @@
 
 #pragma once
 
-#include "./ClassType.mh"
 #include "./Type.mh"
-#include "./Metadata.mh"
+#include "./ClassType.mh"
 #include "./Typedef.mh"
+#include "./Metadata.mh"
 #include "InstanceField.mh"
 #include "AutoRun.h"
 #include "NameSpace.h"
@@ -60,7 +60,7 @@ namespace idlcpp
 
 	void __pafcore__InstanceField_Type::destroyInstance(void* address)
 	{
-		delete reinterpret_cast<::pafcore::RefCountObject<::pafcore::InstanceField>*>(address);
+		reinterpret_cast<::pafcore::Reference*>(address)->release();
 	}
 
 	void __pafcore__InstanceField_Type::destroyArray(void* address)
@@ -135,8 +135,14 @@ namespace idlcpp
 
 	__pafcore__InstanceField_Type* __pafcore__InstanceField_Type::GetSingleton()
 	{
-		static __pafcore__InstanceField_Type s_instance;
-		return &s_instance;
+		static __pafcore__InstanceField_Type* s_instance = 0;
+		static char s_buffer[sizeof(__pafcore__InstanceField_Type)];
+		if(0 == s_instance)
+		{
+			s_instance = (__pafcore__InstanceField_Type*)s_buffer;
+			new (s_buffer)__pafcore__InstanceField_Type;
+		}
+		return s_instance;
 	}
 
 }

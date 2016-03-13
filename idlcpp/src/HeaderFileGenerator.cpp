@@ -398,8 +398,7 @@ void HeaderFileGenerator::generateCode_Property_Set(FILE* file, PropertyNode* pr
 		generateCode_Token(file, propertyNode->m_modifier, indentation);
 		indentation = 0;
 	}
-	writeStringToFile("void ", file, indentation);
-	generateCode_Token(file, propertyNode->m_set->m_keyword, 0);
+	generateCode_Token(file, propertyNode->m_set->m_keyword, indentation);
 	generateCode_Identify(file, propertyNode->m_name, 0);
 	writeStringToFile("( ", file);
 	if(0 != propertyNode->m_set->m_constant)
