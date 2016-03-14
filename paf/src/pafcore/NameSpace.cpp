@@ -11,29 +11,34 @@
 
 BEGIN_PAFCORE
 
-const size_t num_metadata_name_char = 65;
+const size_t num_metadata_name_char = 67;
 
 size_t NameSpace::MetadataTrieTree::Node::GetIndex(char c)
 {
-	assert('\0' == c || ' ' == c || '_' == c || '0' <= c && c <= '9' || 'A' <= c && c <= 'Z' || 'a' <= c && c <= 'z');
+	assert('\0' == c || ' ' == c || '<' == c || '>' == c || '_' == c
+		|| '0' <= c && c <= '9' || 'A' <= c && c <= 'Z' || 'a' <= c && c <= 'z');
 	switch(c)
 	{
 	case '\0':
 		return 0;
 	case ' ':
 		return 1;
-	case '_':
+	case '<':
 		return 2;
-	}
+	case '>':
+		return 3;
+	case '_':
+		return 4;
+ 	}
 	if(c <= '9')
 	{
-		return c - '0' + 3;
+		return c - '0' + 5;
 	}
 	if(c <= 'Z')
 	{
-		return c - 'A' + 13;
+		return c - 'A' + 15;
 	}
-	return c - 'a' + 39;
+	return c - 'a' + 41;
 }
 
 bool NameSpace::MetadataTrieTree::Node::insert(Metadata* metadata, int offset)

@@ -15,15 +15,15 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="LuaTutorial4.cpp">
+    <ClCompile Include="LuaTutorial5.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Common\Tutorial4.cpp">
+    <ClCompile Include="..\..\Common\Tutorial5.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <CustomBuild Include="..\..\Common\Tutorial4.i" />
+    <CustomBuild Include="..\..\Common\Tutorial5.i" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\bin\tutorial4.lua" />

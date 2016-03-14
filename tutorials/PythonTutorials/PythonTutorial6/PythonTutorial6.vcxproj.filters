@@ -15,17 +15,15 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="LuaTutorial4.cpp">
+    <ClCompile Include="PythonTutorial6.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Common\Tutorial4.cpp">
+    <ClCompile Include="..\..\Common\Tutorial6.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <CustomBuild Include="..\..\Common\Tutorial4.i" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="..\..\..\bin\tutorial4.lua" />
+    <None Include="..\..\Common\Tutorial6.i" />
+    <None Include="..\..\..\bin\tutorial6.py" />
   </ItemGroup>
 </Project>

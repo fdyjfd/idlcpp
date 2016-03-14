@@ -19,9 +19,9 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{2F39FCB1-398D-4A08-97B5-944F67EB5F2B}</ProjectGuid>
+    <ProjectGuid>{D2AE0097-C2E3-4B4C-A748-2E82B351BDC8}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>LuaTutorial3</RootNamespace>
+    <RootNamespace>LuaTutorial6</RootNamespace>
     <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -146,15 +146,16 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="LuaTutorial3.cpp" />
+    <ClCompile Include="..\..\Common\Tutorial6.cpp" />
+    <ClCompile Include="LuaTutorial6.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <CustomBuild Include="..\..\Common\Tutorial3.i">
+    <CustomBuild Include="..\..\Common\Tutorial6.i">
       <FileType>Document</FileType>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\..\bin\tutorial3.lua" />
+    <None Include="..\..\..\bin\tutorial6.lua" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
