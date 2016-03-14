@@ -31,14 +31,14 @@ extern "C"
 void ShowDefaultInfo()
 {
 	printf("idlcpp Compiler Version 1.0\n"
-		"Copyright (C) 2007-2013 Aifeng Peng. All rights reserved.\n");
+		"Copyright (C) 2011-2016 Peng Aifeng. All rights reserved.\n");
 	printf("No files specified, use -h to get usage information\n");
 }
 
 void ShowHelpInfo()
 {
 	printf("idlcpp Compiler Version 1.0\n"
-		"Copyright (C) 2007-2013 Aifeng Peng. All rights reserved.\n");
+		"Copyright (C) 2011-2016 Peng Aifeng. All rights reserved.\n");
 	printf(
 		"usage idlcpp [options] [file]\n\n"
 		"-h\t\t\t print this message\n"
@@ -120,8 +120,12 @@ int _tmain(int argc, _TCHAR* argv[])
 		if('-' == *argv[i])
 		{
 			ParseOption(argv[i]);
+			if (i == argc - 1)
+			{
+				return 0;
+			}
 		}
-	}	
+	}
 
 	std::string inputFileName;
 	normalizeFileName(inputFileName, argv[argc - 1]);
