@@ -477,7 +477,7 @@ bool SourceFileManager::generateCode(const char* fileName)
 		m_outputLineDirective = false;
 
 		std::string sourceFileName = fileName;
-		sourceFileName += g_options.m_partialSourceFilePostfix;
+		sourceFileName += g_options.m_internalSourceFilePostfix;
 		res &= generateSourceFile(sourceFileName.c_str(), name);
 
 		std::string metaHeaderFileName = fileName;

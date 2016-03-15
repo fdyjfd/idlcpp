@@ -9,8 +9,8 @@ public:
 	Options();
 public:
 	std::string m_metaTypePostfix;
-	std::string m_interfaceImplementorPostfix;
-	std::string m_partialSourceFilePostfix;
+	std::string m_subclassProxyPostfix;
+	std::string m_internalSourceFilePostfix;
 	std::string m_metaHeaderFilePostfix;
 	std::string m_metaSourceFilePostfix;
 	std::string m_pafcorePath;

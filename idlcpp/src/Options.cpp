@@ -4,8 +4,8 @@
 Options::Options()
 {
 	m_metaTypePostfix = "_Type";
-	m_interfaceImplementorPostfix = "_Interface";
-	m_partialSourceFilePostfix = ".ic";
+	m_subclassProxyPostfix = "_Proxy";
+	m_internalSourceFilePostfix = ".ic";
 	m_metaHeaderFilePostfix = ".mh";
 	m_metaSourceFilePostfix = ".mc";
 	m_outputLineDirective = false;

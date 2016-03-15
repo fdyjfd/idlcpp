@@ -31,22 +31,22 @@ extern "C"
 void ShowDefaultInfo()
 {
 	printf("idlcpp Compiler Version 1.0\n"
-		"Copyright (C) 2011-2016 Peng Aifeng. All rights reserved.\n");
+		"Copyright (C) Peng Aifeng 2011-2016. All rights reserved.\n");
 	printf("No files specified, use -h to get usage information\n");
 }
 
 void ShowHelpInfo()
 {
 	printf("idlcpp Compiler Version 1.0\n"
-		"Copyright (C) 2011-2016 Peng Aifeng. All rights reserved.\n");
+		"Copyright (C) Peng Aifeng 2011-2016. All rights reserved.\n");
 	printf(
-		"usage idlcpp [options] [file]\n\n"
+		"usage: idlcpp [options] [file]\n\n"
 		"-h\t\t\t print this message\n"
 		"-ld\t\t\t add line directive in header file\n"
 		"-pc<path>\t\t set path of pafcore header files\n"
 		"-mp<postfix>\t\t define meta wrapper type postfix\n"
-		"-ip<postfix>\t\t define interface wrapper type postfix\n"
-		"-ic<postfix>\t\t define partial source file postfix\n"
+		"-sp<postfix>\t\t define subclass proxy type postfix\n"
+		"-ic<postfix>\t\t define internal source file postfix\n"
 		"-mh<postfix>\t\t define meta header file postfix\n"
 		"-mc<postfix>\t\t define meta source file postfix\n"
 		"-em<macro>\t\t set vc dllexport macro\n"
@@ -83,13 +83,13 @@ void ParseOption(const char* arg)
 	{
 		g_options.m_metaTypePostfix = arg + 3;
 	}
-	else if(strncmp(arg + 1, "ip", 2) == 0)
+	else if(strncmp(arg + 1, "sp", 2) == 0)
 	{
-		g_options.m_interfaceImplementorPostfix = arg + 3;
+		g_options.m_subclassProxyPostfix = arg + 3;
 	}
 	else if(strncmp(arg + 1, "ic", 2) == 0)
 	{
-		g_options.m_partialSourceFilePostfix = arg + 3;
+		g_options.m_internalSourceFilePostfix = arg + 3;
 	}
 	else if(strncmp(arg + 1, "mh", 2) == 0)
 	{

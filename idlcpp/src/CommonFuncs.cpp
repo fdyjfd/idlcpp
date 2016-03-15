@@ -22,12 +22,12 @@ void GetMetaTypeFullName(std::string& metaTypeName, MemberNode* typeNode)
 	metaTypeName = typeName + g_options.m_metaTypePostfix;
 }
 
-void GetSubclassProxyFullName(std::string& interfaceImplementorName, MemberNode* typeNode)
+void GetSubclassProxyFullName(std::string& subclassProxyName, MemberNode* typeNode)
 {
 	std::string typeName;
 	typeNode->getFullName(typeName, 0);
 	std::replace_if(typeName.begin(), typeName.end(), isNotIdentifyChar, '_');
-	interfaceImplementorName = typeName + g_options.m_interfaceImplementorPostfix;
+	subclassProxyName = typeName + g_options.m_subclassProxyPostfix;
 }
 
 TypeCategory CalcTypeFullName(std::string& typeName, TypeNameNode* typeNameNode, TemplateArgumentMap* templateArguments)

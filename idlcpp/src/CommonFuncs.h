@@ -24,7 +24,7 @@ inline bool isNotIdentifyChar(char c)
 
 
 void GetMetaTypeFullName(std::string& metaTypeName, MemberNode* typeNode);
-void GetSubclassProxyFullName(std::string& interfaceImplementorName, MemberNode* typeNode);
+void GetSubclassProxyFullName(std::string& subclassProxyName, MemberNode* typeNode);
 
 TypeCategory CalcTypeFullName(std::string& typeName, TypeNameNode* typeNameNode, TemplateArgumentMap* templateArguments);
 
