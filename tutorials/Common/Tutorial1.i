@@ -7,6 +7,5 @@ namespace tutorial
 		float y;
 	meta:
 		Point();
-		Point(const Point ref pt);
 	};
 }

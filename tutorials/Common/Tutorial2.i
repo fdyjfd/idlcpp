@@ -8,10 +8,8 @@ namespace tutorial
 	meta:
 		Point();
 		Point(float a, float b);
-		Point(const Point ref pt);
-
 		$*
-			Point()
+		Point()
 		{}
 		Point(float a, float b)
 		{
@@ -39,7 +37,7 @@ namespace tutorial
 	meta:
 		Rectangle(const Rectangle ref pt);
 		$*
-			void set_bottom(float bottom)
+		void set_bottom(float bottom)
 		{
 			m_min.y = bottom;
 		}
@@ -66,7 +64,7 @@ namespace tutorial
 		*$
 	};
 	$*
-		inline Rectangle::Rectangle(const Point& min, const Point& max) : m_min(min), m_max(max)
+	inline Rectangle::Rectangle(const Point& min, const Point& max) : m_min(min), m_max(max)
 	{
 	}
 	inline Rectangle::Rectangle()

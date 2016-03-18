@@ -19,9 +19,9 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{1DA507C2-6B81-4E76-A1F2-4E6AABA43175}</ProjectGuid>
+    <ProjectGuid>{5BEEEC10-B636-4FE0-BDFA-A82193B9596A}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>idlcpp</RootNamespace>
+    <RootNamespace>PythonTutorial0</RootNamespace>
     <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -29,20 +29,20 @@
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v140</PlatformToolset>
-    <CharacterSet>MultiByte</CharacterSet>
+    <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v140</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
-    <CharacterSet>MultiByte</CharacterSet>
+    <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v140</PlatformToolset>
-    <CharacterSet>MultiByte</CharacterSet>
+    <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
@@ -58,27 +58,29 @@
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\PythonTutorial.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\PythonTutorial.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\PythonTutorial.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\PythonTutorial.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <OutDir>..\..\..\bin\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <OutDir>..\..\..\bin\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
@@ -114,17 +116,16 @@
       <WarningLevel>Level3</WarningLevel>
       <PrecompiledHeader>
       </PrecompiledHeader>
-      <Optimization>Disabled</Optimization>
+      <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -136,112 +137,24 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <SDLCheck>false</SDLCheck>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\src\ClassNode.cpp" />
-    <ClCompile Include="..\..\src\CommonFuncs.cpp" />
-    <ClCompile Include="..\..\src\ConfigFile.cpp" />
-    <ClCompile Include="..\..\src\EnumeratorListNode.cpp" />
-    <ClCompile Include="..\..\src\EnumNode.cpp" />
-    <ClCompile Include="..\..\src\ErrorList.cpp" />
-    <ClCompile Include="..\..\src\FieldNode.cpp" />
-    <ClCompile Include="..\..\src\GetterSetterNode.cpp" />
-    <ClCompile Include="..\..\src\HeaderFileGenerator.cpp" />
-    <ClCompile Include="..\..\src\IdentifyNode.cpp" />
-    <ClCompile Include="..\..\src\idlcpp.cpp" />
-    <ClCompile Include="..\..\src\idlcpp.l.c" />
-    <ClCompile Include="..\..\src\idlcpp.y.c" />
-    <ClCompile Include="..\..\src\ImportDirectory.cpp" />
-    <ClCompile Include="..\..\src\MemberListNode.cpp" />
-    <ClCompile Include="..\..\src\MemberNode.cpp" />
-    <ClCompile Include="..\..\src\MetaHeaderFileGenerator.cpp" />
-    <ClCompile Include="..\..\src\MetaSourceFileGenerator.cpp" />
-    <ClCompile Include="..\..\src\MethodNode.cpp" />
-    <ClCompile Include="..\..\src\NamespaceNode.cpp" />
-    <ClCompile Include="..\..\src\Options.cpp" />
-    <ClCompile Include="..\..\src\ParameterListNode.cpp" />
-    <ClCompile Include="..\..\src\ParameterNode.cpp" />
-    <ClCompile Include="..\..\src\Platform.cpp" />
-    <ClCompile Include="..\..\src\ProgramNode.cpp" />
-    <ClCompile Include="..\..\src\PropertyNode.cpp" />
-    <ClCompile Include="..\..\src\RaiseError.cpp" />
-    <ClCompile Include="..\..\src\ScopeListNode.cpp" />
-    <ClCompile Include="..\..\src\SourceFile.cpp" />
-    <ClCompile Include="..\..\src\SourceFileGenerator.cpp" />
-    <ClCompile Include="..\..\src\SyntaxNodeImpl.cpp" />
-    <ClCompile Include="..\..\src\TemplateClassInstanceNode.cpp" />
-    <ClCompile Include="..\..\src\TemplateParameterListNode.cpp" />
-    <ClCompile Include="..\..\src\TemplateParameterNode.cpp" />
-    <ClCompile Include="..\..\src\TemplateParametersNode.cpp" />
-    <ClCompile Include="..\..\src\TokenNode.cpp" />
-    <ClCompile Include="..\..\src\TypeAliasNode.cpp" />
-    <ClCompile Include="..\..\src\TypeNameListNode.cpp" />
-    <ClCompile Include="..\..\src\TypeNameNode.cpp" />
-    <ClCompile Include="..\..\src\yyfuncs.cpp" />
+    <ClCompile Include="PythonTutorial0.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\src\ClassNode.h" />
-    <ClInclude Include="..\..\src\CommonFuncs.h" />
-    <ClInclude Include="..\..\src\EnumeratorListNode.h" />
-    <ClInclude Include="..\..\src\EnumNode.h" />
-    <ClInclude Include="..\..\src\ErrorList.h" />
-    <ClInclude Include="..\..\src\FieldNode.h" />
-    <ClInclude Include="..\..\src\FilterNode.h" />
-    <ClInclude Include="..\..\src\GetterSetterNode.h" />
-    <ClInclude Include="..\..\src\HeaderFileGenerator.h" />
-    <ClInclude Include="..\..\src\IdentifyNode.h" />
-    <ClInclude Include="..\..\src\idlcpp.h" />
-    <ClInclude Include="..\..\src\idlcpp.y.h" />
-    <ClInclude Include="..\..\src\ImportDirectory.h" />
-    <ClInclude Include="..\..\src\MemberListNode.h" />
-    <ClInclude Include="..\..\src\MemberNode.h" />
-    <ClInclude Include="..\..\src\MetaHeaderFileGenerator.h" />
-    <ClInclude Include="..\..\src\MetaSourceFileGenerator.h" />
-    <ClInclude Include="..\..\src\MethodNode.h" />
-    <ClInclude Include="..\..\src\NamespaceNode.h" />
-    <ClInclude Include="..\..\src\Options.h" />
-    <ClInclude Include="..\..\src\ParameterListNode.h" />
-    <ClInclude Include="..\..\src\ParameterNode.h" />
-    <ClInclude Include="..\..\src\Platform.h" />
-    <ClInclude Include="..\..\src\ProgramNode.h" />
-    <ClInclude Include="..\..\src\PropertyNode.h" />
-    <ClInclude Include="..\..\src\RaiseError.h" />
-    <ClInclude Include="..\..\src\ScopeListNode.h" />
-    <ClInclude Include="..\..\src\ScopeNode.h" />
-    <ClInclude Include="..\..\src\SourceFile.h" />
-    <ClInclude Include="..\..\src\SourceFileGenerator.h" />
-    <ClInclude Include="..\..\src\SyntaxNodeImpl.h" />
-    <ClInclude Include="..\..\src\targetver.h" />
-    <ClInclude Include="..\..\src\TempBuffer.h" />
-    <ClInclude Include="..\..\src\TemplateClassInstanceNode.h" />
-    <ClInclude Include="..\..\src\TemplateParameterListNode.h" />
-    <ClInclude Include="..\..\src\TemplateParameterNode.h" />
-    <ClInclude Include="..\..\src\TemplateParametersNode.h" />
-    <ClInclude Include="..\..\src\TokenNode.h" />
-    <ClInclude Include="..\..\src\TypeAliasNode.h" />
-    <ClInclude Include="..\..\src\TypeNameListNode.h" />
-    <ClInclude Include="..\..\src\TypeNameNode.h" />
-    <ClInclude Include="..\..\src\yyfuncs.h" />
+    <CustomBuild Include="..\..\Common\Tutorial0.i">
+      <FileType>Document</FileType>
+    </CustomBuild>
   </ItemGroup>
   <ItemGroup>
-    <CustomBuild Include="..\..\src\idlcpp.l">
-      <FileType>Document</FileType>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">flex -o%(FullPath).c %(FullPath)</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(FullPath).c</Outputs>
-    </CustomBuild>
-    <CustomBuild Include="..\..\src\idlcpp.y">
-      <FileType>Document</FileType>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">bison -o%(FullPath).c -d %(FullPath)</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(FullPath).c</Outputs>
-    </CustomBuild>
+    <None Include="..\..\..\bin\tutorial0.py" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
