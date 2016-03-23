@@ -3,8 +3,8 @@
 
 #pragma once
 
-#include "./ClassType.mh"
 #include "./Type.mh"
+#include "./ClassType.mh"
 #include "./Metadata.mh"
 #include "./Typedef.mh"
 #include "InstanceField.mh"

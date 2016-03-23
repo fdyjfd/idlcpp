@@ -26,6 +26,6 @@
     <CustomBuild Include="..\..\Common\Tutorial5.i" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\..\bin\tutorial4.lua" />
+    <None Include="..\..\..\bin\tutorial5.lua" />
   </ItemGroup>
 </Project>

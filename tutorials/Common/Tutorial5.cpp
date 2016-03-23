@@ -50,53 +50,6 @@ namespace tutorial
 		return area;
 	}
 
-	Rectangle::Rectangle()
-	{}
-	Rectangle::Rectangle(const Point& min, const Point& max) : m_min(min), m_max(max)
-	{}
-
-	void Rectangle::set_bottom(float bottom)
-	{
-		m_min.y = bottom;
-	}
-	float Rectangle::get_bottom()
-	{
-		return m_min.y;
-	}
-	void Rectangle::set_top(float top)
-	{
-		m_max.y = top;
-	}
-	float Rectangle::get_top()
-	{
-		return m_max.y;
-	}
-	float Rectangle::get_area()
-	{
-		return (m_max.x - m_min.x)*(m_max.y - m_min.y);
-	}
-	
-	float Rectangle::getArea()
-	{
-		return (m_max.x - m_min.x)*(m_max.y - m_min.y);
-	}
-	
-	float Rectangle::get_left()
-	{
-		return m_min.x;
-	}
-	void Rectangle::set_left(float left)
-	{
-		m_min.x = left;
-	}
-	float Rectangle::get_right()
-	{
-		return m_max.x;
-	}
-	void Rectangle::set_right(float right)
-	{
-		m_max.x = right;
-	}
 	float Triangle::getArea()
 	{
 		return fabs(m_vertices[0].x * m_vertices[1].y + m_vertices[1].x * m_vertices[2].y + m_vertices[2].x * m_vertices[0].y

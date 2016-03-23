@@ -33,6 +33,7 @@ enum PrimitiveType
 	pt_uint,
 	pt_float,
 	pt_double,
+	pt_long_double,
 };
 
 typedef enum PrimitiveType PrimitiveType;

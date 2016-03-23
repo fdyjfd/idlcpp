@@ -3,8 +3,8 @@
 
 #pragma once
 
-#include "./ClassType.mh"
 #include "./Type.mh"
+#include "./ClassType.mh"
 #include "./Metadata.mh"
 #include "InstanceProperty.mh"
 #include "AutoRun.h"

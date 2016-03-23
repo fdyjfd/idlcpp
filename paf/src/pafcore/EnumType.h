@@ -3,8 +3,8 @@
 
 #pragma once
 
-#include "./Type.h"
 #include "./Typedef.h"
+#include "./Type.h"
 namespace pafcore{ class Enumerator; }
 
 

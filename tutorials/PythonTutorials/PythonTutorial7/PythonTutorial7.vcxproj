@@ -146,6 +146,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\Common\Tutorial6.cpp" />
     <ClCompile Include="..\..\Common\Tutorial7.cpp" />
     <ClCompile Include="PythonTutorial7.cpp" />
   </ItemGroup>

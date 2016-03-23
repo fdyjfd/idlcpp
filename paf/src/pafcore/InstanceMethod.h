@@ -5,8 +5,8 @@
 
 #include "./Typedef.h"
 #include "./Metadata.h"
-namespace pafcore{ class Result; }
 namespace pafcore{ class Argument; }
+namespace pafcore{ class Result; }
 
 namespace pafcore
 {

@@ -3,8 +3,8 @@
 
 #pragma once
 
-#include "./Metadata.h"
 #include "./Typedef.h"
+#include "./Metadata.h"
 namespace pafcore{ class Argument; }
 namespace pafcore{ class Result; }
 

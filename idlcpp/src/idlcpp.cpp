@@ -43,13 +43,14 @@ void ShowHelpInfo()
 		"usage: idlcpp [options] [file]\n\n"
 		"-h\t\t\t print this message\n"
 		"-ld\t\t\t add line directive in header file\n"
-		"-pc<path>\t\t set path of pafcore header files\n"
+		"-pc<dir>\t\t set path of pafcore header files\n"
 		"-mp<postfix>\t\t define meta wrapper type postfix\n"
 		"-sp<postfix>\t\t define subclass proxy type postfix\n"
 		"-ic<postfix>\t\t define internal source file postfix\n"
 		"-mh<postfix>\t\t define meta header file postfix\n"
 		"-mc<postfix>\t\t define meta source file postfix\n"
 		"-em<macro>\t\t set vc dllexport macro\n"
+		"-I<dir>\t\t\t add to import search path\n"
 		);
 }
 
@@ -71,10 +72,10 @@ void ParseOption(const char* arg)
 	{
 		ShowHelpInfo();
 	}
-	else if(strncmp(arg + 1, "ld", 2) == 0)
+	else if (strncmp(arg + 1, "ld", 2) == 0)
 	{
 		g_options.m_outputLineDirective = true;
-	}	
+	}
 	else if(strncmp(arg + 1, "pc", 2) == 0)
 	{
 		g_options.setPafcorePath(arg + 3);
@@ -102,6 +103,10 @@ void ParseOption(const char* arg)
 	else if(strncmp(arg + 1, "em", 2) == 0)
 	{
 		g_options.m_exportMacro = arg + 3;
+	}
+	else if (strncmp(arg + 1, "I", 1) == 0)
+	{
+		g_importDirectories.addImportDirectory(arg + 2);
 	}
 }
 

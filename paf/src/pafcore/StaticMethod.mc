@@ -3,10 +3,10 @@
 
 #pragma once
 
+#include "./Typedef.mh"
+#include "./Metadata.mh"
 #include "./Argument.mh"
 #include "./Result.mh"
-#include "./Metadata.mh"
-#include "./Typedef.mh"
 #include "StaticMethod.mh"
 #include "AutoRun.h"
 #include "NameSpace.h"

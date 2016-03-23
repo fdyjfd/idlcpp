@@ -155,7 +155,7 @@
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\..\bin\tutorial4.lua" />
+    <None Include="..\..\..\bin\tutorial5.lua" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

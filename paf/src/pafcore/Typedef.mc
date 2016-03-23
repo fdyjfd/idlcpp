@@ -260,6 +260,23 @@ namespace idlcpp
 		return s_instance;
 	}
 
+	__longdouble_t_Type::__longdouble_t_Type() : TypeAlias("longdouble_t", RuntimeTypeOf<::longdouble_t>::RuntimeType::GetSingleton())
+	{
+		::pafcore::NameSpace::GetGlobalNameSpace()->registerMember(this);
+	}
+
+	__longdouble_t_Type* __longdouble_t_Type::GetSingleton()
+	{
+		static __longdouble_t_Type* s_instance = 0;
+		static char s_buffer[sizeof(__longdouble_t_Type)];
+		if(0 == s_instance)
+		{
+			s_instance = (__longdouble_t_Type*)s_buffer;
+			new (s_buffer)__longdouble_t_Type;
+		}
+		return s_instance;
+	}
+
 	__byte_t_Type::__byte_t_Type() : TypeAlias("byte_t", RuntimeTypeOf<::byte_t>::RuntimeType::GetSingleton())
 	{
 		::pafcore::NameSpace::GetGlobalNameSpace()->registerMember(this);
@@ -341,6 +358,8 @@ AUTO_REGISTER_TYPE(::idlcpp::__float_t_Type)
 static_assert(RuntimeTypeOf<::float_t>::type_category == ::pafcore::primitive_object, "type category error");
 AUTO_REGISTER_TYPE(::idlcpp::__double_t_Type)
 static_assert(RuntimeTypeOf<::double_t>::type_category == ::pafcore::primitive_object, "type category error");
+AUTO_REGISTER_TYPE(::idlcpp::__longdouble_t_Type)
+static_assert(RuntimeTypeOf<::longdouble_t>::type_category == ::pafcore::primitive_object, "type category error");
 AUTO_REGISTER_TYPE(::idlcpp::__byte_t_Type)
 static_assert(RuntimeTypeOf<::byte_t>::type_category == ::pafcore::primitive_object, "type category error");
 AUTO_REGISTER_TYPE(::idlcpp::__size_t_Type)

@@ -7,14 +7,12 @@ namespace tutorial
 		Vector3();
 		Vector3(const Vector3 ref v);
 		Vector3(N a, N b, N c);
+		Vector3(const N ptr p);
 		N getLength();
 		N length get;
 		N lengthSquare get;
 
 		static Vector3 s_zero;
-		static Vector3 s_unitX;
-		static Vector3 s_unitY;
-		static Vector3 s_unitZ;
 		meta:
 		N x;
 		N y;
@@ -39,18 +37,8 @@ namespace tutorial
 	typedef Vector3<double> Vector3d;
 
 	$*
-
 	template<typename N>
 	Vector3<N> Vector3<N>::s_zero(0, 0, 0);
-
-	template<typename N>
-	Vector3<N> Vector3<N>::s_unitX(1, 0, 0);
-
-	template<typename N>
-	Vector3<N> Vector3<N>::s_unitY(0, 1, 0);
-
-	template<typename N>
-	Vector3<N> Vector3<N>::s_unitZ(0, 0, 1);
 
 	template<typename N>
 	inline Vector3<N>::Vector3()
@@ -58,11 +46,15 @@ namespace tutorial
 	}
 
 	template<typename N>
+	inline Vector3<N>::Vector3(const Vector3<N>& v) : x(v.x), y(v.y), z(v.z)
+	{}
+
+	template<typename N>
 	inline Vector3<N>::Vector3(N a, N b, N c) : x(a), y(b), z(c)
 	{}
 
 	template<typename N>
-	inline Vector3<N>::Vector3(const Vector3<N>& v) : x(v.x), y(v.y), z(v.z)
+	inline Vector3<N>::Vector3(const N* p) : x(p[0]), y(p[1]), z(p[2])
 	{}
 
 	template<typename N>

@@ -41,6 +41,7 @@ primitive				: BOOL												{$$ = newPrimitiveType($1, pt_bool);}
 						| UNSIGNED											{$$ = newPrimitiveType($1, pt_uint);}
 						| FLOAT												{$$ = newPrimitiveType($1, pt_float);}
 						| DOUBLE											{$$ = newPrimitiveType($1, pt_double);}
+						| LONG DOUBLE										{$$ = newPrimitiveType($1, pt_long_double);}
 						| VOID												{$$ = newPrimitiveType($1, pt_void);}
 ;
 

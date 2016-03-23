@@ -4,8 +4,8 @@
 #pragma once
 
 #include "./Type.mh"
-#include "./Metadata.mh"
 #include "./Typedef.mh"
+#include "./Metadata.mh"
 #include "PrimitiveType.mh"
 #include "AutoRun.h"
 #include "NameSpace.h"

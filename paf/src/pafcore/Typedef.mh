@@ -125,6 +125,14 @@ namespace idlcpp
 		PAFCORE_EXPORT static __double_t_Type* GetSingleton();
 	};
 
+	class __longdouble_t_Type : public ::pafcore::TypeAlias
+	{
+	public:
+		__longdouble_t_Type();
+	public:
+		PAFCORE_EXPORT static __longdouble_t_Type* GetSingleton();
+	};
+
 	class __byte_t_Type : public ::pafcore::TypeAlias
 	{
 	public:

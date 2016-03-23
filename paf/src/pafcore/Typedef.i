@@ -38,6 +38,7 @@ typename int_t;
 typename uint_t;
 typename float_t;
 typename double_t;
+typename longdouble_t;
 typename byte_t;
 typename size_t;
 typename ptrdiff_t;

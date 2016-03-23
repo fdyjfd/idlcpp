@@ -21,9 +21,14 @@
     <ClCompile Include="..\..\Common\Tutorial7.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Common\Tutorial6.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\Common\Tutorial7.i" />
     <None Include="..\..\..\bin\tutorial7.py" />
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="..\..\Common\Tutorial7.i" />
   </ItemGroup>
 </Project>

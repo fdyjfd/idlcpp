@@ -32,26 +32,6 @@ namespace tutorial
 	};
 
 
-	class Rectangle : Shape
-	{
-
-		Rectangle(const Point ref min, const Point ref max);
-		Rectangle();
-	meta:
-		Rectangle(const Rectangle ref pt);
-	native:
-		virtual float getArea();
-	all:
-		float left set get;
-		float right set get;
-		float bottom set get;
-		float top set get;
-		float area get;	
-		Point m_min;
-		Point m_max;
-	};
-
-
 	class Triangle : Shape
 	{
 		Point m_vertices[$3];
