@@ -59,5 +59,5 @@ bool ParameterNode::isOutput()
 void ParameterNode::checkSemantic(MethodNode* methodNode)
 {
 	m_type->checkTypeName(methodNode->m_enclosing);
-	g_sourceFileManager.useType(m_type->m_typeInfo, byValue() ? ut_by_value : ut_by_ref);
+	g_sourceFileManager.useType(m_type->m_typeInfo, byValue() ? tu_by_value : tu_by_ref);
 }

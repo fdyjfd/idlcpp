@@ -3,8 +3,8 @@
 
 #pragma once
 
-#include "./Typedef.mh"
 #include "./Metadata.mh"
+#include "./Typedef.mh"
 #include "NameSpace.mh"
 #include "AutoRun.h"
 #include "NameSpace.h"

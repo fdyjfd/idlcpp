@@ -64,12 +64,12 @@ void PropertyNode::checkSemantic()
 	if(m_get)
 	{
 		m_get->m_type->checkTypeName(m_enclosing);
-		g_sourceFileManager.useType(m_get->m_type->m_typeInfo, m_get->byValue() ? ut_by_value : ut_by_ref);
+		g_sourceFileManager.useType(m_get->m_type->m_typeInfo, m_get->byValue() ? tu_by_value : tu_by_ref);
 	}
 	if(m_set)
 	{
 		m_set->m_type->checkTypeName(m_enclosing);
-		g_sourceFileManager.useType(m_set->m_type->m_typeInfo, m_set->byValue() ? ut_by_value : ut_by_ref);
+		g_sourceFileManager.useType(m_set->m_type->m_typeInfo, m_set->byValue() ? tu_by_value : tu_by_ref);
 	}
 };
 

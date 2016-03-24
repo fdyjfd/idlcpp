@@ -24,7 +24,7 @@ class HeaderFileGenerator
 public:
 	static void generateCode(FILE* dstFile, SourceFile* sourceFile);
 public:
-	static void generateCode_Program(FILE* file, ProgramNode* programNode);
+	static void generateCode_Program(FILE* file, SourceFile* sourceFile);
 	static void generateCode_Namespace(FILE* file, NamespaceNode* namespaceNode, int indentation);
 	static void generateCode_Enum(FILE* file, EnumNode* enumNode, int indentation);
 	static void generateCode_Class(FILE* file, ClassNode* classNode, int indentation);

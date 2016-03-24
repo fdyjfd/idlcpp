@@ -3,8 +3,8 @@
 
 #pragma once
 
-#include "./Typedef.h"
 #include "./Metadata.h"
+#include "./Typedef.h"
 
 #include "VectorSet.h"
 

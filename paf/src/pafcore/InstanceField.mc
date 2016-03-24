@@ -3,9 +3,9 @@
 
 #pragma once
 
+#include "./Metadata.mh"
 #include "./Type.mh"
 #include "./ClassType.mh"
-#include "./Metadata.mh"
 #include "./Typedef.mh"
 #include "InstanceField.mh"
 #include "AutoRun.h"

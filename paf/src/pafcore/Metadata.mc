@@ -3,7 +3,6 @@
 
 #pragma once
 
-#include "./Metadata.mh"
 #include "./Reference.mh"
 #include "Metadata.mh"
 #include "AutoRun.h"

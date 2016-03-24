@@ -3,9 +3,9 @@
 
 #pragma once
 
-#include "./Type.mh"
-#include "./ClassType.mh"
 #include "./Metadata.mh"
+#include "./ClassType.mh"
+#include "./Type.mh"
 #include "InstanceProperty.mh"
 #include "AutoRun.h"
 #include "NameSpace.h"

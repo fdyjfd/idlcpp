@@ -327,43 +327,55 @@ TypeInfo* SourceFileManager::findTypeInfo(IdentifyNode* identifyNode, const std:
 	return typeInfo;
 }
 
-void SourceFileManager::useType(TypeInfo* typeInfo, UseType usage)
+void SourceFileManager::useType(TypeInfo* typeInfo, TypeUsage usage)
 {
 	if(0 == typeInfo)
 	{
 		return;
 	}
-	auto it = m_usedTypes.find(typeInfo);
+	UsedType ut = { typeInfo, usage };
+	auto it = std::find(m_usedTypes.begin(), m_usedTypes.end(), ut);
 	if(m_usedTypes.end() == it)
 	{
-		m_usedTypes.insert(std::make_pair(typeInfo, usage));
+		m_usedTypes.push_back(ut);
 	}
 	else
 	{
-		it->second |= usage;
+		it->usage |= usage;
 	}
 }
 
-void SourceFileManager::outputUsedTypes(FILE* file)
+void SourceFileManager::outputUsedTypes(FILE* file, SourceFile* sourceFile)
 {
 	char buf[512];
-	std::set<SourceFile*> sourceFiles;
-	std::set<MemberNode*> typeNodes;
+	std::vector<SourceFile*> sourceFiles;
+	std::vector<MemberNode*> typeNodes;
 	auto begin = m_usedTypes.begin();
 	auto end = m_usedTypes.end();
 	for(auto it = begin; it != end; ++it)
 	{
-		TypeInfo* typeInfo = it->first;
-		if ((it->second & ut_as_base) || 
-			(it->second & ut_by_value) || 
-			typeInfo->m_typeNode->isTemplateClass() || 
-			(typeInfo->m_typeNode->m_enclosing != 0 && typeInfo->m_typeNode->m_enclosing->m_nodeType != snt_namespace))
+		TypeInfo* typeInfo = it->typeInfo;
+		if (typeInfo->m_sourceFile != sourceFile)
 		{
-			sourceFiles.insert(typeInfo->m_sourceFile);
-		}
-		else
-		{
-			typeNodes.insert(typeInfo->m_typeNode);
+			if ((it->usage & tu_as_base) ||
+				(it->usage & tu_by_value) ||
+				typeInfo->m_typeNode->isTemplateClass() ||
+				(typeInfo->m_typeNode->m_enclosing != 0 && typeInfo->m_typeNode->m_enclosing->m_nodeType != snt_namespace))
+			{
+				if (std::find(sourceFiles.begin(), sourceFiles.end(), typeInfo->m_sourceFile)
+					== sourceFiles.end())
+				{
+					sourceFiles.push_back(typeInfo->m_sourceFile);
+				}
+			}
+			else
+			{
+				if (std::find(typeNodes.begin(), typeNodes.end(), typeInfo->m_typeNode)
+					== typeNodes.end())
+				{
+					typeNodes.push_back(typeInfo->m_typeNode);
+				}
+			}
 		}
 	}
 	auto begin2 = sourceFiles.begin();
@@ -384,7 +396,7 @@ void SourceFileManager::outputUsedTypes(FILE* file)
 		writeStringToFile(fileName.c_str(), fileName.length(), file);
 		writeStringToFile("\"\n", file);
 	}
-	bool outputTypeDec = false;
+
 	auto begin3 = typeNodes.begin();
 	auto end3 = typeNodes.end();
 	for (auto it3 = begin3; it3 != end3; ++it3)
@@ -417,17 +429,21 @@ void SourceFileManager::outputUsedTypes(FILE* file)
 	}
 }
 
-void SourceFileManager::outputUsedTypesForMetaSource(FILE* file)
+void SourceFileManager::outputUsedTypesForMetaSource(FILE* file, SourceFile* sourceFile)
 {
-	std::set<SourceFile*> sourceFiles;
+	std::vector<SourceFile*> sourceFiles;
 	auto begin = m_usedTypes.begin();
 	auto end = m_usedTypes.end();
 	for(auto it = begin; it != end; ++it)
 	{
-		//if((it->second & ut_by_value) || (it->second & ut_by_ref))
+		TypeInfo* typeInfo = it->typeInfo;
+		if(typeInfo->m_sourceFile != sourceFile)
 		{
-			TypeInfo* typeInfo = it->first;
-			sourceFiles.insert(typeInfo->m_sourceFile);
+			if (std::find(sourceFiles.begin(), sourceFiles.end(), typeInfo->m_sourceFile)
+				== sourceFiles.end())
+			{
+				sourceFiles.push_back(typeInfo->m_sourceFile);
+			}
 		}
 	}
 	auto begin2 = sourceFiles.begin();

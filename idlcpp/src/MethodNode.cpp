@@ -130,7 +130,7 @@ void MethodNode::checkSemantic()
 	if(0 != m_result)
 	{
 		m_result->checkTypeName(m_enclosing);
-		g_sourceFileManager.useType(m_result->m_typeInfo, byValue() ? ut_by_value : ut_by_ref);
+		g_sourceFileManager.useType(m_result->m_typeInfo, byValue() ? tu_by_value : tu_by_ref);
 	}
 	if(m_export)
 	{

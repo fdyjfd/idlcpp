@@ -25,7 +25,7 @@ class MetaSourceFileGenerator
 public:
 	static void generateCode(FILE* dstFile, SourceFile* sourceFile, const char* fullPathName, const char* baseName);
 public:
-	static void generateCode_Program(FILE* file, ProgramNode* programNode, const char* fullPathName, const char* baseName);	
+	static void generateCode_Program(FILE* file, SourceFile* sourceFile, const char* fullPathName, const char* baseName);
 	static void generateCode_Namespace(FILE* file, NamespaceNode* namespaceNode, int indentation);
 	static void generateCode_Enum(FILE* file, EnumNode* enumNode, int indentation);
 	static void generateCode_Class(FILE* file, ClassNode* classNode, TemplateArgumentMap* templateArguments, int indentation);

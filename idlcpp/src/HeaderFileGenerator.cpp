@@ -127,15 +127,15 @@ void generateCode_Parameter(FILE* file, ParameterNode* parameterNode, MethodNode
 
 void HeaderFileGenerator::generateCode(FILE* dstFile, SourceFile* sourceFile)
 {
-	generateCode_Program(dstFile, sourceFile->m_syntaxTree);
+	generateCode_Program(dstFile, sourceFile);
 }
 
-void HeaderFileGenerator::generateCode_Program(FILE* file, ProgramNode* programNode)
+void HeaderFileGenerator::generateCode_Program(FILE* file, SourceFile* sourceFile)
 {
 	writeStringToFile("#pragma once\n\n", file);
-	g_sourceFileManager.outputUsedTypes(file);
+	g_sourceFileManager.outputUsedTypes(file, sourceFile);
 
-	generateCode_Namespace(file, programNode, -1);
+	generateCode_Namespace(file, sourceFile->m_syntaxTree, -1);
 
 	g_sourceFileManager.outputEmbededCodes(file, 0);
 }

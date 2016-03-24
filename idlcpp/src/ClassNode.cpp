@@ -339,7 +339,7 @@ void ClassNode::checkSemantic()
 	for(size_t i = 0; i < baseCount; ++i)
 	{
 		typeNameNodes[i].second->checkTypeName(m_enclosing);
-		g_sourceFileManager.useType(typeNameNodes[i].second->m_typeInfo, ut_as_base);
+		g_sourceFileManager.useType(typeNameNodes[i].second->m_typeInfo, tu_as_base);
 	}
 
 	checkBaseNames(this, typeNameNodes);

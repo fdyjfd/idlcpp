@@ -56,18 +56,19 @@ void writeInterfaceImplementedByScript(FILE* file, ClassNode* classNode, int ind
 
 void MetaSourceFileGenerator::generateCode(FILE* dstFile, SourceFile* sourceFile, const char* fullPathName, const char* baseName)
 {
-	generateCode_Program(dstFile, sourceFile->m_syntaxTree, fullPathName, baseName);
+	generateCode_Program(dstFile, sourceFile, fullPathName, baseName);
 }
 
-void MetaSourceFileGenerator::generateCode_Program(FILE* file, ProgramNode* programNode, const char* fileName, const char* cppName)
+void MetaSourceFileGenerator::generateCode_Program(FILE* file, SourceFile* sourceFile, const char* fileName, const char* cppName)
 {
+	ProgramNode* programNode = sourceFile->m_syntaxTree;
 	char buf[512];
 	std::string pafcorePath;
 	GetRelativePath(pafcorePath, fileName, g_options.m_pafcorePath.c_str());
 	FormatPathForInclude(pafcorePath);
 
 	writeStringToFile("#pragma once\n\n", file);
-	g_sourceFileManager.outputUsedTypesForMetaSource(file);
+	g_sourceFileManager.outputUsedTypesForMetaSource(file, sourceFile);
 	sprintf_s(buf, "#include \"%s%s\"\n", cppName, g_options.m_metaHeaderFilePostfix.c_str());
 	writeStringToFile(buf, file);
 	sprintf_s(buf, "#include \"%sAutoRun.h\"\n", pafcorePath.c_str());

@@ -34,7 +34,7 @@ bool FieldNode::isArray()
 void FieldNode::checkSemantic()
 {
 	m_type->checkTypeName(m_enclosing);
-	g_sourceFileManager.useType(m_type->m_typeInfo, ut_by_value);
+	g_sourceFileManager.useType(m_type->m_typeInfo, tu_by_value);
 }
 
 void FieldNode::checkSemanticForTemplateInstance(TemplateClassInstanceNode* templateClassInstanceNode, TemplateArgumentMap* templateArguments)

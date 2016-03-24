@@ -88,11 +88,21 @@ struct NamespaceInfo
 	}
 };
 
-enum UseType
+enum TypeUsage
 {
-	ut_as_base = 1,
-	ut_by_value = 2,
-	ut_by_ref = 4,
+	tu_as_base = 1,
+	tu_by_value = 2,
+	tu_by_ref = 4,
+};
+
+struct UsedType
+{
+	TypeInfo* typeInfo;
+	int usage;
+	bool operator == (const UsedType& arg) const
+	{
+		return typeInfo == arg.typeInfo;
+	}
 };
 
 enum NameCategory
@@ -114,9 +124,9 @@ public:
 	void attachSyntaxTree(ProgramNode* programNode);
 	void checkTypeInfos();
 	void checkSemantic();
-	void useType(TypeInfo* typeInfo, UseType usage);
-	void outputUsedTypes(FILE* file);
-	void outputUsedTypesForMetaSource(FILE* file);
+	void useType(TypeInfo* typeInfo, TypeUsage usage);
+	void outputUsedTypes(FILE* file, SourceFile* sourceFile);
+	void outputUsedTypesForMetaSource(FILE* file, SourceFile* sourceFile);
 	bool generateCode(const char* fileName);
 	bool generateHeaderFile(const char* fileName);
 	bool generateSourceFile(const char* fileName, const char* cppName);
@@ -141,7 +151,7 @@ public:
 	std::map<std::string, std::vector<NamespaceInfo>> m_namespaceInfos;
 	std::map<std::string, TypeInfo> m_typeInfos;
 	//std::map<std::string, TypeInfo> m_classTemplateTypeInfos;
-	std::map<TypeInfo*, int> m_usedTypes;
+	std::vector<UsedType> m_usedTypes;
 };
 
 

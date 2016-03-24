@@ -3,8 +3,8 @@
 
 #pragma once
 
-#include "./Typedef.mh"
 #include "./Type.mh"
+#include "./Typedef.mh"
 #include "./Enumerator.mh"
 #include "EnumType.mh"
 #include "AutoRun.h"
