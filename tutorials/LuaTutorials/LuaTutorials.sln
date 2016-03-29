@@ -21,6 +21,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LuaTutorial8", "LuaTutorial
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LuaTutorial0", "LuaTutorial0\LuaTutorial0.vcxproj", "{9F23EE36-556A-402B-A959-19B417A303FE}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LuaTutorial9", "LuaTutorial9\LuaTutorial9.vcxproj", "{D33CB2BF-CA79-479A-9DEC-997AEAA40EAD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -101,6 +103,14 @@ Global
 		{9F23EE36-556A-402B-A959-19B417A303FE}.Release|x64.Build.0 = Release|x64
 		{9F23EE36-556A-402B-A959-19B417A303FE}.Release|x86.ActiveCfg = Release|Win32
 		{9F23EE36-556A-402B-A959-19B417A303FE}.Release|x86.Build.0 = Release|Win32
+		{D33CB2BF-CA79-479A-9DEC-997AEAA40EAD}.Debug|x64.ActiveCfg = Debug|x64
+		{D33CB2BF-CA79-479A-9DEC-997AEAA40EAD}.Debug|x64.Build.0 = Debug|x64
+		{D33CB2BF-CA79-479A-9DEC-997AEAA40EAD}.Debug|x86.ActiveCfg = Debug|Win32
+		{D33CB2BF-CA79-479A-9DEC-997AEAA40EAD}.Debug|x86.Build.0 = Debug|Win32
+		{D33CB2BF-CA79-479A-9DEC-997AEAA40EAD}.Release|x64.ActiveCfg = Release|x64
+		{D33CB2BF-CA79-479A-9DEC-997AEAA40EAD}.Release|x64.Build.0 = Release|x64
+		{D33CB2BF-CA79-479A-9DEC-997AEAA40EAD}.Release|x86.ActiveCfg = Release|Win32
+		{D33CB2BF-CA79-479A-9DEC-997AEAA40EAD}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -613,6 +613,9 @@ pafcore::ErrorCode Variant_Index_Identify(lua_State *L, pafcore::Variant* varian
 				//		VariantToLua(L, &value);
 				//		return pafcore::s_ok;
 				//	}
+				case pafcore::enum_type:
+				case pafcore::class_type:
+					return GetNestedType(L, static_cast<pafcore::Type*>(member));
 				}
 			}
 		}
@@ -664,9 +667,6 @@ pafcore::ErrorCode Variant_Index_Identify(lua_State *L, pafcore::Variant* varian
 		pafcore::Type* memberType = member->getType();
 		switch(memberType->m_category)
 		{
-		case pafcore::enum_type:
-		case pafcore::class_type:
-			return GetNestedType(L, static_cast<pafcore::Type*>(member));
 		case pafcore::instance_field:
 			return GetInstanceField(L, variant, static_cast<pafcore::InstanceField*>(member));
 		case pafcore::static_field:
@@ -691,6 +691,9 @@ pafcore::ErrorCode Variant_Index_Identify(lua_State *L, pafcore::Variant* varian
 		//		VariantToLua(L, &value);
 		//		return pafcore::s_ok;
 		//	}
+		case pafcore::enum_type:
+		case pafcore::class_type:
+			return GetNestedType(L, static_cast<pafcore::Type*>(member));
 		default:
 			assert(false);
 		}

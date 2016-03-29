@@ -476,6 +476,9 @@ pafcore::ErrorCode Variant_GetAttr(PyObject*& pyObject, VariantWrapper* self, co
 					return GetStaticProperty(pyObject, static_cast<pafcore::StaticProperty*>(member));
 				case pafcore::static_method:
 					return GetFunctionInvoker(pyObject, static_cast<pafcore::StaticMethod*>(member)->m_invoker);
+				case pafcore::enum_type:
+				case pafcore::class_type:
+					return GetNestedType(pyObject, static_cast<pafcore::Type*>(member));
 				}
 			}
 		}
@@ -518,9 +521,6 @@ pafcore::ErrorCode Variant_GetAttr(PyObject*& pyObject, VariantWrapper* self, co
 		pafcore::Type* memberType = member->getType();
 		switch(memberType->m_category)
 		{
-		case pafcore::enum_type:
-		case pafcore::class_type:
-			return GetNestedType(pyObject, static_cast<pafcore::Type*>(member));
 		case pafcore::instance_field:
 			return GetInstanceField(pyObject, variant, static_cast<pafcore::InstanceField*>(member));
 		case pafcore::static_field:
@@ -533,6 +533,9 @@ pafcore::ErrorCode Variant_GetAttr(PyObject*& pyObject, VariantWrapper* self, co
 			return GetInstanceMethod(pyObject, self, static_cast<pafcore::InstanceMethod*>(member));
 		case pafcore::static_method:
 			return GetFunctionInvoker(pyObject, static_cast<pafcore::StaticMethod*>(member)->m_invoker);
+		case pafcore::enum_type:
+		case pafcore::class_type:
+			return GetNestedType(pyObject, static_cast<pafcore::Type*>(member));
 		default:
 			assert(false);
 		}

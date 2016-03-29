@@ -1,15 +1,7 @@
 #include "Type.h"
-#include "Variant.h"
-#include "InstanceField.h"
-#include "InstanceProperty.h"
-#include "InstanceMethod.h"
-#include "StaticField.h"
-#include "StaticProperty.h"
-#include "StaticMethod.h"
 #include "Type.mh"
 #include "Type.ic"
 #include "Type.mc"
-#include <algorithm>
 #include <assert.h>
 
 BEGIN_PAFCORE

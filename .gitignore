@@ -41,3 +41,8 @@
 *.iobj
 *.opensdf
 *.pyc
+
+# idlcpp
+*.mh
+*.ic
+*.mc

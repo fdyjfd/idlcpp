@@ -19,9 +19,9 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{133E469F-59B7-4566-8237-4CA13AAC57DB}</ProjectGuid>
+    <ProjectGuid>{B4011DCA-66A2-4B32-BCAC-4019912811D8}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>PythonTutorial1</RootNamespace>
+    <RootNamespace>PythonTutorial9</RootNamespace>
     <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -146,15 +146,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="PythonTutorial1.cpp" />
+    <ClCompile Include="PythonTutorial9.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <CustomBuild Include="..\..\Common\Tutorial1.i">
-      <FileType>Document</FileType>
-    </CustomBuild>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="..\..\..\bin\tutorial1.py" />
+    <None Include="..\..\..\bin\tutorial9.py" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

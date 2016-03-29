@@ -324,9 +324,6 @@
     <ClInclude Include="..\..\..\src\pafcore\Variant.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\src\pafcore\VectorSet.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\src\pafcore\Argument.h">
       <Filter>Header Files</Filter>
     </ClInclude>

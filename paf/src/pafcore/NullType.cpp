@@ -4,7 +4,6 @@
 #include "NullType.mh"
 #include "NullType.ic"
 #include "NullType.mc"
-#include <assert.h>
 
 BEGIN_PAFCORE
 

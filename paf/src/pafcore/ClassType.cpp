@@ -7,7 +7,6 @@
 #include "StaticProperty.h"
 #include "StaticMethod.h"
 #include <algorithm>
-#include <assert.h>
 #include "ClassType.mh"
 #include "ClassType.ic"
 #include "ClassType.mc"

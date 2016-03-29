@@ -312,7 +312,6 @@
     <ClInclude Include="..\..\..\src\pafcore\Typedef.h" />
     <ClInclude Include="..\..\..\src\pafcore\Utility.h" />
     <ClInclude Include="..\..\..\src\pafcore\Variant.h" />
-    <ClInclude Include="..\..\..\src\pafcore\VectorSet.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -1,5 +1,4 @@
 #include "InstanceField.h"
-#include <assert.h>
 #include "InstanceField.mh"
 #include "InstanceField.ic"
 #include "InstanceField.mc"

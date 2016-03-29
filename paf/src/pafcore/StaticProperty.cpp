@@ -1,5 +1,4 @@
 #include "StaticProperty.h"
-#include <assert.h>
 #include "StaticProperty.mh"
 #include "StaticProperty.ic"
 #include "StaticProperty.mc"

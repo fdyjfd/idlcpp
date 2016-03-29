@@ -1,7 +1,5 @@
 #import "Metadata.i"
 
-$$#include "VectorSet.h"
-
 namespace pafcore
 {
 

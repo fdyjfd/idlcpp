@@ -1,5 +1,4 @@
 #include "Enumerator.h"
-#include <assert.h>
 #include "Enumerator.mh"
 #include "Enumerator.ic"
 #include "Enumerator.mc"

@@ -1,5 +1,4 @@
 #include "StaticField.h"
-#include <assert.h>
 #include "StaticField.mh"
 #include "StaticField.ic"
 #include "StaticField.mc"

@@ -1,8 +1,7 @@
 #include "NameSpace.h"
 #include "Metadata.h"
 #include "Type.h"
-#include <string.h>
-#include <algorithm>
+#include <vector>
 #include <assert.h>
 #include "TypeAlias.mh"
 #include "NameSpace.mh"
