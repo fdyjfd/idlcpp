@@ -307,7 +307,7 @@ bool Variant::castToValuePtr(Type* dstType, void** dst) const
 		size_t offset;
 		if(static_cast<ClassType*>(m_type)->getBaseClassOffset(offset, static_cast<ClassType*>(dstType)))
 		{
-			*dst = (void*)((size_t)m_pointer + offset);
+			*dst = (void*)((size_t)m_pointer - offset);
 			return true;
 		}
 	}
@@ -327,7 +327,7 @@ bool Variant::castToReferencePtr(Type* dstType, void** dst) const
 		size_t offset;
 		if(static_cast<ClassType*>(m_type)->getBaseClassOffset(offset, static_cast<ClassType*>(dstType)))
 		{
-			*(size_t*)dst = (size_t)m_pointer + offset;
+			*(size_t*)dst = (size_t)m_pointer - offset;
 			return true;
 		}
 	}
@@ -348,6 +348,23 @@ bool Variant::castToObject(Type* dstType, void* dst) const
 		return castToReference(dstType, dst);
 	}
 	return false;
+}
+
+void Variant::reinterpretCastToPtr(Variant& var, Type* dstType) const
+{
+	assert(var.isNull());
+	var.m_type = dstType;
+	if (m_pointer == m_primitiveValue)
+	{
+		*(size_t*)&var.m_pointer = *(size_t*)m_primitiveValue;
+		var.m_constant = false;
+	}
+	else
+	{
+		var.m_pointer = m_pointer;
+		var.m_constant = m_constant;
+	}
+	var.m_semantic = by_ptr;
 }
 
 END_PAFCORE

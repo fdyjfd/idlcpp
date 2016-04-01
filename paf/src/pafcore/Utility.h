@@ -14,7 +14,7 @@
 #define array_size_of(a)	(sizeof(a)/sizeof(a[0]))
 #define field_size_of(s, m)	sizeof(((s*)0)->m)
 #define field_array_size_of(s, m)	(sizeof(((s*)0)->m)/sizeof(((s*)0)->m[0]))
-#define base_offset_of(d, b) reinterpret_cast<ptrdiff_t>(static_cast<d*>(reinterpret_cast<b*>(0)))
+#define base_offset_of(d, b) (reinterpret_cast<ptrdiff_t>(static_cast<d*>(reinterpret_cast<b*>(1))) - 1)
 
 #define AUTO_NEW_ARRAY_SIZE
 
@@ -140,6 +140,7 @@ enum ErrorCode
 	e_arg_is_constant_19,
 	e_not_implemented,
 	e_script_error,
+	e_script_dose_not_override,
 };
 
 extern const char* g_errorStrings[];

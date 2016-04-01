@@ -62,7 +62,11 @@ pafcore::ErrorCode PythonSubclassInvoker::invoke(const char* name, pafcore::Vari
 		Py_DECREF(pyFunc);
 		return pafcore::s_ok;
 	}
-	return pafcore::e_script_error;
+	else 
+	{
+		PyErr_Clear();
+		return pafcore::e_script_dose_not_override;
+	}
 }
 
 END_PAFPYTHON

@@ -9,6 +9,8 @@ BEGIN_PAFCORE
 EnumType::EnumType(const char* name) 
 : Type(name, enum_object)
 {
+	m_enumerators = 0;
+	m_enumeratorCount = 0;
 	static pafcore::InstanceProperty s_properties[] = 
 	{
 		pafcore::InstanceProperty("_name_", 0, Enum_get__name_, RuntimeTypeOf<char>::RuntimeType::GetSingleton(), Metadata::by_ptr, true, 0, 0, Metadata::by_value, false),

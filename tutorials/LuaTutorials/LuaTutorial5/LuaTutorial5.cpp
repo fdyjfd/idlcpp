@@ -39,7 +39,7 @@ int _tmain(int argc, _TCHAR* argv[])
 		fprintf(stderr, "%s\n", lua_tostring(L, -1));
 		lua_pop(L, 1);
 	}
-	lua_close(L);
+	//lua_close(L);
 	return 0;
 }
 

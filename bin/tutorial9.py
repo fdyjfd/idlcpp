@@ -1,4 +1,5 @@
 ﻿import pafpython;
 paf = pafpython.paf;
+gui = paf.win32gui;
 
-paf.win32gui.MessageBox.Show(0, "text", "caption", paf.win32gui.MessageBoxButton.YesNo);
+gui.MessageBox.Show(0, "text", "caption", gui.MessageBoxButton.YesNo);

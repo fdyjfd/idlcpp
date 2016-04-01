@@ -552,7 +552,7 @@ int Subclassing(lua_State *L)
 	const void* p = lua_topointer(L, lua_upvalueindex(1));
 	pafcore::ClassType* classType = (pafcore::ClassType*)p;
 	int numArgs = lua_gettop(L);
-	if(lua_type(L, -1) == LUA_TTABLE)
+	if(1 == numArgs && lua_type(L, -1) == LUA_TTABLE)
 	{
 		LuaSubclassInvoker* subclassInvoker = new LuaSubclassInvoker(L);
 		void* implementor = classType->createSubclassProxy(subclassInvoker);
@@ -568,7 +568,25 @@ int Subclassing(lua_State *L)
 		VariantToLua(L, &impVar);
 		return 1;
 	}
-	Variant_Error(L, "the argument of _inherit_() must be a table", pafcore::e_script_error);
+	Variant_Error(L, "the argument of _inherit_ must be a table", pafcore::e_invalid_arg_type_1);
+	return 0;
+}
+
+int CastPtr(lua_State *L)
+{
+	const void* p = lua_topointer(L, lua_upvalueindex(1));
+	pafcore::Type* type = (pafcore::Type*)p;
+	int numArgs = lua_gettop(L);
+	if (1 == numArgs)
+	{
+		pafcore::Variant value;
+		pafcore::Variant* arg = LuaToVariant(&value, L, 1);
+		pafcore::Variant dstPtr;
+		arg->reinterpretCastToPtr(dstPtr, type);
+		VariantToLua(L, &dstPtr);
+		return 1;
+	}
+	Variant_Error(L, "_cast_ptr_", pafcore::e_invalid_arg_type_1);
 	return 0;
 }
 
@@ -714,17 +732,23 @@ pafcore::ErrorCode Variant_Index_Identify(lua_State *L, pafcore::Variant* varian
 	}
 	else if(strcmp(name, "_address_") == 0)
 	{
-		lua_pushlightuserdata(L, variant->m_pointer);
+		pafcore::Variant address;
+		address.assignPrimitive(RuntimeTypeOf<size_t>::RuntimeType::GetSingleton(), &variant->m_pointer);
+		VariantToLua(L, &address);
 		return pafcore::s_ok;
 	}
 	else if(strcmp(name, "_size_") == 0)
 	{
-		lua_pushinteger(L, variant->m_type->m_size);
+		pafcore::Variant size;
+		size.assignPrimitive(RuntimeTypeOf<size_t>::RuntimeType::GetSingleton(), &variant->m_type->m_size);
+		VariantToLua(L, &size);
 		return pafcore::s_ok;
 	}
 	else if(strcmp(name, "_count_") == 0)
 	{
-		lua_pushinteger(L, variant->m_arraySize);
+		pafcore::Variant count;
+		count.assignPrimitive(RuntimeTypeOf<size_t>::RuntimeType::GetSingleton(), &variant->m_arraySize);
+		VariantToLua(L, &count);
 		return pafcore::s_ok;
 	}
 	else if(strcmp(name, "_clone_") == 0)
@@ -769,6 +793,22 @@ pafcore::ErrorCode Variant_Index_Identify(lua_State *L, pafcore::Variant* varian
 		else
 		{
 			return pafcore::e_is_not_class;
+		}
+	}
+	else if (strcmp(name, "_cast_ptr_") == 0)
+	{
+		if (pafcore::primitive_type == variant->m_type->m_category ||
+			pafcore::enum_type == variant->m_type->m_category ||
+			pafcore::class_type == variant->m_type->m_category)
+		{
+			pafcore::Type* type = (pafcore::Type*)variant->m_pointer;
+			lua_pushlightuserdata(L, type);
+			lua_pushcclosure(L, CastPtr, 1);
+			return pafcore::s_ok;
+		}
+		else
+		{
+			return pafcore::e_is_not_type;
 		}
 	}
 	return pafcore::e_member_not_found;

@@ -72,11 +72,24 @@ struct ProxyCreatorWrapper
 	pafcore::ClassType* m_classType;
 };
 
-static PyTypeObject s_ProxyCreatorWrapper_Type = 
+static PyTypeObject s_ProxyCreatorWrapper_Type =
 {
 	PyVarObject_HEAD_INIT(NULL, 0)
 	"PafPython.ProxyCreator",
 	sizeof(ProxyCreatorWrapper),
+};
+
+struct TypeCasterWrapper
+{
+	PyObject_HEAD
+	pafcore::Type* m_type;
+};
+
+static PyTypeObject s_TypeCasterWrapper_Type =
+{
+	PyVarObject_HEAD_INIT(NULL, 0)
+	"PafPython.TypeCaster",
+	sizeof(TypeCasterWrapper),
 };
 
 PyObject* VariantWrapper_new(PyTypeObject *type, PyObject *args, PyObject *kwds)
@@ -126,6 +139,14 @@ PyObject* ProxyCreatorWrapper_new(PyTypeObject* type, PyObject *args, PyObject *
 	ProxyCreatorWrapper* self;
 	self = (ProxyCreatorWrapper*)type->tp_alloc(type, 0);
 	self->m_classType = 0;
+	return (PyObject*)self;
+}
+
+PyObject* TypeCasterWrapper_new(PyTypeObject* type, PyObject *args, PyObject *kwds)
+{
+	TypeCasterWrapper* self;
+	self = (TypeCasterWrapper*)type->tp_alloc(type, 0);
+	self->m_type = 0;
 	return (PyObject*)self;
 }
 
@@ -439,6 +460,14 @@ pafcore::ErrorCode GetProxyCreator(PyObject*& pyObject, pafcore::ClassType* clas
 	return pafcore::s_ok;
 }
 
+pafcore::ErrorCode GetTypeCaster(PyObject*& pyObject, pafcore::Type* type)
+{
+	PyObject* object = TypeCasterWrapper_new(&s_TypeCasterWrapper_Type, 0, 0);
+	((TypeCasterWrapper*)object)->m_type = type;
+	pyObject = object;
+	return pafcore::s_ok;
+}
+
 pafcore::ErrorCode Variant_GetAttr(PyObject*& pyObject, VariantWrapper* self, const char *name)
 {
 	pafcore::Variant* variant = (pafcore::Variant*)self->m_var;
@@ -556,17 +585,23 @@ pafcore::ErrorCode Variant_GetAttr(PyObject*& pyObject, VariantWrapper* self, co
 	}
 	else if(strcmp(name, "_address_") == 0)
 	{
-		pyObject = PyLong_FromVoidPtr(variant->m_pointer);
+		pafcore::Variant address;
+		address.assignPrimitive(RuntimeTypeOf<size_t>::RuntimeType::GetSingleton(), &variant->m_pointer);
+		pyObject = VariantToPython(&address);
 		return pafcore::s_ok;
 	}
 	else if(strcmp(name, "_size_") == 0)
 	{
-		pyObject = PyLong_FromSize_t(variant->m_type->m_size);
+		pafcore::Variant size;
+		size.assignPrimitive(RuntimeTypeOf<size_t>::RuntimeType::GetSingleton(), &variant->m_type->m_size);
+		pyObject = VariantToPython(&size);
 		return pafcore::s_ok;
 	}
 	else if(strcmp(name, "_count_") == 0)
 	{
-		pyObject = PyLong_FromUnsignedLong(variant->m_arraySize);
+		pafcore::Variant count;
+		count.assignPrimitive(RuntimeTypeOf<size_t>::RuntimeType::GetSingleton(), &variant->m_arraySize);
+		pyObject = VariantToPython(&count);
 		return pafcore::s_ok;
 	}
 	else if(strcmp(name, "_clone_") == 0)
@@ -608,6 +643,20 @@ pafcore::ErrorCode Variant_GetAttr(PyObject*& pyObject, VariantWrapper* self, co
 		else
 		{
 			return pafcore::e_is_not_class;
+		}
+	}
+	else if (strcmp(name, "_cast_ptr_") == 0)
+	{
+		if (pafcore::primitive_type == variant->m_type->m_category ||
+			pafcore::enum_type == variant->m_type->m_category ||
+			pafcore::class_type == variant->m_type->m_category)
+		{
+			pafcore::Type* type = (pafcore::Type*)variant->m_pointer;
+			return GetTypeCaster(pyObject, type);
+		}
+		else
+		{
+			return pafcore::e_is_not_type;
 		}
 	}
 	return pafcore::e_member_not_found;
@@ -916,9 +965,28 @@ PyObject* ProxyCreatorWrapper_call(ProxyCreatorWrapper* wrapper, PyObject* param
 		}
 		return VariantToPython(&impVar);
 	}
-	PyErr_SetString(PyExc_RuntimeError, ErrorCodeToString(pafcore::e_script_error));
+	PyErr_SetString(PyExc_RuntimeError, ErrorCodeToString(pafcore::e_invalid_arg_type_1));
 	return 0;
 }
+
+PyObject* TypeCasterWrapper_call(TypeCasterWrapper* wrapper, PyObject* parameters, PyObject*)
+{
+	pafcore::Type* type = wrapper->m_type;
+	Py_ssize_t numArgs = PyTuple_Size(parameters);
+	PyObject* pyArg = PyTuple_GetItem(parameters, 0);
+	if (pyArg)
+	{
+		pafcore::Variant value;
+		pafcore::Variant* arg = PythonToVariant(&value, pyArg);
+		pafcore::Variant dstPtr;
+		arg->reinterpretCastToPtr(dstPtr, type);
+		return VariantToPython(&dstPtr);
+	}
+	PyErr_SetString(PyExc_RuntimeError, ErrorCodeToString(pafcore::e_invalid_arg_type_1));
+	return 0;
+}
+
+
 
 PyObject* VariantWrapper_unaryOperator(PyObject* pyObject, pafcore::FunctionInvoker invoker)
 {
@@ -1150,7 +1218,15 @@ PyMODINIT_FUNC PyInit_PafPython_()
 	if (PyType_Ready(&s_ProxyCreatorWrapper_Type) < 0)
 	{
 		return NULL;
-	}	
+	}
+
+	s_TypeCasterWrapper_Type.tp_flags = Py_TPFLAGS_DEFAULT;
+	s_TypeCasterWrapper_Type.tp_new = TypeCasterWrapper_new;
+	s_TypeCasterWrapper_Type.tp_call = (ternaryfunc)TypeCasterWrapper_call;
+	if (PyType_Ready(&s_TypeCasterWrapper_Type) < 0)
+	{
+		return NULL;
+	}
 
 	module = PyModule_Create(&s_PafPythonModule);
 	if (module == NULL)

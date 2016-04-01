@@ -5,11 +5,17 @@ class Circle:
 	def __init__(self):
 		self.radius = 1.0
 		self.shape =  paf.tutorial.Shape._inherit_(self);
-	def getArea(self):
-		return 3.1415926 * self.radius * self.radius;
 
 circle = Circle();
 circle.radius = 2.0;
+
+
+i = paf.uint_t.New(0x12345678);
+c = paf.short._cast_ptr_(i._address_);
+print("%x" % i._);
+print("%x" % i._address_._);
+print("%x" % c[0]._);
+
 
 shapeManager = paf.tutorial.ShapeManager.GetInstance();
 shapeManager.addShape(circle.shape);

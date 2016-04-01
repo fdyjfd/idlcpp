@@ -1,2 +1,3 @@
 
-paf.win32gui.MessageBox.Show(0, "text", "caption", paf.win32gui.MessageBoxButton.YesNo);
+gui = paf.win32gui;
+gui.MessageBox.Show(0, "text", "caption", gui.MessageBoxButton.YesNo);

@@ -68,6 +68,7 @@ public:
 
 	bool castToObject(Type* dstType, void* dst) const;
 
+	void reinterpretCastToPtr(Variant& var, Type* dstType) const;
 public:
 	Type* m_type;
 	void* m_pointer;

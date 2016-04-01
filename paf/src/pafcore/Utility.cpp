@@ -68,6 +68,7 @@ const char* g_errorStrings[] =
 	"e_arg_is_constant_19",
 	"e_not_implemented",
 	"e_script_error",
+	"e_script_dose_not_override",
 };
 
 

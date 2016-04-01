@@ -193,17 +193,6 @@ StaticMethod* ClassType::findStaticMethod(const char* name, bool includeBaseClas
 	return 0;
 }
 
-Enumerator* ClassType::findEnumerator(const char* name)
-{
-	Metadata dummy(name);
-	Enumerator* res = std::lower_bound(m_enumerators, m_enumerators + m_enumeratorCount, dummy);
-	if(m_enumerators + m_enumeratorCount != res && strcmp(name, res->m_name) == 0)
-	{
-		return res;
-	}
-	return 0;
-}
-
 Metadata* ClassType::_findMember_(const char* name, bool includeBaseClasses)
 {
 	Metadata dummy(name);
@@ -229,10 +218,6 @@ Metadata* ClassType::_findMember_(const char* name, bool includeBaseClasses)
 
 Metadata* ClassType::findClassMember(const char* name, bool includeBaseClasses)
 {
-	if(isEnum())
-	{
-		return findEnumerator(name);
-	}
 	Type* type = findNestedType(name, false);
 	if(0 != type)
 	{

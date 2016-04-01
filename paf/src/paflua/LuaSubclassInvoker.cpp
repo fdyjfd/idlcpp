@@ -39,7 +39,7 @@ pafcore::ErrorCode LuaSubclassInvoker::invoke(const char* name, pafcore::Variant
 	{
 		args[i].move(*luaArgs[i]);
 	}
-	return (0 == error) ? pafcore::s_ok : pafcore::e_script_error;
+	return (0 == error) ? pafcore::s_ok : pafcore::e_script_dose_not_override;
 }
 
 END_PAFLUA

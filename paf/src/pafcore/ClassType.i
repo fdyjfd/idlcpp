@@ -44,7 +44,6 @@ namespace pafcore
 		StaticProperty* findStaticProperty(const char* name, bool includeBaseClasses);
 		InstanceMethod* findInstanceMethod(const char* name, bool includeBaseClasses);
 		StaticMethod* findStaticMethod(const char* name, bool includeBaseClasses);
-		Enumerator* findEnumerator(const char* name);
 
 	public:
 		Type** m_nestedTypes;
@@ -65,8 +64,6 @@ namespace pafcore
 		size_t m_staticPropertyCount;
 		StaticMethod* m_staticMethods;
 		size_t m_staticMethodCount;
-		Enumerator* m_enumerators;
-		size_t m_enumeratorCount;
 		*$
 	};
 }
