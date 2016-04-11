@@ -14,7 +14,7 @@
 
 int _tmain(int argc, _TCHAR* argv[])
 {
-	LoadLibraryA("win32gui.dll");
+	LoadLibraryA("crt.dll");
 	const char* path = "tutorial9";
 
 	PyImport_AppendInittab("ctypes", &PyInit_PafPython);
