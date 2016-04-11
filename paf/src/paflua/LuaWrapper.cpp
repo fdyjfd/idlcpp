@@ -373,6 +373,17 @@ pafcore::ErrorCode SetStaticField(lua_State *L, pafcore::StaticField* field)
 	return pafcore::s_ok;
 }
 
+pafcore::ErrorCode SetArraySize(lua_State *L, pafcore::Variant* that)
+{
+	pafcore::Variant value;
+	pafcore::Variant* arg = LuaToVariant(&value, L, 3);
+	if (!arg->castToPrimitive(RuntimeTypeOf<size_t>::RuntimeType::GetSingleton(), &that->m_arraySize))
+	{
+		return pafcore::e_invalid_property_type;
+	}
+	return pafcore::s_ok;
+}
+
 pafcore::ErrorCode GetPrimitiveOrEnum(lua_State *L, pafcore::Variant* variant)
 {
 	if(variant->m_type->isPrimitive())
@@ -472,9 +483,9 @@ int Variant_Call(lua_State *L)
 int Variant_Len(lua_State *L)
 {
 	pafcore::Variant* variant = (pafcore::Variant*)luaL_checkudata(L, 1, variant_metatable_name);
-	if(pafcore::null_object == variant->m_type->m_category)
+	if(pafcore::void_object == variant->m_type->m_category && variant->byValue())
 	{
-		Variant_Error(L, "#", pafcore::e_null_variant);
+		Variant_Error(L, "#", pafcore::e_void_variant);
 		return 0;
 	}
 	lua_pushinteger(L, variant->m_arraySize);
@@ -568,7 +579,7 @@ int Subclassing(lua_State *L)
 		VariantToLua(L, &impVar);
 		return 1;
 	}
-	Variant_Error(L, "the argument of _inherit_ must be a table", pafcore::e_invalid_arg_type_1);
+	Variant_Error(L, "the argument of _Derive_ must be a table", pafcore::e_invalid_arg_type_1);
 	return 0;
 }
 
@@ -586,7 +597,7 @@ int CastPtr(lua_State *L)
 		VariantToLua(L, &dstPtr);
 		return 1;
 	}
-	Variant_Error(L, "_cast_ptr_", pafcore::e_invalid_arg_type_1);
+	Variant_Error(L, "_CastPtr_", pafcore::e_invalid_arg_type_1);
 	return 0;
 }
 
@@ -716,7 +727,7 @@ pafcore::ErrorCode Variant_Index_Identify(lua_State *L, pafcore::Variant* varian
 			assert(false);
 		}
 	}
-	if(strcmp(name, "_") == 0)
+	else if(strcmp(name, "_") == 0)
 	{
 		if(variant->m_type->isPrimitive() || variant->m_type->isEnum())
 		{
@@ -732,6 +743,7 @@ pafcore::ErrorCode Variant_Index_Identify(lua_State *L, pafcore::Variant* varian
 	}
 	else if(strcmp(name, "_address_") == 0)
 	{
+		//lua_pushinteger(L, (size_t)variant->m_pointer);
 		pafcore::Variant address;
 		address.assignPrimitive(RuntimeTypeOf<size_t>::RuntimeType::GetSingleton(), &variant->m_pointer);
 		VariantToLua(L, &address);
@@ -739,6 +751,7 @@ pafcore::ErrorCode Variant_Index_Identify(lua_State *L, pafcore::Variant* varian
 	}
 	else if(strcmp(name, "_size_") == 0)
 	{
+		//lua_pushinteger(L, variant->m_type->m_size);
 		pafcore::Variant size;
 		size.assignPrimitive(RuntimeTypeOf<size_t>::RuntimeType::GetSingleton(), &variant->m_type->m_size);
 		VariantToLua(L, &size);
@@ -746,42 +759,22 @@ pafcore::ErrorCode Variant_Index_Identify(lua_State *L, pafcore::Variant* varian
 	}
 	else if(strcmp(name, "_count_") == 0)
 	{
+		//lua_pushinteger(L, variant->m_arraySize);
 		pafcore::Variant count;
 		count.assignPrimitive(RuntimeTypeOf<size_t>::RuntimeType::GetSingleton(), &variant->m_arraySize);
 		VariantToLua(L, &count);
 		return pafcore::s_ok;
 	}
-	else if(strcmp(name, "_clone_") == 0)
+	else if (strcmp(name, "_isNullPtr_") == 0)
 	{
-		switch(variant->m_type->m_category)
-		{
-		case pafcore::value_object:
-		case pafcore::reference_object:
-			{
-				pafcore::ClassType* type = (pafcore::ClassType*)variant->m_type;
-				pafcore::StaticMethod* method = type->findStaticMethod("Clone", false);
-				if(0 != method)
-				{
-					if(FunctionInvoker_Clone(L, method->m_invoker))
-					{
-						return pafcore::s_ok; 
-					}
-				}
-			}
-			break;
-		case pafcore::primitive_object:
-			{
-				pafcore::PrimitiveType* type = (pafcore::PrimitiveType*)variant->m_type;
-				assert(strcmp(type->m_staticMethods[0].m_name, "Clone") == 0);
-				if(FunctionInvoker_Clone(L, type->m_staticMethods[0].m_invoker))
-				{
-					return pafcore::s_ok; 
-				}
-			}
-			break;
-		}
+		//lua_pushboolean(L, 0 == variant->m_pointer ? 1 : 0);
+		bool isNullPtr = (0 == variant->m_pointer);
+		pafcore::Variant var;
+		var.assignPrimitive(RuntimeTypeOf<bool>::RuntimeType::GetSingleton(), &isNullPtr);
+		VariantToLua(L, &var);
+		return pafcore::s_ok;
 	}
-	else if(strcmp(name, "_inherit_") == 0)
+	else if(strcmp(name, "_Derive_") == 0)
 	{
 		if(pafcore::class_type == variant->m_type->m_category)
 		{
@@ -795,9 +788,10 @@ pafcore::ErrorCode Variant_Index_Identify(lua_State *L, pafcore::Variant* varian
 			return pafcore::e_is_not_class;
 		}
 	}
-	else if (strcmp(name, "_cast_ptr_") == 0)
+	else if (strcmp(name, "_CastPtr_") == 0)
 	{
-		if (pafcore::primitive_type == variant->m_type->m_category ||
+		if (pafcore::void_type == variant->m_type->m_category ||
+			pafcore::primitive_type == variant->m_type->m_category ||
 			pafcore::enum_type == variant->m_type->m_category ||
 			pafcore::class_type == variant->m_type->m_category)
 		{
@@ -811,6 +805,36 @@ pafcore::ErrorCode Variant_Index_Identify(lua_State *L, pafcore::Variant* varian
 			return pafcore::e_is_not_type;
 		}
 	}
+	//else if(strcmp(name, "_clone_") == 0)
+	//{
+	//	switch(variant->m_type->m_category)
+	//	{
+	//	case pafcore::value_object:
+	//	case pafcore::reference_object:
+	//		{
+	//			pafcore::ClassType* type = (pafcore::ClassType*)variant->m_type;
+	//			pafcore::StaticMethod* method = type->findStaticMethod("Clone", false);
+	//			if(0 != method)
+	//			{
+	//				if(FunctionInvoker_Clone(L, method->m_invoker))
+	//				{
+	//					return pafcore::s_ok; 
+	//				}
+	//			}
+	//		}
+	//		break;
+	//	case pafcore::primitive_object:
+	//		{
+	//			pafcore::PrimitiveType* type = (pafcore::PrimitiveType*)variant->m_type;
+	//			assert(strcmp(type->m_staticMethods[0].m_name, "Clone") == 0);
+	//			if(FunctionInvoker_Clone(L, type->m_staticMethods[0].m_invoker))
+	//			{
+	//				return pafcore::s_ok; 
+	//			}
+	//		}
+	//		break;
+	//	}
+	//}
 	return pafcore::e_member_not_found;
 }
 
@@ -852,6 +876,10 @@ pafcore::ErrorCode Variant_NewIndex_Identify(lua_State *L, pafcore::Variant* var
 		case pafcore::static_property:
 			return SetStaticProperty(L, static_cast<pafcore::StaticProperty*>(member));
 		}
+	}
+	else if (strcmp(name, "_count_") == 0)
+	{
+		return SetArraySize(L, variant);
 	}
 	return pafcore::e_member_not_found;
 }
@@ -930,7 +958,7 @@ int Variant_Index(lua_State *L)
 	pafcore::Variant* variant = (pafcore::Variant*)luaL_checkudata(L, 1, variant_metatable_name);
 	if(variant->isNull())
 	{
-		Variant_Error(L, "", pafcore::e_null_variant);
+		Variant_Error(L, "", pafcore::e_void_variant);
 		return 0;
 	}
 	size_t num;
@@ -980,7 +1008,7 @@ int Variant_NewIndex(lua_State *L)
 	pafcore::Variant* variant = (pafcore::Variant*)luaL_checkudata(L, 1, variant_metatable_name);
 	if(variant->isNull())
 	{
-		Variant_Error(L, "", pafcore::e_null_variant);
+		Variant_Error(L, "", pafcore::e_void_variant);
 		return 0;
 	}
 	size_t num;

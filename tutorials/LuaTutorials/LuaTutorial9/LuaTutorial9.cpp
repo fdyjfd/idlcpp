@@ -27,6 +27,7 @@ void GetExePath(std::string& path)
 int _tmain(int argc, _TCHAR* argv[])
 {
 	LoadLibrary("win32gui.dll");
+	LoadLibrary("crt.dll");
 	int error;
 	lua_State *L = luaL_newstate();
 	luaL_openlibs(L);

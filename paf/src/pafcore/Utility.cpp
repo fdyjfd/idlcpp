@@ -9,7 +9,7 @@ const char* g_errorStrings[] =
 	"s_ok",
 	"e_invalid_namespace",
 	"e_name_conflict",
-	"e_null_variant",
+	"e_void_variant",
 	"e_is_not_array",
 	"e_is_not_type",
 	"e_is_not_class",

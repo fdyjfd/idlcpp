@@ -17,7 +17,7 @@
 #include "StaticMethod.h"
 #include "Enumerator.h"
 #include "PrimitiveType.h"
-#include "NullType.h"
+#include "VoidType.h"
 
 
 namespace idlcpp
@@ -38,8 +38,6 @@ namespace idlcpp
 			::pafcore::Enumerator("instance_method", __pafcore__Category_Type::GetSingleton(), ::pafcore::instance_method),
 			::pafcore::Enumerator("instance_property", __pafcore__Category_Type::GetSingleton(), ::pafcore::instance_property),
 			::pafcore::Enumerator("name_space", __pafcore__Category_Type::GetSingleton(), ::pafcore::name_space),
-			::pafcore::Enumerator("null_object", __pafcore__Category_Type::GetSingleton(), ::pafcore::null_object),
-			::pafcore::Enumerator("null_type", __pafcore__Category_Type::GetSingleton(), ::pafcore::null_type),
 			::pafcore::Enumerator("primitive_object", __pafcore__Category_Type::GetSingleton(), ::pafcore::primitive_object),
 			::pafcore::Enumerator("primitive_type", __pafcore__Category_Type::GetSingleton(), ::pafcore::primitive_type),
 			::pafcore::Enumerator("reference_object", __pafcore__Category_Type::GetSingleton(), ::pafcore::reference_object),
@@ -48,6 +46,8 @@ namespace idlcpp
 			::pafcore::Enumerator("static_property", __pafcore__Category_Type::GetSingleton(), ::pafcore::static_property),
 			::pafcore::Enumerator("type_alias", __pafcore__Category_Type::GetSingleton(), ::pafcore::type_alias),
 			::pafcore::Enumerator("value_object", __pafcore__Category_Type::GetSingleton(), ::pafcore::value_object),
+			::pafcore::Enumerator("void_object", __pafcore__Category_Type::GetSingleton(), ::pafcore::void_object),
+			::pafcore::Enumerator("void_type", __pafcore__Category_Type::GetSingleton(), ::pafcore::void_type),
 		};
 		m_enumerators = s_enumerators;
 		m_enumeratorCount = array_size_of(s_enumerators);

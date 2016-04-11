@@ -74,5 +74,6 @@ namespace pafcore
 		size_t m_staticPropertyCount;
 		StaticMethod* m_staticMethods;
 		size_t m_staticMethodCount;
+		
 	};
 }

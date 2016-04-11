@@ -328,6 +328,17 @@ pafcore::ErrorCode SetInstanceProperty(pafcore::Variant* that, pafcore::Instance
 	return errorCode;
 }
 
+pafcore::ErrorCode SetArraySize(pafcore::Variant* that, PyObject* pyAttr)
+{
+	pafcore::Variant value;
+	pafcore::Variant* attr = PythonToVariant(&value, pyAttr);
+	if (!attr->castToPrimitive(RuntimeTypeOf<size_t>::RuntimeType::GetSingleton(), &that->m_arraySize))
+	{
+		return pafcore::e_invalid_property_type;
+	}
+	return pafcore::s_ok;
+}
+
 pafcore::ErrorCode GetFunctionInvoker(PyObject*& pyObject, pafcore::FunctionInvoker invoker)
 {
 	PyObject* object = FunctionInvokerWrapper_new(&s_FunctionInvokerWrapper_Type, 0, 0);
@@ -473,7 +484,7 @@ pafcore::ErrorCode Variant_GetAttr(PyObject*& pyObject, VariantWrapper* self, co
 	pafcore::Variant* variant = (pafcore::Variant*)self->m_var;
 	if(variant->isNull())
 	{
-		return pafcore::e_null_variant;
+		return pafcore::e_void_variant;
 	}
 	switch(variant->m_type->m_category)
 	{
@@ -604,36 +615,15 @@ pafcore::ErrorCode Variant_GetAttr(PyObject*& pyObject, VariantWrapper* self, co
 		pyObject = VariantToPython(&count);
 		return pafcore::s_ok;
 	}
-	else if(strcmp(name, "_clone_") == 0)
+	else if (strcmp(name, "_isNullPtr_") == 0)
 	{
-		pafcore::StaticMethod* method = 0;
-		switch(variant->m_type->m_category)
-		{
-		case pafcore::value_object:
-		case pafcore::reference_object:
-			{
-				pafcore::ClassType* type = (pafcore::ClassType*)variant->m_type;
-				method = type->findStaticMethod("Clone", false);
-			}
-			break;
-		case pafcore::primitive_object:
-			{
-				pafcore::PrimitiveType* type = (pafcore::PrimitiveType*)variant->m_type;
-				assert(strcmp(type->m_staticMethods[0].m_name, "Clone") == 0);
-				method = &type->m_staticMethods[0];
-			}
-			break;
-		}
-		pafcore::Variant* arg = (pafcore::Variant*)self->m_var; 
-		pafcore::Variant result;
-		pafcore::ErrorCode errorCode = (*method->m_invoker)(&result, &arg, 1);
-		if(pafcore::s_ok == errorCode)
-		{
-			pyObject = VariantToPython(&result);
-			return pafcore::s_ok;
-		}
+		bool isNullPtr = (0 == variant->m_pointer);
+		pafcore::Variant var;
+		var.assignPrimitive(RuntimeTypeOf<bool>::RuntimeType::GetSingleton(), &isNullPtr);
+		pyObject = VariantToPython(&var);
+		return pafcore::s_ok;
 	}
-	else if(strcmp(name, "_inherit_") == 0)
+	else if(strcmp(name, "_Derive_") == 0)
 	{
 		if(pafcore::class_type == variant->m_type->m_category)
 		{
@@ -645,9 +635,10 @@ pafcore::ErrorCode Variant_GetAttr(PyObject*& pyObject, VariantWrapper* self, co
 			return pafcore::e_is_not_class;
 		}
 	}
-	else if (strcmp(name, "_cast_ptr_") == 0)
+	else if (strcmp(name, "_CastPtr_") == 0)
 	{
-		if (pafcore::primitive_type == variant->m_type->m_category ||
+		if (pafcore::void_type == variant->m_type->m_category || 
+			pafcore::primitive_type == variant->m_type->m_category ||
 			pafcore::enum_type == variant->m_type->m_category ||
 			pafcore::class_type == variant->m_type->m_category)
 		{
@@ -659,6 +650,35 @@ pafcore::ErrorCode Variant_GetAttr(PyObject*& pyObject, VariantWrapper* self, co
 			return pafcore::e_is_not_type;
 		}
 	}
+	//else if (strcmp(name, "_clone_") == 0)
+	//{
+	//	pafcore::StaticMethod* method = 0;
+	//	switch (variant->m_type->m_category)
+	//	{
+	//	case pafcore::value_object:
+	//	case pafcore::reference_object:
+	//	{
+	//		pafcore::ClassType* type = (pafcore::ClassType*)variant->m_type;
+	//		method = type->findStaticMethod("Clone", false);
+	//	}
+	//	break;
+	//	case pafcore::primitive_object:
+	//	{
+	//		pafcore::PrimitiveType* type = (pafcore::PrimitiveType*)variant->m_type;
+	//		assert(strcmp(type->m_staticMethods[0].m_name, "Clone") == 0);
+	//		method = &type->m_staticMethods[0];
+	//	}
+	//	break;
+	//	}
+	//	pafcore::Variant* arg = (pafcore::Variant*)self->m_var;
+	//	pafcore::Variant result;
+	//	pafcore::ErrorCode errorCode = (*method->m_invoker)(&result, &arg, 1);
+	//	if (pafcore::s_ok == errorCode)
+	//	{
+	//		pyObject = VariantToPython(&result);
+	//		return pafcore::s_ok;
+	//	}
+	//}
 	return pafcore::e_member_not_found;
 }
 
@@ -701,6 +721,10 @@ pafcore::ErrorCode Variant_SetAttr(pafcore::Variant* variant, char* name, PyObje
 		case pafcore::static_property:
 			return SetStaticProperty(static_cast<pafcore::StaticProperty*>(member), pyAttr);
 		}
+	}
+	else if (strcmp(name, "_count_") == 0)
+	{
+		return SetArraySize(variant, pyAttr);
 	}
 
 	return pafcore::e_member_not_found;
@@ -830,9 +854,9 @@ PyObject* VariantWrapper_call(VariantWrapper* wrapper, PyObject* parameters, PyO
 Py_ssize_t VariantWrapper_length(VariantWrapper* wrapper)
 {
 	pafcore::Variant* variant = (pafcore::Variant*)wrapper->m_var;
-	if(pafcore::null_object == variant->m_type->m_category)
+	if (pafcore::void_object == variant->m_type->m_category && variant->byValue())
 	{
-		PyErr_SetString(PyExc_RuntimeError, ErrorCodeToString(pafcore::e_null_variant));
+		PyErr_SetString(PyExc_RuntimeError, ErrorCodeToString(pafcore::e_void_variant));
 		return 0;
 	}
 	return variant->m_arraySize;

@@ -23,8 +23,6 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LuaTutorial0", "LuaTutorial
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LuaTutorial9", "LuaTutorial9\LuaTutorial9.vcxproj", "{D33CB2BF-CA79-479A-9DEC-997AEAA40EAD}"
 EndProject
-Project("{5697748A-77EF-44CA-8824-4F5637E5945B}") = "bin", "..\..\bin.luaproj", "{E439935D-B2A2-46AE-856D-2AA408428F33}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -135,18 +133,6 @@ Global
 		{D33CB2BF-CA79-479A-9DEC-997AEAA40EAD}.Release|x64.Build.0 = Release|x64
 		{D33CB2BF-CA79-479A-9DEC-997AEAA40EAD}.Release|x86.ActiveCfg = Release|Win32
 		{D33CB2BF-CA79-479A-9DEC-997AEAA40EAD}.Release|x86.Build.0 = Release|Win32
-		{E439935D-B2A2-46AE-856D-2AA408428F33}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E439935D-B2A2-46AE-856D-2AA408428F33}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E439935D-B2A2-46AE-856D-2AA408428F33}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{E439935D-B2A2-46AE-856D-2AA408428F33}.Debug|x64.Build.0 = Debug|Any CPU
-		{E439935D-B2A2-46AE-856D-2AA408428F33}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{E439935D-B2A2-46AE-856D-2AA408428F33}.Debug|x86.Build.0 = Debug|Any CPU
-		{E439935D-B2A2-46AE-856D-2AA408428F33}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E439935D-B2A2-46AE-856D-2AA408428F33}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E439935D-B2A2-46AE-856D-2AA408428F33}.Release|x64.ActiveCfg = Release|Any CPU
-		{E439935D-B2A2-46AE-856D-2AA408428F33}.Release|x64.Build.0 = Release|Any CPU
-		{E439935D-B2A2-46AE-856D-2AA408428F33}.Release|x86.ActiveCfg = Release|Any CPU
-		{E439935D-B2A2-46AE-856D-2AA408428F33}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

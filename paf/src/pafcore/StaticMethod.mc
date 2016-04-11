@@ -20,7 +20,7 @@
 #include "StaticMethod.h"
 #include "Enumerator.h"
 #include "PrimitiveType.h"
-#include "NullType.h"
+#include "VoidType.h"
 
 
 namespace idlcpp

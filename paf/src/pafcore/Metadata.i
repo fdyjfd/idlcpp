@@ -4,7 +4,7 @@ namespace pafcore
 {
 	enum Category
 	{
-		null_object,
+		void_object,
 		primitive_object,
 		enum_object,
 		value_object,
@@ -18,7 +18,7 @@ namespace pafcore
 		static_method,
 		function_argument,
 		function_result,
-		null_type,
+		void_type,
 		primitive_type,
 		enum_type,
 		class_type,

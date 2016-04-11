@@ -130,6 +130,10 @@ void MethodNode::checkSemantic()
 	if(0 != m_result)
 	{
 		m_result->checkTypeName(m_enclosing);
+		if (m_result->isVoid() && 0 != m_passing && (snt_keyword_new == m_passing->m_nodeType || snt_keyword_ref == m_passing->m_nodeType))
+		{
+			RaiseError_InvalidResultType(this);
+		}
 		g_sourceFileManager.useType(m_result->m_typeInfo, byValue() ? tu_by_value : tu_by_ref);
 	}
 	if(m_export)

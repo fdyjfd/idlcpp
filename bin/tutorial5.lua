@@ -5,19 +5,13 @@ Circle.__index = Circle;
 function Circle.New()
 	circle= {radius = 1.0}
 	setmetatable(circle, Circle);
-	circle.shape = paf.tutorial.Shape._inherit_(circle);
+	circle.shape = paf.tutorial.Shape._Derive_(circle);
 	return circle;
 end
 
 function Circle:getArea()
 	return self.radius * self.radius * 3.1415926;
 end
-
-i = paf.uint_t.New(0x12345678);
-c = paf.char._cast_ptr_(i._address_);
-print(string.format("%x",i._));
-print(string.format("%x",i._address_._));
-print(string.format("%x",c[0]._));
 
 circle = Circle.New();
 circle.radius = 2.0;

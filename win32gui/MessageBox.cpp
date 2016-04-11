@@ -7,7 +7,7 @@
 
 namespace win32gui
 {
-	void MessageBox::Show(::size_t hwnd, const char* text, const char* caption, ::uint_t flag)
+	void MessageBox::Show(void* hwnd, const char* text, const char* caption, ::uint_t flag)
 	{
 		::MessageBox(HWND(hwnd), text, caption, flag);
 	}

@@ -34,7 +34,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v140_xp</PlatformToolset>
+    <PlatformToolset>v120_xp</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
@@ -203,12 +203,9 @@
     <None Include="..\..\..\src\pafcore\NameSpace.ic" />
     <None Include="..\..\..\src\pafcore\NameSpace.mc" />
     <None Include="..\..\..\src\pafcore\NameSpace.mh" />
-    <CustomBuild Include="..\..\..\src\pafcore\NullType.i">
+    <CustomBuild Include="..\..\..\src\pafcore\VoidType.i">
       <FileType>Document</FileType>
     </CustomBuild>
-    <None Include="..\..\..\src\pafcore\NullType.ic" />
-    <None Include="..\..\..\src\pafcore\NullType.mc" />
-    <None Include="..\..\..\src\pafcore\NullType.mh" />
     <CustomBuild Include="..\..\..\src\pafcore\PrimitiveType.i">
       <FileType>Document</FileType>
     </CustomBuild>
@@ -263,6 +260,9 @@
     <None Include="..\..\..\src\pafcore\Typedef.ic" />
     <None Include="..\..\..\src\pafcore\Typedef.mc" />
     <None Include="..\..\..\src\pafcore\Typedef.mh" />
+    <None Include="..\..\..\src\pafcore\VoidType.ic" />
+    <None Include="..\..\..\src\pafcore\VoidType.mc" />
+    <None Include="..\..\..\src\pafcore\VoidType.mh" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\src\pafcore\Argument.cpp" />
@@ -274,7 +274,7 @@
     <ClCompile Include="..\..\..\src\pafcore\InstanceProperty.cpp" />
     <ClCompile Include="..\..\..\src\pafcore\Metadata.cpp" />
     <ClCompile Include="..\..\..\src\pafcore\NameSpace.cpp" />
-    <ClCompile Include="..\..\..\src\pafcore\NullType.cpp" />
+    <ClCompile Include="..\..\..\src\pafcore\VoidType.cpp" />
     <ClCompile Include="..\..\..\src\pafcore\PrimitiveType.cpp" />
     <ClCompile Include="..\..\..\src\pafcore\Reference.cpp" />
     <ClCompile Include="..\..\..\src\pafcore\Result.cpp" />

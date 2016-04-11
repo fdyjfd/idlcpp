@@ -44,6 +44,7 @@ public:
 	void assignPrimitive(Type* type, const void* pointer);
 	void assignEnum(Type* type, const void* pointer);
 	
+	void assignVoidPtr(const void* pointer, bool constant);
 	void assignPrimitivePtr(Type* type, const void* pointer, bool constant, Semantic semantic);
 	void assignEnumPtr(Type* type, const void* pointer, bool constant, Semantic semantic);
 	void assignValuePtr(Type* type, const void* pointer, bool constant, Semantic semantic);
@@ -61,6 +62,7 @@ public:
 	bool castToValue(Type* dstType, void* dst) const;
 	bool castToReference(Type* dstType, void* dst) const;
 
+	bool castToVoidPtr(void** dst) const;
 	bool castToPrimitivePtr(Type* dstType, void** dst) const;
 	bool castToEnumPtr(Type* dstType, void** dst) const;
 	bool castToValuePtr(Type* dstType, void** dst) const;

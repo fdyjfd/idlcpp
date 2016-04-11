@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Variant.h"
-#include "NullType.h"
+#include "VoidType.h"
 #include "PrimitiveType.h"
 #include "EnumType.h"
 #include "ClassType.h"
@@ -14,7 +14,7 @@ BEGIN_PAFCORE
 
 Variant::Variant()
 {
-	m_type = NullType::GetSingleton();
+	m_type = VoidType::GetSingleton();
 	m_pointer = 0;
 	m_arraySize = 0;
 	m_semantic = by_value;
@@ -40,7 +40,7 @@ void Variant::clear()
 			m_type->destroyInstance(m_pointer);
 		}
 	}
-	m_type = NullType::GetSingleton();
+	m_type = VoidType::GetSingleton();
 	m_pointer = 0;
 	m_arraySize = 0;
 	m_semantic = by_value;
@@ -76,6 +76,7 @@ bool Variant::subscript(Variant& var, size_t index)
 	if(by_value != m_semantic && (0 == index || index < m_arraySize))
 	{
 		var.assignPtr(m_type, (void*)((size_t)m_pointer + m_type->m_size * index), m_constant, by_ref);
+		//var.assignArray(m_type, (void*)((size_t)m_pointer + m_type->m_size * index), m_arraySize - index, m_constant, by_ref);
 		return true;
 	}
 	return false;
@@ -97,6 +98,14 @@ void Variant::assignEnum(Type* type, const void* pointer)
 	m_type = type;
 	m_pointer = m_primitiveValue;
 	memcpy(m_pointer, pointer, type->m_size);
+}
+
+void Variant::assignVoidPtr(const void* pointer, bool constant)
+{
+	clear();
+	m_pointer = (void*)pointer;
+	m_constant = constant;
+	m_semantic = by_ptr;
 }
 
 void Variant::assignPrimitivePtr(Type* type, const void* pointer, bool constant, Semantic semantic)
@@ -176,6 +185,9 @@ void Variant::assignPtr(Type* type, const void* pointer, bool constant, Semantic
 {
 	switch(type->m_category)
 	{
+	case void_object:
+		assignVoidPtr(pointer, constant);
+		break;
 	case primitive_object:
 		assignPrimitivePtr(type, pointer, constant, semantic);
 		break;
@@ -272,6 +284,12 @@ bool Variant::castToReference(Type* dstType, void* dst) const
 	return false;
 }
 
+bool Variant::castToVoidPtr(void** dst) const
+{
+	*dst = m_pointer;
+	return true;
+}
+
 bool Variant::castToPrimitivePtr(Type* dstType, void** dst) const
 {
 	assert(dstType->isPrimitive());
@@ -352,17 +370,20 @@ bool Variant::castToObject(Type* dstType, void* dst) const
 
 void Variant::reinterpretCastToPtr(Variant& var, Type* dstType) const
 {
-	assert(var.isNull());
+	assert(var.isNull() && 0 == var.m_arraySize);
+	assert(dstType && dstType->m_size);
 	var.m_type = dstType;
-	if (m_pointer == m_primitiveValue)
-	{
-		*(size_t*)&var.m_pointer = *(size_t*)m_primitiveValue;
-		var.m_constant = false;
-	}
-	else
+	//if (m_pointer == m_primitiveValue)
+	//{
+	//	*(size_t*)&var.m_pointer = *(size_t*)m_primitiveValue;
+	//	var.m_constant = false;
+	//}
+	//else
 	{
 		var.m_pointer = m_pointer;
 		var.m_constant = m_constant;
+		size_t size = m_type->m_size *(0 == m_arraySize ? 1 : m_arraySize);
+		var.m_arraySize = size / dstType->m_size;
 	}
 	var.m_semantic = by_ptr;
 }
