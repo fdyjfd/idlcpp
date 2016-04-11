@@ -1,5 +1,13 @@
-﻿import pafpython;
+import pafpython;
 paf = pafpython.paf;
-gui = paf.win32gui;
+File = paf.crt.File;
 
-gui.MessageBox.Show(0, "text", "caption", gui.MessageBoxButton.YesNo);
+file = File.New("D:\\GitHub\\idlcpp\\bin\\tutorial9.py", "rb");
+if (not file._isNullPtr_._) :
+	file.seek(0, File.SeekFlag.seek_end);
+	size = file.tell();
+	file.seek(0, File.SeekFlag.seek_set);
+	buf = paf.char.NewArray(size + 1);
+	file.read(buf, size);
+	buf[size] = 0;
+	print(buf._);
