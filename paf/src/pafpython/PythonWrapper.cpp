@@ -650,6 +650,24 @@ pafcore::ErrorCode Variant_GetAttr(PyObject*& pyObject, VariantWrapper* self, co
 			return pafcore::e_is_not_type;
 		}
 	}
+	else if (strcmp(name, "_NullPtr_") == 0)
+	{
+		if (pafcore::void_type == variant->m_type->m_category ||
+			pafcore::primitive_type == variant->m_type->m_category ||
+			pafcore::enum_type == variant->m_type->m_category ||
+			pafcore::class_type == variant->m_type->m_category)
+		{
+			pafcore::Type* type = (pafcore::Type*)variant->m_pointer;
+			pafcore::Variant var;
+			var.assignPtr(type, 0, false, pafcore::Variant::by_ptr);
+			pyObject = VariantToPython(&var);
+			return pafcore::s_ok;
+		}
+		else
+		{
+			return pafcore::e_is_not_type;
+		}
+	}
 	//else if (strcmp(name, "_clone_") == 0)
 	//{
 	//	pafcore::StaticMethod* method = 0;

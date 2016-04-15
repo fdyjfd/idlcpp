@@ -264,7 +264,7 @@ bool Variant::castToValue(Type* dstType, void* dst) const
 {
 	assert(dstType->isValue());
 	void* ptr;
-	if(castToValuePtr(dstType, &ptr))
+	if(castToValuePtr(dstType, &ptr) && ptr)
 	{
 		dstType->assign(dst, ptr);
 		return true;
@@ -276,7 +276,7 @@ bool Variant::castToReference(Type* dstType, void* dst) const
 {
 	assert(dstType->isReference());
 	void* ptr;
-	if(castToReferencePtr(dstType, &ptr))
+	if(castToReferencePtr(dstType, &ptr) && ptr)
 	{
 		dstType->assign(dst, ptr);
 		return true;
@@ -318,7 +318,7 @@ bool Variant::castToValuePtr(Type* dstType, void** dst) const
 	if(0 == m_pointer)
 	{
 		*dst = 0;
-		return false;
+		return true;
 	}
 	if(m_type->isValue())
 	{
@@ -338,7 +338,7 @@ bool Variant::castToReferencePtr(Type* dstType, void** dst) const
 	if(0 == m_pointer)
 	{
 		*dst = 0;
-		return false;
+		return true;
 	}
 	if(m_type->isReference())
 	{

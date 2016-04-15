@@ -805,6 +805,24 @@ pafcore::ErrorCode Variant_Index_Identify(lua_State *L, pafcore::Variant* varian
 			return pafcore::e_is_not_type;
 		}
 	}
+	else if (strcmp(name, "_NullPtr_") == 0)
+	{
+		if (pafcore::void_type == variant->m_type->m_category ||
+			pafcore::primitive_type == variant->m_type->m_category ||
+			pafcore::enum_type == variant->m_type->m_category ||
+			pafcore::class_type == variant->m_type->m_category)
+		{
+			pafcore::Type* type = (pafcore::Type*)variant->m_pointer;
+			pafcore::Variant var;
+			var.assignPtr(type, 0, false, pafcore::Variant::by_ptr);
+			VariantToLua(L, &var);
+			return pafcore::s_ok;
+		}
+		else
+		{
+			return pafcore::e_is_not_type;
+		}
+	}
 	//else if(strcmp(name, "_clone_") == 0)
 	//{
 	//	switch(variant->m_type->m_category)
