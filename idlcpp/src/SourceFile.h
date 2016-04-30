@@ -29,6 +29,16 @@ void addSourceFile(const char* fileName);
 #include <map>
 #include <vector>
 
+bool compareFileName(const std::string& str1, const std::string& str2);
+
+struct CompareFileName
+{
+	bool operator () (const std::string& str1, const std::string& str2) const
+	{
+		return compareFileName(str1, str2);
+	}
+};
+
 struct ProgramNode;
 struct MemberNode;
 struct ClassNode;
@@ -147,7 +157,7 @@ public:
 	size_t m_insertSourceFilePosition;
 	std::vector<SourceFile*> m_unParsedSourceFiles;
 
-	std::set<std::string> m_sourceFileNames;
+	std::set<std::string, CompareFileName> m_sourceFileNames;
 	std::map<std::string, std::vector<NamespaceInfo>> m_namespaceInfos;
 	std::map<std::string, TypeInfo> m_typeInfos;
 	//std::map<std::string, TypeInfo> m_classTemplateTypeInfos;

@@ -15,5 +15,10 @@ namespace pafcore
 		return ::RuntimeTypeOf<ClassType>::RuntimeType::GetSingleton();
 	}
 
+	size_t ClassType::getAddress()
+	{
+		return (size_t)this;
+	}
+
 }
 

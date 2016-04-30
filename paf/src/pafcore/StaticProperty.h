@@ -19,6 +19,7 @@ namespace pafcore
 	{
 	public:
 		virtual ::pafcore::Type* getType();
+		virtual size_t getAddress();
 
 		bool get_hasGetter();
 		bool get_hasSetter();

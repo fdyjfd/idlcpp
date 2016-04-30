@@ -145,7 +145,7 @@ void Variant::assignReferencePtr(Type* type, const void* pointer, bool constant,
 	if(0 != pointer)
 	{
 		m_type = ((Reference*)pointer)->getType();
-		m_pointer = ((Reference*)pointer)->getAddress();
+		m_pointer = (void*)((Reference*)pointer)->getAddress();
 	}
 	else
 	{

@@ -277,6 +277,7 @@ void HeaderFileGenerator::generateCode_Class(FILE* file, ClassNode* classNode, i
 	if (!classNode->isValueType())
 	{
 		writeStringToFile("virtual ::pafcore::Type* getType();\n", file, indentation + 1);
+		writeStringToFile("virtual size_t getAddress();\n", file, indentation + 1);
 	}
 	bool generateCode = true;
 	std::vector<MemberNode*> memberNodes;

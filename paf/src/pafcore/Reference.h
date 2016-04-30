@@ -3,24 +3,25 @@
 
 #pragma once
 
+#include "./Typedef.h"
 namespace pafcore{ class Type; }
 
 #include "Utility.h"
 
 namespace pafcore
 {
-
 	class PAFCORE_EXPORT Reference
 	{
 	public:
 		virtual ::pafcore::Type* getType();
+		virtual size_t getAddress();
 
 
 	public:
-		virtual ~Reference(){}
-		virtual long_t addRef();
-		virtual long_t release();
-		virtual void* getAddress();
+		virtual ~Reference() {}
 		
+		virtual ::long_t addRef();
+		virtual ::long_t release();
+		virtual ::long_t getRefCount();
 	};
 }

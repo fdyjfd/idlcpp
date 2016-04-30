@@ -15,5 +15,10 @@ namespace pafcore
 		return ::RuntimeTypeOf<StaticField>::RuntimeType::GetSingleton();
 	}
 
+	size_t StaticField::getAddress()
+	{
+		return (size_t)this;
+	}
+
 }
 

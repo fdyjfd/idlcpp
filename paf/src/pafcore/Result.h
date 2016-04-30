@@ -14,6 +14,7 @@ class Variant;
 	{
 	public:
 		virtual ::pafcore::Type* getType();
+		virtual size_t getAddress();
 
 		Type* get_type();
 		bool get_byValue();

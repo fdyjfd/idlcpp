@@ -8,6 +8,7 @@ public:
 	ImportDirectories();
 public:
 	void addImportDirectory(const char* dir);
+	void calcImportDirectories(const char* fileName);
 	void setCurrentDirectory(const char* dir);
 public:
 	typedef std::vector<std::string> DirectoryContainer;

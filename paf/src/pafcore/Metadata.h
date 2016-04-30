@@ -35,6 +35,7 @@ namespace pafcore
 	{
 	public:
 		virtual ::pafcore::Type* getType();
+		virtual size_t getAddress();
 
 		const char* get__name_();
 		Category get__category_();

@@ -15,5 +15,10 @@ namespace pafcore
 		return ::RuntimeTypeOf<VoidType>::RuntimeType::GetSingleton();
 	}
 
+	size_t VoidType::getAddress()
+	{
+		return (size_t)this;
+	}
+
 }
 

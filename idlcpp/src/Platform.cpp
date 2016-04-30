@@ -36,6 +36,8 @@ void normalizeFileName(std::string& str, const char* fileName)
 		str = fileName;
 	}
 	std::replace(str.begin(), str.end(), '/', '\\');
+	//std::transform(str.begin(), str.end(), str.begin(), ::tolower);
+
 }
 
 const char* getExtNameBegin(const char* normalizedFileName)
@@ -76,4 +78,9 @@ void FormatPathForInclude(std::string& str)
 void FormatPathForLine(std::string& str)
 {
 	std::replace(str.begin(), str.end(), '\\', '/');
+}
+
+bool compareFileName(const std::string& str1, const std::string& str2)
+{
+	return stricmp(str1.c_str(), str2.c_str()) < 0;
 }

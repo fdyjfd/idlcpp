@@ -23,6 +23,7 @@ namespace pafcore
 	{
 	public:
 		virtual ::pafcore::Type* getType();
+		virtual size_t getAddress();
 
 		::size_t _getMemberCount_(bool includeBaseClasses);
 		Metadata* _getMember_(::size_t index,bool includeBaseClasses);

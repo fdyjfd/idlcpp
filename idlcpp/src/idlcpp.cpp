@@ -134,6 +134,7 @@ int _tmain(int argc, _TCHAR* argv[])
 
 	std::string inputFileName;
 	normalizeFileName(inputFileName, argv[argc - 1]);
+	g_importDirectories.calcImportDirectories(inputFileName.c_str());
 
 	const char* extName = getExtNameBegin(inputFileName.c_str());
 	std::string outputFileName;

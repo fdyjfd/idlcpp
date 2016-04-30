@@ -727,100 +727,121 @@ pafcore::ErrorCode Variant_Index_Identify(lua_State *L, pafcore::Variant* varian
 			assert(false);
 		}
 	}
-	else if(strcmp(name, "_") == 0)
+	else if (name[0] == '_')
 	{
-		if(variant->m_type->isPrimitive() || variant->m_type->isEnum())
+		switch (name[1])
 		{
-			return GetPrimitiveOrEnum(L, variant);
-		}
-	}
-	else if(strcmp(name, "_type_") == 0)
-	{
-		pafcore::Variant typeVar;
-		typeVar.assignReferencePtr(RuntimeTypeOf<pafcore::Type>::RuntimeType::GetSingleton(), variant->m_type, false, ::pafcore::Variant::by_ptr);
-		VariantToLua(L, &typeVar);
-		return pafcore::s_ok;
-	}
-	else if(strcmp(name, "_address_") == 0)
-	{
-		//lua_pushinteger(L, (size_t)variant->m_pointer);
-		pafcore::Variant address;
-		address.assignPrimitive(RuntimeTypeOf<size_t>::RuntimeType::GetSingleton(), &variant->m_pointer);
-		VariantToLua(L, &address);
-		return pafcore::s_ok;
-	}
-	else if(strcmp(name, "_size_") == 0)
-	{
-		//lua_pushinteger(L, variant->m_type->m_size);
-		pafcore::Variant size;
-		size.assignPrimitive(RuntimeTypeOf<size_t>::RuntimeType::GetSingleton(), &variant->m_type->m_size);
-		VariantToLua(L, &size);
-		return pafcore::s_ok;
-	}
-	else if(strcmp(name, "_count_") == 0)
-	{
-		//lua_pushinteger(L, variant->m_arraySize);
-		pafcore::Variant count;
-		count.assignPrimitive(RuntimeTypeOf<size_t>::RuntimeType::GetSingleton(), &variant->m_arraySize);
-		VariantToLua(L, &count);
-		return pafcore::s_ok;
-	}
-	else if (strcmp(name, "_isNullPtr_") == 0)
-	{
-		//lua_pushboolean(L, 0 == variant->m_pointer ? 1 : 0);
-		bool isNullPtr = (0 == variant->m_pointer);
-		pafcore::Variant var;
-		var.assignPrimitive(RuntimeTypeOf<bool>::RuntimeType::GetSingleton(), &isNullPtr);
-		VariantToLua(L, &var);
-		return pafcore::s_ok;
-	}
-	else if(strcmp(name, "_Derive_") == 0)
-	{
-		if(pafcore::class_type == variant->m_type->m_category)
-		{
-			pafcore::ClassType* classType = (pafcore::ClassType*)variant->m_pointer;		
-			lua_pushlightuserdata(L, classType);
-			lua_pushcclosure(L, Subclassing, 1);
-			return pafcore::s_ok;
-		}
-		else
-		{
-			return pafcore::e_is_not_class;
-		}
-	}
-	else if (strcmp(name, "_CastPtr_") == 0)
-	{
-		if (pafcore::void_type == variant->m_type->m_category ||
-			pafcore::primitive_type == variant->m_type->m_category ||
-			pafcore::enum_type == variant->m_type->m_category ||
-			pafcore::class_type == variant->m_type->m_category)
-		{
-			pafcore::Type* type = (pafcore::Type*)variant->m_pointer;
-			lua_pushlightuserdata(L, type);
-			lua_pushcclosure(L, CastPtr, 1);
-			return pafcore::s_ok;
-		}
-		else
-		{
-			return pafcore::e_is_not_type;
-		}
-	}
-	else if (strcmp(name, "_NullPtr_") == 0)
-	{
-		if (pafcore::void_type == variant->m_type->m_category ||
-			pafcore::primitive_type == variant->m_type->m_category ||
-			pafcore::enum_type == variant->m_type->m_category ||
-			pafcore::class_type == variant->m_type->m_category)
-		{
-			pafcore::Type* type = (pafcore::Type*)variant->m_pointer;
-			pafcore::Variant var;
-			var.assignPtr(type, 0, false, pafcore::Variant::by_ptr);
-			VariantToLua(L, &var);
-			return pafcore::s_ok;
-		}
-		else
-		{
-			return pafcore::e_is_not_type;
+		case '\0'://_			
+			if (variant->m_type->isPrimitive() || variant->m_type->isEnum())
+			{
+				return GetPrimitiveOrEnum(L, variant);
+			}
+			break;
+		case 'C':
+			if (strcmp(&name[2], "astPtr_") == 0)//_CastPtr_
+			{
+				if (pafcore::void_type == variant->m_type->m_category ||
+					pafcore::primitive_type == variant->m_type->m_category ||
+					pafcore::enum_type == variant->m_type->m_category ||
+					pafcore::class_type == variant->m_type->m_category)
+				{
+					pafcore::Type* type = (pafcore::Type*)variant->m_pointer;
+					lua_pushlightuserdata(L, type);
+					lua_pushcclosure(L, CastPtr, 1);
+					return pafcore::s_ok;
+				}
+				else
+				{
+					return pafcore::e_is_not_type;
+				}
+			}
+			break;
+		case 'D':
+			if (strcmp(&name[2], "erive_") == 0)//_Derive_
+			{
+				if (pafcore::class_type == variant->m_type->m_category)
+				{
+					pafcore::ClassType* classType = (pafcore::ClassType*)variant->m_pointer;
+					lua_pushlightuserdata(L, classType);
+					lua_pushcclosure(L, Subclassing, 1);
+					return pafcore::s_ok;
+				}
+				else
+				{
+					return pafcore::e_is_not_class;
+				}
+			}
+			break;
+		case 'a':
+			if (strcmp(&name[2], "ddress_") == 0)//_address_
+			{
+				//lua_pushinteger(L, (size_t)variant->m_pointer);
+				pafcore::Variant address;
+				address.assignPrimitive(RuntimeTypeOf<size_t>::RuntimeType::GetSingleton(), &variant->m_pointer);
+				VariantToLua(L, &address);
+				return pafcore::s_ok;
+			}
+			break;
+		case 'c':
+			if (strcmp(&name[2], "ount_") == 0)//_count_
+			{
+				//lua_pushinteger(L, variant->m_arraySize);
+				pafcore::Variant count;
+				count.assignPrimitive(RuntimeTypeOf<size_t>::RuntimeType::GetSingleton(), &variant->m_arraySize);
+				VariantToLua(L, &count);
+				return pafcore::s_ok;
+			}
+			break;
+		case 'i':
+			if (strcmp(&name[2], "sNullPtr_") == 0)//_isNullPtr_
+			{
+				//lua_pushboolean(L, 0 == variant->m_pointer ? 1 : 0);
+				bool isNullPtr = (0 == variant->m_pointer);
+				pafcore::Variant var;
+				var.assignPrimitive(RuntimeTypeOf<bool>::RuntimeType::GetSingleton(), &isNullPtr);
+				VariantToLua(L, &var);
+				return pafcore::s_ok;
+			}
+			break;
+		case 'n':
+			if (strcmp(&name[2], "ullPtr_") == 0)//_nullPtr_
+			{
+				if (pafcore::void_type == variant->m_type->m_category ||
+					pafcore::primitive_type == variant->m_type->m_category ||
+					pafcore::enum_type == variant->m_type->m_category ||
+					pafcore::class_type == variant->m_type->m_category)
+				{
+					pafcore::Type* type = (pafcore::Type*)variant->m_pointer;
+					pafcore::Variant var;
+					var.assignPtr(type, 0, false, pafcore::Variant::by_ptr);
+					VariantToLua(L, &var);
+					return pafcore::s_ok;
+				}
+				else
+				{
+					return pafcore::e_is_not_type;
+				}
+			}
+			break;
+		case 's':
+			if (strcmp(&name[2], "ize_") == 0)//_size_
+			{
+				//lua_pushinteger(L, variant->m_type->m_size);
+				pafcore::Variant size;
+				size.assignPrimitive(RuntimeTypeOf<size_t>::RuntimeType::GetSingleton(), &variant->m_type->m_size);
+				VariantToLua(L, &size);
+				return pafcore::s_ok;
+			}
+			break;
+		case 't':
+			if (strcmp(&name[2], "ype_") == 0)//_type_
+			{
+				pafcore::Variant typeVar;
+				typeVar.assignReferencePtr(RuntimeTypeOf<pafcore::Type>::RuntimeType::GetSingleton(), variant->m_type, false, ::pafcore::Variant::by_ptr);
+				VariantToLua(L, &typeVar);
+				return pafcore::s_ok;
+			}
+			break;
 		}
 	}
 	//else if(strcmp(name, "_clone_") == 0)

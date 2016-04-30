@@ -15,6 +15,7 @@ namespace pafcore
 	{
 	public:
 		virtual ::pafcore::Type* getType();
+		virtual size_t getAddress();
 
 		Type* get_type();
 		ClassType* get_objectType();

@@ -12,6 +12,7 @@ namespace pafcore
 	{
 	public:
 		virtual ::pafcore::Type* getType();
+		virtual size_t getAddress();
 
 		static void* AddressToPtr(::size_t address);
 		static void* get_NullPtr();

@@ -14,6 +14,7 @@ namespace pafcore
 	{
 	public:
 		virtual ::pafcore::Type* getType();
+		virtual size_t getAddress();
 
 		::size_t get_overloadCount();
 		Result* getResult(::size_t overloadIndex);

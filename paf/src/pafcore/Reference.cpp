@@ -16,9 +16,9 @@ long_t Reference::release()
 	return 0x40000000;
 };
 
-void* Reference::getAddress()
+long_t Reference::getRefCount()
 {
-	return this;
-}
+	return 0x40000000;
+};
 
 END_PAFCORE

@@ -85,6 +85,10 @@ public:
 		}
 		return res;
 	}
+	virtual long_t getRefCount()
+	{
+		return m_refCount;
+	}
 private:
 	long_t m_refCount;
 };
@@ -156,6 +160,10 @@ public:
 			delete this;
 		}
 		return res;
+	}
+	virtual long_t getRefCount()
+	{
+		return m_refCount;
 	}
 private:
 	long_t m_refCount;

@@ -22,7 +22,11 @@ namespace idlcpp
 		virtual void destroyArray(void* address);
 		virtual void assign(void* dst, const void* src);
 	public:
+		static ::pafcore::ErrorCode Reference_addRef(::pafcore::Variant* result, ::pafcore::Variant** args, int numArgs);
+		static ::pafcore::ErrorCode Reference_getAddress(::pafcore::Variant* result, ::pafcore::Variant** args, int numArgs);
+		static ::pafcore::ErrorCode Reference_getRefCount(::pafcore::Variant* result, ::pafcore::Variant** args, int numArgs);
 		static ::pafcore::ErrorCode Reference_getType(::pafcore::Variant* result, ::pafcore::Variant** args, int numArgs);
+		static ::pafcore::ErrorCode Reference_release(::pafcore::Variant* result, ::pafcore::Variant** args, int numArgs);
 	public:
 		PAFCORE_EXPORT static __pafcore__Reference_Type* GetSingleton();
 	};
