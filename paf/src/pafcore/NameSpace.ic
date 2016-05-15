@@ -10,7 +10,12 @@
 namespace pafcore
 {
 
-	::pafcore::Type* NameSpace::getType()
+	::pafcore::ClassType* NameSpace::GetType()
+	{
+		return ::RuntimeTypeOf<NameSpace>::RuntimeType::GetSingleton();
+	}
+
+	::pafcore::ClassType* NameSpace::getType()
 	{
 		return ::RuntimeTypeOf<NameSpace>::RuntimeType::GetSingleton();
 	}

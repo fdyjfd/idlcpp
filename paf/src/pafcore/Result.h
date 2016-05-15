@@ -13,7 +13,8 @@ class Variant;
 	class PAFCORE_EXPORT Result : public Metadata
 	{
 	public:
-		virtual ::pafcore::Type* getType();
+		static ::pafcore::ClassType* GetType();
+		virtual ::pafcore::ClassType* getType();
 		virtual size_t getAddress();
 
 		Type* get_type();

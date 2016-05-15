@@ -1,6 +1,43 @@
 #include "ErrorList.h"
 #include "SourceFile.h"
 
+const char* g_errorStrings[] =
+{
+	"file not existing",
+	"open file failed",
+
+	"internal error",
+	"invalid string",
+	"unterminated code",
+	"unterminated comment",
+
+	"native type as namespace name",
+	"native type as type name",
+	"type name as namespace name",
+	"type redefined",
+	"enumerator redefined",
+	"missing type specifier",
+	"constructor with return type",
+	"constructor with modifier",
+	"member name equal to class name",
+	"member redefined",
+	"primitive type as base",
+	"base type",
+	"base redeclared",
+	"invalid package name",
+	"invalid type name",
+	"invalid class template name",
+	"missing template argument list",
+	"too few template arguments",
+	"too many template arguments",
+	"invalid template argument",
+	"ambiguous type name",
+	"template parameter redefinition",
+	"template class not instantiton",
+	"template interface not supported",
+	"missing reference base type",
+};
+
 void ErrorList::addItem(const char* fileName, int lineNo, int columnNo, ErrorCode errorCode, const char* errorText)
 {
 	ErrorInfo errorInfo;
@@ -52,6 +89,7 @@ void ErrorList_Output()
 	for(size_t i = 0; i < count; ++i)
 	{
 		ErrorList::ErrorInfo& err = g_errorList.m_errorInfos[i];
-		fprintf(stderr, "%s(%d,%d):error:%.4d,%s\n", err.fileName, err.lineNo, err.columnNo, err.errorCode, err.errorText.c_str());
+		fprintf(stderr, "%s(%d,%d): error %.4d : %s, %s\n", err.fileName, err.lineNo, err.columnNo, err.errorCode, 
+			g_errorStrings[err.errorCode], err.errorText.c_str());
 	}
 }

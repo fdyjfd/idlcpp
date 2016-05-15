@@ -10,7 +10,12 @@
 namespace pafcore
 {
 
-	::pafcore::Type* StaticField::getType()
+	::pafcore::ClassType* StaticField::GetType()
+	{
+		return ::RuntimeTypeOf<StaticField>::RuntimeType::GetSingleton();
+	}
+
+	::pafcore::ClassType* StaticField::getType()
 	{
 		return ::RuntimeTypeOf<StaticField>::RuntimeType::GetSingleton();
 	}

@@ -18,7 +18,8 @@ namespace pafcore
 	class PAFCORE_EXPORT EnumType : public Type
 	{
 	public:
-		virtual ::pafcore::Type* getType();
+		static ::pafcore::ClassType* GetType();
+		virtual ::pafcore::ClassType* getType();
 		virtual size_t getAddress();
 
 		::size_t _getEnumeratorCount_();

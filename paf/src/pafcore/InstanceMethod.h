@@ -13,7 +13,8 @@ namespace pafcore
 	class PAFCORE_EXPORT InstanceMethod : public Metadata
 	{
 	public:
-		virtual ::pafcore::Type* getType();
+		static ::pafcore::ClassType* GetType();
+		virtual ::pafcore::ClassType* getType();
 		virtual size_t getAddress();
 
 		::size_t get_overloadCount();

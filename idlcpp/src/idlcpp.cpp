@@ -148,7 +148,10 @@ int _tmain(int argc, _TCHAR* argv[])
 	}
 
 	bool mainSourceFile = true;
-	g_sourceFileManager.addSourceFile(inputFileName.c_str());
+	if (import_file_failed == g_sourceFileManager.addSourceFile(inputFileName.c_str()))
+	{
+		ErrorList_AddItem("", 0, 0, import_error_file_not_existing, inputFileName.c_str());
+	}
 	while(SourceFile* sourceFile = g_sourceFileManager.popSourceFile())
 	{
 		const char* dirEnd = getDirNameEnd(sourceFile->m_fileName.c_str());

@@ -48,7 +48,8 @@ namespace pafcore
 	class PAFCORE_EXPORT PrimitiveType : public Type
 	{
 	public:
-		virtual ::pafcore::Type* getType();
+		static ::pafcore::ClassType* GetType();
+		virtual ::pafcore::ClassType* getType();
 		virtual size_t getAddress();
 
 		::size_t _getMemberCount_();

@@ -4,7 +4,6 @@
 #pragma once
 
 #include "./Typedef.mh"
-#include "./Type.mh"
 #include "Reference.mh"
 #include "AutoRun.h"
 #include "NameSpace.h"
@@ -27,48 +26,15 @@ namespace idlcpp
 	__pafcore__Reference_Type::__pafcore__Reference_Type() : ::pafcore::ClassType("Reference", ::pafcore::reference_object)
 	{
 		m_size = sizeof(::pafcore::Reference);
-		static ::pafcore::Result s_addRef_0_Result(RuntimeTypeOf<::long_t>::RuntimeType::GetSingleton(), false, ::pafcore::Result::by_value);
-		static ::pafcore::Result s_getAddress_0_Result(RuntimeTypeOf<::size_t>::RuntimeType::GetSingleton(), false, ::pafcore::Result::by_value);
-		static ::pafcore::Result s_getRefCount_0_Result(RuntimeTypeOf<::long_t>::RuntimeType::GetSingleton(), false, ::pafcore::Result::by_value);
-		static ::pafcore::Result s_getType_0_Result(RuntimeTypeOf<::pafcore::Type>::RuntimeType::GetSingleton(), false, ::pafcore::Result::by_ptr);
-		static ::pafcore::Result s_release_0_Result(RuntimeTypeOf<::long_t>::RuntimeType::GetSingleton(), false, ::pafcore::Result::by_value);
-		static ::pafcore::Overload s_addRef_Overloads[] = 
+		static ::pafcore::InstanceProperty s_properties[] = 
 		{
-			::pafcore::Overload(&s_addRef_0_Result, 0, 0),
+			::pafcore::InstanceProperty("refCount", GetSingleton(), Reference_get_refCount, RuntimeTypeOf<::long_t>::RuntimeType::GetSingleton(), ::pafcore::Metadata::by_value, false, 0, 0, ::pafcore::Metadata::by_value, false),
 		};
-		static ::pafcore::Overload s_getAddress_Overloads[] = 
-		{
-			::pafcore::Overload(&s_getAddress_0_Result, 0, 0),
-		};
-		static ::pafcore::Overload s_getRefCount_Overloads[] = 
-		{
-			::pafcore::Overload(&s_getRefCount_0_Result, 0, 0),
-		};
-		static ::pafcore::Overload s_getType_Overloads[] = 
-		{
-			::pafcore::Overload(&s_getType_0_Result, 0, 0),
-		};
-		static ::pafcore::Overload s_release_Overloads[] = 
-		{
-			::pafcore::Overload(&s_release_0_Result, 0, 0),
-		};
-		static ::pafcore::InstanceMethod s_methods[] = 
-		{
-			::pafcore::InstanceMethod("addRef", Reference_addRef, s_addRef_Overloads, 1),
-			::pafcore::InstanceMethod("getAddress", Reference_getAddress, s_getAddress_Overloads, 1),
-			::pafcore::InstanceMethod("getRefCount", Reference_getRefCount, s_getRefCount_Overloads, 1),
-			::pafcore::InstanceMethod("getType", Reference_getType, s_getType_Overloads, 1),
-			::pafcore::InstanceMethod("release", Reference_release, s_release_Overloads, 1),
-		};
-		m_methods = s_methods;
-		m_methodCount = array_size_of(s_methods);
+		m_properties = s_properties;
+		m_propertyCount = array_size_of(s_properties);
 		static Metadata* s_members[] = 
 		{
-			&s_methods[0],
-			&s_methods[1],
-			&s_methods[2],
-			&s_methods[3],
-			&s_methods[4],
+			&s_properties[0],
 		};
 		m_members = s_members;
 		m_memberCount = array_size_of(s_members);
@@ -90,104 +56,16 @@ namespace idlcpp
 		*(::pafcore::Reference*)dst = *(const ::pafcore::Reference*)src;
 	}
 
-	::pafcore::ErrorCode __pafcore__Reference_Type::Reference_addRef(::pafcore::Variant* result, ::pafcore::Variant** args, int_t numArgs)
+	::pafcore::ErrorCode __pafcore__Reference_Type::Reference_get_refCount(::pafcore::Variant* that, ::pafcore::Variant* value)
 	{
-		if(1 == numArgs)
+		::pafcore::Reference* self;
+		if(!that->castToReferencePtr(GetSingleton(), (void**)&self))
 		{
-			if(args[0]->isConstant())
-			{
-				return ::pafcore::e_this_is_constant;
-			}
-			::pafcore::Reference* self;
-			if(!args[0]->castToReferencePtr(GetSingleton(), (void**)&self))
-			{
-				return ::pafcore::e_invalid_this_type;
-			}
-			::long_t res = self->addRef();
-			result->assignPrimitive(RuntimeTypeOf<::long_t>::RuntimeType::GetSingleton(), &res);
-			return ::pafcore::s_ok;
+			return ::pafcore::e_invalid_this_type;
 		}
-		return ::pafcore::e_invalid_arg_num;
-	}
-
-	::pafcore::ErrorCode __pafcore__Reference_Type::Reference_getAddress(::pafcore::Variant* result, ::pafcore::Variant** args, int_t numArgs)
-	{
-		if(1 == numArgs)
-		{
-			if(args[0]->isConstant())
-			{
-				return ::pafcore::e_this_is_constant;
-			}
-			::pafcore::Reference* self;
-			if(!args[0]->castToReferencePtr(GetSingleton(), (void**)&self))
-			{
-				return ::pafcore::e_invalid_this_type;
-			}
-			::size_t res = self->getAddress();
-			result->assignPrimitive(RuntimeTypeOf<::size_t>::RuntimeType::GetSingleton(), &res);
-			return ::pafcore::s_ok;
-		}
-		return ::pafcore::e_invalid_arg_num;
-	}
-
-	::pafcore::ErrorCode __pafcore__Reference_Type::Reference_getRefCount(::pafcore::Variant* result, ::pafcore::Variant** args, int_t numArgs)
-	{
-		if(1 == numArgs)
-		{
-			if(args[0]->isConstant())
-			{
-				return ::pafcore::e_this_is_constant;
-			}
-			::pafcore::Reference* self;
-			if(!args[0]->castToReferencePtr(GetSingleton(), (void**)&self))
-			{
-				return ::pafcore::e_invalid_this_type;
-			}
-			::long_t res = self->getRefCount();
-			result->assignPrimitive(RuntimeTypeOf<::long_t>::RuntimeType::GetSingleton(), &res);
-			return ::pafcore::s_ok;
-		}
-		return ::pafcore::e_invalid_arg_num;
-	}
-
-	::pafcore::ErrorCode __pafcore__Reference_Type::Reference_getType(::pafcore::Variant* result, ::pafcore::Variant** args, int_t numArgs)
-	{
-		if(1 == numArgs)
-		{
-			if(args[0]->isConstant())
-			{
-				return ::pafcore::e_this_is_constant;
-			}
-			::pafcore::Reference* self;
-			if(!args[0]->castToReferencePtr(GetSingleton(), (void**)&self))
-			{
-				return ::pafcore::e_invalid_this_type;
-			}
-			::pafcore::Type* res = self->getType();
-			result->assignReferencePtr(RuntimeTypeOf<::pafcore::Type>::RuntimeType::GetSingleton(), res, false, ::pafcore::Variant::by_ptr);
-			return ::pafcore::s_ok;
-		}
-		return ::pafcore::e_invalid_arg_num;
-	}
-
-	::pafcore::ErrorCode __pafcore__Reference_Type::Reference_release(::pafcore::Variant* result, ::pafcore::Variant** args, int_t numArgs)
-	{
-		if(1 == numArgs)
-		{
-			if(args[0]->isConstant())
-			{
-				return ::pafcore::e_this_is_constant;
-			}
-			::pafcore::Reference* self;
-			if(!args[0]->castToReferencePtr(GetSingleton(), (void**)&self))
-			{
-				return ::pafcore::e_invalid_this_type;
-			}
-			::long_t res = self->release();
-			result->assignPrimitive(RuntimeTypeOf<::long_t>::RuntimeType::GetSingleton(), &res);
-			return ::pafcore::s_ok;
-		}
-		return ::pafcore::e_invalid_arg_num;
+		::long_t res = self->get_refCount();
+		value->assignPrimitive(RuntimeTypeOf<::long_t>::RuntimeType::GetSingleton(), &res);
+		return ::pafcore::s_ok;
 	}
 
 	__pafcore__Reference_Type* __pafcore__Reference_Type::GetSingleton()

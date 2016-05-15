@@ -10,7 +10,12 @@
 namespace pafcore
 {
 
-	::pafcore::Type* TypeAlias::getType()
+	::pafcore::ClassType* TypeAlias::GetType()
+	{
+		return ::RuntimeTypeOf<TypeAlias>::RuntimeType::GetSingleton();
+	}
+
+	::pafcore::ClassType* TypeAlias::getType()
 	{
 		return ::RuntimeTypeOf<TypeAlias>::RuntimeType::GetSingleton();
 	}

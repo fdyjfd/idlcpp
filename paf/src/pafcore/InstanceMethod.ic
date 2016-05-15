@@ -10,7 +10,12 @@
 namespace pafcore
 {
 
-	::pafcore::Type* InstanceMethod::getType()
+	::pafcore::ClassType* InstanceMethod::GetType()
+	{
+		return ::RuntimeTypeOf<InstanceMethod>::RuntimeType::GetSingleton();
+	}
+
+	::pafcore::ClassType* InstanceMethod::getType()
 	{
 		return ::RuntimeTypeOf<InstanceMethod>::RuntimeType::GetSingleton();
 	}

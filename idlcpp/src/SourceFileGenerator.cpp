@@ -114,9 +114,19 @@ void SourceFileGenerator::generateCode_Class(FILE* file, ClassNode* classNode, i
 	{
 		std::string typeName;
 		GetClassName(typeName, classNode);
-		generateCode_TemplateHeader(file, classNode, indentation);
 
-		writeStringToFile("::pafcore::Type* ", file, indentation);
+		generateCode_TemplateHeader(file, classNode, indentation);
+		writeStringToFile("::pafcore::ClassType* ", file, indentation);
+		writeStringToFile(typeName.c_str(), file);
+		writeStringToFile("::GetType()\n", file);
+		writeStringToFile("{\n", file, indentation);
+		writeStringToFile("return ::RuntimeTypeOf<", file, indentation + 1);
+		writeStringToFile(typeName.c_str(), file);
+		writeStringToFile(">::RuntimeType::GetSingleton();\n", file);
+		writeStringToFile("}\n\n", file, indentation);
+
+		generateCode_TemplateHeader(file, classNode, indentation);
+		writeStringToFile("::pafcore::ClassType* ", file, indentation);
 		writeStringToFile(typeName.c_str(), file);
 		writeStringToFile("::getType()\n", file);
 		writeStringToFile("{\n", file, indentation);
@@ -125,6 +135,7 @@ void SourceFileGenerator::generateCode_Class(FILE* file, ClassNode* classNode, i
 		writeStringToFile(">::RuntimeType::GetSingleton();\n", file);
 		writeStringToFile("}\n\n", file, indentation);
 
+		generateCode_TemplateHeader(file, classNode, indentation);
 		writeStringToFile("size_t ", file, indentation);
 		writeStringToFile(typeName.c_str(), file);
 		writeStringToFile("::getAddress()\n", file);

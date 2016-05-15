@@ -11,7 +11,8 @@ namespace pafcore
 	class PAFCORE_EXPORT VoidType : public Type
 	{
 	public:
-		virtual ::pafcore::Type* getType();
+		static ::pafcore::ClassType* GetType();
+		virtual ::pafcore::ClassType* getType();
 		virtual size_t getAddress();
 
 		static void* AddressToPtr(::size_t address);

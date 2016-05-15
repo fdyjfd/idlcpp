@@ -4,24 +4,32 @@
 #pragma once
 
 #include "./Typedef.h"
-namespace pafcore{ class Type; }
 
 #include "Utility.h"
 
 namespace pafcore
 {
+	class ClassType;
+
 	class PAFCORE_EXPORT Reference
 	{
 	public:
-		virtual ::pafcore::Type* getType();
+		static ::pafcore::ClassType* GetType();
+		virtual ::pafcore::ClassType* getType();
 		virtual size_t getAddress();
 
 
-	public:
-		virtual ~Reference() {}
-		
 		virtual ::long_t addRef();
 		virtual ::long_t release();
-		virtual ::long_t getRefCount();
+
+		::long_t get_refCount();
+
+		void* castTo(ClassType* classType);
+		template<typename T>
+		void* castTo(ClassType* classType)
+		{
+			return reinterpret_cast<T*>(castTo(T::GetType()));
+		}
+		
 	};
 }

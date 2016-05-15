@@ -10,7 +10,12 @@
 namespace pafcore
 {
 
-	::pafcore::Type* PrimitiveType::getType()
+	::pafcore::ClassType* PrimitiveType::GetType()
+	{
+		return ::RuntimeTypeOf<PrimitiveType>::RuntimeType::GetSingleton();
+	}
+
+	::pafcore::ClassType* PrimitiveType::getType()
 	{
 		return ::RuntimeTypeOf<PrimitiveType>::RuntimeType::GetSingleton();
 	}

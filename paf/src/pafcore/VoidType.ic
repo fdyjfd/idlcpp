@@ -10,7 +10,12 @@
 namespace pafcore
 {
 
-	::pafcore::Type* VoidType::getType()
+	::pafcore::ClassType* VoidType::GetType()
+	{
+		return ::RuntimeTypeOf<VoidType>::RuntimeType::GetSingleton();
+	}
+
+	::pafcore::ClassType* VoidType::getType()
 	{
 		return ::RuntimeTypeOf<VoidType>::RuntimeType::GetSingleton();
 	}

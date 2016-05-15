@@ -19,7 +19,8 @@ namespace pafcore
 	class PAFCORE_EXPORT InstanceProperty : public Metadata
 	{
 	public:
-		virtual ::pafcore::Type* getType();
+		static ::pafcore::ClassType* GetType();
+		virtual ::pafcore::ClassType* getType();
 		virtual size_t getAddress();
 
 		ClassType* get_objectType();

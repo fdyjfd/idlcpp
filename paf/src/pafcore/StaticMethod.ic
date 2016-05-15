@@ -10,7 +10,12 @@
 namespace pafcore
 {
 
-	::pafcore::Type* StaticMethod::getType()
+	::pafcore::ClassType* StaticMethod::GetType()
+	{
+		return ::RuntimeTypeOf<StaticMethod>::RuntimeType::GetSingleton();
+	}
+
+	::pafcore::ClassType* StaticMethod::getType()
 	{
 		return ::RuntimeTypeOf<StaticMethod>::RuntimeType::GetSingleton();
 	}

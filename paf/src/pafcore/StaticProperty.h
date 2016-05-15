@@ -18,7 +18,8 @@ namespace pafcore
 	class PAFCORE_EXPORT StaticProperty : public Metadata
 	{
 	public:
-		virtual ::pafcore::Type* getType();
+		static ::pafcore::ClassType* GetType();
+		virtual ::pafcore::ClassType* getType();
 		virtual size_t getAddress();
 
 		bool get_hasGetter();

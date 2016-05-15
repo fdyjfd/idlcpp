@@ -10,7 +10,12 @@
 namespace pafcore
 {
 
-	::pafcore::Type* Enumerator::getType()
+	::pafcore::ClassType* Enumerator::GetType()
+	{
+		return ::RuntimeTypeOf<Enumerator>::RuntimeType::GetSingleton();
+	}
+
+	::pafcore::ClassType* Enumerator::getType()
 	{
 		return ::RuntimeTypeOf<Enumerator>::RuntimeType::GetSingleton();
 	}

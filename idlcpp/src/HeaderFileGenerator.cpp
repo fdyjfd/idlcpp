@@ -276,7 +276,8 @@ void HeaderFileGenerator::generateCode_Class(FILE* file, ClassNode* classNode, i
 	writeStringToFile("public:\n", file, indentation);
 	if (!classNode->isValueType())
 	{
-		writeStringToFile("virtual ::pafcore::Type* getType();\n", file, indentation + 1);
+		writeStringToFile("static ::pafcore::ClassType* GetType();\n", file, indentation + 1);
+		writeStringToFile("virtual ::pafcore::ClassType* getType();\n", file, indentation + 1);
 		writeStringToFile("virtual size_t getAddress();\n", file, indentation + 1);
 	}
 	bool generateCode = true;

@@ -10,7 +10,12 @@
 namespace pafcore
 {
 
-	::pafcore::Type* StaticProperty::getType()
+	::pafcore::ClassType* StaticProperty::GetType()
+	{
+		return ::RuntimeTypeOf<StaticProperty>::RuntimeType::GetSingleton();
+	}
+
+	::pafcore::ClassType* StaticProperty::getType()
 	{
 		return ::RuntimeTypeOf<StaticProperty>::RuntimeType::GetSingleton();
 	}

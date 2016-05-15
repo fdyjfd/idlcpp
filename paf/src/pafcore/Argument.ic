@@ -10,7 +10,12 @@
 namespace pafcore
 {
 
-	::pafcore::Type* Argument::getType()
+	::pafcore::ClassType* Argument::GetType()
+	{
+		return ::RuntimeTypeOf<Argument>::RuntimeType::GetSingleton();
+	}
+
+	::pafcore::ClassType* Argument::getType()
 	{
 		return ::RuntimeTypeOf<Argument>::RuntimeType::GetSingleton();
 	}

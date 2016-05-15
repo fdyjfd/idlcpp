@@ -325,7 +325,7 @@ bool Variant::castToValuePtr(Type* dstType, void** dst) const
 		size_t offset;
 		if(static_cast<ClassType*>(m_type)->getBaseClassOffset(offset, static_cast<ClassType*>(dstType)))
 		{
-			*dst = (void*)((size_t)m_pointer - offset);
+			*dst = (void*)((size_t)m_pointer + offset);
 			return true;
 		}
 	}
@@ -345,7 +345,7 @@ bool Variant::castToReferencePtr(Type* dstType, void** dst) const
 		size_t offset;
 		if(static_cast<ClassType*>(m_type)->getBaseClassOffset(offset, static_cast<ClassType*>(dstType)))
 		{
-			*(size_t*)dst = (size_t)m_pointer - offset;
+			*(size_t*)dst = (size_t)m_pointer + offset;
 			return true;
 		}
 	}

@@ -8,18 +8,14 @@
 
 enum ErrorCode
 {
-	begin_import_error,
 	import_error_file_not_existing,
 	import_error_open_file_failed,
 
-	begin_syntax_error,
 	syntax_error_internal,
 	syntax_error_invalid_string,
 	syntax_error_unterminated_code,
 	syntax_error_unterminated_comment,
 	
-
-	begin_semantic_error,
 	semantic_error_native_type_as_namespace_name,
 	semantic_error_native_type_as_type_name,
 	semantic_error_type_name_as_namespace_name,

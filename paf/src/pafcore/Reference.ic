@@ -10,7 +10,12 @@
 namespace pafcore
 {
 
-	::pafcore::Type* Reference::getType()
+	::pafcore::ClassType* Reference::GetType()
+	{
+		return ::RuntimeTypeOf<Reference>::RuntimeType::GetSingleton();
+	}
+
+	::pafcore::ClassType* Reference::getType()
 	{
 		return ::RuntimeTypeOf<Reference>::RuntimeType::GetSingleton();
 	}

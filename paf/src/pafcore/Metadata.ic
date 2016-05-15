@@ -10,7 +10,12 @@
 namespace pafcore
 {
 
-	::pafcore::Type* Metadata::getType()
+	::pafcore::ClassType* Metadata::GetType()
+	{
+		return ::RuntimeTypeOf<Metadata>::RuntimeType::GetSingleton();
+	}
+
+	::pafcore::ClassType* Metadata::getType()
 	{
 		return ::RuntimeTypeOf<Metadata>::RuntimeType::GetSingleton();
 	}
