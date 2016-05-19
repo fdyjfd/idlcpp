@@ -11,12 +11,24 @@ struct ScopeNode;
 struct NamespaceNode;
 struct TypeNameNode;
 
+enum MemberFilter
+{
+	mf_default,
+	mf_meta_only,
+	mf_native_only,
+};
+
 struct MemberNode : SyntaxNodeImpl
 {
 	IdentifyNode* m_name;
 	ScopeNode* m_enclosing;
+	MemberFilter m_filter;
 public:
 	MemberNode();
+	bool isMetaOnly();
+	bool isNativeOnly();
+	bool canGenerateMetaCode();
+	bool canGenerateNativeCode();
 	NamespaceNode* getNamespace();
 	void getEnclosings(std::vector<ScopeNode*>& enclosings);
 	bool isTemplateClass();

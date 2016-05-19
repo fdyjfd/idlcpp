@@ -61,8 +61,8 @@ int yycolumnno = 1;
 "("	|
 ")"				{yylval.sn = newToken(yytext[0]); yycolumnno++; yytokenno++; return yytext[0];}
 
-"<"				{yylval.sn = newToken(yytext[0]);				yycolumnno += strlen(yytext); yytokenno++; return LAB;}
-">"				{yylval.sn = newToken(yytext[0]);				yycolumnno += strlen(yytext); yytokenno++; return RAB;}
+"<"				{yylval.sn = newToken(yytext[0]);				yycolumnno += strlen(yytext); yytokenno++; return LTS;}
+">"				{yylval.sn = newToken(yytext[0]);				yycolumnno += strlen(yytext); yytokenno++; return GTS;}
 "::"			{yylval.sn = newToken(snt_keyword_scope);		yycolumnno += strlen(yytext); yytokenno++; return SCOPE;}
 "bool"			{yylval.sn = newToken(snt_keyword_bool);		yycolumnno += strlen(yytext); yytokenno++; return BOOL;}
 "char"			{yylval.sn = newToken(snt_keyword_char);		yycolumnno += strlen(yytext); yytokenno++; return CHAR;}
@@ -86,15 +86,13 @@ int yycolumnno = 1;
 "virtual"		{yylval.sn = newToken(snt_keyword_virtual);		yycolumnno += strlen(yytext); yytokenno++; return VIRTUAL;}
 "static"		{yylval.sn = newToken(snt_keyword_static);		yycolumnno += strlen(yytext); yytokenno++; return STATIC;}
 "const"			{yylval.sn = newToken(snt_keyword_const);		yycolumnno += strlen(yytext); yytokenno++; return CONST;}
-"template"		{yylval.sn = newToken(snt_keyword_template);	yycolumnno += strlen(yytext); yytokenno++; return TEMPLATE;}
-"typename"		{yylval.sn = newToken(snt_keyword_typename);	yycolumnno += strlen(yytext); yytokenno++; return TYPENAME;}
 "typedef"		{yylval.sn = newToken(snt_keyword_typedef);		yycolumnno += strlen(yytext); yytokenno++; return TYPEDEF;}
 "get"			{yylval.sn = newToken(snt_keyword_get);			yycolumnno += strlen(yytext); yytokenno++; return GET;}
 "set"			{yylval.sn = newToken(snt_keyword_set);			yycolumnno += strlen(yytext); yytokenno++; return SET;}
-"all"			{yylval.sn = newToken(snt_keyword_all);			yycolumnno += strlen(yytext); yytokenno++; return ALL;}
 "native"		{yylval.sn = newToken(snt_keyword_native);		yycolumnno += strlen(yytext); yytokenno++; return NATIVE;}
 "meta"			{yylval.sn = newToken(snt_keyword_meta);		yycolumnno += strlen(yytext); yytokenno++; return META;}
-"export"		{yylval.sn = newToken(snt_keyword_export);	yycolumnno += strlen(yytext); yytokenno++; return EXPORT;}
+"export"		{yylval.sn = newToken(snt_keyword_export);		yycolumnno += strlen(yytext); yytokenno++; return EXPORT;}
+"override"		{yylval.sn = newToken(snt_keyword_override);	yycolumnno += strlen(yytext); yytokenno++; return OVERRIDE;}
 
 [a-zA-Z_][a-zA-Z_0-9]*	{yylval.sn = newIdentify(yytext);		yycolumnno += strlen(yytext); yytokenno++; return IDENTIFY;}
 

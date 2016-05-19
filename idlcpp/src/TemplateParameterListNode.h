@@ -3,13 +3,12 @@
 #include "SyntaxNodeImpl.h"
 
 struct TokenNode;
-struct TemplateParameterNode;
-
+struct IdentifyNode;
 struct TemplateParameterListNode : SyntaxNodeImpl
 {
 	TemplateParameterListNode* m_parameterList;
 	TokenNode* m_delimiter;
-	TemplateParameterNode* m_parameter;
+	IdentifyNode* m_parameter;
 public:
-	TemplateParameterListNode(TemplateParameterListNode* parameterList, TokenNode* delimiter, TemplateParameterNode* parameter);
+	TemplateParameterListNode(TemplateParameterListNode* parameterList, TokenNode* delimiter, IdentifyNode* parameter);
 };

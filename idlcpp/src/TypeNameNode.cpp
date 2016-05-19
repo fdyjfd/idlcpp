@@ -7,7 +7,6 @@
 #include "SourceFile.h"
 #include "Options.h"
 #include "ClassNode.h"
-#include "TemplateParameterNode.h"
 #include "TemplateParametersNode.h"
 #include "TypeNameListNode.h"
 #include "TemplateClassInstanceNode.h"
@@ -252,7 +251,7 @@ TypeCategory TypeNameNode::getFullName(std::string& typeName, TemplateArgumentMa
 	return getRelativeName(typeName, 0, templateArguments);
 }
 
-TypeInfo* TypeNameNode::checkTemplateTypeName_(ScopeNode* scopeNode, std::vector<TemplateParameterNode*>& templateParameters)
+TypeInfo* TypeNameNode::checkTemplateTypeName_(ScopeNode* scopeNode, std::vector<IdentifyNode*>& templateParameters)
 {
 	assert(isTemplateForm());
 	std::string partTypeName;
@@ -308,7 +307,7 @@ TypeInfo* TypeNameNode::checkTemplateTypeName_(ScopeNode* scopeNode, std::vector
 
 }
 
-void TypeNameNode::checkTypeName_(ScopeNode* scopeNode, std::vector<TemplateParameterNode*>& templateParameters)
+void TypeNameNode::checkTypeName_(ScopeNode* scopeNode, std::vector<IdentifyNode*>& templateParameters)
 {
 	assert(unknown_type == m_typeCategory);
 	assert(0 == m_typeInfo);
@@ -322,8 +321,8 @@ void TypeNameNode::checkTypeName_(ScopeNode* scopeNode, std::vector<TemplatePara
 	size_t templateParamCount = templateParameters.size();
 	for(size_t i = 0; i < templateParamCount; ++i)
 	{
-		TemplateParameterNode* param = templateParameters[i];
-		if(param->m_name->m_str == typeName)
+		IdentifyNode* param = templateParameters[i];
+		if(param->m_str == typeName)
 		{
 			m_typeCategory = template_parameter;
 			return;
@@ -373,7 +372,7 @@ void TypeNameNode::checkTypeName(ScopeNode* scopeNode)
 		}
 		else
 		{
-			std::vector<TemplateParameterNode*> templateParameters;
+			std::vector<IdentifyNode*> templateParameters;
 			if(scopeNode->isTemplateClass())
 			{
 				static_cast<ClassNode*>(scopeNode)->m_templateParameters->collectParameterNodes(templateParameters);

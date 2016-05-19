@@ -4,7 +4,6 @@
 #include "IdentifyNode.h"
 #include "TypeNameListNode.h"
 
-#include "TemplateParameterNode.h"
 #include "TemplateParametersNode.h"
 #include "TemplateClassInstanceNode.h"
 #include "MemberNode.h"
@@ -16,7 +15,6 @@
 #include "FieldNode.h"
 #include "NamespaceNode.h"
 #include "ProgramNode.h"
-#include "FilterNode.h"
 #include "SourceFile.h"
 #include "ErrorList.h"
 #include "RaiseError.h"
@@ -131,10 +129,6 @@ void checkMemberNames(ClassNode* classNode, std::vector<MemberNode*>& memberNode
 	for(size_t i = 0; i < count; ++i)
 	{
 		MemberNode* memberNode = memberNodes[i];
-		if(snt_filter == memberNode->m_nodeType)
-		{
-			continue;
-		}
 		bool nameCollision = false;
 		IdentifyNode* identify = memberNode->m_name;
 		if(snt_method == memberNode->m_nodeType)
@@ -309,7 +303,7 @@ ClassNode::ClassNode(TokenNode* keyword, IdentifyNode* name, IdentifyNode* categ
 	{
 		m_isValueType = (category->m_str == "value_object");
 	}
-	m_export = false;
+	m_override = false;
 	m_abstractFlag = lb_unknown;
 	m_exportFlag = lb_unknown;
 }
@@ -437,6 +431,7 @@ void ClassNode::GenerateCreateInstanceMethod(const char* methodName, MethodNode*
 	setMethodResult(method, typeName, passing);
 	TokenNode* modifier = (TokenNode*)newToken(snt_keyword_static);
 	setMethodModifier(method, modifier);
+	//method->m_filter = constructor->m_filter;
 	method->m_enclosing = this;
 	m_additionalMethods.push_back(method);
 }
@@ -456,6 +451,7 @@ void ClassNode::GenerateCreateArrayMethod(const char* methodName, MethodNode* co
 	setMethodResultArray(method);
 	TokenNode* modifier = (TokenNode*)newToken(snt_keyword_static);
 	setMethodModifier(method, modifier);
+	//method->m_filter = constructor->m_filter;
 	method->m_enclosing = this;
 	m_additionalMethods.push_back(method);
 }
@@ -582,7 +578,7 @@ bool ClassNode::isAbstractClass()
 	return (lb_true == m_abstractFlag);
 }
 
-void ClassNode::collectExportMethods(std::vector<MethodNode*>& methodNodes)
+void ClassNode::collectOverrideMethods(std::vector<MethodNode*>& methodNodes)
 {
 	std::vector<MemberNode*> memberNodes;
 	m_memberList->collectMemberNodes(memberNodes);
@@ -593,7 +589,7 @@ void ClassNode::collectExportMethods(std::vector<MethodNode*>& methodNodes)
 		if(snt_method == memberNode->m_nodeType)
 		{
 			MethodNode* methodNode = static_cast<MethodNode*>(memberNode);
-			if(methodNode->m_export)
+			if(methodNode->m_override)
 			{
 				methodNodes.push_back(methodNode);
 			}
@@ -607,7 +603,7 @@ void ClassNode::collectExportMethods(std::vector<MethodNode*>& methodNodes)
 		TypeNameNode* typeNameNode = baseTypeNameNodes[i];
 		assert(snt_class == typeNameNode->m_typeInfo->m_typeNode->m_nodeType);
 		ClassNode* baseClass = static_cast<ClassNode*>(typeNameNode->m_typeInfo->m_typeNode);
-		baseClass->collectExportMethods(methodNodes);
+		baseClass->collectOverrideMethods(methodNodes);
 	}
 }
 
@@ -622,7 +618,7 @@ bool ClassNode::hasExportMethod()
 		if(snt_method == memberNode->m_nodeType)
 		{
 			MethodNode* methodNode = static_cast<MethodNode*>(memberNode);
-			if(methodNode->m_export)
+			if(methodNode->m_override)
 			{
 				return true;
 			}
@@ -649,7 +645,7 @@ bool ClassNode::needExport()
 	if(lb_unknown == m_exportFlag)
 	{
 		m_exportFlag = lb_false;
-		if(m_export)
+		if(m_override)
 		{
 			if(hasExportMethod())
 			{

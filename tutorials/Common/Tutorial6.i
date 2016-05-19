@@ -1,8 +1,7 @@
 
 namespace tutorial
 {
-	template<typename N>
-	struct Vector3
+	struct Vector3<N>
 	{
 		Vector3();
 		Vector3(const Vector3 ref v);
@@ -13,11 +12,11 @@ namespace tutorial
 		N lengthSquare get;
 
 		static Vector3 s_zero;
-		meta:
-		N x;
-		N y;
-		N z;
-		N v[$3];
+		
+		meta N x;
+		meta N y;
+		meta N z;
+		meta N v[$3];
 
 		$*
 		union
@@ -31,8 +30,8 @@ namespace tutorial
 		*$
 	};
 
-	template class Vector3<float>;
-	template class Vector3<double>;
+	export struct Vector3<float>;
+	export struct Vector3<double>;
 	typedef Vector3<float> Vector3f;
 	typedef Vector3<double> Vector3d;
 

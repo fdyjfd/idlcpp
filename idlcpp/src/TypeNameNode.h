@@ -6,10 +6,10 @@
 #include <map>
 
 struct TokenNode;
+struct IdentifyNode;
 struct ScopeListNode;
 struct TypeNameListNode;
 struct ScopeNode;
-struct TemplateParameterNode;
 struct TypeInfo;
 struct TypeNameNode;
 struct TemplateClassInstanceNode;
@@ -39,8 +39,8 @@ public:
 	TypeCategory getFullName(std::string& fullName, TemplateArgumentMap* templateArguments);
 	TypeCategory getRelativeName(std::string& typeName, ScopeNode* scopeNode, TemplateArgumentMap* templateArguments);
 	void checkTypeName(ScopeNode* scopeNode);
-	void checkTypeName_(ScopeNode* scopeNode, std::vector<TemplateParameterNode*>& templateParameters);
-	TypeInfo* checkTemplateTypeName_(ScopeNode* scopeNode, std::vector<TemplateParameterNode*>& templateParameters);
+	void checkTypeName_(ScopeNode* scopeNode, std::vector<IdentifyNode*>& templateParameters);
+	TypeInfo* checkTemplateTypeName_(ScopeNode* scopeNode, std::vector<IdentifyNode*>& templateParameters);
 	void checkTypeNameForTemplateClassInstance(TemplateClassInstanceNode* templateClassInstanceNode, TemplateArgumentMap* templateArguments);
 	bool isVoid()
 	{

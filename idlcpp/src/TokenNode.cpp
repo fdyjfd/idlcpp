@@ -18,8 +18,6 @@ const char* g_keywordTokens[] =
 	"*",
 	"*",
 	"&",
-	"template ",
-	"typename ",
 	"typedef ",
 };
 

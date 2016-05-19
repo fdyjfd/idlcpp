@@ -9,13 +9,12 @@ namespace tutorial
 		float y;
 		Point();
 		Point(float a, float b);
-	meta:
-		Point(const Point ref pt);
+		meta Point(const Point ref pt);
 	};
 
-	export class Shape : Reference
+	override class Shape : Reference
 	{
-		export abstract float getArea();
+		override abstract float getArea();
 		$$		virtual ~Shape() {}
 	};
 
@@ -35,8 +34,7 @@ namespace tutorial
 	class Triangle : Shape
 	{
 		Point m_vertices[$3];
-	meta:
-		Triangle();
+		meta Triangle();
 		$$virtual float getArea();
 	};
 

@@ -16,27 +16,49 @@ BEGIN_PAFCORE
 ClassType::ClassType(const char* name, Category category)
 : Type(name, category)
 {
-	m_nestedTypes = 0;
-	m_nestedTypeCount = 0;
 
 	m_baseClasses = 0;
 	m_baseClassCount = 0;
 	m_members = 0;
 	m_memberCount = 0;
-
+	m_nestedTypes = 0;
+	m_nestedTypeCount = 0;
+	m_nestedTypeAliases = 0;
+	m_nestedTypeAliasCount = 0;
 	m_fields = 0;
 	m_fieldCount = 0;
 	m_properties = 0;
 	m_propertyCount = 0;
 	m_methods = 0;
 	m_methodCount = 0;
-
 	m_staticFields = 0;
 	m_staticFieldCount = 0;
 	m_staticProperties = 0;
 	m_staticPropertyCount = 0;
 	m_staticMethods = 0;
 	m_staticMethodCount = 0;
+}
+
+TypeAlias* ClassType::findNestedTypeAlias(const char* name, bool includeBaseClasses)
+{
+	Metadata dummy(name);
+	TypeAlias** it = std::lower_bound(m_nestedTypeAliases, m_nestedTypeAliases + m_nestedTypeAliasCount, &dummy, CompareMetaDataPtrByName());
+	if (m_nestedTypeAliases + m_nestedTypeAliasCount != it && strcmp(name, (*it)->m_name) == 0)
+	{
+		return *it;
+	}
+	if (includeBaseClasses)
+	{
+		for (size_t i = 0; i < m_baseClassCount; ++i)
+		{
+			TypeAlias* res = m_baseClasses[i].m_type->findNestedTypeAlias(name, includeBaseClasses);
+			if (0 != res)
+			{
+				return res;
+			}
+		}
+	}
+	return 0;
 }
 
 Type* ClassType::findNestedType(const char* name, bool includeBaseClasses)
@@ -219,9 +241,14 @@ Metadata* ClassType::_findMember_(const char* name, bool includeBaseClasses)
 Metadata* ClassType::findClassMember(const char* name, bool includeBaseClasses)
 {
 	Type* type = findNestedType(name, false);
-	if(0 != type)
+	if (0 != type)
 	{
 		return type;
+	}
+	TypeAlias* typeAlias = findNestedTypeAlias(name, false);
+	if (0 != typeAlias)
+	{
+		return typeAlias;
 	}
 	StaticField* field = findStaticField(name, false);
 	if(0 != field)
@@ -271,11 +298,6 @@ void* ClassType::createSubclassProxy(SubclassInvoker* subclassInvoker)
 
 void ClassType::destroySubclassProxy(void* subclassProxy)
 {}
-
-//Metadata* ClassType::findClassMember(const char* name, bool includeBaseClasses)
-//{
-//	return __findTypeMember(name, true);
-//}
 
 size_t ClassType::_getMemberCount_(bool includeBaseClasses)
 {

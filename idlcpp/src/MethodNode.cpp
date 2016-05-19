@@ -26,7 +26,7 @@ MethodNode::MethodNode(IdentifyNode* name, TokenNode* leftParenthesis, Parameter
 	m_constant = constant;
 	m_semicolon = semicolon;
 	m_resultArray = false;
-	m_export = false;
+	m_override = false;
 }
 
 bool MethodNode::isStatic()
@@ -136,7 +136,7 @@ void MethodNode::checkSemantic()
 		}
 		g_sourceFileManager.useType(m_result->m_typeInfo, byValue() ? tu_by_value : tu_by_ref);
 	}
-	if(m_export)
+	if(m_override)
 	{
 		if(!isVirtual())
 		{

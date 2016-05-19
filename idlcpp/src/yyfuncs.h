@@ -89,12 +89,11 @@ enum SyntaxNodeType
 	snt_keyword_new,
 	snt_keyword_ptr,
 	snt_keyword_ref,
-	snt_keyword_template,
-	snt_keyword_typename,
 	snt_keyword_typedef,
 	snt_keyword_end_output,
 	snt_keyword_scope,
 	snt_keyword_export,
+	snt_keyword_override,
 	snt_identify,
 	snt_scope_list,
 	snt_enumerator_list,
@@ -105,20 +104,16 @@ enum SyntaxNodeType
 	snt_template_parameter,
 	snt_template_parameter_list,
 	snt_template_parameters,
-	snt_field,
 	snt_getter_setter,
+	snt_field,
 	snt_property,
 	snt_method,
-	snt_filter,
 	snt_class,
-	snt_enumerator,
 	snt_enum,
-	//snt_template_class,
 	snt_template_class_instance,
 	snt_type_alias,
 	snt_namespace,
 	snt_member_list,
-	//snt_program,
 };
 
 void newCodeBlock(const char* str);
@@ -128,9 +123,11 @@ SyntaxNode* newPrimitiveType(SyntaxNode* keyword, PrimitiveType type);
 SyntaxNode* newScopeList(SyntaxNode* scopeList, SyntaxNode* identify);
 void setScopeListGlobal(SyntaxNode* scopeList);
 SyntaxNode* newTypeName(SyntaxNode* scopeList);
-SyntaxNode* newTemplateTypeName(SyntaxNode* scopeList, SyntaxNode* lab, SyntaxNode* parameterList, SyntaxNode* rab);
+SyntaxNode* newTemplateTypeName(SyntaxNode* scopeList, SyntaxNode* lts, SyntaxNode* parameterList, SyntaxNode* gts);
 SyntaxNode* newTypeNameList(SyntaxNode* typeNameList, SyntaxNode* delimiter, SyntaxNode* typeName);
 
+void setMetaOnly(SyntaxNode* syntaxNode);
+void setNativeOnly(SyntaxNode* syntaxNode);
 SyntaxNode* newField(SyntaxNode* type, SyntaxNode* name, SyntaxNode* leftBracket, SyntaxNode* rightBracket, SyntaxNode* semicolon);
 void setFieldConstant(SyntaxNode* syntaxNode, SyntaxNode* constant);
 void setFieldStatic(SyntaxNode* syntaxNode, SyntaxNode* stat);
@@ -152,16 +149,14 @@ void setMethodResult(SyntaxNode* method, SyntaxNode* result, SyntaxNode* passing
 void setMethodResultArray(SyntaxNode* method);
 void setMethodResultConst(SyntaxNode* method, SyntaxNode* constant);
 void setMethodModifier(SyntaxNode* method, SyntaxNode* modifier);
-void setMethodExport(SyntaxNode* method);
-
-SyntaxNode* newFilter(int native, int meta);
+void setMethodOverride(SyntaxNode* method);
 
 SyntaxNode* newClassMemberList(SyntaxNode* memberList, SyntaxNode* member);
 SyntaxNode* newClass(SyntaxNode* keyword, SyntaxNode* name, SyntaxNode* category);
 void setClassBaseList(SyntaxNode* cls, SyntaxNode* colon, SyntaxNode* baseList);
 void setClassMemberList(SyntaxNode* cls, SyntaxNode* leftBrace, SyntaxNode* memberList, SyntaxNode* rightBrace, SyntaxNode* semicolon);
 void setClassModifier(SyntaxNode* cls, SyntaxNode* modifier);
-void setClassExport(SyntaxNode* cls);
+void setClassOverride(SyntaxNode* cls);
 void setClassTemplateParameters(SyntaxNode* cls, SyntaxNode* parameters);
 
 SyntaxNode* newEnumeratorList(SyntaxNode* enumeratorList, SyntaxNode* delimiter, SyntaxNode* identify);
@@ -170,11 +165,10 @@ SyntaxNode* newEnum(SyntaxNode* keyword, SyntaxNode* name, SyntaxNode* leftBrace
 SyntaxNode* newTypeAlias(SyntaxNode* name, TypeCategory typeCategory);
 SyntaxNode* newTypeDef(SyntaxNode* keyword, SyntaxNode* name, SyntaxNode* typeName);
 
-SyntaxNode* newTemplateParameter(SyntaxNode* keyword, SyntaxNode* name);
 SyntaxNode* newTemplateParameterList(SyntaxNode* list, SyntaxNode* delimiter, SyntaxNode* identify);
-SyntaxNode* newTemplateParameters(SyntaxNode* keyword, SyntaxNode* lab, SyntaxNode* parameterList, SyntaxNode* rab);
-//SyntaxNode* newTemplateClass(SyntaxNode* keyword, SyntaxNode* lab, SyntaxNode* parameterList, SyntaxNode* rab, SyntaxNode* cls);
-SyntaxNode* newTemplateClassInstance(SyntaxNode* keyword, SyntaxNode* keyword2, SyntaxNode* templateName, SyntaxNode* lab, SyntaxNode* typeNameList, SyntaxNode* rab, SyntaxNode* semicolon);
+SyntaxNode* newTemplateParameters(SyntaxNode* lts, SyntaxNode* parameterList, SyntaxNode* gts);
+
+SyntaxNode* newTemplateClassInstance(SyntaxNode* keyword, SyntaxNode* templateName, SyntaxNode* lts, SyntaxNode* typeNameList, SyntaxNode* gts, SyntaxNode* semicolon);
 SyntaxNode* newNamespaceMemberList(SyntaxNode* memberList, SyntaxNode* member);
 SyntaxNode* newNamespace(SyntaxNode* keyword, SyntaxNode* name, SyntaxNode* leftBrace, SyntaxNode* memberList, SyntaxNode* rightBrace);
 SyntaxNode* newProgram(SyntaxNode* memberList);

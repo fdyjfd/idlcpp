@@ -10,11 +10,9 @@
 #include "EnumNode.h"
 #include "ClassNode.h"
 #include "TemplateParametersNode.h"
-#include "TemplateParameterNode.h"
 #include "TemplateParameterListNode.h"
 #include "TypeNameListNode.h"
 #include "TypeNameNode.h"
-#include "FilterNode.h"
 #include "FieldNode.h"
 #include "PropertyNode.h"
 #include "MethodNode.h"
@@ -57,6 +55,11 @@ void SourceFileGenerator::generateCode_Program(FILE* file, ProgramNode* programN
 
 void SourceFileGenerator::generateCode_Namespace(FILE* file, NamespaceNode* namespaceNode, int indentation)
 {
+	if (namespaceNode->isMetaOnly())
+	{
+		file = 0;
+	}
+
 	char buf[512];
 	if(!namespaceNode->isGlobalNamespace())
 	{
@@ -92,7 +95,7 @@ void GetClassName(std::string& className, ClassNode* classNode)
 	className = classNode->m_name->m_str;
 	if(classNode->m_templateParameters)
 	{
-		std::vector<TemplateParameterNode*> templateParameterNodes;
+		std::vector<IdentifyNode*> templateParameterNodes;
 		classNode->m_templateParameters->collectParameterNodes(templateParameterNodes);
 		className += "<";
 		size_t count = templateParameterNodes.size();
@@ -102,7 +105,7 @@ void GetClassName(std::string& className, ClassNode* classNode)
 			{
 				className += ", ";
 			}
-			className += templateParameterNodes[i]->m_name->m_str;
+			className += templateParameterNodes[i]->m_str;
 		}
 		className += ">";
 	}
@@ -110,6 +113,11 @@ void GetClassName(std::string& className, ClassNode* classNode)
 
 void SourceFileGenerator::generateCode_Class(FILE* file, ClassNode* classNode, int indentation)
 {
+	if (classNode->isMetaOnly())
+	{
+		file = 0;
+	}
+
 	if (!classNode->isValueType())
 	{
 		std::string typeName;
@@ -157,7 +165,7 @@ void SourceFileGenerator::generateCode_TemplateHeader(FILE* file, ClassNode* cla
 {
 	if(classNode->m_templateParameters)
 	{
-		std::vector<TemplateParameterNode*> templateParameterNodes;
+		std::vector<IdentifyNode*> templateParameterNodes;
 		classNode->m_templateParameters->collectParameterNodes(templateParameterNodes);
 		writeStringToFile("template<", file, indentation);
 		size_t count = templateParameterNodes.size();
@@ -168,7 +176,7 @@ void SourceFileGenerator::generateCode_TemplateHeader(FILE* file, ClassNode* cla
 				writeStringToFile(",", file);
 			}
 			writeStringToFile("typename ", file);
-			writeStringToFile(templateParameterNodes[i]->m_name->m_str.c_str(), file);
+			writeStringToFile(templateParameterNodes[i]->m_str.c_str(), file);
 		}
 		writeStringToFile(">\n", file);
 	}
@@ -177,6 +185,11 @@ void SourceFileGenerator::generateCode_TemplateHeader(FILE* file, ClassNode* cla
 
 void SourceFileGenerator::generateCode_AdditionalMethod(FILE* file, MethodNode* methodNode, int indentation)
 {
+	if (methodNode->isMetaOnly())
+	{
+		file = 0;
+	}
+
 	ClassNode* classNode = static_cast<ClassNode*>(methodNode->m_enclosing);
 
 	generateCode_TemplateHeader(file, classNode, indentation);

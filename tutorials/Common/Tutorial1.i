@@ -5,7 +5,6 @@ namespace tutorial
 	{
 		float x;
 		float y;
-	meta:
-		Point();
+		meta Point();
 	};
 }

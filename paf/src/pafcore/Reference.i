@@ -8,10 +8,8 @@ namespace pafcore
 
 	class $PAFCORE_EXPORT Reference
 	{
-	native:
-		virtual long_t addRef();
-		virtual long_t release();
-	all:
+		native virtual long_t addRef();
+		native virtual long_t release();
 		long_t refCount get;
 		$*
 		void* castTo(ClassType* classType);

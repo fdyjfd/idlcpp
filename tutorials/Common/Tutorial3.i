@@ -5,10 +5,9 @@ namespace tutorial
 	{
 		float x;
 		float y;
-	meta:
-		Point();
-		Point(float a, float b);
-		Point(const Point ref pt);
+		meta Point();
+		meta Point(float a, float b);
+		meta Point(const Point ref pt);
 
 		$*
 		Point()
@@ -30,8 +29,7 @@ namespace tutorial
 	struct Triangle : Shape
 	{
 		Point m_vertices[$3];
-	meta:
-		static Triangle new New();
+		meta static Triangle new New();
 		$*
 			virtual float getArea()
 		{

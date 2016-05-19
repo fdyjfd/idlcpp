@@ -29,7 +29,7 @@ struct ClassNode : ScopeNode
 	TypeNameListNode* m_templateArgumentList;
 	std::vector<MethodNode*> m_additionalMethods;//New NewArray Clone
 	bool m_isValueType;
-	bool m_export;
+	bool m_override;
 	LazyBool m_abstractFlag;
 	LazyBool m_exportFlag;
 public:
@@ -48,7 +48,7 @@ public:
 	bool needExport();
 	bool isValueType();
 	bool hasExportMethod();
-	void collectExportMethods(std::vector<MethodNode*>& methodNodes);
+	void collectOverrideMethods(std::vector<MethodNode*>& methodNodes);
 	void GenerateCreateInstanceMethod(const char* methodName, MethodNode* constructor);
 	void GenerateCreateArrayMethod(const char* methodName, MethodNode* constructor);
 };

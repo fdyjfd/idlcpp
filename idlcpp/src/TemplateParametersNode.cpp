@@ -1,20 +1,18 @@
 #include "TemplateParametersNode.h"
 #include "TemplateParameterListNode.h"
-#include "TemplateParameterNode.h"
 #include "IdentifyNode.h"
 #include "RaiseError.h"
 #include <set>
 
-TemplateParametersNode::TemplateParametersNode(TokenNode* keyword, TokenNode* leftBracket, TemplateParameterListNode* parameterList, TokenNode* rightBracket)
+TemplateParametersNode::TemplateParametersNode(TokenNode* leftBracket, TemplateParameterListNode* parameterList, TokenNode* rightBracket)
 {
 	m_nodeType = snt_template_parameters;
-	m_keyword = keyword;
 	m_leftBracket = leftBracket;
 	m_parameterList = parameterList;
 	m_rightBracket = rightBracket;
 }
 
-void TemplateParametersNode::collectParameterNodes(std::vector<std::pair<TokenNode*, TemplateParameterNode*>>& parameterNodes)
+void TemplateParametersNode::collectParameterNodes(std::vector<std::pair<TokenNode*, IdentifyNode*>>& parameterNodes)
 {
 	TemplateParameterListNode* list = m_parameterList;
 	while(0 != list)
@@ -25,7 +23,7 @@ void TemplateParametersNode::collectParameterNodes(std::vector<std::pair<TokenNo
 	std::reverse(parameterNodes.begin(), parameterNodes.end());
 }
 
-void TemplateParametersNode::collectParameterNodes(std::vector<TemplateParameterNode*>& parameterNodes)
+void TemplateParametersNode::collectParameterNodes(std::vector<IdentifyNode*>& parameterNodes)
 {
 	TemplateParameterListNode* list = m_parameterList;
 	while (0 != list)
@@ -51,15 +49,15 @@ size_t TemplateParametersNode::getParameterCount()
 void TemplateParametersNode::checkSemantic()
 {
 	std::set<std::string> paramNames;
-	std::vector<TemplateParameterNode*> parameterNodes;
+	std::vector<IdentifyNode*> parameterNodes;
 	collectParameterNodes(parameterNodes);
 	size_t count = parameterNodes.size();
 	for(size_t i = 0; i < count; ++i)
 	{
-		TemplateParameterNode* paramNode = parameterNodes[i];
-		if(!paramNames.insert(paramNode->m_name->m_str).second)
+		IdentifyNode* paramNode = parameterNodes[i];
+		if(!paramNames.insert(paramNode->m_str).second)
 		{
-			RaiseError_TemplateParameterRedefinition(paramNode->m_name);
+			RaiseError_TemplateParameterRedefinition(paramNode);
 		}
 	}
 }

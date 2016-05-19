@@ -178,7 +178,6 @@
     <ClCompile Include="..\..\src\SyntaxNodeImpl.cpp" />
     <ClCompile Include="..\..\src\TemplateClassInstanceNode.cpp" />
     <ClCompile Include="..\..\src\TemplateParameterListNode.cpp" />
-    <ClCompile Include="..\..\src\TemplateParameterNode.cpp" />
     <ClCompile Include="..\..\src\TemplateParametersNode.cpp" />
     <ClCompile Include="..\..\src\TokenNode.cpp" />
     <ClCompile Include="..\..\src\TypeAliasNode.cpp" />
@@ -193,7 +192,6 @@
     <ClInclude Include="..\..\src\EnumNode.h" />
     <ClInclude Include="..\..\src\ErrorList.h" />
     <ClInclude Include="..\..\src\FieldNode.h" />
-    <ClInclude Include="..\..\src\FilterNode.h" />
     <ClInclude Include="..\..\src\GetterSetterNode.h" />
     <ClInclude Include="..\..\src\HeaderFileGenerator.h" />
     <ClInclude Include="..\..\src\IdentifyNode.h" />
@@ -222,7 +220,6 @@
     <ClInclude Include="..\..\src\TempBuffer.h" />
     <ClInclude Include="..\..\src\TemplateClassInstanceNode.h" />
     <ClInclude Include="..\..\src\TemplateParameterListNode.h" />
-    <ClInclude Include="..\..\src\TemplateParameterNode.h" />
     <ClInclude Include="..\..\src\TemplateParametersNode.h" />
     <ClInclude Include="..\..\src\TokenNode.h" />
     <ClInclude Include="..\..\src\TypeAliasNode.h" />

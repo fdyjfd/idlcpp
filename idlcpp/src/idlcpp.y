@@ -8,14 +8,15 @@
 }
 
 %token <sn> BOOL CHAR WCHAR_T SHORT LONG INT FLOAT DOUBLE SIGNED UNSIGNED
-%token <sn> NAMESPACE ENUM CLASS STRUCT STATIC VIRTUAL VOID CONST TEMPLATE TYPENAME TYPEDEF NEW
-%token <sn> ABSTRACT GET SET ALL NATIVE META REF PTR LAB RAB EXPORT
+%token <sn> NAMESPACE ENUM CLASS STRUCT STATIC VIRTUAL VOID CONST TEMPLATE TYPEDEF NEW
+%token <sn> ABSTRACT GET SET NATIVE META REF PTR EXPORT OVERRIDE LTS GTS
 %token <sn> ',' '.' ':' ';' '(' ')' '[' ']' '{' '}' SCOPE IDENTIFY
-%type <sn> field_0 field_1 field getter setter property_0 property_1 property
-%type <sn> parameter_0 parameter parameterList method_0 method_1 method_2 method_3 method filter
-%type <sn> primitive scopeList_0 scopeList typeName typeNameList enumeratorList classMemberList 
-%type <sn> templateParameter templateParameterList templateParameters templateClassInstance typeAlias
-%type <sn> class_0 class_1 class_2 class_3 class_4 class enum namespaceMemberList namespace program
+%type <sn> field_0 field_1 field_2 field getter setter property_0 property_1 property_2 property
+%type <sn> parameter_0 parameter parameterList method_0 method_1 method_2 method_3 method_4 method
+%type <sn> primitive scopeList_0 scopeList typeName typeNameList enumeratorList classMemberList
+%type <sn> templateParameterList templateParameters templateClassInstance_0 templateClassInstance
+%type <sn> typeAlias_0 typeAlias enum_0 enum 
+%type <sn> class_0 class_1 class_2 class_3 class_4 class_5 class namespaceMemberList namespace_0 namespace program
 %start program
 
 %%
@@ -49,9 +50,14 @@ enumeratorList			: IDENTIFY											{$$ = newEnumeratorList(NULL, NULL, $1);}
 						| enumeratorList ',' IDENTIFY						{$$ = newEnumeratorList($1, $2, $3);}
 ;
 
-enum					: ENUM IDENTIFY '{' enumeratorList '}' ';'			{$$ = newEnum($1, $2, $3, $4, $5, $6);}
+enum_0					: ENUM IDENTIFY '{' enumeratorList '}' ';'			{$$ = newEnum($1, $2, $3, $4, $5, $6);}
 						| ENUM IDENTIFY '{' enumeratorList ',' '}' ';'		{$$ = newEnum($1, $2, $3, $4, $6, $7);}
 						| ENUM IDENTIFY '{' '}' ';'							{$$ = newEnum($1, $2, $3, NULL, $4, $5);}
+;
+
+enum					: enum_0											{$$ = $1;}
+						| META enum_0										{$$ = $2; setMetaOnly($$);}
+						| NATIVE enum_0										{$$ = $2; setNativeOnly($$);}
 ;
 
 scopeList_0				: IDENTIFY											{$$ = newScopeList(NULL, $1);}
@@ -64,11 +70,22 @@ scopeList				: scopeList_0										{$$ = $1;}
 
 typeName				: primitive											{$$ = $1;}
 						| scopeList											{$$ = newTypeName($1);}
-						| scopeList	LAB typeNameList RAB					{$$ = newTemplateTypeName($1, $2, $3, $4);}
+						| scopeList	LTS typeNameList GTS					{$$ = newTemplateTypeName($1, $2, $3, $4);}
 ;
 
 typeNameList			: typeName											{$$ = newTypeNameList(NULL, NULL, $1);}
 						| typeNameList ',' typeName							{$$ = newTypeNameList($1, $2, $3);}
+;
+
+typeAlias_0				: TYPEDEF IDENTIFY ';'								{$$ = newTypeAlias($2, primitive_type);}
+						| TYPEDEF STRUCT IDENTIFY ';'						{$$ = newTypeAlias($3, value_type);}
+						| TYPEDEF CLASS IDENTIFY ';'						{$$ = newTypeAlias($3, reference_type);}
+						| TYPEDEF typeName IDENTIFY ';'						{$$ = newTypeDef($1, $3, $2);}
+;
+
+typeAlias				: typeAlias_0										{$$ = $1;}
+						| META typeAlias_0									{$$ = $2; setMetaOnly($$);}
+						| NATIVE typeAlias_0								{$$ = $2; setNativeOnly($$);}
 ;
 
 field_0					: typeName IDENTIFY ';'								{$$ = newField($1, $2, NULL, NULL, $3);}
@@ -79,8 +96,13 @@ field_1					: field_0											{$$ = $1;}
 						| CONST field_0										{$$ = $2; setFieldConstant($$, $1);}
 ;
 
-field					: field_1											{$$ = $1;}
+field_2					: field_1											{$$ = $1;}
 						| STATIC field_1									{$$ = $2; setFieldStatic($$, $1);}
+;
+
+field					: field_2											{$$ = $1;}
+						| META field_2										{$$ = $2; setMetaOnly($$);}
+						| NATIVE field_2									{$$ = $2; setNativeOnly($$);}
 ;
 
 getter					: GET												{$$ = newGetterSetter($1, NULL, NULL, NULL);}
@@ -115,8 +137,13 @@ property_1				: property_0 getter ';'								{$$ = $1; setPropertyGetter($1, $2)
 ;
 
 
-property				: property_1										{$$ = $1;}
+property_2				: property_1										{$$ = $1;}
 						| STATIC property_1									{$$ = $2; setPropertyModifier($$, $1);}
+;
+
+property				: property_2										{$$ = $1;}
+						| META property_2									{$$ = $2; setMetaOnly($$);}
+						| NATIVE property_2									{$$ = $2; setNativeOnly($$);}
 ;
 
 parameter_0				: typeName IDENTIFY									{$$ = newParameter($1, NULL, NULL, $2);}
@@ -162,40 +189,36 @@ method_3				: method_2											{$$ = $1;}
 						| STATIC method_2									{$$ = $2; setMethodModifier($$, $1);}
 ;
 
-method					: method_3											{$$ = $1;}
-						| EXPORT method_3									{$$ = $2; setMethodExport($$);}
+method_4				: method_3											{$$ = $1;}
+						| OVERRIDE method_3									{$$ = $2; setMethodOverride($$);}
 ;
 
-filter					: ALL ':'											{$$ = newFilter(1, 1);}
-						| NATIVE ':'										{$$ = newFilter(1, 0);}
-						| META ':'											{$$ = newFilter(0, 1);}
+method					: method_4											{$$ = $1;}
+						| META method_4										{$$ = $2; setMetaOnly($$);}
+						| NATIVE method_4									{$$ = $2; setNativeOnly($$);}
 ;
 
 classMemberList			: property											{$$ = newClassMemberList(NULL, $1);}
 						| method											{$$ = newClassMemberList(NULL, $1);}
 						| field												{$$ = newClassMemberList(NULL, $1);}
-						| class_4											{$$ = newClassMemberList(NULL, $1);}
+						| class_5											{$$ = newClassMemberList(NULL, $1);}
 						| enum												{$$ = newClassMemberList(NULL, $1);}
-						| filter											{$$ = newClassMemberList(NULL, $1);}
+						| typeAlias											{$$ = newClassMemberList(NULL, $1);}
 						| ';'												{$$ = NULL;}
 						| classMemberList property							{$$ = newClassMemberList($1, $2);}
 						| classMemberList method							{$$ = newClassMemberList($1, $2);}
 						| classMemberList field								{$$ = newClassMemberList($1, $2);}
-						| classMemberList class_4							{$$ = newClassMemberList($1, $2);}
+						| classMemberList class_5							{$$ = newClassMemberList($1, $2);}
 						| classMemberList enum								{$$ = newClassMemberList($1, $2);}
-						| classMemberList filter							{$$ = newClassMemberList($1, $2);}
+						| classMemberList typeAlias							{$$ = newClassMemberList($1, $2);}
 						| classMemberList ';'								{$$ = $1;}
 ;
 
-templateParameter		: CLASS IDENTIFY									{$$ = newTemplateParameter($1, $2);}
-						| TYPENAME IDENTIFY									{$$ = newTemplateParameter($1, $2);}
+templateParameterList	: IDENTIFY											{$$ = newTemplateParameterList(NULL, NULL, $1);}
+						| templateParameterList ',' IDENTIFY				{$$ = newTemplateParameterList($1, $2, $3);}
 ;
 
-templateParameterList	: templateParameter									{$$ = newTemplateParameterList(NULL, NULL, $1);}
-						| templateParameterList ',' templateParameter		{$$ = newTemplateParameterList($1, $2, $3);}
-;
-
-templateParameters		: TEMPLATE LAB templateParameterList RAB			{$$ = newTemplateParameters($1, $2, $3, $4);}
+templateParameters		: LTS templateParameterList GTS						{$$ = newTemplateParameters($1, $2, $3);}
 ;
 
 class_0					: CLASS IDENTIFY									{$$ = newClass($1, $2, NULL);}
@@ -205,33 +228,37 @@ class_0					: CLASS IDENTIFY									{$$ = newClass($1, $2, NULL);}
 ;
 
 class_1					: class_0											{$$ = $1;}
-						| class_0 ':' typeNameList							{$$ = $1; setClassBaseList($$, $2, $3);}
+						| class_0 templateParameters						{$$ = $1; setClassTemplateParameters($$, $2);}
 ;
 
-class_2					: class_1 '{' '}' ';'								{$$ = $1; setClassMemberList($$, $2, NULL, $3, $4);}
-						| class_1 '{' classMemberList '}' ';'				{$$ = $1; setClassMemberList($$, $2, $3, $4, $5);}
+class_2					: class_1											{$$ = $1;}
+						| class_1 ':' typeNameList							{$$ = $1; setClassBaseList($$, $2, $3);}
 ;
 
-class_3					: class_2											{$$ = $1;}
-						| ABSTRACT class_2									{$$ = $2; setClassModifier($$, $1);}
+class_3					: class_2 '{' '}' ';'								{$$ = $1; setClassMemberList($$, $2, NULL, $3, $4);}
+						| class_2 '{' classMemberList '}' ';'				{$$ = $1; setClassMemberList($$, $2, $3, $4, $5);}
 ;
 
 class_4					: class_3											{$$ = $1;}
-						| EXPORT class_3									{$$ = $2; setClassExport($$);}
+						| ABSTRACT class_3									{$$ = $2; setClassModifier($$, $1);}
 ;
 
-class					: class_4											{$$ = $1;}
-						| templateParameters class_4						{$$ = $2; setClassTemplateParameters($$, $1);}
+class_5					: class_4											{$$ = $1;}
+						| OVERRIDE class_4									{$$ = $2; setClassOverride($$);}
 ;
 
-templateClassInstance	: TEMPLATE CLASS IDENTIFY LAB typeNameList RAB ';'	{$$ = newTemplateClassInstance($1, $2, $3, $4, $5, $6, $7);}
-						| TEMPLATE STRUCT IDENTIFY LAB typeNameList RAB ';'	{$$ = newTemplateClassInstance($1, $2, $3, $4, $5, $6, $7);}
+
+class					: class_5											{$$ = $1;}
+						| META class_5										{$$ = $2; setMetaOnly($$);}
+						| NATIVE class_5									{$$ = $2; setNativeOnly($$);}
 ;
 
-typeAlias				: TYPENAME IDENTIFY ';'								{$$ = newTypeAlias($2, primitive_type);}
-						| TYPENAME STRUCT IDENTIFY ';'						{$$ = newTypeAlias($3, value_type);}
-						| TYPENAME CLASS IDENTIFY ';'						{$$ = newTypeAlias($3, reference_type);}
-						| TYPEDEF typeName IDENTIFY ';'						{$$ = newTypeDef($1, $3, $2);}
+templateClassInstance_0	: EXPORT IDENTIFY LTS typeNameList GTS ';'			{$$ = newTemplateClassInstance($1, $2, $3, $4, $5, $6);}
+						
+
+templateClassInstance	: templateClassInstance_0							{$$ = $1;}
+						| META templateClassInstance_0						{$$ = $2; setMetaOnly($$);}
+						| NATIVE templateClassInstance_0					{$$ = $2; setNativeOnly($$);}
 ;
 
 namespaceMemberList		: class												{$$ = newNamespaceMemberList(NULL, $1);}
@@ -248,9 +275,15 @@ namespaceMemberList		: class												{$$ = newNamespaceMemberList(NULL, $1);}
 						| namespaceMemberList ';'							{$$ = $1;}
 ;
 
-namespace				: NAMESPACE	IDENTIFY '{' '}'						{$$ = newNamespace($1, $2, $3, NULL, $4);}
+namespace_0				: NAMESPACE	IDENTIFY '{' '}'						{$$ = newNamespace($1, $2, $3, NULL, $4);}
 						| NAMESPACE	IDENTIFY '{' namespaceMemberList '}'	{$$ = newNamespace($1, $2, $3, $4, $5);}
 ;
 
-program					: namespaceMemberList								{$$ = newProgram($1); attachSyntaxTree($$);}
+namespace				: namespace_0										{$$ = $1;}
+						| META namespace_0									{$$ = $2; setMetaOnly($$);}
+						| NATIVE namespace_0								{$$ = $2; setNativeOnly($$);}
+;
+
+program					:													{$$ = newProgram(NULL); attachSyntaxTree($$);}
+						| namespaceMemberList								{$$ = newProgram($1); attachSyntaxTree($$);}
 ;

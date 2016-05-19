@@ -10,11 +10,9 @@
 #include "EnumNode.h"
 #include "ClassNode.h"
 #include "TemplateParametersNode.h"
-#include "TemplateParameterNode.h"
 #include "TemplateParameterListNode.h"
 #include "TypeNameListNode.h"
 #include "TypeNameNode.h"
-#include "FilterNode.h"
 #include "FieldNode.h"
 #include "GetterSetterNode.h"
 #include "PropertyNode.h"
@@ -142,13 +140,16 @@ void HeaderFileGenerator::generateCode_Program(FILE* file, SourceFile* sourceFil
 
 void HeaderFileGenerator::generateCode_Namespace(FILE* file, NamespaceNode* namespaceNode, int indentation)
 {
+	if (namespaceNode->isMetaOnly())
+	{
+		file = 0;
+	}
+
 	if(!namespaceNode->isGlobalNamespace())
 	{
 		generateCode_Token(file, namespaceNode->m_keyword, indentation);
 		generateCode_Identify(file, namespaceNode->m_name, 0);
-		//writeStringToFile("\n", file);
 		generateCode_Token(file, namespaceNode->m_leftBrace, indentation);
-		//writeStringToFile("\n", file);
 	}
 	std::vector<MemberNode*> memberNodes;
 	namespaceNode->m_memberList->collectMemberNodes(memberNodes);
@@ -179,15 +180,18 @@ void HeaderFileGenerator::generateCode_Namespace(FILE* file, NamespaceNode* name
 
 	if(!namespaceNode->isGlobalNamespace())
 	{
-		//writeStringToFile("\n", file);
 		generateCode_Token(file, namespaceNode->m_rightBrace, indentation);
-		//writeStringToFile(";\n\n", file);
 	}
 }
 
 
 void HeaderFileGenerator::generateCode_TypeAlias(FILE* file, TypeAliasNode* typeAliasNode, int indentation)
 {
+	if (typeAliasNode->isMetaOnly())
+	{
+		file = 0;
+	}
+
 	if(0 != typeAliasNode->m_typeName)
 	{
 		generateCode_Token(file, typeAliasNode->m_keyword, indentation);
@@ -204,11 +208,14 @@ void HeaderFileGenerator::generateCode_TypeAlias(FILE* file, TypeAliasNode* type
 
 void HeaderFileGenerator::generateCode_Enum(FILE* file, EnumNode* enumNode, int indentation)
 {
+	if (enumNode->isMetaOnly())
+	{
+		file = 0;
+	}
+
 	generateCode_Token(file, enumNode->m_keyword, indentation);
 	generateCode_Identify(file, enumNode->m_name, 0);
-	//writeStringToFile("\n", file);
 	generateCode_Token(file, enumNode->m_leftBrace, indentation);
-	//writeStringToFile("\n", file);
 
 	std::vector<std::pair<TokenNode*, IdentifyNode*>> identifyNodes;
 	enumNode->m_enumeratorList->collectIdentifyNodes(identifyNodes);
@@ -218,23 +225,26 @@ void HeaderFileGenerator::generateCode_Enum(FILE* file, EnumNode* enumNode, int 
 		if(0 != identifyNodes[i].first)
 		{
 			generateCode_Token(file, identifyNodes[i].first, 0);
-			//writeStringToFile("\n", file);
 		}
 		generateCode_Identify(file, identifyNodes[i].second, indentation + 1);
 	}
-	//writeStringToFile("\n", file);
 	generateCode_Token(file, enumNode->m_rightBrace, indentation);
 	generateCode_Token(file, enumNode->m_semicolon, 0);
-	//writeStringToFile(";\n\n", file);
 }
 
 void HeaderFileGenerator::generateCode_Class(FILE* file, ClassNode* classNode, int indentation)
 {
+	if (classNode->isMetaOnly())
+	{
+		file = 0;
+	}
+
+	classNode->m_keyword->outputEmbededCodes(file, 0 == indentation);
 	if(classNode->m_templateParameters)
 	{
-		generateCode_Token(file, classNode->m_templateParameters->m_keyword, indentation);
+		writeStringToFile("template ", file, indentation);
 		generateCode_Token(file, classNode->m_templateParameters->m_leftBracket, 0);
-		std::vector<std::pair<TokenNode*, TemplateParameterNode*>> parameterNodes;
+		std::vector<std::pair<TokenNode*, IdentifyNode*>> parameterNodes;
 		classNode->m_templateParameters->collectParameterNodes(parameterNodes);
 
 		size_t count = parameterNodes.size();
@@ -244,9 +254,8 @@ void HeaderFileGenerator::generateCode_Class(FILE* file, ClassNode* classNode, i
 			{
 				generateCode_Token(file, parameterNodes[i].first, 0);
 			}
-			generateCode_Token(file, parameterNodes[i].second->m_keyword, 0);
-			writeStringToFile(g_strSpaces, 1, file);
-			generateCode_Identify(file, parameterNodes[i].second->m_name, 0);
+			writeStringToFile("typename ", file);
+			generateCode_Identify(file, parameterNodes[i].second, 0);
 		}
 		generateCode_Token(file, classNode->m_templateParameters->m_rightBracket, 0);
 	}
@@ -280,34 +289,31 @@ void HeaderFileGenerator::generateCode_Class(FILE* file, ClassNode* classNode, i
 		writeStringToFile("virtual ::pafcore::ClassType* getType();\n", file, indentation + 1);
 		writeStringToFile("virtual size_t getAddress();\n", file, indentation + 1);
 	}
-	bool generateCode = true;
 	std::vector<MemberNode*> memberNodes;
 	classNode->m_memberList->collectMemberNodes(memberNodes);
 	size_t memberCount = memberNodes.size();
 	for(size_t i = 0; i < memberCount; ++i)
 	{
 		MemberNode* memberNode = memberNodes[i];
-		if(snt_filter == memberNode->m_nodeType)
-		{
-			generateCode = static_cast<FilterNode*>(memberNode)->m_native;			
-			continue;
-		}
 		switch(memberNode->m_nodeType)
 		{
 		case snt_field:
-			generateCode_Field(generateCode ? file : 0, static_cast<FieldNode*>(memberNode), indentation + 1);
+			generateCode_Field(file, static_cast<FieldNode*>(memberNode), indentation + 1);
 			break;
 		case snt_property:
-			generateCode_Property(generateCode ? file : 0, static_cast<PropertyNode*>(memberNode), indentation + 1);
+			generateCode_Property(file, static_cast<PropertyNode*>(memberNode), indentation + 1);
 			break;
 		case snt_method:
-			generateCode_Method(generateCode ? file : 0, static_cast<MethodNode*>(memberNode), indentation + 1);
-			break;
-		case snt_enum:
-			generateCode_Enum(generateCode ? file : 0, static_cast<EnumNode*>(memberNode), indentation + 1);
+			generateCode_Method(file, static_cast<MethodNode*>(memberNode), indentation + 1);
 			break;
 		case snt_class:
-			generateCode_Class(generateCode ? file : 0, static_cast<ClassNode*>(memberNode), indentation + 1);
+			generateCode_Class(file, static_cast<ClassNode*>(memberNode), indentation + 1);
+			break;
+		case snt_enum:
+			generateCode_Enum(file, static_cast<EnumNode*>(memberNode), indentation + 1);
+			break;
+		case snt_type_alias:
+			generateCode_TypeAlias(file, static_cast<TypeAliasNode*>(memberNode), indentation + 1);
 			break;
 		default:
 			assert(false);
@@ -333,6 +339,11 @@ void HeaderFileGenerator::generateCode_Class(FILE* file, ClassNode* classNode, i
 
 void HeaderFileGenerator::generateCode_Field(FILE* file, FieldNode* fieldNode, int indentation)
 {
+	if (fieldNode->isMetaOnly())
+	{
+		file = 0;
+	}
+
 	ClassNode* classNode = static_cast<ClassNode*>(fieldNode->m_enclosing);
 	if(fieldNode->m_static)
 	{
@@ -424,6 +435,11 @@ void HeaderFileGenerator::generateCode_Property_Set(FILE* file, PropertyNode* pr
 
 void HeaderFileGenerator::generateCode_Property(FILE* file, PropertyNode* propertyNode, int indentation)
 {
+	if (propertyNode->isMetaOnly())
+	{
+		file = 0;
+	}
+
 	if(0 != propertyNode->m_get && 0 != propertyNode->m_set && propertyNode->m_get->m_keyword->m_tokenNo > propertyNode->m_set->m_keyword->m_tokenNo)
 	{
 		generateCode_Property_Set(file, propertyNode, indentation);
@@ -449,6 +465,11 @@ void HeaderFileGenerator::generateCode_Property(FILE* file, PropertyNode* proper
 
 void HeaderFileGenerator::generateCode_Method(FILE* file, MethodNode* methodNode, int indentation)
 {
+	if (methodNode->isMetaOnly())
+	{
+		file = 0;
+	}
+
 	ClassNode* classNode = static_cast<ClassNode*>(methodNode->m_enclosing);
 	if(methodNode->m_modifier)
 	{
@@ -498,6 +519,11 @@ void HeaderFileGenerator::generateCode_Method(FILE* file, MethodNode* methodNode
 
 void HeaderFileGenerator::generateCode_AdditionalMethod(FILE* file, MethodNode* methodNode, int indentation)
 {
+	if (methodNode->isMetaOnly())
+	{
+		file = 0;
+	}
+
 	ClassNode* classNode = static_cast<ClassNode*>(methodNode->m_enclosing);
 	const char* typeName = classNode->m_name->m_str.c_str();
 	assert(0 != methodNode->m_modifier);

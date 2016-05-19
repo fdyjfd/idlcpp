@@ -10,7 +10,45 @@ MemberNode::MemberNode()
 {
 	m_name = 0;
 	m_enclosing = 0;
+	m_filter = mf_default;
 }
+
+bool MemberNode::isMetaOnly()
+{
+	return mf_meta_only == m_filter;
+}
+
+bool MemberNode::isNativeOnly()
+{
+	return mf_native_only == m_filter;
+}
+
+bool MemberNode::canGenerateMetaCode()
+{
+	if (mf_native_only == m_filter)
+	{
+		return false;
+	}
+	if (0 == m_enclosing)
+	{
+		return true;
+	}
+	return m_enclosing->canGenerateMetaCode();
+}
+
+bool MemberNode::canGenerateNativeCode()
+{
+	if (mf_meta_only == m_filter)
+	{
+		return false;
+	}
+	if (0 == m_enclosing)
+	{
+		return true;
+	}
+	return m_enclosing->canGenerateNativeCode();
+}
+
 
 void MemberNode::getFullName(std::string& fullName, TemplateArgumentMap* templateArguments)
 {

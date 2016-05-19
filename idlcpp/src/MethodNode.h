@@ -21,7 +21,7 @@ public:
 	TokenNode* m_constant;
 	TokenNode* m_semicolon;
 	bool m_resultArray;
-	bool m_export;
+	bool m_override;
 public:
 	MethodNode(IdentifyNode* name, TokenNode* leftParenthesis, ParameterListNode* parameterList, TokenNode* rightParenthesis, TokenNode* constant, TokenNode* semicolon);
 	bool isStatic();

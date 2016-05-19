@@ -8,13 +8,11 @@
 #include "EnumNode.h"
 #include "ClassNode.h"
 #include "TemplateParametersNode.h"
-#include "TemplateParameterNode.h"
 #include "TemplateClassInstanceNode.h"
 #include "TypeAliasNode.h"
 #include "TypeNameListNode.h"
 #include "TypeNameNode.h"
 #include "MemberListNode.h"
-#include "FilterNode.h"
 #include "FieldNode.h"
 #include "GetterSetterNode.h"
 #include "PropertyNode.h"
@@ -39,6 +37,7 @@ const char* s_variantSemantic_ByNewArray = "::pafcore::Variant::by_new_array";
 void writeMetaConstructor(ClassNode* classNode, 
 	TemplateArgumentMap* templateArguments,
 	std::vector<MemberNode*>& nestedTypeNodes,
+	std::vector<TypeAliasNode*>& nestedTypeAliasNodes,
 	std::vector<FieldNode*>& staticFieldNodes,
 	std::vector<PropertyNode*>& staticPropertyNodes,
 	std::vector<MethodNode*>& staticMethodNodes,
@@ -107,43 +106,46 @@ void MetaSourceFileGenerator::generateCode_Program(FILE* file, SourceFile* sourc
 	CollectExportedTypeInfos(typeInfos, programNode);
 	std::reverse(typeInfos.begin(), typeInfos.end());
 	size_t typeCount = typeInfos.size();
-	for(size_t i = 0; i < typeCount; ++i)
+	for (size_t i = 0; i < typeCount; ++i)
 	{
-		std::string metaTypeName = typeInfos[i].m_typeName;
-		std::replace_if(metaTypeName.begin(), metaTypeName.end(), isNotIdentifyChar, '_');
-		metaTypeName += g_options.m_metaTypePostfix;
-		sprintf_s(buf, "AUTO_REGISTER_TYPE(::idlcpp::%s)\n", metaTypeName.c_str());
-		writeStringToFile(buf, file);
-		if(snt_type_alias == typeInfos[i].m_typeNode->m_nodeType)
+		if (typeInfos[i].m_typeNode->canGenerateMetaCode())
 		{
-			TypeAliasNode* typeAliasNode = static_cast<TypeAliasNode*>(typeInfos[i].m_typeNode);
-			if(0 == typeAliasNode->m_typeName)
+			std::string metaTypeName = typeInfos[i].m_typeName;
+			std::replace_if(metaTypeName.begin(), metaTypeName.end(), isNotIdentifyChar, '_');
+			metaTypeName += g_options.m_metaTypePostfix;
+			sprintf_s(buf, "AUTO_REGISTER_TYPE(::idlcpp::%s)\n", metaTypeName.c_str());
+			writeStringToFile(buf, file);
+			if (snt_type_alias == typeInfos[i].m_typeNode->m_nodeType)
 			{
-				TypeCategory typeCategory = typeInfos[i].m_typeNode->getTypeCategory();
-				const char* typeCategoryName = "";
-				switch(typeCategory)
+				TypeAliasNode* typeAliasNode = static_cast<TypeAliasNode*>(typeInfos[i].m_typeNode);
+				if (0 == typeAliasNode->m_typeName)
 				{
-				case void_type:
-					typeCategoryName = "void_object";
-					break;
-				case primitive_type:
-					typeCategoryName = "primitive_object";
-					break;
-				case enum_type:
-					typeCategoryName = "enum_object";
-					break;
-				case value_type:
-					typeCategoryName = "value_object";
-					break;
-				case reference_type:
-					typeCategoryName = "reference_object";
-					break;
-				default:
-					assert(false);
+					TypeCategory typeCategory = typeInfos[i].m_typeNode->getTypeCategory();
+					const char* typeCategoryName = "";
+					switch (typeCategory)
+					{
+					case void_type:
+						typeCategoryName = "void_object";
+						break;
+					case primitive_type:
+						typeCategoryName = "primitive_object";
+						break;
+					case enum_type:
+						typeCategoryName = "enum_object";
+						break;
+					case value_type:
+						typeCategoryName = "value_object";
+						break;
+					case reference_type:
+						typeCategoryName = "reference_object";
+						break;
+					default:
+						assert(false);
+					}
+					sprintf_s(buf, "static_assert(RuntimeTypeOf<%s>::type_category == ::pafcore::%s, \"type category error\");\n",
+						typeInfos[i].m_typeName.c_str(), typeCategoryName);
+					writeStringToFile(buf, file);
 				}
-				sprintf_s(buf, "static_assert(RuntimeTypeOf<%s>::type_category == ::pafcore::%s, \"type category error\");\n", 
-					typeInfos[i].m_typeName.c_str(), typeCategoryName);
-				writeStringToFile(buf, file);
 			}
 		}
 	}
@@ -151,6 +153,11 @@ void MetaSourceFileGenerator::generateCode_Program(FILE* file, SourceFile* sourc
 
 void MetaSourceFileGenerator::generateCode_Namespace(FILE* file, NamespaceNode* namespaceNode, int indentation)
 {
+	if (namespaceNode->isNativeOnly())
+	{
+		return;
+	}
+
 	std::vector<MemberNode*> memberNodes;
 	namespaceNode->m_memberList->collectMemberNodes(memberNodes);
 	size_t count = memberNodes.size();
@@ -182,10 +189,10 @@ void MetaSourceFileGenerator::generateCode_Namespace(FILE* file, NamespaceNode* 
 
 void MetaSourceFileGenerator::generateCode_Enum(FILE* file, EnumNode* enumNode, int indentation)
 {
-	//std::string typeFullName;
-	//enumNode->getFullName(typeFullName, 0);
-	//typeFullNames->
-
+	if (enumNode->isNativeOnly())
+	{
+		return;
+	}
 	std::vector<IdentifyNode*> identifyNodes;
 	enumNode->m_enumeratorList->collectIdentifyNodes(identifyNodes);
 	std::sort(identifyNodes.begin(), identifyNodes.end(), CompareIdentifyPtr());
@@ -195,13 +202,18 @@ void MetaSourceFileGenerator::generateCode_Enum(FILE* file, EnumNode* enumNode, 
 
 void MetaSourceFileGenerator::generateCode_TemplateClassInstance(FILE* file, TemplateClassInstanceNode* templateClassInstance, int indentation)
 {
+	if (templateClassInstance->isNativeOnly())
+	{
+		return;
+	}
+
 	assert(0 != templateClassInstance->m_templateTypeNameNode->m_typeInfo
 			&& snt_class == templateClassInstance->m_templateTypeNameNode->m_typeInfo->m_typeNode->m_nodeType);
 	ClassNode* classNode = static_cast<ClassNode*>(templateClassInstance->m_templateTypeNameNode->m_typeInfo->m_typeNode);
 	assert(0 != classNode->m_templateParameters);
 	assert(classNode->m_templateParameters->getParameterCount() == templateClassInstance->getParameterCount());
 
-	std::vector<TemplateParameterNode*> templateParameters;
+	std::vector<IdentifyNode*> templateParameters;
 	classNode->m_templateParameters->collectParameterNodes(templateParameters);
 
 	std::vector<TypeNameNode*> templateArguments;
@@ -213,9 +225,9 @@ void MetaSourceFileGenerator::generateCode_TemplateClassInstance(FILE* file, Tem
 
 	for(size_t i = 0; i < count; ++i)
 	{
-		TemplateParameterNode* parameter = templateParameters[i];
+		IdentifyNode* parameter = templateParameters[i];
 		TypeNameNode* argument = templateArguments[i];
-		templateArgumentMap.insert(make_pair(parameter->m_name->m_str, argument));
+		templateArgumentMap.insert(make_pair(parameter->m_str, argument));
 	}
 
 	TypeNameListNode* oldTemplateArgumentList = classNode->setTemplateArgumentList(templateClassInstance->m_parameterList);
@@ -319,11 +331,14 @@ void writeOverrideFunction(ClassNode* classNode, TemplateArgumentMap* templateAr
 
 void MetaSourceFileGenerator::generateCode_Class(FILE* file, ClassNode* classNode, TemplateArgumentMap* templateArguments, int indentation)
 {
+	if (classNode->isNativeOnly())
+	{
+		return;
+	}
 	if(0 != classNode->m_templateParameters && 0 == classNode->m_templateArgumentList)
 	{
 		return;
 	}
-
 	std::vector<MemberNode*> memberNodes;
 	std::vector<MethodNode*> methodNodes;
 	std::vector<MethodNode*> staticMethodNodes;
@@ -332,19 +347,14 @@ void MetaSourceFileGenerator::generateCode_Class(FILE* file, ClassNode* classNod
 	std::vector<FieldNode*> fieldNodes;
 	std::vector<FieldNode*> staticFieldNodes;
 	std::vector<MemberNode*> nestedTypeNodes;
+	std::vector<TypeAliasNode*> nestedTypeAliasNodes;
 
 	classNode->m_memberList->collectMemberNodes(memberNodes);
 	size_t memberCount = memberNodes.size();
-	bool generateCode = true;
 	for(size_t i = 0; i < memberCount; ++i)
 	{
 		MemberNode* memberNode = memberNodes[i];
-		if(snt_filter == memberNode->m_nodeType)
-		{
-			generateCode = static_cast<FilterNode*>(memberNode)->m_meta;
-			continue;
-		}
-		if(generateCode)
+		if(!memberNode->isNativeOnly())
 		{
 			if(snt_method == memberNode->m_nodeType)
 			{
@@ -390,14 +400,30 @@ void MetaSourceFileGenerator::generateCode_Class(FILE* file, ClassNode* classNod
 			{
 				nestedTypeNodes.push_back(memberNode);
 			}
+			else if (snt_type_alias == memberNode->m_nodeType)
+			{
+				TypeAliasNode* typeAliasNode = static_cast<TypeAliasNode*>(memberNode);
+				nestedTypeAliasNodes.push_back(typeAliasNode);
+			}
 		}
 	}
 
 	if(!classNode->isAbstractClass())
 	{
-		staticMethodNodes.insert(staticMethodNodes.end(), classNode->m_additionalMethods.begin(), classNode->m_additionalMethods.end());
+		auto it = classNode->m_additionalMethods.begin();
+		auto end = classNode->m_additionalMethods.end();
+		for (; it != end; ++it)
+		{
+			MethodNode* methodNode = *it;
+			if (!methodNode->isNativeOnly())
+			{
+				staticMethodNodes.push_back(methodNode);
+			}
+		}
 	}
+
 	std::sort(nestedTypeNodes.begin(), nestedTypeNodes.end(), CompareMemberNodeByName());
+	std::sort(nestedTypeAliasNodes.begin(), nestedTypeAliasNodes.end(), CompareMemberNodeByName());
 	std::sort(fieldNodes.begin(), fieldNodes.end(), CompareMemberNodeByName());
 	std::sort(propertyNodes.begin(), propertyNodes.end(), CompareMemberNodeByName());
 	std::sort(methodNodes.begin(), methodNodes.end(), CompareMemberNodeByName());
@@ -414,7 +440,7 @@ void MetaSourceFileGenerator::generateCode_Class(FILE* file, ClassNode* classNod
 		hasDeleteArray = std::binary_search(staticMethodNodes.begin(), staticMethodNodes.end(), &tmpMethodNode, CompareMemberNodeByName());
 	}
 
-	writeMetaConstructor(classNode, templateArguments, nestedTypeNodes,
+	writeMetaConstructor(classNode, templateArguments, nestedTypeNodes, nestedTypeAliasNodes,
 		staticFieldNodes, staticPropertyNodes, staticMethodNodes, 
 		fieldNodes, propertyNodes, methodNodes, file, indentation);
 
@@ -446,6 +472,14 @@ void MetaSourceFileGenerator::generateCode_Class(FILE* file, ClassNode* classNod
 			assert(false);
 		}
 	}
+
+	size_t typeAliasCount = nestedTypeAliasNodes.size();
+	for (size_t i = 0; i < typeAliasCount; ++i)
+	{
+		TypeAliasNode* typeAliasNode = nestedTypeAliasNodes[i];
+		generateCode_TypeAlias(file, typeAliasNode, indentation);
+	}
+
 }
 
 const char g_metaPropertyImplPrefix[] = "::pafcore::ErrorCode ";
@@ -1555,6 +1589,7 @@ bool MethodNodeNameEqual(MethodNode* arg1, MethodNode* arg2)
 
 void writeMetaConstructor_Member(
 	std::vector<MemberNode*>& nestedTypeNodes, 
+	std::vector<TypeAliasNode*>& nestedTypeAliasNodes,
 	std::vector<FieldNode*>& staticFieldNodes,
 	std::vector<PropertyNode*>& staticPropertyNodes,
 	const std::vector<MethodNode*>& staticMethodNodes_,
@@ -1574,7 +1609,8 @@ void writeMetaConstructor_Member(
 	it = std::unique(methodNodes.begin(), methodNodes.end(), MethodNodeNameEqual);
 	methodNodes.erase(it, methodNodes.end());
 
-	if(staticFieldNodes.empty() && staticPropertyNodes.empty() && staticMethodNodes.empty()
+	if(nestedTypeNodes.empty() && nestedTypeAliasNodes.empty() 
+		&& staticFieldNodes.empty() && staticPropertyNodes.empty() && staticMethodNodes.empty()
 		&& fieldNodes.empty() && propertyNodes.empty() && methodNodes.empty())
 	{
 		return;
@@ -1585,6 +1621,7 @@ void writeMetaConstructor_Member(
 	writeStringToFile("{\n", file, indentation);
 
 	size_t nestedTypeCount = nestedTypeNodes.size();
+	size_t nestedTypeAliasCount = nestedTypeAliasNodes.size();
 	size_t staticFieldCount = staticFieldNodes.size();
 	size_t staticPropertyCount = staticPropertyNodes.size();
 	size_t staticMethodCount = staticMethodNodes.size();
@@ -1593,6 +1630,7 @@ void writeMetaConstructor_Member(
 	size_t methodCount = methodNodes.size();
 
 	size_t currentNestedType = 0;
+	size_t currentNestedTypeAlias = 0;
 	size_t currentStaticField = 0;
 	size_t currentStaticProperty = 0;
 	size_t currentStaticMethod = 0;
@@ -1604,6 +1642,7 @@ void writeMetaConstructor_Member(
 	{
 		unknown_member,
 		nested_type,
+		nested_type_alias,
 		static_field,
 		static_property,
 		static_method,
@@ -1620,10 +1659,19 @@ void writeMetaConstructor_Member(
 			current = nestedTypeNodes[currentNestedType];
 			category = nested_type;
 		}
-		if(currentStaticField < staticFieldCount)
+		if (currentNestedTypeAlias < nestedTypeAliasCount)
+		{
+			MemberNode* memberNode = nestedTypeAliasNodes[currentNestedTypeAlias];
+			if (0 == current || memberNode->m_name->m_str < current->m_name->m_str)
+			{
+				current = memberNode;
+				category = nested_type_alias;
+			}
+		}
+		if (currentStaticField < staticFieldCount)
 		{
 			MemberNode* memberNode = staticFieldNodes[currentStaticField];
-			if(0 == current || memberNode->m_name->m_str < current->m_name->m_str)
+			if (0 == current || memberNode->m_name->m_str < current->m_name->m_str)
 			{
 				current = memberNode;
 				category = static_field;
@@ -1683,6 +1731,10 @@ void writeMetaConstructor_Member(
 		case nested_type:
 			sprintf_s(buf, "s_nestedTypes[%d],\n", currentNestedType);
 			++currentNestedType;
+			break;
+		case nested_type_alias:
+			sprintf_s(buf, "s_nestedTypeAliases[%d],\n", currentNestedTypeAlias);
+			++currentNestedTypeAlias;
 			break;
 		case static_field:
 			sprintf_s(buf, "&s_staticFields[%d],\n", currentStaticField);
@@ -1774,6 +1826,32 @@ void writeMetaConstructor_NestedTypes(ClassNode* classNode, TemplateArgumentMap*
 	writeStringToFile("m_nestedTypeCount = array_size_of(s_nestedTypes);\n", file, indentation);
 }
 
+void writeMetaConstructor_NestedTypeAliases(ClassNode* classNode, TemplateArgumentMap* templateArguments, std::vector<TypeAliasNode*>& nestedTypeAliasNodes, FILE* file, int indentation)
+{
+	char buf[512];
+	if (nestedTypeAliasNodes.empty())
+	{
+		return;
+	}
+	size_t count = nestedTypeAliasNodes.size();
+	writeStringToFile("static ::pafcore::TypeAlias* s_nestedTypeAliases[] = \n", file, indentation);
+	writeStringToFile("{\n", file, indentation);
+
+	for (size_t i = 0; i < count; ++i)
+	{
+		TypeAliasNode* typeAliasNode = nestedTypeAliasNodes[i];
+		std::string metaTypeName;
+		GetMetaTypeFullName(metaTypeName, typeAliasNode);
+
+		sprintf_s(buf, "%s::GetSingleton(),\n", metaTypeName.c_str());
+		writeStringToFile(buf, file, indentation + 1);
+	}
+	writeStringToFile("};\n", file, indentation);
+
+	writeStringToFile("m_nestedTypeAliases = s_nestedTypeAliases;\n", file, indentation);
+	writeStringToFile("m_nestedTypeAliasCount = array_size_of(s_nestedTypeAliases);\n", file, indentation);
+}
+
 void writeMetaRegisterToNamespace(MemberNode* memberNode, FILE* file, int indentation)
 {
 	char buf[512];
@@ -1805,6 +1883,7 @@ void writeMetaRegisterToNamespace(MemberNode* memberNode, FILE* file, int indent
 void writeMetaConstructor(ClassNode* classNode, 
 	TemplateArgumentMap* templateArguments,
 	std::vector<MemberNode*>& nestedTypeNodes,
+	std::vector<TypeAliasNode*>& nestedTypeAliasNodes,
 	std::vector<FieldNode*>& staticFieldNodes,
 	std::vector<PropertyNode*>& staticPropertyNodes,
 	std::vector<MethodNode*>& staticMethodNodes,
@@ -1837,7 +1916,7 @@ void writeMetaConstructor(ClassNode* classNode,
 	
 	writeMetaConstructor_BaseClasses(classNode, templateArguments, file, indentation + 1);
 	writeMetaConstructor_NestedTypes(classNode, templateArguments, nestedTypeNodes, file, indentation + 1);
-
+	writeMetaConstructor_NestedTypeAliases(classNode, templateArguments, nestedTypeAliasNodes, file, indentation + 1);
 	writeMetaConstructor_Fields(classNode, templateArguments, staticFieldNodes, true, file, indentation + 1);
 	writeMetaConstructor_Properties(classNode, templateArguments, staticPropertyNodes, true, file, indentation + 1);
 	writeMetaConstructor_Methods(classNode, templateArguments, staticMethodNodes, true, file, indentation + 1);
@@ -1846,7 +1925,7 @@ void writeMetaConstructor(ClassNode* classNode,
 	writeMetaConstructor_Properties(classNode, templateArguments, propertyNodes, false, file, indentation + 1);
 	writeMetaConstructor_Methods(classNode, templateArguments, methodNodes, false, file, indentation + 1);
 
-	writeMetaConstructor_Member(nestedTypeNodes,
+	writeMetaConstructor_Member(nestedTypeNodes, nestedTypeAliasNodes, 
 		staticFieldNodes, staticPropertyNodes, staticMethodNodes,
 		fieldNodes, propertyNodes, methodNodes, file, indentation + 1);
 
@@ -1934,6 +2013,11 @@ void writeMetaGetSingletonImpls(MemberNode* memberNode, FILE* file, int indentat
 
 void MetaSourceFileGenerator::generateCode_TypeAlias(FILE* file, TypeAliasNode* typeAliasNode, int indentation)
 {
+	if (typeAliasNode->isNativeOnly())
+	{
+		return;
+	}
+
 	char buf[512];
 	std::string typeName;
 	std::string metaTypeName;
@@ -2347,12 +2431,12 @@ void writeInterfaceMethodImpl(ClassNode* classNode, MethodNode* methodNode, FILE
 void writeInterfaceMethodsImpl(ClassNode* classNode, FILE* file, int indentation)
 {
 	std::vector<MethodNode*> methodNodes;
-	classNode->collectExportMethods(methodNodes);
+	classNode->collectOverrideMethods(methodNodes);
 	size_t count = methodNodes.size();
 	for(size_t i = 0; i < count; ++i)
 	{
 		MethodNode* methodNode = methodNodes[i];
-		assert(snt_method == methodNode->m_nodeType && methodNode->m_export && methodNode->isVirtual());
+		assert(snt_method == methodNode->m_nodeType && methodNode->m_override && methodNode->isVirtual());
 		writeInterfaceMethodImpl(classNode, methodNode, file, indentation);
 	}
 }

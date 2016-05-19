@@ -18,10 +18,8 @@ namespace pafcore
 		virtual ::pafcore::ClassType* getType();
 		virtual size_t getAddress();
 
-
 		virtual ::long_t addRef();
 		virtual ::long_t release();
-
 		::long_t get_refCount();
 
 		void* castTo(ClassType* classType);

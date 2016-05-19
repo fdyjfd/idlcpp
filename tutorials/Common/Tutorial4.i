@@ -9,8 +9,7 @@ namespace tutorial
 		float y;
 		Point();
 		Point(float a, float b);
-	meta:
-		Point(const Point ref pt);
+		meta Point(const Point ref pt);
 	};
 
 	class Shape : Reference
@@ -35,8 +34,7 @@ namespace tutorial
 	class Triangle : Shape
 	{
 		Point m_vertices[$3];
-	meta:
-		Triangle();
+		meta Triangle();
 $$		virtual float getArea();
 	};
 

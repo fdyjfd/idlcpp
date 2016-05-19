@@ -14,7 +14,6 @@
 #include "TypeAliasNode.h"
 #include "TypeNameListNode.h"
 #include "TypeNameNode.h"
-#include "FilterNode.h"
 #include "FieldNode.h"
 #include "PropertyNode.h"
 #include "MethodNode.h"
@@ -145,7 +144,8 @@ void MetaHeaderFileGenerator::generateCode_Program(FILE* file, ProgramNode* prog
 
 	for(size_t i = 0; i < typeCount; ++i)
 	{
-		if(snt_type_alias != typeInfos[i].m_typeNode->m_nodeType)
+		if(snt_type_alias != typeInfos[i].m_typeNode->m_nodeType
+			&& typeInfos[i].m_typeNode->canGenerateMetaCode())
 		{
 			TypeCategory typeCategory = typeInfos[i].m_typeNode->getTypeCategory();
 			const char* typeCategoryName = "";
@@ -181,6 +181,10 @@ void MetaHeaderFileGenerator::generateCode_Program(FILE* file, ProgramNode* prog
 
 void MetaHeaderFileGenerator::generateCode_Namespace(FILE* file, NamespaceNode* namespaceNode, int indentation)
 {
+	if (namespaceNode->isNativeOnly())
+	{
+		return;
+	}
 	std::vector<MemberNode*> memberNodes;
 	namespaceNode->m_memberList->collectMemberNodes(memberNodes);
 	size_t count = memberNodes.size();
@@ -212,6 +216,11 @@ void MetaHeaderFileGenerator::generateCode_Namespace(FILE* file, NamespaceNode* 
 
 void MetaHeaderFileGenerator::generateCode_Enum(FILE* file, EnumNode* enumNode, int indentation)
 {
+	if (enumNode->isNativeOnly())
+	{
+		return;
+	}
+
 	char buf[512];
 	std::string metaTypeName;
 	GetMetaTypeFullName(metaTypeName, enumNode);
@@ -235,6 +244,10 @@ void MetaHeaderFileGenerator::generateCode_Enum(FILE* file, EnumNode* enumNode, 
 
 void MetaHeaderFileGenerator::generateCode_Class(FILE* file, ClassNode* classNode, int indentation)
 {
+	if (classNode->isNativeOnly())
+	{
+		return;
+	}
 	if(0 != classNode->m_templateParameters && 0 == classNode->m_templateArgumentList)
 	{
 		return;
@@ -248,7 +261,6 @@ void MetaHeaderFileGenerator::generateCode_Class(FILE* file, ClassNode* classNod
 	writeStringToFile(buf, file, indentation);
 	writeStringToFile("{\n", file, indentation);
 
-	bool generateCode = true;
 	std::vector<MemberNode*> memberNodes;
 	std::vector<MethodNode*> methodNodes;
 	std::vector<MethodNode*> staticMethodNodes;
@@ -261,12 +273,7 @@ void MetaHeaderFileGenerator::generateCode_Class(FILE* file, ClassNode* classNod
 	for(size_t i = 0; i < memberCount; ++i)
 	{
 		MemberNode* memberNode = memberNodes[i];
-		if(snt_filter == memberNode->m_nodeType)
-		{
-			generateCode = static_cast<FilterNode*>(memberNode)->m_meta;
-			continue;
-		}
-		if(generateCode)
+		if(!memberNode->isNativeOnly())
 		{
 			if(snt_method == memberNode->m_nodeType)
 			{
@@ -296,7 +303,8 @@ void MetaHeaderFileGenerator::generateCode_Class(FILE* file, ClassNode* classNod
 				}
 			}
 			else if(snt_enum == memberNode->m_nodeType ||
-				snt_class == memberNode->m_nodeType)
+				snt_class == memberNode->m_nodeType ||
+				snt_type_alias == memberNode->m_nodeType)
 			{
 				subTypeNodes.push_back(memberNode);
 			}
@@ -305,7 +313,16 @@ void MetaHeaderFileGenerator::generateCode_Class(FILE* file, ClassNode* classNod
 	
 	if(!classNode->isAbstractClass())
 	{
-		staticMethodNodes.insert(staticMethodNodes.end(), classNode->m_additionalMethods.begin(), classNode->m_additionalMethods.end());
+		auto it = classNode->m_additionalMethods.begin();
+		auto end = classNode->m_additionalMethods.end();
+		for (; it != end; ++it)
+		{
+			MethodNode* methodNode = *it;
+			if (!methodNode->isNativeOnly())
+			{
+				staticMethodNodes.push_back(methodNode);
+			}
+		}
 	}
 
 	std::sort(propertyNodes.begin(), propertyNodes.end(), CompareMemberNodeByName());
@@ -357,6 +374,9 @@ void MetaHeaderFileGenerator::generateCode_Class(FILE* file, ClassNode* classNod
 			break;
 		case snt_class:
 			generateCode_Class(file, static_cast<ClassNode*>(typeNode), indentation);
+			break;
+		case snt_type_alias:
+			generateCode_TypeAlias(file, static_cast<TypeAliasNode*>(typeNode), indentation);
 			break;
 		default:
 			assert(false);
@@ -428,12 +448,12 @@ void writeInterfaceMethodDecl(MethodNode* methodNode, FILE* file, int indentatio
 void writeInterfaceMethodsDecl(ClassNode* classNode, FILE* file, int indentation)
 {
 	std::vector<MethodNode*> methodNodes;
-	classNode->collectExportMethods(methodNodes);
+	classNode->collectOverrideMethods(methodNodes);
 	size_t count = methodNodes.size();
 	for(size_t i = 0; i < count; ++i)
 	{
 		MethodNode* methodNode = methodNodes[i];
-		assert(snt_method == methodNode->m_nodeType && methodNode->m_export && methodNode->isVirtual());
+		assert(snt_method == methodNode->m_nodeType && methodNode->m_override && methodNode->isVirtual());
 		writeInterfaceMethodDecl(methodNode, file, indentation);
 	}
 }
@@ -462,6 +482,10 @@ void MetaHeaderFileGenerator::generateCode_Interface(FILE* file, ClassNode* clas
 
 void MetaHeaderFileGenerator::generateCode_TemplateClassInstance(FILE* file, TemplateClassInstanceNode* templateClassInstance, int indentation)
 {
+	if (templateClassInstance->isNativeOnly())
+	{
+		return;
+	}
 	assert(0 != templateClassInstance->m_templateTypeNameNode->m_typeInfo
 			&& snt_class == templateClassInstance->m_templateTypeNameNode->m_typeInfo->m_typeNode->m_nodeType);
 	ClassNode* classNode = static_cast<ClassNode*>(templateClassInstance->m_templateTypeNameNode->m_typeInfo->m_typeNode);
@@ -475,6 +499,11 @@ void MetaHeaderFileGenerator::generateCode_TemplateClassInstance(FILE* file, Tem
 
 void MetaHeaderFileGenerator::generateCode_TypeAlias(FILE* file, TypeAliasNode* typeAliasNode, int indentation)
 {
+	if (typeAliasNode->isNativeOnly())
+	{
+		return;
+	}
+
 	char buf[512];
 	std::string metaTypeName;
 	GetMetaTypeFullName(metaTypeName, typeAliasNode);

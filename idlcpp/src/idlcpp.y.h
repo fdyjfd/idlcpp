@@ -58,22 +58,21 @@
      VOID = 274,
      CONST = 275,
      TEMPLATE = 276,
-     TYPENAME = 277,
-     TYPEDEF = 278,
-     NEW = 279,
-     ABSTRACT = 280,
-     GET = 281,
-     SET = 282,
-     ALL = 283,
-     NATIVE = 284,
-     META = 285,
-     REF = 286,
-     PTR = 287,
-     LAB = 288,
-     RAB = 289,
-     EXPORT = 290,
-     SCOPE = 291,
-     IDENTIFY = 292
+     TYPEDEF = 277,
+     NEW = 278,
+     ABSTRACT = 279,
+     GET = 280,
+     SET = 281,
+     NATIVE = 282,
+     META = 283,
+     REF = 284,
+     PTR = 285,
+     EXPORT = 286,
+     OVERRIDE = 287,
+     LTS = 288,
+     GTS = 289,
+     SCOPE = 290,
+     IDENTIFY = 291
    };
 #endif
 
@@ -91,7 +90,7 @@ typedef union YYSTYPE
 
 
 /* Line 1676 of yacc.c  */
-#line 95 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.y.h"
+#line 94 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.y.h"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */

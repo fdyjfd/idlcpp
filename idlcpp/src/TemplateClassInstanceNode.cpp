@@ -7,15 +7,13 @@
 #include "ClassNode.h"
 #include "RaiseError.h"
 #include "TemplateParametersNode.h"
-#include "TemplateParameterNode.h"
 #include <assert.h>
 
-TemplateClassInstanceNode::TemplateClassInstanceNode(TokenNode* keyword, TokenNode* keyword2, IdentifyNode* name, 
+TemplateClassInstanceNode::TemplateClassInstanceNode(TokenNode* keyword, IdentifyNode* name, 
 	TokenNode* leftBracket, TypeNameListNode* parameterList, TokenNode* rightBracket, TokenNode* semicolon)
 {
 	m_nodeType = snt_template_class_instance;
 	m_keyword = keyword;
-	m_keyword2 = keyword2;
 	m_name = name;
 	m_leftBracket = leftBracket;
 	m_parameterList = parameterList;
@@ -124,7 +122,7 @@ void TemplateClassInstanceNode::collectTypeInfo()
 void TemplateClassInstanceNode::checkSemantic()
 {
 	ClassNode* classNode = static_cast<ClassNode*>(m_templateTypeNameNode->m_typeInfo->m_typeNode);
-	std::vector<TemplateParameterNode*> templateParameters;
+	std::vector<IdentifyNode*> templateParameters;
 	classNode->m_templateParameters->collectParameterNodes(templateParameters);
 
 	std::vector<TypeNameNode*> templateArguments;
@@ -135,9 +133,9 @@ void TemplateClassInstanceNode::checkSemantic()
 	TemplateArgumentMap templateArgumentMap;
 	for(size_t i = 0; i < count; ++i)
 	{
-		TemplateParameterNode* parameter = templateParameters[i];
+		IdentifyNode* parameter = templateParameters[i];
 		TypeNameNode* argument = templateArguments[i];
-		templateArgumentMap.insert(make_pair(parameter->m_name->m_str, argument));
+		templateArgumentMap.insert(make_pair(parameter->m_str, argument));
 	}
 
 	TypeNameListNode* oldTemplateArgumentList = classNode->setTemplateArgumentList(m_parameterList);

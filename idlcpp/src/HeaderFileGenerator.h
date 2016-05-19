@@ -9,7 +9,6 @@ struct TypeAliasNode;
 struct ClassNode;
 struct TemplateParametersNode;
 struct EnumNode;
-struct TemplateParameterNode;
 struct TokenNode;
 struct IdentifyNode;
 struct FieldNode;

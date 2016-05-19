@@ -90,9 +90,6 @@
     <ClCompile Include="..\..\src\TemplateParameterListNode.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\TemplateParameterNode.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\TemplateParametersNode.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -218,9 +215,6 @@
     <ClInclude Include="..\..\src\TemplateParameterListNode.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\TemplateParameterNode.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\TemplateParametersNode.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -255,9 +249,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\FieldNode.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\FilterNode.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\GetterSetterNode.h">

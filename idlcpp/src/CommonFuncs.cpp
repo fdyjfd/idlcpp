@@ -5,7 +5,6 @@
 #include "MemberListNode.h"
 #include "TypeNameNode.h"
 #include "ClassNode.h"
-#include "TemplateParameterNode.h"
 #include "TemplateParametersNode.h"
 #include "TemplateClassInstanceNode.h"
 
@@ -39,7 +38,7 @@ TypeCategory CalcTypeFullName(std::string& typeName, TypeNameNode* typeNameNode,
 		assert(typeNameNode->m_typeInfo->m_typeNode->isTemplateClass());
 		ClassNode* classNode = static_cast<ClassNode*>(typeNameNode->m_typeInfo->m_typeNode);
 		
-		std::vector<TemplateParameterNode*> templateParameters;
+		std::vector<IdentifyNode*> templateParameters;
 		classNode->m_templateParameters->collectParameterNodes(templateParameters);
 		size_t count = templateParameters.size();
 		typeName += '<';
@@ -49,8 +48,8 @@ TypeCategory CalcTypeFullName(std::string& typeName, TypeNameNode* typeNameNode,
 			{
 				typeName += ',';
 			}
-			TemplateParameterNode* parameter = templateParameters[i];
-			auto it = templateArguments->find(parameter->m_name->m_str);
+			IdentifyNode* parameter = templateParameters[i];
+			auto it = templateArguments->find(parameter->m_str);
 			assert(it != templateArguments->end());
 			TypeNameNode* argument = it->second;
 			std::string argumentName;
@@ -114,50 +113,3 @@ void CollectExportedTypeInfos(std::vector<ExportedTypeInfo>& typeInfos, MemberNo
 		list = list->m_memberList;
 	}
 }
-
-
-//
-//void CollectExportTypeNames(std::vector<std::string>& typeNames, MemberListNode* list)
-//{
-//	while(0 != list)
-//	{
-//		std::string typeName;
-//		MemberNode* memberNode = list->m_member;
-//		switch(memberNode->m_nodeType)
-//		{
-//		case snt_namespace:
-//		case snt_class:
-//			CollectExportTypeNames(typeNames, static_cast<ScopeNode*>(memberNode)->m_memberList);
-//			break;
-//		}
-//		switch(memberNode->m_nodeType)
-//		{
-//		case snt_enum:
-//		case snt_type_alias:
-//			memberNode->getFullName(typeName, 0);
-//			typeNames.push_back(typeName);
-//			break;
-//		case snt_template_class_instance:
-//			{
-//				TemplateClassInstanceNode* templateClassInstance = static_cast<TemplateClassInstanceNode*>(memberNode);
-//				ClassNode* classNode = static_cast<ClassNode*>(templateClassInstance->m_templateTypeNameNode->m_typeInfo->m_typeNode);
-//				assert(0 != classNode->m_templateParameters);
-//				assert(classNode->m_templateParameters->getParameterCount() == templateClassInstance->getParameterCount());
-//				TypeNameListNode* oldTemplateArgumentList = classNode->setTemplateArgumentList(templateClassInstance->m_parameterList);
-//				classNode->getFullName(typeName, 0);
-//				typeNames.push_back(typeName);
-//				CollectExportTypeNames(typeNames, classNode->m_memberList);
-//				classNode->setTemplateArgumentList(oldTemplateArgumentList);
-//			}
-//			break;
-//		case snt_class:
-//			if(!memberNode->isTemplateClass())
-//			{
-//				memberNode->getFullName(typeName, 0);
-//				typeNames.push_back(typeName);
-//			}
-//			break;
-//		}
-//		list = list->m_memberList;
-//	}
-//}
