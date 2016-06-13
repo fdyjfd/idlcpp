@@ -1,5 +1,6 @@
 #pragma once
 #include "ScopeNode.h"
+#include "TemplateArguments.h"
 #include <vector>
 
 struct TokenNode;
@@ -8,6 +9,8 @@ struct MemberListNode;
 struct MethodNode;
 struct TemplateParametersNode;
 struct TypeNameListNode;
+struct TemplateArguments;
+struct ClassTypeNode;
 
 struct ClassNode : ScopeNode
 {
@@ -25,30 +28,30 @@ struct ClassNode : ScopeNode
 	TokenNode* m_leftBrace;
 	TokenNode* m_rightBrace;
 	TokenNode* m_semicolon;
-	TemplateParametersNode* m_templateParameters;
-	TypeNameListNode* m_templateArgumentList;
+	TemplateParametersNode* m_templateParametersNode;
+	ClassTypeNode* m_typeNode;
+	TemplateArguments m_templateArguments;
 	std::vector<MethodNode*> m_additionalMethods;//New NewArray Clone
 	bool m_isValueType;
 	bool m_override;
 	LazyBool m_abstractFlag;
-	LazyBool m_exportFlag;
 public:
 	ClassNode(TokenNode* keyword, IdentifyNode* name, IdentifyNode* category);
+	void setTemplateParameters(TemplateParametersNode* templateParametersNode);
 	void setMemberList(TokenNode* leftBrace, MemberListNode* memberList, TokenNode* rightBrace, TokenNode* semicolon);
 	void buildAdditionalMethods();
-	TypeNameListNode* setTemplateArgumentList(TypeNameListNode* templateArgumentList);
-	virtual TypeCategory getTypeCategory();
-	virtual void getRelativeName(std::string& relativeName, ScopeNode* scope, TemplateArgumentMap* templateArguments);
-	virtual void getTemplateArgumentsName(std::string& relativeName, ScopeNode* scope, TemplateArgumentMap* templateArguments);
-	virtual void collectTypeInfo();
-	virtual void checkSemantic();
-	virtual void checkSemanticForTemplateInstance(TemplateClassInstanceNode* templateClassInstanceNode, TemplateArgumentMap* templateArguments);
-	virtual void extendInternalCode();
-	virtual bool isAbstractClass();
-	bool needExport();
+	void extendInternalCode(TypeNode* enclosingTypeNode, TemplateArguments* templateArguments);
+	bool isAbstractClass();
+	bool needSubclassProxy(TemplateArguments* templateArguments);
 	bool isValueType();
-	bool hasExportMethod();
-	void collectOverrideMethods(std::vector<MethodNode*>& methodNodes);
+	bool hasOverrideMethod(TemplateArguments* templateArguments);
+	void collectOverrideMethods(std::vector<MethodNode*>& methodNodes, TemplateArguments* templateArguments);
 	void GenerateCreateInstanceMethod(const char* methodName, MethodNode* constructor);
 	void GenerateCreateArrayMethod(const char* methodName, MethodNode* constructor);
+
+	virtual TypeNode* getTypeNode();
+	virtual void getLocalName(std::string& name, TemplateArguments* templateArguments);
+	virtual void collectTypes(TypeNode* enclosingTypeNode);
+	virtual void checkTypeNames(TypeNode* enclosingTypeNode, TemplateArguments* templateArguments);
+	virtual void checkSemantic(TemplateArguments* templateArguments);
 };

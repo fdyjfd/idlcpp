@@ -1,28 +1,27 @@
 #pragma once
 
 #include "MemberNode.h"
+#include "TemplateArguments.h"
 #include <vector>
 
 struct TokenNode;
-struct ScopeListNode;
+struct ScopeNameListNode;
 struct TypeNameListNode;
 struct TypeNameNode;
+struct TemplateClassInstanceTypeNode;
+struct ClassTypeNode;
 
 struct TemplateClassInstanceNode : MemberNode
 {
-	TokenNode* m_keyword;
-	TokenNode* m_leftBracket;
 	TypeNameListNode* m_parameterList;
-	TokenNode* m_rightBracket;
-	TokenNode* m_semicolon;
-	TypeNameNode* m_templateTypeNameNode;
-	TypeCategory m_typeCategory;
+	TemplateClassInstanceTypeNode* m_typeNode;
+	ClassTypeNode* m_classTypeNode;
+	TemplateArguments m_templateArguments;
 public:
-	TemplateClassInstanceNode(TokenNode* keyword, IdentifyNode* name, TokenNode* leftBracket, TypeNameListNode* parameterList, TokenNode* rightBracket, TokenNode* semicolon);
-	virtual TypeCategory getTypeCategory();
-	virtual void getRelativeName(std::string& relativeName, ScopeNode* scope, TemplateArgumentMap* templateArguments);
-	virtual void collectTypeInfo();
-	virtual void checkSemantic();
-	virtual bool isAbstractClass();
+	TemplateClassInstanceNode(IdentifyNode* name, TypeNameListNode* parameterList);
+	virtual TypeNode* getTypeNode();
+	virtual void getLocalName(std::string& name, TemplateArguments* templateArguments);
+	virtual void collectTypes(TypeNode* enclosingTypeNode);
+	virtual void checkSemantic(TemplateArguments* templateArguments);
 	size_t getParameterCount();
 };

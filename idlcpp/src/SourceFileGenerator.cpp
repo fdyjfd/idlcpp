@@ -1,11 +1,12 @@
 #include "SourceFileGenerator.h"
+#include "Utility.h"
 #include "SourceFile.h"
 #include "ProgramNode.h"
 #include "NamespaceNode.h"
 #include "TokenNode.h"
 #include "IdentifyNode.h"
 #include "EnumeratorListNode.h"
-#include "ScopeListNode.h"
+#include "ScopeNameListNode.h"
 #include "MemberListNode.h"
 #include "EnumNode.h"
 #include "ClassNode.h"
@@ -17,14 +18,13 @@
 #include "PropertyNode.h"
 #include "MethodNode.h"
 #include "ParameterNode.h"
-#include "TypeAliasNode.h"
+#include "TypedefNode.h"
 #include "Options.h"
 #include "Platform.h"
 #include <assert.h>
 
 void generateCode_Token(FILE* file, TokenNode* tokenNode, int indentation);
 void generateCode_Identify(FILE* file, IdentifyNode* identifyNode, int indentation);
-void generateCode_TypeName(FILE* file, TypeNameNode* typeNameNode, ScopeNode* scopeNode, int indentation);
 void generateCode_Parameter(FILE* file, ParameterNode* parameterNode, MethodNode* methodNode, int indentation);
 
 void SourceFileGenerator::generateCode(FILE* dstFile, SourceFile* sourceFile, const char* fullPathName, const char* baseName)
@@ -93,10 +93,10 @@ void SourceFileGenerator::generateCode_Namespace(FILE* file, NamespaceNode* name
 void GetClassName(std::string& className, ClassNode* classNode)
 {
 	className = classNode->m_name->m_str;
-	if(classNode->m_templateParameters)
+	if(classNode->m_templateParametersNode)
 	{
 		std::vector<IdentifyNode*> templateParameterNodes;
-		classNode->m_templateParameters->collectParameterNodes(templateParameterNodes);
+		classNode->m_templateParametersNode->collectParameterNodes(templateParameterNodes);
 		className += "<";
 		size_t count = templateParameterNodes.size();
 		for(size_t i = 0; i < count; ++i)
@@ -163,10 +163,10 @@ void SourceFileGenerator::generateCode_Class(FILE* file, ClassNode* classNode, i
 
 void SourceFileGenerator::generateCode_TemplateHeader(FILE* file, ClassNode* classNode, int indentation)
 {
-	if(classNode->m_templateParameters)
+	if(classNode->m_templateParametersNode)
 	{
 		std::vector<IdentifyNode*> templateParameterNodes;
-		classNode->m_templateParameters->collectParameterNodes(templateParameterNodes);
+		classNode->m_templateParametersNode->collectParameterNodes(templateParameterNodes);
 		writeStringToFile("template<", file, indentation);
 		size_t count = templateParameterNodes.size();
 		for(size_t i = 0; i < count; ++i)
@@ -203,7 +203,7 @@ void SourceFileGenerator::generateCode_AdditionalMethod(FILE* file, MethodNode* 
 	{
 		generateCode_Token(file, methodNode->m_passing, 0);
 	}
-	writeStringToFile(g_strSpaces, 1, file);
+	writeSpaceToFile(file);;
 	writeStringToFile(typeName.c_str(), file);
 	writeStringToFile("::", file);
 

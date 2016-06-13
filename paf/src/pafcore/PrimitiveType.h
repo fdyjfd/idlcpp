@@ -52,8 +52,8 @@ namespace pafcore
 		virtual ::pafcore::ClassType* getType();
 		virtual size_t getAddress();
 
-		::size_t _getMemberCount_();
-		Metadata* _getMember_(::size_t index);
+		size_t _getMemberCount_();
+		Metadata* _getMember_(size_t index);
 		Metadata* _findMember_(const char* name);
 
 

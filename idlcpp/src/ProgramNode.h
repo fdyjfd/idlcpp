@@ -7,6 +7,6 @@ struct ProgramNode : NamespaceNode
 {
 public:
 	ProgramNode(MemberListNode* memberList);
-	virtual void collectTypeInfo();
-	void checkSemantic();
+	virtual void getLocalName(std::string& name, TemplateArguments* templateArguments);
+	virtual void collectTypes(TypeNode* enclosingTypeNode);
 };

@@ -15,7 +15,7 @@ namespace pafcore
 		virtual ::pafcore::ClassType* getType();
 		virtual size_t getAddress();
 
-		::size_t get__size_();
+		size_t get__size_();
 
 	public:
 		Type(const char* name, Category category);

@@ -2,16 +2,21 @@
 
 struct IdentifyNode;
 struct TypeNameNode;
+struct ScopeNameListNode;
 struct TokenNode;
 struct ParameterNode;
 struct MethodNode;
 
+
 void RaiseError_InvalidTypeName(IdentifyNode* node);
+void RaiseError_InvalidTypeName(ScopeNameListNode* node);
 void RaiseError_InvalidTypeName(TypeNameNode* node);
 void RaiseError_InvalidParameterType(ParameterNode* node);
 void RaiseError_InvalidResultType(MethodNode* node);
 
 void RaiseError_InvalidClassTemplateName(IdentifyNode* node);
+void RaiseError_InvalidClassTemplateName(TypeNameNode* node);
+
 void RaiseError_TooManyTemplateArguments(IdentifyNode* node);
 void RaiseError_TooFewTemplateArguments(IdentifyNode* node);
 void RaiseError_InvalidTemplateArgument(TypeNameNode* node);

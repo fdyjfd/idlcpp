@@ -20,7 +20,7 @@ namespace pafcore
 
 		Type* get_type();
 		ClassType* get_objectType();
-		::size_t get_offset();
+		size_t get_offset();
 		bool get_isArray();
 		bool get_isConstant();
 

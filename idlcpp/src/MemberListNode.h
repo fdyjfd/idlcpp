@@ -4,6 +4,8 @@
 
 struct MemberNode;
 struct ScopeNode;
+struct TypeNode;
+struct TemplateArguments;
 
 struct MemberListNode : SyntaxNodeImpl
 {
@@ -13,5 +15,7 @@ public:
 	MemberListNode(MemberListNode* memberList, MemberNode* member);
 	void initializeMembersEnclosing(ScopeNode* parent);
 	void collectMemberNodes(std::vector<MemberNode*>& memberNodes);
-	void collectTypeInfo();
+	void collectTypes(TypeNode* enclosingTypeNode);
+	void checkTypeNames(TypeNode* enclosingTypeNode, TemplateArguments* templateArguments);
+	void checkSemantic(TemplateArguments* templateArguments);
 };

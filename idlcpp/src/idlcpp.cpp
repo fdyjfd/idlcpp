@@ -10,6 +10,8 @@
 #include "Options.h"
 #include <string>
 #include <tchar.h>
+#include <assert.h>
+#include "Compiler.h"
 
 
 #ifdef __cplusplus
@@ -110,7 +112,6 @@ void ParseOption(const char* arg)
 	}
 }
 
-void ParseConfigFile();
 int _tmain(int argc, _TCHAR* argv[])
 {
 	if(argc < 2)
@@ -119,7 +120,6 @@ int _tmain(int argc, _TCHAR* argv[])
 		return 0;
 	}
 
-	ParseConfigFile();
 	for(int i = 1; i < argc; ++i)
 	{
 		if('-' == *argv[i])
@@ -148,11 +148,11 @@ int _tmain(int argc, _TCHAR* argv[])
 	}
 
 	bool mainSourceFile = true;
-	if (import_file_failed == g_sourceFileManager.addSourceFile(inputFileName.c_str()))
+	if (import_file_failed == g_compiler.addSourceFile(inputFileName.c_str()))
 	{
 		ErrorList_AddItem("", 0, 0, import_error_file_not_existing, inputFileName.c_str());
 	}
-	while(SourceFile* sourceFile = g_sourceFileManager.popSourceFile())
+	while(SourceFile* sourceFile = g_compiler.popSourceFile())
 	{
 		const char* dirEnd = getDirNameEnd(sourceFile->m_fileName.c_str());
 		if(dirEnd)
@@ -164,25 +164,12 @@ int _tmain(int argc, _TCHAR* argv[])
 			{
 				break;
 			}
-			g_sourceFileManager.prepareParse(sourceFile, mainSourceFile);
+			g_compiler.prepareParse(sourceFile, mainSourceFile);
 			yyrestart(file);
 			yylineno = 1;
 			yytokenno = 0;
 			yyparse();
 			fclose(file);
-			//fseek(file, 0, SEEK_END);
-			//long size = ftell(file);
-			//fseek(file, 0, SEEK_SET);
-			//char* buf = new char[size + 2];
-			//memset(buf, 0, size + 2);
-			//fread(buf, 1, size, file);
-			//fclose(file);
-			//size_t len = strlen(buf);
-			//YY_BUFFER_STATE bs = yy_scan_buffer(buf, len + 2);
-			//yy_switch_to_buffer(bs);
-			//yyparse();
-			//yy_delete_buffer(bs);
-			//delete []buf;
 		}
 		mainSourceFile = false;
 	}
@@ -191,19 +178,27 @@ int _tmain(int argc, _TCHAR* argv[])
 		ErrorList_Output();
 		return -1;
 	}
-	g_sourceFileManager.checkTypeInfos();
-	if(0 != ErrorList_ErrorCount())
+	g_compiler.collectTypes();
+	if (0 != ErrorList_ErrorCount())
 	{
 		ErrorList_Output();
 		return -2;
 	}
-	g_sourceFileManager.checkSemantic();
-	if(0 != ErrorList_ErrorCount())
+	g_compiler.checkTypeNames();
+	if (0 != ErrorList_ErrorCount())
 	{
 		ErrorList_Output();
 		return -3;
 	}
-	g_sourceFileManager.generateCode(outputFileName.c_str());
+	g_compiler.checkSemantic();
+	if(0 != ErrorList_ErrorCount())
+	{
+		ErrorList_Output();
+		return -4;
+	}
+	g_compiler.extendInternalCode();
+	assert(0 == ErrorList_ErrorCount());
+	g_compiler.generateCode(outputFileName.c_str());
 	return 0;
 }
 

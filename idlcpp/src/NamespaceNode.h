@@ -4,16 +4,20 @@
 struct TokenNode;
 struct IdentifyNode;
 struct MemberListNode;
+struct NamespaceTypeNode;
 
 struct NamespaceNode : ScopeNode
 {
 	TokenNode* m_keyword;
 	TokenNode* m_leftBrace;
 	TokenNode* m_rightBrace;
+	NamespaceTypeNode* m_typeNode;
 public:
 	NamespaceNode(TokenNode* keyword, IdentifyNode* name, TokenNode* leftBrace, MemberListNode* memberList, TokenNode* rightBrace);
-	virtual void collectTypeInfo();
+	virtual TypeNode* getTypeNode();
+	virtual void collectTypes(TypeNode* enclosingTypeNode);
+	virtual void checkTypeNames(TypeNode* enclosingTypeNode, TemplateArguments* templateArguments);
+	virtual void checkSemantic(TemplateArguments* templateArguments);
 	bool isGlobalNamespace();
-	void extendInternalCode();
-	virtual void checkSemantic();
+	void extendInternalCode(TypeNode* enclosingTypeNode, TemplateArguments* templateArguments);
 };

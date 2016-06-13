@@ -1,9 +1,12 @@
 #include "EnumNode.h"
+#include "ClassNode.h"
 #include "IdentifyNode.h"
 #include "EnumeratorListNode.h"
 #include "ErrorList.h"
-#include "SourceFile.h"
+#include "Compiler.h"
+#include "TypeTree.h"
 #include <vector>
+#include <assert.h>
 
 EnumNode::EnumNode(TokenNode* keyword, IdentifyNode* name, TokenNode* leftBrace, EnumeratorListNode* enumeratorList, TokenNode* rightBrace, TokenNode* semicolon)
 {
@@ -14,27 +17,40 @@ EnumNode::EnumNode(TokenNode* keyword, IdentifyNode* name, TokenNode* leftBrace,
 	m_enumeratorList = enumeratorList;
 	m_rightBrace = rightBrace;
 	m_semicolon = semicolon;
+	m_typeNode = 0;
 }
 
-TypeCategory EnumNode::getTypeCategory()
+TypeNode* EnumNode::getTypeNode()
 {
-	return enum_type;
+	return m_typeNode;
 }
 
-void EnumNode::collectTypeInfo()
+
+void EnumNode::collectTypes(TypeNode* enclosingTypeNode)
 {
-	g_sourceFileManager.registerType(this);
+	assert(0 == m_typeNode);
+	switch (enclosingTypeNode->m_category)
+	{
+	case tc_namespace:
+		m_typeNode = static_cast<NamespaceTypeNode*>(enclosingTypeNode)->addEnum(this);
+		break;
+	case tc_class_type:
+		m_typeNode = static_cast<ClassTypeNode*>(enclosingTypeNode)->addEnum(this);
+		break;
+	default:
+		assert(false);
+	}
 }
 
-void EnumNode::checkSemantic()
+void EnumNode::checkSemantic(TemplateArguments* templateArguments)
 {
-	std::vector<std::pair<TokenNode*, IdentifyNode*>> identifyNodes;
+	std::vector<IdentifyNode*> identifyNodes;
 	m_enumeratorList->collectIdentifyNodes(identifyNodes);
 	size_t count = identifyNodes.size();
 	std::set<IdentifyNode*, CompareIdentifyPtr> items;
 	for(size_t i = 0; i < count; ++i)
 	{
-		IdentifyNode* identify = identifyNodes[i].second;
+		IdentifyNode* identify = identifyNodes[i];
 		auto res = items.insert(identify);
 		if(!res.second)
 		{

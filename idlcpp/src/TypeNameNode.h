@@ -7,75 +7,30 @@
 
 struct TokenNode;
 struct IdentifyNode;
-struct ScopeListNode;
+struct ScopeNameListNode;
 struct TypeNameListNode;
 struct ScopeNode;
 struct TypeInfo;
 struct TypeNameNode;
 struct TemplateClassInstanceNode;
+struct TypeNode;
+struct TemplateArguments;
 
-typedef std::map<std::string, TypeNameNode*> TemplateArgumentMap;
+enum TypeCategory;
 
 struct TypeNameNode : SyntaxNodeImpl
 {
 	TokenNode* m_keyword;
-	PrimitiveType m_primitiveType;
-	ScopeListNode* m_scopeList;
-	TokenNode* m_leftBracket;
-	TypeNameListNode* m_parameterList;
-	TokenNode* m_rightBracket;
-	TypeCategory m_typeCategory;
-	TypeInfo* m_typeInfo;
-private:
-	void getName(std::vector<std::string>& names);
+	ScopeNameListNode* m_scopeNameList;
+	TypeNode* m_startTypeNode;
+	TypeNode* m_typeNode;
 public:
-	TypeNameNode(TokenNode* keyword, PrimitiveType primitiveType);
-	TypeNameNode(ScopeListNode* scopeList);
-	TypeNameNode(ScopeListNode* scopeList, TokenNode* leftBracket, TypeNameListNode* parameterList, TokenNode* rightBracket);
-	size_t getParameterCount();
-	void getName(std::string& name);
-	void getTemplateParametersName(std::string& name);
-	void getNameExceptTemplateParameters(std::string& name);
-	TypeCategory getFullName(std::string& fullName, TemplateArgumentMap* templateArguments);
-	TypeCategory getRelativeName(std::string& typeName, ScopeNode* scopeNode, TemplateArgumentMap* templateArguments);
-	void checkTypeName(ScopeNode* scopeNode);
-	void checkTypeName_(ScopeNode* scopeNode, std::vector<IdentifyNode*>& templateParameters);
-	TypeInfo* checkTemplateTypeName_(ScopeNode* scopeNode, std::vector<IdentifyNode*>& templateParameters);
-	void checkTypeNameForTemplateClassInstance(TemplateClassInstanceNode* templateClassInstanceNode, TemplateArgumentMap* templateArguments);
-	bool isVoid()
-	{
-		return void_type == m_typeCategory;
-	}
-	bool isPrimitiveType()
-	{
-		return primitive_type == m_typeCategory;
-	}
-	bool isEnumType()
-	{
-		return enum_type == m_typeCategory;
-	}	
-	bool isValueType()
-	{
-		return value_type == m_typeCategory;
-	}
-	bool isReferenceType()
-	{
-		return reference_type == m_typeCategory;
-	}
-	bool isTemplateParameter()
-	{
-		return template_parameter == m_typeCategory;
-	}
-	bool isTemplateForm()
-	{
-		return 0 != m_parameterList;
-	}
-	bool isGlobal();
-};
-
-
-struct CompareTypeNamePtr
-{
-	bool operator()(const TypeNameNode* arg1, const TypeNameNode* arg2) const;
+	TypeNameNode(TokenNode* keyword, PredefinedType primitiveType);
+	TypeNameNode(ScopeNameListNode* scopeNameList);
+	bool calcTypeNodes(TypeNode* enclosingTypeTreeNode, TemplateArguments* templateArguments);
+	TypeNode* getTypeNode(TemplateArguments* templateArguments);
+	TypeNode* getActualTypeNode(TemplateArguments* templateArguments);
+	void getString(std::string& str);
+	void getRelativeName(std::string& typeName, ScopeNode* scopeNode);
 };
 

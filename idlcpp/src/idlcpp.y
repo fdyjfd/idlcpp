@@ -8,12 +8,12 @@
 }
 
 %token <sn> BOOL CHAR WCHAR_T SHORT LONG INT FLOAT DOUBLE SIGNED UNSIGNED
-%token <sn> NAMESPACE ENUM CLASS STRUCT STATIC VIRTUAL VOID CONST TEMPLATE TYPEDEF NEW
-%token <sn> ABSTRACT GET SET NATIVE META REF PTR EXPORT OVERRIDE LTS GTS
+%token <sn> NAMESPACE ENUM CLASS STRUCT STATIC VIRTUAL VOID CONST TYPEDEF PRIMITIVE NEW
+%token <sn> ABSTRACT GET SET NOMETA NOCODE REF PTR EXPORT OVERRIDE LTS GTS
 %token <sn> ',' '.' ':' ';' '(' ')' '[' ']' '{' '}' SCOPE IDENTIFY
 %type <sn> field_0 field_1 field_2 field getter setter property_0 property_1 property_2 property
 %type <sn> parameter_0 parameter parameterList method_0 method_1 method_2 method_3 method_4 method
-%type <sn> primitive scopeList_0 scopeList typeName typeNameList enumeratorList classMemberList
+%type <sn> primitive scopeName scopeNameList_0 scopeNameList typeName typeNameList enumeratorList classMemberList
 %type <sn> templateParameterList templateParameters templateClassInstance_0 templateClassInstance
 %type <sn> typeAlias_0 typeAlias enum_0 enum 
 %type <sn> class_0 class_1 class_2 class_3 class_4 class_5 class namespaceMemberList namespace_0 namespace program
@@ -56,36 +56,40 @@ enum_0					: ENUM IDENTIFY '{' enumeratorList '}' ';'			{$$ = newEnum($1, $2, $3
 ;
 
 enum					: enum_0											{$$ = $1;}
-						| META enum_0										{$$ = $2; setMetaOnly($$);}
-						| NATIVE enum_0										{$$ = $2; setNativeOnly($$);}
+						| NOCODE enum_0										{$$ = $2; setMetaOnly($$);}
+						| NOMETA enum_0										{$$ = $2; setNativeOnly($$);}
 ;
 
-scopeList_0				: IDENTIFY											{$$ = newScopeList(NULL, $1);}
-						| scopeList_0 SCOPE IDENTIFY						{$$ = newScopeList($1, $3);}
+scopeName				: IDENTIFY											{$$ = newScopeName($1, NULL, NULL, NULL);}
+						| IDENTIFY LTS typeNameList GTS						{$$ = newScopeName($1, $2, $3, $4);}	
 ;
 
-scopeList				: scopeList_0										{$$ = $1;}
-						| SCOPE scopeList_0									{$$ = $2; setScopeListGlobal($$);}
+scopeNameList_0			: scopeName											{$$ = newScopeNameList(NULL, $1);}
+						| scopeNameList_0 SCOPE scopeName					{$$ = newScopeNameList($1, $3);}
+;
+
+scopeNameList			: scopeNameList_0									{$$ = $1;}
+						| SCOPE scopeNameList_0								{$$ = $2; setScopeNameListGlobal($$);}
 ;
 
 typeName				: primitive											{$$ = $1;}
-						| scopeList											{$$ = newTypeName($1);}
-						| scopeList	LTS typeNameList GTS					{$$ = newTemplateTypeName($1, $2, $3, $4);}
+						| scopeNameList										{$$ = newTypeName($1);}
 ;
 
 typeNameList			: typeName											{$$ = newTypeNameList(NULL, NULL, $1);}
 						| typeNameList ',' typeName							{$$ = newTypeNameList($1, $2, $3);}
 ;
 
-typeAlias_0				: TYPEDEF IDENTIFY ';'								{$$ = newTypeAlias($2, primitive_type);}
-						| TYPEDEF STRUCT IDENTIFY ';'						{$$ = newTypeAlias($3, value_type);}
-						| TYPEDEF CLASS IDENTIFY ';'						{$$ = newTypeAlias($3, reference_type);}
-						| TYPEDEF typeName IDENTIFY ';'						{$$ = newTypeDef($1, $3, $2);}
+typeAlias_0				: TYPEDEF typeName IDENTIFY ';'						{$$ = newTypedef($1, $3, $2);}
+						| PRIMITIVE IDENTIFY ';'							{$$ = newTypeDeclaration($2, primitive_type);}
+						| ENUM IDENTIFY ';'									{$$ = newTypeDeclaration($2, enum_type);}
+						| STRUCT IDENTIFY ';'								{$$ = newTypeDeclaration($2, value_type);}
+						| CLASS IDENTIFY ';'								{$$ = newTypeDeclaration($2, reference_type);}
 ;
 
 typeAlias				: typeAlias_0										{$$ = $1;}
-						| META typeAlias_0									{$$ = $2; setMetaOnly($$);}
-						| NATIVE typeAlias_0								{$$ = $2; setNativeOnly($$);}
+						| NOCODE typeAlias_0								{$$ = $2; setMetaOnly($$);}
+						| NOMETA typeAlias_0								{$$ = $2; setNativeOnly($$);}
 ;
 
 field_0					: typeName IDENTIFY ';'								{$$ = newField($1, $2, NULL, NULL, $3);}
@@ -101,8 +105,8 @@ field_2					: field_1											{$$ = $1;}
 ;
 
 field					: field_2											{$$ = $1;}
-						| META field_2										{$$ = $2; setMetaOnly($$);}
-						| NATIVE field_2									{$$ = $2; setNativeOnly($$);}
+						| NOCODE field_2									{$$ = $2; setMetaOnly($$);}
+						| NOMETA field_2									{$$ = $2; setNativeOnly($$);}
 ;
 
 getter					: GET												{$$ = newGetterSetter($1, NULL, NULL, NULL);}
@@ -142,8 +146,8 @@ property_2				: property_1										{$$ = $1;}
 ;
 
 property				: property_2										{$$ = $1;}
-						| META property_2									{$$ = $2; setMetaOnly($$);}
-						| NATIVE property_2									{$$ = $2; setNativeOnly($$);}
+						| NOCODE property_2									{$$ = $2; setMetaOnly($$);}
+						| NOMETA property_2									{$$ = $2; setNativeOnly($$);}
 ;
 
 parameter_0				: typeName IDENTIFY									{$$ = newParameter($1, NULL, NULL, $2);}
@@ -194,23 +198,21 @@ method_4				: method_3											{$$ = $1;}
 ;
 
 method					: method_4											{$$ = $1;}
-						| META method_4										{$$ = $2; setMetaOnly($$);}
-						| NATIVE method_4									{$$ = $2; setNativeOnly($$);}
+						| NOCODE method_4									{$$ = $2; setMetaOnly($$);}
+						| NOMETA method_4									{$$ = $2; setNativeOnly($$);}
 ;
 
 classMemberList			: property											{$$ = newClassMemberList(NULL, $1);}
 						| method											{$$ = newClassMemberList(NULL, $1);}
 						| field												{$$ = newClassMemberList(NULL, $1);}
-						| class_5											{$$ = newClassMemberList(NULL, $1);}
+						| class												{$$ = newClassMemberList(NULL, $1);}
 						| enum												{$$ = newClassMemberList(NULL, $1);}
-						| typeAlias											{$$ = newClassMemberList(NULL, $1);}
 						| ';'												{$$ = NULL;}
 						| classMemberList property							{$$ = newClassMemberList($1, $2);}
 						| classMemberList method							{$$ = newClassMemberList($1, $2);}
 						| classMemberList field								{$$ = newClassMemberList($1, $2);}
-						| classMemberList class_5							{$$ = newClassMemberList($1, $2);}
+						| classMemberList class								{$$ = newClassMemberList($1, $2);}
 						| classMemberList enum								{$$ = newClassMemberList($1, $2);}
-						| classMemberList typeAlias							{$$ = newClassMemberList($1, $2);}
 						| classMemberList ';'								{$$ = $1;}
 ;
 
@@ -247,18 +249,17 @@ class_5					: class_4											{$$ = $1;}
 						| OVERRIDE class_4									{$$ = $2; setClassOverride($$);}
 ;
 
-
 class					: class_5											{$$ = $1;}
-						| META class_5										{$$ = $2; setMetaOnly($$);}
-						| NATIVE class_5									{$$ = $2; setNativeOnly($$);}
+						| NOCODE class_5									{$$ = $2; setMetaOnly($$);}
+						| NOMETA class_5									{$$ = $2; setNativeOnly($$);}
 ;
 
-templateClassInstance_0	: EXPORT IDENTIFY LTS typeNameList GTS ';'			{$$ = newTemplateClassInstance($1, $2, $3, $4, $5, $6);}
+templateClassInstance_0	: EXPORT IDENTIFY LTS typeNameList GTS ';'			{$$ = newTemplateClassInstance($2, $4);}
 						
 
 templateClassInstance	: templateClassInstance_0							{$$ = $1;}
-						| META templateClassInstance_0						{$$ = $2; setMetaOnly($$);}
-						| NATIVE templateClassInstance_0					{$$ = $2; setNativeOnly($$);}
+						| NOCODE templateClassInstance_0					{$$ = $2; setMetaOnly($$);}
+						| NOMETA templateClassInstance_0					{$$ = $2; setNativeOnly($$);}
 ;
 
 namespaceMemberList		: class												{$$ = newNamespaceMemberList(NULL, $1);}
@@ -280,8 +281,8 @@ namespace_0				: NAMESPACE	IDENTIFY '{' '}'						{$$ = newNamespace($1, $2, $3, 
 ;
 
 namespace				: namespace_0										{$$ = $1;}
-						| META namespace_0									{$$ = $2; setMetaOnly($$);}
-						| NATIVE namespace_0								{$$ = $2; setNativeOnly($$);}
+						| NOCODE namespace_0								{$$ = $2; setMetaOnly($$);}
+						| NOMETA namespace_0								{$$ = $2; setNativeOnly($$);}
 ;
 
 program					:													{$$ = newProgram(NULL); attachSyntaxTree($$);}

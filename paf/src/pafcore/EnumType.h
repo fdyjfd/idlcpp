@@ -22,8 +22,8 @@ namespace pafcore
 		virtual ::pafcore::ClassType* getType();
 		virtual size_t getAddress();
 
-		::size_t _getEnumeratorCount_();
-		Enumerator* _getEnumerator_(::size_t index);
+		size_t _getEnumeratorCount_();
+		Enumerator* _getEnumerator_(size_t index);
 		Enumerator* _getEnumeratorByValue_(int value);
 		Enumerator* _getEnumeratorByName_(const char* name);
 

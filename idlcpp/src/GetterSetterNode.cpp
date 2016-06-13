@@ -3,12 +3,12 @@
 #include "GetterSetterNode.h"
 #include "TokenNode.h"
 
-GetterSetterNode::GetterSetterNode(TokenNode* keyword, TokenNode* constant, TypeNameNode* type, TokenNode* passing)
+GetterSetterNode::GetterSetterNode(TokenNode* keyword, TokenNode* constant, TypeNameNode* typeName, TokenNode* passing)
 {
 	m_nodeType = snt_getter_setter;
 	m_keyword = keyword;
 	m_constant = constant;
-	m_type = type;
+	m_typeName = typeName;
 	m_passing = passing;
 }
 

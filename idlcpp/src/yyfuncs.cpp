@@ -8,9 +8,11 @@
 #include <algorithm>
 #include "ErrorList.h"
 #include "SourceFile.h"
+
 #include "TokenNode.h"
 #include "IdentifyNode.h"
-#include "ScopeListNode.h"
+#include "ScopeNameNode.h"
+#include "ScopeNameListNode.h"
 #include "EnumeratorListNode.h"
 #include "TypeNameNode.h"
 #include "TypeNameListNode.h"
@@ -23,12 +25,14 @@
 #include "MemberListNode.h"
 #include "ClassNode.h"
 #include "EnumNode.h"
-#include "TypeAliasNode.h"
+#include "TypedefNode.h"
+#include "TypeDeclarationNode.h"
 #include "TemplateParameterListNode.h"
 #include "TemplateParametersNode.h"
 #include "TemplateClassInstanceNode.h"
 #include "NamespaceNode.h"
 #include "ProgramNode.h"
+#include "Compiler.h"
 
 extern "C"
 {
@@ -60,50 +64,49 @@ SyntaxNode* newIdentify(const char* str)
 
 void newCodeBlock(const char* str)
 {
-	g_sourceFileManager.m_currentSourceFile->addEmbededCodeBlock(str, yytokenno);
+	g_compiler.m_currentSourceFile->addEmbededCodeBlock(str, yytokenno);
 }
 
-SyntaxNode* newPrimitiveType(SyntaxNode* keyword, PrimitiveType type)
+SyntaxNode* newPrimitiveType(SyntaxNode* keyword, PredefinedType type)
 {
-	assert((snt_keyword_begin_primitive < keyword->m_nodeType && keyword->m_nodeType < snt_keyword_end_primitive)
-		|| snt_keyword_void == keyword->m_nodeType);
-	assert(pt_unknown != type);
+	assert(snt_keyword_begin_primitive < keyword->m_nodeType && keyword->m_nodeType < snt_keyword_end_primitive);
 	TypeNameNode* res = new TypeNameNode((TokenNode*)keyword, type);
 	g_syntaxNodes.push_back(res);
 	return res;
 }
 
-SyntaxNode* newScopeList(SyntaxNode* scopeList, SyntaxNode* identify)
+
+SyntaxNode* newScopeName(SyntaxNode* identify, SyntaxNode* lts, SyntaxNode* parameterList, SyntaxNode* gts)
 {
-	assert(0 == scopeList || snt_scope_list == scopeList->m_nodeType);
-	assert(snt_identify == identify->m_nodeType);
-	ScopeListNode* res = new ScopeListNode((ScopeListNode*)scopeList, (IdentifyNode*)identify);
+	assert(0 != identify || snt_identify == identify->m_nodeType);
+	assert(0 == lts || '<' == lts->m_nodeType);
+	assert(0 == parameterList || snt_type_name_list == parameterList->m_nodeType);
+	assert(0 == gts || '>' == gts->m_nodeType);
+	ScopeNameNode* res = new ScopeNameNode((IdentifyNode*)identify,
+		(TokenNode*)lts, (TypeNameListNode*)parameterList, (TokenNode*)gts);
 	g_syntaxNodes.push_back(res);
 	return res;
 }
 
-void setScopeListGlobal(SyntaxNode* scopeList)
+SyntaxNode* newScopeNameList(SyntaxNode* scopeNameList, SyntaxNode* scopeName)
 {
-	assert(snt_scope_list == scopeList->m_nodeType);
-	static_cast<ScopeListNode*>(scopeList)->m_global = true;
-}
-
-SyntaxNode* newTypeName(SyntaxNode* scopeList)
-{
-	assert(0 != scopeList && snt_scope_list == scopeList->m_nodeType);
-	TypeNameNode* res = new TypeNameNode((ScopeListNode*)scopeList);
+	assert(0 == scopeNameList || snt_scope_name_list == scopeNameList->m_nodeType);
+	assert(snt_scope_name == scopeName->m_nodeType);
+	ScopeNameListNode* res = new ScopeNameListNode((ScopeNameListNode*)scopeNameList, (ScopeNameNode*)scopeName);
 	g_syntaxNodes.push_back(res);
 	return res;
 }
 
-SyntaxNode* newTemplateTypeName(SyntaxNode* scopeList, SyntaxNode* lts, SyntaxNode* parameterList, SyntaxNode* gts)
+void setScopeNameListGlobal(SyntaxNode* scopeNameList)
 {
-	assert(0 != scopeList && snt_scope_list == scopeList->m_nodeType);
-	assert(0 != lts && '<' == lts->m_nodeType);	
-	assert(0 != parameterList && snt_type_name_list == parameterList->m_nodeType);
-	assert(0 != gts && '>' == gts->m_nodeType);	
-	TypeNameNode* res = new TypeNameNode((ScopeListNode*)scopeList, (TokenNode*)lts, 
-		(TypeNameListNode*)parameterList, (TokenNode*)gts);
+	assert(snt_scope_name_list == scopeNameList->m_nodeType);
+	static_cast<ScopeNameListNode*>(scopeNameList)->m_global = true;
+}
+
+SyntaxNode* newTypeName(SyntaxNode* scopeNameList)
+{
+	assert(0 != scopeNameList && snt_scope_name_list == scopeNameList->m_nodeType);
+	TypeNameNode* res = new TypeNameNode((ScopeNameListNode*)scopeNameList);
 	g_syntaxNodes.push_back(res);
 	return res;
 }
@@ -127,7 +130,8 @@ void setMetaOnly(SyntaxNode* syntaxNode)
 		|| snt_class == syntaxNode->m_nodeType
 		|| snt_enum == syntaxNode->m_nodeType
 		|| snt_template_class_instance == syntaxNode->m_nodeType
-		|| snt_type_alias == syntaxNode->m_nodeType
+		|| snt_typedef == syntaxNode->m_nodeType
+		|| snt_type_declaration == syntaxNode->m_nodeType
 		|| snt_namespace == syntaxNode->m_nodeType);
 
 	MemberNode* memberNode = (MemberNode*)syntaxNode;
@@ -142,7 +146,8 @@ void setNativeOnly(SyntaxNode* syntaxNode)
 		|| snt_class == syntaxNode->m_nodeType
 		|| snt_enum == syntaxNode->m_nodeType
 		|| snt_template_class_instance == syntaxNode->m_nodeType
-		|| snt_type_alias == syntaxNode->m_nodeType
+		|| snt_typedef == syntaxNode->m_nodeType
+		|| snt_type_declaration == syntaxNode->m_nodeType
 		|| snt_namespace == syntaxNode->m_nodeType);
 
 	MemberNode* memberNode = (MemberNode*)syntaxNode;
@@ -268,7 +273,7 @@ void setMethodResult(SyntaxNode* method, SyntaxNode* result, SyntaxNode* passing
 {
 	assert(snt_method == method->m_nodeType && snt_type_name == result->m_nodeType);
 	assert(0 == passing || snt_keyword_ref == passing->m_nodeType || snt_keyword_ptr == passing->m_nodeType || snt_keyword_new == passing->m_nodeType);
-	((MethodNode*)method)->m_result = (TypeNameNode*)result;
+	((MethodNode*)method)->m_resultTypeName = (TypeNameNode*)result;
 	((MethodNode*)method)->m_passing = (TokenNode*)passing;
 }
 
@@ -301,7 +306,7 @@ SyntaxNode* newClassMemberList(SyntaxNode* memberList, SyntaxNode* member)
 {
 	assert(0 == memberList || snt_member_list == memberList->m_nodeType);
 	assert(snt_field == member->m_nodeType || snt_property == member->m_nodeType || snt_method == member->m_nodeType
-		|| snt_class == member->m_nodeType || snt_enum == member->m_nodeType || snt_type_alias == member->m_nodeType);
+		|| snt_class == member->m_nodeType || snt_enum == member->m_nodeType);
 	MemberListNode* res = new MemberListNode((MemberListNode*)memberList, (MemberNode*)member);
 	g_syntaxNodes.push_back(res);
 	return res;
@@ -353,7 +358,7 @@ void setClassTemplateParameters(SyntaxNode* cls, SyntaxNode* parameters)
 {
 	assert(snt_class == cls->m_nodeType);
 	assert(snt_template_parameters == parameters->m_nodeType);
-	((ClassNode*)cls)->m_templateParameters = (TemplateParametersNode*)parameters;
+	((ClassNode*)cls)->setTemplateParameters((TemplateParametersNode*)parameters);
 }
 
 SyntaxNode* newEnumeratorList(SyntaxNode* enumeratorList, SyntaxNode* delimiter, SyntaxNode* identify)
@@ -383,22 +388,22 @@ SyntaxNode* newEnum(SyntaxNode* keyword, SyntaxNode* name, SyntaxNode* leftBrace
 	return res;
 }
 
-SyntaxNode* newTypeAlias(SyntaxNode* name, TypeCategory typeCategory)
+SyntaxNode* newTypeDeclaration(SyntaxNode* name, TypeCategory typeCategory)
 {
 	assert(snt_identify == name->m_nodeType);
-	TypeAliasNode* res;
-	res = new TypeAliasNode((IdentifyNode*)name, typeCategory);
+	TypeDeclarationNode* res;
+	res = new TypeDeclarationNode((IdentifyNode*)name, typeCategory);
 	g_syntaxNodes.push_back(res);
 	return res;
 }
 
-SyntaxNode* newTypeDef(SyntaxNode* keyword, SyntaxNode* name, SyntaxNode* typeName)
+SyntaxNode* newTypedef(SyntaxNode* keyword, SyntaxNode* name, SyntaxNode* typeName)
 {
 	assert(snt_keyword_typedef == keyword->m_nodeType);
 	assert(snt_identify == name->m_nodeType);
 	assert(snt_type_name == typeName->m_nodeType);
-	TypeAliasNode* res;
-	res = new TypeAliasNode((TokenNode*)keyword, (IdentifyNode*)name, (TypeNameNode*)typeName);
+	TypedefNode* res;
+	res = new TypedefNode((TokenNode*)keyword, (IdentifyNode*)name, (TypeNameNode*)typeName);
 	g_syntaxNodes.push_back(res);
 	return res;
 }
@@ -425,17 +430,11 @@ SyntaxNode* newTemplateParameters(SyntaxNode* lts, SyntaxNode* parameterList, Sy
 	return res;
 }
 
-SyntaxNode* newTemplateClassInstance(SyntaxNode* keyword, SyntaxNode* templateName, 
-	SyntaxNode* lts, SyntaxNode* typeNameList, SyntaxNode* gts, SyntaxNode* semicolon)
+SyntaxNode* newTemplateClassInstance(SyntaxNode* name, SyntaxNode* typeNameList)
 {
-	assert(snt_keyword_export == keyword->m_nodeType);
-	assert(snt_identify == templateName->m_nodeType);
-	assert('<' == lts->m_nodeType);
+	assert(snt_identify == name->m_nodeType);
 	assert(snt_type_name_list == typeNameList->m_nodeType);
-	assert('>' == gts->m_nodeType);
-	assert(';' == semicolon->m_nodeType);
-	TemplateClassInstanceNode* res = new TemplateClassInstanceNode((TokenNode*)keyword, 
-		(IdentifyNode*)templateName, (TokenNode*)lts, (TypeNameListNode*)typeNameList, (TokenNode*)gts, (TokenNode*)semicolon);
+	TemplateClassInstanceNode* res = new TemplateClassInstanceNode((IdentifyNode*)name, (TypeNameListNode*)typeNameList);
 	g_syntaxNodes.push_back(res);
 	return res;
 }
@@ -446,7 +445,8 @@ SyntaxNode* newNamespaceMemberList(SyntaxNode* memberList, SyntaxNode* member)
 	assert(snt_class == member->m_nodeType 
 		|| snt_enum == member->m_nodeType 
 		|| snt_template_class_instance == member->m_nodeType
-		|| snt_type_alias == member->m_nodeType 
+		|| snt_typedef == member->m_nodeType 
+		|| snt_type_declaration == member->m_nodeType
 		|| snt_namespace == member->m_nodeType);
 	MemberListNode* res = new MemberListNode((MemberListNode*)memberList, (MemberNode*)member);
 	g_syntaxNodes.push_back(res);
@@ -473,22 +473,6 @@ SyntaxNode* newProgram(SyntaxNode* memberList)
 	return res;
 }
 
-//
-//void setPackageName(SyntaxNode* identify)
-//{
-//	assert(snt_identify == identify->m_nodeType);
-//	setCurrentPackageName(((IdentifyNode*)identify)->m_str.c_str());
-//}
-
-int calcColumnAfterCodeBlock(char* s)
-{
-	char* p = strrchr(s, '\n');
-	if(0 == p)
-	{
-		p = s;
-	}
-	return strlen(p) + 1;
-}
 
 void invalidString(char* s)
 {
@@ -508,7 +492,7 @@ void unterminatedComment()
 void attachSyntaxTree(SyntaxNode* tree)
 {
 	assert(snt_namespace == tree->m_nodeType);
-	g_sourceFileManager.attachSyntaxTree((ProgramNode*)tree);
+	g_compiler.attachSyntaxTree((ProgramNode*)tree);
 }
 
 void freetree()
@@ -525,12 +509,3 @@ void yyerror(char* s)
 {
 	ErrorList_AddItem_CurrentFile(syntax_error_internal, s);
 }
-//
-//void yyerror(char* s, ...)
-//{
-//	va_list ap;
-//	va_start(ap, s);
-//	fprintf(stderr, "%s(%d,): error:", g_inputFileName, yylineno);
-//	vfprintf(stderr, s, ap);
-//	fprintf(stderr, "\n");
-//}

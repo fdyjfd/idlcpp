@@ -1,3 +1,4 @@
+#import "../../paf/src/pafcore/typedef.i"
 
 namespace tutorial
 {
@@ -11,12 +12,12 @@ namespace tutorial
 		N length get;
 		N lengthSquare get;
 
-		static Vector3 s_zero;
+		static Vector3<N> s_zero;
 		
-		meta N x;
-		meta N y;
-		meta N z;
-		meta N v[$3];
+		nocode N x;
+		nocode N y;
+		nocode N z;
+		nocode N v[$3];
 
 		$*
 		union
@@ -30,11 +31,15 @@ namespace tutorial
 		*$
 	};
 
-	export struct Vector3<float>;
-	export struct Vector3<double>;
+	export Vector3<float>;
+	export Vector3<double>;
 	typedef Vector3<float> Vector3f;
 	typedef Vector3<double> Vector3d;
 
+	//struct TT
+	//{
+	//	Vector3 ss;
+	//};
 	$*
 	template<typename N>
 	Vector3<N> Vector3<N>::s_zero(0, 0, 0);

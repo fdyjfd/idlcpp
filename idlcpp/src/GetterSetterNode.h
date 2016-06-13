@@ -9,10 +9,10 @@ struct GetterSetterNode : SyntaxNodeImpl
 {
 	TokenNode* m_keyword;
 	TokenNode* m_constant;
-	TypeNameNode* m_type;
+	TypeNameNode* m_typeName;
 	TokenNode* m_passing;//PTR or REF
 public:
-	GetterSetterNode(TokenNode* keyword, TokenNode* constant, TypeNameNode* type, TokenNode* passing);
+	GetterSetterNode(TokenNode* keyword, TokenNode* constant, TypeNameNode* typeName, TokenNode* passing);
 	bool isConstant();
 	bool byValue();
 	bool byPtr();

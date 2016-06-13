@@ -17,5 +17,5 @@ public:
 	void collectParameterNodes(std::vector<std::pair<TokenNode*, IdentifyNode*>>& parameterNodes);
 	void collectParameterNodes(std::vector<IdentifyNode*>& parameterNodes);
 	size_t getParameterCount();
-	void checkSemantic();
+	bool checkSemantic();
 };

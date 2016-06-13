@@ -12,8 +12,8 @@ namespace tutorial
 		Vector3<T> m_direction;
 	};
 
-	export struct Ray3<float>;
-	export struct Ray3<double>;
+	export Ray3<float>;
+	export Ray3<double>;
 	typedef Ray3<float> Ray3f;
 	typedef Ray3<double> Ray3d;
 

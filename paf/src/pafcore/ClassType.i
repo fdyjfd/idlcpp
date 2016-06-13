@@ -39,7 +39,6 @@ namespace pafcore
 		bool getBaseClassOffset_(size_t& offset, ClassType* otherType);
 		bool getBaseClassOffset(size_t& offset, ClassType* otherType);
 		Type* findNestedType(const char* name, bool includeBaseClasses);
-		TypeAlias* findNestedTypeAlias(const char* name, bool includeBaseClasses);
 		InstanceField* findInstanceField(const char* name, bool includeBaseClasses);
 		StaticField* findStaticField(const char* name, bool includeBaseClasses);
 		InstanceProperty* findInstanceProperty(const char* name, bool includeBaseClasses);
@@ -54,8 +53,6 @@ namespace pafcore
 		size_t m_memberCount;
 		Type** m_nestedTypes;
 		size_t m_nestedTypeCount;
-		TypeAlias** m_nestedTypeAliases;
-		size_t m_nestedTypeAliasCount;
 		InstanceField* m_fields;
 		size_t m_fieldCount;
 		InstanceProperty* m_properties;

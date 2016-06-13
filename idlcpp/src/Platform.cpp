@@ -1,7 +1,6 @@
 #include "Platform.h"
 #include <Windows.h>
 #include <shlwapi.h>
-#include "TempBuffer.h"
 #include <algorithm>
 
 #pragma comment(lib, "shlwapi.lib")

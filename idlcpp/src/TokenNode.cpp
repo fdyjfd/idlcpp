@@ -1,5 +1,7 @@
 #include "TokenNode.h"
-#include "SourceFile.h"
+
+#include "Utility.h"
+#include "Compiler.h"
 #include <assert.h>
 
 const char* g_keywordTokens[] = 
@@ -8,7 +10,6 @@ const char* g_keywordTokens[] =
 	"enum ",
 	"class ",
 	"struct ",
-	"void",
 	"virtual ",
 	"virtual ",
 	"static ",
@@ -31,10 +32,10 @@ TokenNode::TokenNode(int nodeType, int tokenNo, int lineNo, int columnNo)
 
 void TokenNode::outputEmbededCodes(FILE* file, bool addSpace)
 {
-	char lastChar = g_sourceFileManager.outputEmbededCodes(file, this);
+	char lastChar = g_compiler.outputEmbededCodes(file, this);
 	if(isNumAlpha_(lastChar) && addSpace)
 	{
-		writeStringToFile(g_strSpaces, 1, file);
+		writeSpaceToFile(file);;
 	}
 }
 

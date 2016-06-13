@@ -1,5 +1,6 @@
 #include "MemberListNode.h"
 #include "MemberNode.h"
+#include <assert.h>
 
 MemberListNode::MemberListNode(MemberListNode* memberList, MemberNode* member)
 {
@@ -18,25 +19,50 @@ void MemberListNode::initializeMembersEnclosing(ScopeNode* parent)
 	}
 }
 
-void MemberListNode::collectTypeInfo()
-{
-	std::vector<MemberNode*> memberNodes;
-	collectMemberNodes(memberNodes);
-	size_t count = memberNodes.size();
-	for(size_t i = 0; i < count; ++i)
-	{
-		MemberNode* memberNode = memberNodes[i];
-		memberNode->collectTypeInfo();
-	}
-}
-
 void MemberListNode::collectMemberNodes(std::vector<MemberNode*>& memberNodes)
 {
 	MemberListNode* list = this;
-	while(0 != list)
+	while (0 != list)
 	{
 		memberNodes.push_back(list->m_member);
 		list = list->m_memberList;
 	}
 	std::reverse(memberNodes.begin(), memberNodes.end());
+}
+
+void MemberListNode::collectTypes(TypeNode* enclosingTypeNode)
+{
+	assert(enclosingTypeNode);
+	std::vector<MemberNode*> memberNodes;
+	collectMemberNodes(memberNodes);
+	size_t count = memberNodes.size();
+	for (size_t i = 0; i < count; ++i)
+	{
+		MemberNode* memberNode = memberNodes[i];
+		memberNode->collectTypes(enclosingTypeNode);
+	}
+}
+
+void MemberListNode::checkTypeNames(TypeNode* enclosingTypeNode, TemplateArguments* templateArguments)
+{
+	std::vector<MemberNode*> memberNodes;
+	collectMemberNodes(memberNodes);
+	size_t count = memberNodes.size();
+	for (size_t i = 0; i < count; ++i)
+	{
+		MemberNode* memberNode = memberNodes[i];
+		memberNode->checkTypeNames(enclosingTypeNode, templateArguments);
+	}
+}
+
+void MemberListNode::checkSemantic(TemplateArguments* templateArguments)
+{
+	std::vector<MemberNode*> memberNodes;
+	collectMemberNodes(memberNodes);
+	size_t count = memberNodes.size();
+	for (size_t i = 0; i < count; ++i)
+	{
+		MemberNode* memberNode = memberNodes[i];
+		memberNode->checkSemantic(templateArguments);
+	}
 }

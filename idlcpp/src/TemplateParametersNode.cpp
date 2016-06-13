@@ -46,8 +46,9 @@ size_t TemplateParametersNode::getParameterCount()
 	return count;
 }
 
-void TemplateParametersNode::checkSemantic()
+bool TemplateParametersNode::checkSemantic()
 {
+	bool res = true;
 	std::set<std::string> paramNames;
 	std::vector<IdentifyNode*> parameterNodes;
 	collectParameterNodes(parameterNodes);
@@ -58,6 +59,8 @@ void TemplateParametersNode::checkSemantic()
 		if(!paramNames.insert(paramNode->m_str).second)
 		{
 			RaiseError_TemplateParameterRedefinition(paramNode);
+			res = false;
 		}
 	}
+	return res;
 }

@@ -5,7 +5,7 @@
 class SourceFile;
 struct ProgramNode;
 struct NamespaceNode;
-struct TypeAliasNode;
+struct TypedefNode;
 struct ClassNode;
 struct TemplateParametersNode;
 struct EnumNode;

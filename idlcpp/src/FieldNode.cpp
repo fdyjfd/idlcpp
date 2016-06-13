@@ -1,15 +1,17 @@
 #include "FieldNode.h"
 #include "TokenNode.h"
 #include "IdentifyNode.h"
+#include "ClassNode.h"
 #include "TypeNameNode.h"
-#include "SourceFile.h"
+#include "Compiler.h"
+#include <assert.h>
 
-FieldNode::FieldNode(TypeNameNode* type, IdentifyNode* name, TokenNode* leftBracket, TokenNode* rightBracket, TokenNode* semicolon)
+FieldNode::FieldNode(TypeNameNode* typeName, IdentifyNode* name, TokenNode* leftBracket, TokenNode* rightBracket, TokenNode* semicolon)
 {
 	m_nodeType = snt_field;
 	m_static = 0;
 	m_constant = 0;
-	m_type = type;
+	m_typeName = typeName;
 	m_name = name;
 	m_leftBracket = leftBracket;
 	m_rightBracket = rightBracket;
@@ -31,13 +33,14 @@ bool FieldNode::isArray()
 	return (0 != m_leftBracket);
 }
 
-void FieldNode::checkSemantic()
+void FieldNode::checkTypeNames(TypeNode* enclosingTypeNode, TemplateArguments* templateArguments)
 {
-	m_type->checkTypeName(m_enclosing);
-	g_sourceFileManager.useType(m_type->m_typeInfo, tu_by_value);
+	m_typeName->calcTypeNodes(enclosingTypeNode, templateArguments);
 }
 
-void FieldNode::checkSemanticForTemplateInstance(TemplateClassInstanceNode* templateClassInstanceNode, TemplateArgumentMap* templateArguments)
+void FieldNode::checkSemantic(TemplateArguments* templateArguments)
 {
-	m_type->checkTypeNameForTemplateClassInstance(templateClassInstanceNode, templateArguments);
+	TypeNode* typeNode = m_typeName->getTypeNode(templateArguments);
+	g_compiler.useType(typeNode, tu_definition, m_typeName);
 }
+

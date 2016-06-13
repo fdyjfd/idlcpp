@@ -18,7 +18,7 @@ namespace pafcore
 		virtual size_t getAddress();
 
 		Type* get_type();
-		::size_t get_address();
+		size_t get_address();
 		bool get_isConstant();
 		bool get_isArray();
 

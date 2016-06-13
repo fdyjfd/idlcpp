@@ -3,15 +3,16 @@
 #include "TokenNode.h"
 #include "IdentifyNode.h"
 #include "GetterSetterNode.h"
-#include "SourceFile.h"
+#include "ClassNode.h"
+#include "Compiler.h"
 #include <assert.h>
 
-PropertyNode::PropertyNode(TokenNode* constant, TypeNameNode* type, TokenNode* passing, IdentifyNode* name)
+PropertyNode::PropertyNode(TokenNode* constant, TypeNameNode* typeName, TokenNode* passing, IdentifyNode* name)
 {
 	m_nodeType = snt_property;
 	m_modifier = 0;
 	m_constant = constant;
-	m_type = type;
+	m_typeName = typeName;
 	m_passing = passing;
 	m_name = name;
 	m_get = 0;
@@ -39,10 +40,10 @@ void PropertyNode::setGetter(GetterSetterNode* getter)
 {
 	assert(snt_keyword_get == getter->m_keyword->m_nodeType);
 	m_get = getter;
-	if(0 == m_get->m_type)
+	if(0 == m_get->m_typeName)
 	{
 		m_get->m_constant = m_constant;
-		m_get->m_type = m_type;
+		m_get->m_typeName = m_typeName;
 		m_get->m_passing = m_passing;
 	}
 }
@@ -51,29 +52,39 @@ void PropertyNode::setSetter(GetterSetterNode* setter)
 {
 	assert(snt_keyword_set == setter->m_keyword->m_nodeType);
 	m_set = setter;
-	if(0 == m_set->m_type)
+	if(0 == m_set->m_typeName)
 	{
 		m_set->m_constant = m_constant;
-		m_set->m_type = m_type;
+		m_set->m_typeName = m_typeName;
 		m_set->m_passing = m_passing;
 	}
 }
 
-void PropertyNode::checkSemantic()
+void PropertyNode::checkTypeNames(TypeNode* enclosingTypeNode, TemplateArguments* templateArguments)
 {
+	m_typeName->calcTypeNodes(enclosingTypeNode, templateArguments);
+	if (m_get && m_get->m_typeName != m_typeName)
+	{
+		m_get->m_typeName->calcTypeNodes(enclosingTypeNode, templateArguments);
+	}
+	if (m_set && m_set->m_typeName != m_typeName)
+	{
+		m_set->m_typeName->calcTypeNodes(enclosingTypeNode, templateArguments);
+	}
+}
+
+void PropertyNode::checkSemantic(TemplateArguments* templateArguments)
+{
+	assert(snt_class == m_enclosing->m_nodeType);
+	ClassNode* classNode = static_cast<ClassNode*>(m_enclosing);
 	if(m_get)
 	{
-		m_get->m_type->checkTypeName(m_enclosing);
-		g_sourceFileManager.useType(m_get->m_type->m_typeInfo, m_get->byValue() ? tu_by_value : tu_by_ref);
+		TypeNode* typeNode = m_get->m_typeName->getTypeNode(templateArguments);
+		g_compiler.useType(typeNode, m_get->byValue() ? tu_definition : tu_declaration, m_get->m_typeName);
 	}
 	if(m_set)
 	{
-		m_set->m_type->checkTypeName(m_enclosing);
-		g_sourceFileManager.useType(m_set->m_type->m_typeInfo, m_set->byValue() ? tu_by_value : tu_by_ref);
+		TypeNode* typeNode = m_set->m_typeName->getTypeNode(templateArguments);
+		g_compiler.useType(typeNode, m_set->byValue() ? tu_definition : tu_declaration, m_set->m_typeName);
 	}
 };
-
-void PropertyNode::checkSemanticForTemplateInstance(TemplateClassInstanceNode* templateClassInstanceNode, TemplateArgumentMap* templateArguments)
-{	
-	m_type->checkTypeNameForTemplateClassInstance(templateClassInstanceNode, templateArguments);
-}

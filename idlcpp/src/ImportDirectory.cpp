@@ -34,16 +34,6 @@ void ImportDirectories::calcImportDirectories(const char* fileName)
 void ImportDirectories::addImportDirectory(const char* dir)
 {
 	m_directories.insert(m_directories.begin(), dir);
-	//std::string str;
-	//normalizeFileName(str, dir);
-	//if(str.length() > 0)
-	//{
-	//	if(str.at(str.length() - 1) != '\\')
-	//	{
-	//		str += '\\';
-	//	}
-	//	m_directories.insert(m_directories.begin(), str);
-	//}
 }
 
 void ImportDirectories::setCurrentDirectory(const char* dir)

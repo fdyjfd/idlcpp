@@ -2,15 +2,17 @@
 #include "TypeNameNode.h"
 #include "IdentifyNode.h"
 #include "MethodNode.h"
-#include "SourceFile.h"
+#include "ClassNode.h"
 #include "RaiseError.h"
+#include "TypeTree.h"
+#include "Compiler.h"
 #include <assert.h>
 
-ParameterNode::ParameterNode(TypeNameNode* type, TokenNode* out, TokenNode* passing, IdentifyNode* name)
+ParameterNode::ParameterNode(TypeNameNode* typeName, TokenNode* out, TokenNode* passing, IdentifyNode* name)
 {
 	m_nodeType = snt_parameter;
 	m_constant = 0;
-	m_type = type;
+	m_typeName = typeName;
 	m_out = out;
 	m_passing = passing;
 	m_name = name;
@@ -57,17 +59,15 @@ bool ParameterNode::isOutput()
 	return 0 != m_out;
 }
 
-void ParameterNode::checkSemantic(MethodNode* methodNode)
+void ParameterNode::checkSemantic(MethodNode* methodNode, TemplateArguments* templateArguments)
 {
-	m_type->checkTypeName(methodNode->m_enclosing);
-
-	if(m_type->isVoid())
+	TypeNode* typeNode = m_typeName->getTypeNode(templateArguments);
+	if(void_type == typeNode->getTypeCategory())
 	{ 
 		if ((isInput() && !byPtr()) || (isOutput() && outNew()))
 		{
 			RaiseError_InvalidParameterType(this);
 		}
 	}
-
-	g_sourceFileManager.useType(m_type->m_typeInfo, byValue() ? tu_by_value : tu_by_ref);
+	g_compiler.useType(typeNode, byValue() ? tu_definition : tu_declaration, m_typeName);
 }

@@ -1,6 +1,7 @@
 #include "MetaHeaderFileGenerator.h"
-#include "HeaderFileGenerator.h"
+#include "Utility.h"
 #include "SourceFile.h"
+#include "HeaderFileGenerator.h"
 #include "ProgramNode.h"
 #include "NamespaceNode.h"
 #include "TokenNode.h"
@@ -11,7 +12,8 @@
 #include "ClassNode.h"
 #include "TemplateClassInstanceNode.h"
 #include "TemplateParametersNode.h"
-#include "TypeAliasNode.h"
+#include "TypedefNode.h"
+#include "typeDeclarationNode.h"
 #include "TypeNameListNode.h"
 #include "TypeNameNode.h"
 #include "FieldNode.h"
@@ -19,9 +21,11 @@
 #include "MethodNode.h"
 #include "ParameterNode.h"
 #include "ParameterNode.h"
+#include "TypeTree.h"
 #include "Platform.h"
 #include "Options.h"
 #include "CommonFuncs.h"
+#include "Compiler.h"
 #include <assert.h>
 #include <algorithm>
 
@@ -137,17 +141,20 @@ void MetaHeaderFileGenerator::generateCode_Program(FILE* file, ProgramNode* prog
 	generateCode_Namespace(file, programNode, 1);
 	writeStringToFile("}\n\n", file);
 
-	std::vector<ExportedTypeInfo> typeInfos;
-	CollectExportedTypeInfos(typeInfos, programNode);
-	std::reverse(typeInfos.begin(), typeInfos.end());
-	size_t typeCount = typeInfos.size();
+
+	std::vector<TypeNode*> typeNodes;
+	CollectTypeNodes(typeNodes, programNode);
+	std::reverse(typeNodes.begin(), typeNodes.end());
+	size_t typeCount = typeNodes.size();
 
 	for(size_t i = 0; i < typeCount; ++i)
 	{
-		if(snt_type_alias != typeInfos[i].m_typeNode->m_nodeType
-			&& typeInfos[i].m_typeNode->canGenerateMetaCode())
+		TypeNode* typeNode = typeNodes[i];
+		if(!typeNode->isTypedef() 
+			&& !typeNode->isTypeDeclaration()
+			&& typeNode->getSyntaxNode()->canGenerateMetaCode())
 		{
-			TypeCategory typeCategory = typeInfos[i].m_typeNode->getTypeCategory();
+			TypeCategory typeCategory = typeNode->getTypeCategory();
 			const char* typeCategoryName = "";
 			switch(typeCategory)
 			{
@@ -164,16 +171,17 @@ void MetaHeaderFileGenerator::generateCode_Program(FILE* file, ProgramNode* prog
 				assert(false);
 			}
 
-			std::string metaTypeName = typeInfos[i].m_typeName;
-			std::replace_if(metaTypeName.begin(), metaTypeName.end(), isNotIdentifyChar, '_');
-			metaTypeName += g_options.m_metaTypePostfix;
+			std::string typeName;
+			typeNode->getFullName(typeName);
+			std::string metaTypeName;
+			GetMetaTypeFullName(metaTypeName, typeNode);
 			sprintf_s(buf, "template<>\n"
 				"struct RuntimeTypeOf<%s>\n"
 				"{\n"
 				"\ttypedef ::idlcpp::%s RuntimeType;\n"
 				"\tenum {type_category = ::pafcore::%s};\n"
 				"};\n\n",
-				typeInfos[i].m_typeName.c_str(), metaTypeName.c_str(), typeCategoryName);
+				typeName.c_str(), metaTypeName.c_str(), typeCategoryName);
 			writeStringToFile(buf, file);
 		}
 	}
@@ -194,19 +202,25 @@ void MetaHeaderFileGenerator::generateCode_Namespace(FILE* file, NamespaceNode* 
 		switch (memberNode->m_nodeType)
 		{
 		case snt_enum:
-			generateCode_Enum(file, static_cast<EnumNode*>(memberNode), indentation);
+			generateCode_Enum(file, static_cast<EnumNode*>(memberNode), 0, indentation);
 			break;
 		case snt_class:
-			generateCode_Class(file, static_cast<ClassNode*>(memberNode), indentation);
+			if (!memberNode->isTemplateClass())
+			{
+				generateCode_Class(file, static_cast<ClassNode*>(memberNode), 0, indentation);
+			}
 			break;
 		case snt_namespace:
 			generateCode_Namespace(file, static_cast<NamespaceNode*>(memberNode), indentation);
 			break;
-		case snt_type_alias:
-			generateCode_TypeAlias(file, static_cast<TypeAliasNode*>(memberNode), indentation);
-			break;
 		case snt_template_class_instance:
 			generateCode_TemplateClassInstance(file, static_cast<TemplateClassInstanceNode*>(memberNode), indentation);
+			break;
+		case snt_typedef:
+			generateCode_Typedef(file, static_cast<TypedefNode*>(memberNode), indentation);
+			break;
+		case snt_type_declaration:
+			generateCode_TypeDeclaration(file, static_cast<TypeDeclarationNode*>(memberNode), indentation);
 			break;
 		default:
 			assert(false);
@@ -214,7 +228,7 @@ void MetaHeaderFileGenerator::generateCode_Namespace(FILE* file, NamespaceNode* 
 	}
 }
 
-void MetaHeaderFileGenerator::generateCode_Enum(FILE* file, EnumNode* enumNode, int indentation)
+void MetaHeaderFileGenerator::generateCode_Enum(FILE* file, EnumNode* enumNode, TemplateArguments* templateArguments, int indentation)
 {
 	if (enumNode->isNativeOnly())
 	{
@@ -223,7 +237,7 @@ void MetaHeaderFileGenerator::generateCode_Enum(FILE* file, EnumNode* enumNode, 
 
 	char buf[512];
 	std::string metaTypeName;
-	GetMetaTypeFullName(metaTypeName, enumNode);
+	GetMetaTypeFullName(metaTypeName, enumNode, templateArguments);
 
 	sprintf_s(buf, "class %s : public ::pafcore::EnumType\n",
 		metaTypeName.c_str());
@@ -242,19 +256,16 @@ void MetaHeaderFileGenerator::generateCode_Enum(FILE* file, EnumNode* enumNode, 
 	writeStringToFile("};\n\n", file, indentation);
 }
 
-void MetaHeaderFileGenerator::generateCode_Class(FILE* file, ClassNode* classNode, int indentation)
+void MetaHeaderFileGenerator::generateCode_Class(FILE* file, ClassNode* classNode, TemplateArguments* templateArguments, int indentation)
 {
 	if (classNode->isNativeOnly())
 	{
 		return;
 	}
-	if(0 != classNode->m_templateParameters && 0 == classNode->m_templateArgumentList)
-	{
-		return;
-	}
+
 	char buf[512];
 	std::string metaClassName;
-	GetMetaTypeFullName(metaClassName, classNode);
+	GetMetaTypeFullName(metaClassName, classNode, templateArguments);
 
 	sprintf_s(buf, "class %s : public ::pafcore::ClassType\n",
 		metaClassName.c_str());
@@ -303,8 +314,7 @@ void MetaHeaderFileGenerator::generateCode_Class(FILE* file, ClassNode* classNod
 				}
 			}
 			else if(snt_enum == memberNode->m_nodeType ||
-				snt_class == memberNode->m_nodeType ||
-				snt_type_alias == memberNode->m_nodeType)
+				snt_class == memberNode->m_nodeType )
 			{
 				subTypeNodes.push_back(memberNode);
 			}
@@ -340,7 +350,7 @@ void MetaHeaderFileGenerator::generateCode_Class(FILE* file, ClassNode* classNod
 	writeStringToFile("virtual void destroyArray(void* address);\n", file, indentation + 1);
 	writeStringToFile("virtual void assign(void* dst, const void* src);\n", file, indentation + 1);
 	
-	if(classNode->needExport())
+	if(classNode->needSubclassProxy(templateArguments))
 	{
 		writeStringToFile("public:\n", file, indentation);
 		writeStringToFile("virtual void* createSubclassProxy(::pafcore::SubclassInvoker* subclassInvoker);\n", file, indentation + 1);
@@ -358,9 +368,9 @@ void MetaHeaderFileGenerator::generateCode_Class(FILE* file, ClassNode* classNod
 	writeStringToFile(buf, file, indentation + 1);
 	writeStringToFile("};\n\n", file, indentation);
 
-	if(classNode->needExport())
+	if(classNode->needSubclassProxy(templateArguments))
 	{
-		generateCode_Interface(file, classNode, indentation);
+		generateCode_SubclassProxy(file, classNode, templateArguments, indentation);
 	}
 
 	size_t subTypeCount = subTypeNodes.size();
@@ -370,13 +380,10 @@ void MetaHeaderFileGenerator::generateCode_Class(FILE* file, ClassNode* classNod
 		switch (typeNode->m_nodeType)
 		{
 		case snt_enum:
-			generateCode_Enum(file, static_cast<EnumNode*>(typeNode), indentation);
+			generateCode_Enum(file, static_cast<EnumNode*>(typeNode), templateArguments, indentation);
 			break;
 		case snt_class:
-			generateCode_Class(file, static_cast<ClassNode*>(typeNode), indentation);
-			break;
-		case snt_type_alias:
-			generateCode_TypeAlias(file, static_cast<TypeAliasNode*>(typeNode), indentation);
+			generateCode_Class(file, static_cast<ClassNode*>(typeNode), templateArguments, indentation);
 			break;
 		default:
 			assert(false);
@@ -392,7 +399,7 @@ void writeMethodParameter(MethodNode* methodNode, ParameterNode* parameterNode, 
 	{
 		writeStringToFile("const ", file);
 	}
-	parameterNode->m_type->getRelativeName(typeName, methodNode->m_enclosing, 0);
+	parameterNode->m_typeName->getRelativeName(typeName, methodNode->m_enclosing);
 	writeStringToFile(typeName.c_str(), file);
 	if(0 != parameterNode->m_out)
 	{
@@ -402,7 +409,7 @@ void writeMethodParameter(MethodNode* methodNode, ParameterNode* parameterNode, 
 	{
 		writeStringToFile(g_keywordTokens[parameterNode->m_passing->m_nodeType - snt_keyword_begin_output - 1], file);
 	}
-	writeStringToFile(g_strSpaces, 1, file);
+	writeSpaceToFile(file);;
 	writeStringToFile(parameterNode->m_name->m_str.c_str(), file);
 };
 
@@ -414,9 +421,9 @@ void writeInterfaceMethodDecl(MethodNode* methodNode, FILE* file, int indentatio
 	{
 		resultName = "const ";
 	}
-	assert(0 != methodNode->m_result);
+	assert(0 != methodNode->m_resultTypeName);
 	std::string typeName;
-	methodNode->m_result->getRelativeName(typeName, methodNode->m_enclosing, 0);
+	methodNode->m_resultTypeName->getRelativeName(typeName, methodNode->m_enclosing);
 	resultName += typeName;
 	if(0 != methodNode->m_passing)
 	{
@@ -445,10 +452,10 @@ void writeInterfaceMethodDecl(MethodNode* methodNode, FILE* file, int indentatio
 }
 
 
-void writeInterfaceMethodsDecl(ClassNode* classNode, FILE* file, int indentation)
+void writeInterfaceMethodsDecl(FILE* file, ClassNode* classNode, TemplateArguments* templateArguments, int indentation)
 {
 	std::vector<MethodNode*> methodNodes;
-	classNode->collectOverrideMethods(methodNodes);
+	classNode->collectOverrideMethods(methodNodes, templateArguments);
 	size_t count = methodNodes.size();
 	for(size_t i = 0; i < count; ++i)
 	{
@@ -458,13 +465,13 @@ void writeInterfaceMethodsDecl(ClassNode* classNode, FILE* file, int indentation
 	}
 }
 
-void MetaHeaderFileGenerator::generateCode_Interface(FILE* file, ClassNode* classNode, int indentation)
+void MetaHeaderFileGenerator::generateCode_SubclassProxy(FILE* file, ClassNode* classNode, TemplateArguments* templateArguments, int indentation)
 {
 	char buf[512];
 	std::string className;
-	classNode->getFullName(className, 0);
+	classNode->getFullName(className, templateArguments);
 	std::string subclassProxyName;
-	GetSubclassProxyFullName(subclassProxyName, classNode);
+	GetSubclassProxyFullName(subclassProxyName, classNode, templateArguments);
 	
 	sprintf_s(buf, "class %s : public %s\n", subclassProxyName.c_str(), className.c_str());
 	writeStringToFile(buf, file, indentation);
@@ -475,7 +482,7 @@ void MetaHeaderFileGenerator::generateCode_Interface(FILE* file, ClassNode* clas
 	writeStringToFile(buf, file, indentation + 1);
 	sprintf_s(buf, "~%s();\n", subclassProxyName.c_str());
 	writeStringToFile(buf, file, indentation + 1);
-	writeInterfaceMethodsDecl(classNode, file, indentation + 1);
+	writeInterfaceMethodsDecl(file, classNode, templateArguments, indentation + 1);
 	writeStringToFile("};\n\n", file, indentation);
 
 }
@@ -486,27 +493,22 @@ void MetaHeaderFileGenerator::generateCode_TemplateClassInstance(FILE* file, Tem
 	{
 		return;
 	}
-	assert(0 != templateClassInstance->m_templateTypeNameNode->m_typeInfo
-			&& snt_class == templateClassInstance->m_templateTypeNameNode->m_typeInfo->m_typeNode->m_nodeType);
-	ClassNode* classNode = static_cast<ClassNode*>(templateClassInstance->m_templateTypeNameNode->m_typeInfo->m_typeNode);
-	assert(0 != classNode->m_templateParameters);
-	assert(classNode->m_templateParameters->getParameterCount() == templateClassInstance->getParameterCount());
 
-	TypeNameListNode* oldTemplateArgumentList = classNode->setTemplateArgumentList(templateClassInstance->m_parameterList);
-	generateCode_Class(file, classNode, indentation);
-	classNode->setTemplateArgumentList(oldTemplateArgumentList);
+	ClassNode* classNode = static_cast<ClassNode*>(templateClassInstance->m_classTypeNode->m_classNode);
+	generateCode_Class(file, classNode, &templateClassInstance->m_templateArguments, indentation);
+
 }
 
-void MetaHeaderFileGenerator::generateCode_TypeAlias(FILE* file, TypeAliasNode* typeAliasNode, int indentation)
+void MetaHeaderFileGenerator::generateCode_Typedef(FILE* file, TypedefNode* typedefNode, int indentation)
 {
-	if (typeAliasNode->isNativeOnly())
+	if (typedefNode->isNativeOnly())
 	{
 		return;
 	}
 
 	char buf[512];
 	std::string metaTypeName;
-	GetMetaTypeFullName(metaTypeName, typeAliasNode);
+	GetMetaTypeFullName(metaTypeName, typedefNode, 0);
 
 	sprintf_s(buf, "class %s : public ::pafcore::TypeAlias\n",
 		metaTypeName.c_str());
@@ -520,6 +522,34 @@ void MetaHeaderFileGenerator::generateCode_TypeAlias(FILE* file, TypeAliasNode* 
 
 	writeStringToFile("public:\n", file, indentation);
 	sprintf_s(buf, "%s static %s* GetSingleton();\n", 
+		g_options.m_exportMacro.c_str(), metaTypeName.c_str());
+	writeStringToFile(buf, file, indentation + 1);
+	writeStringToFile("};\n\n", file, indentation);
+}
+
+void MetaHeaderFileGenerator::generateCode_TypeDeclaration(FILE* file, TypeDeclarationNode* typeDeclarationNode, int indentation)
+{
+	if (typeDeclarationNode->isNativeOnly())
+	{
+		return;
+	}
+
+	char buf[512];
+	std::string metaTypeName;
+	GetMetaTypeFullName(metaTypeName, typeDeclarationNode, 0);
+
+	sprintf_s(buf, "class %s : public ::pafcore::TypeAlias\n",
+		metaTypeName.c_str());
+	writeStringToFile(buf, file, indentation);
+	writeStringToFile("{\n", file, indentation);
+
+	writeStringToFile("public:\n", file, indentation);
+
+	writeStringToFile(metaTypeName.c_str(), metaTypeName.length(), file, indentation + 1);
+	writeStringToFile("();\n", file);
+
+	writeStringToFile("public:\n", file, indentation);
+	sprintf_s(buf, "%s static %s* GetSingleton();\n",
 		g_options.m_exportMacro.c_str(), metaTypeName.c_str());
 	writeStringToFile(buf, file, indentation + 1);
 	writeStringToFile("};\n\n", file, indentation);

@@ -6,16 +6,9 @@
 struct MemberNode;
 struct TypeNameNode;
 enum TypeCategory;
-typedef std::map<std::string, TypeNameNode*> TemplateArgumentMap;
-
-struct ExportedTypeInfo
-{
-	MemberNode* m_typeNode;
-	std::string m_typeName;
-	ExportedTypeInfo(MemberNode* typeNode, const std::string& typeName)
-		: m_typeNode(typeNode), m_typeName(typeName)
-	{}
-};
+struct TemplateArguments;
+struct TypeNode;
+struct ClassNode;
 
 inline bool isNotIdentifyChar(char c)
 {
@@ -23,9 +16,10 @@ inline bool isNotIdentifyChar(char c)
 }
 
 
-void GetMetaTypeFullName(std::string& metaTypeName, MemberNode* typeNode);
-void GetSubclassProxyFullName(std::string& subclassProxyName, MemberNode* typeNode);
+void GetMetaTypeFullName(std::string& metaTypeName, MemberNode* memberNode, TemplateArguments* templateArguments);
+void GetMetaTypeFullName(std::string& metaTypeName, TypeNode* typeNode);
+void GetSubclassProxyFullName(std::string& subclassProxyName, ClassNode* typeNode, TemplateArguments* templateArguments);
+TypeCategory CalcTypeFullName(std::string& typeName, TypeNameNode* typeNameNode, TemplateArguments* templateArguments);
+void CollectTypeNodes(std::vector<TypeNode*>& typeNodes, MemberNode* memberNode);
 
-TypeCategory CalcTypeFullName(std::string& typeName, TypeNameNode* typeNameNode, TemplateArgumentMap* templateArguments);
-
-void CollectExportedTypeInfos(std::vector<ExportedTypeInfo>& typeInfos, MemberNode* memberNode);
+//void CollectExportedTypeInfos(std::vector<ExportedTypeInfo>& typeInfos, MemberNode* memberNode);

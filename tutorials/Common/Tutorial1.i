@@ -5,6 +5,6 @@ namespace tutorial
 	{
 		float x;
 		float y;
-		meta Point();
+		nocode Point();
 	};
 }

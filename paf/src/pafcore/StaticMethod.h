@@ -17,10 +17,10 @@ namespace pafcore
 		virtual ::pafcore::ClassType* getType();
 		virtual size_t getAddress();
 
-		::size_t get_overloadCount();
-		Result* getResult(::size_t overloadIndex);
-		::size_t getArgumentCount(::size_t overloadIndex);
-		Argument* getArgument(::size_t overloadIndex,::size_t index);
+		size_t get_overloadCount();
+		Result* getResult(size_t overloadIndex);
+		size_t getArgumentCount(size_t overloadIndex);
+		Argument* getArgument(size_t overloadIndex,size_t index);
 
 	public:
 		StaticMethod(const char* name, FunctionInvoker invoker, Overload* overloads, size_t overloadCount);

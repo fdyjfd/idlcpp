@@ -24,21 +24,21 @@ struct RuntimeTypeOf
 
 *$
 
-typedef bool_t;
-typedef char_t;
-typedef schar_t;
-typedef uchar_t;
-typedef short_t;
-typedef ushort_t;
-typedef long_t;
-typedef ulong_t;
-typedef longlong_t;
-typedef ulonglong_t;
-typedef int_t;
-typedef uint_t;
-typedef float_t;
-typedef double_t;
-typedef longdouble_t;
-typedef byte_t;
-typedef size_t;
-typedef ptrdiff_t;
+primitive bool_t;
+primitive char_t;
+primitive schar_t;
+primitive uchar_t;
+primitive short_t;
+primitive ushort_t;
+primitive long_t;
+primitive ulong_t;
+primitive longlong_t;
+primitive ulonglong_t;
+primitive int_t;
+primitive uint_t;
+primitive float_t;
+primitive double_t;
+primitive longdouble_t;
+primitive byte_t;
+primitive size_t;
+primitive ptrdiff_t;

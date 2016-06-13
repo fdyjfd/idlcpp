@@ -5,8 +5,8 @@ namespace tutorial
 	{
 		float x;
 		float y;
-		meta Point();
-		meta Point(float a, float b);
+		nocode Point();
+		nocode Point(float a, float b);
 		$*
 		Point()
 		{}
@@ -26,14 +26,14 @@ namespace tutorial
 		float left set get;
 		float right set get;
 
-		meta float bottom set get;
-		meta float top set get;
-		meta float area get;
-		meta float getArea();
+		nocode float bottom set get;
+		nocode float top set get;
+		nocode float area get;
+		nocode float getArea();
 
 		Rectangle(const Point ref min, const Point ref max);
 		Rectangle();
-		meta Rectangle(const Rectangle ref pt);
+		nocode Rectangle(const Rectangle ref pt);
 		$*
 		void set_bottom(float bottom)
 		{

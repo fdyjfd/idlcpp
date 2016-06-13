@@ -5,18 +5,14 @@ extern "C"
 {
 #endif
 
-
-void lexError(int errorCode, const char* errorText);
-
 struct SyntaxNode
 {
 	int m_nodeType;
 };
 typedef struct SyntaxNode SyntaxNode;
 
-enum PrimitiveType
+enum PredefinedType
 {
-	pt_unknown,
 	pt_void,
 	pt_bool,
 	pt_char,
@@ -34,9 +30,10 @@ enum PrimitiveType
 	pt_float,
 	pt_double,
 	pt_long_double,
+	pt_end,
 };
 
-typedef enum PrimitiveType PrimitiveType;
+typedef enum PredefinedType PredefinedType;
 
 enum TypeCategory
 {
@@ -57,11 +54,12 @@ enum SyntaxNodeType
 {
 	snt_keyword_all = 258,
 
-	snt_keyword_native,
-	snt_keyword_meta,
+	snt_keyword_nometa,
+	snt_keyword_nocode,
 	snt_keyword_none,
 
 	snt_keyword_begin_primitive,
+	snt_keyword_void,
 	snt_keyword_bool,
 	snt_keyword_char,
 	snt_keyword_wchar_t,
@@ -79,7 +77,6 @@ enum SyntaxNodeType
 	snt_keyword_enum,
 	snt_keyword_class,
 	snt_keyword_struct,
-	snt_keyword_void,
 	snt_keyword_abstract,
 	snt_keyword_virtual,
 	snt_keyword_static,
@@ -91,11 +88,13 @@ enum SyntaxNodeType
 	snt_keyword_ref,
 	snt_keyword_typedef,
 	snt_keyword_end_output,
+	snt_keyword_primitive,
 	snt_keyword_scope,
 	snt_keyword_export,
 	snt_keyword_override,
 	snt_identify,
-	snt_scope_list,
+	snt_scope_name,
+	snt_scope_name_list,
 	snt_enumerator_list,
 	snt_type_name,
 	snt_type_name_list,
@@ -111,7 +110,8 @@ enum SyntaxNodeType
 	snt_class,
 	snt_enum,
 	snt_template_class_instance,
-	snt_type_alias,
+	snt_typedef,
+	snt_type_declaration,
 	snt_namespace,
 	snt_member_list,
 };
@@ -119,11 +119,13 @@ enum SyntaxNodeType
 void newCodeBlock(const char* str);
 SyntaxNode* newToken(int nodeType);
 SyntaxNode* newIdentify(const char* str);
-SyntaxNode* newPrimitiveType(SyntaxNode* keyword, PrimitiveType type);
-SyntaxNode* newScopeList(SyntaxNode* scopeList, SyntaxNode* identify);
-void setScopeListGlobal(SyntaxNode* scopeList);
-SyntaxNode* newTypeName(SyntaxNode* scopeList);
-SyntaxNode* newTemplateTypeName(SyntaxNode* scopeList, SyntaxNode* lts, SyntaxNode* parameterList, SyntaxNode* gts);
+
+SyntaxNode* newPrimitiveType(SyntaxNode* keyword, PredefinedType type);
+
+SyntaxNode* newScopeName(SyntaxNode* identify, SyntaxNode* lts, SyntaxNode* parameterList, SyntaxNode* gts);
+SyntaxNode* newScopeNameList(SyntaxNode* scopeNameList, SyntaxNode* scopeName);
+void setScopeNameListGlobal(SyntaxNode* scopeNameList);
+SyntaxNode* newTypeName(SyntaxNode* scopeNameList);
 SyntaxNode* newTypeNameList(SyntaxNode* typeNameList, SyntaxNode* delimiter, SyntaxNode* typeName);
 
 void setMetaOnly(SyntaxNode* syntaxNode);
@@ -162,26 +164,23 @@ void setClassTemplateParameters(SyntaxNode* cls, SyntaxNode* parameters);
 SyntaxNode* newEnumeratorList(SyntaxNode* enumeratorList, SyntaxNode* delimiter, SyntaxNode* identify);
 SyntaxNode* newEnum(SyntaxNode* keyword, SyntaxNode* name, SyntaxNode* leftBrace, SyntaxNode* enumeratorList, SyntaxNode* rightBrace, SyntaxNode* semicolon);
 
-SyntaxNode* newTypeAlias(SyntaxNode* name, TypeCategory typeCategory);
-SyntaxNode* newTypeDef(SyntaxNode* keyword, SyntaxNode* name, SyntaxNode* typeName);
+SyntaxNode* newTypeDeclaration(SyntaxNode* name, TypeCategory typeCategory);
+SyntaxNode* newTypedef(SyntaxNode* keyword, SyntaxNode* name, SyntaxNode* typeName);
 
 SyntaxNode* newTemplateParameterList(SyntaxNode* list, SyntaxNode* delimiter, SyntaxNode* identify);
 SyntaxNode* newTemplateParameters(SyntaxNode* lts, SyntaxNode* parameterList, SyntaxNode* gts);
 
-SyntaxNode* newTemplateClassInstance(SyntaxNode* keyword, SyntaxNode* templateName, SyntaxNode* lts, SyntaxNode* typeNameList, SyntaxNode* gts, SyntaxNode* semicolon);
+SyntaxNode* newTemplateClassInstance(SyntaxNode* name, SyntaxNode* typeNameList);
 SyntaxNode* newNamespaceMemberList(SyntaxNode* memberList, SyntaxNode* member);
 SyntaxNode* newNamespace(SyntaxNode* keyword, SyntaxNode* name, SyntaxNode* leftBrace, SyntaxNode* memberList, SyntaxNode* rightBrace);
 SyntaxNode* newProgram(SyntaxNode* memberList);
 
-int calcColumnAfterCodeBlock(char* s);
 void yyerror(char* s);
 void invalidString(char* s);
 void unterminatedCode();
 void unterminatedComment();
-
+void addSourceFile(const char* fileName);
 void attachSyntaxTree(SyntaxNode* tree);
-void freetree();
-
 
 #ifdef __cplusplus
 }

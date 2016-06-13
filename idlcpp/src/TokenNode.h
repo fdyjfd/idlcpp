@@ -1,6 +1,7 @@
 #pragma once
 
 #include "SyntaxNodeImpl.h"
+#include <stdio.h>
 
 struct TokenNode : SyntaxNodeImpl
 {

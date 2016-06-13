@@ -4,7 +4,8 @@
 #include "TypeNameNode.h"
 #include "ParameterNode.h"
 #include "MethodNode.h"
-#include "ScopeListNode.h"
+#include "ScopeNameListNode.h"
+#include "ScopeNameNode.h"
 #include <assert.h>
 
 const size_t error_info_buffer_size = 512;
@@ -17,26 +18,37 @@ void RaiseError_InvalidTypeName(IdentifyNode* node)
 		node->m_columnNo, semantic_error_invalid_type_name, buf);
 }
 
+void RaiseError_InvalidTypeName(ScopeNameListNode* node)
+{
+	char buf[error_info_buffer_size];
+	std::string str;
+	node->getString(str);
+	IdentifyNode* identifyNode = node->m_scopeName->m_name;
+	sprintf_s(buf, "\'%s\' : is not a type name", str.c_str());
+	ErrorList_AddItem_CurrentFile(identifyNode->m_lineNo,
+		identifyNode->m_columnNo, semantic_error_invalid_type_name, buf);
+}
+
 void RaiseError_InvalidTypeName(TypeNameNode* node)
 {
 	char buf[error_info_buffer_size];
-	std::string name;
-	node->getName(name);
-	IdentifyNode* identifyNode = node->m_scopeList->m_name;
-	sprintf_s(buf, "\'%s\' : is not a type name", name.c_str());
+	std::string str;
+	node->getString(str);
+	IdentifyNode* identifyNode = node->m_scopeNameList->m_scopeName->m_name;
+	sprintf_s(buf, "\'%s\' : is not a type name", str.c_str());
 	ErrorList_AddItem_CurrentFile(identifyNode->m_lineNo,
 		identifyNode->m_columnNo, semantic_error_invalid_type_name, buf);
 }
 
 void RaiseError_InvalidParameterType(ParameterNode* node)
 {
-	TypeNameNode* type = node->m_type;
+	TypeNameNode* typeName = node->m_typeName;
 	TokenNode* out = node->m_out;
 	TokenNode* passing = node->m_passing;
 
 	char buf[error_info_buffer_size];
-	std::string name;
-	type->getName(name);
+	std::string str;
+	typeName->getString(str);
 
 	const char* strOut = "";
 	if (out)
@@ -67,19 +79,19 @@ void RaiseError_InvalidParameterType(ParameterNode* node)
 			break;
 		}
 	}
-	TokenNode* tokenNode = type->m_scopeList ? type->m_scopeList->m_name : type->m_keyword;
-	sprintf_s(buf, "\'%s %s %s\' : is an invalid type", name.c_str(), strOut, strPassing);
+	TokenNode* tokenNode = typeName->m_scopeNameList ? typeName->m_scopeNameList->m_scopeName->m_name : typeName->m_keyword;
+	sprintf_s(buf, "\'%s %s %s\' : is an invalid type", str.c_str(), strOut, strPassing);
 	ErrorList_AddItem_CurrentFile(tokenNode->m_lineNo,
 		tokenNode->m_columnNo, semantic_error_invalid_type_name, buf);
 }
 
 void RaiseError_InvalidResultType(MethodNode* node)
 {
-	TypeNameNode* result = node->m_result;
+	TypeNameNode* result = node->m_resultTypeName;
 	TokenNode* passing = node->m_passing;
 	char buf[error_info_buffer_size];
-	std::string name;
-	result->getName(name);
+	std::string str;
+	result->getString(str);
 
 	const char* strPassing = "";
 	if(passing)
@@ -97,29 +109,29 @@ void RaiseError_InvalidResultType(MethodNode* node)
 			break;
 		}
 	}
-	TokenNode* tokenNode = result->m_scopeList ? result->m_scopeList->m_name : result->m_keyword;
-	sprintf_s(buf, "\'%s %s\' : can not be a result type", name.c_str(), strPassing);
+	TokenNode* tokenNode = result->m_scopeNameList ? result->m_scopeNameList->m_scopeName->m_name : result->m_keyword;
+	sprintf_s(buf, "\'%s %s\' : can not be a result type", str.c_str(), strPassing);
 	ErrorList_AddItem_CurrentFile(tokenNode->m_lineNo,
 		tokenNode->m_columnNo, semantic_error_invalid_type_name, buf);
-}
-
-void RaiseError_InvalidResultType(TypeNameNode* node)
-{
-	char buf[error_info_buffer_size];
-	std::string name;
-	node->getName(name);
-	IdentifyNode* identifyNode = node->m_scopeList->m_name;
-	sprintf_s(buf, "\'%s\' : is not a type name", name.c_str());
-	ErrorList_AddItem_CurrentFile(identifyNode->m_lineNo,
-		identifyNode->m_columnNo, semantic_error_invalid_type_name, buf);
 }
 
 void RaiseError_InvalidClassTemplateName(IdentifyNode* node)
 {
 	char buf[error_info_buffer_size];
-	sprintf_s(buf, "\'%s\' : is not a class template", node->m_str.c_str());
+	sprintf_s(buf, "\'%s\' : is not a class template name", node->m_str.c_str());
 	ErrorList_AddItem_CurrentFile(node->m_lineNo,
 		node->m_columnNo, semantic_error_invalid_class_template_name, buf);
+}
+
+void RaiseError_InvalidClassTemplateName(TypeNameNode* node)
+{
+	char buf[error_info_buffer_size];
+	std::string name;
+	node->getString(name);
+	IdentifyNode* identifyNode = node->m_scopeNameList->m_scopeName->m_name;
+	sprintf_s(buf, "\'%s\' : is not a class template name", name.c_str());
+	ErrorList_AddItem_CurrentFile(identifyNode->m_lineNo,
+		identifyNode->m_columnNo, semantic_error_invalid_class_template_name, buf);
 }
 
 void RaiseError_TooManyTemplateArguments(IdentifyNode* node)
@@ -142,10 +154,10 @@ void RaiseError_InvalidTemplateArgument(TypeNameNode* node)
 {
 	char buf[error_info_buffer_size];
 	std::string name;
-	node->getName(name);
+	node->getString(name);
 	sprintf_s(buf, "\'%s\' : is not a valid template argument", name.c_str());
-	ErrorList_AddItem_CurrentFile(node->m_scopeList->m_name->m_lineNo,
-		node->m_scopeList->m_name->m_columnNo, semantic_error_invalid_template_argument, buf);
+	ErrorList_AddItem_CurrentFile(node->m_scopeNameList->m_scopeName->m_name->m_lineNo,
+		node->m_scopeNameList->m_scopeName->m_name->m_columnNo, semantic_error_invalid_template_argument, buf);
 }
 
 void RaiseError_TemplateParameterRedefinition(IdentifyNode* node)

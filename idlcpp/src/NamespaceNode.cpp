@@ -1,7 +1,9 @@
 #include "NamespaceNode.h"
 #include "MemberListNode.h"
 #include "ClassNode.h"
-#include "SourceFile.h"
+#include "TypeTree.h"
+#include "Compiler.h"
+#include <assert.h>
 
 NamespaceNode::NamespaceNode(TokenNode* keyword, IdentifyNode* name, TokenNode* leftBrace, MemberListNode* memberList, TokenNode* rightBrace)
 {
@@ -12,6 +14,7 @@ NamespaceNode::NamespaceNode(TokenNode* keyword, IdentifyNode* name, TokenNode* 
 	m_memberList = memberList;
 	m_rightBrace = rightBrace;
 	m_memberList->initializeMembersEnclosing(this);
+	m_typeNode = 0;
 }
 
 bool NamespaceNode::isGlobalNamespace()
@@ -19,26 +22,34 @@ bool NamespaceNode::isGlobalNamespace()
 	return 0 == m_keyword;
 }
 
-void NamespaceNode::collectTypeInfo()
+TypeNode* NamespaceNode::getTypeNode()
 {
-	g_sourceFileManager.registerNamespace(this);
-	m_memberList->collectTypeInfo();
+	return m_typeNode;
 }
 
-void NamespaceNode::checkSemantic()
+void NamespaceNode::collectTypes(TypeNode* enclosingTypeNode)
 {
-	std::vector<MemberNode*> memberNodes;
-	m_memberList->collectMemberNodes(memberNodes);
-
-	size_t memberCount = memberNodes.size();
-	for(size_t i = 0; i < memberCount; ++i)
+	assert(0 == m_typeNode && enclosingTypeNode->isNamespace());
+	m_typeNode = static_cast<NamespaceTypeNode*>(enclosingTypeNode)->addNamespace(this);
+	if (m_typeNode)
 	{
-		MemberNode* memberNode = memberNodes[i];
-		memberNodes[i]->checkSemantic();
+		m_memberList->collectTypes(m_typeNode);
 	}
 }
 
-void NamespaceNode::extendInternalCode()
+void NamespaceNode::checkTypeNames(TypeNode* enclosingTypeNode, TemplateArguments* templateArguments)
+{
+	assert(0 != m_typeNode && 0 == templateArguments);
+	m_memberList->checkTypeNames(m_typeNode, templateArguments);
+}
+
+void NamespaceNode::checkSemantic(TemplateArguments* templateArguments)
+{
+	assert(0 == templateArguments);
+	m_memberList->checkSemantic(templateArguments);
+}
+
+void NamespaceNode::extendInternalCode(TypeNode* enclosingTypeNode, TemplateArguments* templateArguments)
 {
 	std::vector<MemberNode*> memberNodes;
 	m_memberList->collectMemberNodes(memberNodes);
@@ -49,10 +60,10 @@ void NamespaceNode::extendInternalCode()
 		switch (memberNode->m_nodeType)
 		{
 		case snt_namespace:
-			static_cast<NamespaceNode*>(memberNode)->extendInternalCode();
+			static_cast<NamespaceNode*>(memberNode)->extendInternalCode(m_typeNode, templateArguments);
 			break;
 		case snt_class:
-			static_cast<ClassNode*>(memberNode)->extendInternalCode();
+			static_cast<ClassNode*>(memberNode)->extendInternalCode(m_typeNode, templateArguments);
 			break;
 		}
 	}

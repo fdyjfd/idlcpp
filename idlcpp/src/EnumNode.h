@@ -3,6 +3,7 @@
 
 struct TokenNode;
 struct EnumeratorListNode;
+struct EnumTypeNode;
 
 struct EnumNode : ScopeNode
 {
@@ -11,9 +12,10 @@ struct EnumNode : ScopeNode
 	EnumeratorListNode* m_enumeratorList;
 	TokenNode* m_rightBrace;
 	TokenNode* m_semicolon;
+	EnumTypeNode* m_typeNode;
 public:
 	EnumNode(TokenNode* keyword, IdentifyNode* name, TokenNode* leftBrace, EnumeratorListNode* enumeratorList, TokenNode* rightBrace, TokenNode* semicolon);
-	virtual TypeCategory getTypeCategory();
-	virtual void collectTypeInfo();
-	virtual void checkSemantic();
+	virtual TypeNode* getTypeNode();
+	virtual void collectTypes(TypeNode* enclosingTypeNode);
+	virtual void checkSemantic(TemplateArguments* templateArguments);
 };

@@ -3,9 +3,11 @@
 #include "NamespaceNode.h"
 #include "IdentifyNode.h"
 #include "ClassNode.h"
-#include "SourceFile.h"
+#include "TypeTree.h"
+
 #include "Options.h"
 #include "Platform.h"
+#include <assert.h>
 #include <vector>
 
 const char g_pragmaOnce[] = {"#pragma once\n\n"};
@@ -15,18 +17,15 @@ ProgramNode::ProgramNode(MemberListNode* memberList)
 {
 }
 
-void ProgramNode::collectTypeInfo()
+void ProgramNode::getLocalName(std::string& name, TemplateArguments* templateArguments)
 {
-	m_memberList->collectTypeInfo();
+	name = "";
 }
 
-void ProgramNode::checkSemantic()
+void ProgramNode::collectTypes(TypeNode* enclosingTypeNode)
 {
-	std::vector<MemberNode*> memberNodes;
-	m_memberList->collectMemberNodes(memberNodes);
-	size_t count = memberNodes.size();
-	for(size_t i = 0; i < count; ++i)
-	{
-		memberNodes[i]->checkSemantic();
-	}
+	assert(0 == enclosingTypeNode && 0 == m_typeNode);
+	m_typeNode = g_typeTree.getRootNamespaceTypeNode();
+	m_memberList->collectTypes(m_typeNode);
 }
+

@@ -3,6 +3,8 @@
 #include "ScopeNode.h"
 #include "ClassNode.h"
 #include "NamespaceNode.h"
+#include "TypedefNode.h"
+#include "TypeTree.h"
 #include "Options.h"
 #include <assert.h>
 
@@ -49,151 +51,28 @@ bool MemberNode::canGenerateNativeCode()
 	return m_enclosing->canGenerateNativeCode();
 }
 
-
-void MemberNode::getFullName(std::string& fullName, TemplateArgumentMap* templateArguments)
+void MemberNode::getFullName(std::string& fullName, TemplateArguments* templateArguments)
 {
-	getRelativeName(fullName, 0, templateArguments);
-}
-
-void MemberNode::getRelativeName(std::string& relativeName, ScopeNode* scope, TemplateArgumentMap* templateArguments)
-{
-	assert((0 == m_enclosing && 0 == m_name) || (0 != m_enclosing && 0 != m_name));
-	relativeName.clear();
-	if(0 == m_enclosing)
-	{
-		//global scope, name is ""
-		return;
-	}
+	std::string localName;
+	fullName.clear();
 	std::vector<ScopeNode*> enclosings;
 	getEnclosings(enclosings);
-	if(enclosings.empty())
+	auto it = enclosings.begin();
+	auto end = enclosings.end();
+	for (; it != end; ++it)
 	{
-		//under global scope, name is ::m_name 
-		relativeName = "::" + m_name->m_str;
-		return;
+		ScopeNode* enclosing = *it;
+		enclosing->getLocalName(localName, templateArguments);
+		fullName += localName + "::";
 	}
-
-	std::vector<ScopeNode*> scopeEnclosings;
-	if(0 != scope)
-	{
-		scope->getEnclosings(scopeEnclosings);
-		if(scope->m_name)
-		{
-			scopeEnclosings.push_back(scope);
-		}
-	}
-
-	bool visible = false;
-	size_t count1 = enclosings.size();
-	size_t count2 = scopeEnclosings.size();
-
-	if(count1 <= count2)
-	{
-		size_t index = 0;
-		for(; index < count1; ++index)
-		{
-			if(enclosings[index]->m_name->m_str != scopeEnclosings[index]->m_name->m_str)
-			{
-				break;
-			}
-		}
-		if(index == count1)
-		{
-			visible = true;
-		}
-	}
-	if(visible)
-	{
-		relativeName = m_name->m_str;
-	}
-	else
-	{
-		std::string enclosingName;
-		m_enclosing->getRelativeName(enclosingName, scope, templateArguments);
-		assert(!enclosingName.empty());
-		relativeName = enclosingName + "::" + m_name->m_str;
-	}
-
-	//std::string enclosingName;
-	//if(!visible)
-	//{
-	//	m_enclosing->getRelativeName(enclosingName, scope, templateArguments);
-	//	assert(!enclosingName.empty());
-	//}
-
-	//relativeName = enclosingName;
-
-	//if(!enclosingName.empty())
-	//{
-	//	relativeName += "::";
-	//}
-	//relativeName += m_name->m_str;
+	getLocalName(localName, templateArguments);
+	fullName += localName;
 }
-
-/*
-void MemberNode::getRelativeName(std::string& relativeName, ScopeNode* scope, TemplateArgumentMap* templateArguments)
-{
-	relativeName.clear();
-	std::vector<std::string> names;
-	bool isGlobal = getRelativeName(names, scope);
-	if(!names.empty())
-	{
-		if(isGlobal)
-		{
-			relativeName = "::";
-		}
-		relativeName.append(names[0]);
-		size_t count = names.size();
-		for (size_t i = 1; i < count; ++i)
-		{
-			relativeName.append("::");
-			relativeName.append(names[i]);
-		}
-	}
-}
-
-bool MemberNode::getRelativeName(std::vector<std::string>& names, ScopeNode* scope)
-{
-	names.clear();
-	std::vector<ScopeNode*> enclosings;
-	getEnclosings(enclosings);
-	std::vector<ScopeNode*> scopeEnclosings;
-	if(0 != scope)
-	{
-		scope->getEnclosings(scopeEnclosings);
-		if(scope->m_name)
-		{
-			scopeEnclosings.push_back(scope);
-		}
-	}
-	size_t count1 = enclosings.size();
-	size_t count2 = scopeEnclosings.size();
-	size_t count = count1 < count2 ? count1 : count2;
-	size_t index = 0;
-	for(; index < count; ++index)
-	{
-		if(enclosings[index]->m_name->m_str != scopeEnclosings[index]->m_name->m_str)
-		{
-			break;
-		}
-	}
-	bool isGlobal = (0 == index);
-	for(; index < enclosings.size(); ++index)
-	{
-		names.push_back(enclosings[index]->m_name->m_str);
-	}
-	if(m_name)
-	{
-		names.push_back(m_name->m_str);
-	}
-	return isGlobal;
-}
-*/
 
 void MemberNode::getEnclosings(std::vector<ScopeNode*>& enclosings)
 {
 	ScopeNode* enclosing = m_enclosing;
-	while (enclosing && enclosing->m_name)
+	while (enclosing)
 	{
 		enclosings.push_back(enclosing);
 		enclosing = enclosing->m_enclosing;
@@ -201,37 +80,52 @@ void MemberNode::getEnclosings(std::vector<ScopeNode*>& enclosings)
 	std::reverse(enclosings.begin(), enclosings.end());
 }
 
-TypeCategory MemberNode::getTypeCategory()
-{
-	return unknown_type;
-}
 
-void MemberNode::collectTypeInfo()
-{}
+bool MemberNode::isNamespace()
+{
+	return (snt_namespace == m_nodeType);
+}
 
 bool MemberNode::isTemplateClass()
 {
 	if (snt_class == m_nodeType)
 	{
-		return (0 != static_cast<ClassNode*>(this)->m_templateParameters);
+		return (0 != static_cast<ClassNode*>(this)->m_templateParametersNode);
 	}
 	return false;
 }
 
-NamespaceNode* MemberNode::getNamespace()
+bool MemberNode::isTypedef()
 {
-	ScopeNode* enclosing = m_enclosing;
-	while(snt_namespace != enclosing->m_nodeType)
+	if (snt_typedef == m_nodeType)
 	{
-		enclosing = enclosing->m_enclosing;
+		return 0 != static_cast<TypedefNode*>(this)->m_keyword;
 	}
-	return static_cast<NamespaceNode*>(enclosing);
+	return false;
 }
 
-bool MemberNode::isAbstractClass()
+
+void MemberNode::getLocalName(std::string& name, TemplateArguments* templateArguments)
+{
+	name = m_name->m_str;
+}
+
+TypeNode* MemberNode::getTypeNode()
 {
 	assert(false);
-	return false;
+	return 0;
+}
+
+void MemberNode::collectTypes(TypeNode* enclosingTypeNode)
+{
+}
+
+void MemberNode::checkTypeNames(TypeNode* enclosingTypeNode, TemplateArguments* templateArguments)
+{
+}
+
+void MemberNode::checkSemantic(TemplateArguments* templateArguments)
+{
 }
 
 

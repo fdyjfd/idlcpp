@@ -16,10 +16,9 @@ enum ErrorCode
 	syntax_error_unterminated_code,
 	syntax_error_unterminated_comment,
 	
-	semantic_error_native_type_as_namespace_name,
-	semantic_error_native_type_as_type_name,
-	semantic_error_type_name_as_namespace_name,
+	semantic_error_namespace_redefined,
 	semantic_error_type_redefined,
+	semantic_error_template_redefined,
 	semantic_error_enumerator_redefined,
 	semantic_error_missing_type_specifier,
 	semantic_error_constructor_with_return_type,
@@ -37,6 +36,7 @@ enum ErrorCode
 	semantic_error_too_many_template_arguments,
 	semantic_error_invalid_template_argument,
 	semantic_error_ambiguous_type_name,
+	semantic_error_ambiguous_template_name,
 	semantic_error_template_parameter_redefinition,
 	semantic_error_template_class_not_instantiton,
 	semantic_error_template_interface_not_supported,
@@ -48,8 +48,8 @@ typedef enum ErrorCode ErrorCode;
 void ErrorList_AddItem(const char* fileName, int lineNo, int columnNo, ErrorCode errorCode, const char* errorText);
 void ErrorList_AddItem_CurrentFile(ErrorCode errorCode, const char* errorText);
 void ErrorList_AddItem_CurrentFile(int lineNo, int columnNo, ErrorCode errorCode, const char* errorText);
-//void ErrorList_AddItem_MainFile(int lineNo, int columnNo, ErrorCode errorCode, const char* errorText);
-int ErrorList_ErrorCount();
+void ErrorList_Enable(bool b);
+size_t ErrorList_ErrorCount();
 void ErrorList_Output();
 //
 //#ifdef __cplusplus
@@ -74,11 +74,13 @@ public:
 		std::string errorText;
 	};
 public:
+	ErrorList();
 	void addItem(const char* fileName, int lineNo, int columnNo, ErrorCode errorCode, const char* errorText);
 public:
 	std::set<std::string> m_fileNames;
 	typedef std::vector<ErrorInfo> ErrorInfoContainer;
 	ErrorInfoContainer m_errorInfos;
+	bool m_enabled;
 };
 
 #endif

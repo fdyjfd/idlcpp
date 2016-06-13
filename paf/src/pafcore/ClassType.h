@@ -27,11 +27,11 @@ namespace pafcore
 		virtual ::pafcore::ClassType* getType();
 		virtual size_t getAddress();
 
-		::size_t _getMemberCount_(bool includeBaseClasses);
-		Metadata* _getMember_(::size_t index,bool includeBaseClasses);
+		size_t _getMemberCount_(bool includeBaseClasses);
+		Metadata* _getMember_(size_t index,bool includeBaseClasses);
 		Metadata* _findMember_(const char* name,bool includeBaseClasses);
-		::size_t _getBaseClassCount_();
-		Metadata* _getBaseClass_(::size_t index);
+		size_t _getBaseClassCount_();
+		Metadata* _getBaseClass_(size_t index);
 
 	public:
 		struct BaseClass
@@ -51,7 +51,6 @@ namespace pafcore
 		bool getBaseClassOffset_(size_t& offset, ClassType* otherType);
 		bool getBaseClassOffset(size_t& offset, ClassType* otherType);
 		Type* findNestedType(const char* name, bool includeBaseClasses);
-		TypeAlias* findNestedTypeAlias(const char* name, bool includeBaseClasses);
 		InstanceField* findInstanceField(const char* name, bool includeBaseClasses);
 		StaticField* findStaticField(const char* name, bool includeBaseClasses);
 		InstanceProperty* findInstanceProperty(const char* name, bool includeBaseClasses);
@@ -66,8 +65,6 @@ namespace pafcore
 		size_t m_memberCount;
 		Type** m_nestedTypes;
 		size_t m_nestedTypeCount;
-		TypeAlias** m_nestedTypeAliases;
-		size_t m_nestedTypeAliasCount;
 		InstanceField* m_fields;
 		size_t m_fieldCount;
 		InstanceProperty* m_properties;

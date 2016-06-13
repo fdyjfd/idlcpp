@@ -1,5 +1,5 @@
 #include "ErrorList.h"
-#include "SourceFile.h"
+#include "Compiler.h"
 
 const char* g_errorStrings[] =
 {
@@ -11,10 +11,9 @@ const char* g_errorStrings[] =
 	"unterminated code",
 	"unterminated comment",
 
-	"native type as namespace name",
-	"native type as type name",
-	"type name as namespace name",
+	"namespace redefined",
 	"type redefined",
+	"template redefined",
 	"enumerator redefined",
 	"missing type specifier",
 	"constructor with return type",
@@ -32,21 +31,30 @@ const char* g_errorStrings[] =
 	"too many template arguments",
 	"invalid template argument",
 	"ambiguous type name",
+	"ambiguous template name",
 	"template parameter redefinition",
 	"template class not instantiton",
 	"template interface not supported",
 	"missing reference base type",
 };
 
+ErrorList::ErrorList()
+{
+	m_enabled = true;
+}
+
 void ErrorList::addItem(const char* fileName, int lineNo, int columnNo, ErrorCode errorCode, const char* errorText)
 {
-	ErrorInfo errorInfo;
-	errorInfo.fileName = m_fileNames.insert(fileName).first->c_str();
-	errorInfo.lineNo = lineNo;
-	errorInfo.columnNo = columnNo;
-	errorInfo.errorCode = errorCode;
-	errorInfo.errorText = errorText;
-	m_errorInfos.push_back(errorInfo);
+	if(m_enabled)
+	{
+		ErrorInfo errorInfo;
+		errorInfo.fileName = m_fileNames.insert(fileName).first->c_str();
+		errorInfo.lineNo = lineNo;
+		errorInfo.columnNo = columnNo;
+		errorInfo.errorCode = errorCode;
+		errorInfo.errorText = errorText;
+		m_errorInfos.push_back(errorInfo);
+	}
 }
 
 ErrorList g_errorList;
@@ -72,13 +80,12 @@ void ErrorList_AddItem_CurrentFile(int lineNo, int columnNo, ErrorCode errorCode
 	g_errorList.addItem(getCurrentSourceFileName(), lineNo, columnNo, errorCode, errorText);
 }
 
-//void ErrorList_AddItem_MainFile(int lineNo, int columnNo, ErrorCode errorCode, const char* errorText)
-//{
-//	g_errorList.addItem(getMainSourceFileName(), lineNo, columnNo, errorCode, errorText);
-//}
+void ErrorList_Enable(bool b)
+{
+	g_errorList.m_enabled = b;
+}
 
-
-int ErrorList_ErrorCount()
+size_t ErrorList_ErrorCount()
 {
 	return g_errorList.m_errorInfos.size();
 }

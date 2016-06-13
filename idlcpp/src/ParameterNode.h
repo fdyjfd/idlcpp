@@ -6,17 +6,18 @@ struct TokenNode;
 struct TypeNameNode;
 struct IdentifyNode;
 struct MethodNode;
+struct TemplateArguments;
 
 struct ParameterNode : SyntaxNodeImpl
 {
 	TokenNode* m_constant;
-	TypeNameNode* m_type;
+	TypeNameNode* m_typeName;
 	TokenNode* m_out;
 	TokenNode* m_passing;
 	IdentifyNode* m_name;
 	bool m_array;
 public:
-	ParameterNode(TypeNameNode* type, TokenNode* out, TokenNode* passing, IdentifyNode* name);
+	ParameterNode(TypeNameNode* typeName, TokenNode* out, TokenNode* passing, IdentifyNode* name);
 	bool isConstant();
 	bool byValue();
 	bool byPtr();
@@ -25,5 +26,5 @@ public:
 	bool isArray();
 	bool isInput();
 	bool isOutput();
-	void checkSemantic(MethodNode* methodNode);
+	void checkSemantic(MethodNode* methodNode, TemplateArguments* templateArguments);
 };

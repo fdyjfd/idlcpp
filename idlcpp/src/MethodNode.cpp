@@ -3,9 +3,11 @@
 #include "ParameterNode.h"
 #include "TypeNameNode.h"
 #include "IdentifyNode.h"
+#include "ClassNode.h"
 #include "ErrorList.h"
 #include "RaiseError.h"
-#include "SourceFile.h"
+#include "TypeTree.h"
+#include "Compiler.h"
 
 #include <set>
 #include <assert.h>
@@ -17,7 +19,7 @@ MethodNode::MethodNode(IdentifyNode* name, TokenNode* leftParenthesis, Parameter
 	m_nodeType = snt_method;
 	m_modifier = 0;
 	m_resultConst = 0;
-	m_result = 0;
+	m_resultTypeName = 0;
 	m_passing = 0;
 	m_name = name;
 	m_leftParenthesis = leftParenthesis;
@@ -124,17 +126,39 @@ void checkParameterNames(std::vector<ParameterNode*>& parameterNodes)
 	}
 }
 
-
-void MethodNode::checkSemantic()
+void MethodNode::checkTypeNames(TypeNode* enclosingTypeNode, TemplateArguments* templateArguments)
 {
-	if(0 != m_result)
+	if (0 != m_resultTypeName)
 	{
-		m_result->checkTypeName(m_enclosing);
-		if (m_result->isVoid() && 0 != m_passing && (snt_keyword_new == m_passing->m_nodeType || snt_keyword_ref == m_passing->m_nodeType))
+		m_resultTypeName->calcTypeNodes(enclosingTypeNode, templateArguments);
+	}
+
+	std::vector<ParameterNode*> parameterNodes;
+	collectParameterNodes(parameterNodes);
+	auto it = parameterNodes.begin();
+	auto end = parameterNodes.end();
+	for (; it != end; ++it)
+	{
+		ParameterNode* parameterNode = *it;
+		parameterNode->m_typeName->calcTypeNodes(enclosingTypeNode, templateArguments);
+	}
+}
+
+void MethodNode::checkSemantic(TemplateArguments* templateArguments)
+{
+	assert(snt_class == m_enclosing->m_nodeType);
+	ClassNode* classNode = static_cast<ClassNode*>(m_enclosing);
+	if(0 != m_resultTypeName)
+	{
+		TypeNode* typeNode = m_resultTypeName->getTypeNode(templateArguments);
+		if (void_type == typeNode->getTypeCategory())
 		{
-			RaiseError_InvalidResultType(this);
+			if (0 != m_passing && (snt_keyword_new == m_passing->m_nodeType || snt_keyword_ref == m_passing->m_nodeType))
+			{
+				RaiseError_InvalidResultType(this);
+			}
 		}
-		g_sourceFileManager.useType(m_result->m_typeInfo, byValue() ? tu_by_value : tu_by_ref);
+		g_compiler.useType(typeNode, byValue() ? tu_definition : tu_declaration, m_resultTypeName);
 	}
 	if(m_override)
 	{
@@ -151,21 +175,6 @@ void MethodNode::checkSemantic()
 	size_t parameterCount = parameterNodes.size();
 	for(size_t i = 0; i < parameterCount; ++i)
 	{
-		parameterNodes[i]->checkSemantic(this);
-	}
-}
-
-void MethodNode::checkSemanticForTemplateInstance(TemplateClassInstanceNode* templateClassInstanceNode, TemplateArgumentMap* templateArguments)
-{
-	if(0 != m_result)
-	{
-		m_result->checkTypeNameForTemplateClassInstance(templateClassInstanceNode, templateArguments);
-	}
-	std::vector<ParameterNode*> parameterNodes;
-	collectParameterNodes(parameterNodes);
-	size_t parameterCount = parameterNodes.size();
-	for(size_t i = 0; i < parameterCount; ++i)
-	{
-		parameterNodes[i]->m_type->checkTypeNameForTemplateClassInstance(templateClassInstanceNode, templateArguments);
+		parameterNodes[i]->checkSemantic(this, templateArguments);
 	}
 }

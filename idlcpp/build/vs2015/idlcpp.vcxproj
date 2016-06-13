@@ -147,7 +147,7 @@
   <ItemGroup>
     <ClCompile Include="..\..\src\ClassNode.cpp" />
     <ClCompile Include="..\..\src\CommonFuncs.cpp" />
-    <ClCompile Include="..\..\src\ConfigFile.cpp" />
+    <ClCompile Include="..\..\src\Compiler.cpp" />
     <ClCompile Include="..\..\src\EnumeratorListNode.cpp" />
     <ClCompile Include="..\..\src\EnumNode.cpp" />
     <ClCompile Include="..\..\src\ErrorList.cpp" />
@@ -172,22 +172,28 @@
     <ClCompile Include="..\..\src\ProgramNode.cpp" />
     <ClCompile Include="..\..\src\PropertyNode.cpp" />
     <ClCompile Include="..\..\src\RaiseError.cpp" />
-    <ClCompile Include="..\..\src\ScopeListNode.cpp" />
+    <ClCompile Include="..\..\src\ScopeNameListNode.cpp" />
+    <ClCompile Include="..\..\src\ScopeNameNode.cpp" />
     <ClCompile Include="..\..\src\SourceFile.cpp" />
     <ClCompile Include="..\..\src\SourceFileGenerator.cpp" />
     <ClCompile Include="..\..\src\SyntaxNodeImpl.cpp" />
+    <ClCompile Include="..\..\src\TemplateArguments.cpp" />
     <ClCompile Include="..\..\src\TemplateClassInstanceNode.cpp" />
     <ClCompile Include="..\..\src\TemplateParameterListNode.cpp" />
     <ClCompile Include="..\..\src\TemplateParametersNode.cpp" />
     <ClCompile Include="..\..\src\TokenNode.cpp" />
-    <ClCompile Include="..\..\src\TypeAliasNode.cpp" />
+    <ClCompile Include="..\..\src\TypedefNode.cpp" />
+    <ClCompile Include="..\..\src\TypeDeclarationNode.cpp" />
     <ClCompile Include="..\..\src\TypeNameListNode.cpp" />
     <ClCompile Include="..\..\src\TypeNameNode.cpp" />
+    <ClCompile Include="..\..\src\TypeTree.cpp" />
+    <ClCompile Include="..\..\src\Utility.cpp" />
     <ClCompile Include="..\..\src\yyfuncs.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\ClassNode.h" />
     <ClInclude Include="..\..\src\CommonFuncs.h" />
+    <ClInclude Include="..\..\src\Compiler.h" />
     <ClInclude Include="..\..\src\EnumeratorListNode.h" />
     <ClInclude Include="..\..\src\EnumNode.h" />
     <ClInclude Include="..\..\src\ErrorList.h" />
@@ -211,20 +217,24 @@
     <ClInclude Include="..\..\src\ProgramNode.h" />
     <ClInclude Include="..\..\src\PropertyNode.h" />
     <ClInclude Include="..\..\src\RaiseError.h" />
-    <ClInclude Include="..\..\src\ScopeListNode.h" />
+    <ClInclude Include="..\..\src\ScopeNameListNode.h" />
+    <ClInclude Include="..\..\src\ScopeNameNode.h" />
     <ClInclude Include="..\..\src\ScopeNode.h" />
     <ClInclude Include="..\..\src\SourceFile.h" />
     <ClInclude Include="..\..\src\SourceFileGenerator.h" />
     <ClInclude Include="..\..\src\SyntaxNodeImpl.h" />
     <ClInclude Include="..\..\src\targetver.h" />
-    <ClInclude Include="..\..\src\TempBuffer.h" />
+    <ClInclude Include="..\..\src\TemplateArguments.h" />
     <ClInclude Include="..\..\src\TemplateClassInstanceNode.h" />
     <ClInclude Include="..\..\src\TemplateParameterListNode.h" />
     <ClInclude Include="..\..\src\TemplateParametersNode.h" />
     <ClInclude Include="..\..\src\TokenNode.h" />
-    <ClInclude Include="..\..\src\TypeAliasNode.h" />
+    <ClInclude Include="..\..\src\TypedefNode.h" />
+    <ClInclude Include="..\..\src\TypeDeclarationNode.h" />
     <ClInclude Include="..\..\src\TypeNameListNode.h" />
     <ClInclude Include="..\..\src\TypeNameNode.h" />
+    <ClInclude Include="..\..\src\TypeTree.h" />
+    <ClInclude Include="..\..\src\Utility.h" />
     <ClInclude Include="..\..\src\yyfuncs.h" />
   </ItemGroup>
   <ItemGroup>
