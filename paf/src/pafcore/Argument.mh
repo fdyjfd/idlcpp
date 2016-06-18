@@ -31,6 +31,7 @@ namespace idlcpp
 		static ::pafcore::ErrorCode Argument_get_byPtr(::pafcore::Variant* that, ::pafcore::Variant* value);
 		static ::pafcore::ErrorCode Argument_get_byRef(::pafcore::Variant* that, ::pafcore::Variant* value);
 		static ::pafcore::ErrorCode Argument_get_byValue(::pafcore::Variant* that, ::pafcore::Variant* value);
+		static ::pafcore::ErrorCode Argument_get_isConstant(::pafcore::Variant* that, ::pafcore::Variant* value);
 		static ::pafcore::ErrorCode Argument_get_type(::pafcore::Variant* that, ::pafcore::Variant* value);
 	public:
 		PAFCORE_EXPORT static __pafcore__Argument_Type* GetSingleton();

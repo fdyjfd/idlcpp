@@ -16,10 +16,10 @@ namespace pafcore
 	abstract class $PAFCORE_EXPORT ClassType(class_type) : Type
 	{
 		size_t _getMemberCount_(bool includeBaseClasses);
-		Metadata ptr _getMember_(size_t index, bool includeBaseClasses);
-		Metadata ptr _findMember_(const char ptr name, bool includeBaseClasses);
+		Metadata* _getMember_(size_t index, bool includeBaseClasses);
+		Metadata* _findMember_(const char* name, bool includeBaseClasses);
 		size_t _getBaseClassCount_();
-		Metadata ptr _getBaseClass_(size_t index);
+		Metadata* _getBaseClass_(size_t index);
 		$*
 	public:
 		struct BaseClass
@@ -36,8 +36,9 @@ namespace pafcore
 		Metadata* findMember(const char* name, bool includeBaseClasses);
 		Metadata* findClassMember(const char* name, bool includeBaseClasses);
 	public:
-		bool getBaseClassOffset_(size_t& offset, ClassType* otherType);
-		bool getBaseClassOffset(size_t& offset, ClassType* otherType);
+		bool isType(ClassType* otherType);
+		bool getClassOffset_(size_t& offset, ClassType* otherType);
+		bool getClassOffset(size_t& offset, ClassType* otherType);
 		Type* findNestedType(const char* name, bool includeBaseClasses);
 		InstanceField* findInstanceField(const char* name, bool includeBaseClasses);
 		StaticField* findStaticField(const char* name, bool includeBaseClasses);

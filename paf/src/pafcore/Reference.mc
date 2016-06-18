@@ -31,13 +31,13 @@ namespace idlcpp
 			::pafcore::InstanceProperty("refCount", GetSingleton(), Reference_get_refCount, RuntimeTypeOf<::long_t>::RuntimeType::GetSingleton(), ::pafcore::Metadata::by_value, false, 0, 0, ::pafcore::Metadata::by_value, false),
 		};
 		m_properties = s_properties;
-		m_propertyCount = array_size_of(s_properties);
+		m_propertyCount = paf_array_size_of(s_properties);
 		static Metadata* s_members[] = 
 		{
 			&s_properties[0],
 		};
 		m_members = s_members;
-		m_memberCount = array_size_of(s_members);
+		m_memberCount = paf_array_size_of(s_members);
 		::pafcore::NameSpace::GetGlobalNameSpace()->getNameSpace("pafcore")->registerMember(this);
 	}
 
@@ -48,7 +48,7 @@ namespace idlcpp
 
 	void __pafcore__Reference_Type::destroyArray(void* address)
 	{
-		delete_array(reinterpret_cast<::pafcore::RefCountObject<::pafcore::Reference>*>(address));
+		paf_delete_array(reinterpret_cast<::pafcore::RefCountObject<::pafcore::Reference>*>(address));
 	}
 
 	void __pafcore__Reference_Type::assign(void* dst, const void* src)

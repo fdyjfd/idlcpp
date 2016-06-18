@@ -26,7 +26,7 @@ void* Reference::castTo(ClassType* classType)
 {
 	size_t offset;
 	ClassType* thisType = getType();
-	if (thisType->getBaseClassOffset(offset, classType))
+	if (thisType->getClassOffset(offset, classType))
 	{
 		size_t address = getAddress();
 		return (void*)(address + offset);

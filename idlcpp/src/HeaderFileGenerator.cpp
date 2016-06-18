@@ -284,15 +284,41 @@ void HeaderFileGenerator::generateCode_Class(FILE* file, ClassNode* classNode, i
 	generateCode_Token(file, classNode->m_leftBrace, indentation);
 	writeStringToFile("\n", file);
 	writeStringToFile("public:\n", file, indentation);
+
+	std::vector<MemberNode*> memberNodes;
+	classNode->m_memberList->collectMemberNodes(memberNodes);
+	size_t memberCount = memberNodes.size();
+	for (size_t i = 0; i < memberCount; ++i)
+	{
+		char buf[512];
+		MemberNode* memberNode = memberNodes[i];
+		switch (memberNode->m_nodeType)
+		{
+		case snt_class:
+		{
+			ClassNode* nestedClassNode = static_cast<ClassNode*>(memberNode);
+			sprintf_s(buf, "%s%s;\n", g_keywordTokens[nestedClassNode->m_keyword->m_nodeType - snt_keyword_begin_output - 1],
+				nestedClassNode->m_name->m_str.c_str());
+			writeStringToFile(buf, file, indentation + 1);
+		}
+		break;
+		case snt_enum:
+		{
+			EnumNode* nestedEnumNode = static_cast<EnumNode*>(memberNode);
+			sprintf_s(buf, "%s%s;\n", g_keywordTokens[nestedEnumNode->m_keyword->m_nodeType - snt_keyword_begin_output - 1],
+				nestedEnumNode->m_name->m_str.c_str());
+			writeStringToFile(buf, file, indentation + 1);
+		}
+		break;
+		}
+	}
+
 	if (!classNode->isValueType())
 	{
 		writeStringToFile("static ::pafcore::ClassType* GetType();\n", file, indentation + 1);
 		writeStringToFile("virtual ::pafcore::ClassType* getType();\n", file, indentation + 1);
 		writeStringToFile("virtual size_t getAddress();\n", file, indentation + 1);
 	}
-	std::vector<MemberNode*> memberNodes;
-	classNode->m_memberList->collectMemberNodes(memberNodes);
-	size_t memberCount = memberNodes.size();
 	for(size_t i = 0; i < memberCount; ++i)
 	{
 		MemberNode* memberNode = memberNodes[i];

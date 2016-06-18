@@ -4,7 +4,7 @@ namespace pafcore
 {
 	abstract class $PAFCORE_EXPORT TypeAlias(type_alias) : Metadata
 	{
-		Type ptr type get;
+		Type* type get;
 		$*
 	public:
 		TypeAlias(const char* name, Type* type);

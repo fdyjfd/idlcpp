@@ -5,11 +5,12 @@
 
 BEGIN_PAFCORE
 
-Argument::Argument(const char* name, Type* type, Passing passing)
+Argument::Argument(const char* name, Type* type, Passing passing, bool constant)
 : Metadata(name)
 {
 	m_type = type;
 	m_passing = passing;
+	m_constant = constant;
 }
 
 Type* Argument::get_type()
@@ -60,6 +61,11 @@ bool Argument::get_byNewArrayPtr()
 bool Argument::get_byNewArrayRef()
 {
 	return by_new_array_ref == m_passing;
+}
+
+bool Argument::get_isConstant()
+{
+	return m_constant;
 }
 
 

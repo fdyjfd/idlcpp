@@ -4,7 +4,7 @@ namespace pafcore
 {
 	abstract class $PAFCORE_EXPORT Argument(function_argument) : Metadata
 	{
-		Type ptr type get;
+		Type* type get;
 		bool byValue get;
 		bool byRef get;
 		bool byPtr get;
@@ -14,12 +14,14 @@ namespace pafcore
 		bool byNewRef get;
 		bool byNewArrayPtr get;
 		bool byNewArrayRef get;
+		bool isConstant get;
 		$*
 	public:
-		Argument(const char* name, Type* type, Passing passing);
+		Argument(const char* name, Type* type, Passing passing, bool constant);
 	public:
 		Type* m_type;
 		Passing m_passing;
+		bool m_constant;
 		*$
 	};
 }

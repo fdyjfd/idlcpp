@@ -4,6 +4,8 @@
 #include "IdentifyNode.h"
 #include "GetterSetterNode.h"
 #include "ClassNode.h"
+#include "TypeTree.h"
+#include "RaiseError.h"
 #include "Compiler.h"
 #include <assert.h>
 
@@ -34,6 +36,11 @@ bool PropertyNode::isVirtual()
 bool PropertyNode::isAbstract()
 {
 	return (0 != m_modifier && snt_keyword_abstract == m_modifier->m_nodeType);
+}
+
+bool PropertyNode::byPtr()
+{
+	return (0 != m_passing && snt_keyword_ptr == m_passing->m_nodeType);
 }
 
 void PropertyNode::setGetter(GetterSetterNode* getter)
@@ -80,11 +87,27 @@ void PropertyNode::checkSemantic(TemplateArguments* templateArguments)
 	if(m_get)
 	{
 		TypeNode* typeNode = m_get->m_typeName->getTypeNode(templateArguments);
+		if (0 == typeNode)
+		{
+			return;
+		}
+		if (void_type == typeNode->getTypeCategory() && !byPtr())
+		{
+			RaiseError_InvalidPropertyType(m_get, true);
+		}
 		g_compiler.useType(typeNode, m_get->byValue() ? tu_definition : tu_declaration, m_get->m_typeName);
 	}
 	if(m_set)
 	{
 		TypeNode* typeNode = m_set->m_typeName->getTypeNode(templateArguments);
+		if (0 == typeNode)
+		{
+			return;
+		}
+		if (void_type == typeNode->getTypeCategory() && !byPtr())
+		{
+			RaiseError_InvalidPropertyType(m_set, false);
+		}
 		g_compiler.useType(typeNode, m_set->byValue() ? tu_definition : tu_declaration, m_set->m_typeName);
 	}
 };

@@ -6,7 +6,7 @@ namespace pafcore
 
 	abstract class $PAFCORE_EXPORT Result(function_result) : Metadata
 	{
-		Type ptr type get;
+		Type* type get;
 		bool byValue get;
 		bool byRef get;
 		bool byPtr get;

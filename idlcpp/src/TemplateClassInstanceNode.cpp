@@ -8,6 +8,7 @@
 #include "TemplateParametersNode.h"
 #include "Compiler.h"
 #include "TypeTree.h"
+#include "ErrorList.h"
 #include <assert.h>
 
 TemplateClassInstanceNode::TemplateClassInstanceNode(IdentifyNode* name, TypeNameListNode* parameterList)
@@ -107,5 +108,8 @@ void TemplateClassInstanceNode::checkSemantic(TemplateArguments* templateArgumen
 	assert(0 == templateArguments);
 	assert(m_typeNode && m_classTypeNode);
 	ClassNode* classNode = static_cast<ClassNode*>(m_classTypeNode->m_classNode);
+
+	g_errorList.setTemplateClassInstance(this);
 	classNode->checkSemantic(&m_templateArguments);
+	g_errorList.setTemplateClassInstance(0);
 }

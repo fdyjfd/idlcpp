@@ -5,7 +5,7 @@ namespace pafcore
 
 	abstract class $PAFCORE_EXPORT StaticField(static_field) : Metadata
 	{
-		Type ptr type get;
+		Type* type get;
 		size_t address get;
 		bool isConstant get;
 		bool isArray get;

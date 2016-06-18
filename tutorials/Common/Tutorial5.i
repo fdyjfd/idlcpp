@@ -9,7 +9,7 @@ namespace tutorial
 		float y;
 		Point();
 		Point(float a, float b);
-		nocode Point(const Point ref pt);
+		nocode Point(const Point& pt);
 	};
 
 	override class Shape : Reference
@@ -20,9 +20,9 @@ namespace tutorial
 
 	class ShapeManager(value_object)
 	{
-		void addShape(Shape ptr shape);
+		void addShape(Shape* shape);
 		float getTotalArea();
-		static ShapeManager ptr GetInstance();
+		static ShapeManager* GetInstance();
 		$*
 		~ShapeManager();
 	private:

@@ -107,7 +107,7 @@ pafcore::Variant* LuaToVariant(pafcore::Variant* value, lua_State *L, int index)
 			}
 			else
 			{
-				char* p = new_array<char>(len + 1);
+				char* p = paf_new_array<char>(len + 1);
 				memcpy(p, s, len + 1);
 				value->assignPrimitivePtr(RuntimeTypeOf<char>::RuntimeType::GetSingleton(), p, false, ::pafcore::Variant::by_new_array);
 			}
@@ -295,7 +295,7 @@ pafcore::ErrorCode GetNestedType(lua_State *L, pafcore::Type* nestedType)
 pafcore::ErrorCode GetInstanceField(lua_State *L, pafcore::Variant* that, pafcore::InstanceField* field)
 {
 	size_t baseOffset;
-	if(!static_cast<pafcore::ClassType*>(that->m_type)->getBaseClassOffset(baseOffset, field->m_objectType))
+	if(!static_cast<pafcore::ClassType*>(that->m_type)->getClassOffset(baseOffset, field->m_objectType))
 	{
 		return pafcore::e_invalid_type;
 	}
@@ -325,7 +325,7 @@ pafcore::ErrorCode SetInstanceField(lua_State *L, pafcore::Variant* that, pafcor
 		return pafcore::e_field_is_constant;
 	}
 	size_t baseOffset;
-	if(!static_cast<pafcore::ClassType*>(that->m_type)->getBaseClassOffset(baseOffset, field->m_objectType))
+	if(!static_cast<pafcore::ClassType*>(that->m_type)->getClassOffset(baseOffset, field->m_objectType))
 	{
 		return pafcore::e_invalid_object_type;
 	}

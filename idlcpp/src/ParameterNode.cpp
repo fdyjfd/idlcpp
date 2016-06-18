@@ -62,6 +62,10 @@ bool ParameterNode::isOutput()
 void ParameterNode::checkSemantic(MethodNode* methodNode, TemplateArguments* templateArguments)
 {
 	TypeNode* typeNode = m_typeName->getTypeNode(templateArguments);
+	if(0 == typeNode)
+	{
+		return;
+	}
 	if(void_type == typeNode->getTypeCategory())
 	{ 
 		if ((isInput() && !byPtr()) || (isOutput() && outNew()))

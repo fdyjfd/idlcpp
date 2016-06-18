@@ -5,7 +5,7 @@ namespace pafcore
 
 	abstract class $PAFCORE_EXPORT Enumerator(enumerator) : Metadata
 	{
-		Type ptr _type_ get;
+		Type* _type_ get;
 		int _value_ get;
 		$*
 	public:

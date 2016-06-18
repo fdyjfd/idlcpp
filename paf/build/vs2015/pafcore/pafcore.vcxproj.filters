@@ -259,6 +259,9 @@
     <ClCompile Include="..\..\..\src\pafcore\VoidType.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\src\pafcore\Overload.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\src\pafcore\Enumerator.h">
@@ -331,6 +334,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\src\pafcore\ClassType.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\pafcore\Overload.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

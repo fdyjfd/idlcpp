@@ -30,7 +30,7 @@
 
 const char g_strPublic[] = {"public "};
 
-void checkBaseNames(ClassNode* classNode, std::vector<TypeNameNode*>& baseTypeNameNodes, std::vector<TypeNode*>& baseTypeNodes)
+void checkBaseTypes(ClassNode* classNode, std::vector<TypeNameNode*>& baseTypeNameNodes, std::vector<TypeNode*>& baseTypeNodes)
 {
 	assert(baseTypeNameNodes.size() == baseTypeNodes.size());
 	size_t count = baseTypeNameNodes.size();
@@ -71,18 +71,19 @@ struct Overload
 {
 	IdentifyNode* methodName;
 	size_t parameterCount;
+	std::string manglingName;
 	bool operator < (const Overload& arg) const
 	{
 		int cmp = methodName->m_str.compare(arg.methodName->m_str);
-		if(cmp < 0)
+		if (cmp != 0)
 		{
-			return true;
+			return cmp < 0;
 		}
-		else if(cmp > 0)
+		if (parameterCount != arg.parameterCount)
 		{
-			return false;
+			return parameterCount < arg.parameterCount;
 		}
-		return parameterCount < arg.parameterCount;
+		return manglingName < arg.manglingName;
 	}
 };
 
@@ -123,7 +124,7 @@ bool isCopyConstructor(ClassNode* classNode, MethodNode* methodNode)
 	return false;
 }
 
-void checkMemberNames(ClassNode* classNode, std::vector<MemberNode*>& memberNodes)
+void checkMemberNames(ClassNode* classNode, std::vector<MemberNode*>& memberNodes, TemplateArguments* templateArguments)
 {
 	std::set<IdentifyNode*, CompareIdentifyPtr> methodNames;
 	std::set<IdentifyNode*, CompareIdentifyPtr> staticMethodNames;
@@ -218,6 +219,7 @@ void checkMemberNames(ClassNode* classNode, std::vector<MemberNode*>& memberNode
 						Overload overload;
 						overload.methodName = identify;
 						overload.parameterCount = methodNode->getParameterCount();
+						methodNode->calcManglingName(overload.manglingName, templateArguments);
 						if(methodNode->isStatic())
 						{
 							auto res = staticMethods.insert(overload);
@@ -264,7 +266,11 @@ void checkMemberNames(ClassNode* classNode, std::vector<MemberNode*>& memberNode
 				collisionNode = *it;
 				nameCollision = true;
 			}
-			else if((it = methodNames.find(identify)) != methodNames.end())
+			else
+			{
+				otherNames.insert(identify);
+			}	
+			if((it = methodNames.find(identify)) != methodNames.end())
 			{
 				collisionNode = *it;
 				nameCollision = true;
@@ -724,18 +730,14 @@ void ClassNode::checkSemantic(TemplateArguments* templateArguments)
 	{
 		TypeNameNode* typeNameNode = baseTypeNameNodes[i];
 		TypeNode* typeNode = typeNameNode->getTypeNode(templateArguments);
-		baseTypeNodes.push_back(typeNode);
-		if (0 == typeNode)
+		if (0 != typeNode)
 		{
-			RaiseError_InvalidTypeName(typeNameNode);
-		}
-		else
-		{
+			baseTypeNodes.push_back(typeNode);
 			g_compiler.useType(typeNode, tu_definition, typeNameNode);
 		}
 	}
 
-	checkBaseNames(this, baseTypeNameNodes, baseTypeNodes);
+	checkBaseTypes(this, baseTypeNameNodes, baseTypeNodes);
 	if (0 == baseCount)
 	{
 		if (!isValueType())
@@ -758,5 +760,5 @@ void ClassNode::checkSemantic(TemplateArguments* templateArguments)
 		MemberNode* memberNode = memberNodes[i];
 		memberNodes[i]->checkSemantic(templateArguments);
 	}
-	checkMemberNames(this, memberNodes);
+	checkMemberNames(this, memberNodes, templateArguments);
 }

@@ -2,7 +2,8 @@
 %x IFILE CODEBLOCK COMMENT
 
 %{
-
+#include <stdlib.h>
+#include <string.h>
 #include "idlcpp.y.h"
 #include "yyfuncs.h"
 
@@ -16,7 +17,6 @@ int yycolumnno = 1;
 "#import"[ \t]*\"	{BEGIN IFILE;}
 <IFILE>[^\"\n]+		{
 						{
-							int res;
 							int c;
 							while((c = input()) && c != '\n')
 							{}
@@ -75,9 +75,9 @@ int yycolumnno = 1;
 "float"			{yylval.sn = newToken(snt_keyword_float);		yycolumnno += strlen(yytext); yytokenno++; return FLOAT;}
 "double"		{yylval.sn = newToken(snt_keyword_double);		yycolumnno += strlen(yytext); yytokenno++; return DOUBLE;}
 "void"			{yylval.sn = newToken(snt_keyword_void);		yycolumnno += strlen(yytext); yytokenno++; return VOID;}
-"ref"			{yylval.sn = newToken(snt_keyword_ref);			yycolumnno += strlen(yytext); yytokenno++; return REF;}
-"ptr"			{yylval.sn = newToken(snt_keyword_ptr);			yycolumnno += strlen(yytext); yytokenno++; return PTR;}
-"new"			{yylval.sn = newToken(snt_keyword_new);			yycolumnno += strlen(yytext); yytokenno++; return NEW;}
+"&"				{yylval.sn = newToken(snt_keyword_ref);			yycolumnno += strlen(yytext); yytokenno++; return REF;}
+"*"				{yylval.sn = newToken(snt_keyword_ptr);			yycolumnno += strlen(yytext); yytokenno++; return PTR;}
+"^"				{yylval.sn = newToken(snt_keyword_new);			yycolumnno += strlen(yytext); yytokenno++; return NEW;}
 "abstract"		{yylval.sn = newToken(snt_keyword_abstract);	yycolumnno += strlen(yytext); yytokenno++; return ABSTRACT;}
 "namespace"		{yylval.sn = newToken(snt_keyword_namespace);	yycolumnno += strlen(yytext); yytokenno++; return NAMESPACE;}
 "enum"			{yylval.sn = newToken(snt_keyword_enum);		yycolumnno += strlen(yytext); yytokenno++; return ENUM;}
@@ -100,7 +100,7 @@ int yycolumnno = 1;
 [ \t]							{++yycolumnno;}
 "\n"							{newCodeBlock(yytext); yycolumnno = 1;}
 
-[^ ,;:{}\[\]<>()\$\"/\t\n]*		{invalidString(yytext); yycolumnno += strlen(yytext);}
+[^ ,;:{}\[\]<>()&*^\$\"/\t\n]*		{invalidString(yytext); yycolumnno += strlen(yytext);}
 .								{invalidString(yytext); yycolumnno += strlen(yytext);}
 
 %%

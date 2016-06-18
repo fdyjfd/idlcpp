@@ -3,9 +3,10 @@
 
 #pragma once
 
-#include "./Type.h"
 #include "./Typedef.h"
-namespace pafcore{ class Metadata; }
+#include "./Reference.h"
+#include "./Metadata.h"
+#include "./Type.h"
 
 namespace pafcore
 {
@@ -48,8 +49,9 @@ namespace pafcore
 		Metadata* findMember(const char* name, bool includeBaseClasses);
 		Metadata* findClassMember(const char* name, bool includeBaseClasses);
 	public:
-		bool getBaseClassOffset_(size_t& offset, ClassType* otherType);
-		bool getBaseClassOffset(size_t& offset, ClassType* otherType);
+		bool isType(ClassType* otherType);
+		bool getClassOffset_(size_t& offset, ClassType* otherType);
+		bool getClassOffset(size_t& offset, ClassType* otherType);
 		Type* findNestedType(const char* name, bool includeBaseClasses);
 		InstanceField* findInstanceField(const char* name, bool includeBaseClasses);
 		StaticField* findStaticField(const char* name, bool includeBaseClasses);

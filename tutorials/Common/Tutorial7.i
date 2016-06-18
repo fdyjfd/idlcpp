@@ -5,8 +5,8 @@ namespace tutorial
 	struct Ray3<T>
 	{
 		Ray3();
-		Ray3(const Vector3<T> ref origin, const Vector3<T> ref direction);
-		void getPoint(Vector3<T> ref point, T t) const;
+		Ray3(const Vector3<T>& origin, const Vector3<T>& direction);
+		void getPoint(Vector3<T>& point, T t) const;
 		Vector3<T> getPoint(T t) const;
 		Vector3<T> m_origin;
 		Vector3<T> m_direction;

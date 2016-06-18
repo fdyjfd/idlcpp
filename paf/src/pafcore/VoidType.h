@@ -3,8 +3,10 @@
 
 #pragma once
 
-#include "./Type.h"
 #include "./Typedef.h"
+#include "./Reference.h"
+#include "./Metadata.h"
+#include "./Type.h"
 
 namespace pafcore
 {

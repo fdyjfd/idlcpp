@@ -3,6 +3,7 @@
 #include "ScopeNode.h"
 #include "ClassNode.h"
 #include "NamespaceNode.h"
+#include "ProgramNode.h"
 #include "TypedefNode.h"
 #include "TypeTree.h"
 #include "Options.h"
@@ -114,6 +115,19 @@ TypeNode* MemberNode::getTypeNode()
 {
 	assert(false);
 	return 0;
+}
+
+SourceFile* MemberNode::getSourceFile()
+{
+	MemberNode* memberNode = this;
+	ScopeNode* enclosing = m_enclosing;
+	while (enclosing)
+	{
+		memberNode = enclosing;
+		enclosing = enclosing->m_enclosing;
+	}
+	assert(snt_namespace == memberNode->m_nodeType);
+	return static_cast<ProgramNode*>(memberNode)->m_sourceFile;
 }
 
 void MemberNode::collectTypes(TypeNode* enclosingTypeNode)

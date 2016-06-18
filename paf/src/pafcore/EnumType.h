@@ -3,8 +3,10 @@
 
 #pragma once
 
-#include "./Type.h"
 #include "./Typedef.h"
+#include "./Reference.h"
+#include "./Metadata.h"
+#include "./Type.h"
 namespace pafcore{ class Enumerator; }
 
 
@@ -30,7 +32,7 @@ namespace pafcore
 	public:
 		EnumType(const char* name);
 	public:
-		Enumerator* findEnumerator(const char * name);
+		Enumerator* findEnumerator(const char* name);
 		Metadata* findMember(const char* name);
 	public:
 		static pafcore::ErrorCode Enum_get__name_(pafcore::Variant* that, pafcore::Variant* value);

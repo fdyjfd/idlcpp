@@ -3,9 +3,10 @@
 
 #pragma once
 
-#include "./Type.h"
 #include "./Typedef.h"
-namespace pafcore{ class Metadata; }
+#include "./Reference.h"
+#include "./Metadata.h"
+#include "./Type.h"
 
 
 #include "Variant.h"
@@ -42,6 +43,7 @@ namespace pafcore
 		float_type,
 		double_type,
 		long_double_type,
+		primitive_type_count,
 	};	
 	
 
@@ -342,7 +344,7 @@ namespace pafcore
 			static Result s_Clone_1_Result(this, false, Result::by_new);
 			static Argument s_Clone_1_Arguments[] = 
 			{
-				Argument("value", this, Argument::by_ref),
+				Argument("value", this, Argument::by_value, false),
 			};
 			static ::pafcore::Overload s_Clone_Overloads[] = 
 			{
@@ -353,7 +355,7 @@ namespace pafcore
 			static Result s_New_1_Result(this, false, Result::by_new);
 			static Argument s_New_1_Arguments[] = 
 			{
-				Argument("value", this, Argument::by_value),
+				Argument("value", this, Argument::by_value, false),
 			};
 
 			static Overload s_New_Overloads[] =
@@ -365,7 +367,7 @@ namespace pafcore
 			static Result s_NewArray_1_Result(this, false, Result::by_new_array);
 			static Argument s_NewArray_1_Arguments[] = 
 			{
-				Argument("count", RuntimeTypeOf<size_t>::RuntimeType::GetSingleton(), Argument::by_value),
+				Argument("count", RuntimeTypeOf<size_t>::RuntimeType::GetSingleton(), Argument::by_value, false),
 			};
 			static Overload s_NewArray_Overloads[] =
 			{
@@ -379,7 +381,7 @@ namespace pafcore
 			};
 
 			m_staticMethods = s_staticMethods;
-			m_staticMethodCount = array_size_of(s_staticMethods);
+			m_staticMethodCount = paf_array_size_of(s_staticMethods);
 
 			NameSpace::GetGlobalNameSpace()->registerMember(this);
 		}
@@ -423,15 +425,15 @@ namespace pafcore
 				{
 					return e_invalid_arg_type_1;
 				}
-				T* ptr = new_array<T>(count);
-				result->assignArray(RuntimeTypeOf<T>::RuntimeType::GetSingleton(), ptr, count, false, Variant::by_new_array);
+				T* p = paf_new_array<T>(count);
+				result->assignArray(RuntimeTypeOf<T>::RuntimeType::GetSingleton(), p, count, false, Variant::by_new_array);
 				return s_ok;
 			}
 			return e_invalid_arg_num;
 		}
 		virtual void destroyArray(void* address)
 		{
-			delete_array((T*)address);
+			paf_delete_array((T*)address);
 		}
 		virtual bool castTo(void* dst, Type* otherType, const void* src)
 		{

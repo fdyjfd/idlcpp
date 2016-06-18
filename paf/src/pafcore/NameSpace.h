@@ -3,8 +3,9 @@
 
 #pragma once
 
-#include "./Metadata.h"
 #include "./Typedef.h"
+#include "./Reference.h"
+#include "./Metadata.h"
 
 namespace pafcore
 {

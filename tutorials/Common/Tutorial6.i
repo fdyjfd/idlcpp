@@ -5,9 +5,9 @@ namespace tutorial
 	struct Vector3<N>
 	{
 		Vector3();
-		Vector3(const Vector3 ref v);
+		Vector3(const Vector3& v);
 		Vector3(N a, N b, N c);
-		Vector3(const N ptr p);
+		Vector3(const N* p);
 		N getLength();
 		N length get;
 		N lengthSquare get;

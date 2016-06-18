@@ -12,14 +12,14 @@ namespace pafcore
 	abstract class $PAFCORE_EXPORT EnumType(enum_type) : Type
 	{
 		size_t _getEnumeratorCount_();
-		Enumerator ptr _getEnumerator_(size_t index);
-		Enumerator ptr _getEnumeratorByValue_(int value);
-		Enumerator ptr _getEnumeratorByName_(const char ptr name);
+		Enumerator* _getEnumerator_(size_t index);
+		Enumerator* _getEnumeratorByValue_(int value);
+		Enumerator* _getEnumeratorByName_(const char* name);
 		$*
 	public:
 		EnumType(const char* name);
 	public:
-		Enumerator* findEnumerator(const char * name);
+		Enumerator* findEnumerator(const char* name);
 		Metadata* findMember(const char* name);
 	public:
 		static pafcore::ErrorCode Enum_get__name_(pafcore::Variant* that, pafcore::Variant* value);

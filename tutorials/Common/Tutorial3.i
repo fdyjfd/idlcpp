@@ -7,7 +7,7 @@ namespace tutorial
 		float y;
 		nocode Point();
 		nocode Point(float a, float b);
-		nocode Point(const Point ref pt);
+		nocode Point(const Point& pt);
 
 		$*
 		Point()
@@ -29,7 +29,7 @@ namespace tutorial
 	struct Triangle : Shape
 	{
 		Point m_vertices[$3];
-		nocode static Triangle new New();
+		nocode static Triangle^ New();
 		$*
 			virtual float getArea()
 		{

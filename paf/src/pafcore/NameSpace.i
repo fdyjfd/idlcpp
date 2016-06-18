@@ -6,8 +6,8 @@ namespace pafcore
 	abstract class $PAFCORE_EXPORT NameSpace(name_space) : Metadata
 	{
 		size_t _getMemberCount_();
-		Metadata ptr _getMember_(size_t index);
-		Metadata ptr _findMember_(const char ptr name);
+		Metadata* _getMember_(size_t index);
+		Metadata* _findMember_(const char* name);
 		$*
 	private:
 		class PAFCORE_EXPORT MetadataTrieTree

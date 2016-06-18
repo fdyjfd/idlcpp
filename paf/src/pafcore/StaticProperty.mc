@@ -3,6 +3,8 @@
 
 #pragma once
 
+#include "./Typedef.mh"
+#include "./Reference.mh"
 #include "./Metadata.mh"
 #include "./Type.mh"
 #include "StaticProperty.mh"
@@ -29,10 +31,10 @@ namespace idlcpp
 		m_size = sizeof(::pafcore::StaticProperty);
 		static BaseClass s_baseClasses[] =
 		{
-			{RuntimeTypeOf<::pafcore::Metadata>::RuntimeType::GetSingleton(), base_offset_of(::pafcore::StaticProperty, ::pafcore::Metadata)},
+			{RuntimeTypeOf<::pafcore::Metadata>::RuntimeType::GetSingleton(), paf_base_offset_of(::pafcore::StaticProperty, ::pafcore::Metadata)},
 		};
 		m_baseClasses = s_baseClasses;
-		m_baseClassCount = array_size_of(s_baseClasses);
+		m_baseClassCount = paf_array_size_of(s_baseClasses);
 		static ::pafcore::InstanceProperty s_properties[] = 
 		{
 			::pafcore::InstanceProperty("getterByPtr", GetSingleton(), StaticProperty_get_getterByPtr, RuntimeTypeOf<bool>::RuntimeType::GetSingleton(), ::pafcore::Metadata::by_value, false, 0, 0, ::pafcore::Metadata::by_value, false),
@@ -49,7 +51,7 @@ namespace idlcpp
 			::pafcore::InstanceProperty("setterType", GetSingleton(), StaticProperty_get_setterType, RuntimeTypeOf<::pafcore::Type>::RuntimeType::GetSingleton(), ::pafcore::Metadata::by_ptr, false, 0, 0, ::pafcore::Metadata::by_value, false),
 		};
 		m_properties = s_properties;
-		m_propertyCount = array_size_of(s_properties);
+		m_propertyCount = paf_array_size_of(s_properties);
 		static Metadata* s_members[] = 
 		{
 			&s_properties[0],
@@ -66,7 +68,7 @@ namespace idlcpp
 			&s_properties[11],
 		};
 		m_members = s_members;
-		m_memberCount = array_size_of(s_members);
+		m_memberCount = paf_array_size_of(s_members);
 		::pafcore::NameSpace::GetGlobalNameSpace()->getNameSpace("pafcore")->registerMember(this);
 	}
 
@@ -77,7 +79,7 @@ namespace idlcpp
 
 	void __pafcore__StaticProperty_Type::destroyArray(void* address)
 	{
-		delete_array(reinterpret_cast<::pafcore::RefCountObject<::pafcore::StaticProperty>*>(address));
+		paf_delete_array(reinterpret_cast<::pafcore::RefCountObject<::pafcore::StaticProperty>*>(address));
 	}
 
 	void __pafcore__StaticProperty_Type::assign(void* dst, const void* src)

@@ -30,6 +30,10 @@ enum ErrorCode
 	semantic_error_base_redeclared,
 	semantic_error_invalid_package_name,
 	semantic_error_invalid_type_name,
+	semantic_error_invalid_parameter,
+	semantic_error_invalid_result,
+	semantic_error_invalid_field,
+	semantic_error_invalid_property,
 	semantic_error_invalid_class_template_name,
 	semantic_error_missing_template_argument_list,
 	semantic_error_too_few_template_arguments,
@@ -41,6 +45,7 @@ enum ErrorCode
 	semantic_error_template_class_not_instantiton,
 	semantic_error_template_interface_not_supported,
 	semantic_error_missing_reference_base_type,
+	semantic_error_template_class_instance_internal,
 };
 
 typedef enum ErrorCode ErrorCode;
@@ -48,7 +53,6 @@ typedef enum ErrorCode ErrorCode;
 void ErrorList_AddItem(const char* fileName, int lineNo, int columnNo, ErrorCode errorCode, const char* errorText);
 void ErrorList_AddItem_CurrentFile(ErrorCode errorCode, const char* errorText);
 void ErrorList_AddItem_CurrentFile(int lineNo, int columnNo, ErrorCode errorCode, const char* errorText);
-void ErrorList_Enable(bool b);
 size_t ErrorList_ErrorCount();
 void ErrorList_Output();
 //
@@ -62,6 +66,7 @@ void ErrorList_Output();
 #include <string>
 
 
+struct TemplateClassInstanceNode;
 class ErrorList
 {
 public:
@@ -76,11 +81,16 @@ public:
 public:
 	ErrorList();
 	void addItem(const char* fileName, int lineNo, int columnNo, ErrorCode errorCode, const char* errorText);
+	void setTemplateClassInstance(TemplateClassInstanceNode* templateClassInstanceNode);
+private:
+	void addItem_(const char* fileName, int lineNo, int columnNo, ErrorCode errorCode, const char* errorText);
 public:
 	std::set<std::string> m_fileNames;
 	typedef std::vector<ErrorInfo> ErrorInfoContainer;
 	ErrorInfoContainer m_errorInfos;
-	bool m_enabled;
+	TemplateClassInstanceNode* m_templateClassInstanceNode;
 };
+
+extern ErrorList g_errorList;
 
 #endif

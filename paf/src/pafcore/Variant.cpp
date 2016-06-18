@@ -323,7 +323,7 @@ bool Variant::castToValuePtr(Type* dstType, void** dst) const
 	if(m_type->isValue())
 	{
 		size_t offset;
-		if(static_cast<ClassType*>(m_type)->getBaseClassOffset(offset, static_cast<ClassType*>(dstType)))
+		if(static_cast<ClassType*>(m_type)->getClassOffset(offset, static_cast<ClassType*>(dstType)))
 		{
 			*dst = (void*)((size_t)m_pointer + offset);
 			return true;
@@ -343,7 +343,7 @@ bool Variant::castToReferencePtr(Type* dstType, void** dst) const
 	if(m_type->isReference())
 	{
 		size_t offset;
-		if(static_cast<ClassType*>(m_type)->getBaseClassOffset(offset, static_cast<ClassType*>(dstType)))
+		if(static_cast<ClassType*>(m_type)->getClassOffset(offset, static_cast<ClassType*>(dstType)))
 		{
 			*(size_t*)dst = (size_t)m_pointer + offset;
 			return true;
@@ -373,18 +373,10 @@ void Variant::reinterpretCastToPtr(Variant& var, Type* dstType) const
 	assert(var.isNull() && 0 == var.m_arraySize);
 	assert(dstType && dstType->m_size);
 	var.m_type = dstType;
-	//if (m_pointer == m_primitiveValue)
-	//{
-	//	*(size_t*)&var.m_pointer = *(size_t*)m_primitiveValue;
-	//	var.m_constant = false;
-	//}
-	//else
-	{
-		var.m_pointer = m_pointer;
-		var.m_constant = m_constant;
-		size_t size = m_type->m_size *(0 == m_arraySize ? 1 : m_arraySize);
-		var.m_arraySize = size / dstType->m_size;
-	}
+	var.m_pointer = m_pointer;
+	var.m_constant = m_constant;
+	size_t size = m_type->m_size *(0 == m_arraySize ? 1 : m_arraySize);
+	var.m_arraySize = size / dstType->m_size;
 	var.m_semantic = by_ptr;
 }
 

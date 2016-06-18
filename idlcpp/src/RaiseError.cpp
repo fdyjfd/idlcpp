@@ -4,8 +4,11 @@
 #include "TypeNameNode.h"
 #include "ParameterNode.h"
 #include "MethodNode.h"
+#include "GetterSetterNode.h"
+#include "FieldNode.h"
 #include "ScopeNameListNode.h"
 #include "ScopeNameNode.h"
+
 #include <assert.h>
 
 const size_t error_info_buffer_size = 512;
@@ -80,9 +83,9 @@ void RaiseError_InvalidParameterType(ParameterNode* node)
 		}
 	}
 	TokenNode* tokenNode = typeName->m_scopeNameList ? typeName->m_scopeNameList->m_scopeName->m_name : typeName->m_keyword;
-	sprintf_s(buf, "\'%s %s %s\' : is an invalid type", str.c_str(), strOut, strPassing);
+	sprintf_s(buf, "\'%s %s %s\' : is not a valid type as paramter", str.c_str(), strOut, strPassing);
 	ErrorList_AddItem_CurrentFile(tokenNode->m_lineNo,
-		tokenNode->m_columnNo, semantic_error_invalid_type_name, buf);
+		tokenNode->m_columnNo, semantic_error_invalid_parameter, buf);
 }
 
 void RaiseError_InvalidResultType(MethodNode* node)
@@ -112,7 +115,45 @@ void RaiseError_InvalidResultType(MethodNode* node)
 	TokenNode* tokenNode = result->m_scopeNameList ? result->m_scopeNameList->m_scopeName->m_name : result->m_keyword;
 	sprintf_s(buf, "\'%s %s\' : can not be a result type", str.c_str(), strPassing);
 	ErrorList_AddItem_CurrentFile(tokenNode->m_lineNo,
-		tokenNode->m_columnNo, semantic_error_invalid_type_name, buf);
+		tokenNode->m_columnNo, semantic_error_invalid_result, buf);
+}
+
+void RaiseError_InvalidFieldType(FieldNode* node)
+{
+	char buf[error_info_buffer_size];
+	std::string str;
+	node->m_typeName->getString(str);
+
+	TokenNode* tokenNode = node->m_typeName->m_scopeNameList ? node->m_typeName->m_scopeNameList->m_scopeName->m_name : node->m_typeName->m_keyword;
+	sprintf_s(buf, "\'%s\' : can not be a field type", str.c_str());
+	ErrorList_AddItem_CurrentFile(tokenNode->m_lineNo,
+		tokenNode->m_columnNo, semantic_error_invalid_field, buf);
+}
+
+void RaiseError_InvalidPropertyType(GetterSetterNode* node, bool getter)
+{
+	TokenNode* passing = node->m_passing;
+	char buf[error_info_buffer_size];
+	std::string str;
+	node->m_typeName->getString(str);
+
+	const char* strPassing = "";
+	if (passing)
+	{
+		switch (passing->m_nodeType)
+		{
+		case snt_keyword_ptr:
+			strPassing = "ptr";
+			break;
+		case snt_keyword_ref:
+			strPassing = "ref";
+			break;
+		}
+	}
+	TokenNode* tokenNode = node->m_typeName->m_scopeNameList ? node->m_typeName->m_scopeNameList->m_scopeName->m_name : node->m_typeName->m_keyword;
+	sprintf_s(buf, "\'%s %s\' : can not be a property %s type", str.c_str(), strPassing, getter ? "getter" : "setter");
+	ErrorList_AddItem_CurrentFile(tokenNode->m_lineNo,
+		tokenNode->m_columnNo, semantic_error_invalid_property, buf);
 }
 
 void RaiseError_InvalidClassTemplateName(IdentifyNode* node)

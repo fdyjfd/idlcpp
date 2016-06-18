@@ -14,6 +14,7 @@ struct TypeNameNode;
 struct TypeNode;
 struct TemplateArguments;
 enum TypeCategory;
+class SourceFile;
 
 enum MemberFilter
 {
@@ -47,6 +48,7 @@ public:
 	bool isTemplateClass();
 	bool isTypedef();
 	void getFullName(std::string& fullName, TemplateArguments* templateArguments);
+	SourceFile* getSourceFile();
 	virtual TypeNode* getTypeNode();
 	virtual void getLocalName(std::string& name, TemplateArguments* templateArguments);
 	virtual void collectTypes(TypeNode* enclosingTypeNode);

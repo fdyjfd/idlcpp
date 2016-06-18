@@ -11,22 +11,22 @@
 #define BEGIN_PAFCORE namespace pafcore {
 #define END_PAFCORE }
 
-#define array_size_of(a)	(sizeof(a)/sizeof(a[0]))
-#define field_size_of(s, m)	sizeof(((s*)0)->m)
-#define field_array_size_of(s, m)	(sizeof(((s*)0)->m)/sizeof(((s*)0)->m[0]))
-#define base_offset_of(d, b) (reinterpret_cast<ptrdiff_t>(static_cast<b*>(reinterpret_cast<d*>(1))) - 1)
-
+#define paf_array_size_of(a)	(sizeof(a)/sizeof(a[0]))
+#define paf_field_size_of(s, m)	sizeof(((s*)0)->m)
+#define paf_field_array_size_of(s, m)	(sizeof(((s*)0)->m)/sizeof(((s*)0)->m[0]))
+#define paf_base_offset_of(d, b) (reinterpret_cast<ptrdiff_t>(static_cast<b*>(reinterpret_cast<d*>(1))) - 1)
+#define paf_verify
 #define AUTO_NEW_ARRAY_SIZE
 
 #ifdef AUTO_NEW_ARRAY_SIZE
 
-inline size_t new_array_size_of(void* p)
+inline size_t paf_new_array_size_of(void* p)
 {
 	return *((size_t*)p - 1);
 }
 
 template<typename T>
-inline T* new_array(size_t count)
+inline T* paf_new_array(size_t count)
 {
 	size_t* p = (size_t*)malloc(sizeof(T)*count + sizeof(size_t));
 	if(0 != p)
@@ -39,7 +39,7 @@ inline T* new_array(size_t count)
 }
 
 template<typename T>
-inline void delete_array(T* p)
+inline void paf_delete_array(T* p)
 {
 	if(0 != p)
 	{
@@ -55,19 +55,19 @@ inline void delete_array(T* p)
 }
 #else
 
-inline size_t new_array_size_of(void* p)
+inline size_t paf_new_array_size_of(void* p)
 {
 	return 1;
 }
 
 template<typename T>
-inline T* new_array(size_t count)
+inline T* paf_new_array(size_t count)
 {
 	return new T[count];
 }
 
 template<typename T>
-inline void delete_array(T* p)
+inline void paf_delete_array(T* p)
 {
 	delete []p;
 }
@@ -98,6 +98,8 @@ enum ErrorCode
 	e_invalid_field_type,
 	e_invalid_property_type,
 	e_invalid_arg_num,
+	e_no_match_overload,
+	e_ambiguous_overload,
 	e_invalid_this_type,
 	e_invalid_arg_type_1,
 	e_invalid_arg_type_2,
@@ -146,6 +148,15 @@ enum ErrorCode
 extern const char* g_errorStrings[];
 
 PAFCORE_EXPORT const char* ErrorCodeToString(ErrorCode errorCode);
+
+enum ArgumentMatch
+{
+	no_match,
+	type_conversion, 
+	type_promotion,
+	const_transformation,
+	exact_match,
+};
 
 
 END_PAFCORE

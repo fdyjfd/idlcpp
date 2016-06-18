@@ -3,9 +3,11 @@
 
 #pragma once
 
+#include "./Typedef.h"
+#include "./Reference.h"
 #include "./Metadata.h"
+#include "./Type.h"
 namespace pafcore{ class ClassType; }
-namespace pafcore{ class Type; }
 
 namespace pafcore
 {

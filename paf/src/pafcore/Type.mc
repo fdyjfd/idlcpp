@@ -3,8 +3,9 @@
 
 #pragma once
 
-#include "./Metadata.mh"
 #include "./Typedef.mh"
+#include "./Reference.mh"
+#include "./Metadata.mh"
 #include "Type.mh"
 #include "AutoRun.h"
 #include "NameSpace.h"
@@ -29,22 +30,22 @@ namespace idlcpp
 		m_size = sizeof(::pafcore::Type);
 		static BaseClass s_baseClasses[] =
 		{
-			{RuntimeTypeOf<::pafcore::Metadata>::RuntimeType::GetSingleton(), base_offset_of(::pafcore::Type, ::pafcore::Metadata)},
+			{RuntimeTypeOf<::pafcore::Metadata>::RuntimeType::GetSingleton(), paf_base_offset_of(::pafcore::Type, ::pafcore::Metadata)},
 		};
 		m_baseClasses = s_baseClasses;
-		m_baseClassCount = array_size_of(s_baseClasses);
+		m_baseClassCount = paf_array_size_of(s_baseClasses);
 		static ::pafcore::InstanceProperty s_properties[] = 
 		{
 			::pafcore::InstanceProperty("_size_", GetSingleton(), Type_get__size_, RuntimeTypeOf<::size_t>::RuntimeType::GetSingleton(), ::pafcore::Metadata::by_value, false, 0, 0, ::pafcore::Metadata::by_value, false),
 		};
 		m_properties = s_properties;
-		m_propertyCount = array_size_of(s_properties);
+		m_propertyCount = paf_array_size_of(s_properties);
 		static Metadata* s_members[] = 
 		{
 			&s_properties[0],
 		};
 		m_members = s_members;
-		m_memberCount = array_size_of(s_members);
+		m_memberCount = paf_array_size_of(s_members);
 		::pafcore::NameSpace::GetGlobalNameSpace()->getNameSpace("pafcore")->registerMember(this);
 	}
 
@@ -55,7 +56,7 @@ namespace idlcpp
 
 	void __pafcore__Type_Type::destroyArray(void* address)
 	{
-		delete_array(reinterpret_cast<::pafcore::RefCountObject<::pafcore::Type>*>(address));
+		paf_delete_array(reinterpret_cast<::pafcore::RefCountObject<::pafcore::Type>*>(address));
 	}
 
 	void __pafcore__Type_Type::assign(void* dst, const void* src)

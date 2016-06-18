@@ -123,6 +123,7 @@ void Compiler::attachSyntaxTree(ProgramNode* programNode)
 {
 	assert(0 != m_currentSourceFile && 0 == m_currentSourceFile->m_syntaxTree);
 	m_currentSourceFile->m_syntaxTree = programNode;
+	programNode->m_sourceFile = m_currentSourceFile;
 }
 
 void CollectSourceFiles(std::vector<SourceFile*>& sourceFiles, SourceFile* sourceFile)
@@ -152,11 +153,42 @@ void Compiler::collectTypes()
 
 void Compiler::checkTypeNames()
 {
-	if (0 != m_mainSourceFile && 0 != m_mainSourceFile->m_syntaxTree)
+	std::vector<SourceFile*> sourceFiles;
+	CollectSourceFiles(sourceFiles, m_mainSourceFile);
+	size_t count = sourceFiles.size();
+	for (size_t i = 0; i < count; ++i)
 	{
-		m_currentSourceFile = m_mainSourceFile;
-		m_mainSourceFile->m_syntaxTree->checkTypeNames(0, 0);
+		if (0 != sourceFiles[i]->m_syntaxTree)
+		{
+			m_currentSourceFile = sourceFiles[i];
+			m_currentSourceFile->m_syntaxTree->checkTypeNames(0, 0);
+		}
 	}
+	//if (0 != m_mainSourceFile && 0 != m_mainSourceFile->m_syntaxTree)
+	//{
+	//	m_currentSourceFile = m_mainSourceFile;
+	//	m_mainSourceFile->m_syntaxTree->checkTypeNames(0, 0);
+	//}
+}
+
+void Compiler::checkSemantic()
+{
+	std::vector<SourceFile*> sourceFiles;
+	CollectSourceFiles(sourceFiles, m_mainSourceFile);
+	size_t count = sourceFiles.size();
+	for (size_t i = 0; i < count; ++i)
+	{
+		if (0 != sourceFiles[i]->m_syntaxTree)
+		{
+			m_currentSourceFile = sourceFiles[i];
+			m_currentSourceFile->m_syntaxTree->checkSemantic(0);
+		}
+	}
+	//if (0 != m_mainSourceFile && 0 != m_mainSourceFile->m_syntaxTree)
+	//{
+	//	m_currentSourceFile = m_mainSourceFile;
+	//	m_mainSourceFile->m_syntaxTree->checkSemantic(0);
+	//}
 }
 
 void Compiler::extendInternalCode()
@@ -168,14 +200,6 @@ void Compiler::extendInternalCode()
 	}
 }
 
-void Compiler::checkSemantic()
-{
-	if (0 != m_mainSourceFile && 0 != m_mainSourceFile->m_syntaxTree)
-	{
-		m_currentSourceFile = m_mainSourceFile;
-		m_mainSourceFile->m_syntaxTree->checkSemantic(0);
-	}
-}
 
 void Compiler::useType(TypeNode* typeNode, TypeUsage usage, TypeNameNode* typeNameNode)
 {
@@ -218,7 +242,7 @@ void Compiler::outputUsedTypes(FILE* file, SourceFile* sourceFile)
 		TypeNode* typeNode = it->typeNode;
 		if (typeNode->m_sourceFile != sourceFile)
 		{
-			if ((it->usage & tu_definition))
+			if ((it->usage & tu_definition) || !typeNode->getEnclosing()->isNamespace())
 			{
 				if (std::find(sourceFiles.begin(), sourceFiles.end(), typeNode->m_sourceFile)
 					== sourceFiles.end())
@@ -236,7 +260,7 @@ void Compiler::outputUsedTypes(FILE* file, SourceFile* sourceFile)
 		}
 		else
 		{
-			if (it->tokenNo < typeNode->m_identifyNode->m_tokenNo)
+			if (it->tokenNo < typeNode->m_identifyNode->m_tokenNo && typeNode->getEnclosing()->isNamespace())
 			{
 				if (std::find(typeNodes.begin(), typeNodes.end(), typeNode) == typeNodes.end())
 				{

@@ -15,6 +15,7 @@ const char g_pragmaOnce[] = {"#pragma once\n\n"};
 ProgramNode::ProgramNode(MemberListNode* memberList)
 : NamespaceNode(0, 0, 0, memberList, 0)
 {
+	m_sourceFile = 0;
 }
 
 void ProgramNode::getLocalName(std::string& name, TemplateArguments* templateArguments)

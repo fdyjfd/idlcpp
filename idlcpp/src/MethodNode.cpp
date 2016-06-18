@@ -29,6 +29,7 @@ MethodNode::MethodNode(IdentifyNode* name, TokenNode* leftParenthesis, Parameter
 	m_semicolon = semicolon;
 	m_resultArray = false;
 	m_override = false;
+	m_parameterCount = size_t(-1);
 }
 
 bool MethodNode::isStatic()
@@ -73,16 +74,20 @@ bool MethodNode::byNew()
 	return (0 != m_passing && snt_keyword_new == m_passing->m_nodeType);
 }
 
-size_t MethodNode::getParameterCount()
+size_t MethodNode::getParameterCount() const
 {
-	size_t res = 0;
-	ParameterListNode* list = m_parameterList;
-	while(0 != list)
+	if (size_t(-1) == m_parameterCount)
 	{
-		++res;
-		list = list->m_parameterList;
+		size_t res = 0;
+		ParameterListNode* list = m_parameterList;
+		while(0 != list)
+		{
+			++res;
+			list = list->m_parameterList;
+		}
+		m_parameterCount = res;
 	}
-	return res;
+	return m_parameterCount;
 }
 
 void MethodNode::collectParameterNodes(std::vector<std::pair<TokenNode*, ParameterNode*>>& parameterNodes)
@@ -126,6 +131,50 @@ void checkParameterNames(std::vector<ParameterNode*>& parameterNodes)
 	}
 }
 
+void MethodNode::calcManglingName(std::string& name, TemplateArguments* templateArguments)
+{
+	if (isStatic())
+	{
+		name = "";
+	}
+	else
+	{
+		if (isConstant())
+		{
+			name = "const,";
+		}
+		else
+		{
+			name = ",";
+		}
+	}
+
+	std::vector<ParameterNode*> parameterNodes;
+	collectParameterNodes(parameterNodes);
+	size_t parameterCount = parameterNodes.size();
+	for (size_t i = 0; i < parameterCount; ++i)
+	{
+		ParameterNode* parameterNode = parameterNodes[i];
+		TypeNode* typeNode = parameterNode->m_typeName->getTypeNode(templateArguments);
+		if (0 == typeNode)
+		{
+			return;	
+		}
+		if (parameterNode->isInput())
+		{
+			if (parameterNode->isConstant()/* && !parameterNode->byValue()*/)
+			{
+				name += "const ";
+			}
+			name += typeNode->m_name + ",";
+		}
+		else
+		{
+			name += ",";
+		}		
+	}
+}
+
 void MethodNode::checkTypeNames(TypeNode* enclosingTypeNode, TemplateArguments* templateArguments)
 {
 	if (0 != m_resultTypeName)
@@ -151,6 +200,10 @@ void MethodNode::checkSemantic(TemplateArguments* templateArguments)
 	if(0 != m_resultTypeName)
 	{
 		TypeNode* typeNode = m_resultTypeName->getTypeNode(templateArguments);
+		if (0 == typeNode)
+		{
+			return;
+		}
 		if (void_type == typeNode->getTypeCategory())
 		{
 			if (0 != m_passing && (snt_keyword_new == m_passing->m_nodeType || snt_keyword_ref == m_passing->m_nodeType))

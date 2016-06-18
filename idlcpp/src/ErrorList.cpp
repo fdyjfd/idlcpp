@@ -1,5 +1,9 @@
 #include "ErrorList.h"
 #include "Compiler.h"
+#include "SourceFile.h"
+#include "IdentifyNode.h"
+#include "TemplateClassInstanceNode.h"
+#include "TypeTree.h"
 
 const char* g_errorStrings[] =
 {
@@ -23,9 +27,15 @@ const char* g_errorStrings[] =
 	"primitive type as base",
 	"base type",
 	"base redeclared",
+
 	"invalid package name",
 	"invalid type name",
+	"invalid_ arameter",
+	"invalid result",
+	"invalid field",
+	"invalid property",
 	"invalid class template name",
+
 	"missing template argument list",
 	"too few template arguments",
 	"too many template arguments",
@@ -36,26 +46,45 @@ const char* g_errorStrings[] =
 	"template class not instantiton",
 	"template interface not supported",
 	"missing reference base type",
+	"error in template class instance",
 };
 
 ErrorList::ErrorList()
 {
-	m_enabled = true;
+	m_templateClassInstanceNode = 0;
+}
+
+void ErrorList::addItem_(const char* fileName, int lineNo, int columnNo, ErrorCode errorCode, const char* errorText)
+{
+	ErrorInfo errorInfo;
+	errorInfo.fileName = m_fileNames.insert(fileName).first->c_str();
+	errorInfo.lineNo = lineNo;
+	errorInfo.columnNo = columnNo;
+	errorInfo.errorCode = errorCode;
+	errorInfo.errorText = errorText;
+	m_errorInfos.push_back(errorInfo);
 }
 
 void ErrorList::addItem(const char* fileName, int lineNo, int columnNo, ErrorCode errorCode, const char* errorText)
 {
-	if(m_enabled)
+	addItem_(fileName, lineNo, columnNo, errorCode, errorText);
+	if (m_templateClassInstanceNode)
 	{
-		ErrorInfo errorInfo;
-		errorInfo.fileName = m_fileNames.insert(fileName).first->c_str();
-		errorInfo.lineNo = lineNo;
-		errorInfo.columnNo = columnNo;
-		errorInfo.errorCode = errorCode;
-		errorInfo.errorText = errorText;
-		m_errorInfos.push_back(errorInfo);
+		std::string error = ": " + m_templateClassInstanceNode->getTypeNode()->m_name;
+		SourceFile* sourceFile = m_templateClassInstanceNode->getSourceFile();
+		addItem_(sourceFile->m_fileName.c_str(),
+			m_templateClassInstanceNode->m_name->m_lineNo,
+			m_templateClassInstanceNode->m_name->m_columnNo,
+			semantic_error_template_class_instance_internal,
+			error.c_str());
 	}
 }
+
+void ErrorList::setTemplateClassInstance(TemplateClassInstanceNode* templateClassInstanceNode)
+{
+	m_templateClassInstanceNode = templateClassInstanceNode;
+}
+
 
 ErrorList g_errorList;
 
@@ -78,11 +107,6 @@ void ErrorList_AddItem_CurrentFile(ErrorCode errorCode, const char* errorText)
 void ErrorList_AddItem_CurrentFile(int lineNo, int columnNo, ErrorCode errorCode, const char* errorText)
 {
 	g_errorList.addItem(getCurrentSourceFileName(), lineNo, columnNo, errorCode, errorText);
-}
-
-void ErrorList_Enable(bool b)
-{
-	g_errorList.m_enabled = b;
 }
 
 size_t ErrorList_ErrorCount()

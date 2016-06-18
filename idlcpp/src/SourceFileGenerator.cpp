@@ -229,17 +229,17 @@ void SourceFileGenerator::generateCode_AdditionalMethod(FILE* file, MethodNode* 
 	{
 		if(classNode->isValueType())
 		{
-			sprintf_s(buf, "return new_array<%s>(count);\n", typeName.c_str());
+			sprintf_s(buf, "return paf_new_array<%s>(count);\n", typeName.c_str());
 		}
 		else
 		{
-			sprintf_s(buf, "return new_array<::pafcore::RefCountObject<%s>>(count);\n", typeName.c_str());
+			sprintf_s(buf, "return paf_new_array<::pafcore::RefCountObject<%s>>(count);\n", typeName.c_str());
 		}
 		writeStringToFile(buf, file, indentation + 1);
 	}
 	else if("NewArrayARC" == methodNode->m_name->m_str)
 	{
-		sprintf_s(buf, "return new_array<::pafcore::AtomicRefCountObject<%s>>(count);\n", typeName.c_str());
+		sprintf_s(buf, "return paf_new_array<::pafcore::AtomicRefCountObject<%s>>(count);\n", typeName.c_str());
 		writeStringToFile(buf, file, indentation + 1);
 	}
 	else

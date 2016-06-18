@@ -330,7 +330,7 @@ Metadata* ClassType::_getBaseClass_(size_t index)
 	return 0;
 }
 
-bool ClassType::getBaseClassOffset_(size_t& offset, ClassType* otherType)
+bool ClassType::getClassOffset_(size_t& offset, ClassType* otherType)
 {
 	if(this == otherType)
 	{
@@ -340,7 +340,7 @@ bool ClassType::getBaseClassOffset_(size_t& offset, ClassType* otherType)
 	for(size_t i = 0; i < m_baseClassCount; ++i)
 	{
 		offset = curOffset + m_baseClasses[i].m_offset;
-		if(m_baseClasses[i].m_type->getBaseClassOffset_(offset, otherType))
+		if(m_baseClasses[i].m_type->getClassOffset_(offset, otherType))
 		{
 			return true;
 		}
@@ -348,10 +348,26 @@ bool ClassType::getBaseClassOffset_(size_t& offset, ClassType* otherType)
 	return false;
 }
 
-bool ClassType::getBaseClassOffset(size_t& offset, ClassType* otherType)
+bool ClassType::getClassOffset(size_t& offset, ClassType* otherType)
 {
 	offset = 0;
-	return getBaseClassOffset_(offset, otherType);
+	return getClassOffset_(offset, otherType);
+}
+
+bool ClassType::isType(ClassType* otherType)
+{
+	if (this == otherType)
+	{
+		return true;
+	}
+	for (size_t i = 0; i < m_baseClassCount; ++i)
+	{
+		if (m_baseClasses[i].m_type->isType(otherType))
+		{
+			return true;
+		}
+	}
+	return false;
 }
 
 END_PAFCORE

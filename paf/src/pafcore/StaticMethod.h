@@ -3,10 +3,14 @@
 
 #pragma once
 
-#include "./Metadata.h"
 #include "./Typedef.h"
+#include "./Reference.h"
+#include "./Metadata.h"
+namespace pafcore{ class Type; }
 namespace pafcore{ class Result; }
 namespace pafcore{ class Argument; }
+
+#include "Overload.h"
 
 namespace pafcore
 {

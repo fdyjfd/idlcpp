@@ -4,8 +4,8 @@ namespace pafcore
 {
 	abstract class $PAFCORE_EXPORT VoidType(void_type) : Type
 	{
-		static void ptr AddressToPtr(size_t address);
-		static void ptr NullPtr get;
+		static void* AddressToPtr(size_t address);
+		static void* NullPtr get;
 		$*
 	public:
 		VoidType();

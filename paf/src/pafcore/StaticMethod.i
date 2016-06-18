@@ -1,14 +1,16 @@
 #import "Argument.i"
 #import "Result.i"
 
+$$#include "Overload.h"
+
 namespace pafcore
 {
 	abstract class $PAFCORE_EXPORT StaticMethod(static_method) : Metadata
 	{
 		size_t overloadCount get;
-		Result ptr getResult(size_t overloadIndex);
+		Result* getResult(size_t overloadIndex);
 		size_t getArgumentCount(size_t overloadIndex);
-		Argument ptr getArgument(size_t overloadIndex, size_t index);
+		Argument* getArgument(size_t overloadIndex, size_t index);
 		$*
 	public:
 		StaticMethod(const char* name, FunctionInvoker invoker, Overload* overloads, size_t overloadCount);

@@ -3,6 +3,8 @@
 
 #pragma once
 
+#include "./Typedef.h"
+#include "./Reference.h"
 #include "./Metadata.h"
 namespace pafcore{ class Type; }
 
@@ -25,12 +27,14 @@ namespace pafcore
 		bool get_byNewRef();
 		bool get_byNewArrayPtr();
 		bool get_byNewArrayRef();
+		bool get_isConstant();
 
 	public:
-		Argument(const char* name, Type* type, Passing passing);
+		Argument(const char* name, Type* type, Passing passing, bool constant);
 	public:
 		Type* m_type;
 		Passing m_passing;
+		bool m_constant;
 		
 	};
 }

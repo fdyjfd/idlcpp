@@ -31,9 +31,9 @@ namespace tutorial
 		nocode float area get;
 		nocode float getArea();
 
-		Rectangle(const Point ref min, const Point ref max);
+		Rectangle(const Point& min, const Point& max);
 		Rectangle();
-		nocode Rectangle(const Rectangle ref pt);
+		nocode Rectangle(const Rectangle& pt);
 		$*
 		void set_bottom(float bottom)
 		{

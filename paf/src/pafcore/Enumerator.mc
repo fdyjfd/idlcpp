@@ -3,6 +3,8 @@
 
 #pragma once
 
+#include "./Typedef.mh"
+#include "./Reference.mh"
 #include "./Metadata.mh"
 #include "./Type.mh"
 #include "Enumerator.mh"
@@ -29,24 +31,24 @@ namespace idlcpp
 		m_size = sizeof(::pafcore::Enumerator);
 		static BaseClass s_baseClasses[] =
 		{
-			{RuntimeTypeOf<::pafcore::Metadata>::RuntimeType::GetSingleton(), base_offset_of(::pafcore::Enumerator, ::pafcore::Metadata)},
+			{RuntimeTypeOf<::pafcore::Metadata>::RuntimeType::GetSingleton(), paf_base_offset_of(::pafcore::Enumerator, ::pafcore::Metadata)},
 		};
 		m_baseClasses = s_baseClasses;
-		m_baseClassCount = array_size_of(s_baseClasses);
+		m_baseClassCount = paf_array_size_of(s_baseClasses);
 		static ::pafcore::InstanceProperty s_properties[] = 
 		{
 			::pafcore::InstanceProperty("_type_", GetSingleton(), Enumerator_get__type_, RuntimeTypeOf<::pafcore::Type>::RuntimeType::GetSingleton(), ::pafcore::Metadata::by_ptr, false, 0, 0, ::pafcore::Metadata::by_value, false),
 			::pafcore::InstanceProperty("_value_", GetSingleton(), Enumerator_get__value_, RuntimeTypeOf<int>::RuntimeType::GetSingleton(), ::pafcore::Metadata::by_value, false, 0, 0, ::pafcore::Metadata::by_value, false),
 		};
 		m_properties = s_properties;
-		m_propertyCount = array_size_of(s_properties);
+		m_propertyCount = paf_array_size_of(s_properties);
 		static Metadata* s_members[] = 
 		{
 			&s_properties[0],
 			&s_properties[1],
 		};
 		m_members = s_members;
-		m_memberCount = array_size_of(s_members);
+		m_memberCount = paf_array_size_of(s_members);
 		::pafcore::NameSpace::GetGlobalNameSpace()->getNameSpace("pafcore")->registerMember(this);
 	}
 
@@ -57,7 +59,7 @@ namespace idlcpp
 
 	void __pafcore__Enumerator_Type::destroyArray(void* address)
 	{
-		delete_array(reinterpret_cast<::pafcore::RefCountObject<::pafcore::Enumerator>*>(address));
+		paf_delete_array(reinterpret_cast<::pafcore::RefCountObject<::pafcore::Enumerator>*>(address));
 	}
 
 	void __pafcore__Enumerator_Type::assign(void* dst, const void* src)

@@ -274,6 +274,7 @@
     <ClCompile Include="..\..\..\src\pafcore\InstanceProperty.cpp" />
     <ClCompile Include="..\..\..\src\pafcore\Metadata.cpp" />
     <ClCompile Include="..\..\..\src\pafcore\NameSpace.cpp" />
+    <ClCompile Include="..\..\..\src\pafcore\Overload.cpp" />
     <ClCompile Include="..\..\..\src\pafcore\VoidType.cpp" />
     <ClCompile Include="..\..\..\src\pafcore\PrimitiveType.cpp" />
     <ClCompile Include="..\..\..\src\pafcore\Reference.cpp" />
@@ -299,6 +300,7 @@
     <ClInclude Include="..\..\..\src\pafcore\Metadata.h" />
     <ClInclude Include="..\..\..\src\pafcore\NameSpace.h" />
     <ClInclude Include="..\..\..\src\pafcore\NullType.h" />
+    <ClInclude Include="..\..\..\src\pafcore\Overload.h" />
     <ClInclude Include="..\..\..\src\pafcore\PrimitiveType.h" />
     <ClInclude Include="..\..\..\src\pafcore\RefCount.h" />
     <ClInclude Include="..\..\..\src\pafcore\Reference.h" />

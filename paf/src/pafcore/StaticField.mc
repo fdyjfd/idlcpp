@@ -3,9 +3,10 @@
 
 #pragma once
 
+#include "./Typedef.mh"
+#include "./Reference.mh"
 #include "./Metadata.mh"
 #include "./Type.mh"
-#include "./Typedef.mh"
 #include "StaticField.mh"
 #include "AutoRun.h"
 #include "NameSpace.h"
@@ -30,10 +31,10 @@ namespace idlcpp
 		m_size = sizeof(::pafcore::StaticField);
 		static BaseClass s_baseClasses[] =
 		{
-			{RuntimeTypeOf<::pafcore::Metadata>::RuntimeType::GetSingleton(), base_offset_of(::pafcore::StaticField, ::pafcore::Metadata)},
+			{RuntimeTypeOf<::pafcore::Metadata>::RuntimeType::GetSingleton(), paf_base_offset_of(::pafcore::StaticField, ::pafcore::Metadata)},
 		};
 		m_baseClasses = s_baseClasses;
-		m_baseClassCount = array_size_of(s_baseClasses);
+		m_baseClassCount = paf_array_size_of(s_baseClasses);
 		static ::pafcore::InstanceProperty s_properties[] = 
 		{
 			::pafcore::InstanceProperty("address", GetSingleton(), StaticField_get_address, RuntimeTypeOf<::size_t>::RuntimeType::GetSingleton(), ::pafcore::Metadata::by_value, false, 0, 0, ::pafcore::Metadata::by_value, false),
@@ -42,7 +43,7 @@ namespace idlcpp
 			::pafcore::InstanceProperty("type", GetSingleton(), StaticField_get_type, RuntimeTypeOf<::pafcore::Type>::RuntimeType::GetSingleton(), ::pafcore::Metadata::by_ptr, false, 0, 0, ::pafcore::Metadata::by_value, false),
 		};
 		m_properties = s_properties;
-		m_propertyCount = array_size_of(s_properties);
+		m_propertyCount = paf_array_size_of(s_properties);
 		static Metadata* s_members[] = 
 		{
 			&s_properties[0],
@@ -51,7 +52,7 @@ namespace idlcpp
 			&s_properties[3],
 		};
 		m_members = s_members;
-		m_memberCount = array_size_of(s_members);
+		m_memberCount = paf_array_size_of(s_members);
 		::pafcore::NameSpace::GetGlobalNameSpace()->getNameSpace("pafcore")->registerMember(this);
 	}
 
@@ -62,7 +63,7 @@ namespace idlcpp
 
 	void __pafcore__StaticField_Type::destroyArray(void* address)
 	{
-		delete_array(reinterpret_cast<::pafcore::RefCountObject<::pafcore::StaticField>*>(address));
+		paf_delete_array(reinterpret_cast<::pafcore::RefCountObject<::pafcore::StaticField>*>(address));
 	}
 
 	void __pafcore__StaticField_Type::assign(void* dst, const void* src)

@@ -3,6 +3,7 @@
 
 #pragma once
 
+#include "./Typedef.h"
 #include "./Reference.h"
 
 namespace pafcore
@@ -83,25 +84,6 @@ namespace pafcore
 	public:
 		bool operator()(const Metadata* m1, const Metadata* m2);
 	};
-
-
-	class Result;
-	class Argument;
-
-	struct Overload
-	{
-		Overload(Result* result, Argument* args, size_t argCount)
-		{
-			m_result = result;
-			m_args = args;
-			m_argCount = argCount;
-		}
-		Result* m_result;
-		Argument* m_args;
-		size_t m_argCount;
-	};
-	class Variant;
-	typedef ErrorCode(*FunctionInvoker)(Variant* result, Variant** args, int_t numArgs);
 
 	
 

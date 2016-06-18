@@ -5,8 +5,8 @@ namespace pafcore
 
 	abstract class $PAFCORE_EXPORT InstanceField(instance_field) : Metadata
 	{
-		Type ptr type get;
-		ClassType ptr objectType get;
+		Type* type get;
+		ClassType* objectType get;
 		size_t offset get;
 		bool isArray get;
 		bool isConstant get;

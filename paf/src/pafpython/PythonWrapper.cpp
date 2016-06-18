@@ -230,7 +230,7 @@ pafcore::ErrorCode SetStaticField(pafcore::StaticField* field, PyObject* pyAttr)
 pafcore::ErrorCode GetInstanceField(PyObject*& pyObject, pafcore::Variant* that, pafcore::InstanceField* field)
 {
 	size_t baseOffset;
-	if(!static_cast<pafcore::ClassType*>(that->m_type)->getBaseClassOffset(baseOffset, field->m_objectType))
+	if(!static_cast<pafcore::ClassType*>(that->m_type)->getClassOffset(baseOffset, field->m_objectType))
 	{
 		return pafcore::e_invalid_type;
 	}
@@ -260,7 +260,7 @@ pafcore::ErrorCode SetInstanceField(pafcore::Variant* that, pafcore::InstanceFie
 		return pafcore::e_field_is_constant;
 	}
 	size_t baseOffset;
-	if(!static_cast<pafcore::ClassType*>(that->m_type)->getBaseClassOffset(baseOffset, field->m_objectType))
+	if(!static_cast<pafcore::ClassType*>(that->m_type)->getClassOffset(baseOffset, field->m_objectType))
 	{
 		return pafcore::e_invalid_object_type;
 	}

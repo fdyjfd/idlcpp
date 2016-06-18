@@ -26,6 +26,8 @@ const char* g_errorStrings[] =
 	"e_invalid_field_type",
 	"e_invalid_property_type",
 	"e_invalid_arg_num",
+	"e_no_match_overload",
+	"e_ambiguous_overload",
 	"e_invalid_this_type",
 	"e_invalid_arg_type_1",
 	"e_invalid_arg_type_2",
@@ -74,7 +76,7 @@ const char* g_errorStrings[] =
 
 const char* ErrorCodeToString(ErrorCode errorCode)
 {
-	if(errorCode < array_size_of(g_errorStrings))
+	if(errorCode < paf_array_size_of(g_errorStrings))
 	{
 		return g_errorStrings[errorCode];
 	}

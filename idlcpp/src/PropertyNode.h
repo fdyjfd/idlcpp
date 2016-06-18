@@ -18,6 +18,7 @@ public:
 	bool isStatic();
 	bool isVirtual();
 	bool isAbstract();
+	bool byPtr();
 	void setGetter(GetterSetterNode* getter);
 	void setSetter(GetterSetterNode* setter);
 	virtual void checkTypeNames(TypeNode* enclosingTypeNode, TemplateArguments* templateArguments);

@@ -15,13 +15,13 @@ namespace pafcore
 		bool hasGetter get;
 		bool hasSetter get;
 
-		Type ptr getterType get;
+		Type* getterType get;
 		bool getterByValue get;
 		bool getterByRef get;
 		bool getterByPtr get;
 		bool getterConstant get;
 
-		Type ptr setterType get;
+		Type* setterType get;
 		bool setterByValue get;
 		bool setterByRef get;
 		bool setterByPtr get;

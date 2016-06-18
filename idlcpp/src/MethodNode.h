@@ -22,6 +22,7 @@ public:
 	TokenNode* m_semicolon;
 	bool m_resultArray;
 	bool m_override;
+	mutable size_t m_parameterCount;
 public:
 	MethodNode(IdentifyNode* name, TokenNode* leftParenthesis, ParameterListNode* parameterList, TokenNode* rightParenthesis, TokenNode* constant, TokenNode* semicolon);
 	bool isStatic();
@@ -32,9 +33,10 @@ public:
 	bool byRef();
 	bool byPtr();
 	bool byNew();
-	size_t getParameterCount();
+	size_t getParameterCount() const;
 	void collectParameterNodes(std::vector<std::pair<TokenNode*, ParameterNode*>>& parameterNodes);
 	void collectParameterNodes(std::vector<ParameterNode*>& parameterNodes);
+	void calcManglingName(std::string& name, TemplateArguments* templateArguments);
 	virtual void checkTypeNames(TypeNode* enclosingTypeNode, TemplateArguments* templateArguments);
 	virtual void checkSemantic(TemplateArguments* templateArguments);
 };

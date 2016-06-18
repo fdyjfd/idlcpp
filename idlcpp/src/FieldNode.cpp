@@ -3,6 +3,8 @@
 #include "IdentifyNode.h"
 #include "ClassNode.h"
 #include "TypeNameNode.h"
+#include "TypeTree.h"
+#include "RaiseError.h"
 #include "Compiler.h"
 #include <assert.h>
 
@@ -41,6 +43,14 @@ void FieldNode::checkTypeNames(TypeNode* enclosingTypeNode, TemplateArguments* t
 void FieldNode::checkSemantic(TemplateArguments* templateArguments)
 {
 	TypeNode* typeNode = m_typeName->getTypeNode(templateArguments);
+	if (0 == typeNode)
+	{
+		return;
+	}
+	if (void_type == typeNode->getTypeCategory())
+	{
+		RaiseError_InvalidFieldType(this);
+	}
 	g_compiler.useType(typeNode, tu_definition, m_typeName);
 }
 
