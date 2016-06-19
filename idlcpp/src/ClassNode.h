@@ -31,7 +31,7 @@ struct ClassNode : ScopeNode
 	TemplateParametersNode* m_templateParametersNode;
 	ClassTypeNode* m_typeNode;
 	TemplateArguments m_templateArguments;
-	std::vector<MethodNode*> m_additionalMethods;//New NewArray Clone
+	std::vector<MethodNode*> m_additionalMethods;//New NewARC NewArray
 	bool m_isValueType;
 	bool m_override;
 	LazyBool m_abstractFlag;
@@ -45,6 +45,7 @@ public:
 	bool needSubclassProxy(TemplateArguments* templateArguments);
 	bool isValueType();
 	bool hasOverrideMethod(TemplateArguments* templateArguments);
+	bool isAdditionalMethod(MethodNode* methodNode);
 	void collectOverrideMethods(std::vector<MethodNode*>& methodNodes, TemplateArguments* templateArguments);
 	void GenerateCreateInstanceMethod(const char* methodName, MethodNode* constructor);
 	void GenerateCreateArrayMethod(const char* methodName, MethodNode* constructor);

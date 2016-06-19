@@ -343,19 +343,7 @@ void HeaderFileGenerator::generateCode_Class(FILE* file, ClassNode* classNode, i
 			assert(false);
 		}
 	}
-	if(!classNode->m_additionalMethods.empty())
-	{
-		bool backup = g_compiler.m_outputLineDirective;
-		g_compiler.m_outputLineDirective = false;
-		writeStringToFile("\n", file, 0);
-		writeStringToFile("public:\n", file, indentation);
-		size_t count = classNode->m_additionalMethods.size();
-		for(size_t i = 0; i < count; ++i)
-		{
-			generateCode_AdditionalMethod(file, classNode->m_additionalMethods[i], indentation + 1);
-		}
-		g_compiler.m_outputLineDirective = backup;
-	}
+
 	generateCode_Token(file, classNode->m_rightBrace, indentation);
 	generateCode_Token(file, classNode->m_semicolon, 0);
 }
@@ -539,42 +527,4 @@ void HeaderFileGenerator::generateCode_Method(FILE* file, MethodNode* methodNode
 		generateCode_Token(file, methodNode->m_constant, 0);
 	}
 	generateCode_Token(file, methodNode->m_semicolon, 0);
-}
-
-void HeaderFileGenerator::generateCode_AdditionalMethod(FILE* file, MethodNode* methodNode, int indentation)
-{
-	if (methodNode->isMetaOnly())
-	{
-		file = 0;
-	}
-
-	ClassNode* classNode = static_cast<ClassNode*>(methodNode->m_enclosing);
-	const char* typeName = classNode->m_name->m_str.c_str();
-	assert(0 != methodNode->m_modifier);
-	generateCode_Token(file, methodNode->m_modifier, indentation);
-	assert(0 != methodNode->m_resultTypeName);
-
-	generateCode_TypeName(file, methodNode->m_resultTypeName, methodNode->m_enclosing, 0);
-	if(0 != methodNode->m_passing)
-	{
-		generateCode_Token(file, methodNode->m_passing, 0);
-	}
-	writeSpaceToFile(file);;
-
-	generateCode_Identify(file, methodNode->m_name, 0);
-
-	generateCode_Token(file, methodNode->m_leftParenthesis, 0);
-	std::vector<std::pair<TokenNode*, ParameterNode*>> parameterNodes;
-	methodNode->collectParameterNodes(parameterNodes);
-	size_t parameterCount = parameterNodes.size();
-	for(size_t i = 0; i < parameterCount; ++i)
-	{
-		if(parameterNodes[i].first)
-		{
-			generateCode_Token(file, parameterNodes[i].first, 0);
-		}
-		generateCode_Parameter(file, parameterNodes[i].second, methodNode, 0);
-	}
-	generateCode_Token(file, methodNode->m_rightParenthesis, 0);
-	writeStringToFile(";\n", file);
 }

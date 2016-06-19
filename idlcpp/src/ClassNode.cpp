@@ -99,37 +99,11 @@ bool isDefaultConstructor(ClassNode* classNode, MethodNode* methodNode)
 	return false;
 }
 
-bool isCopyConstructor(ClassNode* classNode, MethodNode* methodNode)
-{
-	if(classNode->m_name->m_str == methodNode->m_name->m_str)
-	{
-		std::vector<ParameterNode*> parameterNodes;
-		methodNode->collectParameterNodes(parameterNodes);
-		if(1 == parameterNodes.size())
-		{
-			ParameterNode* parameterNode = parameterNodes.front();
-			assert(0 != parameterNode->m_typeName->m_typeNode);
-			if(parameterNode->m_typeName->m_typeNode->isClass())
-			{
-				if(classNode->m_typeNode == parameterNode->m_typeName->m_typeNode)
-				{
-					if(0 == parameterNode->m_passing || snt_keyword_ref == parameterNode->m_passing->m_nodeType)
-					{
-						return true;
-					}
-				}
-			}
-		}
-	}
-	return false;
-}
-
 void checkMemberNames(ClassNode* classNode, std::vector<MemberNode*>& memberNodes, TemplateArguments* templateArguments)
 {
 	std::set<IdentifyNode*, CompareIdentifyPtr> methodNames;
 	std::set<IdentifyNode*, CompareIdentifyPtr> staticMethodNames;
 	std::set<IdentifyNode*, CompareIdentifyPtr> otherNames;
-	IdentifyNode* copyConstructor = 0;
 	std::set<Overload> methods;
 	std::set<Overload> staticMethods;
 
@@ -182,70 +156,55 @@ void checkMemberNames(ClassNode* classNode, std::vector<MemberNode*>& memberNode
 			}
 			else
 			{
-				if(isCopyConstructor(classNode, methodNode))
+				if (methodNode->isStatic())
 				{
-					if(0 == copyConstructor)
+					it = methodNames.find(identify);
+					if (methodNames.end() != it)
 					{
-						copyConstructor = methodNode->m_name;
-					}
-					else
-					{
-						collisionNode = copyConstructor;
+						collisionNode = *it;
 						nameCollision = true;
 					}
 				}
 				else
 				{
-					if(methodNode->isStatic())
+					it = staticMethodNames.find(identify);
+					if (staticMethodNames.end() != it)
 					{
-						it = methodNames.find(identify);
-						if(methodNames.end() != it)
+						collisionNode = *it;
+						nameCollision = true;
+					}
+				}
+				if (!nameCollision)
+				{
+					Overload overload;
+					overload.methodName = identify;
+					overload.parameterCount = methodNode->getParameterCount();
+					methodNode->calcManglingName(overload.manglingName, templateArguments);
+					if (methodNode->isStatic())
+					{
+						auto res = staticMethods.insert(overload);
+						if (!res.second)
 						{
-							collisionNode = *it;
+							collisionNode = res.first->methodName;
 							nameCollision = true;
+						}
+						else
+						{
+							staticMethodNames.insert(identify);
 						}
 					}
 					else
 					{
-						it = staticMethodNames.find(identify);
-						if(staticMethodNames.end() != it)
+						++overload.parameterCount;
+						auto res = methods.insert(overload);
+						if (!res.second)
 						{
-							collisionNode = *it;
+							collisionNode = res.first->methodName;
 							nameCollision = true;
-						}
-					}
-					if(!nameCollision)
-					{
-						Overload overload;
-						overload.methodName = identify;
-						overload.parameterCount = methodNode->getParameterCount();
-						methodNode->calcManglingName(overload.manglingName, templateArguments);
-						if(methodNode->isStatic())
-						{
-							auto res = staticMethods.insert(overload);
-							if(!res.second)
-							{
-								collisionNode = res.first->methodName;
-								nameCollision = true;
-							}
-							else
-							{
-								staticMethodNames.insert(identify);
-							}
 						}
 						else
 						{
-							++overload.parameterCount;
-							auto res = methods.insert(overload);
-							if(!res.second)
-							{
-								collisionNode = res.first->methodName;
-								nameCollision = true;
-							}
-							else
-							{
-								methodNames.insert(identify);
-							}
+							methodNames.insert(identify);
 						}
 					}
 				}
@@ -347,7 +306,7 @@ void ClassNode::extendInternalCode(TypeNode* enclosingTypeNode, TemplateArgument
 
 	if(!isAbstractClass())
 	{
-		//New NewArray Clone
+		//New NewARC NewArray
 		buildAdditionalMethods();
 	}
 
@@ -390,7 +349,7 @@ void ClassNode::GenerateCreateInstanceMethod(const char* methodName, MethodNode*
 	setMethodResult(method, typeName, passing);
 	TokenNode* modifier = (TokenNode*)newToken(snt_keyword_static);
 	setMethodModifier(method, modifier);
-	//method->m_filter = constructor->m_filter;
+	method->m_filter = constructor->m_filter;
 	method->m_enclosing = this;
 	m_additionalMethods.push_back(method);
 }
@@ -411,7 +370,7 @@ void ClassNode::GenerateCreateArrayMethod(const char* methodName, MethodNode* co
 	setMethodResultArray(method);
 	TokenNode* modifier = (TokenNode*)newToken(snt_keyword_static);
 	setMethodModifier(method, modifier);
-	//method->m_filter = constructor->m_filter;
+	method->m_filter = constructor->m_filter;
 	method->m_enclosing = this;
 	m_additionalMethods.push_back(method);
 }
@@ -421,7 +380,6 @@ void ClassNode::buildAdditionalMethods()
 	int backup = yytokenno;
 	yytokenno = 0;
 	MethodNode* defaultConstructor = 0;
-	MethodNode* copyConstructor = 0;
 	std::vector<MethodNode*> constructors;	
 	std::vector<MemberNode*> memberNodes;
 	m_memberList->collectMemberNodes(memberNodes);
@@ -439,15 +397,7 @@ void ClassNode::buildAdditionalMethods()
 					assert(0 == defaultConstructor);
 					defaultConstructor = methodNode;
 				}
-				if(isCopyConstructor(this, methodNode))
-				{
-					assert(0 == copyConstructor);
-					copyConstructor = methodNode;
-				}
-				else
-				{
-					constructors.push_back(methodNode);
-				}
+				constructors.push_back(methodNode);
 			}
 		}
 	}
@@ -462,23 +412,9 @@ void ClassNode::buildAdditionalMethods()
 			GenerateCreateInstanceMethod("NewARC", constructor);
 		}
 	}
-	if(0 != defaultConstructor)
+	if(0 != defaultConstructor && isValueType())
 	{
-		MethodNode* constructor = defaultConstructor;
-		GenerateCreateArrayMethod("NewArray", constructor);
-		if(!isValueType())
-		{
-			GenerateCreateArrayMethod("NewArrayARC", constructor);
-		}
-	}
-	if(0 != copyConstructor)
-	{
-		MethodNode* constructor = copyConstructor;
-		GenerateCreateInstanceMethod("Clone", constructor);
-		if(!isValueType())
-		{
-			GenerateCreateInstanceMethod("CloneARC", constructor);
-		}
+		GenerateCreateArrayMethod("NewArray", defaultConstructor);
 	}
 	yytokenno = backup;
 }
@@ -606,6 +542,20 @@ bool ClassNode::hasOverrideMethod(TemplateArguments* templateArguments)
 			{
 				return true;
 			}
+		}
+	}
+	return false;
+}
+
+bool ClassNode::isAdditionalMethod(MethodNode* methodNode)
+{
+	auto it = m_additionalMethods.begin();
+	auto end = m_additionalMethods.end();
+	for(; it != end; ++it)
+	{
+		if (methodNode == *it)
+		{
+			return true;
 		}
 	}
 	return false;

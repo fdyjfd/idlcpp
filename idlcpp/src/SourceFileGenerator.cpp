@@ -151,14 +151,7 @@ void SourceFileGenerator::generateCode_Class(FILE* file, ClassNode* classNode, i
 		writeStringToFile("return (size_t)this;\n", file, indentation + 1);
 		writeStringToFile("}\n\n", file, indentation);
 	}
-	if(!classNode->m_additionalMethods.empty())
-	{
-		size_t count = classNode->m_additionalMethods.size();
-		for(size_t i = 0; i < count; ++i)
-		{
-			generateCode_AdditionalMethod(file, classNode->m_additionalMethods[i], indentation);
-		}
-	}
+
 }
 
 void SourceFileGenerator::generateCode_TemplateHeader(FILE* file, ClassNode* classNode, int indentation)
@@ -180,96 +173,4 @@ void SourceFileGenerator::generateCode_TemplateHeader(FILE* file, ClassNode* cla
 		}
 		writeStringToFile(">\n", file);
 	}
-}
-
-
-void SourceFileGenerator::generateCode_AdditionalMethod(FILE* file, MethodNode* methodNode, int indentation)
-{
-	if (methodNode->isMetaOnly())
-	{
-		file = 0;
-	}
-
-	ClassNode* classNode = static_cast<ClassNode*>(methodNode->m_enclosing);
-
-	generateCode_TemplateHeader(file, classNode, indentation);
-
-	std::string typeName;
-	GetClassName(typeName, classNode);
-
-	writeStringToFile(typeName.c_str(), file, indentation);
-
-	if(0 != methodNode->m_passing)
-	{
-		generateCode_Token(file, methodNode->m_passing, 0);
-	}
-	writeSpaceToFile(file);;
-	writeStringToFile(typeName.c_str(), file);
-	writeStringToFile("::", file);
-
-	generateCode_Identify(file, methodNode->m_name, 0);
-
-	generateCode_Token(file, methodNode->m_leftParenthesis, 0);
-	std::vector<std::pair<TokenNode*, ParameterNode*>> parameterNodes;
-	methodNode->collectParameterNodes(parameterNodes);
-	size_t parameterCount = parameterNodes.size();
-	for(size_t i = 0; i < parameterCount; ++i)
-	{
-		if(parameterNodes[i].first)
-		{
-			generateCode_Token(file, parameterNodes[i].first, 0);
-		}
-		generateCode_Parameter(file, parameterNodes[i].second, methodNode, 0);
-	}
-	generateCode_Token(file, methodNode->m_rightParenthesis, 0);
-	writeStringToFile("\n", file);
-	char buf[512];
-	writeStringToFile("{\n", file, indentation);
-	if("NewArray" == methodNode->m_name->m_str)
-	{
-		if(classNode->isValueType())
-		{
-			sprintf_s(buf, "return paf_new_array<%s>(count);\n", typeName.c_str());
-		}
-		else
-		{
-			sprintf_s(buf, "return paf_new_array<::pafcore::RefCountObject<%s>>(count);\n", typeName.c_str());
-		}
-		writeStringToFile(buf, file, indentation + 1);
-	}
-	else if("NewArrayARC" == methodNode->m_name->m_str)
-	{
-		sprintf_s(buf, "return paf_new_array<::pafcore::AtomicRefCountObject<%s>>(count);\n", typeName.c_str());
-		writeStringToFile(buf, file, indentation + 1);
-	}
-	else
-	{
-		if("New" == methodNode->m_name->m_str || "Clone" == methodNode->m_name->m_str)
-		{
-			if(classNode->isValueType())
-			{
-				sprintf_s(buf, "return new %s(", typeName.c_str());
-			}
-			else
-			{
-				sprintf_s(buf, "return new ::pafcore::RefCountObject<%s>(", typeName.c_str());
-			}
-		}
-		else
-		{
-			assert("NewARC" == methodNode->m_name->m_str || "CloneARC" == methodNode->m_name->m_str);
-			sprintf_s(buf, "return new ::pafcore::AtomicRefCountObject<%s>(", typeName.c_str());
-		}
-		writeStringToFile(buf, file, indentation + 1);
-		for(size_t i = 0; i < parameterCount; ++i)
-		{
-			if(i != 0)
-			{
-				writeStringToFile(", ", file);
-			}
-			writeStringToFile(parameterNodes[i].second->m_name->m_str.c_str(), file);
-		}
-		writeStringToFile(");\n", file);
-	}
-	writeStringToFile("}\n\n", file, indentation);
 }

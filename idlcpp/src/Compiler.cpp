@@ -193,11 +193,22 @@ void Compiler::checkSemantic()
 
 void Compiler::extendInternalCode()
 {
-	if (0 != m_mainSourceFile && 0 != m_mainSourceFile->m_syntaxTree)
+	std::vector<SourceFile*> sourceFiles;
+	CollectSourceFiles(sourceFiles, m_mainSourceFile);
+	size_t count = sourceFiles.size();
+	for (size_t i = 0; i < count; ++i)
 	{
-		m_currentSourceFile = m_mainSourceFile;
-		m_mainSourceFile->m_syntaxTree->extendInternalCode(0, 0);
+		if (0 != sourceFiles[i]->m_syntaxTree)
+		{
+			m_currentSourceFile = sourceFiles[i];
+			m_currentSourceFile->m_syntaxTree->extendInternalCode(0, 0);
+		}
 	}
+	//if (0 != m_mainSourceFile && 0 != m_mainSourceFile->m_syntaxTree)
+	//{
+	//	m_currentSourceFile = m_mainSourceFile;
+	//	m_mainSourceFile->m_syntaxTree->extendInternalCode(0, 0);
+	//}
 }
 
 
@@ -242,7 +253,8 @@ void Compiler::outputUsedTypes(FILE* file, SourceFile* sourceFile)
 		TypeNode* typeNode = it->typeNode;
 		if (typeNode->m_sourceFile != sourceFile)
 		{
-			if ((it->usage & tu_definition) || !typeNode->getEnclosing()->isNamespace())
+			if ((it->usage & tu_definition) || !typeNode->getEnclosing()->isNamespace()
+				|| typeNode->isTemplateClass())
 			{
 				if (std::find(sourceFiles.begin(), sourceFiles.end(), typeNode->m_sourceFile)
 					== sourceFiles.end())
@@ -325,8 +337,8 @@ void Compiler::outputUsedTypes(FILE* file, SourceFile* sourceFile)
 			}
 			std::vector<TemplateParameterTypeNode*> m_parameterNodes;
 
-			sprintf_s(buf, "%s%s<%s>;", g_keywordTokens[classNode->m_keyword->m_nodeType - snt_keyword_begin_output - 1], 
-				paramNames.c_str(), typeNode->m_name.c_str());
+			sprintf_s(buf, "template<%s>%s%s;", paramNames.c_str(), 
+				g_keywordTokens[classNode->m_keyword->m_nodeType - snt_keyword_begin_output - 1], typeNode->m_name.c_str());
 		}
 		else if (typeNode->isClass())
 		{

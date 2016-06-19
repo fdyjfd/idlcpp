@@ -1101,6 +1101,7 @@ void writeMetaMethodImpl_AssignResult(const std::string& typeName, TypeCategory 
 	writeStringToFile(buf, file, indentation);
 }
 
+
 void writeMetaMethodImpl_Call(ClassNode* classNode, TemplateArguments* templateArguments, MethodNode* methodNode, std::vector<ParameterNode*>& parameterNodes, FILE* file, int indentation)
 {
 	char buf[512];
@@ -1134,7 +1135,35 @@ void writeMetaMethodImpl_Call(ClassNode* classNode, TemplateArguments* templateA
 	}
 	if(methodNode->isStatic())
 	{
-		sprintf_s(buf, "%s::%s(", className.c_str(), methodNode->m_name->m_str.c_str());
+		if (classNode->isAdditionalMethod(methodNode))
+		{
+			if ("New" == methodNode->m_name->m_str)
+			{
+				if (classNode->isValueType())
+				{
+					sprintf_s(buf, "new %s(", className.c_str());
+				}
+				else
+				{
+					sprintf_s(buf, "new ::pafcore::RefCountObject<%s>(", className.c_str());
+				}
+			}
+			else if ("NewARC" == methodNode->m_name->m_str)
+			{
+				assert(!classNode->isValueType());
+				sprintf_s(buf, "new ::pafcore::AtomicRefCountObject<%s>(", className.c_str());
+			}
+			else
+			{
+				assert("NewArray" == methodNode->m_name->m_str);
+				assert(classNode->isValueType());
+				sprintf_s(buf, "paf_new_array<%s>(", className.c_str());
+			}
+		}
+		else
+		{
+			sprintf_s(buf, "%s::%s(", className.c_str(), methodNode->m_name->m_str.c_str());
+		}
 	}
 	else
 	{
@@ -1217,8 +1246,8 @@ void writeMetaMethodImpl_SameParamCount(ClassNode* classNode, TemplateArguments*
 		writeStringToFile(buf, file, indentation + 1);
 		sprintf_s(buf, "char argMatches[%d];\n", overloadCount * argCount);
 		writeStringToFile(buf, file, indentation + 1);
-		sprintf_s(buf, "size_t matched = ::pafcore::OverloadResolution(&GetSingleton()->m_methods[%d].m_overloads[%d], args, %d, %d, candidates, argMatches);\n",
-			methodIndex, overloadIndex, argCount, overloadCount);
+		sprintf_s(buf, "size_t matched = ::pafcore::Overload::Resolution(&GetSingleton()->%s[%d].m_overloads[%d], args, %d, %d, candidates, argMatches);\n",
+			isStatic ? "m_staticMethods" : "m_methods",  methodIndex, overloadIndex, argCount, overloadCount);
 		writeStringToFile(buf, file, indentation + 1);
 		sprintf_s(buf, "switch(matched)\n");
 		writeStringToFile(buf, file, indentation + 1);
