@@ -9,6 +9,7 @@ struct MethodNode;
 struct GetterSetterNode;
 struct FieldNode;
 
+void RaiseError_NestedTemplateClass(IdentifyNode* node);
 void RaiseError_InvalidTypeName(IdentifyNode* node);
 void RaiseError_InvalidTypeName(ScopeNameListNode* node);
 void RaiseError_InvalidTypeName(TypeNameNode* node);

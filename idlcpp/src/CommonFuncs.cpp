@@ -48,7 +48,7 @@ TypeCategory CalcTypeFullName(std::string& typeName, TypeNameNode* typeNameNode,
 	TypeNode* typeNode = typeNameNode->getTypeNode(templateArguments);
 	assert(typeNode);
 	typeNode->getFullName(typeName);
-	return typeNode->getTypeCategory();
+	return typeNode->getTypeCategory(templateArguments);
 }
 
 void CollectTypeNodes(std::vector<TypeNode*>& typeNodes, ClassTypeNode* classTypeNode)
@@ -67,6 +67,12 @@ void CollectTypeNodes(std::vector<TypeNode*>& typeNodes, ClassTypeNode* classTyp
 		case tc_class_type:
 			CollectTypeNodes(typeNodes, static_cast<ClassTypeNode*>(srcChild));
 			break;
+		case tc_typedef:
+			typeNodes.push_back(srcChild);
+			break;
+		case tc_type_declaration:
+			typeNodes.push_back(srcChild);
+			break;
 		default:
 			assert(false);
 		}
@@ -81,12 +87,6 @@ void CollectTypeNodes(std::vector<TypeNode*>& typeNodes, MemberNode* memberNode)
 	case snt_enum:
 		typeNodes.push_back(static_cast<EnumNode*>(memberNode)->m_typeNode);
 		break;
-	case snt_typedef:
-		typeNodes.push_back(static_cast<TypedefNode*>(memberNode)->m_typeNode);
-		break;
-	case snt_type_declaration:
-		typeNodes.push_back(static_cast<TypeDeclarationNode*>(memberNode)->m_typeNode);
-		break;
 	case snt_class:
 		if (!memberNode->isTemplateClass())
 		{
@@ -95,6 +95,13 @@ void CollectTypeNodes(std::vector<TypeNode*>& typeNodes, MemberNode* memberNode)
 		break;
 	case snt_template_class_instance:
 		CollectTypeNodes(typeNodes, static_cast<TemplateClassInstanceNode*>(memberNode)->m_typeNode);
+		break;
+	case snt_typedef:
+		typeNodes.push_back(static_cast<TypedefNode*>(memberNode)->m_typeNode);
+		break;
+	case snt_type_declaration:
+		typeNodes.push_back(static_cast<TypeDeclarationNode*>(memberNode)->m_typeNode);
+		break;
 	}
 	if (memberNode->isNamespace())
 	{

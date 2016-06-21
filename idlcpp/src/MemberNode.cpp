@@ -130,7 +130,7 @@ SourceFile* MemberNode::getSourceFile()
 	return static_cast<ProgramNode*>(memberNode)->m_sourceFile;
 }
 
-void MemberNode::collectTypes(TypeNode* enclosingTypeNode)
+void MemberNode::collectTypes(TypeNode* enclosingTypeNode, TemplateArguments* templateArguments)
 {
 }
 

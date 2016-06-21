@@ -204,7 +204,7 @@ void MethodNode::checkSemantic(TemplateArguments* templateArguments)
 		{
 			return;
 		}
-		if (void_type == typeNode->getTypeCategory())
+		if (void_type == typeNode->getTypeCategory(templateArguments))
 		{
 			if (0 != m_passing && (snt_keyword_new == m_passing->m_nodeType || snt_keyword_ref == m_passing->m_nodeType))
 			{

@@ -52,7 +52,7 @@ public:
 
 	virtual TypeNode* getTypeNode();
 	virtual void getLocalName(std::string& name, TemplateArguments* templateArguments);
-	virtual void collectTypes(TypeNode* enclosingTypeNode);
+	virtual void collectTypes(TypeNode* enclosingTypeNode, TemplateArguments* templateArguments);
 	virtual void checkTypeNames(TypeNode* enclosingTypeNode, TemplateArguments* templateArguments);
 	virtual void checkSemantic(TemplateArguments* templateArguments);
 };

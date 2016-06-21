@@ -26,7 +26,7 @@ TypeNode* EnumNode::getTypeNode()
 }
 
 
-void EnumNode::collectTypes(TypeNode* enclosingTypeNode)
+void EnumNode::collectTypes(TypeNode* enclosingTypeNode, TemplateArguments* templateArguments)
 {
 	assert(0 == m_typeNode);
 	switch (enclosingTypeNode->m_category)

@@ -146,7 +146,7 @@ void Compiler::collectTypes()
 		if (0 != sourceFiles[i]->m_syntaxTree)
 		{
 			m_currentSourceFile = sourceFiles[i];
-			m_currentSourceFile->m_syntaxTree->collectTypes(0);
+			m_currentSourceFile->m_syntaxTree->collectTypes(0, 0);
 		}
 	}
 }
@@ -164,11 +164,6 @@ void Compiler::checkTypeNames()
 			m_currentSourceFile->m_syntaxTree->checkTypeNames(0, 0);
 		}
 	}
-	//if (0 != m_mainSourceFile && 0 != m_mainSourceFile->m_syntaxTree)
-	//{
-	//	m_currentSourceFile = m_mainSourceFile;
-	//	m_mainSourceFile->m_syntaxTree->checkTypeNames(0, 0);
-	//}
 }
 
 void Compiler::checkSemantic()
@@ -184,11 +179,6 @@ void Compiler::checkSemantic()
 			m_currentSourceFile->m_syntaxTree->checkSemantic(0);
 		}
 	}
-	//if (0 != m_mainSourceFile && 0 != m_mainSourceFile->m_syntaxTree)
-	//{
-	//	m_currentSourceFile = m_mainSourceFile;
-	//	m_mainSourceFile->m_syntaxTree->checkSemantic(0);
-	//}
 }
 
 void Compiler::extendInternalCode()

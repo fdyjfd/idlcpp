@@ -188,13 +188,13 @@ MemberNode* TypeNode::getSyntaxNode()
 	return 0;
 }
 
-TypeCategory TypeNode::getTypeCategory()
+TypeCategory TypeNode::getTypeCategory(TemplateArguments* templateArguments)
 {
 	assert(false);
 	return unknown_type;
 }
 
-TypeNode* TypeNode::getActualTypeNode()
+TypeNode* TypeNode::getActualTypeNode(TemplateArguments* templateArguments)
 {
 	return this;
 }
@@ -283,7 +283,7 @@ PredefinedTypeNode::PredefinedTypeNode()
 	m_category = tc_predefined_type;
 }
 
-TypeCategory PredefinedTypeNode::getTypeCategory()
+TypeCategory PredefinedTypeNode::getTypeCategory(TemplateArguments* templateArguments)
 {
 	return pt_void == m_type ? void_type : primitive_type;
 }
@@ -298,14 +298,68 @@ MemberNode* EnumTypeNode::getSyntaxNode()
 	return m_enumNode;
 }
 
-TypeCategory EnumTypeNode::getTypeCategory()
+TypeCategory EnumTypeNode::getTypeCategory(TemplateArguments* templateArguments)
 {
 	return enum_type;
+}
+
+TypedefTypeNode::TypedefTypeNode()
+{
+	m_category = tc_typedef;
+}
+
+void TypedefTypeNode::getActualTypeFullName(std::string& name)
+{
+	m_typedefNode->m_srcTypeNode->getActualTypeFullName(name);
+}
+
+TypeNode* TypedefTypeNode::getActualTypeNode(TemplateArguments* templateArguments)
+{
+	TypeNode* actualTypeNode = m_typedefNode->getActualTypeNode(templateArguments);
+	return actualTypeNode;
+}
+
+MemberNode* TypedefTypeNode::getSyntaxNode()
+{
+	return m_typedefNode;
+}
+
+TypeCategory TypedefTypeNode::getTypeCategory(TemplateArguments* templateArguments)
+{
+	return m_typedefNode->m_srcTypeNode->getTypeCategory(templateArguments);
+}
+
+TypeDeclarationTypeNode::TypeDeclarationTypeNode()
+{
+	m_category = tc_type_declaration;
+}
+
+MemberNode* TypeDeclarationTypeNode::getSyntaxNode()
+{
+	return m_typeDeclarationNode;
+}
+
+TypeCategory TypeDeclarationTypeNode::getTypeCategory(TemplateArguments* templateArguments)
+{
+	return m_typeDeclarationNode->m_typeCategory;
 }
 
 TemplateParameterTypeNode::TemplateParameterTypeNode()
 {
 	m_category = tc_template_paramter;
+}
+
+TypeCategory TemplateParameterTypeNode::getTypeCategory(TemplateArguments* templateArguments)
+{
+	TypeNode* actualTypeNode = templateArguments->findTypeNode(m_name);
+	return actualTypeNode->getTypeCategory(templateArguments);
+
+}
+
+TypeNode* TemplateParameterTypeNode::getActualTypeNode(TemplateArguments* templateArguments)
+{
+	TypeNode* actualTypeNode = templateArguments->findTypeNode(m_name);
+	return actualTypeNode;
 }
 
 ClassTypeNode::ClassTypeNode()
@@ -316,14 +370,40 @@ ClassTypeNode::ClassTypeNode()
 EnumTypeNode* ClassTypeNode::addEnum(EnumNode* node)
 {
 	EnumTypeNode* res = m_children.addTypeNode<EnumTypeNode>(this, node->m_name->m_str, node->m_name);
-	res->m_enumNode = node;
+	if (res)
+	{
+		res->m_enumNode = node;
+	}
 	return res;
 }
 
 ClassTypeNode* ClassTypeNode::addClass(ClassNode* node)
 {
 	ClassTypeNode* res = m_children.addTypeNode<ClassTypeNode>(this, node->m_name->m_str, node->m_name);
-	res->m_classNode = node;
+	if (res)
+	{
+		res->m_classNode = node;
+	}
+	return res;
+}
+
+TypedefTypeNode* ClassTypeNode::addTypedef(TypedefNode* node)
+{
+	TypedefTypeNode* res = m_children.addTypeNode<TypedefTypeNode>(this, node->m_name->m_str, node->m_name);
+	if (res)
+	{
+		res->m_typedefNode = node;
+	}
+	return res;
+}
+
+TypeDeclarationTypeNode* ClassTypeNode::addTypeDeclaration(TypeDeclarationNode* node)
+{
+	TypeDeclarationTypeNode* res = m_children.addTypeNode<TypeDeclarationTypeNode>(this, node->m_name->m_str, node->m_name);
+	if (res)
+	{
+		res->m_typeDeclarationNode = node;
+	}
 	return res;
 }
 
@@ -337,7 +417,7 @@ MemberNode* ClassTypeNode::getSyntaxNode()
 	return m_classNode;
 }
 
-TypeCategory ClassTypeNode::getTypeCategory()
+TypeCategory ClassTypeNode::getTypeCategory(TemplateArguments* templateArguments)
 {
 	return m_classNode->isValueType() ? value_type : reference_type;
 }
@@ -352,54 +432,14 @@ MemberNode* TemplateClassInstanceTypeNode::getSyntaxNode()
 	return m_templateClassInstanceNode;
 }
 
-TypeCategory TemplateClassInstanceTypeNode::getTypeCategory()
+TypeCategory TemplateClassInstanceTypeNode::getTypeCategory(TemplateArguments* templateArguments)
 {
-	return m_templateClassInstanceNode->m_classTypeNode->getTypeCategory();
+	return m_templateClassInstanceNode->m_classTypeNode->getTypeCategory(templateArguments);
 }
 
 void TemplateClassInstanceTypeNode::getLocalName(std::string& name)
 {
 	name = m_localName;
-}
-
-TypedefTypeNode::TypedefTypeNode()
-{
-	m_category = tc_typedef;
-}
-
-void TypedefTypeNode::getActualTypeFullName(std::string& name)
-{
-	m_typedefNode->m_actualTypeNode->getActualTypeFullName(name);
-}
-
-TypeNode* TypedefTypeNode::getActualTypeNode()
-{
-	return m_typedefNode->m_actualTypeNode;
-}
-
-MemberNode* TypedefTypeNode::getSyntaxNode()
-{
-	return m_typedefNode;
-}
-
-TypeCategory TypedefTypeNode::getTypeCategory()
-{
-	return m_typedefNode->m_actualTypeNode->getTypeCategory();
-}
-
-TypeDeclarationTypeNode::TypeDeclarationTypeNode()
-{
-	m_category = tc_type_declaration;
-}
-
-MemberNode* TypeDeclarationTypeNode::getSyntaxNode()
-{
-	return m_typeDeclarationNode;
-}
-
-TypeCategory TypeDeclarationTypeNode::getTypeCategory()
-{
-	return m_typeDeclarationNode->m_typeCategory;
 }
 
 NamespaceTypeNode::NamespaceTypeNode()
@@ -443,44 +483,56 @@ NamespaceTypeNode* NamespaceTypeNode::addNamespace(NamespaceNode* node)
 EnumTypeNode* NamespaceTypeNode::addEnum(EnumNode* node)
 {
 	EnumTypeNode* res = m_children.addTypeNode<EnumTypeNode>(this, node->m_name->m_str, node->m_name);
-	res->m_enumNode = node;
+	if (res)
+	{
+		res->m_enumNode = node;
+	}
 	return res;
 }
 
 ClassTypeNode* NamespaceTypeNode::addClass(ClassNode* node)
 {
 	ClassTypeNode* res = m_children.addTypeNode<ClassTypeNode>(this, node->m_name->m_str, node->m_name);
-	if (res && node->m_templateParametersNode)
+	if (res)
 	{
-		std::vector<IdentifyNode*> templateParameterNodes;
-		node->m_templateParametersNode->collectParameterNodes(templateParameterNodes);
-		auto it = templateParameterNodes.begin();
-		auto end = templateParameterNodes.end();
-		for (; it != end; ++it)
+		res->m_classNode = node;
+		if (node->m_templateParametersNode)
 		{
-			IdentifyNode* identifyNode = *it;
-			TemplateParameterTypeNode* typeNode = new TemplateParameterTypeNode();
-			typeNode->m_name = identifyNode->m_str;
-			typeNode->m_identifyNode = identifyNode;
-			typeNode->m_sourceFile = g_compiler.m_currentSourceFile;
-			res->m_parameterNodes.push_back(typeNode);
+			std::vector<IdentifyNode*> templateParameterNodes;
+			node->m_templateParametersNode->collectParameterNodes(templateParameterNodes);
+			auto it = templateParameterNodes.begin();
+			auto end = templateParameterNodes.end();
+			for (; it != end; ++it)
+			{
+				IdentifyNode* identifyNode = *it;
+				TemplateParameterTypeNode* typeNode = new TemplateParameterTypeNode();
+				typeNode->m_name = identifyNode->m_str;
+				typeNode->m_identifyNode = identifyNode;
+				typeNode->m_sourceFile = g_compiler.m_currentSourceFile;
+				res->m_parameterNodes.push_back(typeNode);
+			}
 		}
 	}
-	res->m_classNode = node;
 	return res;
 }
 
 TypedefTypeNode* NamespaceTypeNode::addTypedef(TypedefNode* node)
 {
 	TypedefTypeNode* res = m_children.addTypeNode<TypedefTypeNode>(this, node->m_name->m_str, node->m_name);
-	res->m_typedefNode = node;
+	if (res)
+	{
+		res->m_typedefNode = node;
+	}
 	return res;
 }
 
 TypeDeclarationTypeNode* NamespaceTypeNode::addTypeDeclaration(TypeDeclarationNode* node)
 {
 	TypeDeclarationTypeNode* res = m_children.addTypeNode<TypeDeclarationTypeNode>(this, node->m_name->m_str, node->m_name);
-	res->m_typeDeclarationNode = node;
+	if (res)
+	{
+		res->m_typeDeclarationNode = node;
+	}
 	return res;
 }
 
@@ -502,6 +554,12 @@ void CopyChildren(ClassTypeNode* dst, ClassTypeNode* src)
 				ClassTypeNode* dstChild = dst->addClass(static_cast<ClassTypeNode*>(srcChild)->m_classNode);
 				CopyChildren(dstChild, static_cast<ClassTypeNode*>(srcChild));
 			}
+			break;
+		case tc_typedef:
+			dst->addTypedef(static_cast<TypedefTypeNode*>(srcChild)->m_typedefNode);
+			break;
+		case tc_type_declaration:
+			dst->addTypeDeclaration(static_cast<TypeDeclarationTypeNode*>(srcChild)->m_typeDeclarationNode);
 			break;
 		default:
 			assert(false);
@@ -701,11 +759,24 @@ bool TypeTree::findNodeByScopeNames(TypeNode*& initialTypeTreeNode, TypeNode*& f
 			return false;
 		}
 		finalTypeTreeNode = currentTypeTreeNode;
+		//currentTypeTreeNode = currentTypeTreeNode->getActualTypeNode(templateArguments);
+		//assert(0 != currentTypeTreeNode);
 		if (currentTypeTreeNode->isTypedef())
 		{
-			currentTypeTreeNode = static_cast<TypedefTypeNode*>(currentTypeTreeNode)->m_typedefNode->m_actualTypeNode;
+			currentTypeTreeNode = static_cast<TypedefTypeNode*>(currentTypeTreeNode)->m_typedefNode->m_srcTypeNode;
+			if (0 == currentTypeTreeNode)
+			{
+				//under template parameter
+				finalTypeTreeNode = 0;
+				return true;
+			}
 			assert(currentTypeTreeNode && !currentTypeTreeNode->isTypedef());
 		}
+		//if (currentTypeTreeNode->isTemplateParameter())
+		//{
+		//	currentTypeTreeNode = templateArguments->findTypeNode(currentTypeTreeNode->m_name);
+		//	assert(0 != currentTypeTreeNode);
+		//}
 		++it;
 		if (end == it)
 		{

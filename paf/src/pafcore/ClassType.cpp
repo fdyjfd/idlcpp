@@ -23,6 +23,8 @@ ClassType::ClassType(const char* name, Category category)
 	m_memberCount = 0;
 	m_nestedTypes = 0;
 	m_nestedTypeCount = 0;
+	m_nestedTypeAliases = 0;
+	m_nestedTypeAliasCount = 0;
 	m_fields = 0;
 	m_fieldCount = 0;
 	m_properties = 0;
@@ -51,6 +53,28 @@ Type* ClassType::findNestedType(const char* name, bool includeBaseClasses)
 		{
 			Type* res = m_baseClasses[i].m_type->findNestedType(name, includeBaseClasses);
 			if(0 != res)
+			{
+				return res;
+			}
+		}
+	}
+	return 0;
+}
+
+TypeAlias* ClassType::findNestedTypeAlias(const char* name, bool includeBaseClasses)
+{
+	Metadata dummy(name);
+	TypeAlias** it = std::lower_bound(m_nestedTypeAliases, m_nestedTypeAliases + m_nestedTypeAliasCount, &dummy, CompareMetaDataPtrByName());
+	if (m_nestedTypeAliases + m_nestedTypeAliasCount != it && strcmp(name, (*it)->m_name) == 0)
+	{
+		return *it;
+	}
+	if (includeBaseClasses)
+	{
+		for (size_t i = 0; i < m_baseClassCount; ++i)
+		{
+			TypeAlias* res = m_baseClasses[i].m_type->findNestedTypeAlias(name, includeBaseClasses);
+			if (0 != res)
 			{
 				return res;
 			}
@@ -220,6 +244,11 @@ Metadata* ClassType::findClassMember(const char* name, bool includeBaseClasses)
 	if (0 != type)
 	{
 		return type;
+	}
+	TypeAlias* typeAlias = findNestedTypeAlias(name, false);
+	if (0 != typeAlias)
+	{
+		return typeAlias;
 	}
 	StaticField* field = findStaticField(name, false);
 	if(0 != field)

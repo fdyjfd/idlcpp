@@ -13,6 +13,14 @@
 
 const size_t error_info_buffer_size = 512;
 
+void RaiseError_NestedTemplateClass(IdentifyNode* node)
+{
+	char buf[error_info_buffer_size];
+	sprintf_s(buf, "\'%s\' : template class can not as a nested type", node->m_str.c_str());
+	ErrorList_AddItem_CurrentFile(node->m_lineNo,
+		node->m_columnNo, semantic_error_nested_template_class, buf);
+}
+
 void RaiseError_InvalidTypeName(IdentifyNode* node)
 {
 	char buf[error_info_buffer_size];

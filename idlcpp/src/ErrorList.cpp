@@ -19,6 +19,8 @@ const char* g_errorStrings[] =
 	"type redefined",
 	"template redefined",
 	"enumerator redefined",
+	"nested template class",
+
 	"missing type specifier",
 	"constructor with return type",
 	"constructor with modifier",

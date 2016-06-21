@@ -33,6 +33,6 @@ public:
 	static void generateCode_Class(FILE* file, ClassNode* classNode, TemplateArguments* templateArguments, int indentation);
 	static void generateCode_SubclassProxy(FILE* file, ClassNode* classNode, TemplateArguments* templateArguments, int indentation);
 	static void generateCode_TemplateClassInstance(FILE* file, TemplateClassInstanceNode* templateClassInstance, int indentation);
-	static void generateCode_Typedef(FILE* file, TypedefNode* typedefNode, int indentation);
-	static void generateCode_TypeDeclaration(FILE* file, TypeDeclarationNode* typeDeclarationNode, int indentation);
+	static void generateCode_Typedef(FILE* file, TypedefNode* typedefNode, TemplateArguments* templateArguments, int indentation);
+	static void generateCode_TypeDeclaration(FILE* file, TypeDeclarationNode* typeDeclarationNode, TemplateArguments* templateArguments, int indentation);
 };

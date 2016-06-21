@@ -13,6 +13,6 @@ struct TypeDeclarationNode : MemberNode
 public:
 	TypeDeclarationNode(IdentifyNode* name, TypeCategory typeCategory);
 	virtual TypeNode* getTypeNode();
-	virtual void collectTypes(TypeNode* enclosingTypeNode);
+	virtual void collectTypes(TypeNode* enclosingTypeNode, TemplateArguments* templateArguments);
 };
 

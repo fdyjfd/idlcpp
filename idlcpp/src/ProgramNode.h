@@ -8,7 +8,7 @@ struct ProgramNode : NamespaceNode
 public:
 	ProgramNode(MemberListNode* memberList);
 	virtual void getLocalName(std::string& name, TemplateArguments* templateArguments);
-	virtual void collectTypes(TypeNode* enclosingTypeNode);
+	virtual void collectTypes(TypeNode* enclosingTypeNode, TemplateArguments* templateArguments);
 public:
 	SourceFile* m_sourceFile;
 };

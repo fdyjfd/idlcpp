@@ -30,7 +30,7 @@
 
 const char g_strPublic[] = {"public "};
 
-void checkBaseTypes(ClassNode* classNode, std::vector<TypeNameNode*>& baseTypeNameNodes, std::vector<TypeNode*>& baseTypeNodes)
+void checkBaseTypes(ClassNode* classNode, std::vector<TypeNameNode*>& baseTypeNameNodes, std::vector<TypeNode*>& baseTypeNodes, TemplateArguments* templateArguments)
 {
 	assert(baseTypeNameNodes.size() == baseTypeNodes.size());
 	size_t count = baseTypeNameNodes.size();
@@ -42,7 +42,7 @@ void checkBaseTypes(ClassNode* classNode, std::vector<TypeNameNode*>& baseTypeNa
 		{
 			continue;
 		}
-		TypeCategory baseTypeCategory = typeNode->getTypeCategory();
+		TypeCategory baseTypeCategory = typeNode->getTypeCategory(templateArguments);
 		if(!((classNode->isValueType() && value_type == baseTypeCategory) 
 			|| (!classNode->isValueType() && reference_type == baseTypeCategory)))	
 		{
@@ -594,7 +594,7 @@ void ClassNode::getLocalName(std::string& name, TemplateArguments* templateArgum
 	}
 }
 
-void ClassNode::collectTypes(TypeNode* enclosingTypeNode)
+void ClassNode::collectTypes(TypeNode* enclosingTypeNode, TemplateArguments* templateArguments)
 {
 	assert(enclosingTypeNode);
 	assert(0 == m_typeNode);
@@ -611,8 +611,14 @@ void ClassNode::collectTypes(TypeNode* enclosingTypeNode)
 		m_typeNode = static_cast<NamespaceTypeNode*>(enclosingTypeNode)->addClass(this);
 		break;
 	case tc_class_type:
-		assert(0 == m_templateParametersNode);
-		m_typeNode = static_cast<ClassTypeNode*>(enclosingTypeNode)->addClass(this);
+		if (0 == m_templateParametersNode)
+		{
+			m_typeNode = static_cast<ClassTypeNode*>(enclosingTypeNode)->addClass(this);
+		}
+		else
+		{
+			RaiseError_NestedTemplateClass(m_name);
+		}
 		break;
 	default:
 		assert(false);
@@ -633,10 +639,12 @@ void ClassNode::collectTypes(TypeNode* enclosingTypeNode)
 				arg.m_typeNode = typeNode;
 				m_templateArguments.m_arguments.push_back(arg);
 			}
+			assert(0 == templateArguments);
+			templateArguments = &m_templateArguments;
 		}
 		if (m_memberList)
 		{
-			m_memberList->collectTypes(m_typeNode);
+			m_memberList->collectTypes(m_typeNode, templateArguments);
 		}
 	}
 }
@@ -687,7 +695,7 @@ void ClassNode::checkSemantic(TemplateArguments* templateArguments)
 		}
 	}
 
-	checkBaseTypes(this, baseTypeNameNodes, baseTypeNodes);
+	checkBaseTypes(this, baseTypeNameNodes, baseTypeNodes, templateArguments);
 	if (0 == baseCount)
 	{
 		if (!isValueType())

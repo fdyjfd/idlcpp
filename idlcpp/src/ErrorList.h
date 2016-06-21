@@ -20,6 +20,7 @@ enum ErrorCode
 	semantic_error_type_redefined,
 	semantic_error_template_redefined,
 	semantic_error_enumerator_redefined,
+	semantic_error_nested_template_class,
 	semantic_error_missing_type_specifier,
 	semantic_error_constructor_with_return_type,
 	semantic_error_constructor_with_modifier,

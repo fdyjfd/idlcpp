@@ -44,9 +44,9 @@ void TemplateClassInstanceNode::getLocalName(std::string& name, TemplateArgument
 	m_typeNode->getLocalName(name);
 }
 
-void TemplateClassInstanceNode::collectTypes(TypeNode* enclosingTypeNode)
+void TemplateClassInstanceNode::collectTypes(TypeNode* enclosingTypeNode, TemplateArguments* templateArguments)
 {
-	assert(enclosingTypeNode->isNamespace());
+	assert(enclosingTypeNode->isNamespace() && 0 == templateArguments);
 	assert(0 == m_typeNode && 0 == m_classTypeNode);
 	TypeNode* childTypeNode = enclosingTypeNode->getChildNode(m_name->m_str);
 	if (0 == childTypeNode || !childTypeNode->isTemplateClass())

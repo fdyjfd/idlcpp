@@ -27,13 +27,13 @@ TypeNode* NamespaceNode::getTypeNode()
 	return m_typeNode;
 }
 
-void NamespaceNode::collectTypes(TypeNode* enclosingTypeNode)
+void NamespaceNode::collectTypes(TypeNode* enclosingTypeNode, TemplateArguments* templateArguments)
 {
-	assert(0 == m_typeNode && enclosingTypeNode->isNamespace());
+	assert(0 == m_typeNode && enclosingTypeNode->isNamespace() && 0 == templateArguments);
 	m_typeNode = static_cast<NamespaceTypeNode*>(enclosingTypeNode)->addNamespace(this);
 	if (m_typeNode)
 	{
-		m_memberList->collectTypes(m_typeNode);
+		m_memberList->collectTypes(m_typeNode, templateArguments);
 	}
 }
 

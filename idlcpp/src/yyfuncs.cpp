@@ -306,7 +306,8 @@ SyntaxNode* newClassMemberList(SyntaxNode* memberList, SyntaxNode* member)
 {
 	assert(0 == memberList || snt_member_list == memberList->m_nodeType);
 	assert(snt_field == member->m_nodeType || snt_property == member->m_nodeType || snt_method == member->m_nodeType
-		|| snt_class == member->m_nodeType || snt_enum == member->m_nodeType);
+		|| snt_class == member->m_nodeType || snt_enum == member->m_nodeType 
+		|| snt_typedef == member->m_nodeType || snt_type_declaration  == member->m_nodeType);
 	MemberListNode* res = new MemberListNode((MemberListNode*)memberList, (MemberNode*)member);
 	g_syntaxNodes.push_back(res);
 	return res;

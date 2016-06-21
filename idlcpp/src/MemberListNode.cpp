@@ -30,7 +30,7 @@ void MemberListNode::collectMemberNodes(std::vector<MemberNode*>& memberNodes)
 	std::reverse(memberNodes.begin(), memberNodes.end());
 }
 
-void MemberListNode::collectTypes(TypeNode* enclosingTypeNode)
+void MemberListNode::collectTypes(TypeNode* enclosingTypeNode, TemplateArguments* templateArguments)
 {
 	assert(enclosingTypeNode);
 	std::vector<MemberNode*> memberNodes;
@@ -39,7 +39,7 @@ void MemberListNode::collectTypes(TypeNode* enclosingTypeNode)
 	for (size_t i = 0; i < count; ++i)
 	{
 		MemberNode* memberNode = memberNodes[i];
-		memberNode->collectTypes(enclosingTypeNode);
+		memberNode->collectTypes(enclosingTypeNode, templateArguments);
 	}
 }
 

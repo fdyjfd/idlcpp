@@ -54,9 +54,9 @@ public:
 	TypeNode();
 	virtual ~TypeNode();
 	virtual MemberNode* getSyntaxNode();
-	virtual TypeCategory getTypeCategory();
+	virtual TypeCategory getTypeCategory(TemplateArguments* templateArguments);
 	virtual TypeNode* getChildNode(const std::string& name);
-	virtual TypeNode* getActualTypeNode();
+	virtual TypeNode* getActualTypeNode(TemplateArguments* templateArguments);
 	virtual void getActualTypeFullName(std::string& name);
 	virtual void getLocalName(std::string& name);
 	void getFullName(std::string& name);
@@ -80,7 +80,7 @@ struct PredefinedTypeNode : TypeNode
 	PredefinedType m_type;
 public:
 	PredefinedTypeNode();
-	virtual TypeCategory getTypeCategory();
+	virtual TypeCategory getTypeCategory(TemplateArguments* templateArguments);
 };
 
 struct EnumTypeNode : TypeNode
@@ -89,12 +89,34 @@ struct EnumTypeNode : TypeNode
 public:
 	EnumTypeNode();
 	virtual MemberNode* getSyntaxNode();
-	virtual TypeCategory getTypeCategory();
+	virtual TypeCategory getTypeCategory(TemplateArguments* templateArguments);
+};
+
+struct TypedefTypeNode : TypeNode
+{
+	TypedefNode* m_typedefNode;
+public:
+	TypedefTypeNode();
+	virtual MemberNode* getSyntaxNode();
+	virtual TypeCategory getTypeCategory(TemplateArguments* templateArguments);
+	virtual TypeNode* getActualTypeNode(TemplateArguments* templateArguments);
+	virtual void getActualTypeFullName(std::string& name);
+};
+
+struct TypeDeclarationTypeNode : TypeNode
+{
+	TypeDeclarationNode* m_typeDeclarationNode;
+public:
+	TypeDeclarationTypeNode();
+	virtual MemberNode* getSyntaxNode();
+	virtual TypeCategory getTypeCategory(TemplateArguments* templateArguments);
 };
 
 struct TemplateParameterTypeNode : TypeNode
 {
 	TemplateParameterTypeNode();
+	virtual TypeCategory getTypeCategory(TemplateArguments* templateArguments);
+	virtual TypeNode* getActualTypeNode(TemplateArguments* templateArguments);
 };
 
 struct ClassTypeNode : TypeNode
@@ -106,8 +128,10 @@ public:
 	ClassTypeNode();
 	EnumTypeNode* addEnum(EnumNode* node);
 	ClassTypeNode* addClass(ClassNode* node);
+	TypedefTypeNode* addTypedef(TypedefNode* node);
+	TypeDeclarationTypeNode* addTypeDeclaration(TypeDeclarationNode* node);
 	virtual MemberNode* getSyntaxNode();
-	virtual TypeCategory getTypeCategory();
+	virtual TypeCategory getTypeCategory(TemplateArguments* templateArguments);
 	virtual TypeNode* getChildNode(const std::string& name);
 };
 
@@ -118,28 +142,8 @@ struct TemplateClassInstanceTypeNode : ClassTypeNode
 public:
 	TemplateClassInstanceTypeNode();
 	virtual MemberNode* getSyntaxNode();
-	virtual TypeCategory getTypeCategory();
+	virtual TypeCategory getTypeCategory(TemplateArguments* templateArguments);
 	virtual void getLocalName(std::string& name);
-};
-
-struct TypedefTypeNode : TypeNode
-{
-	TypedefNode* m_typedefNode;
-public:
-	TypedefTypeNode();
-	virtual MemberNode* getSyntaxNode();
-	virtual TypeCategory getTypeCategory();
-	virtual TypeNode* getActualTypeNode();
-	virtual void getActualTypeFullName(std::string& name);
-};
-
-struct TypeDeclarationTypeNode : TypeNode
-{
-	TypeDeclarationNode* m_typeDeclarationNode;
-public:
-	TypeDeclarationTypeNode();
-	virtual MemberNode* getSyntaxNode();
-	virtual TypeCategory getTypeCategory();
 };
 
 struct NamespaceTypeNode : TypeNode

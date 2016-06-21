@@ -18,9 +18,20 @@ TypeNode* TypeDeclarationNode::getTypeNode()
 	return m_typeNode;
 }
 
-void TypeDeclarationNode::collectTypes(TypeNode* enclosingTypeNode)
+void TypeDeclarationNode::collectTypes(TypeNode* enclosingTypeNode, TemplateArguments* templateArguments)
 {
-	assert(tc_namespace == enclosingTypeNode->m_category);
+	//assert(enclosingTypeNode->isNamespace() || enclosingTypeNode->isClass());
 	assert(0 == m_typeNode);
-	m_typeNode = static_cast<NamespaceTypeNode*>(enclosingTypeNode)->addTypeDeclaration(this);
+
+	switch (enclosingTypeNode->m_category)
+	{
+	case tc_namespace:
+		m_typeNode = static_cast<NamespaceTypeNode*>(enclosingTypeNode)->addTypeDeclaration(this);
+		break;
+	case tc_class_type:
+		m_typeNode = static_cast<ClassTypeNode*>(enclosingTypeNode)->addTypeDeclaration(this);
+		break;
+	default:
+		assert(false);
+	}
 }

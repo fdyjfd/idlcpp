@@ -64,27 +64,36 @@ bool TypeNameNode::calcTypeNodes(TypeNode* enclosingTypeTreeNode, TemplateArgume
 
 TypeNode* TypeNameNode::getTypeNode(TemplateArguments* templateArguments)
 {
-	assert(0 == templateArguments || templateArguments->m_classTypeNode->isTemplateClassInstance());
+	//assert(0 == templateArguments || templateArguments->m_classTypeNode->isTemplateClassInstance());
 	assert(0 != m_startTypeNode);
 	TypeNode* result = 0;
 	if (0 == m_typeNode)// under template parameter
 	{
-		assert(templateArguments && templateArguments->m_classTypeNode->isTemplateClassInstance() 
-			&& m_startTypeNode && m_startTypeNode->isTemplateParameter());
-		TypeNode* actualStartTypeNode = templateArguments->findTypeNode(m_startTypeNode->m_name);
+		assert(templateArguments && m_startTypeNode 
+			&& (m_startTypeNode->isTemplateParameter() || m_startTypeNode->isTypedef()) );
+		if (templateArguments->m_classTypeNode->isClass())
+		{
+			return 0;
+		}
+		TypeNode* actualStartTypeNode = m_startTypeNode->getActualTypeNode(templateArguments);
 		assert(actualStartTypeNode);
-		actualStartTypeNode = actualStartTypeNode->getActualTypeNode();
 		std::vector<ScopeNameNode*> scopeNameNodes;
 		m_scopeNameList->collectIdentifyNodes(scopeNameNodes);
-		assert(scopeNameNodes.size() > 1);
-		scopeNameNodes.erase(scopeNameNodes.begin());
-		TypeNode* initialTypeTreeNode = 0;
-		TypeNode* finalTypeTreeNode = 0;
-		if (g_typeTree.findNodeByScopeNames(initialTypeTreeNode, finalTypeTreeNode,
-			scopeNameNodes, actualStartTypeNode, templateArguments))
+		if (scopeNameNodes.size() == 1)
 		{
-			assert(finalTypeTreeNode);
-			result = finalTypeTreeNode;
+			result = actualStartTypeNode;
+		}
+		else
+		{
+			scopeNameNodes.erase(scopeNameNodes.begin());
+			TypeNode* initialTypeTreeNode = 0;
+			TypeNode* finalTypeTreeNode = 0;
+			if (g_typeTree.findNodeByScopeNames(initialTypeTreeNode, finalTypeTreeNode,
+				scopeNameNodes, actualStartTypeNode, templateArguments))
+			{
+				assert(finalTypeTreeNode);
+				result = finalTypeTreeNode;
+			}
 		}
 	}
 	else if (m_typeNode->isTemplateParameter())
@@ -130,6 +139,15 @@ TypeNode* TypeNameNode::getTypeNode(TemplateArguments* templateArguments)
 				TypeNode* tempTypeNode = *it;
 				typeNode = typeNode->getChildNode(tempTypeNode->m_name);
 				assert(typeNode);
+			}
+			if (typeNode->isTypedef())
+			{
+				TypeNode* actualTypeNode = typeNode->getActualTypeNode(templateArguments);
+				if (actualTypeNode->isTemplateParameter())
+				{
+					typeNode = templateArguments->findTypeNode(actualTypeNode->m_name);
+					assert(0 != typeNode);
+				}
 			}
 			result = typeNode;
 		}
@@ -182,7 +200,7 @@ TypeNode* TypeNameNode::getActualTypeNode(TemplateArguments* templateArguments)
 	TypeNode* typeNode = getTypeNode(templateArguments);
 	if (typeNode)
 	{
-		typeNode = typeNode->getActualTypeNode();
+		typeNode = typeNode->getActualTypeNode(templateArguments);
 	}
 	return typeNode;
 }
@@ -252,3 +270,7 @@ void TypeNameNode::getRelativeName(std::string& typeName, ScopeNode* scopeNode)
 	}
 }
 
+bool TypeNameNode::underTemplateParameter()
+{
+	return 0 == m_typeNode;
+}

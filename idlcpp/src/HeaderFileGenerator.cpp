@@ -27,7 +27,7 @@
 
 void generateCode_Token(FILE* file, TokenNode* tokenNode, int indentation);
 void generateCode_Identify(FILE* file, IdentifyNode* identifyNode, int indentation);
-void generateCode_TypeName(FILE* file, TypeNameNode* typeNameNode, ScopeNode* scopeNode, int indentation);
+void generateCode_TypeName(FILE* file, TypeNameNode* typeNameNode, ScopeNode* scopeNode, bool addKeyword, int indentation);
 void generateCode_Parameter(FILE* file, ParameterNode* parameterNode, MethodNode* methodNode, int indentation);
 
 void generateCode_Token(FILE* file, TokenNode* tokenNode, int indentation)
@@ -87,7 +87,7 @@ void generateCode_Identify(FILE* file, IdentifyNode* identifyNode, int indentati
 };
 
 
-void generateCode_TypeName(FILE* file, TypeNameNode* typeNameNode, ScopeNode* scopeNode, int indentation)
+void generateCode_TypeName(FILE* file, TypeNameNode* typeNameNode, ScopeNode* scopeNode, bool addKeyword, int indentation)
 {
 	if(typeNameNode->m_keyword)
 	{
@@ -97,6 +97,11 @@ void generateCode_TypeName(FILE* file, TypeNameNode* typeNameNode, ScopeNode* sc
 	if(typeNameNode->m_scopeNameList)
 	{
 		typeNameNode->m_scopeNameList->m_scopeName->m_name->outputEmbededCodes(file, 0 == indentation);
+	}
+	if (addKeyword && typeNameNode->underTemplateParameter())
+	{
+		writeStringToFile("typename ", file, indentation);
+		indentation = 0;
 	}
 	std::string typeName;
 	typeNameNode->getRelativeName(typeName, scopeNode);
@@ -110,7 +115,7 @@ void generateCode_Parameter(FILE* file, ParameterNode* parameterNode, MethodNode
 	{
 		generateCode_Token(file, parameterNode->m_constant, 0);
 	}
-	generateCode_TypeName(file, parameterNode->m_typeName, methodNode->m_enclosing, 0);
+	generateCode_TypeName(file, parameterNode->m_typeName, methodNode->m_enclosing, true, 0);
 	if(0 != parameterNode->m_out)
 	{
 		generateCode_Token(file, parameterNode->m_out, 0);
@@ -196,11 +201,9 @@ void HeaderFileGenerator::generateCode_Typedef(FILE* file, TypedefNode* typedefN
 	}
 	if(0 != typedefNode->m_typeName)
 	{
-		generateCode_Token(file, typedefNode->m_keyword, indentation);
-		std::string relativeName;
-		typedefNode->m_typeName->getRelativeName(relativeName, typedefNode->m_enclosing);
-		writeStringToFile(relativeName.c_str(), file);
-		writeSpaceToFile(file);;
+		generateCode_Token(file, typedefNode->m_keyword, indentation);	
+		generateCode_TypeName(file, typedefNode->m_typeName, typedefNode->m_enclosing, true, 0);
+		writeSpaceToFile(file);
 		generateCode_Identify(file, typedefNode->m_name, 0);
 		writeStringToFile(";", 1, file);
 	}
@@ -277,7 +280,7 @@ void HeaderFileGenerator::generateCode_Class(FILE* file, ClassNode* classNode, i
 				generateCode_Token(file, typeNameNodes[i].first, 0);
 			}
 			writeStringToFile("public ", file);
-			generateCode_TypeName(file, typeNameNodes[i].second, classNode->m_enclosing, 0);
+			generateCode_TypeName(file, typeNameNodes[i].second, classNode->m_enclosing, false, 0);
 		}
 	}
 
@@ -339,6 +342,11 @@ void HeaderFileGenerator::generateCode_Class(FILE* file, ClassNode* classNode, i
 		case snt_enum:
 			generateCode_Enum(file, static_cast<EnumNode*>(memberNode), indentation + 1);
 			break;
+		case snt_typedef:
+			generateCode_Typedef(file, static_cast<TypedefNode*>(memberNode), indentation + 1);
+			break;
+		case snt_type_declaration:
+			break;
 		default:
 			assert(false);
 		}
@@ -367,7 +375,7 @@ void HeaderFileGenerator::generateCode_Field(FILE* file, FieldNode* fieldNode, i
 		generateCode_Token(file, fieldNode->m_constant, indentation);
 		indentation = 0;
 	}
-	generateCode_TypeName(file, fieldNode->m_typeName, fieldNode->m_enclosing, indentation);
+	generateCode_TypeName(file, fieldNode->m_typeName, fieldNode->m_enclosing, true, indentation);
 
 	writeSpaceToFile(file);;
 
@@ -396,7 +404,7 @@ void HeaderFileGenerator::generateCode_Property_Get(FILE* file, PropertyNode* pr
 		generateCode_Token(file, propertyNode->m_get->m_constant, indentation);
 		indentation = 0;
 	}
-	generateCode_TypeName(file, propertyNode->m_get->m_typeName, propertyNode->m_enclosing, indentation);
+	generateCode_TypeName(file, propertyNode->m_get->m_typeName, propertyNode->m_enclosing, true, indentation);
 	if(0 != propertyNode->m_get->m_passing)
 	{
 		generateCode_Token(file, propertyNode->m_get->m_passing, 0);
@@ -430,7 +438,7 @@ void HeaderFileGenerator::generateCode_Property_Set(FILE* file, PropertyNode* pr
 	{
 		generateCode_Token(file, propertyNode->m_set->m_constant, 0);
 	}
-	generateCode_TypeName(file, propertyNode->m_set->m_typeName, propertyNode->m_enclosing, 0);
+	generateCode_TypeName(file, propertyNode->m_set->m_typeName, propertyNode->m_enclosing, true, 0);
 	if(0 != propertyNode->m_set->m_passing)
 	{
 		generateCode_Token(file, propertyNode->m_set->m_passing, 0);
@@ -495,7 +503,7 @@ void HeaderFileGenerator::generateCode_Method(FILE* file, MethodNode* methodNode
 	}
 	if(0 != methodNode->m_resultTypeName)
 	{
-		generateCode_TypeName(file, methodNode->m_resultTypeName, methodNode->m_enclosing, indentation);
+		generateCode_TypeName(file, methodNode->m_resultTypeName, methodNode->m_enclosing, true, indentation);
 		indentation = 0;
 		if(0 != methodNode->m_passing)
 		{

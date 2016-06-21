@@ -207,12 +207,14 @@ classMemberList			: property											{$$ = newClassMemberList(NULL, $1);}
 						| field												{$$ = newClassMemberList(NULL, $1);}
 						| class												{$$ = newClassMemberList(NULL, $1);}
 						| enum												{$$ = newClassMemberList(NULL, $1);}
+						| typeAlias											{$$ = newClassMemberList(NULL, $1);}	
 						| ';'												{$$ = NULL;}
 						| classMemberList property							{$$ = newClassMemberList($1, $2);}
 						| classMemberList method							{$$ = newClassMemberList($1, $2);}
 						| classMemberList field								{$$ = newClassMemberList($1, $2);}
 						| classMemberList class								{$$ = newClassMemberList($1, $2);}
 						| classMemberList enum								{$$ = newClassMemberList($1, $2);}
+						| classMemberList typeAlias							{$$ = newClassMemberList($1, $2);}
 						| classMemberList ';'								{$$ = $1;}
 ;
 

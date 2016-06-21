@@ -15,7 +15,7 @@ public:
 	MemberListNode(MemberListNode* memberList, MemberNode* member);
 	void initializeMembersEnclosing(ScopeNode* parent);
 	void collectMemberNodes(std::vector<MemberNode*>& memberNodes);
-	void collectTypes(TypeNode* enclosingTypeNode);
+	void collectTypes(TypeNode* enclosingTypeNode, TemplateArguments* templateArguments);
 	void checkTypeNames(TypeNode* enclosingTypeNode, TemplateArguments* templateArguments);
 	void checkSemantic(TemplateArguments* templateArguments);
 };

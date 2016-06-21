@@ -154,7 +154,7 @@ void MetaHeaderFileGenerator::generateCode_Program(FILE* file, ProgramNode* prog
 			&& !typeNode->isTypeDeclaration()
 			&& typeNode->getSyntaxNode()->canGenerateMetaCode())
 		{
-			TypeCategory typeCategory = typeNode->getTypeCategory();
+			TypeCategory typeCategory = typeNode->getTypeCategory(0);
 			const char* typeCategoryName = "";
 			switch(typeCategory)
 			{
@@ -217,10 +217,10 @@ void MetaHeaderFileGenerator::generateCode_Namespace(FILE* file, NamespaceNode* 
 			generateCode_TemplateClassInstance(file, static_cast<TemplateClassInstanceNode*>(memberNode), indentation);
 			break;
 		case snt_typedef:
-			generateCode_Typedef(file, static_cast<TypedefNode*>(memberNode), indentation);
+			generateCode_Typedef(file, static_cast<TypedefNode*>(memberNode), 0, indentation);
 			break;
 		case snt_type_declaration:
-			generateCode_TypeDeclaration(file, static_cast<TypeDeclarationNode*>(memberNode), indentation);
+			generateCode_TypeDeclaration(file, static_cast<TypeDeclarationNode*>(memberNode), 0, indentation);
 			break;
 		default:
 			assert(false);
@@ -313,8 +313,10 @@ void MetaHeaderFileGenerator::generateCode_Class(FILE* file, ClassNode* classNod
 					propertyNodes.push_back(propertyNode);
 				}
 			}
-			else if(snt_enum == memberNode->m_nodeType ||
-				snt_class == memberNode->m_nodeType )
+			else if(snt_enum == memberNode->m_nodeType
+				|| snt_class == memberNode->m_nodeType
+				|| snt_typedef == memberNode->m_nodeType
+				|| snt_type_declaration == memberNode->m_nodeType)
 			{
 				subTypeNodes.push_back(memberNode);
 			}
@@ -384,6 +386,12 @@ void MetaHeaderFileGenerator::generateCode_Class(FILE* file, ClassNode* classNod
 			break;
 		case snt_class:
 			generateCode_Class(file, static_cast<ClassNode*>(typeNode), templateArguments, indentation);
+			break;
+		case snt_typedef:
+			generateCode_Typedef(file, static_cast<TypedefNode*>(typeNode), templateArguments, indentation);
+			break;
+		case snt_type_declaration:
+			generateCode_TypeDeclaration(file, static_cast<TypeDeclarationNode*>(typeNode), templateArguments, indentation);
 			break;
 		default:
 			assert(false);
@@ -499,7 +507,7 @@ void MetaHeaderFileGenerator::generateCode_TemplateClassInstance(FILE* file, Tem
 
 }
 
-void MetaHeaderFileGenerator::generateCode_Typedef(FILE* file, TypedefNode* typedefNode, int indentation)
+void MetaHeaderFileGenerator::generateCode_Typedef(FILE* file, TypedefNode* typedefNode, TemplateArguments* templateArguments, int indentation)
 {
 	if (typedefNode->isNativeOnly())
 	{
@@ -508,7 +516,7 @@ void MetaHeaderFileGenerator::generateCode_Typedef(FILE* file, TypedefNode* type
 
 	char buf[512];
 	std::string metaTypeName;
-	GetMetaTypeFullName(metaTypeName, typedefNode, 0);
+	GetMetaTypeFullName(metaTypeName, typedefNode, templateArguments);
 
 	sprintf_s(buf, "class %s : public ::pafcore::TypeAlias\n",
 		metaTypeName.c_str());
@@ -527,7 +535,7 @@ void MetaHeaderFileGenerator::generateCode_Typedef(FILE* file, TypedefNode* type
 	writeStringToFile("};\n\n", file, indentation);
 }
 
-void MetaHeaderFileGenerator::generateCode_TypeDeclaration(FILE* file, TypeDeclarationNode* typeDeclarationNode, int indentation)
+void MetaHeaderFileGenerator::generateCode_TypeDeclaration(FILE* file, TypeDeclarationNode* typeDeclarationNode, TemplateArguments* templateArguments, int indentation)
 {
 	if (typeDeclarationNode->isNativeOnly())
 	{
@@ -536,7 +544,7 @@ void MetaHeaderFileGenerator::generateCode_TypeDeclaration(FILE* file, TypeDecla
 
 	char buf[512];
 	std::string metaTypeName;
-	GetMetaTypeFullName(metaTypeName, typeDeclarationNode, 0);
+	GetMetaTypeFullName(metaTypeName, typeDeclarationNode, templateArguments);
 
 	sprintf_s(buf, "class %s : public ::pafcore::TypeAlias\n",
 		metaTypeName.c_str());

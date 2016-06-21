@@ -15,7 +15,7 @@ struct NamespaceNode : ScopeNode
 public:
 	NamespaceNode(TokenNode* keyword, IdentifyNode* name, TokenNode* leftBrace, MemberListNode* memberList, TokenNode* rightBrace);
 	virtual TypeNode* getTypeNode();
-	virtual void collectTypes(TypeNode* enclosingTypeNode);
+	virtual void collectTypes(TypeNode* enclosingTypeNode, TemplateArguments* templateArguments);
 	virtual void checkTypeNames(TypeNode* enclosingTypeNode, TemplateArguments* templateArguments);
 	virtual void checkSemantic(TemplateArguments* templateArguments);
 	bool isGlobalNamespace();

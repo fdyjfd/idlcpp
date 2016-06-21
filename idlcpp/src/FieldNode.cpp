@@ -47,7 +47,7 @@ void FieldNode::checkSemantic(TemplateArguments* templateArguments)
 	{
 		return;
 	}
-	if (void_type == typeNode->getTypeCategory())
+	if (void_type == typeNode->getTypeCategory(templateArguments))
 	{
 		RaiseError_InvalidFieldType(this);
 	}

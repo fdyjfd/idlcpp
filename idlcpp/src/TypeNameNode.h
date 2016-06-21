@@ -32,5 +32,6 @@ public:
 	TypeNode* getActualTypeNode(TemplateArguments* templateArguments);
 	void getString(std::string& str);
 	void getRelativeName(std::string& typeName, ScopeNode* scopeNode);
+	bool underTemplateParameter();
 };
 

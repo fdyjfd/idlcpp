@@ -91,7 +91,7 @@ void PropertyNode::checkSemantic(TemplateArguments* templateArguments)
 		{
 			return;
 		}
-		if (void_type == typeNode->getTypeCategory() && !byPtr())
+		if (void_type == typeNode->getTypeCategory(templateArguments) && !byPtr())
 		{
 			RaiseError_InvalidPropertyType(m_get, true);
 		}
@@ -104,7 +104,7 @@ void PropertyNode::checkSemantic(TemplateArguments* templateArguments)
 		{
 			return;
 		}
-		if (void_type == typeNode->getTypeCategory() && !byPtr())
+		if (void_type == typeNode->getTypeCategory(templateArguments) && !byPtr())
 		{
 			RaiseError_InvalidPropertyType(m_set, false);
 		}

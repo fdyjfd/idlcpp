@@ -23,10 +23,10 @@ void ProgramNode::getLocalName(std::string& name, TemplateArguments* templateArg
 	name = "";
 }
 
-void ProgramNode::collectTypes(TypeNode* enclosingTypeNode)
+void ProgramNode::collectTypes(TypeNode* enclosingTypeNode, TemplateArguments* templateArguments)
 {
-	assert(0 == enclosingTypeNode && 0 == m_typeNode);
+	assert(0 == enclosingTypeNode && 0 == m_typeNode && 0 == templateArguments);
 	m_typeNode = g_typeTree.getRootNamespaceTypeNode();
-	m_memberList->collectTypes(m_typeNode);
+	m_memberList->collectTypes(m_typeNode, templateArguments);
 }
 
