@@ -1102,67 +1102,67 @@ PyObject* VariantWrapper_binaryOperator(PyObject* pyObject1, PyObject* pyObject2
 
 PyObject* VariantWrapper_add(PyObject* pyObject1, PyObject* pyObject2)
 {
-	return VariantWrapper_binaryOperator(pyObject1, pyObject2, pafcore::PrimitiveType::Primitive___op_add_);
+	return VariantWrapper_binaryOperator(pyObject1, pyObject2, pafcore::PrimitiveType::Primitive_op_add);
 }
 
 PyObject* VariantWrapper_subtract(PyObject* pyObject1, PyObject* pyObject2)
 {
-	return VariantWrapper_binaryOperator(pyObject1, pyObject2, pafcore::PrimitiveType::Primitive___op_sub_);
+	return VariantWrapper_binaryOperator(pyObject1, pyObject2, pafcore::PrimitiveType::Primitive_op_subtract);
 }
 
 PyObject* VariantWrapper_multiply(PyObject* pyObject1, PyObject* pyObject2)
 {
-	return VariantWrapper_binaryOperator(pyObject1, pyObject2, pafcore::PrimitiveType::Primitive___op_mul_);
+	return VariantWrapper_binaryOperator(pyObject1, pyObject2, pafcore::PrimitiveType::Primitive_op_multiply);
 }
 
 PyObject* VariantWrapper_mod(PyObject* pyObject1, PyObject* pyObject2)
 {
-	return VariantWrapper_binaryOperator(pyObject1, pyObject2, pafcore::PrimitiveType::Primitive___op_mod_);
+	return VariantWrapper_binaryOperator(pyObject1, pyObject2, pafcore::PrimitiveType::Primitive_op_mod);
 }
 
 PyObject* VariantWrapper_negative(PyObject* pyObject)
 {
-	return VariantWrapper_unaryOperator(pyObject, pafcore::PrimitiveType::Primitive___op_neg_);
+	return VariantWrapper_unaryOperator(pyObject, pafcore::PrimitiveType::Primitive_op_negate);
 }
 
 PyObject* VariantWrapper_positive(PyObject* pyObject)
 {
-	return VariantWrapper_unaryOperator(pyObject, pafcore::PrimitiveType::Primitive___op_pos_);
+	return VariantWrapper_unaryOperator(pyObject, pafcore::PrimitiveType::Primitive_op_plus);
 }
 
 PyObject* VariantWrapper_invert(PyObject* pyObject)
 {
-	return VariantWrapper_unaryOperator(pyObject, pafcore::PrimitiveType::Primitive___op_bit_not_);
+	return VariantWrapper_unaryOperator(pyObject, pafcore::PrimitiveType::Primitive_op_bitwiseNot);
 }
 
 PyObject* VariantWrapper_lshift(PyObject* pyObject1, PyObject* pyObject2)
 {
-	return VariantWrapper_binaryOperator(pyObject1, pyObject2, pafcore::PrimitiveType::Primitive___op_left_shift_);
+	return VariantWrapper_binaryOperator(pyObject1, pyObject2, pafcore::PrimitiveType::Primitive_op_leftShift);
 }
 
 PyObject* VariantWrapper_rshift(PyObject* pyObject1, PyObject* pyObject2)
 {
-	return VariantWrapper_binaryOperator(pyObject1, pyObject2, pafcore::PrimitiveType::Primitive___op_right_shift_);
+	return VariantWrapper_binaryOperator(pyObject1, pyObject2, pafcore::PrimitiveType::Primitive_op_rightShift);
 }
 
 PyObject* VariantWrapper_and(PyObject* pyObject1, PyObject* pyObject2)
 {
-	return VariantWrapper_binaryOperator(pyObject1, pyObject2, pafcore::PrimitiveType::Primitive___op_bit_and_);
+	return VariantWrapper_binaryOperator(pyObject1, pyObject2, pafcore::PrimitiveType::Primitive_op_bitwiseAnd);
 }
 
 PyObject* VariantWrapper_xor(PyObject* pyObject1, PyObject* pyObject2)
 {
-	return VariantWrapper_binaryOperator(pyObject1, pyObject2, pafcore::PrimitiveType::Primitive___op_bit_xor_);
+	return VariantWrapper_binaryOperator(pyObject1, pyObject2, pafcore::PrimitiveType::Primitive_op_bitwiseXor);
 }
 
 PyObject* VariantWrapper_or(PyObject* pyObject1, PyObject* pyObject2)
 {
-	return VariantWrapper_binaryOperator(pyObject1, pyObject2, pafcore::PrimitiveType::Primitive___op_bit_or_);
+	return VariantWrapper_binaryOperator(pyObject1, pyObject2, pafcore::PrimitiveType::Primitive_op_bitwiseOr);
 }
 //
 //PyObject* VariantWrapper_inplace_add(PyObject* pyObject1, PyObject* pyObject2)
 //{
-//	return VariantWrapper_compoundAssignmentOperator(pyObject1, pyObject2, pafcore::PrimitiveType::Primitive___op_add_assign_);
+//	return VariantWrapper_compoundAssignmentOperator(pyObject1, pyObject2, pafcore::PrimitiveType::Primitive_op_addAssign);
 //}
 
 static PyNumberMethods s_VariantWrapper_Operators = 
@@ -1210,17 +1210,17 @@ PyObject* VariantWrapper_richcmp(PyObject* pyObject1, PyObject* pyObject2, int o
 	switch(op)
 	{
 	case Py_LT:
-		return VariantWrapper_binaryOperator(pyObject1, pyObject2, pafcore::PrimitiveType::Primitive___op_less_than_);
+		return VariantWrapper_binaryOperator(pyObject1, pyObject2, pafcore::PrimitiveType::Primitive_op_less);
 	case Py_LE:
-		return VariantWrapper_binaryOperator(pyObject1, pyObject2, pafcore::PrimitiveType::Primitive___op_less_equal_);
+		return VariantWrapper_binaryOperator(pyObject1, pyObject2, pafcore::PrimitiveType::Primitive_op_lessEqual);
 	case Py_EQ:
-		return VariantWrapper_binaryOperator(pyObject1, pyObject2, pafcore::PrimitiveType::Primitive___op_equal_to_);
+		return VariantWrapper_binaryOperator(pyObject1, pyObject2, pafcore::PrimitiveType::Primitive_op_equal);
 	case Py_NE:
-		return VariantWrapper_binaryOperator(pyObject1, pyObject2, pafcore::PrimitiveType::Primitive___op_not_equal_to_);
+		return VariantWrapper_binaryOperator(pyObject1, pyObject2, pafcore::PrimitiveType::Primitive_op_notEqual);
 	case Py_GT:
-		return VariantWrapper_binaryOperator(pyObject1, pyObject2, pafcore::PrimitiveType::Primitive___op_greater_than_);
+		return VariantWrapper_binaryOperator(pyObject1, pyObject2, pafcore::PrimitiveType::Primitive_op_greater);
 	case Py_GE:
-		return VariantWrapper_binaryOperator(pyObject1, pyObject2, pafcore::PrimitiveType::Primitive___op_greater_equal_);
+		return VariantWrapper_binaryOperator(pyObject1, pyObject2, pafcore::PrimitiveType::Primitive_op_greaterEqual);
 	}
 	return 0;
 }

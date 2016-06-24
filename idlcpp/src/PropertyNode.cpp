@@ -40,7 +40,7 @@ bool PropertyNode::isAbstract()
 
 bool PropertyNode::byPtr()
 {
-	return (0 != m_passing && snt_keyword_ptr == m_passing->m_nodeType);
+	return (0 != m_passing && '*' == m_passing->m_nodeType);
 }
 
 void PropertyNode::setGetter(GetterSetterNode* getter)

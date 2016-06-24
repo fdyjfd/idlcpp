@@ -114,7 +114,12 @@ void checkMemberNames(ClassNode* classNode, std::vector<MemberNode*>& memberNode
 		MemberNode* memberNode = memberNodes[i];
 		bool nameCollision = false;
 		IdentifyNode* identify = memberNode->m_name;
-		if(snt_method == memberNode->m_nodeType)
+		if (0 == identify)
+		{
+			//invalid operator has no name
+			continue;
+		}
+		if(snt_method == memberNode->m_nodeType || snt_operator == memberNode->m_nodeType)
 		{
 			MethodNode* methodNode = static_cast<MethodNode*>(memberNode);
 			if(methodNode->m_name->m_str == classNode->m_name->m_str)
@@ -131,7 +136,7 @@ void checkMemberNames(ClassNode* classNode, std::vector<MemberNode*>& memberNode
 				{
 					char buf[512];
 					sprintf_s(buf, "\'%s\' : constructor cannot be declared %s", identify->m_str.c_str(), 
-						g_keywordTokens[methodNode->m_modifier->m_nodeType - snt_keyword_begin_output - 1]);
+						g_keywordTokens[methodNode->m_modifier->m_nodeType - snt_begin_output - 1]);
 					ErrorList_AddItem_CurrentFile(identify->m_lineNo,
 						identify->m_columnNo, semantic_error_constructor_with_modifier, buf);
 					continue;
@@ -345,7 +350,7 @@ void ClassNode::GenerateCreateInstanceMethod(const char* methodName, MethodNode*
 	ScopeNameNode* scopeName = (ScopeNameNode*)newScopeName(m_name, 0, 0, 0);
 	ScopeNameListNode* scopeNameList = (ScopeNameListNode*)newScopeNameList(0, scopeName);
 	TypeNameNode* typeName = (TypeNameNode*)newTypeName(scopeNameList);
-	TokenNode* passing = (TokenNode*)newToken(snt_keyword_new);
+	TokenNode* passing = (TokenNode*)newToken('^');
 	setMethodResult(method, typeName, passing);
 	TokenNode* modifier = (TokenNode*)newToken(snt_keyword_static);
 	setMethodModifier(method, modifier);
@@ -365,7 +370,7 @@ void ClassNode::GenerateCreateArrayMethod(const char* methodName, MethodNode* co
 	ScopeNameNode* scopeName = (ScopeNameNode*)newScopeName(m_name, 0, 0, 0);
 	ScopeNameListNode* scopeNameList = (ScopeNameListNode*)newScopeNameList(0, scopeName);
 	TypeNameNode* typeName = (TypeNameNode*)newTypeName(scopeNameList);
-	TokenNode* passing = (TokenNode*)newToken(snt_keyword_new);
+	TokenNode* passing = (TokenNode*)newToken('^');
 	setMethodResult(method, typeName, passing);
 	setMethodResultArray(method);
 	TokenNode* modifier = (TokenNode*)newToken(snt_keyword_static);

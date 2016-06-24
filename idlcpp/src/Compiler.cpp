@@ -328,16 +328,16 @@ void Compiler::outputUsedTypes(FILE* file, SourceFile* sourceFile)
 			std::vector<TemplateParameterTypeNode*> m_parameterNodes;
 
 			sprintf_s(buf, "template<%s>%s%s;", paramNames.c_str(), 
-				g_keywordTokens[classNode->m_keyword->m_nodeType - snt_keyword_begin_output - 1], typeNode->m_name.c_str());
+				g_keywordTokens[classNode->m_keyword->m_nodeType - snt_begin_output - 1], typeNode->m_name.c_str());
 		}
 		else if (typeNode->isClass())
 		{
 			ClassNode* classNode = static_cast<ClassTypeNode*>(typeNode)->m_classNode;
-			sprintf_s(buf, "%s%s;", g_keywordTokens[classNode->m_keyword->m_nodeType - snt_keyword_begin_output - 1], typeNode->m_name.c_str());
+			sprintf_s(buf, "%s%s;", g_keywordTokens[classNode->m_keyword->m_nodeType - snt_begin_output - 1], typeNode->m_name.c_str());
 		}
 		else if (typeNode->isEnum())
 		{
-			sprintf_s(buf, "%s%s;", g_keywordTokens[snt_keyword_enum - snt_keyword_begin_output - 1], typeNode->m_name.c_str());
+			sprintf_s(buf, "%s%s;", g_keywordTokens[snt_keyword_enum - snt_begin_output - 1], typeNode->m_name.c_str());
 		}
 		writeStringToFile(buf, file, indentation);
 		for (size_t i = 1; i < count; ++i)

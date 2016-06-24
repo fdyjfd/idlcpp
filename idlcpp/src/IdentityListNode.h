@@ -6,13 +6,13 @@
 struct TokenNode;
 struct IdentifyNode;
 
-struct EnumeratorListNode : SyntaxNodeImpl
+struct IdentityListNode : SyntaxNodeImpl
 {
-	EnumeratorListNode* m_enumeratorList;
+	IdentityListNode* m_identityList;
 	TokenNode* m_delimiter;
 	IdentifyNode* m_identity;
 public:
-	EnumeratorListNode(EnumeratorListNode* enumeratorList, TokenNode* delimiter, IdentifyNode* identity);
+	IdentityListNode(IdentityListNode* identityList, TokenNode* delimiter, IdentifyNode* identity);
 	void collectIdentifyNodes(std::vector<std::pair<TokenNode*, IdentifyNode*>>& identifyNodes);
 	void collectIdentifyNodes(std::vector<IdentifyNode*>& identifyNodes);
 };

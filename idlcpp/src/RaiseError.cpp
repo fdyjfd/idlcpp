@@ -4,6 +4,7 @@
 #include "TypeNameNode.h"
 #include "ParameterNode.h"
 #include "MethodNode.h"
+#include "OperatorNode.h"
 #include "GetterSetterNode.h"
 #include "FieldNode.h"
 #include "ScopeNameListNode.h"
@@ -66,11 +67,11 @@ void RaiseError_InvalidParameterType(ParameterNode* node)
 	{
 		switch (out->m_nodeType)
 		{
-		case snt_keyword_new:
-			strOut = node->m_array ? "new []" : "new";
+		case '^':
+			strOut = node->m_array ? "^[]" : "^";
 			break;
-		case snt_keyword_ptr:
-			strOut = "ptr";
+		case '*':
+			strOut = "*";
 			break;
 		}
 	}
@@ -79,15 +80,14 @@ void RaiseError_InvalidParameterType(ParameterNode* node)
 	{
 		switch (passing->m_nodeType)
 		{
-		case snt_keyword_new:
-			strPassing = "new";
+		case '*':
+			strPassing = "*";
 			break;
-		case snt_keyword_ptr:
-			strPassing = "ptr";
+		case '&':
+			strPassing = "&";
 			break;
-		case snt_keyword_ref:
-			strPassing = "ref";
-			break;
+		default:
+			assert(false);
 		}
 	}
 	TokenNode* tokenNode = typeName->m_scopeNameList ? typeName->m_scopeNameList->m_scopeName->m_name : typeName->m_keyword;
@@ -96,27 +96,25 @@ void RaiseError_InvalidParameterType(ParameterNode* node)
 		tokenNode->m_columnNo, semantic_error_invalid_parameter, buf);
 }
 
-void RaiseError_InvalidResultType(MethodNode* node)
+void RaiseError_InvalidResultType(TypeNameNode* result, TokenNode* passing, bool resultArray)
 {
-	TypeNameNode* result = node->m_resultTypeName;
-	TokenNode* passing = node->m_passing;
 	char buf[error_info_buffer_size];
 	std::string str;
 	result->getString(str);
 
 	const char* strPassing = "";
-	if(passing)
-	{ 
+	if (passing)
+	{
 		switch (passing->m_nodeType)
 		{
-		case snt_keyword_new:
-			strPassing = "new";
+		case '^':
+			strPassing = resultArray ? "^[]" : "^";
 			break;
-		case snt_keyword_ptr:
-			strPassing = "ptr";
+		case '*':
+			strPassing = "*";
 			break;
-		case snt_keyword_ref:
-			strPassing = "ref";
+		case '&':
+			strPassing = "&";
 			break;
 		}
 	}
@@ -124,7 +122,19 @@ void RaiseError_InvalidResultType(MethodNode* node)
 	sprintf_s(buf, "\'%s %s\' : can not be a result type", str.c_str(), strPassing);
 	ErrorList_AddItem_CurrentFile(tokenNode->m_lineNo,
 		tokenNode->m_columnNo, semantic_error_invalid_result, buf);
+
 }
+
+void RaiseError_InvalidResultType(MethodNode* node)
+{
+	RaiseError_InvalidResultType(node->m_resultTypeName, node->m_passing, node->m_resultArray);
+}
+
+void RaiseError_InvalidResultType(OperatorNode* node) 
+{
+	RaiseError_InvalidResultType(node->m_resultTypeName, node->m_passing, node->m_resultArray);
+}
+
 
 void RaiseError_InvalidFieldType(FieldNode* node)
 {
@@ -150,11 +160,11 @@ void RaiseError_InvalidPropertyType(GetterSetterNode* node, bool getter)
 	{
 		switch (passing->m_nodeType)
 		{
-		case snt_keyword_ptr:
-			strPassing = "ptr";
+		case '*':
+			strPassing = "*";
 			break;
-		case snt_keyword_ref:
-			strPassing = "ref";
+		case '&':
+			strPassing = "&";
 			break;
 		}
 	}
@@ -247,4 +257,34 @@ void RaiseError_InterfaceMethodIsNotVirtual(IdentifyNode* node)
 	sprintf_s(buf, "\'%s\' : interface method must be virtual or abstract", node->m_str.c_str());
 	ErrorList_AddItem_CurrentFile(node->m_lineNo,
 		node->m_columnNo, semantic_error_missing_reference_base_type, buf);
+}
+
+void RaiseError_TooFewFormalParameters(OperatorNode* node)
+{
+	char buf[error_info_buffer_size];
+	std::string str;
+	node->getOperatorString(str);
+	sprintf_s(buf, "\'operator %s\' : too few formal parameters", str.c_str());
+	ErrorList_AddItem_CurrentFile(node->m_sign->m_lineNo,
+		node->m_sign->m_columnNo, semantic_error_too_many_template_arguments, buf);
+}
+
+void RaiseError_TooManyFormalParameters(OperatorNode* node)
+{
+	char buf[error_info_buffer_size];
+	std::string str;
+	node->getOperatorString(str);
+	sprintf_s(buf, "\'operator %s\' : too many formal parameters", str.c_str());
+	ErrorList_AddItem_CurrentFile(node->m_sign->m_lineNo,
+		node->m_sign->m_columnNo, semantic_error_too_many_template_arguments, buf);
+}
+
+void RaiseError_StaticOperator(OperatorNode* node)
+{
+	char buf[error_info_buffer_size];
+	std::string str;
+	node->getOperatorString(str);
+	sprintf_s(buf, "\'operator %s\' : static operator overloading is not support", str.c_str());
+	ErrorList_AddItem_CurrentFile(node->m_sign->m_lineNo,
+		node->m_sign->m_columnNo, semantic_error_operator_can_not_be_static, buf);
 }

@@ -13,7 +13,7 @@
 #include "IdentifyNode.h"
 #include "ScopeNameNode.h"
 #include "ScopeNameListNode.h"
-#include "EnumeratorListNode.h"
+#include "IdentityListNode.h"
 #include "TypeNameNode.h"
 #include "TypeNameListNode.h"
 #include "FieldNode.h"
@@ -22,6 +22,8 @@
 #include "ParameterNode.h"
 #include "ParameterListNode.h"
 #include "MethodNode.h"
+#include "OperatorNode.h"
+#include "TokenListNode.h"
 #include "MemberListNode.h"
 #include "ClassNode.h"
 #include "EnumNode.h"
@@ -122,7 +124,7 @@ SyntaxNode* newTypeNameList(SyntaxNode* typeNameList, SyntaxNode* delimiter, Syn
 	return res;
 }
 
-void setMetaOnly(SyntaxNode* syntaxNode)
+void setNoCode(SyntaxNode* syntaxNode)
 {
 	assert(snt_field == syntaxNode->m_nodeType
 		|| snt_property == syntaxNode->m_nodeType
@@ -135,10 +137,10 @@ void setMetaOnly(SyntaxNode* syntaxNode)
 		|| snt_namespace == syntaxNode->m_nodeType);
 
 	MemberNode* memberNode = (MemberNode*)syntaxNode;
-	memberNode->m_filter = mf_meta_only;
+	memberNode->m_filter = mf_no_code;
 }
 
-void setNativeOnly(SyntaxNode* syntaxNode)
+void setNoMeta(SyntaxNode* syntaxNode)
 {
 	assert(snt_field == syntaxNode->m_nodeType
 		|| snt_property == syntaxNode->m_nodeType
@@ -151,7 +153,7 @@ void setNativeOnly(SyntaxNode* syntaxNode)
 		|| snt_namespace == syntaxNode->m_nodeType);
 
 	MemberNode* memberNode = (MemberNode*)syntaxNode;
-	memberNode->m_filter = mf_native_only;
+	memberNode->m_filter = mf_no_meta;
 }
 
 SyntaxNode* newField(SyntaxNode* type, SyntaxNode* name, SyntaxNode* leftBracket, SyntaxNode* rightBracket, SyntaxNode* semicolon)
@@ -185,7 +187,7 @@ SyntaxNode* newGetterSetter(SyntaxNode* keyword, SyntaxNode* constant, SyntaxNod
 	assert(snt_keyword_get == keyword->m_nodeType || snt_keyword_set == keyword->m_nodeType);
 	assert(0 == constant || snt_keyword_const == constant->m_nodeType);
 	assert(0 == type || snt_type_name == type->m_nodeType);
-	assert(0 == passing || snt_keyword_ptr == passing->m_nodeType || snt_keyword_ref == passing->m_nodeType);
+	assert(0 == passing || '*' == passing->m_nodeType || '&' == passing->m_nodeType);
 	GetterSetterNode* res = new GetterSetterNode((TokenNode*)keyword, 
 		(TokenNode*)constant, (TypeNameNode*)type, (TokenNode*)passing); 
 	g_syntaxNodes.push_back(res);
@@ -196,7 +198,7 @@ SyntaxNode* newProperty(SyntaxNode* constant, SyntaxNode* type, SyntaxNode* pass
 {
 	assert(0 == constant || snt_keyword_const == constant->m_nodeType);
 	assert(0 == type || snt_type_name == type->m_nodeType);
-	assert(0 == passing || snt_keyword_ptr == passing->m_nodeType || snt_keyword_ref == passing->m_nodeType);
+	assert(0 == passing || '*' == passing->m_nodeType || '&' == passing->m_nodeType);
 	assert(snt_identify == name->m_nodeType);
 	PropertyNode* res = new PropertyNode((TokenNode*)constant, (TypeNameNode*)type, (TokenNode*)passing, (IdentifyNode*) name);
 	g_syntaxNodes.push_back(res);
@@ -228,8 +230,8 @@ void setPropertyModifier(SyntaxNode* syntaxNode, SyntaxNode* modifier)
 SyntaxNode* newParameter(SyntaxNode* type, SyntaxNode* out, SyntaxNode* passing, SyntaxNode* name)
 {
 	assert(snt_type_name == type->m_nodeType && snt_identify == name->m_nodeType);
-	assert(0 == out || snt_keyword_ptr == out->m_nodeType|| snt_keyword_new == out->m_nodeType);
-	assert(0 == passing || snt_keyword_ptr == passing->m_nodeType|| snt_keyword_ref == passing->m_nodeType);
+	assert(0 == out || '*' == out->m_nodeType|| '^' == out->m_nodeType);
+	assert(0 == passing || '*' == passing->m_nodeType|| '&' == passing->m_nodeType);
 	ParameterNode* res = new ParameterNode((TypeNameNode*) type, (TokenNode*)out, (TokenNode*)passing, (IdentifyNode*) name);
 	g_syntaxNodes.push_back(res);
 	return res;
@@ -272,7 +274,7 @@ SyntaxNode* newMethod(SyntaxNode* name, SyntaxNode* leftParenthesis, SyntaxNode*
 void setMethodResult(SyntaxNode* method, SyntaxNode* result, SyntaxNode* passing)
 {
 	assert(snt_method == method->m_nodeType && snt_type_name == result->m_nodeType);
-	assert(0 == passing || snt_keyword_ref == passing->m_nodeType || snt_keyword_ptr == passing->m_nodeType || snt_keyword_new == passing->m_nodeType);
+	assert(0 == passing || '&' == passing->m_nodeType || '*' == passing->m_nodeType || '^' == passing->m_nodeType);
 	((MethodNode*)method)->m_resultTypeName = (TypeNameNode*)result;
 	((MethodNode*)method)->m_passing = (TokenNode*)passing;
 }
@@ -302,10 +304,58 @@ void setMethodOverride(SyntaxNode* method)
 	((MethodNode*)method)->m_override = true;
 }
 
+SyntaxNode* newOperator(SyntaxNode* keyword, SyntaxNode* sign, SyntaxNode* leftParenthesis, SyntaxNode* parameterList, SyntaxNode* rightParenthesis, SyntaxNode* constant, SyntaxNode* semicolon)
+{
+	assert(snt_keyword_operator == keyword->m_nodeType);
+	assert('(' == leftParenthesis->m_nodeType && ')' == rightParenthesis->m_nodeType && ';' == semicolon->m_nodeType);
+	assert(0 == constant || snt_keyword_const == constant->m_nodeType);
+	assert(0 == parameterList || snt_parameter_list == parameterList->m_nodeType);
+	OperatorNode* res = new OperatorNode((TokenNode*)keyword, (TokenNode*)sign, (TokenNode*)leftParenthesis, (ParameterListNode*)parameterList,
+		(TokenNode*)rightParenthesis, (TokenNode*)constant, (TokenNode*)semicolon);
+	g_syntaxNodes.push_back(res);
+	return res;
+}
+
+void setOperatorResult(SyntaxNode* opt, SyntaxNode* result, SyntaxNode* passing)
+{
+	assert(snt_operator == opt->m_nodeType && snt_type_name == result->m_nodeType);
+	assert(0 == passing || '&' == passing->m_nodeType || '*' == passing->m_nodeType || '^' == passing->m_nodeType);
+	((OperatorNode*)opt)->m_resultTypeName = (TypeNameNode*)result;
+	((OperatorNode*)opt)->m_passing = (TokenNode*)passing;
+}
+
+void setOperatorResultArray(SyntaxNode* opt)
+{
+	assert(snt_operator == opt->m_nodeType);
+	((OperatorNode*)opt)->m_resultArray = true;
+}
+
+void setOperatorResultConst(SyntaxNode* opt, SyntaxNode* constant)
+{
+	assert(snt_operator == opt->m_nodeType && snt_keyword_const == constant->m_nodeType);
+	((OperatorNode*)opt)->m_resultConst = (TokenNode*)constant;
+}
+
+void setOperatorModifier(SyntaxNode* opt, SyntaxNode* modifier)
+{
+	assert(snt_operator == opt->m_nodeType);
+	assert(snt_keyword_abstract == modifier->m_nodeType || snt_keyword_virtual == modifier->m_nodeType || snt_keyword_static == modifier->m_nodeType);
+	((OperatorNode*)opt)->m_modifier = (TokenNode*)modifier;
+}
+
+void setOperatorOverride(SyntaxNode* opt)
+{
+	assert(snt_operator == opt->m_nodeType);
+	((OperatorNode*)opt)->m_override = true;
+}
+
+
+
 SyntaxNode* newClassMemberList(SyntaxNode* memberList, SyntaxNode* member)
 {
 	assert(0 == memberList || snt_member_list == memberList->m_nodeType);
-	assert(snt_field == member->m_nodeType || snt_property == member->m_nodeType || snt_method == member->m_nodeType
+	assert(snt_field == member->m_nodeType || snt_property == member->m_nodeType 
+		|| snt_method == member->m_nodeType || snt_operator == member->m_nodeType
 		|| snt_class == member->m_nodeType || snt_enum == member->m_nodeType 
 		|| snt_typedef == member->m_nodeType || snt_type_declaration  == member->m_nodeType);
 	MemberListNode* res = new MemberListNode((MemberListNode*)memberList, (MemberNode*)member);
@@ -362,28 +412,28 @@ void setClassTemplateParameters(SyntaxNode* cls, SyntaxNode* parameters)
 	((ClassNode*)cls)->setTemplateParameters((TemplateParametersNode*)parameters);
 }
 
-SyntaxNode* newEnumeratorList(SyntaxNode* enumeratorList, SyntaxNode* delimiter, SyntaxNode* identify)
+SyntaxNode* newIdentityList(SyntaxNode* identityList, SyntaxNode* delimiter, SyntaxNode* identify)
 {
-	assert(0 == enumeratorList || snt_enumerator_list == enumeratorList->m_nodeType);
+	assert(0 == identityList || snt_identity_list == identityList->m_nodeType);
 	assert(0 == delimiter || ',' == delimiter->m_nodeType);
-	assert((0 == delimiter && 0 == enumeratorList) || (0 != delimiter && 0 != enumeratorList));
+	assert((0 == delimiter && 0 == identityList) || (0 != delimiter && 0 != identityList));
 	assert(snt_identify == identify->m_nodeType);
-	EnumeratorListNode* res = new EnumeratorListNode((EnumeratorListNode*)enumeratorList, (TokenNode*)delimiter, (IdentifyNode*)identify);
+	IdentityListNode* res = new IdentityListNode((IdentityListNode*)identityList, (TokenNode*)delimiter, (IdentifyNode*)identify);
 	g_syntaxNodes.push_back(res);
 	return res;
 }
 
-SyntaxNode* newEnum(SyntaxNode* keyword, SyntaxNode* name, SyntaxNode* leftBrace, SyntaxNode* enumeratorList, SyntaxNode* rightBrace, SyntaxNode* semicolon)
+SyntaxNode* newEnum(SyntaxNode* keyword, SyntaxNode* name, SyntaxNode* leftBrace, SyntaxNode* identityList, SyntaxNode* rightBrace, SyntaxNode* semicolon)
 {
 	assert(snt_keyword_enum == keyword->m_nodeType);
 	assert(snt_identify == name->m_nodeType);
 	assert('{' == leftBrace->m_nodeType);	
-	assert(0 == enumeratorList || snt_enumerator_list == enumeratorList->m_nodeType);
+	assert(0 == identityList || snt_identity_list == identityList->m_nodeType);
 	assert('}' == rightBrace->m_nodeType);
 	assert(';' == semicolon->m_nodeType);
 	
 	EnumNode* res = new EnumNode((TokenNode*)keyword, (IdentifyNode*)name, 
-		(TokenNode*)leftBrace, (EnumeratorListNode*)enumeratorList, (TokenNode*)rightBrace,
+		(TokenNode*)leftBrace, (IdentityListNode*)identityList, (TokenNode*)rightBrace,
 		(TokenNode*)semicolon);
 	g_syntaxNodes.push_back(res);
 	return res;
@@ -438,6 +488,20 @@ SyntaxNode* newTemplateClassInstance(SyntaxNode* name, SyntaxNode* typeNameList)
 	TemplateClassInstanceNode* res = new TemplateClassInstanceNode((IdentifyNode*)name, (TypeNameListNode*)typeNameList);
 	g_syntaxNodes.push_back(res);
 	return res;
+}
+
+SyntaxNode* newTokenList(SyntaxNode* tokenList, SyntaxNode* token)
+{
+	assert(0 == tokenList || snt_token_list == tokenList->m_nodeType);
+	TokenListNode* res = new TokenListNode((TokenListNode*)tokenList, (TokenNode*)token);
+	g_syntaxNodes.push_back(res);
+	return res;
+}
+
+void setTemplateClassInstanceTokenList(SyntaxNode* tci, SyntaxNode* tokenList)
+{
+	assert(snt_template_class_instance == tci->m_nodeType && snt_token_list == tokenList->m_nodeType);
+	((TemplateClassInstanceNode*)tci)->m_tokenList = (TokenListNode*)tokenList;
 }
 
 SyntaxNode* newNamespaceMemberList(SyntaxNode* memberList, SyntaxNode* member)

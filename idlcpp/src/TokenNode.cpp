@@ -6,6 +6,30 @@
 
 const char* g_keywordTokens[] = 
 {
+	"::",
+	"+=",
+	"-=",
+	"*=",
+	"/=",
+	"%=",
+	"^=",
+	"&=",
+	"|=",
+	"<<",
+	">>",
+	"<<=",
+	">>=",
+	"==",
+	"!=",
+	"<=",
+	">=",
+	"&&",
+	"||",
+	"++",
+	"--",
+	"++",
+	"--",
+
 	"namespace ",
 	"enum ",
 	"class ",
@@ -14,11 +38,9 @@ const char* g_keywordTokens[] =
 	"virtual ",
 	"static ",
 	"const ",
+	"operator ",
 	"get_",
 	"void set_",
-	"*",
-	"*",
-	"&",
 	"typedef ",
 };
 
@@ -35,7 +57,7 @@ void TokenNode::outputEmbededCodes(FILE* file, bool addSpace)
 	char lastChar = g_compiler.outputEmbededCodes(file, this);
 	if(isNumAlpha_(lastChar) && addSpace)
 	{
-		writeSpaceToFile(file);;
+		writeSpaceToFile(file);
 	}
 }
 

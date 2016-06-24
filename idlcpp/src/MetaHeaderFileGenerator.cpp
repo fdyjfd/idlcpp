@@ -6,7 +6,7 @@
 #include "NamespaceNode.h"
 #include "TokenNode.h"
 #include "IdentifyNode.h"
-#include "EnumeratorListNode.h"
+#include "IdentityListNode.h"
 #include "MemberListNode.h"
 #include "EnumNode.h"
 #include "ClassNode.h"
@@ -19,8 +19,9 @@
 #include "FieldNode.h"
 #include "PropertyNode.h"
 #include "MethodNode.h"
+#include "OperatorNode.h"
 #include "ParameterNode.h"
-#include "ParameterNode.h"
+#include "ParameterListNode.h"
 #include "TypeTree.h"
 #include "Platform.h"
 #include "Options.h"
@@ -256,12 +257,23 @@ void MetaHeaderFileGenerator::generateCode_Enum(FILE* file, EnumNode* enumNode, 
 	writeStringToFile("};\n\n", file, indentation);
 }
 
-void MetaHeaderFileGenerator::generateCode_Class(FILE* file, ClassNode* classNode, TemplateArguments* templateArguments, int indentation)
+void MetaHeaderFileGenerator::generateCode_Class(FILE* file, ClassNode* classNode, TemplateClassInstanceNode* templateClassInstance, int indentation)
 {
 	if (classNode->isNativeOnly())
 	{
 		return;
 	}
+	TemplateArguments* templateArguments = templateClassInstance ? &templateClassInstance->m_templateArguments : 0;
+
+	std::vector<IdentifyNode*> reservedNames;
+	std::vector<TokenNode*> reservedOperators;
+	if (templateClassInstance && templateClassInstance->m_tokenList
+		&& templateClassInstance->m_classTypeNode->m_classNode == classNode)
+	{
+		assert(classNode->m_typeNode == templateClassInstance->m_classTypeNode);
+		templateClassInstance->getReservedMembers(reservedNames, reservedOperators);
+	}
+	bool hasReservedMember = (!reservedNames.empty() || !reservedOperators.empty());
 
 	char buf[512];
 	std::string metaClassName;
@@ -284,9 +296,28 @@ void MetaHeaderFileGenerator::generateCode_Class(FILE* file, ClassNode* classNod
 	for(size_t i = 0; i < memberCount; ++i)
 	{
 		MemberNode* memberNode = memberNodes[i];
+		if (hasReservedMember)
+		{
+			if (snt_method == memberNode->m_nodeType || snt_property == memberNode->m_nodeType)
+			{
+				if (!std::binary_search(reservedNames.begin(), reservedNames.end(), memberNode->m_name, CompareIdentifyPtr()))
+				{
+					continue;
+				}
+			}	
+			if (snt_operator == memberNode->m_nodeType)
+			{
+				OperatorNode* operatorNode = static_cast<OperatorNode*>(memberNode);
+				if (!std::binary_search(reservedOperators.begin(), reservedOperators.end(), operatorNode->m_sign, CompareTokenPtr()))
+				{
+					continue;
+				}
+			}
+		}
+
 		if(!memberNode->isNativeOnly())
 		{
-			if(snt_method == memberNode->m_nodeType)
+			if(snt_method == memberNode->m_nodeType || snt_operator == memberNode->m_nodeType)
 			{
 				MethodNode* methodNode = static_cast<MethodNode*>(memberNode);
 				if(memberNode->m_name->m_str != classNode->m_name->m_str)
@@ -320,6 +351,10 @@ void MetaHeaderFileGenerator::generateCode_Class(FILE* file, ClassNode* classNod
 			{
 				subTypeNodes.push_back(memberNode);
 			}
+			else
+			{
+				assert(snt_field == memberNode->m_nodeType);
+			}
 		}
 	}
 	
@@ -330,6 +365,13 @@ void MetaHeaderFileGenerator::generateCode_Class(FILE* file, ClassNode* classNod
 		for (; it != end; ++it)
 		{
 			MethodNode* methodNode = *it;
+			if (!reservedNames.empty())
+			{
+				if (!std::binary_search(reservedNames.begin(), reservedNames.end(), methodNode->m_name, CompareIdentifyPtr()))
+				{
+					continue;
+				}
+			}
 			if (!methodNode->isNativeOnly())
 			{
 				staticMethodNodes.push_back(methodNode);
@@ -385,7 +427,7 @@ void MetaHeaderFileGenerator::generateCode_Class(FILE* file, ClassNode* classNod
 			generateCode_Enum(file, static_cast<EnumNode*>(typeNode), templateArguments, indentation);
 			break;
 		case snt_class:
-			generateCode_Class(file, static_cast<ClassNode*>(typeNode), templateArguments, indentation);
+			generateCode_Class(file, static_cast<ClassNode*>(typeNode), templateClassInstance, indentation);
 			break;
 		case snt_typedef:
 			generateCode_Typedef(file, static_cast<TypedefNode*>(typeNode), templateArguments, indentation);
@@ -411,13 +453,13 @@ void writeMethodParameter(MethodNode* methodNode, ParameterNode* parameterNode, 
 	writeStringToFile(typeName.c_str(), file);
 	if(0 != parameterNode->m_out)
 	{
-		writeStringToFile(g_keywordTokens[parameterNode->m_out->m_nodeType - snt_keyword_begin_output - 1], file);
+		writeStringToFile(g_keywordTokens[parameterNode->m_out->m_nodeType - snt_begin_output - 1], file);
 	}
 	if(0 != parameterNode->m_passing)
 	{
-		writeStringToFile(g_keywordTokens[parameterNode->m_passing->m_nodeType - snt_keyword_begin_output - 1], file);
+		writeStringToFile(g_keywordTokens[parameterNode->m_passing->m_nodeType - snt_begin_output - 1], file);
 	}
-	writeSpaceToFile(file);;
+	writeSpaceToFile(file);
 	writeStringToFile(parameterNode->m_name->m_str.c_str(), file);
 };
 
@@ -435,13 +477,13 @@ void writeInterfaceMethodDecl(MethodNode* methodNode, FILE* file, int indentatio
 	resultName += typeName;
 	if(0 != methodNode->m_passing)
 	{
-		resultName += g_keywordTokens[methodNode->m_passing->m_nodeType - snt_keyword_begin_output - 1];
+		resultName += g_keywordTokens[methodNode->m_passing->m_nodeType - snt_begin_output - 1];
 	}
 	sprintf_s(buf, "%s %s( ", resultName.c_str(), methodNode->m_name->m_str.c_str());
 	writeStringToFile(buf, file, indentation);
 
 	std::vector<ParameterNode*> parameterNodes;
-	methodNode->collectParameterNodes(parameterNodes);
+	methodNode->m_parameterList->collectParameterNodes(parameterNodes);
 	size_t parameterCount = parameterNodes.size();
 	for(size_t i = 0; i < parameterCount; ++i)
 	{
@@ -503,7 +545,7 @@ void MetaHeaderFileGenerator::generateCode_TemplateClassInstance(FILE* file, Tem
 	}
 
 	ClassNode* classNode = static_cast<ClassNode*>(templateClassInstance->m_classTypeNode->m_classNode);
-	generateCode_Class(file, classNode, &templateClassInstance->m_templateArguments, indentation);
+	generateCode_Class(file, classNode, templateClassInstance, indentation);
 
 }
 

@@ -515,47 +515,47 @@ inline bool isNumberString(const char* str)
 
 int Variant_Add(lua_State *L)
 {
-	return InvokeFunction_ArithmeticOperator(L, pafcore::PrimitiveType::Primitive___op_add_);
+	return InvokeFunction_ArithmeticOperator(L, pafcore::PrimitiveType::Primitive_op_add);
 }
 
 int Variant_Sub(lua_State *L)
 {
-	return InvokeFunction_ArithmeticOperator(L, pafcore::PrimitiveType::Primitive___op_sub_);
+	return InvokeFunction_ArithmeticOperator(L, pafcore::PrimitiveType::Primitive_op_subtract);
 }
 
 int Variant_Mul(lua_State *L)
 {
-	return InvokeFunction_ArithmeticOperator(L, pafcore::PrimitiveType::Primitive___op_mul_);
+	return InvokeFunction_ArithmeticOperator(L, pafcore::PrimitiveType::Primitive_op_multiply);
 }
 
 int Variant_Div(lua_State *L)
 {
-	return InvokeFunction_ArithmeticOperator(L, pafcore::PrimitiveType::Primitive___op_div_);
+	return InvokeFunction_ArithmeticOperator(L, pafcore::PrimitiveType::Primitive_op_divide);
 }
 
 int Variant_Mod(lua_State *L)
 {
-	return InvokeFunction_ArithmeticOperator(L, pafcore::PrimitiveType::Primitive___op_mod_);
+	return InvokeFunction_ArithmeticOperator(L, pafcore::PrimitiveType::Primitive_op_mod);
 }
 
 int Variant_Unm(lua_State *L)
 {
-	return InvokeFunction_ArithmeticOperator(L, pafcore::PrimitiveType::Primitive___op_neg_);
+	return InvokeFunction_ArithmeticOperator(L, pafcore::PrimitiveType::Primitive_op_negate);
 }
 
 int Variant_LessThan(lua_State *L)
 {
-	return InvokeFunction_ComparisonOperator(L, pafcore::PrimitiveType::Primitive___op_less_than_);
+	return InvokeFunction_ComparisonOperator(L, pafcore::PrimitiveType::Primitive_op_less);
 }
 
 int Variant_LessEqual(lua_State *L)
 {
-	return InvokeFunction_ComparisonOperator(L, pafcore::PrimitiveType::Primitive___op_less_equal_);
+	return InvokeFunction_ComparisonOperator(L, pafcore::PrimitiveType::Primitive_op_lessEqual);
 }
 
 int Variant_EqualTo(lua_State *L)
 {
-	return InvokeFunction_ComparisonOperator(L, pafcore::PrimitiveType::Primitive___op_equal_to_);
+	return InvokeFunction_ComparisonOperator(L, pafcore::PrimitiveType::Primitive_op_equal);
 }
 
 int Subclassing(lua_State *L)

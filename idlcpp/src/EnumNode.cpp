@@ -1,20 +1,20 @@
 #include "EnumNode.h"
 #include "ClassNode.h"
 #include "IdentifyNode.h"
-#include "EnumeratorListNode.h"
+#include "IdentityListNode.h"
 #include "ErrorList.h"
 #include "Compiler.h"
 #include "TypeTree.h"
 #include <vector>
 #include <assert.h>
 
-EnumNode::EnumNode(TokenNode* keyword, IdentifyNode* name, TokenNode* leftBrace, EnumeratorListNode* enumeratorList, TokenNode* rightBrace, TokenNode* semicolon)
+EnumNode::EnumNode(TokenNode* keyword, IdentifyNode* name, TokenNode* leftBrace, IdentityListNode* identityList, TokenNode* rightBrace, TokenNode* semicolon)
 {
 	m_nodeType = snt_enum;
 	m_keyword = keyword;
 	m_name = name;
 	m_leftBrace = leftBrace;
-	m_enumeratorList = enumeratorList;
+	m_identityList = identityList;
 	m_rightBrace = rightBrace;
 	m_semicolon = semicolon;
 	m_typeNode = 0;
@@ -45,7 +45,7 @@ void EnumNode::collectTypes(TypeNode* enclosingTypeNode, TemplateArguments* temp
 void EnumNode::checkSemantic(TemplateArguments* templateArguments)
 {
 	std::vector<IdentifyNode*> identifyNodes;
-	m_enumeratorList->collectIdentifyNodes(identifyNodes);
+	m_identityList->collectIdentifyNodes(identifyNodes);
 	size_t count = identifyNodes.size();
 	std::set<IdentifyNode*, CompareIdentifyPtr> items;
 	for(size_t i = 0; i < count; ++i)

@@ -1,6 +1,5 @@
 #pragma once
 #include "MemberNode.h"
-#include <vector>
 
 struct SyntaxNodeImpl;
 struct TokenNode;
@@ -34,8 +33,6 @@ public:
 	bool byPtr();
 	bool byNew();
 	size_t getParameterCount() const;
-	void collectParameterNodes(std::vector<std::pair<TokenNode*, ParameterNode*>>& parameterNodes);
-	void collectParameterNodes(std::vector<ParameterNode*>& parameterNodes);
 	void calcManglingName(std::string& name, TemplateArguments* templateArguments);
 	virtual void checkTypeNames(TypeNode* enclosingTypeNode, TemplateArguments* templateArguments);
 	virtual void checkSemantic(TemplateArguments* templateArguments);

@@ -8,6 +8,7 @@
 
 enum ErrorCode
 {
+	no_error,
 	import_error_file_not_existing,
 	import_error_open_file_failed,
 
@@ -47,6 +48,9 @@ enum ErrorCode
 	semantic_error_template_interface_not_supported,
 	semantic_error_missing_reference_base_type,
 	semantic_error_template_class_instance_internal,
+	semantic_error_too_few_formal_parameters,
+	semantic_error_too_many_formal_parameters,
+	semantic_error_operator_can_not_be_static,
 };
 
 typedef enum ErrorCode ErrorCode;

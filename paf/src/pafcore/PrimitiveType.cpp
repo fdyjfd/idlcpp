@@ -10,26 +10,32 @@ BEGIN_PAFCORE
 
 size_t PrimitiveType::_getMemberCount_()
 {
-	return m_staticMethodCount;
+	return m_memberCount;
 }
 
 Metadata* PrimitiveType::_getMember_(size_t index)
 {
-	if(index < m_staticMethodCount)
+	if (index < m_memberCount)
 	{
-		return &m_staticMethods[index];
+		return m_members[index];
 	}
 	return 0;
 }
 
 Metadata* PrimitiveType::_findMember_(const char* name)
 {
-	return findTypeMember(name);
+	Metadata dummy(name);
+	Metadata** it = std::lower_bound(m_members, m_members + m_memberCount, &dummy, CompareMetaDataPtrByName());
+	if (m_members + m_memberCount != it && strcmp(name, (*it)->m_name) == 0)
+	{
+		return *it;
+	}
+	return 0;
 }
 
 Metadata* PrimitiveType::findMember(const char* name)
 {
-	return findTypeMember(name);
+	return _findMember_(name);
 }
 
 Metadata* PrimitiveType::findTypeMember(const char* name)
@@ -43,16 +49,42 @@ Metadata* PrimitiveType::findTypeMember(const char* name)
 	return 0;
 }
 
-PrimitiveTypeCategory PrimitiveType::GetPromotedTypeCategory(PrimitiveTypeCategory typeCategory)
+template<bool short_less_int>
+struct TypePromoter
 {
-	if(typeCategory <= unsigned_short_type)
+	static PrimitiveTypeCategory GetPromotedTypeCategory(PrimitiveTypeCategory typeCategory)
 	{
-		return int_type;
+		if (typeCategory <= unsigned_short_type)
+		{
+			return int_type;
+		}
+		return typeCategory;
 	}
-	return typeCategory;
+};
+
+template<>
+struct TypePromoter<false>
+{
+	static PrimitiveTypeCategory GetPromotedTypeCategory(PrimitiveTypeCategory typeCategory)
+	{
+		if (typeCategory < unsigned_short_type)
+		{
+			return int_type;
+		}
+		else if (typeCategory == unsigned_short_type)
+		{
+			return unsigned_int_type;
+		}
+		return typeCategory;
+	}
+};
+
+inline PrimitiveTypeCategory GetPromotedTypeCategory(PrimitiveTypeCategory typeCategory)
+{
+	return TypePromoter<sizeof(unsigned short) < sizeof(int)>::GetPromotedTypeCategory(typeCategory);
 }
 
-PrimitiveTypeCategory PrimitiveType::GetPromotedTypeCategory(PrimitiveTypeCategory typeCategory1, PrimitiveTypeCategory typeCategory2)
+inline PrimitiveTypeCategory GetPromotedTypeCategory(PrimitiveTypeCategory typeCategory1, PrimitiveTypeCategory typeCategory2)
 {
 	PrimitiveTypeCategory small, large; 
 	if(typeCategory1 < typeCategory2)
@@ -69,7 +101,7 @@ PrimitiveTypeCategory PrimitiveType::GetPromotedTypeCategory(PrimitiveTypeCatego
 	{
 		return unsigned_long_type;
 	}
-	return large;
+	return GetPromotedTypeCategory(large);
 }
 
 PrimitiveType* GetPrimitiveTypeFromTypeCategory(PrimitiveTypeCategory typeCategory)
@@ -131,13 +163,13 @@ PrimitiveType* GetPrimitiveTypeFromTypeCategory(PrimitiveTypeCategory typeCatego
 	return res;
 }
 
-ErrorCode PrimitiveType::Primitive___op_pos_(Variant* result, Variant** args, int_t numArgs)
+ErrorCode PrimitiveType::Primitive_op_plus(Variant* result, Variant** args, int_t numArgs)
 {
 	if(1 == numArgs)
 	{
 		if(!args[0]->m_type->isPrimitive())
 		{
-			return e_invalid_arg_type_1;
+			return e_invalid_this_type;
 		}
 		PrimitiveType* arg0Type = static_cast<PrimitiveType*>(args[0]->m_type);
 		PrimitiveTypeCategory resTypeCategory = GetPromotedTypeCategory(arg0Type->m_typeCategory);
@@ -146,46 +178,183 @@ ErrorCode PrimitiveType::Primitive___op_pos_(Variant* result, Variant** args, in
 		char value0[max_primitive_type_size];
 		char resultValue[max_primitive_type_size];
 		arg0Type->castTo(value0, resType, args[0]->m_pointer);
-		resType->_op_pos_(resultValue, value0);
+		resType->op_plus(resultValue, value0);
 		result->assignPrimitive(resType, resultValue);
 		return s_ok;
 	}
 	return e_invalid_arg_num;
 }
 
-ErrorCode PrimitiveType::Primitive___op_neg_(Variant* result, Variant** args, int_t numArgs)
+ErrorCode PrimitiveType::Primitive_op_negate(Variant* result, Variant** args, int_t numArgs)
 {
 	if(1 == numArgs)
 	{
 		if(!args[0]->m_type->isPrimitive())
 		{
-			return e_invalid_arg_type_1;
+			return e_invalid_this_type;
 		}
 		PrimitiveType* arg0Type = static_cast<PrimitiveType*>(args[0]->m_type);
+		switch (arg0Type->m_typeCategory)
+		{
+		case unsigned_int_type:
+		case unsigned_long_type:
+		case unsigned_long_long_type:
+			return e_invalid_this_type;
+		}
 		PrimitiveTypeCategory resTypeCategory = GetPromotedTypeCategory(arg0Type->m_typeCategory);
 		PrimitiveType* resType = GetPrimitiveTypeFromTypeCategory(resTypeCategory);
 
 		char value0[max_primitive_type_size];
 		char resultValue[max_primitive_type_size];
 		arg0Type->castTo(value0, resType, args[0]->m_pointer);
-		resType->_op_neg_(resultValue, value0);
+		resType->op_negate(resultValue, value0);
 		result->assignPrimitive(resType, resultValue);
 		return s_ok;
 	}
 	return e_invalid_arg_num;
 }
 
-ErrorCode PrimitiveType::Primitive___op_add_(Variant* result, Variant** args, int_t numArgs)
+ErrorCode PrimitiveType::Primitive_op_increment(Variant* result, Variant** args, int_t numArgs)
 {
-	if(2 == numArgs)
+	if (1 == numArgs)
 	{
-		if(!args[0]->m_type->isPrimitive())
+		if (!args[0]->m_type->isPrimitive())
+		{
+			return e_invalid_this_type;
+		}
+		PrimitiveType* arg0Type = static_cast<PrimitiveType*>(args[0]->m_type);
+		if (float_type <= arg0Type->m_typeCategory)
+		{
+			return e_invalid_this_type;
+		}
+		PrimitiveType* resType = arg0Type;
+		char resultValue[max_primitive_type_size];
+		resType->op_increment(resultValue, args[0]->m_pointer);
+		result->assignPrimitivePtr(arg0Type, args[0]->m_pointer, false, ::pafcore::Variant::by_ref);
+		return s_ok;
+	}
+	return e_invalid_arg_num;
+}
+
+ErrorCode PrimitiveType::Primitive_op_postIncrement(Variant* result, Variant** args, int_t numArgs)
+{
+	if (1 == numArgs)
+	{
+		if (!args[0]->m_type->isPrimitive())
+		{
+			return e_invalid_this_type;
+		}
+		PrimitiveType* arg0Type = static_cast<PrimitiveType*>(args[0]->m_type);
+		if (float_type <= arg0Type->m_typeCategory)
+		{
+			return e_invalid_this_type;
+		}
+		PrimitiveType* resType = arg0Type;
+		char resultValue[max_primitive_type_size];
+		resType->op_postIncrement(resultValue, args[0]->m_pointer);
+		result->assignPrimitive(resType, resultValue);
+		return s_ok;
+	}
+	return e_invalid_arg_num;
+}
+
+ErrorCode PrimitiveType::Primitive_op_decrement(Variant* result, Variant** args, int_t numArgs)
+{
+	if (1 == numArgs)
+	{
+		if (!args[0]->m_type->isPrimitive())
+		{
+			return e_invalid_this_type;
+		}
+		PrimitiveType* arg0Type = static_cast<PrimitiveType*>(args[0]->m_type);
+		if (bool_type == arg0Type->m_typeCategory  || float_type <= arg0Type->m_typeCategory)
+		{
+			return e_invalid_this_type;
+		}
+		PrimitiveType* resType = arg0Type;
+		char resultValue[max_primitive_type_size];
+		resType->op_decrement(resultValue, args[0]->m_pointer);
+		result->assignPrimitivePtr(arg0Type, args[0]->m_pointer, false, ::pafcore::Variant::by_ref);
+		return s_ok;
+	}
+	return e_invalid_arg_num;
+}
+
+ErrorCode PrimitiveType::Primitive_op_postDecrement(Variant* result, Variant** args, int_t numArgs)
+{
+	if (1 == numArgs)
+	{
+		if (!args[0]->m_type->isPrimitive())
+		{
+			return e_invalid_this_type;
+		}
+		PrimitiveType* arg0Type = static_cast<PrimitiveType*>(args[0]->m_type);
+		if (bool_type == arg0Type->m_typeCategory || float_type <= arg0Type->m_typeCategory)
+		{
+			return e_invalid_this_type;
+		}
+		PrimitiveType* resType = arg0Type;
+		char resultValue[max_primitive_type_size];
+		resType->op_postDecrement(resultValue, args[0]->m_pointer);
+		result->assignPrimitive(resType, resultValue);
+		return s_ok;
+	}
+	return e_invalid_arg_num;
+}
+
+ErrorCode PrimitiveType::Primitive_op_not(Variant* result, Variant** args, int_t numArgs)
+{
+	if (1 == numArgs)
+	{
+		if (!args[0]->m_type->isPrimitive())
+		{
+			return e_invalid_this_type;
+		}
+		PrimitiveType* arg0Type = static_cast<PrimitiveType*>(args[0]->m_type);
+		bool res = arg0Type->op_not(args[0]->m_pointer);
+		result->assignPrimitive(BoolType::GetSingleton(), &res);
+		return s_ok;
+	}
+	return e_invalid_arg_num;
+}
+
+ErrorCode PrimitiveType::Primitive_op_bitwiseNot(Variant* result, Variant** args, int_t numArgs)
+{
+	if (1 == numArgs)
+	{
+		if (!args[0]->m_type->isPrimitive())
+		{
+			return e_invalid_this_type;
+		}
+		PrimitiveType* arg0Type = static_cast<PrimitiveType*>(args[0]->m_type);
+		if (float_type <= arg0Type->m_typeCategory)
+		{
+			return e_invalid_this_type;
+		}
+		PrimitiveTypeCategory resTypeCategory = GetPromotedTypeCategory(arg0Type->m_typeCategory);
+		PrimitiveType* resType = GetPrimitiveTypeFromTypeCategory(resTypeCategory);
+		char value0[max_primitive_type_size];
+		char resultValue[max_primitive_type_size];
+		arg0Type->castTo(value0, resType, args[0]->m_pointer);
+		resType->op_bitwiseNot(resultValue, value0);
+		result->assignPrimitive(resType, resultValue);
+		return s_ok;
+	}
+	return e_invalid_arg_num;
+}
+
+template<typename Func>
+inline ErrorCode Primitive_op_binary(Variant* result, Variant** args, int_t numArgs, Func func)
+{
+	if (2 == numArgs)
+	{
+		if (!args[0]->m_type->isPrimitive())
+		{
+			return e_invalid_this_type;
+		}
+		if (!args[1]->m_type->isPrimitive())
 		{
 			return e_invalid_arg_type_1;
-		}
-		if(!args[1]->m_type->isPrimitive())
-		{
-			return e_invalid_arg_type_2;
 		}
 		PrimitiveType* arg0Type = static_cast<PrimitiveType*>(args[0]->m_type);
 		PrimitiveType* arg1Type = static_cast<PrimitiveType*>(args[1]->m_type);
@@ -198,28 +367,36 @@ ErrorCode PrimitiveType::Primitive___op_add_(Variant* result, Variant** args, in
 
 		arg0Type->castTo(value0, resType, args[0]->m_pointer);
 		arg1Type->castTo(value1, resType, args[1]->m_pointer);
-		resType->_op_add_(resultValue, value0, value1);
+		(resType->*func)(resultValue, value0, value1);
 		result->assignPrimitive(resType, resultValue);
 		return s_ok;
 	}
 	return e_invalid_arg_num;
 }
 
-
-ErrorCode PrimitiveType::Primitive___op_sub_(Variant* result, Variant** args, int_t numArgs)
+template<typename Func>
+inline ErrorCode Primitive_op_binaryIntegerOnly(Variant* result, Variant** args, int_t numArgs, Func func)
 {
-	if(2 == numArgs)
+	if (2 == numArgs)
 	{
-		if(!args[0]->m_type->isPrimitive())
+		if (!args[0]->m_type->isPrimitive())
+		{
+			return e_invalid_this_type;
+		}
+		if (!args[1]->m_type->isPrimitive())
 		{
 			return e_invalid_arg_type_1;
 		}
-		if(!args[1]->m_type->isPrimitive())
-		{
-			return e_invalid_arg_type_2;
-		}
 		PrimitiveType* arg0Type = static_cast<PrimitiveType*>(args[0]->m_type);
+		if(float_type <= arg0Type->m_typeCategory)
+		{
+			return e_invalid_this_type;
+		}
 		PrimitiveType* arg1Type = static_cast<PrimitiveType*>(args[1]->m_type);
+		if(float_type <= arg1Type->m_typeCategory)
+		{
+			return e_invalid_arg_type_1;
+		}
 		PrimitiveTypeCategory resTypeCategory = GetPromotedTypeCategory(arg0Type->m_typeCategory, arg1Type->m_typeCategory);
 		PrimitiveType* resType = GetPrimitiveTypeFromTypeCategory(resTypeCategory);
 
@@ -229,86 +406,77 @@ ErrorCode PrimitiveType::Primitive___op_sub_(Variant* result, Variant** args, in
 
 		arg0Type->castTo(value0, resType, args[0]->m_pointer);
 		arg1Type->castTo(value1, resType, args[1]->m_pointer);
-		resType->_op_sub_(resultValue, value0, value1);
+		(resType->*func)(resultValue, value0, value1);
 		result->assignPrimitive(resType, resultValue);
 		return s_ok;
 	}
 	return e_invalid_arg_num;
 }
 
-
-ErrorCode PrimitiveType::Primitive___op_mul_(Variant* result, Variant** args, int_t numArgs)
+ErrorCode PrimitiveType::Primitive_op_add(Variant* result, Variant** args, int_t numArgs)
 {
-	if(2 == numArgs)
-	{
-		if(!args[0]->m_type->isPrimitive())
-		{
-			return e_invalid_arg_type_1;
-		}
-		if(!args[1]->m_type->isPrimitive())
-		{
-			return e_invalid_arg_type_2;
-		}
-		PrimitiveType* arg0Type = static_cast<PrimitiveType*>(args[0]->m_type);
-		PrimitiveType* arg1Type = static_cast<PrimitiveType*>(args[1]->m_type);
-		PrimitiveTypeCategory resTypeCategory = GetPromotedTypeCategory(arg0Type->m_typeCategory, arg1Type->m_typeCategory);
-		PrimitiveType* resType = GetPrimitiveTypeFromTypeCategory(resTypeCategory);
+	return Primitive_op_binary(result, args, numArgs, &op_add);
+}
 
-		char value0[max_primitive_type_size];
-		char value1[max_primitive_type_size];
-		char resultValue[max_primitive_type_size];
+ErrorCode PrimitiveType::Primitive_op_subtract(Variant* result, Variant** args, int_t numArgs)
+{
+	return Primitive_op_binary(result, args, numArgs, &op_subtract);
+}
 
-		arg0Type->castTo(value0, resType, args[0]->m_pointer);
-		arg1Type->castTo(value1, resType, args[1]->m_pointer);
-		resType->_op_mul_(resultValue, value0, value1);
-		result->assignPrimitive(resType, resultValue);
-		return s_ok;
-	}
-	return e_invalid_arg_num;
+ErrorCode PrimitiveType::Primitive_op_multiply(Variant* result, Variant** args, int_t numArgs)
+{
+	return Primitive_op_binary(result, args, numArgs, &op_multiply);
+}
+
+ErrorCode PrimitiveType::Primitive_op_divide(Variant* result, Variant** args, int_t numArgs)
+{
+	return Primitive_op_binary(result, args, numArgs, &op_divide);
+}
+
+ErrorCode PrimitiveType::Primitive_op_mod(Variant* result, Variant** args, int_t numArgs)
+{
+	return Primitive_op_binaryIntegerOnly(result, args, numArgs, &op_mod);
+}
+
+ErrorCode PrimitiveType::Primitive_op_bitwiseAnd(Variant* result, Variant** args, int_t numArgs)
+{
+	return Primitive_op_binaryIntegerOnly(result, args, numArgs, &op_bitwiseAnd);
+}
+
+ErrorCode PrimitiveType::Primitive_op_bitwiseOr(Variant* result, Variant** args, int_t numArgs)
+{
+	return Primitive_op_binaryIntegerOnly(result, args, numArgs, &op_bitwiseOr);
+}
+
+ErrorCode PrimitiveType::Primitive_op_bitwiseXor(Variant* result, Variant** args, int_t numArgs)
+{
+	return Primitive_op_binaryIntegerOnly(result, args, numArgs, &op_bitwiseXor);
+}
+
+ErrorCode PrimitiveType::Primitive_op_leftShift(Variant* result, Variant** args, int_t numArgs)
+{
+	return Primitive_op_binaryIntegerOnly(result, args, numArgs, &op_leftShift);
+}
+
+ErrorCode PrimitiveType::Primitive_op_rightShift(Variant* result, Variant** args, int_t numArgs)
+{
+	return Primitive_op_binaryIntegerOnly(result, args, numArgs, &op_rightShift);
 }
 
 
-ErrorCode PrimitiveType::Primitive___op_div_(Variant* result, Variant** args, int_t numArgs)
+
+template<typename Func>
+inline ErrorCode Primitive_op_compare(Variant* result, Variant** args, int_t numArgs, Func func)
 {
-	if(2 == numArgs)
+	if (2 == numArgs)
 	{
-		if(!args[0]->m_type->isPrimitive())
+		if (!args[0]->m_type->isPrimitive())
+		{
+			return e_invalid_this_type;
+		}
+		if (!args[1]->m_type->isPrimitive())
 		{
 			return e_invalid_arg_type_1;
-		}
-		if(!args[1]->m_type->isPrimitive())
-		{
-			return e_invalid_arg_type_2;
-		}
-		PrimitiveType* arg0Type = static_cast<PrimitiveType*>(args[0]->m_type);
-		PrimitiveType* arg1Type = static_cast<PrimitiveType*>(args[1]->m_type);
-		PrimitiveTypeCategory resTypeCategory = GetPromotedTypeCategory(arg0Type->m_typeCategory, arg1Type->m_typeCategory);
-		PrimitiveType* resType = GetPrimitiveTypeFromTypeCategory(resTypeCategory);
-
-		char value0[max_primitive_type_size];
-		char value1[max_primitive_type_size];
-		char resultValue[max_primitive_type_size];
-
-		arg0Type->castTo(value0, resType, args[0]->m_pointer);
-		arg1Type->castTo(value1, resType, args[1]->m_pointer);
-		resType->_op_div_(resultValue, value0, value1);
-		result->assignPrimitive(resType, resultValue);
-		return s_ok;
-	}
-	return e_invalid_arg_num;
-}
-
-ErrorCode PrimitiveType::Primitive___op_less_than_(Variant* result, Variant** args, int_t numArgs)
-{
-	if(2 == numArgs)
-	{
-		if(!args[0]->m_type->isPrimitive())
-		{
-			return e_invalid_arg_type_1;
-		}
-		if(!args[1]->m_type->isPrimitive())
-		{
-			return e_invalid_arg_type_2;
 		}
 		PrimitiveType* arg0Type = static_cast<PrimitiveType*>(args[0]->m_type);
 		PrimitiveType* arg1Type = static_cast<PrimitiveType*>(args[1]->m_type);
@@ -320,380 +488,119 @@ ErrorCode PrimitiveType::Primitive___op_less_than_(Variant* result, Variant** ar
 
 		arg0Type->castTo(value0, resType, args[0]->m_pointer);
 		arg1Type->castTo(value1, resType, args[1]->m_pointer);
-		bool res = resType->_op_less_than_(value0, value1);
+		bool res = (resType->*func)(value0, value1);
 		result->assignPrimitive(BoolType::GetSingleton(), &res);
 		return s_ok;
 	}
 	return e_invalid_arg_num;
 }
 
-ErrorCode PrimitiveType::Primitive___op_less_equal_(Variant* result, Variant** args, int_t numArgs)
+ErrorCode PrimitiveType::Primitive_op_less(Variant* result, Variant** args, int_t numArgs)
 {
-	if(2 == numArgs)
-	{
-		if(!args[0]->m_type->isPrimitive())
-		{
-			return e_invalid_arg_type_1;
-		}
-		if(!args[1]->m_type->isPrimitive())
-		{
-			return e_invalid_arg_type_2;
-		}
-		PrimitiveType* arg0Type = static_cast<PrimitiveType*>(args[0]->m_type);
-		PrimitiveType* arg1Type = static_cast<PrimitiveType*>(args[1]->m_type);
-		PrimitiveTypeCategory resTypeCategory = GetPromotedTypeCategory(arg0Type->m_typeCategory, arg1Type->m_typeCategory);
-		PrimitiveType* resType = GetPrimitiveTypeFromTypeCategory(resTypeCategory);
-
-		char value0[max_primitive_type_size];
-		char value1[max_primitive_type_size];
-
-		arg0Type->castTo(value0, resType, args[0]->m_pointer);
-		arg1Type->castTo(value1, resType, args[1]->m_pointer);
-		bool res = resType->_op_less_equal_(value0, value1);
-		result->assignPrimitive(BoolType::GetSingleton(), &res);
-		return s_ok;
-	}
-	return e_invalid_arg_num;
+	return Primitive_op_compare(result, args, numArgs, &op_less);
 }
 
-ErrorCode PrimitiveType::Primitive___op_equal_to_(Variant* result, Variant** args, int_t numArgs)
+ErrorCode PrimitiveType::Primitive_op_lessEqual(Variant* result, Variant** args, int_t numArgs)
 {
-	if(2 == numArgs)
-	{
-		if(!args[0]->m_type->isPrimitive())
-		{
-			return e_invalid_arg_type_1;
-		}
-		if(!args[1]->m_type->isPrimitive())
-		{
-			return e_invalid_arg_type_2;
-		}
-		PrimitiveType* arg0Type = static_cast<PrimitiveType*>(args[0]->m_type);
-		PrimitiveType* arg1Type = static_cast<PrimitiveType*>(args[1]->m_type);
-		PrimitiveTypeCategory resTypeCategory = GetPromotedTypeCategory(arg0Type->m_typeCategory, arg1Type->m_typeCategory);
-		PrimitiveType* resType = GetPrimitiveTypeFromTypeCategory(resTypeCategory);
-
-		char value0[max_primitive_type_size];
-		char value1[max_primitive_type_size];
-
-		arg0Type->castTo(value0, resType, args[0]->m_pointer);
-		arg1Type->castTo(value1, resType, args[1]->m_pointer);
-		bool res = resType->_op_equal_to_(value0, value1);
-		result->assignPrimitive(BoolType::GetSingleton(), &res);
-		return s_ok;
-	}
-	return e_invalid_arg_num;
+	return Primitive_op_compare(result, args, numArgs, &op_lessEqual);
 }
 
-ErrorCode PrimitiveType::Primitive___op_not_equal_to_(Variant* result, Variant** args, int_t numArgs)
+ErrorCode PrimitiveType::Primitive_op_equal(Variant* result, Variant** args, int_t numArgs)
 {
-	if(2 == numArgs)
-	{
-		if(!args[0]->m_type->isPrimitive())
-		{
-			return e_invalid_arg_type_1;
-		}
-		if(!args[1]->m_type->isPrimitive())
-		{
-			return e_invalid_arg_type_2;
-		}
-		PrimitiveType* arg0Type = static_cast<PrimitiveType*>(args[0]->m_type);
-		PrimitiveType* arg1Type = static_cast<PrimitiveType*>(args[1]->m_type);
-		PrimitiveTypeCategory resTypeCategory = GetPromotedTypeCategory(arg0Type->m_typeCategory, arg1Type->m_typeCategory);
-		PrimitiveType* resType = GetPrimitiveTypeFromTypeCategory(resTypeCategory);
-
-		char value0[max_primitive_type_size];
-		char value1[max_primitive_type_size];
-
-		arg0Type->castTo(value0, resType, args[0]->m_pointer);
-		arg1Type->castTo(value1, resType, args[1]->m_pointer);
-		bool res = resType->_op_not_equal_to_(value0, value1);
-		result->assignPrimitive(BoolType::GetSingleton(), &res);
-		return s_ok;
-	}
-	return e_invalid_arg_num;
+	return Primitive_op_compare(result, args, numArgs, &op_equal);
 }
 
-ErrorCode PrimitiveType::Primitive___op_greater_equal_(Variant* result, Variant** args, int_t numArgs)
+ErrorCode PrimitiveType::Primitive_op_notEqual(Variant* result, Variant** args, int_t numArgs)
 {
-	if(2 == numArgs)
-	{
-		if(!args[0]->m_type->isPrimitive())
-		{
-			return e_invalid_arg_type_1;
-		}
-		if(!args[1]->m_type->isPrimitive())
-		{
-			return e_invalid_arg_type_2;
-		}
-		PrimitiveType* arg0Type = static_cast<PrimitiveType*>(args[0]->m_type);
-		PrimitiveType* arg1Type = static_cast<PrimitiveType*>(args[1]->m_type);
-		PrimitiveTypeCategory resTypeCategory = GetPromotedTypeCategory(arg0Type->m_typeCategory, arg1Type->m_typeCategory);
-		PrimitiveType* resType = GetPrimitiveTypeFromTypeCategory(resTypeCategory);
-
-		char value0[max_primitive_type_size];
-		char value1[max_primitive_type_size];
-
-		arg0Type->castTo(value0, resType, args[0]->m_pointer);
-		arg1Type->castTo(value1, resType, args[1]->m_pointer);
-		bool res = resType->_op_greater_equal_(value0, value1);
-		result->assignPrimitive(BoolType::GetSingleton(), &res);
-		return s_ok;
-	}
-	return e_invalid_arg_num;
+	return Primitive_op_compare(result, args, numArgs, &op_notEqual);
 }
 
-ErrorCode PrimitiveType::Primitive___op_greater_than_(Variant* result, Variant** args, int_t numArgs)
+ErrorCode PrimitiveType::Primitive_op_greaterEqual(Variant* result, Variant** args, int_t numArgs)
 {
-	if(2 == numArgs)
-	{
-		if(!args[0]->m_type->isPrimitive())
-		{
-			return e_invalid_arg_type_1;
-		}
-		if(!args[1]->m_type->isPrimitive())
-		{
-			return e_invalid_arg_type_2;
-		}
-		PrimitiveType* arg0Type = static_cast<PrimitiveType*>(args[0]->m_type);
-		PrimitiveType* arg1Type = static_cast<PrimitiveType*>(args[1]->m_type);
-		PrimitiveTypeCategory resTypeCategory = GetPromotedTypeCategory(arg0Type->m_typeCategory, arg1Type->m_typeCategory);
-		PrimitiveType* resType = GetPrimitiveTypeFromTypeCategory(resTypeCategory);
-
-		char value0[max_primitive_type_size];
-		char value1[max_primitive_type_size];
-
-		arg0Type->castTo(value0, resType, args[0]->m_pointer);
-		arg1Type->castTo(value1, resType, args[1]->m_pointer);
-		bool res = resType->_op_greater_than_(value0, value1);
-		result->assignPrimitive(BoolType::GetSingleton(), &res);
-		return s_ok;
-	}
-	return e_invalid_arg_num;
+	return Primitive_op_compare(result, args, numArgs, &op_greaterEqual);
 }
 
-ErrorCode PrimitiveType::Primitive___op_not_(Variant* result, Variant** args, int_t numArgs)
+ErrorCode PrimitiveType::Primitive_op_greater(Variant* result, Variant** args, int_t numArgs)
 {
-	if(1 == numArgs)
-	{
-		if(!args[0]->m_type->isPrimitive())
-		{
-			return e_invalid_arg_type_1;
-		}
-		PrimitiveType* arg0Type = static_cast<PrimitiveType*>(args[0]->m_type);
-		bool res = arg0Type->_op_not_(args[0]->m_pointer);
-		result->assignPrimitive(BoolType::GetSingleton(), &res);
-		return s_ok;
-	}
-	return e_invalid_arg_num;
-}
-
-ErrorCode PrimitiveType::Primitive___op_and_(Variant* result, Variant** args, int_t numArgs)
-{
-	if(2 == numArgs)
-	{
-		if(!args[0]->m_type->isPrimitive())
-		{
-			return e_invalid_arg_type_1;
-		}
-		if(!args[1]->m_type->isPrimitive())
-		{
-			return e_invalid_arg_type_2;
-		}
-		PrimitiveType* arg0Type = static_cast<PrimitiveType*>(args[0]->m_type);
-		PrimitiveType* arg1Type = static_cast<PrimitiveType*>(args[1]->m_type);
-		BoolType* resType = BoolType::GetSingleton();
-		bool value0[1], value1[1];
-		arg0Type->castTo(value0, resType, args[0]->m_pointer);
-		arg1Type->castTo(value1, resType, args[1]->m_pointer);
-		bool res = resType->_op_and_(value0, value1);
-		result->assignPrimitive(resType, &res);
-		return s_ok;
-	}
-	return e_invalid_arg_num;
-}
-
-ErrorCode PrimitiveType::Primitive___op_or_(Variant* result, Variant** args, int_t numArgs)
-{
-	if(2 == numArgs)
-	{
-		if(!args[0]->m_type->isPrimitive())
-		{
-			return e_invalid_arg_type_1;
-		}
-		if(!args[1]->m_type->isPrimitive())
-		{
-			return e_invalid_arg_type_2;
-		}
-		PrimitiveType* arg0Type = static_cast<PrimitiveType*>(args[0]->m_type);
-		PrimitiveType* arg1Type = static_cast<PrimitiveType*>(args[1]->m_type);
-		BoolType* resType = BoolType::GetSingleton();
-		bool value0[1], value1[1];
-		arg0Type->castTo(value0, resType, args[0]->m_pointer);
-		arg1Type->castTo(value1, resType, args[1]->m_pointer);
-		bool res = resType->_op_or_(value0, value1);
-		result->assignPrimitive(resType, &res);
-		return s_ok;
-	}
-	return e_invalid_arg_num;
+	return Primitive_op_compare(result, args, numArgs, &op_greater);
 }
 	
-//ErrorCode PrimitiveType::Primitive___op_add_assign_(Variant* result, Variant** args, int_t numArgs)
-//{
-//	if(2 == numArgs)
-//	{
-//		if(!args[0]->m_type->isPrimitive())
-//		{
-//			return e_invalid_arg_type_1;
-//		}
-//		if(!args[1]->m_type->isPrimitive())
-//		{
-//			return e_invalid_arg_type_2;
-//		}
-//		PrimitiveType* arg0Type = static_cast<PrimitiveType*>(args[0]->m_type);
-//		PrimitiveType* arg1Type = static_cast<PrimitiveType*>(args[1]->m_type);
-//		PrimitiveTypeCategory resTypeCategory = GetPromotedTypeCategory(arg0Type->m_typeCategory, arg1Type->m_typeCategory);
-//		PrimitiveType* resType = GetPrimitiveTypeFromTypeCategory(resTypeCategory);
-//
-//		char value0[max_primitive_type_size];
-//		char value1[max_primitive_type_size];
-//		char resultValue[max_primitive_type_size];
-//
-//		arg0Type->castTo(value0, resType, args[0]->m_pointer);
-//		arg1Type->castTo(value1, resType, args[1]->m_pointer);
-//		resType->_op_add_(resultValue, value0, value1);
-//		resType->castTo(args[0]->m_pointer, arg0Type, resultValue);
-//
-//		return s_ok;
-//	}
-//	return e_invalid_arg_num;
-//}
-//
-//ErrorCode PrimitiveType::Primitive___op_sub_assign_(Variant* result, Variant** args, int_t numArgs)
-//{
-//	return e_invalid_arg_num;
-//}
-//
-//ErrorCode PrimitiveType::Primitive___op_mul_assign_(Variant* result, Variant** args, int_t numArgs)
-//{
-//	return e_invalid_arg_num;
-//}
-//
-//ErrorCode PrimitiveType::Primitive___op_div_assign_(Variant* result, Variant** args, int_t numArgs)
-//{
-//	return e_invalid_arg_num;
-//}
-
-//integer only
-ErrorCode PrimitiveType::Primitive___op_inc_(Variant* result, Variant** args, int_t numArgs)
+ErrorCode PrimitiveType::Primitive_op_assign(Variant* result, Variant** args, int_t numArgs)
 {
-	if(1 == numArgs)
+	if (2 == numArgs)
 	{
-		if(!args[0]->m_type->isPrimitive())
+		if (!args[0]->m_type->isPrimitive())
+		{
+			return e_invalid_this_type;
+		}
+		if (!args[1]->m_type->isPrimitive())
 		{
 			return e_invalid_arg_type_1;
-		}
-		PrimitiveType* arg0Type = static_cast<PrimitiveType*>(args[0]->m_type);
-		if(arg0Type->m_typeCategory >= float_type)
-		{
-			return e_invalid_arg_type_1;
-		}
-		PrimitiveType* resType = arg0Type;
-		char resultValue[max_primitive_type_size];
-		resType->_op_inc_(resultValue, args[0]->m_pointer);
-		result->assignPrimitive(resType, resultValue);
-		return s_ok;
-	}
-	return e_invalid_arg_num;
-}
-
-ErrorCode PrimitiveType::Primitive___op_post_inc_(Variant* result, Variant** args, int_t numArgs)
-{
-	if(1 == numArgs)
-	{
-		if(!args[0]->m_type->isPrimitive())
-		{
-			return e_invalid_arg_type_1;
-		}
-		PrimitiveType* arg0Type = static_cast<PrimitiveType*>(args[0]->m_type);
-		if(arg0Type->m_typeCategory >= float_type)
-		{
-			return e_invalid_arg_type_1;
-		}
-		PrimitiveType* resType = arg0Type;
-		char resultValue[max_primitive_type_size];
-		resType->_op_post_inc_(resultValue, args[0]->m_pointer);
-		result->assignPrimitive(resType, resultValue);
-		return s_ok;
-	}
-	return e_invalid_arg_num;
-}
-
-ErrorCode PrimitiveType::Primitive___op_dec_(Variant* result, Variant** args, int_t numArgs)
-{
-	if(1 == numArgs)
-	{
-		if(!args[0]->m_type->isPrimitive())
-		{
-			return e_invalid_arg_type_1;
-		}
-		PrimitiveType* arg0Type = static_cast<PrimitiveType*>(args[0]->m_type);
-		if(arg0Type->m_typeCategory >= float_type)
-		{
-			return e_invalid_arg_type_1;
-		}
-		PrimitiveType* resType = arg0Type;
-		char resultValue[max_primitive_type_size];
-		resType->_op_dec_(resultValue, args[0]->m_pointer);
-		result->assignPrimitive(resType, resultValue);
-		return s_ok;
-	}
-	return e_invalid_arg_num;
-}
-
-ErrorCode PrimitiveType::Primitive___op_post_dec_(Variant* result, Variant** args, int_t numArgs)
-{
-	if(1 == numArgs)
-	{
-		if(!args[0]->m_type->isPrimitive())
-		{
-			return e_invalid_arg_type_1;
-		}
-		PrimitiveType* arg0Type = static_cast<PrimitiveType*>(args[0]->m_type);
-		if(arg0Type->m_typeCategory >= float_type)
-		{
-			return e_invalid_arg_type_1;
-		}
-		PrimitiveType* resType = arg0Type;
-		char resultValue[max_primitive_type_size];
-		resType->_op_post_dec_(resultValue, args[0]->m_pointer);
-		result->assignPrimitive(resType, resultValue);
-		return s_ok;
-	}
-	return e_invalid_arg_num;
-}
-
-ErrorCode PrimitiveType::Primitive___op_mod_(Variant* result, Variant** args, int_t numArgs)
-{
-	if(2 == numArgs)
-	{
-		if(!args[0]->m_type->isPrimitive())
-		{
-			return e_invalid_arg_type_1;
-		}
-		if(!args[1]->m_type->isPrimitive())
-		{
-			return e_invalid_arg_type_2;
 		}
 		PrimitiveType* arg0Type = static_cast<PrimitiveType*>(args[0]->m_type);
 		PrimitiveType* arg1Type = static_cast<PrimitiveType*>(args[1]->m_type);
-		if(arg0Type->m_typeCategory >= float_type)
+		arg1Type->castTo(args[0]->m_pointer, arg0Type, args[1]->m_pointer);
+		result->assignPrimitivePtr(arg0Type, args[0]->m_pointer, false, ::pafcore::Variant::by_ref);
+		return s_ok;
+	}
+	return e_invalid_arg_num;
+}
+
+template<typename Func>
+inline ErrorCode Primitive_op_compoundAssign(Variant* result, Variant** args, int_t numArgs, Func func)
+{
+	if (2 == numArgs)
+	{
+		if (!args[0]->m_type->isPrimitive())
+		{
+			return e_invalid_this_type;
+		}
+		if (!args[1]->m_type->isPrimitive())
 		{
 			return e_invalid_arg_type_1;
 		}
-		if(arg1Type->m_typeCategory >= float_type)
+		PrimitiveType* arg0Type = static_cast<PrimitiveType*>(args[0]->m_type);
+		PrimitiveType* arg1Type = static_cast<PrimitiveType*>(args[1]->m_type);
+		PrimitiveTypeCategory resTypeCategory = GetPromotedTypeCategory(arg0Type->m_typeCategory, arg1Type->m_typeCategory);
+		PrimitiveType* resType = GetPrimitiveTypeFromTypeCategory(resTypeCategory);
+
+		char value0[max_primitive_type_size];
+		char value1[max_primitive_type_size];
+		char resultValue[max_primitive_type_size];
+
+		arg0Type->castTo(value0, resType, args[0]->m_pointer);
+		arg1Type->castTo(value1, resType, args[1]->m_pointer);
+		(resType->*func)(resultValue, value0, value1);
+		resType->castTo(args[0]->m_pointer, arg0Type, resultValue);
+		result->assignPrimitivePtr(arg0Type, args[0]->m_pointer, false, ::pafcore::Variant::by_ref);
+		return s_ok;
+	}
+	return e_invalid_arg_num;
+}
+
+
+template<typename Func>
+inline ErrorCode Primitive_op_compoundAssign_IntegerOnly(Variant* result, Variant** args, int_t numArgs, Func func)
+{
+	if (2 == numArgs)
+	{
+		if (!args[0]->m_type->isPrimitive())
 		{
-			return e_invalid_arg_type_2;
+			return e_invalid_this_type;
+		}
+		if (!args[1]->m_type->isPrimitive())
+		{
+			return e_invalid_arg_type_1;
+		}
+		PrimitiveType* arg0Type = static_cast<PrimitiveType*>(args[0]->m_type);
+		if(float_type <= arg0Type->m_typeCategory)
+		{
+			return e_invalid_this_type;
+		}
+		PrimitiveType* arg1Type = static_cast<PrimitiveType*>(args[1]->m_type);
+		if(float_type <= arg1Type->m_typeCategory)
+		{
+			return e_invalid_arg_type_1;
 		}
 		PrimitiveTypeCategory resTypeCategory = GetPromotedTypeCategory(arg0Type->m_typeCategory, arg1Type->m_typeCategory);
 		PrimitiveType* resType = GetPrimitiveTypeFromTypeCategory(resTypeCategory);
@@ -704,226 +611,62 @@ ErrorCode PrimitiveType::Primitive___op_mod_(Variant* result, Variant** args, in
 
 		arg0Type->castTo(value0, resType, args[0]->m_pointer);
 		arg1Type->castTo(value1, resType, args[1]->m_pointer);
-		resType->_op_mod_(resultValue, value0, value1);
-		result->assignPrimitive(resType, resultValue);
+		(resType->*func)(resultValue, value0, value1);
+		resType->castTo(args[0]->m_pointer, arg0Type, resultValue);
+		result->assignPrimitivePtr(arg0Type, args[0]->m_pointer, false, ::pafcore::Variant::by_ref);
 		return s_ok;
 	}
 	return e_invalid_arg_num;
 }
 
-ErrorCode PrimitiveType::Primitive___op_bit_not_(Variant* result, Variant** args, int_t numArgs)
+ErrorCode PrimitiveType::Primitive_op_addAssign(Variant* result, Variant** args, int_t numArgs)
 {
-	if(1 == numArgs)
-	{
-		if(!args[0]->m_type->isPrimitive())
-		{
-			return e_invalid_arg_type_1;
-		}
-		PrimitiveType* arg0Type = static_cast<PrimitiveType*>(args[0]->m_type);
-		if(arg0Type->m_typeCategory >= float_type)
-		{
-			return e_invalid_arg_type_1;
-		}
-		PrimitiveTypeCategory resTypeCategory = GetPromotedTypeCategory(arg0Type->m_typeCategory);
-		PrimitiveType* resType = GetPrimitiveTypeFromTypeCategory(resTypeCategory);
-		char value0[max_primitive_type_size];
-		char resultValue[max_primitive_type_size];
-		arg0Type->castTo(value0, resType, args[0]->m_pointer);
-		resType->_op_bit_not_(resultValue, value0);
-		result->assignPrimitive(resType, resultValue);
-		return s_ok;
-	}
-	return e_invalid_arg_num;
+	return Primitive_op_compoundAssign(result, args, numArgs, &op_add);
 }
 
-ErrorCode PrimitiveType::Primitive___op_bit_and_(Variant* result, Variant** args, int_t numArgs)
+ErrorCode PrimitiveType::Primitive_op_subtractAssign(Variant* result, Variant** args, int_t numArgs)
 {
-	if(2 == numArgs)
-	{
-		if(!args[0]->m_type->isPrimitive())
-		{
-			return e_invalid_arg_type_1;
-		}
-		if(!args[1]->m_type->isPrimitive())
-		{
-			return e_invalid_arg_type_2;
-		}
-		PrimitiveType* arg0Type = static_cast<PrimitiveType*>(args[0]->m_type);
-		PrimitiveType* arg1Type = static_cast<PrimitiveType*>(args[1]->m_type);
-		if(arg0Type->m_typeCategory >= float_type)
-		{
-			return e_invalid_arg_type_1;
-		}
-		if(arg1Type->m_typeCategory >= float_type)
-		{
-			return e_invalid_arg_type_2;
-		}
-		PrimitiveTypeCategory resTypeCategory = GetPromotedTypeCategory(arg0Type->m_typeCategory, arg1Type->m_typeCategory);
-		PrimitiveType* resType = GetPrimitiveTypeFromTypeCategory(resTypeCategory);
-
-		char value0[max_primitive_type_size];
-		char value1[max_primitive_type_size];
-		char resultValue[max_primitive_type_size];
-
-		arg0Type->castTo(value0, resType, args[0]->m_pointer);
-		arg1Type->castTo(value1, resType, args[1]->m_pointer);
-		resType->_op_bit_and_(resultValue, value0, value1);
-		result->assignPrimitive(resType, resultValue);
-		return s_ok;
-	}
-	return e_invalid_arg_num;
+	return Primitive_op_compoundAssign(result, args, numArgs, &op_subtract);
 }
 
-ErrorCode PrimitiveType::Primitive___op_bit_or_(Variant* result, Variant** args, int_t numArgs)
+ErrorCode PrimitiveType::Primitive_op_multiplyAssign(Variant* result, Variant** args, int_t numArgs)
 {
-	if(2 == numArgs)
-	{
-		if(!args[0]->m_type->isPrimitive())
-		{
-			return e_invalid_arg_type_1;
-		}
-		if(!args[1]->m_type->isPrimitive())
-		{
-			return e_invalid_arg_type_2;
-		}
-		PrimitiveType* arg0Type = static_cast<PrimitiveType*>(args[0]->m_type);
-		PrimitiveType* arg1Type = static_cast<PrimitiveType*>(args[1]->m_type);
-		if(arg0Type->m_typeCategory >= float_type)
-		{
-			return e_invalid_arg_type_1;
-		}
-		if(arg1Type->m_typeCategory >= float_type)
-		{
-			return e_invalid_arg_type_2;
-		}
-		PrimitiveTypeCategory resTypeCategory = GetPromotedTypeCategory(arg0Type->m_typeCategory, arg1Type->m_typeCategory);
-		PrimitiveType* resType = GetPrimitiveTypeFromTypeCategory(resTypeCategory);
-
-		char value0[max_primitive_type_size];
-		char value1[max_primitive_type_size];
-		char resultValue[max_primitive_type_size];
-
-		arg0Type->castTo(value0, resType, args[0]->m_pointer);
-		arg1Type->castTo(value1, resType, args[1]->m_pointer);
-		resType->_op_bit_or_(resultValue, value0, value1);
-		result->assignPrimitive(resType, resultValue);
-		return s_ok;
-	}
-	return e_invalid_arg_num;
+	return Primitive_op_compoundAssign(result, args, numArgs, &op_multiply);
 }
 
-ErrorCode PrimitiveType::Primitive___op_bit_xor_(Variant* result, Variant** args, int_t numArgs)
+ErrorCode PrimitiveType::Primitive_op_divideAssign(Variant* result, Variant** args, int_t numArgs)
 {
-	if(2 == numArgs)
-	{
-		if(!args[0]->m_type->isPrimitive())
-		{
-			return e_invalid_arg_type_1;
-		}
-		if(!args[1]->m_type->isPrimitive())
-		{
-			return e_invalid_arg_type_2;
-		}
-		PrimitiveType* arg0Type = static_cast<PrimitiveType*>(args[0]->m_type);
-		PrimitiveType* arg1Type = static_cast<PrimitiveType*>(args[1]->m_type);
-		if(arg0Type->m_typeCategory >= float_type)
-		{
-			return e_invalid_arg_type_1;
-		}
-		if(arg1Type->m_typeCategory >= float_type)
-		{
-			return e_invalid_arg_type_2;
-		}
-		PrimitiveTypeCategory resTypeCategory = GetPromotedTypeCategory(arg0Type->m_typeCategory, arg1Type->m_typeCategory);
-		PrimitiveType* resType = GetPrimitiveTypeFromTypeCategory(resTypeCategory);
-
-		char value0[max_primitive_type_size];
-		char value1[max_primitive_type_size];
-		char resultValue[max_primitive_type_size];
-
-		arg0Type->castTo(value0, resType, args[0]->m_pointer);
-		arg1Type->castTo(value1, resType, args[1]->m_pointer);
-		resType->_op_bit_xor_(resultValue, value0, value1);
-		result->assignPrimitive(resType, resultValue);
-		return s_ok;
-	}
-	return e_invalid_arg_num;
+	return Primitive_op_compoundAssign(result, args, numArgs, &op_divide);
 }
 
-ErrorCode PrimitiveType::Primitive___op_left_shift_(Variant* result, Variant** args, int_t numArgs)
+ErrorCode PrimitiveType::Primitive_op_modAssign(Variant* result, Variant** args, int_t numArgs)
 {
-	if(2 == numArgs)
-	{
-		if(!args[0]->m_type->isPrimitive())
-		{
-			return e_invalid_arg_type_1;
-		}
-		if(!args[1]->m_type->isPrimitive())
-		{
-			return e_invalid_arg_type_2;
-		}
-		PrimitiveType* arg0Type = static_cast<PrimitiveType*>(args[0]->m_type);
-		PrimitiveType* arg1Type = static_cast<PrimitiveType*>(args[1]->m_type);
-		if(arg0Type->m_typeCategory >= float_type)
-		{
-			return e_invalid_arg_type_1;
-		}
-		if(arg1Type->m_typeCategory >= float_type)
-		{
-			return e_invalid_arg_type_2;
-		}
-		PrimitiveTypeCategory resTypeCategory = GetPromotedTypeCategory(arg0Type->m_typeCategory);
-		PrimitiveType* resType = GetPrimitiveTypeFromTypeCategory(resTypeCategory);
-
-		char value0[max_primitive_type_size];
-		char value1[max_primitive_type_size];
-		char resultValue[max_primitive_type_size];
-
-		arg0Type->castTo(value0, resType, args[0]->m_pointer);
-		arg1Type->castTo(value1, resType, args[1]->m_pointer);
-		resType->_op_left_shift_(resultValue, value0, value1);
-		result->assignPrimitive(resType, resultValue);
-		return s_ok;
-	}
-	return e_invalid_arg_num;
+	return Primitive_op_compoundAssign_IntegerOnly(result, args, numArgs, &op_mod);
 }
 
-ErrorCode PrimitiveType::Primitive___op_right_shift_(Variant* result, Variant** args, int_t numArgs)
+ErrorCode PrimitiveType::Primitive_op_bitwiseXorAssign(Variant* result, Variant** args, int_t numArgs)
 {
-	if(2 == numArgs)
-	{
-		if(!args[0]->m_type->isPrimitive())
-		{
-			return e_invalid_arg_type_1;
-		}
-		if(!args[1]->m_type->isPrimitive())
-		{
-			return e_invalid_arg_type_2;
-		}
-		PrimitiveType* arg0Type = static_cast<PrimitiveType*>(args[0]->m_type);
-		PrimitiveType* arg1Type = static_cast<PrimitiveType*>(args[1]->m_type);
-		if(arg0Type->m_typeCategory >= float_type)
-		{
-			return e_invalid_arg_type_1;
-		}
-		if(arg1Type->m_typeCategory >= float_type)
-		{
-			return e_invalid_arg_type_2;
-		}
-		PrimitiveTypeCategory resTypeCategory = GetPromotedTypeCategory(arg0Type->m_typeCategory);
-		PrimitiveType* resType = GetPrimitiveTypeFromTypeCategory(resTypeCategory);
+	return Primitive_op_compoundAssign_IntegerOnly(result, args, numArgs, &op_bitwiseXor);
+}
 
-		char value0[max_primitive_type_size];
-		char value1[max_primitive_type_size];
-		char resultValue[max_primitive_type_size];
+ErrorCode PrimitiveType::Primitive_op_bitwiseAndAssign(Variant* result, Variant** args, int_t numArgs)
+{
+	return Primitive_op_compoundAssign_IntegerOnly(result, args, numArgs, &op_bitwiseAnd);
+}
 
-		arg0Type->castTo(value0, resType, args[0]->m_pointer);
-		arg1Type->castTo(value1, resType, args[1]->m_pointer);
-		resType->_op_right_shift_(resultValue, value0, value1);
-		result->assignPrimitive(resType, resultValue);
-		return s_ok;
-	}
-	return e_invalid_arg_num;
+ErrorCode PrimitiveType::Primitive_op_bitwiseOrAssign(Variant* result, Variant** args, int_t numArgs)
+{
+	return Primitive_op_compoundAssign_IntegerOnly(result, args, numArgs, &op_bitwiseOr);
+}
+
+ErrorCode PrimitiveType::Primitive_op_leftShiftAssign(Variant* result, Variant** args, int_t numArgs)
+{
+	return Primitive_op_compoundAssign_IntegerOnly(result, args, numArgs, &op_leftShift);
+}
+
+ErrorCode PrimitiveType::Primitive_op_rightShiftAssign(Variant* result, Variant** args, int_t numArgs)
+{
+	return Primitive_op_compoundAssign_IntegerOnly(result, args, numArgs, &op_rightShift);
 }
 
 const char* PrimitiveTypeTraits<bool>::s_typeName					= "bool";

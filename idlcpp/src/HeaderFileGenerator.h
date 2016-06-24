@@ -14,6 +14,7 @@ struct IdentifyNode;
 struct FieldNode;
 struct PropertyNode;
 struct MethodNode;
+struct OperatorNode;
 struct TypeNameNode;
 struct ParameterNode;
 struct ScopeNode;
@@ -33,4 +34,5 @@ public:
 	static void generateCode_Property_Get(FILE* file, PropertyNode* propertyNode, int indentation);
 	static void generateCode_Property_Set(FILE* file, PropertyNode* propertyNode, int indentation);
 	static void generateCode_Method(FILE* file, MethodNode* methodNode, int indentation);
+	static void generateCode_Operator(FILE* file, OperatorNode* methodNode, int indentation);
 };

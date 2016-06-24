@@ -26,5 +26,5 @@ public:
 	bool isArray();
 	bool isInput();
 	bool isOutput();
-	void checkSemantic(MethodNode* methodNode, TemplateArguments* templateArguments);
+	void checkSemantic(TemplateArguments* templateArguments);
 };

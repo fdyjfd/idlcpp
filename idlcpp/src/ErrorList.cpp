@@ -7,6 +7,7 @@
 
 const char* g_errorStrings[] =
 {
+	""
 	"file not existing",
 	"open file failed",
 
@@ -49,6 +50,9 @@ const char* g_errorStrings[] =
 	"template interface not supported",
 	"missing reference base type",
 	"error in template class instance",
+	"too few formal parameters",
+	"too many formal parameters",
+	"semantic error operator can not be static",
 };
 
 ErrorList::ErrorList()

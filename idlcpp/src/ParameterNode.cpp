@@ -31,17 +31,17 @@ bool ParameterNode::byValue()
 
 bool ParameterNode::byPtr()
 {
-	return (0 != m_passing && snt_keyword_ptr == m_passing->m_nodeType);
+	return (0 != m_passing && '*' == m_passing->m_nodeType);
 }
 
 bool ParameterNode::byRef()
 {
-	return (0 != m_passing && snt_keyword_ref == m_passing->m_nodeType);
+	return (0 != m_passing && '&' == m_passing->m_nodeType);
 }
 
 bool ParameterNode::outNew()
 {
-	return (0 != m_out && snt_keyword_new == m_out->m_nodeType);
+	return (0 != m_out && '^' == m_out->m_nodeType);
 }
 
 bool ParameterNode::isArray()
@@ -59,7 +59,7 @@ bool ParameterNode::isOutput()
 	return 0 != m_out;
 }
 
-void ParameterNode::checkSemantic(MethodNode* methodNode, TemplateArguments* templateArguments)
+void ParameterNode::checkSemantic(TemplateArguments* templateArguments)
 {
 	TypeNode* typeNode = m_typeName->getTypeNode(templateArguments);
 	if(0 == typeNode)

@@ -24,10 +24,10 @@ bool GetterSetterNode::byValue()
 
 bool GetterSetterNode::byPtr()
 {
-	return (0 != m_passing && snt_keyword_ptr == m_passing->m_nodeType);
+	return (0 != m_passing && '*' == m_passing->m_nodeType);
 }
 
 bool GetterSetterNode::byRef()
 {
-	return (0 != m_passing && snt_keyword_ref == m_passing->m_nodeType);
+	return (0 != m_passing && '&' == m_passing->m_nodeType);
 }

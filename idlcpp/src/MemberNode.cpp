@@ -18,17 +18,17 @@ MemberNode::MemberNode()
 
 bool MemberNode::isMetaOnly()
 {
-	return mf_meta_only == m_filter;
+	return mf_no_code == m_filter;
 }
 
 bool MemberNode::isNativeOnly()
 {
-	return mf_native_only == m_filter;
+	return mf_no_meta == m_filter;
 }
 
 bool MemberNode::canGenerateMetaCode()
 {
-	if (mf_native_only == m_filter)
+	if (mf_no_meta == m_filter)
 	{
 		return false;
 	}
@@ -41,7 +41,7 @@ bool MemberNode::canGenerateMetaCode()
 
 bool MemberNode::canGenerateNativeCode()
 {
-	if (mf_meta_only == m_filter)
+	if (mf_no_code == m_filter)
 	{
 		return false;
 	}

@@ -4,8 +4,9 @@
 #include "ProgramNode.h"
 #include "NamespaceNode.h"
 #include "TokenNode.h"
+#include "TokenListNode.h"
 #include "IdentifyNode.h"
-#include "EnumeratorListNode.h"
+#include "IdentityListNode.h"
 #include "EnumNode.h"
 #include "ClassNode.h"
 #include "TemplateParametersNode.h"
@@ -19,7 +20,9 @@
 #include "GetterSetterNode.h"
 #include "PropertyNode.h"
 #include "MethodNode.h"
+#include "OperatorNode.h"
 #include "ParameterNode.h"
+#include "ParameterListNode.h"
 #include "TypeTree.h"
 #include "Platform.h"
 #include "CommonFuncs.h"
@@ -201,7 +204,7 @@ void MetaSourceFileGenerator::generateCode_Enum(FILE* file, EnumNode* enumNode, 
 		return;
 	}
 	std::vector<IdentifyNode*> identifyNodes;
-	enumNode->m_enumeratorList->collectIdentifyNodes(identifyNodes);
+	enumNode->m_identityList->collectIdentifyNodes(identifyNodes);
 	std::sort(identifyNodes.begin(), identifyNodes.end(), CompareIdentifyPtr());
 	writeEnumMetaConstructor(enumNode, templateArguments, identifyNodes, file, indentation);
 	writeMetaGetSingletonImpls(enumNode, templateArguments, file, indentation);
@@ -214,7 +217,7 @@ void MetaSourceFileGenerator::generateCode_TemplateClassInstance(FILE* file, Tem
 		return;
 	}
 	ClassNode* classNode = static_cast<ClassNode*>(templateClassInstance->m_classTypeNode->m_classNode);
-	generateCode_Class(file, classNode, &templateClassInstance->m_templateArguments, indentation);
+	generateCode_Class(file, classNode, templateClassInstance, indentation);
 }
 
 void writeOverrideFunction(ClassNode* classNode, TemplateArguments* templateArguments, bool hasDelete, bool hasDeleteArray, FILE* file, int indentation)
@@ -324,12 +327,24 @@ struct CompareMethodNode
 	}
 };
 
-void MetaSourceFileGenerator::generateCode_Class(FILE* file, ClassNode* classNode, TemplateArguments* templateArguments, int indentation)
+void MetaSourceFileGenerator::generateCode_Class(FILE* file, ClassNode* classNode, TemplateClassInstanceNode* templateClassInstance, int indentation)
 {
 	if (classNode->isNativeOnly())
 	{
 		return;
 	}
+	TemplateArguments* templateArguments = templateClassInstance ? &templateClassInstance->m_templateArguments : 0;
+
+	std::vector<IdentifyNode*> reservedNames;
+	std::vector<TokenNode*> reservedOperators;
+	if (templateClassInstance && templateClassInstance->m_tokenList
+		&& templateClassInstance->m_classTypeNode->m_classNode == classNode)
+	{
+		assert(classNode->m_typeNode == templateClassInstance->m_classTypeNode);
+		templateClassInstance->getReservedMembers(reservedNames, reservedOperators);
+	}
+	bool hasReservedMember = (!reservedNames.empty() || !reservedOperators.empty());
+
 	std::vector<MemberNode*> memberNodes;
 	std::vector<MethodNode*> methodNodes;
 	std::vector<MethodNode*> staticMethodNodes;
@@ -345,9 +360,27 @@ void MetaSourceFileGenerator::generateCode_Class(FILE* file, ClassNode* classNod
 	for(size_t i = 0; i < memberCount; ++i)
 	{
 		MemberNode* memberNode = memberNodes[i];
+		if (hasReservedMember)
+		{
+			if (snt_method == memberNode->m_nodeType || snt_property == memberNode->m_nodeType)
+			{
+				if (!std::binary_search(reservedNames.begin(), reservedNames.end(), memberNode->m_name, CompareIdentifyPtr()))
+				{
+					continue;
+				}
+			}
+			if (snt_operator == memberNode->m_nodeType)
+			{
+				OperatorNode* operatorNode = static_cast<OperatorNode*>(memberNode);
+				if (!std::binary_search(reservedOperators.begin(), reservedOperators.end(), operatorNode->m_sign, CompareTokenPtr()))
+				{
+					continue;
+				}
+			}
+		}
 		if(!memberNode->isNativeOnly())
 		{
-			if(snt_method == memberNode->m_nodeType)
+			if(snt_method == memberNode->m_nodeType || snt_operator == memberNode->m_nodeType)
 			{
 				MethodNode* methodNode = static_cast<MethodNode*>(memberNode);
 				if(memberNode->m_name->m_str != classNode->m_name->m_str)
@@ -410,6 +443,13 @@ void MetaSourceFileGenerator::generateCode_Class(FILE* file, ClassNode* classNod
 		for (; it != end; ++it)
 		{
 			MethodNode* methodNode = *it;
+			if (!reservedNames.empty())
+			{
+				if (!std::binary_search(reservedNames.begin(), reservedNames.end(), methodNode->m_name, CompareIdentifyPtr()))
+				{
+					continue;
+				}
+			}
 			if (!methodNode->isNativeOnly())
 			{
 				staticMethodNodes.push_back(methodNode);
@@ -461,7 +501,7 @@ void MetaSourceFileGenerator::generateCode_Class(FILE* file, ClassNode* classNod
 			generateCode_Enum(file, static_cast<EnumNode*>(typeNode), templateArguments, indentation);
 			break;
 		case snt_class:
-			generateCode_Class(file, static_cast<ClassNode*>(typeNode), templateArguments, indentation);
+			generateCode_Class(file, static_cast<ClassNode*>(typeNode), templateClassInstance, indentation);
 			break;
 		default:
 			assert(false);
@@ -528,14 +568,14 @@ void writeMetaGetPropertyImpl(ClassNode* classNode, TemplateArguments* templateA
 				sprintf_s(buf, "%s* res = new %s(%s::get_%s());\n", typeName.c_str(), typeName.c_str(), className.c_str(), propertyNode->m_name->m_str.c_str());
 			}
 		}
-		else if(snt_keyword_ptr == propertyNode->m_get->m_passing->m_nodeType)
+		else if('*' == propertyNode->m_get->m_passing->m_nodeType)
 		{
 			sprintf_s(buf, "%s%s* res = %s::get_%s();\n", propertyNode->m_get->isConstant() ? "const " : "",
 				typeName.c_str(), className.c_str(), propertyNode->m_name->m_str.c_str());
 		}
 		else
 		{
-			assert(snt_keyword_ref == propertyNode->m_get->m_passing->m_nodeType);
+			assert('&' == propertyNode->m_get->m_passing->m_nodeType);
 			sprintf_s(buf, "%s%s* res = &%s::get_%s();\n",  propertyNode->m_get->isConstant() ? "const " : "",
 				typeName.c_str(), className.c_str(), propertyNode->m_name->m_str.c_str());
 		}
@@ -567,14 +607,14 @@ void writeMetaGetPropertyImpl(ClassNode* classNode, TemplateArguments* templateA
 				sprintf_s(buf, "%s* res = new %s(self->get_%s());\n", typeName.c_str(), typeName.c_str(), propertyNode->m_name->m_str.c_str());
 			}
 		}
-		else if(snt_keyword_ptr == propertyNode->m_get->m_passing->m_nodeType)
+		else if('*' == propertyNode->m_get->m_passing->m_nodeType)
 		{
 			sprintf_s(buf, "%s%s* res = self->get_%s();\n", propertyNode->m_get->isConstant() ? "const " : "",
 				typeName.c_str(), propertyNode->m_name->m_str.c_str());
 		}
 		else
 		{
-			assert(snt_keyword_ref == propertyNode->m_get->m_passing->m_nodeType);
+			assert('&' == propertyNode->m_get->m_passing->m_nodeType);
 			sprintf_s(buf, "%s%s* res = &self->get_%s();\n",  propertyNode->m_get->isConstant() ? "const " : "",
 				typeName.c_str(), propertyNode->m_name->m_str.c_str());
 		}
@@ -875,7 +915,7 @@ void writeMetaMethodImpl_CastParam(ClassNode* classNode, TemplateArguments* temp
 			}
 			else 
 			{
-				assert(snt_keyword_ptr == parameterNode->m_passing->m_nodeType || snt_keyword_ref == parameterNode->m_passing->m_nodeType);
+				assert('*' == parameterNode->m_passing->m_nodeType || '&' == parameterNode->m_passing->m_nodeType);
 				sprintf_s(buf, "%s%s* a%d;\n", strConstant, typeName.c_str(), paramIndex);
 				writeStringToFile(buf, file, indentation);
 				sprintf_s(buf, "args[%d]->castToPrimitivePtr(RuntimeTypeOf<%s>::RuntimeType::GetSingleton(), (void**)&a%d)", argIndex, typeName.c_str(), paramIndex);
@@ -1133,8 +1173,10 @@ void writeMetaMethodImpl_Call(ClassNode* classNode, TemplateArguments* templateA
 	std::string typeName;
 	std::string className;
 	classNode->getFullName(className, templateArguments);
-
 	TypeCategory typeCategory = CalcTypeFullName(typeName, methodNode->m_resultTypeName, templateArguments);
+
+	size_t paramCount = parameterNodes.size();
+
 	if(void_type == typeCategory && 0 == methodNode->m_passing)
 	{
 		writeStringToFile("", 0, file, indentation);
@@ -1192,22 +1234,77 @@ void writeMetaMethodImpl_Call(ClassNode* classNode, TemplateArguments* templateA
 	}
 	else
 	{
-		sprintf_s(buf, "self->%s(", methodNode->m_name->m_str.c_str());
+		if (snt_method == methodNode->m_nodeType)
+		{
+			sprintf_s(buf, "self->%s(", methodNode->m_name->m_str.c_str());
+		}
+		else
+		{
+			assert(snt_operator == methodNode->m_nodeType);
+			OperatorNode* operatorNode = static_cast<OperatorNode*>(methodNode);
+			if ('(' == operatorNode->m_sign->m_nodeType)
+			{
+				sprintf_s(buf, "(*self)(");
+			}
+			else if ('[' == operatorNode->m_sign->m_nodeType)
+			{
+				sprintf_s(buf, "(*self)[");
+			}
+			else if(0 == paramCount 
+				&& snt_operator_post_inc != operatorNode->m_sign->m_nodeType
+				&& snt_operator_post_dec != operatorNode->m_sign->m_nodeType)
+			{
+				std::string opStr;
+				operatorNode->getOperatorString(opStr);
+				sprintf_s(buf, "%s(*self)", opStr.c_str());
+			}
+			else
+			{
+				bool unary = 0 == paramCount;
+				const char* blank = unary ? "" : " ";
+				std::string opStr;
+				operatorNode->getOperatorString(opStr);
+				sprintf_s(buf, "%s(*self)%s%s%s", unary ? "" : "(", blank, opStr.c_str(), blank);
+			}
+		}
 	}
 	writeStringToFile(buf, file, 0);
-	size_t paramCount = parameterNodes.size();
 	for(size_t i = 0 ; i < paramCount; ++i)
 	{
 		ParameterNode* parameterNode = parameterNodes[i];
 		writeMetaMethodImpl_UseParam(classNode, templateArguments, parameterNode, i, file);
 	}
-	if(methodNode->byValue() && (value_type == typeCategory || reference_type == typeCategory))
+	if (snt_method == methodNode->m_nodeType)
 	{
-		writeStringToFile("));\n", file, 0);
+		writeStringToFile(")", file, 0);
 	}
 	else
 	{
+		assert(snt_operator == methodNode->m_nodeType);
+		OperatorNode* operatorNode = static_cast<OperatorNode*>(methodNode);
+		if ('(' == operatorNode->m_sign->m_nodeType)
+		{
+			writeStringToFile(")", file, 0);
+		}
+		else if ('[' == operatorNode->m_sign->m_nodeType)
+		{
+			writeStringToFile("]", file, 0);
+		}
+		else
+		{
+			if (0 != paramCount)
+			{
+				writeStringToFile(")", file, 0);
+			}
+		}
+	}
+	if(methodNode->byValue() && (value_type == typeCategory || reference_type == typeCategory))
+	{
 		writeStringToFile(");\n", file, 0);
+	}
+	else
+	{
+		writeStringToFile(";\n", file, 0);
 	}
 	if(!(void_type == typeCategory && 0 == methodNode->m_passing))
 	{
@@ -1221,7 +1318,7 @@ void writeMetaMethodImpl_OneOverload(ClassNode* classNode, TemplateArguments* te
 	assert(methodNode->isStatic() == isStatic);
 
 	std::vector<ParameterNode*> parameterNodes;
-	methodNode->collectParameterNodes(parameterNodes);
+	methodNode->m_parameterList->collectParameterNodes(parameterNodes);
 	size_t paramCount = parameterNodes.size();
 
 	if (!isStatic)
@@ -1527,13 +1624,13 @@ void writeMetaConstructor_Method_Result(ClassNode* classNode, TemplateArguments*
 	{
 		switch(methodNode->m_passing->m_nodeType)
 		{
-		case snt_keyword_ref:
+		case '&':
 			strcpy_s(passing, "::pafcore::Result::by_ref");
 			break;
-		case snt_keyword_ptr:
+		case '*':
 			strcpy_s(passing, "::pafcore::Result::by_ptr");
 			break;
-		case snt_keyword_new:
+		case '^':
 			if(methodNode->m_resultArray)
 			{
 				strcpy_s(passing, "::pafcore::Result::by_new_array");
@@ -1581,7 +1678,7 @@ void writeMetaConstructor_Method_Arguments(ClassNode* classNode, TemplateArgumen
 			writeStringToFile(buf, file, indentation + 1);
 		}
 		std::vector<ParameterNode*> parameterNodes;
-		methodNode->collectParameterNodes(parameterNodes);
+		methodNode->m_parameterList->collectParameterNodes(parameterNodes);
 		assert(parameterNodes.size() == paramCount);
 
 		for(size_t i = 0; i < paramCount; ++i)
@@ -1593,10 +1690,10 @@ void writeMetaConstructor_Method_Arguments(ClassNode* classNode, TemplateArgumen
 			{
 				switch(parameterNode->m_passing->m_nodeType)
 				{
-				case snt_keyword_ref:
+				case '&':
 					strcpy_s(passing, "::pafcore::Argument::by_ref");
 					break;
-				case snt_keyword_ptr:
+				case '*':
 					strcpy_s(passing, "::pafcore::Argument::by_ptr");
 					break;
 				}
@@ -2512,13 +2609,13 @@ void writeInterfaceMethodImpl(ClassNode* classNode, TemplateArguments* templateA
 	resultName += typeName;
 	if(0 != methodNode->m_passing)
 	{
-		resultName += g_keywordTokens[methodNode->m_passing->m_nodeType - snt_keyword_begin_output - 1];
+		resultName += g_keywordTokens[methodNode->m_passing->m_nodeType - snt_begin_output - 1];
 	}
 	sprintf_s(buf, "%s %s::%s( ", resultName.c_str(), subclassProxyName.c_str(), methodNode->m_name->m_str.c_str());
 	writeStringToFile(buf, file, indentation);
 
 	std::vector<ParameterNode*> parameterNodes;
-	methodNode->collectParameterNodes(parameterNodes);
+	methodNode->m_parameterList->collectParameterNodes(parameterNodes);
 	size_t paramCount = parameterNodes.size();
 	for(size_t i = 0; i < paramCount; ++i)
 	{

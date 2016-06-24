@@ -19,8 +19,8 @@ class SourceFile;
 enum MemberFilter
 {
 	mf_default,
-	mf_meta_only,
-	mf_native_only,
+	mf_no_code,
+	mf_no_meta,
 };
 
 enum TypeTreeFilter

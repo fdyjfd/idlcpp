@@ -61,17 +61,17 @@ bool MethodNode::byValue()
 
 bool MethodNode::byRef()
 {
-	return (0 != m_passing && snt_keyword_ref == m_passing->m_nodeType);
+	return (0 != m_passing && '&' == m_passing->m_nodeType);
 }
 
 bool MethodNode::byPtr()
 {
-	return (0 != m_passing && snt_keyword_ptr == m_passing->m_nodeType);
+	return (0 != m_passing && '*' == m_passing->m_nodeType);
 }
 
 bool MethodNode::byNew()
 {
-	return (0 != m_passing && snt_keyword_new == m_passing->m_nodeType);
+	return (0 != m_passing && '^' == m_passing->m_nodeType);
 }
 
 size_t MethodNode::getParameterCount() const
@@ -88,47 +88,6 @@ size_t MethodNode::getParameterCount() const
 		m_parameterCount = res;
 	}
 	return m_parameterCount;
-}
-
-void MethodNode::collectParameterNodes(std::vector<std::pair<TokenNode*, ParameterNode*>>& parameterNodes)
-{
-	ParameterListNode* list = m_parameterList;
-	while(0 != list)
-	{
-		parameterNodes.push_back(std::make_pair(list->m_delimiter, list->m_parameter));
-		list = list->m_parameterList;
-	}
-	std::reverse(parameterNodes.begin(), parameterNodes.end());
-}
-
-void MethodNode::collectParameterNodes(std::vector<ParameterNode*>& parameterNodes)
-{
-	ParameterListNode* list = m_parameterList;
-	while(0 != list)
-	{
-		parameterNodes.push_back(list->m_parameter);
-		list = list->m_parameterList;
-	}
-	std::reverse(parameterNodes.begin(), parameterNodes.end());
-}
-
-void checkParameterNames(std::vector<ParameterNode*>& parameterNodes)
-{
-	std::set<IdentifyNode*, CompareIdentifyPtr> items;
-	size_t count = parameterNodes.size();
-	for(size_t i = 0; i < count; ++i)
-	{
-		IdentifyNode* identify = parameterNodes[i]->m_name;
-		auto res = items.insert(identify);
-		if(!res.second)
-		{
-			char buf[512];
-			sprintf_s(buf, "\'%s\' : parameter already defined at line %d, column %d", identify->m_str.c_str(), 
-				(*res.first)->m_lineNo, (*res.first)->m_columnNo);
-			ErrorList_AddItem_CurrentFile(identify->m_lineNo,
-				identify->m_columnNo, semantic_error_member_redefined, buf);
-		}
-	}
 }
 
 void MethodNode::calcManglingName(std::string& name, TemplateArguments* templateArguments)
@@ -150,7 +109,7 @@ void MethodNode::calcManglingName(std::string& name, TemplateArguments* template
 	}
 
 	std::vector<ParameterNode*> parameterNodes;
-	collectParameterNodes(parameterNodes);
+	m_parameterList->collectParameterNodes(parameterNodes);
 	size_t parameterCount = parameterNodes.size();
 	for (size_t i = 0; i < parameterCount; ++i)
 	{
@@ -183,7 +142,7 @@ void MethodNode::checkTypeNames(TypeNode* enclosingTypeNode, TemplateArguments* 
 	}
 
 	std::vector<ParameterNode*> parameterNodes;
-	collectParameterNodes(parameterNodes);
+	m_parameterList->collectParameterNodes(parameterNodes);
 	auto it = parameterNodes.begin();
 	auto end = parameterNodes.end();
 	for (; it != end; ++it)
@@ -206,7 +165,7 @@ void MethodNode::checkSemantic(TemplateArguments* templateArguments)
 		}
 		if (void_type == typeNode->getTypeCategory(templateArguments))
 		{
-			if (0 != m_passing && (snt_keyword_new == m_passing->m_nodeType || snt_keyword_ref == m_passing->m_nodeType))
+			if (0 != m_passing && ('^' == m_passing->m_nodeType || '&' == m_passing->m_nodeType))
 			{
 				RaiseError_InvalidResultType(this);
 			}
@@ -222,12 +181,12 @@ void MethodNode::checkSemantic(TemplateArguments* templateArguments)
 	}
 
 	std::vector<ParameterNode*> parameterNodes;
-	collectParameterNodes(parameterNodes);
+	m_parameterList->collectParameterNodes(parameterNodes);
 	checkParameterNames(parameterNodes);
 
 	size_t parameterCount = parameterNodes.size();
 	for(size_t i = 0; i < parameterCount; ++i)
 	{
-		parameterNodes[i]->checkSemantic(this, templateArguments);
+		parameterNodes[i]->checkSemantic(templateArguments);
 	}
 }
