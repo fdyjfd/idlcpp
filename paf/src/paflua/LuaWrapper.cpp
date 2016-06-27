@@ -177,13 +177,13 @@ int InvokeFunction(lua_State *L, pafcore::FunctionInvoker invoker, int numArgs, 
 	return 0;
 }
 
-int InvokeFunction_CallOperator(lua_State *L, pafcore::FunctionInvoker invoker)
+int InvokeFunction_Method(lua_State *L, pafcore::FunctionInvoker invoker)
 {
 	int numArgs = lua_gettop(L) - 1;
 	return InvokeFunction(L, invoker, numArgs, 2);
 }
 
-int InvokeFunction_ArithmeticOperator(lua_State *L, pafcore::FunctionInvoker invoker)
+int InvokeFunction_Operator(lua_State *L, pafcore::FunctionInvoker invoker)
 {
 	int numArgs = lua_gettop(L);
 	return InvokeFunction(L, invoker, numArgs, 1);
@@ -206,8 +206,15 @@ int InvokeFunction_ComparisonOperator(lua_State *L, pafcore::FunctionInvoker inv
 	pafcore::ErrorCode errorCode = (*invoker)(&result, args, numArgs);
 	if(pafcore::s_ok == errorCode)
 	{
-		bool b = *reinterpret_cast<bool*>(result.m_pointer);
-		lua_pushboolean(L, b ? 1 : 0);
+		if (pafcore::BoolType::GetSingleton() == result.m_type && result.byValue())
+		{
+			bool b = *reinterpret_cast<bool*>(result.m_pointer);
+			lua_pushboolean(L, b ? 1 : 0);
+		}
+		else
+		{
+			VariantToLua(L, &result);
+		}
 		return 1;
 	}
 	luaL_error(L, ErrorCodeToString(errorCode));
@@ -440,6 +447,22 @@ pafcore::ErrorCode GetPrimitiveOrEnum(lua_State *L, pafcore::Variant* variant)
 	return pafcore::e_invalid_type;
 }
 
+pafcore::ErrorCode SetPrimitiveOrEnum(lua_State *L, pafcore::Variant* variant)
+{
+	assert(variant->m_type->isPrimitive() || variant->m_type->isEnum());
+	if (variant->isConstant())
+	{
+		return pafcore::e_this_is_constant;
+	}
+	pafcore::Variant value;
+	pafcore::Variant* arg = LuaToVariant(&value, L, 3);
+	if (!arg->castToObject(variant->m_type, (void*)variant->m_pointer))
+	{
+		return pafcore::e_invalid_property_type;
+	}
+	return pafcore::s_ok;
+}
+
 int Variant_Call(lua_State *L)
 {
 	int numArgs = lua_gettop(L);
@@ -449,20 +472,20 @@ int Variant_Call(lua_State *L)
 	case pafcore::instance_method:
 		{
 			pafcore::InstanceMethod* method = (pafcore::InstanceMethod*)variant->m_pointer;
-			return InvokeFunction_CallOperator(L, method->m_invoker);
+			return InvokeFunction_Method(L, method->m_invoker);
 		}
 		break;
 	case pafcore::static_method:
 		{
 			pafcore::StaticMethod* method = (pafcore::StaticMethod*)variant->m_pointer;
-			return InvokeFunction_CallOperator(L, method->m_invoker);
+			return InvokeFunction_Method(L, method->m_invoker);
 		}
 		break;
 	case pafcore::primitive_type:
 		{
 			pafcore::PrimitiveType* type = (pafcore::PrimitiveType*)variant->m_pointer;
 			assert(strcmp(type->m_staticMethods[1].m_name, "New") == 0);
-			return InvokeFunction_CallOperator(L, type->m_staticMethods[1].m_invoker);
+			return InvokeFunction_Method(L, type->m_staticMethods[1].m_invoker);
 		}
 		break;
 	case pafcore::class_type:
@@ -471,7 +494,18 @@ int Variant_Call(lua_State *L)
 			pafcore::StaticMethod* method = type->findStaticMethod("New", false);
 			if(0 != method)
 			{
-				return InvokeFunction_CallOperator(L, method->m_invoker);
+				return InvokeFunction_Method(L, method->m_invoker);
+			}
+		}
+		break;
+	case pafcore::value_object:
+	case pafcore::reference_object:
+		{
+			pafcore::ClassType* type = (pafcore::ClassType*)variant->m_type;
+			pafcore::InstanceMethod* method = type->findInstanceMethod("op_call", true);
+			if (0 != method)
+			{
+				return InvokeFunction_Operator(L, method->m_invoker);
 			}
 		}
 		break;
@@ -513,49 +547,123 @@ inline bool isNumberString(const char* str)
 	return true;
 }
 
+int Variant_Operator(lua_State *L, const char* op)
+{
+	int numArgs = lua_gettop(L);
+	pafcore::Variant* variant = (pafcore::Variant*)luaL_checkudata(L, 1, variant_metatable_name);
+
+	pafcore::InstanceMethod* method;
+	switch (variant->m_type->m_category)
+	{
+	case pafcore::primitive_object:
+		{
+			pafcore::PrimitiveType* type = (pafcore::PrimitiveType*)variant->m_type;
+			method = type->findInstanceMethod(op);
+		}
+		break;
+	case pafcore::value_object:
+	case pafcore::reference_object:
+		{
+			pafcore::ClassType* type = (pafcore::ClassType*)variant->m_type;
+			method = type->findInstanceMethod(op, true);
+		}
+		break;
+	default:
+		method = 0;
+	}
+	if (0 != method)
+	{
+		return InvokeFunction_Operator(L, method->m_invoker);
+	}
+	else
+	{
+		luaL_error(L, ErrorCodeToString(pafcore::e_member_not_found));
+		return 0;
+	}
+}
+
+int Variant_ComparisonOperator(lua_State *L, const char* op)
+{
+	pafcore::Variant* variant;
+	if (LUA_TUSERDATA == lua_type(L, 1))
+	{
+		variant = (pafcore::Variant*)luaL_checkudata(L, 1, variant_metatable_name);
+	}
+	else
+	{
+		variant = (pafcore::Variant*)luaL_checkudata(L, 2, variant_metatable_name);
+	}
+	switch (variant->m_type->m_category)
+	{
+	case pafcore::primitive_object:
+	{
+		pafcore::PrimitiveType* type = (pafcore::PrimitiveType*)variant->m_type;
+		pafcore::InstanceMethod* method = type->findInstanceMethod(op);
+		if (0 != method)
+		{
+			return InvokeFunction_ComparisonOperator(L, method->m_invoker);
+		}
+	}
+	break;
+	case pafcore::value_object:
+	case pafcore::reference_object:
+	{
+		pafcore::ClassType* type = (pafcore::ClassType*)variant->m_type;
+		pafcore::InstanceMethod* method = type->findInstanceMethod(op, true);
+		if (0 != method)
+		{
+			return InvokeFunction_ComparisonOperator(L, method->m_invoker);
+		}
+	}
+	break;
+	}
+	luaL_error(L, ErrorCodeToString(pafcore::e_member_not_found));
+	return 0;
+}
+
 int Variant_Add(lua_State *L)
 {
-	return InvokeFunction_ArithmeticOperator(L, pafcore::PrimitiveType::Primitive_op_add);
+	return Variant_Operator(L, "op_add");
 }
 
 int Variant_Sub(lua_State *L)
 {
-	return InvokeFunction_ArithmeticOperator(L, pafcore::PrimitiveType::Primitive_op_subtract);
+	return Variant_Operator(L, "op_subtract");
 }
 
 int Variant_Mul(lua_State *L)
 {
-	return InvokeFunction_ArithmeticOperator(L, pafcore::PrimitiveType::Primitive_op_multiply);
+	return Variant_Operator(L, "op_multiply");
 }
 
 int Variant_Div(lua_State *L)
 {
-	return InvokeFunction_ArithmeticOperator(L, pafcore::PrimitiveType::Primitive_op_divide);
+	return Variant_Operator(L, "op_divide");
 }
 
 int Variant_Mod(lua_State *L)
 {
-	return InvokeFunction_ArithmeticOperator(L, pafcore::PrimitiveType::Primitive_op_mod);
+	return Variant_Operator(L, "op_mod");
 }
 
 int Variant_Unm(lua_State *L)
 {
-	return InvokeFunction_ArithmeticOperator(L, pafcore::PrimitiveType::Primitive_op_negate);
+	return Variant_Operator(L, "op_negate");
 }
 
-int Variant_LessThan(lua_State *L)
+int Variant_Less(lua_State *L)
 {
-	return InvokeFunction_ComparisonOperator(L, pafcore::PrimitiveType::Primitive_op_less);
+	return Variant_ComparisonOperator(L, "op_less");
 }
 
 int Variant_LessEqual(lua_State *L)
 {
-	return InvokeFunction_ComparisonOperator(L, pafcore::PrimitiveType::Primitive_op_lessEqual);
+	return Variant_ComparisonOperator(L, "op_lessEqual");
 }
 
-int Variant_EqualTo(lua_State *L)
+int Variant_Equal(lua_State *L)
 {
-	return InvokeFunction_ComparisonOperator(L, pafcore::PrimitiveType::Primitive_op_equal);
+	return Variant_ComparisonOperator(L, "op_equal");
 }
 
 int Subclassing(lua_State *L)
@@ -731,8 +839,8 @@ pafcore::ErrorCode Variant_Index_Identify(lua_State *L, pafcore::Variant* varian
 	{
 		switch (name[1])
 		{
-		case '\0'://_			
-			if (variant->m_type->isPrimitive() || variant->m_type->isEnum())
+		case '\0':			
+			if (variant->m_type->isPrimitive() || variant->m_type->isEnum())//_
 			{
 				return GetPrimitiveOrEnum(L, variant);
 			}
@@ -844,36 +952,6 @@ pafcore::ErrorCode Variant_Index_Identify(lua_State *L, pafcore::Variant* varian
 			break;
 		}
 	}
-	//else if(strcmp(name, "_clone_") == 0)
-	//{
-	//	switch(variant->m_type->m_category)
-	//	{
-	//	case pafcore::value_object:
-	//	case pafcore::reference_object:
-	//		{
-	//			pafcore::ClassType* type = (pafcore::ClassType*)variant->m_type;
-	//			pafcore::StaticMethod* method = type->findStaticMethod("Clone", false);
-	//			if(0 != method)
-	//			{
-	//				if(FunctionInvoker_Clone(L, method->m_invoker))
-	//				{
-	//					return pafcore::s_ok; 
-	//				}
-	//			}
-	//		}
-	//		break;
-	//	case pafcore::primitive_object:
-	//		{
-	//			pafcore::PrimitiveType* type = (pafcore::PrimitiveType*)variant->m_type;
-	//			assert(strcmp(type->m_staticMethods[0].m_name, "Clone") == 0);
-	//			if(FunctionInvoker_Clone(L, type->m_staticMethods[0].m_invoker))
-	//			{
-	//				return pafcore::s_ok; 
-	//			}
-	//		}
-	//		break;
-	//	}
-	//}
 	return pafcore::e_member_not_found;
 }
 
@@ -916,9 +994,24 @@ pafcore::ErrorCode Variant_NewIndex_Identify(lua_State *L, pafcore::Variant* var
 			return SetStaticProperty(L, static_cast<pafcore::StaticProperty*>(member));
 		}
 	}
-	else if (strcmp(name, "_count_") == 0)
+	else if (name[0] == '_')
 	{
-		return SetArraySize(L, variant);
+		switch (name[1])
+		{
+		case '\0':
+			if ((variant->m_type->isPrimitive() || variant->m_type->isEnum()) && 
+				(variant->byValue() || variant->byRef()))//_
+			{
+				return SetPrimitiveOrEnum(L, variant);
+			}
+			break;
+		case 'c':
+			if (strcmp(&name[2], "ount_") == 0)//_count_
+			{
+				return SetArraySize(L, variant);
+			}
+			break;
+		}
 	}
 	return pafcore::e_member_not_found;
 }
@@ -1084,8 +1177,8 @@ const struct luaL_Reg g_variant_reg [] =
 	{"__div", Variant_Div},
 	{"__mod", Variant_Mod},
 	{"__unm", Variant_Unm},
-	{"__lt", Variant_LessThan},
-	{"__eq", Variant_EqualTo},
+	{"__lt", Variant_Less},
+	{"__eq", Variant_Equal},
 	{"__le", Variant_LessEqual},
 	{NULL, NULL}
 };

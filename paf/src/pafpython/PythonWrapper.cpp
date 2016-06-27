@@ -454,11 +454,15 @@ pafcore::ErrorCode GetPrimitiveOrEnum(PyObject*& pyObject, pafcore::Variant* var
 
 pafcore::ErrorCode SetPrimitiveOrEnum(pafcore::Variant* variant, PyObject* pyAttr)
 {
+	if (variant->isConstant())
+	{
+		return pafcore::e_field_is_constant;
+	}
 	pafcore::Variant value;
 	pafcore::Variant* attr = PythonToVariant(&value, pyAttr);
-	if(attr && !attr->castToObject(variant->m_type, variant->m_pointer))
+	if (!attr->castToPrimitive(variant->m_type, variant->m_pointer))
 	{
-		return pafcore::e_invalid_type;
+		return pafcore::e_invalid_property_type;
 	}
 	return pafcore::s_ok;
 }
@@ -689,36 +693,6 @@ pafcore::ErrorCode Variant_GetAttr(PyObject*& pyObject, VariantWrapper* self, co
 			break;
 		}
 	}
-
-	//else if (strcmp(name, "_clone_") == 0)
-	//{
-	//	pafcore::StaticMethod* method = 0;
-	//	switch (variant->m_type->m_category)
-	//	{
-	//	case pafcore::value_object:
-	//	case pafcore::reference_object:
-	//	{
-	//		pafcore::ClassType* type = (pafcore::ClassType*)variant->m_type;
-	//		method = type->findStaticMethod("Clone", false);
-	//	}
-	//	break;
-	//	case pafcore::primitive_object:
-	//	{
-	//		pafcore::PrimitiveType* type = (pafcore::PrimitiveType*)variant->m_type;
-	//		assert(strcmp(type->m_staticMethods[0].m_name, "Clone") == 0);
-	//		method = &type->m_staticMethods[0];
-	//	}
-	//	break;
-	//	}
-	//	pafcore::Variant* arg = (pafcore::Variant*)self->m_var;
-	//	pafcore::Variant result;
-	//	pafcore::ErrorCode errorCode = (*method->m_invoker)(&result, &arg, 1);
-	//	if (pafcore::s_ok == errorCode)
-	//	{
-	//		pyObject = VariantToPython(&result);
-	//		return pafcore::s_ok;
-	//	}
-	//}
 	return pafcore::e_member_not_found;
 }
 
@@ -762,11 +736,25 @@ pafcore::ErrorCode Variant_SetAttr(pafcore::Variant* variant, char* name, PyObje
 			return SetStaticProperty(static_cast<pafcore::StaticProperty*>(member), pyAttr);
 		}
 	}
-	else if (strcmp(name, "_count_") == 0)
+	else if (name[0] == '_')
 	{
-		return SetArraySize(variant, pyAttr);
+		switch (name[1])
+		{
+		case '\0':
+			if ((variant->m_type->isPrimitive() || variant->m_type->isEnum()) &&
+				(variant->byValue() || variant->byRef()))//_
+			{
+				return SetPrimitiveOrEnum(variant, pyAttr);
+			}
+			break;
+		case 'c':
+			if (strcmp(&name[2], "ount_") == 0)//_count_
+			{
+				return SetArraySize(variant, pyAttr);
+			}
+			break;
+		}
 	}
-
 	return pafcore::e_member_not_found;
 }
 
@@ -1052,34 +1040,92 @@ PyObject* TypeCasterWrapper_call(TypeCasterWrapper* wrapper, PyObject* parameter
 
 
 
-PyObject* VariantWrapper_unaryOperator(PyObject* pyObject, pafcore::FunctionInvoker invoker)
+PyObject* VariantWrapper_unaryOperator(PyObject* pyObject, const char* op)
 {
 	pafcore::Variant arguments[1];
 	pafcore::Variant* args[1];
 	args[0] = PythonToVariant(&arguments[0], pyObject);
-	pafcore::Variant result;
-	pafcore::ErrorCode errorCode = (*invoker)(&result, args, 1);
-	if(pafcore::s_ok == errorCode)
+
+	pafcore::InstanceMethod* method;
+
+	switch (args[0]->m_type->m_category)
 	{
-		return VariantToPython(&result);
+	case pafcore::primitive_object:
+		{
+			pafcore::PrimitiveType* type = (pafcore::PrimitiveType*)args[0]->m_type;
+			method = type->findInstanceMethod(op);
+		}
+		break;
+	case pafcore::value_object:
+	case pafcore::reference_object:
+		{
+			pafcore::ClassType* type = (pafcore::ClassType*)args[0]->m_type;
+			method = type->findInstanceMethod(op, true);
+		}
+		break;
+	default:
+		method = 0;
+	};
+	if (0 != method)
+	{
+		pafcore::Variant result;
+		pafcore::ErrorCode errorCode = (*method->m_invoker)(&result, args, 1);
+		if (pafcore::s_ok == errorCode)
+		{
+			PyObject* pyObject = VariantToPython(&result);
+			return pyObject;
+		}
+		PyErr_SetString(PyExc_RuntimeError, ErrorCodeToString(errorCode));
 	}
-	PyErr_SetString(PyExc_RuntimeError, ErrorCodeToString(errorCode));
+	else
+	{
+		PyErr_SetString(PyExc_RuntimeError, ErrorCodeToString(pafcore::e_member_not_found));
+	}
 	return 0;
 }
 
-PyObject* VariantWrapper_binaryOperator(PyObject* pyObject1, PyObject* pyObject2, pafcore::FunctionInvoker invoker)
+PyObject* VariantWrapper_binaryOperator(PyObject* pyObject1, PyObject* pyObject2, const char* op)
 {
 	pafcore::Variant arguments[2];
 	pafcore::Variant* args[2];
 	args[0] = PythonToVariant(&arguments[0], pyObject1);
 	args[1] = PythonToVariant(&arguments[1], pyObject2);
-	pafcore::Variant result;
-	pafcore::ErrorCode errorCode = (*invoker)(&result, args, 2);
-	if(pafcore::s_ok == errorCode)
+
+	pafcore::InstanceMethod* method;
+
+	switch (args[0]->m_type->m_category)
 	{
-		return VariantToPython(&result);
+	case pafcore::primitive_object:
+		{
+			pafcore::PrimitiveType* type = (pafcore::PrimitiveType*)args[0]->m_type;
+			method = type->findInstanceMethod(op);
+		}
+		break;
+	case pafcore::value_object:
+	case pafcore::reference_object:
+		{
+			pafcore::ClassType* type = (pafcore::ClassType*)args[0]->m_type;
+			method = type->findInstanceMethod(op, true);
+		}
+		break;
+	default:
+		method = 0;
+	};
+	if (0 != method)
+	{
+		pafcore::Variant result;
+		pafcore::ErrorCode errorCode = (*method->m_invoker)(&result, args, 2);
+		if (pafcore::s_ok == errorCode)
+		{
+			PyObject* pyObject = VariantToPython(&result);
+			return pyObject;
+		}
+		PyErr_SetString(PyExc_RuntimeError, ErrorCodeToString(errorCode));
 	}
-	PyErr_SetString(PyExc_RuntimeError, ErrorCodeToString(errorCode));
+	else
+	{
+		PyErr_SetString(PyExc_RuntimeError, ErrorCodeToString(pafcore::e_member_not_found));
+	}
 	return 0;
 }
 
@@ -1102,62 +1148,62 @@ PyObject* VariantWrapper_binaryOperator(PyObject* pyObject1, PyObject* pyObject2
 
 PyObject* VariantWrapper_add(PyObject* pyObject1, PyObject* pyObject2)
 {
-	return VariantWrapper_binaryOperator(pyObject1, pyObject2, pafcore::PrimitiveType::Primitive_op_add);
+	return VariantWrapper_binaryOperator(pyObject1, pyObject2, "op_add");
 }
 
 PyObject* VariantWrapper_subtract(PyObject* pyObject1, PyObject* pyObject2)
 {
-	return VariantWrapper_binaryOperator(pyObject1, pyObject2, pafcore::PrimitiveType::Primitive_op_subtract);
+	return VariantWrapper_binaryOperator(pyObject1, pyObject2, "op_subtract");
 }
 
 PyObject* VariantWrapper_multiply(PyObject* pyObject1, PyObject* pyObject2)
 {
-	return VariantWrapper_binaryOperator(pyObject1, pyObject2, pafcore::PrimitiveType::Primitive_op_multiply);
+	return VariantWrapper_binaryOperator(pyObject1, pyObject2, "op_multiply");
 }
 
 PyObject* VariantWrapper_mod(PyObject* pyObject1, PyObject* pyObject2)
 {
-	return VariantWrapper_binaryOperator(pyObject1, pyObject2, pafcore::PrimitiveType::Primitive_op_mod);
+	return VariantWrapper_binaryOperator(pyObject1, pyObject2, "op_mod");
 }
 
 PyObject* VariantWrapper_negative(PyObject* pyObject)
 {
-	return VariantWrapper_unaryOperator(pyObject, pafcore::PrimitiveType::Primitive_op_negate);
+	return VariantWrapper_unaryOperator(pyObject, "op_negate");
 }
 
 PyObject* VariantWrapper_positive(PyObject* pyObject)
 {
-	return VariantWrapper_unaryOperator(pyObject, pafcore::PrimitiveType::Primitive_op_plus);
+	return VariantWrapper_unaryOperator(pyObject, "op_plus");
 }
 
 PyObject* VariantWrapper_invert(PyObject* pyObject)
 {
-	return VariantWrapper_unaryOperator(pyObject, pafcore::PrimitiveType::Primitive_op_bitwiseNot);
+	return VariantWrapper_unaryOperator(pyObject, "op_bitwiseNot");
 }
 
 PyObject* VariantWrapper_lshift(PyObject* pyObject1, PyObject* pyObject2)
 {
-	return VariantWrapper_binaryOperator(pyObject1, pyObject2, pafcore::PrimitiveType::Primitive_op_leftShift);
+	return VariantWrapper_binaryOperator(pyObject1, pyObject2, "op_leftShift");
 }
 
 PyObject* VariantWrapper_rshift(PyObject* pyObject1, PyObject* pyObject2)
 {
-	return VariantWrapper_binaryOperator(pyObject1, pyObject2, pafcore::PrimitiveType::Primitive_op_rightShift);
+	return VariantWrapper_binaryOperator(pyObject1, pyObject2, "op_rightShift");
 }
 
 PyObject* VariantWrapper_and(PyObject* pyObject1, PyObject* pyObject2)
 {
-	return VariantWrapper_binaryOperator(pyObject1, pyObject2, pafcore::PrimitiveType::Primitive_op_bitwiseAnd);
+	return VariantWrapper_binaryOperator(pyObject1, pyObject2, "op_bitwiseAnd");
 }
 
 PyObject* VariantWrapper_xor(PyObject* pyObject1, PyObject* pyObject2)
 {
-	return VariantWrapper_binaryOperator(pyObject1, pyObject2, pafcore::PrimitiveType::Primitive_op_bitwiseXor);
+	return VariantWrapper_binaryOperator(pyObject1, pyObject2, "op_bitwiseXor");
 }
 
 PyObject* VariantWrapper_or(PyObject* pyObject1, PyObject* pyObject2)
 {
-	return VariantWrapper_binaryOperator(pyObject1, pyObject2, pafcore::PrimitiveType::Primitive_op_bitwiseOr);
+	return VariantWrapper_binaryOperator(pyObject1, pyObject2, "op_bitwiseOr");
 }
 //
 //PyObject* VariantWrapper_inplace_add(PyObject* pyObject1, PyObject* pyObject2)
@@ -1210,17 +1256,17 @@ PyObject* VariantWrapper_richcmp(PyObject* pyObject1, PyObject* pyObject2, int o
 	switch(op)
 	{
 	case Py_LT:
-		return VariantWrapper_binaryOperator(pyObject1, pyObject2, pafcore::PrimitiveType::Primitive_op_less);
+		return VariantWrapper_binaryOperator(pyObject1, pyObject2, "op_less");
 	case Py_LE:
-		return VariantWrapper_binaryOperator(pyObject1, pyObject2, pafcore::PrimitiveType::Primitive_op_lessEqual);
+		return VariantWrapper_binaryOperator(pyObject1, pyObject2, "op_lessEqual");
 	case Py_EQ:
-		return VariantWrapper_binaryOperator(pyObject1, pyObject2, pafcore::PrimitiveType::Primitive_op_equal);
+		return VariantWrapper_binaryOperator(pyObject1, pyObject2, "op_equal");
 	case Py_NE:
-		return VariantWrapper_binaryOperator(pyObject1, pyObject2, pafcore::PrimitiveType::Primitive_op_notEqual);
+		return VariantWrapper_binaryOperator(pyObject1, pyObject2, "op_notEqual");
 	case Py_GT:
-		return VariantWrapper_binaryOperator(pyObject1, pyObject2, pafcore::PrimitiveType::Primitive_op_greater);
+		return VariantWrapper_binaryOperator(pyObject1, pyObject2, "op_greater");
 	case Py_GE:
-		return VariantWrapper_binaryOperator(pyObject1, pyObject2, pafcore::PrimitiveType::Primitive_op_greaterEqual);
+		return VariantWrapper_binaryOperator(pyObject1, pyObject2, "op_greaterEqual");
 	}
 	return 0;
 }

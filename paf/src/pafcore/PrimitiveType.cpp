@@ -38,15 +38,31 @@ Metadata* PrimitiveType::findMember(const char* name)
 	return _findMember_(name);
 }
 
-Metadata* PrimitiveType::findTypeMember(const char* name)
+InstanceMethod* PrimitiveType::findInstanceMethod(const char* name)
 {
 	Metadata dummy(name);
-	StaticMethod* res = std::lower_bound(m_staticMethods, m_staticMethods + m_staticMethodCount, dummy);
-	if(m_staticMethods + m_staticMethodCount != res && strcmp(name, res->m_name) == 0)
+	InstanceMethod* res = std::lower_bound(m_methods, m_methods + m_methodCount, dummy);
+	if (m_methods + m_methodCount != res && strcmp(name, res->m_name) == 0)
 	{
 		return res;
 	}
 	return 0;
+}
+
+StaticMethod* PrimitiveType::findStaticMethod(const char* name)
+{
+	Metadata dummy(name);
+	StaticMethod* res = std::lower_bound(m_staticMethods, m_staticMethods + m_staticMethodCount, dummy);
+	if (m_staticMethods + m_staticMethodCount != res && strcmp(name, res->m_name) == 0)
+	{
+		return res;
+	}
+	return 0;
+}
+
+Metadata* PrimitiveType::findTypeMember(const char* name)
+{
+	return findStaticMethod(name);
 }
 
 template<bool short_less_int>

@@ -17,5 +17,5 @@ print(rect1.area._);
 rect2 = paf.tutorial.Rectangle(rect1.m_min, paf.tutorial.Point(5,5));
 print(rect2:getArea()._);
 
-rect3 = paf.tutorial.Rectangle.Clone(rect2);
+rect3 = paf.tutorial.Rectangle.New(rect2);
 print(rect3:getArea()._);

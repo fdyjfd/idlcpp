@@ -7,7 +7,7 @@
 
 const char* g_errorStrings[] =
 {
-	""
+	"",
 	"file not existing",
 	"open file failed",
 

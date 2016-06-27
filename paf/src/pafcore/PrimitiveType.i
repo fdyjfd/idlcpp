@@ -50,6 +50,8 @@ namespace pafcore
 		PrimitiveType(const char* name) : Type(name, primitive_object)
 		{}
 	public:
+		InstanceMethod* findInstanceMethod(const char* name);
+		StaticMethod* findStaticMethod(const char* name);
 		Metadata* findTypeMember(const char* name);
 		virtual Metadata* findMember(const char* name);
 		virtual bool castTo(void* dst, Type* dstType, const void* src) = 0;
