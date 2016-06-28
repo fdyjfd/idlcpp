@@ -135,8 +135,9 @@ void HeaderFileGenerator::generateCode_Program(FILE* file, SourceFile* sourceFil
 
 void HeaderFileGenerator::generateCode_Namespace(FILE* file, NamespaceNode* namespaceNode, int indentation)
 {
-	if (namespaceNode->isMetaOnly())
+	if (namespaceNode->isNoCode())
 	{
+		g_compiler.outputEmbededCodes(file, namespaceNode->m_filterNode);
 		file = 0;
 	}
 
@@ -184,8 +185,9 @@ void HeaderFileGenerator::generateCode_Namespace(FILE* file, NamespaceNode* name
 
 void HeaderFileGenerator::generateCode_Typedef(FILE* file, TypedefNode* typedefNode, int indentation)
 {
-	if (typedefNode->isMetaOnly())
+	if (typedefNode->isNoCode())
 	{
+		g_compiler.outputEmbededCodes(file, typedefNode->m_filterNode);
 		file = 0;
 	}
 	if(0 != typedefNode->m_typeName)
@@ -200,8 +202,9 @@ void HeaderFileGenerator::generateCode_Typedef(FILE* file, TypedefNode* typedefN
 
 void HeaderFileGenerator::generateCode_Enum(FILE* file, EnumNode* enumNode, int indentation)
 {
-	if (enumNode->isMetaOnly())
+	if (enumNode->isNoCode())
 	{
+		g_compiler.outputEmbededCodes(file, enumNode->m_filterNode);
 		file = 0;
 	}
 
@@ -226,8 +229,9 @@ void HeaderFileGenerator::generateCode_Enum(FILE* file, EnumNode* enumNode, int 
 
 void HeaderFileGenerator::generateCode_Class(FILE* file, ClassNode* classNode, int indentation)
 {
-	if (classNode->isMetaOnly())
+	if (classNode->isNoCode())
 	{
+		g_compiler.outputEmbededCodes(file, classNode->m_filterNode);
 		file = 0;
 	}
 
@@ -353,8 +357,9 @@ void HeaderFileGenerator::generateCode_Class(FILE* file, ClassNode* classNode, i
 
 void HeaderFileGenerator::generateCode_Field(FILE* file, FieldNode* fieldNode, int indentation)
 {
-	if (fieldNode->isMetaOnly())
+	if (fieldNode->isNoCode())
 	{
+		g_compiler.outputEmbededCodes(file, fieldNode->m_filterNode);
 		file = 0;
 	}
 
@@ -449,8 +454,9 @@ void HeaderFileGenerator::generateCode_Property_Set(FILE* file, PropertyNode* pr
 
 void HeaderFileGenerator::generateCode_Property(FILE* file, PropertyNode* propertyNode, int indentation)
 {
-	if (propertyNode->isMetaOnly())
+	if (propertyNode->isNoCode())
 	{
+		g_compiler.outputEmbededCodes(file, propertyNode->m_filterNode);
 		file = 0;
 	}
 
@@ -479,8 +485,9 @@ void HeaderFileGenerator::generateCode_Property(FILE* file, PropertyNode* proper
 
 void HeaderFileGenerator::generateCode_Method(FILE* file, MethodNode* methodNode, int indentation)
 {
-	if (methodNode->isMetaOnly())
+	if (methodNode->isNoCode())
 	{
+		g_compiler.outputEmbededCodes(file, methodNode->m_filterNode);
 		file = 0;
 	}
 
@@ -533,8 +540,9 @@ void HeaderFileGenerator::generateCode_Method(FILE* file, MethodNode* methodNode
 
 void HeaderFileGenerator::generateCode_Operator(FILE* file, OperatorNode* operatorNode, int indentation)
 {
-	if (operatorNode->isMetaOnly())
+	if (operatorNode->isNoCode())
 	{
+		g_compiler.outputEmbededCodes(file, operatorNode->m_filterNode);
 		file = 0;
 	}
 

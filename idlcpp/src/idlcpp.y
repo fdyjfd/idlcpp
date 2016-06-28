@@ -30,14 +30,23 @@ primitive				: BOOL												{$$ = newPrimitiveType($1, pt_bool);}
 						| UNSIGNED CHAR										{$$ = newPrimitiveType($1, pt_uchar);}
 						| WCHAR_T											{$$ = newPrimitiveType($1, pt_wchar_t);}
 						| SHORT												{$$ = newPrimitiveType($1, pt_short);}
+						| SHORT INT											{$$ = newPrimitiveType($1, pt_short);}
 						| SIGNED SHORT										{$$ = newPrimitiveType($1, pt_short);}
+						| SIGNED SHORT INT									{$$ = newPrimitiveType($1, pt_short);}
 						| UNSIGNED SHORT									{$$ = newPrimitiveType($1, pt_ushort);}
+						| UNSIGNED SHORT INT								{$$ = newPrimitiveType($1, pt_ushort);}
 						| LONG												{$$ = newPrimitiveType($1, pt_long);}
+						| LONG INT											{$$ = newPrimitiveType($1, pt_long);}
 						| SIGNED LONG										{$$ = newPrimitiveType($1, pt_long);}
+						| SIGNED LONG INT									{$$ = newPrimitiveType($1, pt_long);}
 						| UNSIGNED LONG										{$$ = newPrimitiveType($1, pt_ulong);}
+						| UNSIGNED LONG INT									{$$ = newPrimitiveType($1, pt_ulong);}
 						| LONG LONG											{$$ = newPrimitiveType($1, pt_longlong);}
+						| LONG LONG INT										{$$ = newPrimitiveType($1, pt_longlong);}
 						| SIGNED LONG LONG									{$$ = newPrimitiveType($1, pt_longlong);}
+						| SIGNED LONG LONG INT								{$$ = newPrimitiveType($1, pt_longlong);}
 						| UNSIGNED LONG LONG								{$$ = newPrimitiveType($1, pt_ulonglong);}
+						| UNSIGNED LONG LONG INT							{$$ = newPrimitiveType($1, pt_ulonglong);}
 						| INT												{$$ = newPrimitiveType($1, pt_int);}
 						| SIGNED INT										{$$ = newPrimitiveType($1, pt_int);}
 						| SIGNED											{$$ = newPrimitiveType($1, pt_int);}
@@ -59,8 +68,8 @@ enum_0					: ENUM IDENTIFY '{' identityList '}' ';'			{$$ = newEnum($1, $2, $3, 
 ;
 
 enum					: enum_0											{$$ = $1;}
-						| NOCODE enum_0										{$$ = $2; setNoCode($$);}
-						| NOMETA enum_0										{$$ = $2; setNoMeta($$);}
+						| NOCODE enum_0										{$$ = $2; setFilter($$, $1);}
+						| NOMETA enum_0										{$$ = $2; setFilter($$, $1);}
 ;
 
 scopeName				: IDENTIFY											{$$ = newScopeName($1, NULL, NULL, NULL);}
@@ -91,8 +100,8 @@ typeAlias_0				: TYPEDEF typeName IDENTIFY ';'						{$$ = newTypedef($1, $3, $2)
 ;
 
 typeAlias				: typeAlias_0										{$$ = $1;}
-						| NOCODE typeAlias_0								{$$ = $2; setNoCode($$);}
-						| NOMETA typeAlias_0								{$$ = $2; setNoMeta($$);}
+						| NOCODE typeAlias_0								{$$ = $2; setFilter($$, $1);}
+						| NOMETA typeAlias_0								{$$ = $2; setFilter($$, $1);}
 ;
 
 field_0					: typeName IDENTIFY ';'								{$$ = newField($1, $2, NULL, NULL, $3);}
@@ -108,8 +117,8 @@ field_2					: field_1											{$$ = $1;}
 ;
 
 field					: field_2											{$$ = $1;}
-						| NOCODE field_2									{$$ = $2; setNoCode($$);}
-						| NOMETA field_2									{$$ = $2; setNoMeta($$);}
+						| NOCODE field_2									{$$ = $2; setFilter($$, $1);}
+						| NOMETA field_2									{$$ = $2; setFilter($$, $1);}
 ;
 
 getter					: GET												{$$ = newGetterSetter($1, NULL, NULL, NULL);}
@@ -149,8 +158,8 @@ property_2				: property_1										{$$ = $1;}
 ;
 
 property				: property_2										{$$ = $1;}
-						| NOCODE property_2									{$$ = $2; setNoCode($$);}
-						| NOMETA property_2									{$$ = $2; setNoMeta($$);}
+						| NOCODE property_2									{$$ = $2; setFilter($$, $1);}
+						| NOMETA property_2									{$$ = $2; setFilter($$, $1);}
 ;
 
 parameter_0				: typeName IDENTIFY									{$$ = newParameter($1, NULL, NULL, $2);}
@@ -173,8 +182,10 @@ parameterList			: parameter											{$$ = newParameterList(NULL, NULL, $1);}
 ;
 
 method_0				: IDENTIFY '(' ')' ';'								{$$ = newMethod($1, $2, NULL, $3, NULL, $4);}
+						| IDENTIFY '(' VOID ')' ';'							{$$ = newMethod($1, $2, NULL, $4, NULL, $5);}
 						| IDENTIFY '(' parameterList ')' ';'				{$$ = newMethod($1, $2, $3, $4, NULL, $5);}
 						| IDENTIFY '(' ')' CONST ';'						{$$ = newMethod($1, $2, NULL, $3, $4, $5);}
+						| IDENTIFY '(' VOID ')' CONST ';'					{$$ = newMethod($1, $2, NULL, $4, $5, $6);}
 						| IDENTIFY '(' parameterList ')' CONST ';'			{$$ = newMethod($1, $2, $3, $4, $5, $6);}
 ;
 
@@ -201,8 +212,8 @@ method_4				: method_3											{$$ = $1;}
 ;
 
 method					: method_4											{$$ = $1;}
-						| NOCODE method_4									{$$ = $2; setNoCode($$);}
-						| NOMETA method_4									{$$ = $2; setNoMeta($$);}
+						| NOCODE method_4									{$$ = $2; setFilter($$, $1);}
+						| NOMETA method_4									{$$ = $2; setFilter($$, $1);}
 ;
 
 operatorSign			: '+'
@@ -272,8 +283,8 @@ operator_4				: operator_3											{$$ = $1;}
 ;
 
 operator				: operator_4											{$$ = $1;}
-						| NOCODE operator_4										{$$ = $2; setNoCode($$);}
-						| NOMETA operator_4										{$$ = $2; setNoMeta($$);}
+						| NOCODE operator_4										{$$ = $2; setFilter($$, $1);}
+						| NOMETA operator_4										{$$ = $2; setFilter($$, $1);}
 ;
 
 
@@ -329,8 +340,8 @@ class_5					: class_4												{$$ = $1;}
 ;
 
 class					: class_5												{$$ = $1;}
-						| NOCODE class_5										{$$ = $2; setNoCode($$);}
-						| NOMETA class_5										{$$ = $2; setNoMeta($$);}
+						| NOCODE class_5										{$$ = $2; setFilter($$, $1);}
+						| NOMETA class_5										{$$ = $2; setFilter($$, $1);}
 ;
 
 tokenList				: IDENTIFY												{$$ = newTokenList(NULL, $1);}
@@ -349,8 +360,8 @@ templateClassInstance_1	: templateClassInstance_0 ';'							{$$ = $1;}
 ;
 
 templateClassInstance	: templateClassInstance_1								{$$ = $1;}
-						| NOCODE templateClassInstance_1						{$$ = $2; setNoCode($$);}
-						| NOMETA templateClassInstance_1						{$$ = $2; setNoMeta($$);}
+						| NOCODE templateClassInstance_1						{$$ = $2; setFilter($$, $1);}
+						| NOMETA templateClassInstance_1						{$$ = $2; setFilter($$, $1);}
 ;
 
 namespaceMemberList		: class													{$$ = newNamespaceMemberList(NULL, $1);}
@@ -372,8 +383,8 @@ namespace_0				: NAMESPACE	IDENTIFY '{' '}'							{$$ = newNamespace($1, $2, $3,
 ;
 
 namespace				: namespace_0											{$$ = $1;}
-						| NOCODE namespace_0									{$$ = $2; setNoCode($$);}
-						| NOMETA namespace_0									{$$ = $2; setNoMeta($$);}
+						| NOCODE namespace_0									{$$ = $2; setFilter($$, $1);}
+						| NOMETA namespace_0									{$$ = $2; setFilter($$, $1);}
 ;
 
 program					:														{$$ = newProgram(NULL); attachSyntaxTree($$);}

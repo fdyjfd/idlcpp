@@ -157,7 +157,7 @@ void MetaSourceFileGenerator::generateCode_Program(FILE* file, SourceFile* sourc
 
 void MetaSourceFileGenerator::generateCode_Namespace(FILE* file, NamespaceNode* namespaceNode, int indentation)
 {
-	if (namespaceNode->isNativeOnly())
+	if (namespaceNode->isNoMeta())
 	{
 		return;
 	}
@@ -199,7 +199,7 @@ void MetaSourceFileGenerator::generateCode_Namespace(FILE* file, NamespaceNode* 
 
 void MetaSourceFileGenerator::generateCode_Enum(FILE* file, EnumNode* enumNode, TemplateArguments* templateArguments, int indentation)
 {
-	if (enumNode->isNativeOnly())
+	if (enumNode->isNoMeta())
 	{
 		return;
 	}
@@ -212,7 +212,7 @@ void MetaSourceFileGenerator::generateCode_Enum(FILE* file, EnumNode* enumNode, 
 
 void MetaSourceFileGenerator::generateCode_TemplateClassInstance(FILE* file, TemplateClassInstanceNode* templateClassInstance, int indentation)
 {
-	if (templateClassInstance->isNativeOnly())
+	if (templateClassInstance->isNoMeta())
 	{
 		return;
 	}
@@ -329,7 +329,7 @@ struct CompareMethodNode
 
 void MetaSourceFileGenerator::generateCode_Class(FILE* file, ClassNode* classNode, TemplateClassInstanceNode* templateClassInstance, int indentation)
 {
-	if (classNode->isNativeOnly())
+	if (classNode->isNoMeta())
 	{
 		return;
 	}
@@ -378,7 +378,7 @@ void MetaSourceFileGenerator::generateCode_Class(FILE* file, ClassNode* classNod
 				}
 			}
 		}
-		if(!memberNode->isNativeOnly())
+		if(!memberNode->isNoMeta())
 		{
 			if(snt_method == memberNode->m_nodeType || snt_operator == memberNode->m_nodeType)
 			{
@@ -450,7 +450,7 @@ void MetaSourceFileGenerator::generateCode_Class(FILE* file, ClassNode* classNod
 					continue;
 				}
 			}
-			if (!methodNode->isNativeOnly())
+			if (!methodNode->isNoMeta())
 			{
 				staticMethodNodes.push_back(methodNode);
 			}
@@ -2242,7 +2242,7 @@ void writeMetaGetSingletonImpls(MemberNode* memberNode, TemplateArguments* templ
 
 void MetaSourceFileGenerator::generateCode_Typedef(FILE* file, TypedefNode* typedefNode, TemplateArguments* templateArguments, int indentation)
 {
-	if (typedefNode->isNativeOnly())
+	if (typedefNode->isNoMeta())
 	{
 		return;
 	}
@@ -2264,7 +2264,7 @@ void MetaSourceFileGenerator::generateCode_Typedef(FILE* file, TypedefNode* type
 
 void MetaSourceFileGenerator::generateCode_TypeDeclaration(FILE* file, TypeDeclarationNode* typeDeclarationNode, TemplateArguments* templateArguments, int indentation)
 {
-	if (typeDeclarationNode->isNativeOnly())
+	if (typeDeclarationNode->isNoMeta())
 	{
 		return;
 	}

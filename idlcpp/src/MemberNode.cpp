@@ -13,22 +13,22 @@ MemberNode::MemberNode()
 {
 	m_name = 0;
 	m_enclosing = 0;
-	m_filter = mf_default;
+	m_filterNode = 0;
 }
 
-bool MemberNode::isMetaOnly()
+bool MemberNode::isNoCode()
 {
-	return mf_no_code == m_filter;
+	return (m_filterNode && snt_keyword_nocode == m_filterNode->m_nodeType);
 }
 
-bool MemberNode::isNativeOnly()
+bool MemberNode::isNoMeta()
 {
-	return mf_no_meta == m_filter;
+	return (m_filterNode && snt_keyword_nometa == m_filterNode->m_nodeType);
 }
 
 bool MemberNode::canGenerateMetaCode()
 {
-	if (mf_no_meta == m_filter)
+	if (isNoMeta())
 	{
 		return false;
 	}
@@ -41,7 +41,7 @@ bool MemberNode::canGenerateMetaCode()
 
 bool MemberNode::canGenerateNativeCode()
 {
-	if (mf_no_code == m_filter)
+	if (isNoCode())
 	{
 		return false;
 	}

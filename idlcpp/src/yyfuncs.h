@@ -151,8 +151,7 @@ void setScopeNameListGlobal(SyntaxNode* scopeNameList);
 SyntaxNode* newTypeName(SyntaxNode* scopeNameList);
 SyntaxNode* newTypeNameList(SyntaxNode* typeNameList, SyntaxNode* delimiter, SyntaxNode* typeName);
 
-void setNoCode(SyntaxNode* syntaxNode);
-void setNoMeta(SyntaxNode* syntaxNode);
+void setFilter(SyntaxNode* syntaxNode, SyntaxNode* filterNode);
 SyntaxNode* newField(SyntaxNode* type, SyntaxNode* name, SyntaxNode* leftBracket, SyntaxNode* rightBracket, SyntaxNode* semicolon);
 void setFieldConstant(SyntaxNode* syntaxNode, SyntaxNode* constant);
 void setFieldStatic(SyntaxNode* syntaxNode, SyntaxNode* stat);

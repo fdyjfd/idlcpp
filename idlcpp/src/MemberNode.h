@@ -16,13 +16,6 @@ struct TemplateArguments;
 enum TypeCategory;
 class SourceFile;
 
-enum MemberFilter
-{
-	mf_default,
-	mf_no_code,
-	mf_no_meta,
-};
-
 enum TypeTreeFilter
 {
 	ttf_type = 1,
@@ -36,11 +29,11 @@ struct MemberNode : SyntaxNodeImpl
 {
 	IdentifyNode* m_name;
 	ScopeNode* m_enclosing;
-	MemberFilter m_filter;
+	TokenNode* m_filterNode;
 public:
 	MemberNode();
-	bool isMetaOnly();
-	bool isNativeOnly();
+	bool isNoCode();
+	bool isNoMeta();
 	bool canGenerateMetaCode();
 	bool canGenerateNativeCode();
 	void getEnclosings(std::vector<ScopeNode*>& enclosings);

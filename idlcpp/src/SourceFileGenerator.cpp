@@ -55,7 +55,7 @@ void SourceFileGenerator::generateCode_Program(FILE* file, ProgramNode* programN
 
 void SourceFileGenerator::generateCode_Namespace(FILE* file, NamespaceNode* namespaceNode, int indentation)
 {
-	if (namespaceNode->isMetaOnly())
+	if (namespaceNode->isNoCode())
 	{
 		file = 0;
 	}
@@ -113,7 +113,7 @@ void GetClassName(std::string& className, ClassNode* classNode)
 
 void SourceFileGenerator::generateCode_Class(FILE* file, ClassNode* classNode, int indentation)
 {
-	if (classNode->isMetaOnly())
+	if (classNode->isNoCode())
 	{
 		file = 0;
 	}

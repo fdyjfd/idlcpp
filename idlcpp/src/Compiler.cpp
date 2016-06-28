@@ -241,10 +241,14 @@ void Compiler::outputUsedTypes(FILE* file, SourceFile* sourceFile)
 	for (auto it = begin; it != end; ++it)
 	{
 		TypeNode* typeNode = it->typeNode;
+		if (typeNode->isTypeDeclaration())
+		{
+			continue;
+		}
 		if (typeNode->m_sourceFile != sourceFile)
 		{
-			if ((it->usage & tu_definition) || !typeNode->getEnclosing()->isNamespace()
-				|| typeNode->isTemplateClass())
+			if ( (it->usage & tu_definition) || !typeNode->getEnclosing()->isNamespace()
+				|| typeNode->isTemplateClass() || typeNode->isTypedef() || typeNode->isTemplateClassInstance())
 			{
 				if (std::find(sourceFiles.begin(), sourceFiles.end(), typeNode->m_sourceFile)
 					== sourceFiles.end())

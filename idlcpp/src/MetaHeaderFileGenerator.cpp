@@ -190,7 +190,7 @@ void MetaHeaderFileGenerator::generateCode_Program(FILE* file, ProgramNode* prog
 
 void MetaHeaderFileGenerator::generateCode_Namespace(FILE* file, NamespaceNode* namespaceNode, int indentation)
 {
-	if (namespaceNode->isNativeOnly())
+	if (namespaceNode->isNoMeta())
 	{
 		return;
 	}
@@ -231,7 +231,7 @@ void MetaHeaderFileGenerator::generateCode_Namespace(FILE* file, NamespaceNode* 
 
 void MetaHeaderFileGenerator::generateCode_Enum(FILE* file, EnumNode* enumNode, TemplateArguments* templateArguments, int indentation)
 {
-	if (enumNode->isNativeOnly())
+	if (enumNode->isNoMeta())
 	{
 		return;
 	}
@@ -259,7 +259,7 @@ void MetaHeaderFileGenerator::generateCode_Enum(FILE* file, EnumNode* enumNode, 
 
 void MetaHeaderFileGenerator::generateCode_Class(FILE* file, ClassNode* classNode, TemplateClassInstanceNode* templateClassInstance, int indentation)
 {
-	if (classNode->isNativeOnly())
+	if (classNode->isNoMeta())
 	{
 		return;
 	}
@@ -315,7 +315,7 @@ void MetaHeaderFileGenerator::generateCode_Class(FILE* file, ClassNode* classNod
 			}
 		}
 
-		if(!memberNode->isNativeOnly())
+		if(!memberNode->isNoMeta())
 		{
 			if(snt_method == memberNode->m_nodeType || snt_operator == memberNode->m_nodeType)
 			{
@@ -372,7 +372,7 @@ void MetaHeaderFileGenerator::generateCode_Class(FILE* file, ClassNode* classNod
 					continue;
 				}
 			}
-			if (!methodNode->isNativeOnly())
+			if (!methodNode->isNoMeta())
 			{
 				staticMethodNodes.push_back(methodNode);
 			}
@@ -539,7 +539,7 @@ void MetaHeaderFileGenerator::generateCode_SubclassProxy(FILE* file, ClassNode* 
 
 void MetaHeaderFileGenerator::generateCode_TemplateClassInstance(FILE* file, TemplateClassInstanceNode* templateClassInstance, int indentation)
 {
-	if (templateClassInstance->isNativeOnly())
+	if (templateClassInstance->isNoMeta())
 	{
 		return;
 	}
@@ -551,7 +551,7 @@ void MetaHeaderFileGenerator::generateCode_TemplateClassInstance(FILE* file, Tem
 
 void MetaHeaderFileGenerator::generateCode_Typedef(FILE* file, TypedefNode* typedefNode, TemplateArguments* templateArguments, int indentation)
 {
-	if (typedefNode->isNativeOnly())
+	if (typedefNode->isNoMeta())
 	{
 		return;
 	}
@@ -579,7 +579,7 @@ void MetaHeaderFileGenerator::generateCode_Typedef(FILE* file, TypedefNode* type
 
 void MetaHeaderFileGenerator::generateCode_TypeDeclaration(FILE* file, TypeDeclarationNode* typeDeclarationNode, TemplateArguments* templateArguments, int indentation)
 {
-	if (typeDeclarationNode->isNativeOnly())
+	if (typeDeclarationNode->isNoMeta())
 	{
 		return;
 	}

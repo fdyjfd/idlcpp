@@ -124,7 +124,7 @@ SyntaxNode* newTypeNameList(SyntaxNode* typeNameList, SyntaxNode* delimiter, Syn
 	return res;
 }
 
-void setNoCode(SyntaxNode* syntaxNode)
+void setFilter(SyntaxNode* syntaxNode, SyntaxNode* filterNode)
 {
 	assert(snt_field == syntaxNode->m_nodeType
 		|| snt_property == syntaxNode->m_nodeType
@@ -135,25 +135,11 @@ void setNoCode(SyntaxNode* syntaxNode)
 		|| snt_typedef == syntaxNode->m_nodeType
 		|| snt_type_declaration == syntaxNode->m_nodeType
 		|| snt_namespace == syntaxNode->m_nodeType);
+	assert(snt_keyword_nocode == filterNode->m_nodeType
+		|| snt_keyword_nometa == filterNode->m_nodeType);
 
 	MemberNode* memberNode = (MemberNode*)syntaxNode;
-	memberNode->m_filter = mf_no_code;
-}
-
-void setNoMeta(SyntaxNode* syntaxNode)
-{
-	assert(snt_field == syntaxNode->m_nodeType
-		|| snt_property == syntaxNode->m_nodeType
-		|| snt_method == syntaxNode->m_nodeType
-		|| snt_class == syntaxNode->m_nodeType
-		|| snt_enum == syntaxNode->m_nodeType
-		|| snt_template_class_instance == syntaxNode->m_nodeType
-		|| snt_typedef == syntaxNode->m_nodeType
-		|| snt_type_declaration == syntaxNode->m_nodeType
-		|| snt_namespace == syntaxNode->m_nodeType);
-
-	MemberNode* memberNode = (MemberNode*)syntaxNode;
-	memberNode->m_filter = mf_no_meta;
+	memberNode->m_filterNode = (TokenNode*)filterNode;
 }
 
 SyntaxNode* newField(SyntaxNode* type, SyntaxNode* name, SyntaxNode* leftBracket, SyntaxNode* rightBracket, SyntaxNode* semicolon)

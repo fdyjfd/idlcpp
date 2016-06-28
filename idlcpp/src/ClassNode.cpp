@@ -122,7 +122,7 @@ void checkMemberNames(ClassNode* classNode, std::vector<MemberNode*>& memberNode
 		if(snt_method == memberNode->m_nodeType || snt_operator == memberNode->m_nodeType)
 		{
 			MethodNode* methodNode = static_cast<MethodNode*>(memberNode);
-			if(methodNode->m_name->m_str == classNode->m_name->m_str)
+			if(methodNode->m_name->m_str == classNode->m_name->m_str && !methodNode->isStatic())
 			{
 				if(0 != methodNode->m_resultTypeName)
 				{
@@ -354,7 +354,10 @@ void ClassNode::GenerateCreateInstanceMethod(const char* methodName, MethodNode*
 	setMethodResult(method, typeName, passing);
 	TokenNode* modifier = (TokenNode*)newToken(snt_keyword_static);
 	setMethodModifier(method, modifier);
-	method->m_filter = constructor->m_filter;
+	if (constructor->m_filterNode)
+	{
+		method->m_filterNode = (TokenNode*)newToken(constructor->m_filterNode->m_nodeType);
+	}
 	method->m_enclosing = this;
 	m_additionalMethods.push_back(method);
 }
@@ -375,7 +378,10 @@ void ClassNode::GenerateCreateArrayMethod(const char* methodName, MethodNode* co
 	setMethodResultArray(method);
 	TokenNode* modifier = (TokenNode*)newToken(snt_keyword_static);
 	setMethodModifier(method, modifier);
-	method->m_filter = constructor->m_filter;
+	if (constructor->m_filterNode)
+	{
+		method->m_filterNode = (TokenNode*)newToken(constructor->m_filterNode->m_nodeType);
+	}
 	method->m_enclosing = this;
 	m_additionalMethods.push_back(method);
 }
