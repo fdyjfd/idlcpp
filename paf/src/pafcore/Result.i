@@ -4,7 +4,7 @@ namespace pafcore
 {
 	$$class Variant;
 
-	abstract class $PAFCORE_EXPORT Result(function_result) : Metadata
+	abstract class(function_result)$PAFCORE_EXPORT Result : Metadata
 	{
 		Type* type get;
 		bool byValue get;

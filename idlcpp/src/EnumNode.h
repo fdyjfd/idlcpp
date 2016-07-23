@@ -14,7 +14,7 @@ struct EnumNode : ScopeNode
 	TokenNode* m_semicolon;
 	EnumTypeNode* m_typeNode;
 public:
-	EnumNode(TokenNode* keyword, IdentifyNode* name, TokenNode* leftBrace, IdentityListNode* identityList, TokenNode* rightBrace, TokenNode* semicolon);
+	EnumNode(TokenNode* keyword, IdentifyNode* name, TokenNode* leftBrace, IdentityListNode* identityList, TokenNode* rightBrace);
 	virtual TypeNode* getTypeNode();
 	virtual void collectTypes(TypeNode* enclosingTypeNode, TemplateArguments* templateArguments);
 	virtual void checkSemantic(TemplateArguments* templateArguments);

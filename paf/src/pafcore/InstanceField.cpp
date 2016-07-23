@@ -5,7 +5,7 @@
 
 BEGIN_PAFCORE
 
-InstanceField::InstanceField(const char* name, ClassType* objectType, Type* type, size_t offset, size_t arraySize, bool constant, bool array)
+InstanceField::InstanceField(const char* name, ClassType* objectType, Type* type, size_t offset, size_t arraySize, bool constant, TypeCompound tc)
 : Metadata(name)
 {
 	m_objectType = objectType;
@@ -13,7 +13,7 @@ InstanceField::InstanceField(const char* name, ClassType* objectType, Type* type
 	m_offset = offset;
 	m_arraySize = arraySize;
 	m_constant = constant;
-	m_array = array;
+	m_typeCompound = tc;
 }
 
 Type* InstanceField::get_type()
@@ -28,7 +28,12 @@ ClassType* InstanceField::get_objectType()
 
 bool InstanceField::get_isArray()
 {
-	return m_array;
+	return tc_array == m_typeCompound;
+}
+
+bool InstanceField::get_isPointer()
+{
+	return tc_pointer == m_typeCompound;
 }
 
 bool InstanceField::get_isConstant()

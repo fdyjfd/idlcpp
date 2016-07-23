@@ -18,7 +18,7 @@ namespace tutorial
 		$$		virtual ~Shape() {}
 	};
 
-	class ShapeManager(value_object)
+	class(value_object)ShapeManager
 	{
 		void addShape(Shape* shape);
 		float getTotalArea();

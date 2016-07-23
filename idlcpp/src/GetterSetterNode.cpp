@@ -10,6 +10,7 @@ GetterSetterNode::GetterSetterNode(TokenNode* keyword, TokenNode* constant, Type
 	m_constant = constant;
 	m_typeName = typeName;
 	m_passing = passing;
+	m_nativeName = 0;
 }
 
 bool GetterSetterNode::isConstant()

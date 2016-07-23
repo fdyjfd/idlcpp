@@ -313,6 +313,10 @@ pafcore::ErrorCode GetInstanceField(lua_State *L, pafcore::Variant* that, pafcor
 	{
 		value.assignArray(field->m_type, (void*)fieldAddress, field->m_arraySize, field->m_constant, ::pafcore::Variant::by_array);
 	}
+	else if(field->isPointer())
+	{
+		value.assignPtr(field->m_type, *(void**)fieldAddress, field->m_constant, ::pafcore::Variant::by_ref);
+	}
 	else
 	{
 		value.assignPtr(field->m_type, (void*)fieldAddress, field->m_constant, ::pafcore::Variant::by_ref);
@@ -339,9 +343,19 @@ pafcore::ErrorCode SetInstanceField(lua_State *L, pafcore::Variant* that, pafcor
 	size_t fieldAddress = (size_t)that->m_pointer + baseOffset + field->m_offset;
 	pafcore::Variant value;
 	pafcore::Variant* arg = LuaToVariant(&value, L, 3);
-	if(!arg->castToObject(field->m_type, (void*)fieldAddress))
+	if (field->isPointer())
 	{
-		return pafcore::e_invalid_field_type;
+		if (!arg->castToObjectPtr(field->m_type, (void**)fieldAddress))
+		{
+			return pafcore::e_invalid_field_type;
+		}
+	}
+	else
+	{
+		if (!arg->castToObject(field->m_type, (void*)fieldAddress))
+		{
+			return pafcore::e_invalid_field_type;
+		}
 	}
 	return pafcore::s_ok;
 }
@@ -352,6 +366,10 @@ pafcore::ErrorCode GetStaticField(lua_State *L, pafcore::StaticField* field)
 	if(field->isArray())
 	{
 		value.assignArray(field->m_type, (void*)field->m_address, field->m_arraySize, field->m_constant, ::pafcore::Variant::by_array);
+	}
+	else if (field->isPointer())
+	{
+		value.assignPtr(field->m_type, *(void**)field->m_address, field->m_constant, ::pafcore::Variant::by_ref);
 	}
 	else
 	{
@@ -373,9 +391,19 @@ pafcore::ErrorCode SetStaticField(lua_State *L, pafcore::StaticField* field)
 	}
 	pafcore::Variant value;
 	pafcore::Variant* arg = LuaToVariant(&value, L, 3);
-	if(!arg->castToObject(field->m_type, (void*)field->m_address))
+	if (field->isPointer())
 	{
-		return pafcore::e_invalid_field_type;
+		if (!arg->castToObjectPtr(field->m_type, (void**)field->m_address))
+		{
+			return pafcore::e_invalid_field_type;
+		}
+	}
+	else
+	{
+		if (!arg->castToObject(field->m_type, (void*)field->m_address))
+		{
+			return pafcore::e_invalid_field_type;
+		}
 	}
 	return pafcore::s_ok;
 }
@@ -484,8 +512,8 @@ int Variant_Call(lua_State *L)
 	case pafcore::primitive_type:
 		{
 			pafcore::PrimitiveType* type = (pafcore::PrimitiveType*)variant->m_pointer;
-			assert(strcmp(type->m_staticMethods[1].m_name, "New") == 0);
-			return InvokeFunction_Method(L, type->m_staticMethods[1].m_invoker);
+			assert(strcmp(type->m_staticMethods[0].m_name, "New") == 0);
+			return InvokeFunction_Method(L, type->m_staticMethods[0].m_invoker);
 		}
 		break;
 	case pafcore::class_type:

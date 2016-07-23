@@ -13,7 +13,7 @@ namespace pafcore
 	class TypeAlias;
 	class SubclassInvoker;
 	*$
-	abstract class $PAFCORE_EXPORT ClassType(class_type) : Type
+	abstract class(class_type)$PAFCORE_EXPORT ClassType : Type
 	{
 		size_t _getMemberCount_(bool includeBaseClasses);
 		Metadata* _getMember_(size_t index, bool includeBaseClasses);

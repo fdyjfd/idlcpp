@@ -158,5 +158,8 @@ enum ArgumentMatch
 	exact_match,
 };
 
+PAFCORE_EXPORT void DummyDestroyInstance(void* address);
+PAFCORE_EXPORT void DummyDestroyArray(void* address);
+PAFCORE_EXPORT void DummyAssign(void* dst, const void* src);
 
 END_PAFCORE

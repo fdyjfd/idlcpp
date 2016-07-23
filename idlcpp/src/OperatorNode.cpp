@@ -16,8 +16,9 @@ const char g_strPure[] = { " = 0 " };
 
 OperatorNode::OperatorNode(TokenNode* keyword, TokenNode* sign, TokenNode* leftParenthesis,
 	ParameterListNode* parameterList, TokenNode* rightParenthesis, TokenNode* constant, TokenNode* semicolon)
-: MethodNode(0, leftParenthesis, parameterList, rightParenthesis, constant, semicolon)
+: MethodNode(0, leftParenthesis, parameterList, rightParenthesis, constant)
 {
+	m_semicolon = semicolon;
 	m_nodeType = snt_operator;
 	m_keyword = keyword;
 	m_sign = sign;

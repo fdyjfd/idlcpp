@@ -8,16 +8,17 @@
 #include "Compiler.h"
 #include <assert.h>
 
-FieldNode::FieldNode(TypeNameNode* typeName, IdentifyNode* name, TokenNode* leftBracket, TokenNode* rightBracket, TokenNode* semicolon)
+FieldNode::FieldNode(TypeNameNode* typeName, TokenNode* pointer, IdentifyNode* name, TokenNode* leftBracket, TokenNode* rightBracket)
 {
 	m_nodeType = snt_field;
 	m_static = 0;
 	m_constant = 0;
 	m_typeName = typeName;
+	m_pointer = pointer;
 	m_name = name;
 	m_leftBracket = leftBracket;
 	m_rightBracket = rightBracket;
-	m_semicolon = semicolon;
+	m_semicolon = 0;
 }
 
 bool FieldNode::isStatic()
@@ -28,6 +29,11 @@ bool FieldNode::isStatic()
 bool FieldNode::isConstant()
 {
 	return 0 != m_constant;
+}
+
+bool FieldNode::isPointer()
+{
+	return (0 != m_pointer);
 }
 
 bool FieldNode::isArray()

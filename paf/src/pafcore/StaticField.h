@@ -3,7 +3,6 @@
 
 #pragma once
 
-#include "./Typedef.h"
 #include "./Reference.h"
 #include "./Metadata.h"
 namespace pafcore{ class Type; }
@@ -22,13 +21,18 @@ namespace pafcore
 		size_t get_address();
 		bool get_isConstant();
 		bool get_isArray();
+		bool get_isPointer();
 
 	public:
-		StaticField(const char* name, Type* type, size_t address, size_t arraySize, bool constant, bool array);
+		StaticField(const char* name, Type* type, size_t address, size_t arraySize, bool constant, TypeCompound tc);
 	public:
 		bool isArray()
 		{
-			return m_array;
+			return tc_array == m_typeCompound;
+		}
+		bool isPointer()
+		{
+			return tc_pointer == m_typeCompound;
 		}
 		bool isConstant()
 		{
@@ -39,7 +43,7 @@ namespace pafcore
 		size_t m_address;
 		size_t m_arraySize;
 		bool m_constant;
-		bool m_array;
+		byte_t m_typeCompound;
 		
 	};
 

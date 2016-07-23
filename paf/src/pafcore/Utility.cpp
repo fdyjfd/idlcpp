@@ -117,4 +117,13 @@ void freeMemory(void* p)
 	free(p);
 }
 
+void DummyDestroyInstance(void* address)
+{}
+
+void DummyDestroyArray(void* address)
+{}
+
+void DummyAssign(void* dst, const void* src)
+{}
+
 END_PAFCORE

@@ -23,7 +23,7 @@ public:
 	bool m_override;
 	mutable size_t m_parameterCount;
 public:
-	MethodNode(IdentifyNode* name, TokenNode* leftParenthesis, ParameterListNode* parameterList, TokenNode* rightParenthesis, TokenNode* constant, TokenNode* semicolon);
+	MethodNode(IdentifyNode* name, TokenNode* leftParenthesis, ParameterListNode* parameterList, TokenNode* rightParenthesis, TokenNode* constant);
 	bool isStatic();
 	bool isConstant();
 	bool isVirtual();

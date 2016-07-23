@@ -36,9 +36,9 @@ struct ClassNode : ScopeNode
 	bool m_override;
 	LazyBool m_abstractFlag;
 public:
-	ClassNode(TokenNode* keyword, IdentifyNode* name, IdentifyNode* category);
+	ClassNode(TokenNode* keyword, IdentifyNode* category, IdentifyNode* name);
 	void setTemplateParameters(TemplateParametersNode* templateParametersNode);
-	void setMemberList(TokenNode* leftBrace, MemberListNode* memberList, TokenNode* rightBrace, TokenNode* semicolon);
+	void setMemberList(TokenNode* leftBrace, MemberListNode* memberList, TokenNode* rightBrace);
 	void buildAdditionalMethods();
 	void extendInternalCode(TypeNode* enclosingTypeNode, TemplateArguments* templateArguments);
 	bool isAbstractClass();

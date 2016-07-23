@@ -226,49 +226,62 @@ void TypeNameNode::getRelativeName(std::string& typeName, ScopeNode* scopeNode)
 	{
 		m_typeNode->getFullName(typeName);
 	}
-	else if (m_scopeNameList->isGlobal())
-	{
-		m_scopeNameList->getString(typeName);
-	}
 	else
 	{
-		TypeNode* scopeTypeNode = scopeNode->getTypeNode();
-
-		std::vector<TypeNode*> enclosings;
-		m_startTypeNode->getEnclosings(enclosings);
-		std::vector<TypeNode*> scopeEnclosings;
-		scopeTypeNode->getEnclosings(scopeEnclosings);
-		scopeEnclosings.push_back(scopeTypeNode);
-
-		auto it = enclosings.begin();
-		auto end = enclosings.end();
-		auto it2 = scopeEnclosings.begin();
-		auto end2 = scopeEnclosings.end();
-		for (; it2 != end2; ++it2)
+		if (m_typeNode)
 		{
-			if (it == end)
+			MemberNode* memberNode = m_typeNode->getSyntaxNode();
+			if (memberNode && memberNode->m_nativeName)
 			{
-				break;
+				memberNode->getNativeName(typeName, 0);
+				return;
 			}
-			if (*it != *it2)
-			{
-				break;
-			}
-			++it;
 		}
-		typeName.clear();
-		for (; it != end; ++it)
+		if (m_scopeNameList->isGlobal())
 		{
-			TypeNode* typeNode = *it;
-			std::string localName;
-			typeNode->getLocalName(localName);
-			typeName += localName + "::";
+			m_scopeNameList->getString(typeName);
 		}
-		std::string str;
-		m_scopeNameList->getString(str);
-		typeName += str;
+		else
+		{
+			TypeNode* scopeTypeNode = scopeNode->getTypeNode();
+
+			std::vector<TypeNode*> enclosings;
+			m_startTypeNode->getEnclosings(enclosings);
+			std::vector<TypeNode*> scopeEnclosings;
+			scopeTypeNode->getEnclosings(scopeEnclosings);
+			scopeEnclosings.push_back(scopeTypeNode);
+
+			auto it = enclosings.begin();
+			auto end = enclosings.end();
+			auto it2 = scopeEnclosings.begin();
+			auto end2 = scopeEnclosings.end();
+			for (; it2 != end2; ++it2)
+			{
+				if (it == end)
+				{
+					break;
+				}
+				if (*it != *it2)
+				{
+					break;
+				}
+				++it;
+			}
+			typeName.clear();
+			for (; it != end; ++it)
+			{
+				TypeNode* typeNode = *it;
+				std::string localName;
+				typeNode->getLocalName(localName);
+				typeName += localName + "::";
+			}
+			std::string str;
+			m_scopeNameList->getString(str);
+			typeName += str;
+		}
 	}
 }
+
 
 bool TypeNameNode::underTemplateParameter()
 {

@@ -142,6 +142,7 @@ enum SyntaxNodeType
 void newCodeBlock(const char* str);
 SyntaxNode* newToken(int nodeType);
 SyntaxNode* newIdentify(const char* str);
+SyntaxNode* newString(const char* str);
 
 SyntaxNode* newPrimitiveType(SyntaxNode* keyword, PredefinedType type);
 
@@ -152,11 +153,14 @@ SyntaxNode* newTypeName(SyntaxNode* scopeNameList);
 SyntaxNode* newTypeNameList(SyntaxNode* typeNameList, SyntaxNode* delimiter, SyntaxNode* typeName);
 
 void setFilter(SyntaxNode* syntaxNode, SyntaxNode* filterNode);
-SyntaxNode* newField(SyntaxNode* type, SyntaxNode* name, SyntaxNode* leftBracket, SyntaxNode* rightBracket, SyntaxNode* semicolon);
+void setNativeName(SyntaxNode* syntaxNode, SyntaxNode* nativeName);
+SyntaxNode* newField(SyntaxNode* type, SyntaxNode* pointer, SyntaxNode* name, SyntaxNode* leftBracket, SyntaxNode* rightBracket);
 void setFieldConstant(SyntaxNode* syntaxNode, SyntaxNode* constant);
 void setFieldStatic(SyntaxNode* syntaxNode, SyntaxNode* stat);
+void setFieldSemicolon(SyntaxNode* syntaxNode, SyntaxNode* semicolon);
 
 SyntaxNode* newGetterSetter(SyntaxNode* keyword, SyntaxNode* constant, SyntaxNode* type, SyntaxNode* passing);
+void setGetterSetterNativeName(SyntaxNode* syntaxNode, SyntaxNode* nativeName);
 
 SyntaxNode* newProperty(SyntaxNode* constant, SyntaxNode* type, SyntaxNode* passing, SyntaxNode* name);
 void setPropertyGetter(SyntaxNode* property, SyntaxNode* getter);
@@ -168,12 +172,14 @@ void setParameterArray(SyntaxNode* parameter);
 void setParameterConst(SyntaxNode* parameter, SyntaxNode* constant);
 SyntaxNode* newParameterList(SyntaxNode* parameterList, SyntaxNode* delimiter, SyntaxNode* parameter);
 
-SyntaxNode* newMethod(SyntaxNode* name, SyntaxNode* leftParenthesis, SyntaxNode* parameterList, SyntaxNode* rightParenthesis, SyntaxNode* constant, SyntaxNode* semicolon);
+SyntaxNode* newMethod(SyntaxNode* name, SyntaxNode* leftParenthesis, SyntaxNode* parameterList, SyntaxNode* rightParenthesis, SyntaxNode* constant);
 void setMethodResult(SyntaxNode* method, SyntaxNode* result, SyntaxNode* passing);
 void setMethodResultArray(SyntaxNode* method);
 void setMethodResultConst(SyntaxNode* method, SyntaxNode* constant);
 void setMethodModifier(SyntaxNode* method, SyntaxNode* modifier);
 void setMethodOverride(SyntaxNode* method);
+void setMethodSemicolon(SyntaxNode* syntaxNode, SyntaxNode* semicolon);
+
 
 SyntaxNode* newOperator(SyntaxNode* keyword, SyntaxNode* sign, SyntaxNode* leftParenthesis, SyntaxNode* parameterList, SyntaxNode* rightParenthesis, SyntaxNode* constant, SyntaxNode* semicolon);
 void setOperatorResult(SyntaxNode* opt, SyntaxNode* result, SyntaxNode* passing);
@@ -183,15 +189,17 @@ void setOperatorModifier(SyntaxNode* opt, SyntaxNode* modifier);
 void setOperatorOverride(SyntaxNode* opt);
 
 SyntaxNode* newClassMemberList(SyntaxNode* memberList, SyntaxNode* member);
-SyntaxNode* newClass(SyntaxNode* keyword, SyntaxNode* name, SyntaxNode* category);
+SyntaxNode* newClass(SyntaxNode* keyword, SyntaxNode* category, SyntaxNode* name);
 void setClassBaseList(SyntaxNode* cls, SyntaxNode* colon, SyntaxNode* baseList);
-void setClassMemberList(SyntaxNode* cls, SyntaxNode* leftBrace, SyntaxNode* memberList, SyntaxNode* rightBrace, SyntaxNode* semicolon);
+void setClassMemberList(SyntaxNode* cls, SyntaxNode* leftBrace, SyntaxNode* memberList, SyntaxNode* rightBrace);
 void setClassModifier(SyntaxNode* cls, SyntaxNode* modifier);
 void setClassOverride(SyntaxNode* cls);
 void setClassTemplateParameters(SyntaxNode* cls, SyntaxNode* parameters);
+void setClassSemicolon(SyntaxNode* cls, SyntaxNode* semicolon);
 
 SyntaxNode* newIdentityList(SyntaxNode* identityList, SyntaxNode* delimiter, SyntaxNode* identify);
-SyntaxNode* newEnum(SyntaxNode* keyword, SyntaxNode* name, SyntaxNode* leftBrace, SyntaxNode* identityList, SyntaxNode* rightBrace, SyntaxNode* semicolon);
+SyntaxNode* newEnum(SyntaxNode* keyword, SyntaxNode* name, SyntaxNode* leftBrace, SyntaxNode* identityList, SyntaxNode* rightBrace);
+void setEnumSemicolon(SyntaxNode* enm, SyntaxNode* semicolon);
 
 SyntaxNode* newTypeDeclaration(SyntaxNode* name, TypeCategory typeCategory);
 SyntaxNode* newTypedef(SyntaxNode* keyword, SyntaxNode* name, SyntaxNode* typeName);

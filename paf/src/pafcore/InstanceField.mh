@@ -24,6 +24,7 @@ namespace idlcpp
 	public:
 		static ::pafcore::ErrorCode InstanceField_get_isArray(::pafcore::Variant* that, ::pafcore::Variant* value);
 		static ::pafcore::ErrorCode InstanceField_get_isConstant(::pafcore::Variant* that, ::pafcore::Variant* value);
+		static ::pafcore::ErrorCode InstanceField_get_isPointer(::pafcore::Variant* that, ::pafcore::Variant* value);
 		static ::pafcore::ErrorCode InstanceField_get_objectType(::pafcore::Variant* that, ::pafcore::Variant* value);
 		static ::pafcore::ErrorCode InstanceField_get_offset(::pafcore::Variant* that, ::pafcore::Variant* value);
 		static ::pafcore::ErrorCode InstanceField_get_type(::pafcore::Variant* that, ::pafcore::Variant* value);

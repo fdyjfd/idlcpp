@@ -9,7 +9,7 @@ namespace pafcore
 	class InstanceProperty;
 	*$
 
-	abstract class $PAFCORE_EXPORT EnumType(enum_type) : Type
+	abstract class(enum_type)$PAFCORE_EXPORT EnumType : Type
 	{
 		size_t _getEnumeratorCount_();
 		Enumerator* _getEnumerator_(size_t index);

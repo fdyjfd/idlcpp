@@ -40,7 +40,7 @@ namespace pafcore
 	};	
 	*$
 
-	abstract class $PAFCORE_EXPORT PrimitiveType(primitive_type) : Type
+	abstract class(primitive_type)$PAFCORE_EXPORT PrimitiveType : Type
 	{
 		size_t _getMemberCount_();
 		Metadata* _getMember_(size_t index);
@@ -1204,6 +1204,13 @@ struct RuntimeTypeOf<long double>
 {
 	typedef ::pafcore::LongDoubleType RuntimeType;
 	enum {type_category = ::pafcore::primitive_object};
+};
+
+template<typename T>
+struct RuntimeTypeOf<T*>
+{
+	typedef RuntimeTypeOf<size_t>::RuntimeType RuntimeType;
+	enum { type_category = ::pafcore::primitive_object };
 };
 
 #pragma warning( pop ) 

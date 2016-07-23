@@ -5,7 +5,7 @@ $$#include "Overload.h"
 
 namespace pafcore
 {
-	abstract class $PAFCORE_EXPORT StaticMethod(static_method) : Metadata
+	abstract class(static_method)$PAFCORE_EXPORT StaticMethod : Metadata
 	{
 		size_t overloadCount get;
 		Result* getResult(size_t overloadIndex);

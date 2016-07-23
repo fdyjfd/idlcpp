@@ -2,7 +2,7 @@
 
 namespace pafcore
 {
-	abstract class $PAFCORE_EXPORT TypeAlias(type_alias) : Metadata
+	abstract class(type_alias)$PAFCORE_EXPORT TypeAlias : Metadata
 	{
 		Type* type get;
 		$*

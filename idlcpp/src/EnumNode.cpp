@@ -8,7 +8,7 @@
 #include <vector>
 #include <assert.h>
 
-EnumNode::EnumNode(TokenNode* keyword, IdentifyNode* name, TokenNode* leftBrace, IdentityListNode* identityList, TokenNode* rightBrace, TokenNode* semicolon)
+EnumNode::EnumNode(TokenNode* keyword, IdentifyNode* name, TokenNode* leftBrace, IdentityListNode* identityList, TokenNode* rightBrace)
 {
 	m_nodeType = snt_enum;
 	m_keyword = keyword;
@@ -16,7 +16,7 @@ EnumNode::EnumNode(TokenNode* keyword, IdentifyNode* name, TokenNode* leftBrace,
 	m_leftBrace = leftBrace;
 	m_identityList = identityList;
 	m_rightBrace = rightBrace;
-	m_semicolon = semicolon;
+	m_semicolon = 0;
 	m_typeNode = 0;
 }
 

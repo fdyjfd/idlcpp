@@ -12,14 +12,14 @@
 %token <sn> LEFT_SHIFT RIGHT_SHIFT EQUAL NOT_EQUAL LESS_EQUAL GREATER_EQUAL AND OR INC DEC
 %token <sn> BOOL CHAR WCHAR_T SHORT LONG INT FLOAT DOUBLE SIGNED UNSIGNED
 %token <sn> NAMESPACE ENUM CLASS STRUCT STATIC VIRTUAL VOID CONST OPERATOR TYPEDEF PRIMITIVE
-%token <sn> ABSTRACT GET SET NOMETA NOCODE EXPORT OVERRIDE SCOPE IDENTIFY
-%type <sn> field_0 field_1 field_2 field getter setter property_0 property_1 property_2 property
+%token <sn> ABSTRACT GET SET NOMETA NOCODE EXPORT OVERRIDE SCOPE IDENTIFY STRING
+%type <sn> field_0 field_1 field_2 field getter_0 getter setter_0 setter property_0 property_1 property
 %type <sn> parameter_0 parameter parameterList method_0 method_1 method_2 method_3 method_4 method
-%type <sn> operatorSign operator_0 operator_1 operator_2 operator_3 operator_4 operator
+%type <sn> operatorSign operator_0 operator_1 operator_2 operator_3 operator classMember_0 classMember
 %type <sn> primitive scopeName scopeNameList_0 scopeNameList typeName typeNameList identityList classMemberList tokenList
-%type <sn> templateParameterList templateParameters templateClassInstance_0 templateClassInstance_1 templateClassInstance
-%type <sn> typeAlias_0 typeAlias enum_0 enum 
-%type <sn> class_0 class_1 class_2 class_3 class_4 class_5 class namespaceMemberList namespace_0 namespace program
+%type <sn> templateParameterList templateParameters templateClassInstance_0 templateClassInstance
+%type <sn> typeAlias enum_0 enum 
+%type <sn> class_0 class_1 class_2 class_3 class_4 class_5 class namespaceMember namespaceMemberList namespace program
 %start program
 
 %%
@@ -62,14 +62,14 @@ identityList			: IDENTIFY											{$$ = newIdentityList(NULL, NULL, $1);}
 						| identityList ',' IDENTIFY							{$$ = newIdentityList($1, $2, $3);}
 ;
 
-enum_0					: ENUM IDENTIFY '{' identityList '}' ';'			{$$ = newEnum($1, $2, $3, $4, $5, $6);}
-						| ENUM IDENTIFY '{' identityList ',' '}' ';'		{$$ = newEnum($1, $2, $3, $4, $6, $7);}
-						| ENUM IDENTIFY '{' '}' ';'							{$$ = newEnum($1, $2, $3, NULL, $4, $5);}
+
+enum_0					: ENUM IDENTIFY '{' identityList '}'				{$$ = newEnum($1, $2, $3, $4, $5);}
+						| ENUM IDENTIFY '{' identityList ',' '}'			{$$ = newEnum($1, $2, $3, $4, $6);}
+						| ENUM IDENTIFY '{' '}'								{$$ = newEnum($1, $2, $3, NULL, $4);}
 ;
 
-enum					: enum_0											{$$ = $1;}
-						| NOCODE enum_0										{$$ = $2; setFilter($$, $1);}
-						| NOMETA enum_0										{$$ = $2; setFilter($$, $1);}
+enum					: enum_0 ';'										{$$ = $1; setEnumSemicolon($$, $2);}
+						| enum_0 '=' STRING ';'								{$$ = $1; setNativeName($$, $3); setEnumSemicolon($$, $4);}
 ;
 
 scopeName				: IDENTIFY											{$$ = newScopeName($1, NULL, NULL, NULL);}
@@ -92,20 +92,20 @@ typeNameList			: typeName											{$$ = newTypeNameList(NULL, NULL, $1);}
 						| typeNameList ',' typeName							{$$ = newTypeNameList($1, $2, $3);}
 ;
 
-typeAlias_0				: TYPEDEF typeName IDENTIFY ';'						{$$ = newTypedef($1, $3, $2);}
+typeAlias				: TYPEDEF typeName IDENTIFY ';'						{$$ = newTypedef($1, $3, $2);}
 						| PRIMITIVE IDENTIFY ';'							{$$ = newTypeDeclaration($2, primitive_type);}
 						| ENUM IDENTIFY ';'									{$$ = newTypeDeclaration($2, enum_type);}
 						| STRUCT IDENTIFY ';'								{$$ = newTypeDeclaration($2, value_type);}
 						| CLASS IDENTIFY ';'								{$$ = newTypeDeclaration($2, reference_type);}
+						| PRIMITIVE IDENTIFY '=' STRING ';'					{$$ = newTypeDeclaration($2, primitive_type); setNativeName($$, $4);}
+						| ENUM IDENTIFY '=' STRING ';'						{$$ = newTypeDeclaration($2, enum_type); setNativeName($$, $4);}
+						| STRUCT IDENTIFY '=' STRING ';'					{$$ = newTypeDeclaration($2, value_type); setNativeName($$, $4);}
+						| CLASS IDENTIFY '=' STRING ';'						{$$ = newTypeDeclaration($2, reference_type); setNativeName($$, $4);}
 ;
 
-typeAlias				: typeAlias_0										{$$ = $1;}
-						| NOCODE typeAlias_0								{$$ = $2; setFilter($$, $1);}
-						| NOMETA typeAlias_0								{$$ = $2; setFilter($$, $1);}
-;
-
-field_0					: typeName IDENTIFY ';'								{$$ = newField($1, $2, NULL, NULL, $3);}
-						| typeName IDENTIFY '[' ']'	';'						{$$ = newField($1, $2, $3, $4, $5);}
+field_0					: typeName IDENTIFY									{$$ = newField($1, NULL, $2, NULL, NULL);}
+						| typeName IDENTIFY '[' ']'							{$$ = newField($1, NULL, $2, $3, $4);}
+						| typeName '*' IDENTIFY								{$$ = newField($1, $2, $3, NULL, NULL);}
 ;
 
 field_1					: field_0											{$$ = $1;}
@@ -116,12 +116,12 @@ field_2					: field_1											{$$ = $1;}
 						| STATIC field_1									{$$ = $2; setFieldStatic($$, $1);}
 ;
 
-field					: field_2											{$$ = $1;}
-						| NOCODE field_2									{$$ = $2; setFilter($$, $1);}
-						| NOMETA field_2									{$$ = $2; setFilter($$, $1);}
+field					: field_2 ';'										{$$ = $1; setFieldSemicolon($$, $2);}
+						| field_2 '=' STRING ';'							{$$ = $1; setNativeName($$, $3); setFieldSemicolon($$, $4);}
 ;
 
-getter					: GET												{$$ = newGetterSetter($1, NULL, NULL, NULL);}
+
+getter_0				: GET												{$$ = newGetterSetter($1, NULL, NULL, NULL);}
 						| GET '(' typeName ')'								{$$ = newGetterSetter($1, NULL, $3, NULL);}
 						| GET '(' typeName '*' ')'							{$$ = newGetterSetter($1, NULL, $3, $4);}
 						| GET '(' typeName '&' ')'							{$$ = newGetterSetter($1, NULL, $3, $4);}
@@ -129,12 +129,20 @@ getter					: GET												{$$ = newGetterSetter($1, NULL, NULL, NULL);}
 						| GET '(' CONST typeName '&' ')'					{$$ = newGetterSetter($1, $3, $4, $5);}
 ;
 
-setter					: SET												{$$ = newGetterSetter($1, NULL, NULL, NULL);}
+getter					: getter_0											{$$ = $1;}
+						| getter_0 '=' STRING								{$$ = $1; setGetterSetterNativeName($$, $3);}
+;
+
+setter_0				: SET												{$$ = newGetterSetter($1, NULL, NULL, NULL);}
 						| SET '(' typeName ')'								{$$ = newGetterSetter($1, NULL, $3, NULL);}
 						| SET '(' typeName '*' ')'							{$$ = newGetterSetter($1, NULL, $3, $4);}
 						| SET '(' typeName '&' ')'							{$$ = newGetterSetter($1, NULL, $3, $4);}
 						| SET '(' CONST typeName '*' ')'					{$$ = newGetterSetter($1, $3, $4, $5);}
 						| SET '(' CONST typeName '&' ')'					{$$ = newGetterSetter($1, $3, $4, $5);}
+;
+
+setter					: setter_0											{$$ = $1;}
+						| setter_0 '=' STRING								{$$ = $1; setGetterSetterNativeName($$, $3);}
 ;
 
 
@@ -153,14 +161,10 @@ property_1				: property_0 getter ';'								{$$ = $1; setPropertyGetter($1, $2)
 ;
 
 
-property_2				: property_1										{$$ = $1;}
+property				: property_1										{$$ = $1;}
 						| STATIC property_1									{$$ = $2; setPropertyModifier($$, $1);}
 ;
 
-property				: property_2										{$$ = $1;}
-						| NOCODE property_2									{$$ = $2; setFilter($$, $1);}
-						| NOMETA property_2									{$$ = $2; setFilter($$, $1);}
-;
 
 parameter_0				: typeName IDENTIFY									{$$ = newParameter($1, NULL, NULL, $2);}
 						| typeName '*' IDENTIFY								{$$ = newParameter($1, NULL, $2, $3);}
@@ -181,12 +185,12 @@ parameterList			: parameter											{$$ = newParameterList(NULL, NULL, $1);}
 						| parameterList ',' parameter						{$$ = newParameterList($1, $2, $3);}
 ;
 
-method_0				: IDENTIFY '(' ')' ';'								{$$ = newMethod($1, $2, NULL, $3, NULL, $4);}
-						| IDENTIFY '(' VOID ')' ';'							{$$ = newMethod($1, $2, NULL, $4, NULL, $5);}
-						| IDENTIFY '(' parameterList ')' ';'				{$$ = newMethod($1, $2, $3, $4, NULL, $5);}
-						| IDENTIFY '(' ')' CONST ';'						{$$ = newMethod($1, $2, NULL, $3, $4, $5);}
-						| IDENTIFY '(' VOID ')' CONST ';'					{$$ = newMethod($1, $2, NULL, $4, $5, $6);}
-						| IDENTIFY '(' parameterList ')' CONST ';'			{$$ = newMethod($1, $2, $3, $4, $5, $6);}
+method_0				: IDENTIFY '(' ')'									{$$ = newMethod($1, $2, NULL, $3, NULL);}
+						| IDENTIFY '(' VOID ')'								{$$ = newMethod($1, $2, NULL, $4, NULL);}
+						| IDENTIFY '(' parameterList ')'					{$$ = newMethod($1, $2, $3, $4, NULL);}
+						| IDENTIFY '(' ')' CONST							{$$ = newMethod($1, $2, NULL, $3, $4);}
+						| IDENTIFY '(' VOID ')' CONST						{$$ = newMethod($1, $2, NULL, $4, $5);}
+						| IDENTIFY '(' parameterList ')' CONST				{$$ = newMethod($1, $2, $3, $4, $5);}
 ;
 
 method_1				: method_0											{$$ = $1;}
@@ -211,9 +215,8 @@ method_4				: method_3											{$$ = $1;}
 						| OVERRIDE method_3									{$$ = $2; setMethodOverride($$);}
 ;
 
-method					: method_4											{$$ = $1;}
-						| NOCODE method_4									{$$ = $2; setFilter($$, $1);}
-						| NOMETA method_4									{$$ = $2; setFilter($$, $1);}
+method					: method_4 ';'										{$$ = $1; setMethodSemicolon($$, $2);}
+						| method_4 '=' STRING ';'							{$$ = $1; setNativeName($$, $3); setMethodSemicolon($$, $4);}
 ;
 
 operatorSign			: '+'
@@ -278,31 +281,27 @@ operator_3				: operator_2											{$$ = $1;}
 						| VIRTUAL operator_2									{$$ = $2; setOperatorModifier($$, $1);}
 ;
 
-operator_4				: operator_3											{$$ = $1;}
+operator				: operator_3											{$$ = $1;}
 						| OVERRIDE operator_3									{$$ = $2; setOperatorOverride($$);}
 ;
 
-operator				: operator_4											{$$ = $1;}
-						| NOCODE operator_4										{$$ = $2; setFilter($$, $1);}
-						| NOMETA operator_4										{$$ = $2; setFilter($$, $1);}
+classMember_0			: field													{$$ = $1;}
+						| property												{$$ = $1;}
+						| method												{$$ = $1;}
+						| operator												{$$ = $1;}
+						| class													{$$ = $1;}
+						| enum													{$$ = $1;}
+						| typeAlias												{$$ = $1;}
+;
+			
+classMember				: classMember_0											{$$ = $1;}
+						| NOCODE classMember_0									{$$ = $2; setFilter($$, $1);}
+						| NOMETA classMember_0									{$$ = $2; setFilter($$, $1);}
 ;
 
-
-classMemberList			: field													{$$ = newClassMemberList(NULL, $1);}
-						| property												{$$ = newClassMemberList(NULL, $1);}
-						| method												{$$ = newClassMemberList(NULL, $1);}
-						| operator												{$$ = newClassMemberList(NULL, $1);}
-						| class													{$$ = newClassMemberList(NULL, $1);}
-						| enum													{$$ = newClassMemberList(NULL, $1);}
-						| typeAlias												{$$ = newClassMemberList(NULL, $1);}	
+classMemberList			: classMember											{$$ = newClassMemberList(NULL, $1);}
 						| ';'													{$$ = NULL;}
-						| classMemberList field									{$$ = newClassMemberList($1, $2);}
-						| classMemberList property								{$$ = newClassMemberList($1, $2);}
-						| classMemberList method								{$$ = newClassMemberList($1, $2);}
-						| classMemberList operator								{$$ = newClassMemberList($1, $2);}
-						| classMemberList class									{$$ = newClassMemberList($1, $2);}
-						| classMemberList enum									{$$ = newClassMemberList($1, $2);}
-						| classMemberList typeAlias								{$$ = newClassMemberList($1, $2);}
+						| classMemberList classMember							{$$ = newClassMemberList($1, $2);}
 						| classMemberList ';'									{$$ = $1;}
 ;
 
@@ -313,10 +312,10 @@ templateParameterList	: IDENTIFY												{$$ = newTemplateParameterList(NULL,
 templateParameters		: '<' templateParameterList '>'							{$$ = newTemplateParameters($1, $2, $3);}
 ;
 
-class_0					: CLASS IDENTIFY										{$$ = newClass($1, $2, NULL);}
-						| CLASS IDENTIFY '(' IDENTIFY ')' 						{$$ = newClass($1, $2, $4);}
-						| STRUCT IDENTIFY										{$$ = newClass($1, $2, NULL);}
-						| STRUCT IDENTIFY '(' IDENTIFY ')' 						{$$ = newClass($1, $2, $4);}
+class_0					: CLASS IDENTIFY										{$$ = newClass($1, NULL, $2);}
+						| CLASS '(' IDENTIFY ')' IDENTIFY 						{$$ = newClass($1, $3, $5);}
+						| STRUCT IDENTIFY										{$$ = newClass($1, NULL, $2);}
+						| STRUCT '(' IDENTIFY ')' IDENTIFY 						{$$ = newClass($1, $3, $5);}
 ;
 
 class_1					: class_0												{$$ = $1;}
@@ -327,21 +326,20 @@ class_2					: class_1												{$$ = $1;}
 						| class_1 ':' typeNameList								{$$ = $1; setClassBaseList($$, $2, $3);}
 ;
 
-class_3					: class_2 '{' '}' ';'									{$$ = $1; setClassMemberList($$, $2, NULL, $3, $4);}
-						| class_2 '{' classMemberList '}' ';'					{$$ = $1; setClassMemberList($$, $2, $3, $4, $5);}
+class_3					: class_2 '{' '}'										{$$ = $1; setClassMemberList($$, $2, NULL, $3);}
+						| class_2 '{' classMemberList '}'						{$$ = $1; setClassMemberList($$, $2, $3, $4);}
 ;
 
-class_4					: class_3												{$$ = $1;}
-						| ABSTRACT class_3										{$$ = $2; setClassModifier($$, $1);}
+class_4					: class_3 ';'											{$$ = $1; setClassSemicolon($$, $2);}
+						| class_3 '=' STRING ';'								{$$ = $1; setNativeName($$, $3); setClassSemicolon($$, $4);}
 ;
 
 class_5					: class_4												{$$ = $1;}
-						| OVERRIDE class_4										{$$ = $2; setClassOverride($$);}
+						| ABSTRACT class_4										{$$ = $2; setClassModifier($$, $1);}
 ;
 
 class					: class_5												{$$ = $1;}
-						| NOCODE class_5										{$$ = $2; setFilter($$, $1);}
-						| NOMETA class_5										{$$ = $2; setFilter($$, $1);}
+						| OVERRIDE class_5										{$$ = $2; setClassOverride($$);}
 ;
 
 tokenList				: IDENTIFY												{$$ = newTokenList(NULL, $1);}
@@ -353,38 +351,29 @@ tokenList				: IDENTIFY												{$$ = newTokenList(NULL, $1);}
 templateClassInstance_0	: EXPORT IDENTIFY '<' typeNameList '>'					{$$ = newTemplateClassInstance($2, $4);}
 ;
 						
-templateClassInstance_1	: templateClassInstance_0 ';'							{$$ = $1;}
+templateClassInstance	: templateClassInstance_0 ';'							{$$ = $1;}
 						| templateClassInstance_0 '{' '}' ';'					{$$ = $1;}
 						| templateClassInstance_0 '{' tokenList '}' ';'			{$$ = $1; setTemplateClassInstanceTokenList($1, $3);}
 						| templateClassInstance_0 '{' tokenList ',' '}' ';'		{$$ = $1; setTemplateClassInstanceTokenList($1, $3);}
 ;
 
-templateClassInstance	: templateClassInstance_1								{$$ = $1;}
-						| NOCODE templateClassInstance_1						{$$ = $2; setFilter($$, $1);}
-						| NOMETA templateClassInstance_1						{$$ = $2; setFilter($$, $1);}
+namespaceMember			: class													{$$ = $1;}
+						| enum													{$$ = $1;}
+						| templateClassInstance									{$$ = $1;}
+						| typeAlias												{$$ = $1;}
+						| namespace												{$$ = $1;}
+						| NOCODE namespaceMember								{$$ = $2; setFilter($$, $1);}
+						| NOMETA namespaceMember								{$$ = $2; setFilter($$, $1);}
 ;
 
-namespaceMemberList		: class													{$$ = newNamespaceMemberList(NULL, $1);}
-						| enum													{$$ = newNamespaceMemberList(NULL, $1);}
-						| templateClassInstance									{$$ = newNamespaceMemberList(NULL, $1);}
-						| typeAlias												{$$ = newNamespaceMemberList(NULL, $1);}
-						| namespace												{$$ = newNamespaceMemberList(NULL, $1);}
+namespaceMemberList		: namespaceMember										{$$ = newNamespaceMemberList(NULL, $1);}
 						| ';'													{$$ = NULL;}
-						| namespaceMemberList class								{$$ = newNamespaceMemberList($1, $2);}
-						| namespaceMemberList enum								{$$ = newNamespaceMemberList($1, $2);}
-						| namespaceMemberList templateClassInstance				{$$ = newNamespaceMemberList($1, $2);}
-						| namespaceMemberList typeAlias							{$$ = newNamespaceMemberList($1, $2);}
-						| namespaceMemberList namespace							{$$ = newNamespaceMemberList($1, $2);}
+						| namespaceMemberList namespaceMember					{$$ = newNamespaceMemberList($1, $2);}
 						| namespaceMemberList ';'								{$$ = $1;}
 ;
 
-namespace_0				: NAMESPACE	IDENTIFY '{' '}'							{$$ = newNamespace($1, $2, $3, NULL, $4);}
+namespace				: NAMESPACE	IDENTIFY '{' '}'							{$$ = newNamespace($1, $2, $3, NULL, $4);}
 						| NAMESPACE	IDENTIFY '{' namespaceMemberList '}'		{$$ = newNamespace($1, $2, $3, $4, $5);}
-;
-
-namespace				: namespace_0											{$$ = $1;}
-						| NOCODE namespace_0									{$$ = $2; setFilter($$, $1);}
-						| NOMETA namespace_0									{$$ = $2; setFilter($$, $1);}
 ;
 
 program					:														{$$ = newProgram(NULL); attachSyntaxTree($$);}

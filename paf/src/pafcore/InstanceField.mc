@@ -40,6 +40,7 @@ namespace idlcpp
 		{
 			::pafcore::InstanceProperty("isArray", GetSingleton(), InstanceField_get_isArray, RuntimeTypeOf<bool>::RuntimeType::GetSingleton(), ::pafcore::Metadata::by_value, false, 0, 0, ::pafcore::Metadata::by_value, false),
 			::pafcore::InstanceProperty("isConstant", GetSingleton(), InstanceField_get_isConstant, RuntimeTypeOf<bool>::RuntimeType::GetSingleton(), ::pafcore::Metadata::by_value, false, 0, 0, ::pafcore::Metadata::by_value, false),
+			::pafcore::InstanceProperty("isPointer", GetSingleton(), InstanceField_get_isPointer, RuntimeTypeOf<bool>::RuntimeType::GetSingleton(), ::pafcore::Metadata::by_value, false, 0, 0, ::pafcore::Metadata::by_value, false),
 			::pafcore::InstanceProperty("objectType", GetSingleton(), InstanceField_get_objectType, RuntimeTypeOf<::pafcore::ClassType>::RuntimeType::GetSingleton(), ::pafcore::Metadata::by_ptr, false, 0, 0, ::pafcore::Metadata::by_value, false),
 			::pafcore::InstanceProperty("offset", GetSingleton(), InstanceField_get_offset, RuntimeTypeOf<::size_t>::RuntimeType::GetSingleton(), ::pafcore::Metadata::by_value, false, 0, 0, ::pafcore::Metadata::by_value, false),
 			::pafcore::InstanceProperty("type", GetSingleton(), InstanceField_get_type, RuntimeTypeOf<::pafcore::Type>::RuntimeType::GetSingleton(), ::pafcore::Metadata::by_ptr, false, 0, 0, ::pafcore::Metadata::by_value, false),
@@ -53,6 +54,7 @@ namespace idlcpp
 			&s_properties[2],
 			&s_properties[3],
 			&s_properties[4],
+			&s_properties[5],
 		};
 		m_members = s_members;
 		m_memberCount = paf_array_size_of(s_members);
@@ -94,6 +96,18 @@ namespace idlcpp
 			return ::pafcore::e_invalid_this_type;
 		}
 		bool res = self->get_isConstant();
+		value->assignPrimitive(RuntimeTypeOf<bool>::RuntimeType::GetSingleton(), &res);
+		return ::pafcore::s_ok;
+	}
+
+	::pafcore::ErrorCode __pafcore__InstanceField_Type::InstanceField_get_isPointer(::pafcore::Variant* that, ::pafcore::Variant* value)
+	{
+		::pafcore::InstanceField* self;
+		if(!that->castToReferencePtr(GetSingleton(), (void**)&self))
+		{
+			return ::pafcore::e_invalid_this_type;
+		}
+		bool res = self->get_isPointer();
 		value->assignPrimitive(RuntimeTypeOf<bool>::RuntimeType::GetSingleton(), &res);
 		return ::pafcore::s_ok;
 	}

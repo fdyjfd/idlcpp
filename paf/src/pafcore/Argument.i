@@ -2,7 +2,7 @@
 
 namespace pafcore
 {
-	abstract class $PAFCORE_EXPORT Argument(function_argument) : Metadata
+	abstract class(function_argument)$PAFCORE_EXPORT Argument : Metadata
 	{
 		Type* type get;
 		bool byValue get;

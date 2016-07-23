@@ -183,6 +183,19 @@ void TypeNode::getFullName(std::string& name)
 	name += localName;
 }
 
+void TypeNode::getNativeName(std::string& name)
+{
+	MemberNode* memberNode = getSyntaxNode();
+	if (memberNode && memberNode->m_nativeName)
+	{
+		memberNode->getNativeName(name, 0);
+	}
+	else
+	{
+		getFullName(name);
+	}
+}
+
 MemberNode* TypeNode::getSyntaxNode()
 {
 	return 0;

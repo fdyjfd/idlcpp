@@ -40,6 +40,7 @@ namespace idlcpp
 			::pafcore::InstanceProperty("address", GetSingleton(), StaticField_get_address, RuntimeTypeOf<::size_t>::RuntimeType::GetSingleton(), ::pafcore::Metadata::by_value, false, 0, 0, ::pafcore::Metadata::by_value, false),
 			::pafcore::InstanceProperty("isArray", GetSingleton(), StaticField_get_isArray, RuntimeTypeOf<bool>::RuntimeType::GetSingleton(), ::pafcore::Metadata::by_value, false, 0, 0, ::pafcore::Metadata::by_value, false),
 			::pafcore::InstanceProperty("isConstant", GetSingleton(), StaticField_get_isConstant, RuntimeTypeOf<bool>::RuntimeType::GetSingleton(), ::pafcore::Metadata::by_value, false, 0, 0, ::pafcore::Metadata::by_value, false),
+			::pafcore::InstanceProperty("isPointer", GetSingleton(), StaticField_get_isPointer, RuntimeTypeOf<bool>::RuntimeType::GetSingleton(), ::pafcore::Metadata::by_value, false, 0, 0, ::pafcore::Metadata::by_value, false),
 			::pafcore::InstanceProperty("type", GetSingleton(), StaticField_get_type, RuntimeTypeOf<::pafcore::Type>::RuntimeType::GetSingleton(), ::pafcore::Metadata::by_ptr, false, 0, 0, ::pafcore::Metadata::by_value, false),
 		};
 		m_properties = s_properties;
@@ -50,6 +51,7 @@ namespace idlcpp
 			&s_properties[1],
 			&s_properties[2],
 			&s_properties[3],
+			&s_properties[4],
 		};
 		m_members = s_members;
 		m_memberCount = paf_array_size_of(s_members);
@@ -103,6 +105,18 @@ namespace idlcpp
 			return ::pafcore::e_invalid_this_type;
 		}
 		bool res = self->get_isConstant();
+		value->assignPrimitive(RuntimeTypeOf<bool>::RuntimeType::GetSingleton(), &res);
+		return ::pafcore::s_ok;
+	}
+
+	::pafcore::ErrorCode __pafcore__StaticField_Type::StaticField_get_isPointer(::pafcore::Variant* that, ::pafcore::Variant* value)
+	{
+		::pafcore::StaticField* self;
+		if(!that->castToReferencePtr(GetSingleton(), (void**)&self))
+		{
+			return ::pafcore::e_invalid_this_type;
+		}
+		bool res = self->get_isPointer();
 		value->assignPrimitive(RuntimeTypeOf<bool>::RuntimeType::GetSingleton(), &res);
 		return ::pafcore::s_ok;
 	}

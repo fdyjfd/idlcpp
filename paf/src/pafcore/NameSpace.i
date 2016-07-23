@@ -3,7 +3,7 @@
 namespace pafcore
 {
 
-	abstract class $PAFCORE_EXPORT NameSpace(name_space) : Metadata
+	abstract class(name_space)$PAFCORE_EXPORT NameSpace : Metadata
 	{
 		size_t _getMemberCount_();
 		Metadata* _getMember_(size_t index);

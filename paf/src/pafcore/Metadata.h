@@ -3,7 +3,6 @@
 
 #pragma once
 
-#include "./Typedef.h"
 #include "./Reference.h"
 
 namespace pafcore
@@ -57,6 +56,12 @@ namespace pafcore
 			by_new_ref,
 			by_new_array_ptr,
 			by_new_array_ref,
+		};
+		enum TypeCompound
+		{
+			tc_none,
+			tc_pointer,
+			tc_array,
 		};
 	public:
 		Metadata(const char* name);

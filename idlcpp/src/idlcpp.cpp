@@ -81,6 +81,7 @@ void ParseOption(const char* arg)
 	else if(strncmp(arg + 1, "pc", 2) == 0)
 	{
 		g_options.setPafcorePath(arg + 3);
+		g_importDirectories.addImportDirectory(arg + 3);
 	}
 	else if(strncmp(arg + 1, "mp", 2) == 0)
 	{

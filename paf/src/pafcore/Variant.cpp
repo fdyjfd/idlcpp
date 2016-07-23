@@ -293,7 +293,7 @@ bool Variant::castToVoidPtr(void** dst) const
 bool Variant::castToPrimitivePtr(Type* dstType, void** dst) const
 {
 	assert(dstType->isPrimitive());
-	if(m_type == dstType)
+	if(m_type == dstType || 0 == m_pointer)
 	{
 		*dst = m_pointer;
 		return true;
@@ -304,7 +304,7 @@ bool Variant::castToPrimitivePtr(Type* dstType, void** dst) const
 bool Variant::castToEnumPtr(Type* dstType, void** dst) const
 {
 	assert(dstType->isEnum());
-	if(m_type == dstType)
+	if(m_type == dstType || 0 == m_pointer)
 	{
 		*dst = m_pointer;
 		return true;
@@ -348,6 +348,24 @@ bool Variant::castToReferencePtr(Type* dstType, void** dst) const
 			*(size_t*)dst = (size_t)m_pointer + offset;
 			return true;
 		}
+	}
+	return false;
+}
+
+bool Variant::castToObjectPtr(Type* dstType, void** dst) const
+{
+	switch (dstType->m_category)
+	{
+	case void_object:
+		return castToVoidPtr(dst);
+	case primitive_object:
+		return castToPrimitivePtr(dstType, dst);
+	case enum_object:
+		return castToEnumPtr(dstType, dst);
+	case value_object:
+		return castToValuePtr(dstType, dst);
+	case reference_object:
+		return castToReferencePtr(dstType, dst);
 	}
 	return false;
 }

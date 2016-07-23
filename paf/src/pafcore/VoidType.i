@@ -2,7 +2,7 @@
 
 namespace pafcore
 {
-	abstract class $PAFCORE_EXPORT VoidType(void_type) : Type
+	abstract class(void_type)$PAFCORE_EXPORT VoidType : Type
 	{
 		static void* AddressToPtr(size_t address);
 		static void* NullPtr get;

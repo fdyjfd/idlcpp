@@ -14,6 +14,7 @@
 #include "TypeNameNode.h"
 #include "TemplateClassInstanceNode.h"
 #include "TypedefNode.h"
+#include "EnumNode.h"
 #include "ScopeNameListNode.h"
 #include "ScopeNameNode.h"
 #include "HeaderFileGenerator.h"
@@ -314,6 +315,7 @@ void Compiler::outputUsedTypes(FILE* file, SourceFile* sourceFile)
 			writeStringToFile(buf, file);
 		}
 
+		buf[0] = 0;
 		if (typeNode->isTemplateClass())
 		{
 			ClassNode* classNode = static_cast<ClassTypeNode*>(typeNode)->m_classNode;
@@ -337,11 +339,18 @@ void Compiler::outputUsedTypes(FILE* file, SourceFile* sourceFile)
 		else if (typeNode->isClass())
 		{
 			ClassNode* classNode = static_cast<ClassTypeNode*>(typeNode)->m_classNode;
-			sprintf_s(buf, "%s%s;", g_keywordTokens[classNode->m_keyword->m_nodeType - snt_begin_output - 1], typeNode->m_name.c_str());
+			if (0 == classNode->m_nativeName)
+			{
+				sprintf_s(buf, "%s%s;", g_keywordTokens[classNode->m_keyword->m_nodeType - snt_begin_output - 1], typeNode->m_name.c_str());
+			}
 		}
 		else if (typeNode->isEnum())
 		{
-			sprintf_s(buf, "%s%s;", g_keywordTokens[snt_keyword_enum - snt_begin_output - 1], typeNode->m_name.c_str());
+			EnumNode* enumNode = static_cast<EnumTypeNode*>(typeNode)->m_enumNode;
+			if (0 == enumNode->m_nativeName)
+			{
+				sprintf_s(buf, "%s%s;", g_keywordTokens[snt_keyword_enum - snt_begin_output - 1], typeNode->m_name.c_str());
+			}
 		}
 		writeStringToFile(buf, file, indentation);
 		for (size_t i = 1; i < count; ++i)

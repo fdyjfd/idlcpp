@@ -15,17 +15,14 @@ Type::Type(const char* name, Category category)
 
 void Type::destroyInstance(void* address)
 {
-	assert(false);
 }
 
 void Type::destroyArray(void* address)
 {
-	assert(false);
 }
 
 void Type::assign(void* dst, const void* src)
 {
-	assert(false);
 }
 
 //Metadata* Type::findMember(const char* name)

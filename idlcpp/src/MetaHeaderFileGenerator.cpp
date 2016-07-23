@@ -173,7 +173,7 @@ void MetaHeaderFileGenerator::generateCode_Program(FILE* file, ProgramNode* prog
 			}
 
 			std::string typeName;
-			typeNode->getFullName(typeName);
+			typeNode->getNativeName(typeName);
 			std::string metaTypeName;
 			GetMetaTypeFullName(metaTypeName, typeNode);
 			sprintf_s(buf, "template<>\n"
@@ -287,6 +287,7 @@ void MetaHeaderFileGenerator::generateCode_Class(FILE* file, ClassNode* classNod
 	std::vector<MemberNode*> memberNodes;
 	std::vector<MethodNode*> methodNodes;
 	std::vector<MethodNode*> staticMethodNodes;
+	std::vector<MethodNode*> typeMethodNodes;
 	std::vector<PropertyNode*> propertyNodes;
 	std::vector<PropertyNode*> staticPropertyNodes;
 	std::vector<MemberNode*> subTypeNodes;
@@ -324,7 +325,20 @@ void MetaHeaderFileGenerator::generateCode_Class(FILE* file, ClassNode* classNod
 				{
 					if(methodNode->isStatic())
 					{
-						staticMethodNodes.push_back(methodNode);
+						if (methodNode->m_name->m_str == "__destroyInstance__"
+							|| methodNode->m_name->m_str == "__destroyArray__"
+							|| methodNode->m_name->m_str == "__assign__")
+						{
+							typeMethodNodes.push_back(methodNode);
+							if (0 == methodNode->m_nativeName)
+							{
+								staticMethodNodes.push_back(methodNode);
+							}
+						}
+						else
+						{
+							staticMethodNodes.push_back(methodNode);
+						}
 					}
 					else
 					{

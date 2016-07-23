@@ -3,7 +3,6 @@
 
 #pragma once
 
-#include "./Typedef.h"
 #include "./Reference.h"
 #include "./Metadata.h"
 #include "./Type.h"
@@ -1217,6 +1216,13 @@ struct RuntimeTypeOf<long double>
 {
 	typedef ::pafcore::LongDoubleType RuntimeType;
 	enum {type_category = ::pafcore::primitive_object};
+};
+
+template<typename T>
+struct RuntimeTypeOf<T*>
+{
+	typedef RuntimeTypeOf<size_t>::RuntimeType RuntimeType;
+	enum { type_category = ::pafcore::primitive_object };
 };
 
 #pragma warning( pop ) 

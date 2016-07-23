@@ -68,6 +68,7 @@ public:
 	bool castToValuePtr(Type* dstType, void** dst) const;
 	bool castToReferencePtr(Type* dstType, void** dst) const;
 
+	bool castToObjectPtr(Type* dstType, void** dst) const;
 	bool castToObject(Type* dstType, void* dst) const;
 
 	void reinterpretCastToPtr(Variant& var, Type* dstType) const;

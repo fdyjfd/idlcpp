@@ -60,6 +60,7 @@ public:
 	virtual void getActualTypeFullName(std::string& name);
 	virtual void getLocalName(std::string& name);
 	void getFullName(std::string& name);
+	void getNativeName(std::string& name);
 	TypeNode* getEnclosing();
 	void getEnclosings(std::vector<TypeNode*>& enclosings);
 	bool isNamespace();

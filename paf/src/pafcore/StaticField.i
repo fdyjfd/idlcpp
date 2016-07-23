@@ -3,19 +3,24 @@
 namespace pafcore
 {
 
-	abstract class $PAFCORE_EXPORT StaticField(static_field) : Metadata
+	abstract class(static_field)$PAFCORE_EXPORT StaticField : Metadata
 	{
 		Type* type get;
 		size_t address get;
 		bool isConstant get;
 		bool isArray get;
+		bool isPointer get;
 		$*
 	public:
-		StaticField(const char* name, Type* type, size_t address, size_t arraySize, bool constant, bool array);
+		StaticField(const char* name, Type* type, size_t address, size_t arraySize, bool constant, TypeCompound tc);
 	public:
 		bool isArray()
 		{
-			return m_array;
+			return tc_array == m_typeCompound;
+		}
+		bool isPointer()
+		{
+			return tc_pointer == m_typeCompound;
 		}
 		bool isConstant()
 		{
@@ -26,7 +31,7 @@ namespace pafcore
 		size_t m_address;
 		size_t m_arraySize;
 		bool m_constant;
-		bool m_array;
+		byte_t m_typeCompound;
 		*$
 	};
 

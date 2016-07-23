@@ -30,6 +30,7 @@ struct MemberNode : SyntaxNodeImpl
 	IdentifyNode* m_name;
 	ScopeNode* m_enclosing;
 	TokenNode* m_filterNode;
+	IdentifyNode* m_nativeName;
 public:
 	MemberNode();
 	bool isNoCode();
@@ -41,6 +42,7 @@ public:
 	bool isTemplateClass();
 	bool isTypedef();
 	void getFullName(std::string& fullName, TemplateArguments* templateArguments);
+	void getNativeName(std::string& nativeName, TemplateArguments* templateArguments);
 	SourceFile* getSourceFile();
 	virtual TypeNode* getTypeNode();
 	virtual void getLocalName(std::string& name, TemplateArguments* templateArguments);

@@ -14,6 +14,7 @@ MemberNode::MemberNode()
 	m_name = 0;
 	m_enclosing = 0;
 	m_filterNode = 0;
+	m_nativeName = 0;
 }
 
 bool MemberNode::isNoCode()
@@ -51,6 +52,19 @@ bool MemberNode::canGenerateNativeCode()
 	}
 	return m_enclosing->canGenerateNativeCode();
 }
+
+void MemberNode::getNativeName(std::string& nativeName, TemplateArguments* templateArguments)
+{
+	if (m_nativeName)
+	{
+		nativeName = m_nativeName->m_str;
+	}
+	else
+	{
+		getFullName(nativeName, templateArguments);
+	}
+}
+
 
 void MemberNode::getFullName(std::string& fullName, TemplateArguments* templateArguments)
 {

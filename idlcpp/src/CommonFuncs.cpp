@@ -43,11 +43,11 @@ void GetSubclassProxyFullName(std::string& subclassProxyName, ClassNode* classNo
 	subclassProxyName = typeName + g_options.m_subclassProxyPostfix;
 }
 
-TypeCategory CalcTypeFullName(std::string& typeName, TypeNameNode* typeNameNode, TemplateArguments* templateArguments)
+TypeCategory CalcTypeNativeName(std::string& typeName, TypeNameNode* typeNameNode, TemplateArguments* templateArguments)
 {
 	TypeNode* typeNode = typeNameNode->getTypeNode(templateArguments);
 	assert(typeNode);
-	typeNode->getFullName(typeName);
+	typeNode->getNativeName(typeName);
 	return typeNode->getTypeCategory(templateArguments);
 }
 

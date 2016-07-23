@@ -14,7 +14,7 @@
 
 const char g_strPure[] = {" = 0 "};
 
-MethodNode::MethodNode(IdentifyNode* name, TokenNode* leftParenthesis, ParameterListNode* parameterList, TokenNode* rightParenthesis, TokenNode* constant, TokenNode* semicolon)
+MethodNode::MethodNode(IdentifyNode* name, TokenNode* leftParenthesis, ParameterListNode* parameterList, TokenNode* rightParenthesis, TokenNode* constant)
 {
 	m_nodeType = snt_method;
 	m_modifier = 0;
@@ -26,7 +26,7 @@ MethodNode::MethodNode(IdentifyNode* name, TokenNode* leftParenthesis, Parameter
 	m_parameterList = parameterList;
 	m_rightParenthesis = rightParenthesis;
 	m_constant = constant;
-	m_semicolon = semicolon;
+	m_semicolon = 0;
 	m_resultArray = false;
 	m_override = false;
 	m_parameterCount = size_t(-1);

@@ -3,7 +3,6 @@
 
 #pragma once
 
-#include "./Typedef.h"
 #include "./Reference.h"
 #include "./Metadata.h"
 #include "./Type.h"

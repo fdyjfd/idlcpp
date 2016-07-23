@@ -5,14 +5,14 @@
 
 BEGIN_PAFCORE
 
-StaticField::StaticField(const char* name, Type* type, size_t offset, size_t arraySize, bool constant, bool array)
+StaticField::StaticField(const char* name, Type* type, size_t offset, size_t arraySize, bool constant, TypeCompound tc)
 : Metadata(name)
 {
 	m_type = type;
 	m_address = offset;
 	m_arraySize = arraySize;
 	m_constant = constant;
-	m_array = array;
+	m_typeCompound = tc;
 }
 
 Type* StaticField::get_type()
@@ -22,7 +22,12 @@ Type* StaticField::get_type()
 
 bool StaticField::get_isArray()
 {
-	return m_array;
+	return tc_array == m_typeCompound;
+}
+
+bool StaticField::get_isPointer()
+{
+	return tc_pointer == m_typeCompound;
 }
 
 bool StaticField::get_isConstant()

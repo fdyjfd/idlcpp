@@ -833,8 +833,8 @@ PyObject* VariantWrapper_call(VariantWrapper* wrapper, PyObject* parameters, PyO
 	case pafcore::primitive_type:
 		{
 			pafcore::PrimitiveType* type = (pafcore::PrimitiveType*)self->m_pointer;
-			assert(strcmp(type->m_staticMethods[1].m_name, "New") == 0);
-			invoker = type->m_staticMethods[1].m_invoker;
+			assert(strcmp(type->m_staticMethods[0].m_name, "New") == 0);
+			invoker = type->m_staticMethods[0].m_invoker;
 		}
 		break;
 	case pafcore::static_method:

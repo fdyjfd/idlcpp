@@ -9,7 +9,7 @@ namespace pafcore
 	typedef ErrorCode(*InstancePropertySetter)(Variant* that, Variant* value);
 	*$
 
-	abstract class $PAFCORE_EXPORT InstanceProperty(instance_property) : Metadata
+	abstract class(instance_property)$PAFCORE_EXPORT InstanceProperty : Metadata
 	{
 		ClassType* objectType get;
 		bool hasGetter get;

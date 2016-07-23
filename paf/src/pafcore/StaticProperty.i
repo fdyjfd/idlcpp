@@ -10,7 +10,7 @@ namespace pafcore
 	typedef ErrorCode(*StaticPropertySetter)(Variant* value);
 	*$
 
-	abstract class $PAFCORE_EXPORT StaticProperty(static_property) : Metadata
+	abstract class(static_property)$PAFCORE_EXPORT StaticProperty : Metadata
 	{
 		bool hasGetter get;
 		bool hasSetter get;

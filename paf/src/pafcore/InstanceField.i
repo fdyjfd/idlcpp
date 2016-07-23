@@ -3,20 +3,25 @@
 namespace pafcore
 {
 
-	abstract class $PAFCORE_EXPORT InstanceField(instance_field) : Metadata
+	abstract class(instance_field)$PAFCORE_EXPORT InstanceField : Metadata
 	{
 		Type* type get;
 		ClassType* objectType get;
 		size_t offset get;
 		bool isArray get;
+		bool isPointer get;
 		bool isConstant get;
 		$*
 	public:
-		InstanceField(const char* name, ClassType* objectType, Type* type, size_t offset, size_t arraySize, bool constant, bool array);
+		InstanceField(const char* name, ClassType* objectType, Type* type, size_t offset, size_t arraySize, bool constant, TypeCompound tc);
 	public:
 		bool isArray()
 		{
-			return m_array;
+			return tc_array == m_typeCompound;
+		}
+		bool isPointer()
+		{
+			return tc_pointer == m_typeCompound;
 		}
 		bool isConstant()
 		{
@@ -28,7 +33,7 @@ namespace pafcore
 		size_t m_offset;
 		size_t m_arraySize;
 		bool m_constant;
-		bool m_array;
+		byte_t m_typeCompound;
 		*$
 	};
 

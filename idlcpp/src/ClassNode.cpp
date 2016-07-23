@@ -256,14 +256,14 @@ void checkMemberNames(ClassNode* classNode, std::vector<MemberNode*>& memberNode
 	}
 }
 
-ClassNode::ClassNode(TokenNode* keyword, IdentifyNode* name, IdentifyNode* category)
+ClassNode::ClassNode(TokenNode* keyword, IdentifyNode* category, IdentifyNode* name)
 {
 	assert(snt_keyword_struct == keyword->m_nodeType || snt_keyword_class == keyword->m_nodeType);
 
 	m_nodeType = snt_class;
 	m_keyword = keyword;
-	m_name = name;
 	m_category = category;
+	m_name = name;
 	m_modifier = 0;
 	m_colon = 0;
 	m_baseList = 0;
@@ -291,12 +291,11 @@ void ClassNode::setTemplateParameters(TemplateParametersNode* templateParameters
 	m_templateParametersNode = templateParametersNode;
 }
 
-void ClassNode::setMemberList(TokenNode* leftBrace, MemberListNode* memberList, TokenNode* rightBrace, TokenNode* semicolon)
+void ClassNode::setMemberList(TokenNode* leftBrace, MemberListNode* memberList, TokenNode* rightBrace)
 {
 	m_leftBrace = leftBrace;
 	m_memberList = memberList;
 	m_rightBrace = rightBrace;
-	m_semicolon = semicolon;
 	m_memberList->initializeMembersEnclosing(this);
 }
 
@@ -346,7 +345,8 @@ void ClassNode::GenerateCreateInstanceMethod(const char* methodName, MethodNode*
 	IdentifyNode* name = (IdentifyNode*)newIdentify(methodName);
 	MethodNode* method = (MethodNode*)newMethod(name, 
 		constructor->m_leftParenthesis, constructor->m_parameterList, 
-		constructor->m_rightParenthesis, constructor->m_constant, constructor->m_semicolon);
+		constructor->m_rightParenthesis, constructor->m_constant);
+	method->m_semicolon = constructor->m_semicolon;
 	ScopeNameNode* scopeName = (ScopeNameNode*)newScopeName(m_name, 0, 0, 0);
 	ScopeNameListNode* scopeNameList = (ScopeNameListNode*)newScopeNameList(0, scopeName);
 	TypeNameNode* typeName = (TypeNameNode*)newTypeName(scopeNameList);
@@ -369,7 +369,9 @@ void ClassNode::GenerateCreateArrayMethod(const char* methodName, MethodNode* co
 	ParameterListNode* parameterList = (ParameterListNode*)newParameterList(0,0,parameter);
 	MethodNode* method = (MethodNode*)newMethod(name, 
 		constructor->m_leftParenthesis, parameterList, 
-		constructor->m_rightParenthesis, constructor->m_constant, constructor->m_semicolon);
+		constructor->m_rightParenthesis, constructor->m_constant);
+	method->m_semicolon = constructor->m_semicolon;
+
 	ScopeNameNode* scopeName = (ScopeNameNode*)newScopeName(m_name, 0, 0, 0);
 	ScopeNameListNode* scopeNameList = (ScopeNameListNode*)newScopeNameList(0, scopeName);
 	TypeNameNode* typeName = (TypeNameNode*)newTypeName(scopeNameList);
