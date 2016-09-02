@@ -14,7 +14,7 @@ namespace pafcore
 	class Variant;
 	typedef ErrorCode(*StaticPropertyGetter)(Variant* value);
 	typedef ErrorCode(*StaticPropertySetter)(Variant* value);
-	
+
 
 	class PAFCORE_EXPORT StaticProperty : public Metadata
 	{
@@ -51,7 +51,7 @@ namespace pafcore
 		byte_t m_setterPassing;
 		bool m_getterConstant;
 		bool m_setterConstant;
-		
+
 	};
 
 }

@@ -9,7 +9,7 @@ namespace tutorial
 		nocode Point(float a, float b);
 		nocode Point(const Point& pt);
 
-		$*
+#{
 		Point()
 		{}
 		Point(float a, float b)
@@ -17,20 +17,20 @@ namespace tutorial
 			x = a;
 			y = b;
 		}
-		*$
+#}
 	};
 
 	struct Shape
 	{
 		abstract float getArea();
-		$$		virtual ~Shape() {}
+		##		virtual ~Shape() {}
 	};
 
 	struct Triangle : Shape
 	{
-		Point m_vertices[$3];
+		Point m_vertices[#3];
 		nocode static Triangle^ New();
-		$*
+#{
 			virtual float getArea()
 		{
 			return fabs(m_vertices[0].x * m_vertices[1].y
@@ -44,7 +44,7 @@ namespace tutorial
 		{
 			return new Triangle;
 		}
-		*$
+#}
 	};
 
 }

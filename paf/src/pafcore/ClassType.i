@@ -2,7 +2,7 @@
 
 namespace pafcore
 {
-	$*
+#{
 	class InstanceField;
 	class InstanceProperty;
 	class InstanceMethod;
@@ -12,15 +12,15 @@ namespace pafcore
 	class Enumerator;
 	class TypeAlias;
 	class SubclassInvoker;
-	*$
-	abstract class(class_type)$PAFCORE_EXPORT ClassType : Type
+#}
+	abstract class(class_type)#PAFCORE_EXPORT ClassType : Type
 	{
 		size_t _getMemberCount_(bool includeBaseClasses);
 		Metadata* _getMember_(size_t index, bool includeBaseClasses);
 		Metadata* _findMember_(const char* name, bool includeBaseClasses);
 		size_t _getBaseClassCount_();
 		Metadata* _getBaseClass_(size_t index);
-		$*
+#{
 	public:
 		struct BaseClass
 		{
@@ -69,6 +69,6 @@ namespace pafcore
 		size_t m_staticPropertyCount;
 		StaticMethod* m_staticMethods;
 		size_t m_staticMethodCount;
-		*$
+#}
 	};
 }

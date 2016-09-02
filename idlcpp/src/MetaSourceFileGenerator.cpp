@@ -1276,7 +1276,7 @@ void writeMetaMethodImpl_Call(ClassNode* classNode, TemplateArguments* templateA
 		}
 		else
 		{
-			if (methodNameNode->m_str.find(':') != std::string::npos)
+			if (methodNode->m_nativeName)
 			{
 				sprintf_s(buf, "%s(", methodNameNode->m_str.c_str());
 			}

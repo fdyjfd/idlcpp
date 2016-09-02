@@ -18,7 +18,7 @@ namespace tutorial
 	typedef Ray3<double> Ray3d;
 
 
-	$*
+#{
 
 	template<typename T>
 	inline Ray3<T>::Ray3()
@@ -44,7 +44,7 @@ namespace tutorial
 			m_origin.z + m_direction.z * t);
 	}
 
-	*$
+#}
 }
 
 

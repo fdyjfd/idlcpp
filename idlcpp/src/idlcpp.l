@@ -27,9 +27,9 @@ int yycolumnno = 1;
 					}
 <IFILE>.|\n			{fprintf(stderr, "%d bad import line\n", yylineno); yyterminate();}
 
-"$*"						{yycolumnno += 2; BEGIN CODEBLOCK;}
-<CODEBLOCK>"*$"				{yycolumnno += 2; BEGIN INITIAL;}
-<CODEBLOCK>[^*\n]+			{newCodeBlock(yytext); yycolumnno += strlen(yytext); yytokenno++;}
+"#{"						{yycolumnno += 2; BEGIN CODEBLOCK;}
+<CODEBLOCK>"#}"				{yycolumnno += 2; BEGIN INITIAL;}
+<CODEBLOCK>[^#\n]+			{newCodeBlock(yytext); yycolumnno += strlen(yytext); yytokenno++;}
 <CODEBLOCK>\n				{newCodeBlock(yytext); yycolumnno = 1; yytokenno++;}
 <CODEBLOCK>.				{newCodeBlock(yytext); yycolumnno++; yytokenno++;}
 <CODEBLOCK><<EOF>>			{unterminatedCode();yyterminate();}
@@ -47,9 +47,9 @@ int yycolumnno = 1;
 
 <<EOF>>				{yyterminate();}
 
-\$\$.*				{newCodeBlock(yytext + 2); yycolumnno += strlen(yytext); yytokenno++;}
+\#\#.*				{newCodeBlock(yytext + 2); yycolumnno += strlen(yytext); yytokenno++;}
 
-\$[a-zA-Z_0-9]+		{newCodeBlock(yytext + 1); yycolumnno += strlen(yytext); yytokenno++;}
+\#[a-zA-Z_0-9]+		{newCodeBlock(yytext + 1); yycolumnno += strlen(yytext); yytokenno++;}
 
 "+" |
 "-" |

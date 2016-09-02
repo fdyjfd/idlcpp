@@ -47,7 +47,7 @@ namespace pafcore
 		size_t m_arraySize;
 		bool m_constant;
 		byte_t m_typeCompound;
-		
+
 	};
 
 }

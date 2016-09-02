@@ -26,12 +26,12 @@ namespace pafcore
 		name_space,
 	};
 
-	abstract class $PAFCORE_EXPORT Metadata : Reference
+	abstract class #PAFCORE_EXPORT Metadata : Reference
 	{
 		const char* _name_ get;
 		Category _category_ get;
 		Metadata* _scope_ get;
-		$*
+#{
 	public:
 		enum Passing
 		{
@@ -59,10 +59,10 @@ namespace pafcore
 	public:
 		const char* m_name;
 		Metadata* m_scope;
-		*$
+#}
 	};
 
-	$*
+#{
 
 	inline const char* Metadata::get__name_()
 	{
@@ -80,6 +80,6 @@ namespace pafcore
 		bool operator()(const Metadata* m1, const Metadata* m2);
 	};
 
-	*$
+#}
 
 }

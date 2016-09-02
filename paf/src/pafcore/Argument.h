@@ -34,6 +34,6 @@ namespace pafcore
 		Type* m_type;
 		Passing m_passing;
 		bool m_constant;
-		
+
 	};
 }

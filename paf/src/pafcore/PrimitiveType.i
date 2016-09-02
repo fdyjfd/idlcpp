@@ -1,6 +1,6 @@
 #import "Type.i"
 
-$*
+#{
 #include "Variant.h"
 #include "Argument.h"
 #include "Result.h"
@@ -13,11 +13,11 @@ $*
 #pragma warning( disable : 4804 )
 #pragma warning( disable : 4800 )
 #pragma warning( disable : 4146 )
-*$
+#}
 
 namespace pafcore
 {
-	$*
+#{
 	enum PrimitiveTypeCategory
 	{
 		bool_type,
@@ -38,14 +38,14 @@ namespace pafcore
 		long_double_type,
 		primitive_type_count,
 	};	
-	*$
+#}
 
-	abstract class(primitive_type)$PAFCORE_EXPORT PrimitiveType : Type
+	abstract class(primitive_type)#PAFCORE_EXPORT PrimitiveType : Type
 	{
 		size_t _getMemberCount_();
 		Metadata* _getMember_(size_t index);
 		Metadata* _findMember_(const char* name);
-		$*
+#{
 	public:
 		PrimitiveType(const char* name) : Type(name, primitive_object)
 		{}
@@ -156,10 +156,10 @@ namespace pafcore
 		size_t m_methodCount;
 		StaticMethod* m_staticMethods;
 		size_t m_staticMethodCount;
-		*$
+#}
 	};
 
-	$*
+#{
 	template<typename T>
 	struct PAFCORE_EXPORT PrimitiveTypeTraits
 	{
@@ -1090,10 +1090,10 @@ namespace pafcore
 	typedef PrimitiveTypeImpl_Real<double>						DoubleType;
 	typedef PrimitiveTypeImpl_Real<long double>					LongDoubleType;
 
-	*$
+#}
 }
 
-$*
+#{
 template<>
 struct RuntimeTypeOf<bool>
 {
@@ -1214,4 +1214,4 @@ struct RuntimeTypeOf<T*>
 };
 
 #pragma warning( pop ) 
-*$
+#}

@@ -25,7 +25,7 @@ namespace pafcore
 		int m_value;
 	public:
 		Enumerator(const char* name, Type* type, size_t value);
-		
+
 	};
 
 }

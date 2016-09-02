@@ -7,7 +7,7 @@ namespace tutorial
 		float y;
 		nocode Point();
 		nocode Point(float a, float b);
-		$*
+#{
 		Point()
 		{}
 		Point(float a, float b)
@@ -15,7 +15,7 @@ namespace tutorial
 			x = a;
 			y = b;
 		}
-		*$
+#}
 	};
 
 	struct Rectangle
@@ -34,7 +34,7 @@ namespace tutorial
 		Rectangle(const Point& min, const Point& max);
 		Rectangle();
 		nocode Rectangle(const Rectangle& pt);
-		$*
+#{
 		void set_bottom(float bottom)
 		{
 			m_min.y = bottom;
@@ -59,9 +59,9 @@ namespace tutorial
 		{
 			return (m_max.x - m_min.x)*(m_max.y - m_min.y);
 		}
-		*$
+#}
 	};
-	$*
+#{
 	inline Rectangle::Rectangle(const Point& min, const Point& max) : m_min(min), m_max(max)
 	{
 	}
@@ -83,5 +83,5 @@ namespace tutorial
 	{
 		m_max.x = right;
 	}
-	*$
+#}
 }

@@ -45,7 +45,7 @@ namespace pafcore
 		long_double_type,
 		primitive_type_count,
 	};	
-	
+
 
 	class PAFCORE_EXPORT PrimitiveType : public Type
 	{
@@ -168,7 +168,7 @@ namespace pafcore
 		size_t m_methodCount;
 		StaticMethod* m_staticMethods;
 		size_t m_staticMethodCount;
-		
+
 	};
 
 
@@ -1102,7 +1102,7 @@ namespace pafcore
 	typedef PrimitiveTypeImpl_Real<double>						DoubleType;
 	typedef PrimitiveTypeImpl_Real<long double>					LongDoubleType;
 
-	
+
 }
 
 

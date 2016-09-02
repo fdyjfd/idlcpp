@@ -15,7 +15,7 @@ namespace pafcore
 	class Variant;
 	typedef ErrorCode(*InstancePropertyGetter)(Variant* that, Variant* value);
 	typedef ErrorCode(*InstancePropertySetter)(Variant* that, Variant* value);
-	
+
 
 	class PAFCORE_EXPORT InstanceProperty : public Metadata
 	{
@@ -55,7 +55,7 @@ namespace pafcore
 		byte_t m_setterPassing;
 		bool m_getterConstant;
 		bool m_setterConstant;
-		
+
 	};
 
 }

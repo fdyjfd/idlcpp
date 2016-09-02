@@ -1,5 +1,5 @@
 #import "../../paf/src/pafcore/Reference.i"
-$$#include <vector>
+###include <vector>
 
 namespace tutorial
 {
@@ -15,7 +15,7 @@ namespace tutorial
 	class Shape : Reference
 	{
 		abstract float getArea();
-		$$		virtual ~Shape() {}
+		##		virtual ~Shape() {}
 	};
 
 	class(value_object)ShapeManager
@@ -23,19 +23,19 @@ namespace tutorial
 		void addShape(Shape* shape);
 		float getTotalArea();
 		static ShapeManager* GetInstance();
-		$*
+#{
 		~ShapeManager();
 	private:
 		std::vector<Shape*> m_shapes;
-		*$
+#}
 	};
 
 
 	class Triangle : Shape
 	{
-		Point m_vertices[$3];
+		Point m_vertices[#3];
 		nocode Triangle();
-$$		virtual float getArea();
+##		virtual float getArea();
 	};
 
 }

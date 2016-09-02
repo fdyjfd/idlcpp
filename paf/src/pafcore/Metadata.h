@@ -69,7 +69,7 @@ namespace pafcore
 	public:
 		const char* m_name;
 		Metadata* m_scope;
-		
+
 	};
 
 
@@ -90,6 +90,6 @@ namespace pafcore
 		bool operator()(const Metadata* m1, const Metadata* m2);
 	};
 
-	
+
 
 }

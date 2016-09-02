@@ -4,13 +4,13 @@
 namespace pafcore
 {
 
-	$*
+#{
 	class Variant;
 	typedef ErrorCode(*StaticPropertyGetter)(Variant* value);
 	typedef ErrorCode(*StaticPropertySetter)(Variant* value);
-	*$
+#}
 
-	abstract class(static_property)$PAFCORE_EXPORT StaticProperty : Metadata
+	abstract class(static_property)#PAFCORE_EXPORT StaticProperty : Metadata
 	{
 		bool hasGetter get;
 		bool hasSetter get;
@@ -26,7 +26,7 @@ namespace pafcore
 		bool setterByRef get;
 		bool setterByPtr get;
 		bool setterConstant get;
-		$*
+#{
 	public:
 		StaticProperty(const char* name, 
 			StaticPropertyGetter getter, Type* getterType, Passing getterPassing, bool getterConstant,
@@ -40,7 +40,7 @@ namespace pafcore
 		byte_t m_setterPassing;
 		bool m_getterConstant;
 		bool m_setterConstant;
-		*$
+#}
 	};
 
 }

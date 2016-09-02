@@ -31,7 +31,7 @@ namespace pafcore
 		FunctionInvoker m_invoker;
 		Overload* m_overloads;
 		size_t m_overloadCount;
-		
+
 	};
 
 }

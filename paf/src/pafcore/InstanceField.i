@@ -3,7 +3,7 @@
 namespace pafcore
 {
 
-	abstract class(instance_field)$PAFCORE_EXPORT InstanceField : Metadata
+	abstract class(instance_field)#PAFCORE_EXPORT InstanceField : Metadata
 	{
 		Type* type get;
 		ClassType* objectType get;
@@ -11,7 +11,7 @@ namespace pafcore
 		bool isArray get;
 		bool isPointer get;
 		bool isConstant get;
-		$*
+#{
 	public:
 		InstanceField(const char* name, ClassType* objectType, Type* type, size_t offset, size_t arraySize, bool constant, TypeCompound tc);
 	public:
@@ -34,7 +34,7 @@ namespace pafcore
 		size_t m_arraySize;
 		bool m_constant;
 		byte_t m_typeCompound;
-		*$
+#}
 	};
 
 }

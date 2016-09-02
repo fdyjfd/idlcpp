@@ -1,4 +1,4 @@
-$*
+#{
 #include <stddef.h>
 
 typedef bool					bool_t;
@@ -22,7 +22,7 @@ template<typename T>
 struct RuntimeTypeOf
 {};
 
-*$
+#}
 
 primitive bool_t;
 primitive char_t;

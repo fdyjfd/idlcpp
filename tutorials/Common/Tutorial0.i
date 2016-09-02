@@ -1,6 +1,6 @@
 //tutorial
 
-$$#include <stdio.h>
+###include <stdio.h>
 
 namespace tutorial
 {
@@ -8,10 +8,10 @@ namespace tutorial
 	{
 		static void Run();
 	};
-	$*
+#{
 	inline void Test::Run()
 	{
 		printf("Hello World!");
 	}
-	*$
+#}
 }

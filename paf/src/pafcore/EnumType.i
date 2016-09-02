@@ -4,18 +4,18 @@
 
 namespace pafcore
 {
-	$*
+#{
 	class Variant;
 	class InstanceProperty;
-	*$
+#}
 
-	abstract class(enum_type)$PAFCORE_EXPORT EnumType : Type
+	abstract class(enum_type)#PAFCORE_EXPORT EnumType : Type
 	{
 		size_t _getEnumeratorCount_();
 		Enumerator* _getEnumerator_(size_t index);
 		Enumerator* _getEnumeratorByValue_(int value);
 		Enumerator* _getEnumeratorByName_(const char* name);
-		$*
+#{
 	public:
 		EnumType(const char* name);
 	public:
@@ -28,6 +28,6 @@ namespace pafcore
 		size_t m_enumeratorCount;
 		InstanceProperty* m_properties;
 		size_t m_propertyCount;
-		*$
+#}
 	};
 }

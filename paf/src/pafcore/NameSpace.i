@@ -3,12 +3,12 @@
 namespace pafcore
 {
 
-	abstract class(name_space)$PAFCORE_EXPORT NameSpace : Metadata
+	abstract class(name_space)#PAFCORE_EXPORT NameSpace : Metadata
 	{
 		size_t _getMemberCount_();
 		Metadata* _getMember_(size_t index);
 		Metadata* _findMember_(const char* name);
-		$*
+#{
 	private:
 		class PAFCORE_EXPORT MetadataTrieTree
 		{
@@ -85,7 +85,7 @@ namespace pafcore
 		MetadataContainer m_members;
 	public:
 		static NameSpace* GetGlobalNameSpace();
-		*$
+#}
 	};
 
 }

@@ -27,6 +27,6 @@ namespace pafcore
 		{
 			return reinterpret_cast<T*>(castTo(T::GetType()));
 		}
-		
+
 	};
 }

@@ -32,7 +32,7 @@ class Variant;
 		Type* m_type;
 		bool m_constant;
 		byte_t m_passing;
-		
+
 	};
 
 }

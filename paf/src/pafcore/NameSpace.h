@@ -96,7 +96,7 @@ namespace pafcore
 		MetadataContainer m_members;
 	public:
 		static NameSpace* GetGlobalNameSpace();
-		
+
 	};
 
 }

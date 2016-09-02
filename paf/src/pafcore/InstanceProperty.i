@@ -3,13 +3,13 @@
 namespace pafcore
 {
 
-	$*
+#{
 	class Variant;
 	typedef ErrorCode(*InstancePropertyGetter)(Variant* that, Variant* value);
 	typedef ErrorCode(*InstancePropertySetter)(Variant* that, Variant* value);
-	*$
+#}
 
-	abstract class(instance_property)$PAFCORE_EXPORT InstanceProperty : Metadata
+	abstract class(instance_property)#PAFCORE_EXPORT InstanceProperty : Metadata
 	{
 		ClassType* objectType get;
 		bool hasGetter get;
@@ -27,7 +27,7 @@ namespace pafcore
 		bool setterByPtr get;
 		bool setterConstant get;
 
-		$*
+#{
 	public:
 		InstanceProperty(const char* name, ClassType* objectType, 
 			InstancePropertyGetter getter, Type* getterType, Passing getterPassing, bool getterConstant,
@@ -42,7 +42,7 @@ namespace pafcore
 		byte_t m_setterPassing;
 		bool m_getterConstant;
 		bool m_setterConstant;
-		*$
+#}
 	};
 
 }

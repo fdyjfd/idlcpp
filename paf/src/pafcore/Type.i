@@ -2,10 +2,10 @@
 
 namespace pafcore
 {
-	abstract class $PAFCORE_EXPORT Type : Metadata
+	abstract class #PAFCORE_EXPORT Type : Metadata
 	{
 		size_t _size_ get;
-		$*
+#{
 	public:
 		Type(const char* name, Category category);
 	public:
@@ -21,10 +21,10 @@ namespace pafcore
 	public:
 		Category m_category;
 		size_t m_size;
-		*$
+#}
 	};
 
-	$*
+#{
 
 	inline size_t Type::get__size_()
 	{
@@ -47,6 +47,6 @@ namespace pafcore
 		return reference_object <= m_category;
 	}
 
-	*$
+#}
 
 }

@@ -32,7 +32,7 @@ namespace pafcore
 	public:
 		Category m_category;
 		size_t m_size;
-		
+
 	};
 
 
@@ -58,6 +58,6 @@ namespace pafcore
 		return reference_object <= m_category;
 	}
 
-	
+
 
 }

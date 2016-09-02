@@ -25,7 +25,7 @@ namespace pafcore
 		virtual Metadata* findMember(const char* name);
 	public:
 		static VoidType* GetSingleton();
-		
+
 	};
 
 	inline void* VoidType::AddressToPtr(size_t address)
@@ -36,7 +36,7 @@ namespace pafcore
 	{
 		return 0;
 	}
-	
+
 }
 
 
@@ -44,6 +44,6 @@ template<>
 struct RuntimeTypeOf<void>
 {
 	typedef ::pafcore::VoidType RuntimeType;
-	enum {type_category = ::pafcore::void_object};
+	enum { type_category = ::pafcore::void_object };
 };
 

@@ -14,7 +14,7 @@ namespace pafcore
 
 	class Variant;
 	class InstanceProperty;
-	
+
 
 	class PAFCORE_EXPORT EnumType : public Type
 	{
@@ -40,6 +40,6 @@ namespace pafcore
 		size_t m_enumeratorCount;
 		InstanceProperty* m_properties;
 		size_t m_propertyCount;
-		
+
 	};
 }

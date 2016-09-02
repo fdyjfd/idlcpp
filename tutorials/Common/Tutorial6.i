@@ -17,9 +17,9 @@ namespace tutorial
 		nocode N x;
 		nocode N y;
 		nocode N z;
-		nocode N v[$3];
+		nocode N v[#3];
 
-		$*
+#{
 		union
 		{
 			struct
@@ -28,7 +28,7 @@ namespace tutorial
 			};
 			N v[3];
 		};
-		*$
+#}
 	};
 
 	export Vector3<float>;
@@ -40,7 +40,7 @@ namespace tutorial
 	//{
 	//	Vector3 ss;
 	//};
-	$*
+#{
 	template<typename N>
 	Vector3<N> Vector3<N>::s_zero(0, 0, 0);
 
@@ -78,7 +78,7 @@ namespace tutorial
 	{
 		return (x * x + y * y + z * z);
 	}
-	*$
+#}
 }
 
 
