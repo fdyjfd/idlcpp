@@ -13,6 +13,14 @@
 namespace idlcpp
 {
 
+	class __uint_t_Type : public ::pafcore::TypeAlias
+	{
+	public:
+		__uint_t_Type();
+	public:
+		PAFCORE_EXPORT static __uint_t_Type* GetSingleton();
+	};
+
 	class __bool_t_Type : public ::pafcore::TypeAlias
 	{
 	public:
@@ -101,14 +109,6 @@ namespace idlcpp
 		PAFCORE_EXPORT static __int_t_Type* GetSingleton();
 	};
 
-	class __uint_t_Type : public ::pafcore::TypeAlias
-	{
-	public:
-		__uint_t_Type();
-	public:
-		PAFCORE_EXPORT static __uint_t_Type* GetSingleton();
-	};
-
 	class __float_t_Type : public ::pafcore::TypeAlias
 	{
 	public:
@@ -139,6 +139,70 @@ namespace idlcpp
 		__byte_t_Type();
 	public:
 		PAFCORE_EXPORT static __byte_t_Type* GetSingleton();
+	};
+
+	class __int8_t_Type : public ::pafcore::TypeAlias
+	{
+	public:
+		__int8_t_Type();
+	public:
+		PAFCORE_EXPORT static __int8_t_Type* GetSingleton();
+	};
+
+	class __uint8_t_Type : public ::pafcore::TypeAlias
+	{
+	public:
+		__uint8_t_Type();
+	public:
+		PAFCORE_EXPORT static __uint8_t_Type* GetSingleton();
+	};
+
+	class __int16_t_Type : public ::pafcore::TypeAlias
+	{
+	public:
+		__int16_t_Type();
+	public:
+		PAFCORE_EXPORT static __int16_t_Type* GetSingleton();
+	};
+
+	class __uint16_t_Type : public ::pafcore::TypeAlias
+	{
+	public:
+		__uint16_t_Type();
+	public:
+		PAFCORE_EXPORT static __uint16_t_Type* GetSingleton();
+	};
+
+	class __int32_t_Type : public ::pafcore::TypeAlias
+	{
+	public:
+		__int32_t_Type();
+	public:
+		PAFCORE_EXPORT static __int32_t_Type* GetSingleton();
+	};
+
+	class __uint32_t_Type : public ::pafcore::TypeAlias
+	{
+	public:
+		__uint32_t_Type();
+	public:
+		PAFCORE_EXPORT static __uint32_t_Type* GetSingleton();
+	};
+
+	class __int64_t_Type : public ::pafcore::TypeAlias
+	{
+	public:
+		__int64_t_Type();
+	public:
+		PAFCORE_EXPORT static __int64_t_Type* GetSingleton();
+	};
+
+	class __uint64_t_Type : public ::pafcore::TypeAlias
+	{
+	public:
+		__uint64_t_Type();
+	public:
+		PAFCORE_EXPORT static __uint64_t_Type* GetSingleton();
 	};
 
 	class __size_t_Type : public ::pafcore::TypeAlias

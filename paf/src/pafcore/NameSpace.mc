@@ -89,7 +89,7 @@ namespace idlcpp
 
 	void __pafcore__NameSpace_Type::destroyArray(void* address)
 	{
-		paf_delete_array(reinterpret_cast<::pafcore::RefCountObject<::pafcore::NameSpace>*>(address));
+		paf_delete_array(reinterpret_cast<::pafcore::RefCountImpl<::pafcore::NameSpace>*>(address));
 	}
 
 	void __pafcore__NameSpace_Type::assign(void* dst, const void* src)

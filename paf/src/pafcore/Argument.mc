@@ -77,7 +77,7 @@ namespace idlcpp
 
 	void __pafcore__Argument_Type::destroyArray(void* address)
 	{
-		paf_delete_array(reinterpret_cast<::pafcore::RefCountObject<::pafcore::Argument>*>(address));
+		paf_delete_array(reinterpret_cast<::pafcore::RefCountImpl<::pafcore::Argument>*>(address));
 	}
 
 	void __pafcore__Argument_Type::assign(void* dst, const void* src)

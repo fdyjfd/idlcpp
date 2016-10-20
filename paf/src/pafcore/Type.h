@@ -15,7 +15,7 @@ namespace pafcore
 		virtual ::pafcore::ClassType* getType();
 		virtual size_t getAddress();
 
-		size_t get__size_();
+		size_t get__size_() const;
 
 	public:
 		Type(const char* name, Category category);
@@ -25,10 +25,10 @@ namespace pafcore
 		virtual void assign(void* dst, const void* src);
 		virtual Metadata* findMember(const char* name) = 0;
 	public:
-		bool isPrimitive();
-		bool isEnum();
-		bool isValue();
-		bool isReference();
+		bool isPrimitive() const;
+		bool isEnum() const;
+		bool isValue() const;
+		bool isReference() const;
 	public:
 		Category m_category;
 		size_t m_size;
@@ -37,23 +37,23 @@ namespace pafcore
 
 
 
-	inline size_t Type::get__size_()
+	inline size_t Type::get__size_() const
 	{
 		return m_size;
 	}
-	inline bool Type::isPrimitive()
+	inline bool Type::isPrimitive() const
 	{
 		return primitive_object == m_category;
 	}
-	inline bool Type::isEnum()
+	inline bool Type::isEnum() const
 	{
 		return enum_object == m_category;
 	}
-	inline bool Type::isValue()
+	inline bool Type::isValue() const
 	{
 		return value_object == m_category;
 	}
-	inline bool Type::isReference()
+	inline bool Type::isReference() const
 	{
 		return reference_object <= m_category;
 	}

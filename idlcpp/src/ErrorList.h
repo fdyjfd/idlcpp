@@ -51,6 +51,7 @@ enum ErrorCode
 	semantic_error_too_few_formal_parameters,
 	semantic_error_too_many_formal_parameters,
 	semantic_error_operator_can_not_be_static,
+	semantic_error_override_method_must_be_virtual_or_abstract,
 };
 
 typedef enum ErrorCode ErrorCode;

@@ -37,13 +37,13 @@ int yycolumnno = 1;
 "/*"						{yycolumnno += 2; BEGIN COMMENT;}
 <COMMENT>"*/"				{yycolumnno += 2; BEGIN INITIAL;}
 <COMMENT>[^*\n]+			{yycolumnno += strlen(yytext); }
-<COMMENT>\n					{yycolumnno = 1; }
+<COMMENT>\n					{newCodeBlock("\n"); yycolumnno = 1; }
 <COMMENT>.					{yycolumnno++;}
 <COMMENT><<EOF>>			{unterminatedComment();yyterminate();}
 
 
 
-"//".*\n			{}
+"//".*\n			{newCodeBlock("\n"); yycolumnno = 1;}
 
 <<EOF>>				{yyterminate();}
 
@@ -124,6 +124,7 @@ int yycolumnno = 1;
 "nometa"		{yylval.sn = newToken(snt_keyword_nometa);					yycolumnno += strlen(yytext); yytokenno++; return NOMETA;}
 "export"		{yylval.sn = newToken(snt_keyword_export);					yycolumnno += strlen(yytext); yytokenno++; return EXPORT;}
 "override"		{yylval.sn = newToken(snt_keyword_override);				yycolumnno += strlen(yytext); yytokenno++; return OVERRIDE;}
+"template"		{yylval.sn = newToken(snt_keyword_template);				yycolumnno += strlen(yytext); yytokenno++; return TEMPLATE;}
 
 [a-zA-Z_][a-zA-Z_0-9]*	{yylval.sn = newIdentify(yytext);					yycolumnno += strlen(yytext); yytokenno++; return IDENTIFY;}
 

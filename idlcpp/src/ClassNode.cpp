@@ -43,14 +43,38 @@ void checkBaseTypes(ClassNode* classNode, std::vector<TypeNameNode*>& baseTypeNa
 			continue;
 		}
 		TypeCategory baseTypeCategory = typeNode->getTypeCategory(templateArguments);
-		if(!((classNode->isValueType() && value_type == baseTypeCategory) 
-			|| (!classNode->isValueType() && reference_type == baseTypeCategory)))	
+		if(classNode->isValueType())
 		{
-			char buf[512];
-			sprintf_s(buf, "\'%s\' : base type must be %s type", typeNameNode->m_scopeNameList->m_scopeName->m_name->m_str.c_str(),
-				snt_keyword_struct == classNode->m_keyword->m_nodeType ? "struct" : "class");
-			ErrorList_AddItem_CurrentFile(typeNameNode->m_scopeNameList->m_scopeName->m_name->m_lineNo,
-				typeNameNode->m_scopeNameList->m_scopeName->m_name->m_columnNo, semantic_error_base_type, buf);
+			if (value_type != baseTypeCategory)
+			{
+				char buf[512];
+				sprintf_s(buf, "\'%s\' : base type must be value type", typeNameNode->m_scopeNameList->m_scopeName->m_name->m_str.c_str());
+				ErrorList_AddItem_CurrentFile(typeNameNode->m_scopeNameList->m_scopeName->m_name->m_lineNo,
+					typeNameNode->m_scopeNameList->m_scopeName->m_name->m_columnNo, semantic_error_base_type, buf);
+			}
+		}
+		else
+		{
+			if (0 == i)
+			{
+				if (reference_type != baseTypeCategory)
+				{
+					char buf[512];
+					sprintf_s(buf, "\'%s\' : first base type must be reference type", typeNameNode->m_scopeNameList->m_scopeName->m_name->m_str.c_str());
+					ErrorList_AddItem_CurrentFile(typeNameNode->m_scopeNameList->m_scopeName->m_name->m_lineNo,
+						typeNameNode->m_scopeNameList->m_scopeName->m_name->m_columnNo, semantic_error_base_type, buf);
+				}
+			}
+			else
+			{
+				if (reference_type != baseTypeCategory && value_type != baseTypeCategory)
+				{
+					char buf[512];
+					sprintf_s(buf, "\'%s\' : base type must be reference type or value type", typeNameNode->m_scopeNameList->m_scopeName->m_name->m_str.c_str());
+					ErrorList_AddItem_CurrentFile(typeNameNode->m_scopeNameList->m_scopeName->m_name->m_lineNo,
+						typeNameNode->m_scopeNameList->m_scopeName->m_name->m_columnNo, semantic_error_base_type, buf);
+				}
+			}
 		}
 		auto it = std::find(baseTypeNodes.begin(), baseTypeNodes.begin() + i, typeNode);
 		if(it != baseTypeNodes.begin() + i)

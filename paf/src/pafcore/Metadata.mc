@@ -102,7 +102,7 @@ namespace idlcpp
 
 	void __pafcore__Metadata_Type::destroyArray(void* address)
 	{
-		paf_delete_array(reinterpret_cast<::pafcore::RefCountObject<::pafcore::Metadata>*>(address));
+		paf_delete_array(reinterpret_cast<::pafcore::RefCountImpl<::pafcore::Metadata>*>(address));
 	}
 
 	void __pafcore__Metadata_Type::assign(void* dst, const void* src)

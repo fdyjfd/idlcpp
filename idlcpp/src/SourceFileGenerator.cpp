@@ -47,7 +47,7 @@ void SourceFileGenerator::generateCode_Program(FILE* file, ProgramNode* programN
 	sprintf_s(buf, "#include \"%s%s\"\n", cppName, g_options.m_metaHeaderFilePostfix.c_str());
 	writeStringToFile(buf, file);
 
-	sprintf_s(buf, "#include \"%sRefCount.h\"\n\n", pafcorePath.c_str());
+	sprintf_s(buf, "#include \"%sRefCountImpl.h\"\n\n", pafcorePath.c_str());
 	writeStringToFile(buf, file);
 
 	generateCode_Namespace(file, programNode, -1);

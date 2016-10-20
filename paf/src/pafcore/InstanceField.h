@@ -20,10 +20,10 @@ namespace pafcore
 
 		Type* get_type();
 		ClassType* get_objectType();
-		size_t get_offset();
-		bool get_isArray();
-		bool get_isPointer();
-		bool get_isConstant();
+		size_t get_offset() const;
+		bool get_isArray() const;
+		bool get_isPointer() const;
+		bool get_isConstant() const;
 
 	public:
 		InstanceField(const char* name, ClassType* objectType, Type* type, size_t offset, size_t arraySize, bool constant, TypeCompound tc);

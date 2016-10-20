@@ -34,6 +34,7 @@ const char* g_keywordTokens[] =
 	"enum ",
 	"class ",
 	"struct ",
+	"template ",
 	"virtual ",
 	"virtual ",
 	"static ",

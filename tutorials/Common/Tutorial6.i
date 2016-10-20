@@ -2,7 +2,8 @@
 
 namespace tutorial
 {
-	struct Vector3<N>
+	template<N>
+	struct Vector3
 	{
 		Vector3();
 		Vector3(const Vector3& v);
@@ -68,13 +69,13 @@ namespace tutorial
 	}
 
 	template<typename N>
-	inline N Vector3<N>::get_length()
+	inline N Vector3<N>::get_length() const
 	{
 		return N(sqrt(x * x + y * y + z * z));
 	}
 
 	template<typename N>
-	inline N Vector3<N>::get_lengthSquare()
+	inline N Vector3<N>::get_lengthSquare() const
 	{
 		return (x * x + y * y + z * z);
 	}

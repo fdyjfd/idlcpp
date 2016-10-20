@@ -79,7 +79,7 @@ namespace idlcpp
 
 	void __pafcore__StaticProperty_Type::destroyArray(void* address)
 	{
-		paf_delete_array(reinterpret_cast<::pafcore::RefCountObject<::pafcore::StaticProperty>*>(address));
+		paf_delete_array(reinterpret_cast<::pafcore::RefCountImpl<::pafcore::StaticProperty>*>(address));
 	}
 
 	void __pafcore__StaticProperty_Type::assign(void* dst, const void* src)

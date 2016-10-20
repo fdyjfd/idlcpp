@@ -26,12 +26,12 @@ ClassType* InstanceProperty::get_objectType()
 	return m_objectType;
 }
 
-bool InstanceProperty::get_hasGetter()
+bool InstanceProperty::get_hasGetter() const
 {
 	return (0 != m_getter);
 }
 
-bool InstanceProperty::get_hasSetter()
+bool InstanceProperty::get_hasSetter() const
 {
 	return (0 != m_setter);
 }
@@ -41,22 +41,22 @@ Type* InstanceProperty::get_getterType()
 	return m_getterType;
 }
 
-bool InstanceProperty::get_getterByValue()
+bool InstanceProperty::get_getterByValue() const
 {
 	return (by_value == m_getterPassing);
 }
 
-bool InstanceProperty::get_getterByRef()
+bool InstanceProperty::get_getterByRef() const
 {
 	return (by_ref == m_getterPassing);
 }
 
-bool InstanceProperty::get_getterByPtr()
+bool InstanceProperty::get_getterByPtr() const
 {
 	return (by_ptr == m_getterPassing);
 }
 
-bool InstanceProperty::get_getterConstant()
+bool InstanceProperty::get_getterConstant() const
 {
 	return m_getterConstant;
 }
@@ -66,22 +66,22 @@ Type* InstanceProperty::get_setterType()
 	return m_setterType;
 }
 
-bool InstanceProperty::get_setterByValue()
+bool InstanceProperty::get_setterByValue() const
 {
 	return (by_value == m_setterPassing);
 }
 
-bool InstanceProperty::get_setterByRef()
+bool InstanceProperty::get_setterByRef() const
 {
 	return (by_ref == m_setterPassing);
 }
 
-bool InstanceProperty::get_setterByPtr()
+bool InstanceProperty::get_setterByPtr() const
 {
 	return (by_ptr == m_setterPassing);
 }
 
-bool InstanceProperty::get_setterConstant()
+bool InstanceProperty::get_setterConstant() const
 {
 	return m_setterConstant;
 }

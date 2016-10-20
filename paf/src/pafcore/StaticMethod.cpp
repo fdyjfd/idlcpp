@@ -14,7 +14,7 @@ StaticMethod::StaticMethod(const char* name, FunctionInvoker invoker, Overload* 
 	m_overloadCount = overloadCount;
 }
 
-size_t StaticMethod::get_overloadCount()
+size_t StaticMethod::get_overloadCount() const
 {
 	return m_overloadCount;
 }

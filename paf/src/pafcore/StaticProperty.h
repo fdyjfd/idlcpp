@@ -23,20 +23,20 @@ namespace pafcore
 		virtual ::pafcore::ClassType* getType();
 		virtual size_t getAddress();
 
-		bool get_hasGetter();
-		bool get_hasSetter();
+		bool get_hasGetter() const;
+		bool get_hasSetter() const;
 
 		Type* get_getterType();
-		bool get_getterByValue();
-		bool get_getterByRef();
-		bool get_getterByPtr();
-		bool get_getterConstant();
+		bool get_getterByValue() const;
+		bool get_getterByRef() const;
+		bool get_getterByPtr() const;
+		bool get_getterConstant() const;
 
 		Type* get_setterType();
-		bool get_setterByValue();
-		bool get_setterByRef();
-		bool get_setterByPtr();
-		bool get_setterConstant();
+		bool get_setterByValue() const;
+		bool get_setterByRef() const;
+		bool get_setterByPtr() const;
+		bool get_setterConstant() const;
 
 	public:
 		StaticProperty(const char* name, 

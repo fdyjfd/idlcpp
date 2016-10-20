@@ -307,6 +307,7 @@
     <ClInclude Include="..\..\..\src\pafcore\Overload.h" />
     <ClInclude Include="..\..\..\src\pafcore\PrimitiveType.h" />
     <ClInclude Include="..\..\..\src\pafcore\RefCount.h" />
+    <ClInclude Include="..\..\..\src\pafcore\RefCountImpl.h" />
     <ClInclude Include="..\..\..\src\pafcore\Reference.h" />
     <ClInclude Include="..\..\..\src\pafcore\Result.h" />
     <ClInclude Include="..\..\..\src\pafcore\StaticField.h" />

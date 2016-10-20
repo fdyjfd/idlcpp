@@ -57,7 +57,7 @@ namespace idlcpp
 
 	void __pafcore__TypeAlias_Type::destroyArray(void* address)
 	{
-		paf_delete_array(reinterpret_cast<::pafcore::RefCountObject<::pafcore::TypeAlias>*>(address));
+		paf_delete_array(reinterpret_cast<::pafcore::RefCountImpl<::pafcore::TypeAlias>*>(address));
 	}
 
 	void __pafcore__TypeAlias_Type::assign(void* dst, const void* src)

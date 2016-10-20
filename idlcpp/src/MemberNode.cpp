@@ -131,6 +131,19 @@ TypeNode* MemberNode::getTypeNode()
 	return 0;
 }
 
+ProgramNode* MemberNode::getProgramNode()
+{
+	MemberNode* memberNode = this;
+	ScopeNode* enclosing = m_enclosing;
+	while (enclosing)
+	{
+		memberNode = enclosing;
+		enclosing = enclosing->m_enclosing;
+	}
+	assert(snt_namespace == memberNode->m_nodeType);
+	return static_cast<ProgramNode*>(memberNode);
+}
+
 SourceFile* MemberNode::getSourceFile()
 {
 	MemberNode* memberNode = this;

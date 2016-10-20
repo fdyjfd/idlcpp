@@ -82,7 +82,7 @@ namespace idlcpp
 
 	void __pafcore__InstanceProperty_Type::destroyArray(void* address)
 	{
-		paf_delete_array(reinterpret_cast<::pafcore::RefCountObject<::pafcore::InstanceProperty>*>(address));
+		paf_delete_array(reinterpret_cast<::pafcore::RefCountImpl<::pafcore::InstanceProperty>*>(address));
 	}
 
 	void __pafcore__InstanceProperty_Type::assign(void* dst, const void* src)

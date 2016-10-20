@@ -1,12 +1,12 @@
 #import "Typedef.i"
 
-###include "Utility.h"
+###include "RefCount.h"
 
 namespace pafcore
 {
 	##	class ClassType;
 
-	class #PAFCORE_EXPORT Reference
+	class #PAFCORE_EXPORT Reference ## : public RefCount
 	{
 		nometa virtual long_t addRef();
 		nometa virtual long_t release();

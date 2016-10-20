@@ -73,7 +73,7 @@ namespace idlcpp
 
 	void __pafcore__VoidType_Type::destroyArray(void* address)
 	{
-		paf_delete_array(reinterpret_cast<::pafcore::RefCountObject<::pafcore::VoidType>*>(address));
+		paf_delete_array(reinterpret_cast<::pafcore::RefCountImpl<::pafcore::VoidType>*>(address));
 	}
 
 	void __pafcore__VoidType_Type::assign(void* dst, const void* src)

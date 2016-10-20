@@ -18,10 +18,10 @@ namespace pafcore
 		virtual size_t getAddress();
 
 		Type* get_type();
-		size_t get_address();
-		bool get_isConstant();
-		bool get_isArray();
-		bool get_isPointer();
+		size_t get_address() const;
+		bool get_isConstant() const;
+		bool get_isArray() const;
+		bool get_isPointer() const;
 
 	public:
 		StaticField(const char* name, Type* type, size_t address, size_t arraySize, bool constant, TypeCompound tc);

@@ -13,9 +13,9 @@ Metadata::Metadata(const char* name)
 	m_scope = 0;
 }
 
-Category Metadata::get__category_()
+Category Metadata::get__category_() const
 {
-	Type* type = getType();
+	Type* type = const_cast<Metadata*>(this)->getType();
 	return type->m_category;
 }
 

@@ -16,10 +16,10 @@ long_t Reference::release()
 	return 0x40000000;
 };
 
-long_t Reference::get_refCount()
+long_t Reference::get_refCount() const
 {
-	addRef();
-	return release();
+	const_cast<Reference*>(this)->addRef();
+	return const_cast<Reference*>(this)->release();
 };
 
 void* Reference::castTo(ClassType* classType)

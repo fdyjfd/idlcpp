@@ -28,6 +28,11 @@ namespace crt
 	{
 		fclose((FILE*)file);
 	}
+	
+	//void File::__destroyInstance__(File* file)
+	//{
+	//	fclose((FILE*)file);
+	//}
 
 	size_t File::read(void * buffer, size_t size)
 	{

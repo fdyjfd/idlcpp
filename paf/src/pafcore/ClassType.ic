@@ -5,7 +5,7 @@
 
 #include "ClassType.h"
 #include "ClassType.mh"
-#include "RefCount.h"
+#include "RefCountImpl.h"
 
 namespace pafcore
 {

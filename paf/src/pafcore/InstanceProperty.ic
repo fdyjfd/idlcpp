@@ -5,7 +5,7 @@
 
 #include "InstanceProperty.h"
 #include "InstanceProperty.mh"
-#include "RefCount.h"
+#include "RefCountImpl.h"
 
 namespace pafcore
 {

@@ -14,7 +14,7 @@ InstanceMethod::InstanceMethod(const char* name, FunctionInvoker invoker, Overlo
 	m_overloadCount = overloadCount;
 }
 
-size_t InstanceMethod::get_overloadCount()
+size_t InstanceMethod::get_overloadCount() const
 {
 	return m_overloadCount;
 }

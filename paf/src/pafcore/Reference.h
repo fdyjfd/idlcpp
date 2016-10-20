@@ -4,13 +4,13 @@
 #pragma once
 
 
-#include "Utility.h"
+#include "RefCount.h"
 
 namespace pafcore
 {
 	class ClassType;
 
-	class PAFCORE_EXPORT Reference
+	class PAFCORE_EXPORT Reference : public RefCount
 	{
 	public:
 		static ::pafcore::ClassType* GetType();
@@ -19,7 +19,7 @@ namespace pafcore
 
 		virtual long_t addRef();
 		virtual long_t release();
-		long_t get_refCount();
+		long_t get_refCount() const;
 
 		void* castTo(ClassType* classType);
 		template<typename T>

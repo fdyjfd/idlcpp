@@ -12,7 +12,7 @@
 %token <sn> LEFT_SHIFT RIGHT_SHIFT EQUAL NOT_EQUAL LESS_EQUAL GREATER_EQUAL AND OR INC DEC
 %token <sn> BOOL CHAR WCHAR_T SHORT LONG INT FLOAT DOUBLE SIGNED UNSIGNED
 %token <sn> NAMESPACE ENUM CLASS STRUCT STATIC VIRTUAL VOID CONST OPERATOR TYPEDEF PRIMITIVE
-%token <sn> ABSTRACT GET SET NOMETA NOCODE EXPORT OVERRIDE SCOPE IDENTIFY STRING
+%token <sn> ABSTRACT GET SET NOMETA NOCODE EXPORT OVERRIDE SCOPE IDENTIFY STRING TEMPLATE
 %type <sn> field_0 field_1 field_2 field getter_0 getter setter_0 setter property_0 property_1 property
 %type <sn> parameter_0 parameter parameterList method_0 method_1 method_2 method_3 method_4 method
 %type <sn> operatorSign operator_0 operator_1 operator_2 operator_3 operator classMember_0 classMember
@@ -309,7 +309,7 @@ templateParameterList	: IDENTIFY												{$$ = newTemplateParameterList(NULL,
 						| templateParameterList ',' IDENTIFY					{$$ = newTemplateParameterList($1, $2, $3);}
 ;
 
-templateParameters		: '<' templateParameterList '>'							{$$ = newTemplateParameters($1, $2, $3);}
+templateParameters		: TEMPLATE '<' templateParameterList '>'				{$$ = newTemplateParameters($1, $2, $3, $4);}
 ;
 
 class_0					: CLASS IDENTIFY										{$$ = newClass($1, NULL, $2);}
@@ -319,28 +319,29 @@ class_0					: CLASS IDENTIFY										{$$ = newClass($1, NULL, $2);}
 ;
 
 class_1					: class_0												{$$ = $1;}
-						| class_0 templateParameters							{$$ = $1; setClassTemplateParameters($$, $2);}
+						| class_0 ':' typeNameList								{$$ = $1; setClassBaseList($$, $2, $3);}
 ;
 
-class_2					: class_1												{$$ = $1;}
-						| class_1 ':' typeNameList								{$$ = $1; setClassBaseList($$, $2, $3);}
+class_2					: class_1 '{' '}'										{$$ = $1; setClassMemberList($$, $2, NULL, $3);}
+						| class_1 '{' classMemberList '}'						{$$ = $1; setClassMemberList($$, $2, $3, $4);}
 ;
 
-class_3					: class_2 '{' '}'										{$$ = $1; setClassMemberList($$, $2, NULL, $3);}
-						| class_2 '{' classMemberList '}'						{$$ = $1; setClassMemberList($$, $2, $3, $4);}
+class_3					: class_2 ';'											{$$ = $1; setClassSemicolon($$, $2);}
+						| class_2 '=' STRING ';'								{$$ = $1; setNativeName($$, $3); setClassSemicolon($$, $4);}
 ;
 
-class_4					: class_3 ';'											{$$ = $1; setClassSemicolon($$, $2);}
-						| class_3 '=' STRING ';'								{$$ = $1; setNativeName($$, $3); setClassSemicolon($$, $4);}
+class_4					: class_3												{$$ = $1;}
+						| ABSTRACT class_3										{$$ = $2; setClassModifier($$, $1);}
 ;
 
 class_5					: class_4												{$$ = $1;}
-						| ABSTRACT class_4										{$$ = $2; setClassModifier($$, $1);}
+						| OVERRIDE class_4										{$$ = $2; setClassOverride($$);}
 ;
 
 class					: class_5												{$$ = $1;}
-						| OVERRIDE class_5										{$$ = $2; setClassOverride($$);}
+						| templateParameters class_5							{$$ = $2; setClassTemplateParameters($$, $1);}
 ;
+
 
 tokenList				: IDENTIFY												{$$ = newTokenList(NULL, $1);}
 						| operatorSign											{$$ = newTokenList(NULL, $1);}

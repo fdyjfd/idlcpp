@@ -6,6 +6,7 @@
 #include <string>
 #include <map>
 
+struct ProgramNode;
 struct IdentifyNode;
 struct ScopeNode;
 struct ClassNode;
@@ -43,6 +44,7 @@ public:
 	bool isTypedef();
 	void getFullName(std::string& fullName, TemplateArguments* templateArguments);
 	void getNativeName(std::string& nativeName, TemplateArguments* templateArguments);
+	ProgramNode* getProgramNode();
 	SourceFile* getSourceFile();
 	virtual TypeNode* getTypeNode();
 	virtual void getLocalName(std::string& name, TemplateArguments* templateArguments);

@@ -38,8 +38,8 @@ namespace pafcore
 		virtual ::pafcore::ClassType* getType();
 		virtual size_t getAddress();
 
-		const char* get__name_();
-		Category get__category_();
+		const char* get__name_() const;
+		Category get__category_() const;
 		Metadata* get__scope_();
 
 	public:
@@ -74,7 +74,7 @@ namespace pafcore
 
 
 
-	inline const char* Metadata::get__name_()
+	inline const char* Metadata::get__name_() const
 	{
 		return m_name;
 	}

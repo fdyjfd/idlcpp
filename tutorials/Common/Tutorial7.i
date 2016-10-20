@@ -2,7 +2,8 @@
 
 namespace tutorial
 {
-	struct Ray3<T>
+	template<T>
+	struct Ray3
 	{
 		Ray3();
 		Ray3(const Vector3<T>& origin, const Vector3<T>& direction);

@@ -330,10 +330,10 @@ void MetaHeaderFileGenerator::generateCode_Class(FILE* file, ClassNode* classNod
 							|| methodNode->m_name->m_str == "__assign__")
 						{
 							typeMethodNodes.push_back(methodNode);
-							if (0 == methodNode->m_nativeName)
-							{
-								staticMethodNodes.push_back(methodNode);
-							}
+							//if (0 == methodNode->m_nativeName)
+							//{
+							//	staticMethodNodes.push_back(methodNode);
+							//}
 						}
 						else
 						{
@@ -455,7 +455,7 @@ void MetaHeaderFileGenerator::generateCode_Class(FILE* file, ClassNode* classNod
 	}
 }
 
-void writeMethodParameter(MethodNode* methodNode, ParameterNode* parameterNode, FILE* file)
+void writeOverrideMethodParameter(MethodNode* methodNode, ParameterNode* parameterNode, FILE* file)
 {
 	std::string typeName;
 	ClassNode* classNode = static_cast<ClassNode*>(methodNode->m_enclosing);
@@ -463,15 +463,20 @@ void writeMethodParameter(MethodNode* methodNode, ParameterNode* parameterNode, 
 	{
 		writeStringToFile("const ", file);
 	}
-	parameterNode->m_typeName->getRelativeName(typeName, methodNode->m_enclosing);
+	parameterNode->m_typeName->getRelativeName(typeName, methodNode->getProgramNode());
 	writeStringToFile(typeName.c_str(), file);
-	if(0 != parameterNode->m_out)
+
+	if (parameterNode->isOutput())
 	{
-		writeStringToFile(g_keywordTokens[parameterNode->m_out->m_nodeType - snt_begin_output - 1], file);
+		writeStringToFile("*", file);
 	}
-	if(0 != parameterNode->m_passing)
+	if (parameterNode->byPtr())
 	{
-		writeStringToFile(g_keywordTokens[parameterNode->m_passing->m_nodeType - snt_begin_output - 1], file);
+		writeStringToFile("*", file);
+	}
+	else if(parameterNode->byRef())
+	{
+		writeStringToFile("&", file);
 	}
 	writeSpaceToFile(file);
 	writeStringToFile(parameterNode->m_name->m_str.c_str(), file);
@@ -487,12 +492,18 @@ void writeInterfaceMethodDecl(MethodNode* methodNode, FILE* file, int indentatio
 	}
 	assert(0 != methodNode->m_resultTypeName);
 	std::string typeName;
-	methodNode->m_resultTypeName->getRelativeName(typeName, methodNode->m_enclosing);
+	methodNode->m_resultTypeName->getRelativeName(typeName, methodNode->getProgramNode());
 	resultName += typeName;
-	if(0 != methodNode->m_passing)
+
+	if (methodNode->byRef())
 	{
-		resultName += g_keywordTokens[methodNode->m_passing->m_nodeType - snt_begin_output - 1];
+		resultName += "&";
 	}
+	else if (methodNode->byPtr() || methodNode->byNew())
+	{
+		resultName += "*";
+	}
+
 	sprintf_s(buf, "%s %s( ", resultName.c_str(), methodNode->m_name->m_str.c_str());
 	writeStringToFile(buf, file, indentation);
 
@@ -505,7 +516,7 @@ void writeInterfaceMethodDecl(MethodNode* methodNode, FILE* file, int indentatio
 		{
 			writeStringToFile(", ", file);
 		}
-		writeMethodParameter(methodNode, parameterNodes[i], file);
+		writeOverrideMethodParameter(methodNode, parameterNodes[i], file);
 	}
 	writeStringToFile(")", file);
 	if(methodNode->m_constant)

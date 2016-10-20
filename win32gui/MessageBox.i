@@ -13,6 +13,6 @@ namespace win32gui
 	};
 	struct MessageBox
 	{
-		static void Show(void ptr hwnd, const char ptr text, const char ptr caption, uint_t flag);
+		static void Show(void * hwnd, const char * text, const char * caption, uint_t flag);
 	};
 }

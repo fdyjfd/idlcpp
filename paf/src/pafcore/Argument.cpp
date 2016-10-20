@@ -18,52 +18,52 @@ Type* Argument::get_type()
 	return m_type;
 }
 
-bool Argument::get_byValue()
+bool Argument::get_byValue() const
 {
 	return by_value == m_passing;
 }
 
-bool Argument::get_byRef()
+bool Argument::get_byRef() const
 {
 	return by_ref == m_passing;
 }
 
-bool Argument::get_byPtr()
+bool Argument::get_byPtr() const
 {
 	return by_ptr == m_passing;
 }
 
-bool Argument::get_byOutPtr()
+bool Argument::get_byOutPtr() const
 {
 	return by_out_ptr == m_passing;
 }
 
-bool Argument::get_byOutRef()
+bool Argument::get_byOutRef() const
 {
 	return by_out_ref == m_passing;
 }
 
-bool Argument::get_byNewPtr()
+bool Argument::get_byNewPtr() const
 {
 	return by_new_ptr == m_passing;
 }
 
-bool Argument::get_byNewRef()
+bool Argument::get_byNewRef() const
 {
 	return by_new_ref == m_passing;
 }
 
-bool Argument::get_byNewArrayPtr()
+bool Argument::get_byNewArrayPtr() const
 {
 	return by_new_array_ptr == m_passing;
 }
 
-bool Argument::get_byNewArrayRef()
+bool Argument::get_byNewArrayRef() const
 {
 	return by_new_array_ref == m_passing;
 }
 
-bool Argument::get_isConstant()
+bool Argument::get_isConstant() const
 {
 	return m_constant;
 }

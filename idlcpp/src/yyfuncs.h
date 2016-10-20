@@ -99,6 +99,7 @@ enum SyntaxNodeType
 	snt_keyword_enum,
 	snt_keyword_class,
 	snt_keyword_struct,
+	snt_keyword_template,
 	snt_keyword_abstract,
 	snt_keyword_virtual,
 	snt_keyword_static,
@@ -107,7 +108,7 @@ enum SyntaxNodeType
 	snt_keyword_get,
 	snt_keyword_set,
 	snt_keyword_typedef,
-	
+
 	snt_end_output,
 
 	snt_keyword_primitive,
@@ -205,7 +206,7 @@ SyntaxNode* newTypeDeclaration(SyntaxNode* name, TypeCategory typeCategory);
 SyntaxNode* newTypedef(SyntaxNode* keyword, SyntaxNode* name, SyntaxNode* typeName);
 
 SyntaxNode* newTemplateParameterList(SyntaxNode* list, SyntaxNode* delimiter, SyntaxNode* identify);
-SyntaxNode* newTemplateParameters(SyntaxNode* lts, SyntaxNode* parameterList, SyntaxNode* gts);
+SyntaxNode* newTemplateParameters(SyntaxNode* keyword, SyntaxNode* lts, SyntaxNode* parameterList, SyntaxNode* gts);
 
 SyntaxNode* newTemplateClassInstance(SyntaxNode* name, SyntaxNode* typeNameList);
 

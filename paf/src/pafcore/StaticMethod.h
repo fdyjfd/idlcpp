@@ -20,7 +20,7 @@ namespace pafcore
 		virtual ::pafcore::ClassType* getType();
 		virtual size_t getAddress();
 
-		size_t get_overloadCount();
+		size_t get_overloadCount() const;
 		Result* getResult(size_t overloadIndex);
 		size_t getArgumentCount(size_t overloadIndex);
 		Argument* getArgument(size_t overloadIndex,size_t index);

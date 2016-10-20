@@ -20,22 +20,22 @@ Type* StaticField::get_type()
 	return m_type;
 }
 
-bool StaticField::get_isArray()
+bool StaticField::get_isArray() const
 {
 	return tc_array == m_typeCompound;
 }
 
-bool StaticField::get_isPointer()
+bool StaticField::get_isPointer() const
 {
 	return tc_pointer == m_typeCompound;
 }
 
-bool StaticField::get_isConstant()
+bool StaticField::get_isConstant() const
 {
 	return m_constant;
 }
 
-size_t StaticField::get_address()
+size_t StaticField::get_address() const
 {
 	return m_address;
 }

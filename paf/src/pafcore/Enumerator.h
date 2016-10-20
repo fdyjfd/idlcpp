@@ -18,7 +18,7 @@ namespace pafcore
 		virtual size_t getAddress();
 
 		Type* get__type_();
-		int get__value_();
+		int get__value_() const;
 
 	public:
 		Type* m_type;

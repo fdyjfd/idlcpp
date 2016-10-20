@@ -101,7 +101,7 @@ namespace idlcpp
 
 	void __pafcore__StaticMethod_Type::destroyArray(void* address)
 	{
-		paf_delete_array(reinterpret_cast<::pafcore::RefCountObject<::pafcore::StaticMethod>*>(address));
+		paf_delete_array(reinterpret_cast<::pafcore::RefCountImpl<::pafcore::StaticMethod>*>(address));
 	}
 
 	void __pafcore__StaticMethod_Type::assign(void* dst, const void* src)

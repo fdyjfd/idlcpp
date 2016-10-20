@@ -5,7 +5,7 @@
 
 #include "Reference.h"
 #include "Reference.mh"
-#include "RefCount.h"
+#include "RefCountImpl.h"
 
 namespace pafcore
 {

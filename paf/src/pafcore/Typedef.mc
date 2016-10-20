@@ -22,6 +22,23 @@
 namespace idlcpp
 {
 
+	__uint_t_Type::__uint_t_Type() : TypeAlias("uint_t", RuntimeTypeOf<::uint_t>::RuntimeType::GetSingleton())
+	{
+		::pafcore::NameSpace::GetGlobalNameSpace()->registerMember(this);
+	}
+
+	__uint_t_Type* __uint_t_Type::GetSingleton()
+	{
+		static __uint_t_Type* s_instance = 0;
+		static char s_buffer[sizeof(__uint_t_Type)];
+		if(0 == s_instance)
+		{
+			s_instance = (__uint_t_Type*)s_buffer;
+			new (s_buffer)__uint_t_Type;
+		}
+		return s_instance;
+	}
+
 	__bool_t_Type::__bool_t_Type() : TypeAlias("bool_t", RuntimeTypeOf<::bool_t>::RuntimeType::GetSingleton())
 	{
 		::pafcore::NameSpace::GetGlobalNameSpace()->registerMember(this);
@@ -209,23 +226,6 @@ namespace idlcpp
 		return s_instance;
 	}
 
-	__uint_t_Type::__uint_t_Type() : TypeAlias("uint_t", RuntimeTypeOf<::uint_t>::RuntimeType::GetSingleton())
-	{
-		::pafcore::NameSpace::GetGlobalNameSpace()->registerMember(this);
-	}
-
-	__uint_t_Type* __uint_t_Type::GetSingleton()
-	{
-		static __uint_t_Type* s_instance = 0;
-		static char s_buffer[sizeof(__uint_t_Type)];
-		if(0 == s_instance)
-		{
-			s_instance = (__uint_t_Type*)s_buffer;
-			new (s_buffer)__uint_t_Type;
-		}
-		return s_instance;
-	}
-
 	__float_t_Type::__float_t_Type() : TypeAlias("float_t", RuntimeTypeOf<::float_t>::RuntimeType::GetSingleton())
 	{
 		::pafcore::NameSpace::GetGlobalNameSpace()->registerMember(this);
@@ -294,6 +294,142 @@ namespace idlcpp
 		return s_instance;
 	}
 
+	__int8_t_Type::__int8_t_Type() : TypeAlias("int8_t", RuntimeTypeOf<::int8_t>::RuntimeType::GetSingleton())
+	{
+		::pafcore::NameSpace::GetGlobalNameSpace()->registerMember(this);
+	}
+
+	__int8_t_Type* __int8_t_Type::GetSingleton()
+	{
+		static __int8_t_Type* s_instance = 0;
+		static char s_buffer[sizeof(__int8_t_Type)];
+		if(0 == s_instance)
+		{
+			s_instance = (__int8_t_Type*)s_buffer;
+			new (s_buffer)__int8_t_Type;
+		}
+		return s_instance;
+	}
+
+	__uint8_t_Type::__uint8_t_Type() : TypeAlias("uint8_t", RuntimeTypeOf<::uint8_t>::RuntimeType::GetSingleton())
+	{
+		::pafcore::NameSpace::GetGlobalNameSpace()->registerMember(this);
+	}
+
+	__uint8_t_Type* __uint8_t_Type::GetSingleton()
+	{
+		static __uint8_t_Type* s_instance = 0;
+		static char s_buffer[sizeof(__uint8_t_Type)];
+		if(0 == s_instance)
+		{
+			s_instance = (__uint8_t_Type*)s_buffer;
+			new (s_buffer)__uint8_t_Type;
+		}
+		return s_instance;
+	}
+
+	__int16_t_Type::__int16_t_Type() : TypeAlias("int16_t", RuntimeTypeOf<::int16_t>::RuntimeType::GetSingleton())
+	{
+		::pafcore::NameSpace::GetGlobalNameSpace()->registerMember(this);
+	}
+
+	__int16_t_Type* __int16_t_Type::GetSingleton()
+	{
+		static __int16_t_Type* s_instance = 0;
+		static char s_buffer[sizeof(__int16_t_Type)];
+		if(0 == s_instance)
+		{
+			s_instance = (__int16_t_Type*)s_buffer;
+			new (s_buffer)__int16_t_Type;
+		}
+		return s_instance;
+	}
+
+	__uint16_t_Type::__uint16_t_Type() : TypeAlias("uint16_t", RuntimeTypeOf<::uint16_t>::RuntimeType::GetSingleton())
+	{
+		::pafcore::NameSpace::GetGlobalNameSpace()->registerMember(this);
+	}
+
+	__uint16_t_Type* __uint16_t_Type::GetSingleton()
+	{
+		static __uint16_t_Type* s_instance = 0;
+		static char s_buffer[sizeof(__uint16_t_Type)];
+		if(0 == s_instance)
+		{
+			s_instance = (__uint16_t_Type*)s_buffer;
+			new (s_buffer)__uint16_t_Type;
+		}
+		return s_instance;
+	}
+
+	__int32_t_Type::__int32_t_Type() : TypeAlias("int32_t", RuntimeTypeOf<::int32_t>::RuntimeType::GetSingleton())
+	{
+		::pafcore::NameSpace::GetGlobalNameSpace()->registerMember(this);
+	}
+
+	__int32_t_Type* __int32_t_Type::GetSingleton()
+	{
+		static __int32_t_Type* s_instance = 0;
+		static char s_buffer[sizeof(__int32_t_Type)];
+		if(0 == s_instance)
+		{
+			s_instance = (__int32_t_Type*)s_buffer;
+			new (s_buffer)__int32_t_Type;
+		}
+		return s_instance;
+	}
+
+	__uint32_t_Type::__uint32_t_Type() : TypeAlias("uint32_t", RuntimeTypeOf<::uint32_t>::RuntimeType::GetSingleton())
+	{
+		::pafcore::NameSpace::GetGlobalNameSpace()->registerMember(this);
+	}
+
+	__uint32_t_Type* __uint32_t_Type::GetSingleton()
+	{
+		static __uint32_t_Type* s_instance = 0;
+		static char s_buffer[sizeof(__uint32_t_Type)];
+		if(0 == s_instance)
+		{
+			s_instance = (__uint32_t_Type*)s_buffer;
+			new (s_buffer)__uint32_t_Type;
+		}
+		return s_instance;
+	}
+
+	__int64_t_Type::__int64_t_Type() : TypeAlias("int64_t", RuntimeTypeOf<::int64_t>::RuntimeType::GetSingleton())
+	{
+		::pafcore::NameSpace::GetGlobalNameSpace()->registerMember(this);
+	}
+
+	__int64_t_Type* __int64_t_Type::GetSingleton()
+	{
+		static __int64_t_Type* s_instance = 0;
+		static char s_buffer[sizeof(__int64_t_Type)];
+		if(0 == s_instance)
+		{
+			s_instance = (__int64_t_Type*)s_buffer;
+			new (s_buffer)__int64_t_Type;
+		}
+		return s_instance;
+	}
+
+	__uint64_t_Type::__uint64_t_Type() : TypeAlias("uint64_t", RuntimeTypeOf<::uint64_t>::RuntimeType::GetSingleton())
+	{
+		::pafcore::NameSpace::GetGlobalNameSpace()->registerMember(this);
+	}
+
+	__uint64_t_Type* __uint64_t_Type::GetSingleton()
+	{
+		static __uint64_t_Type* s_instance = 0;
+		static char s_buffer[sizeof(__uint64_t_Type)];
+		if(0 == s_instance)
+		{
+			s_instance = (__uint64_t_Type*)s_buffer;
+			new (s_buffer)__uint64_t_Type;
+		}
+		return s_instance;
+	}
+
 	__size_t_Type::__size_t_Type() : TypeAlias("size_t", RuntimeTypeOf<::size_t>::RuntimeType::GetSingleton())
 	{
 		::pafcore::NameSpace::GetGlobalNameSpace()->registerMember(this);
@@ -330,6 +466,7 @@ namespace idlcpp
 
 }
 
+AUTO_REGISTER_TYPE(::idlcpp::__uint_t_Type)
 AUTO_REGISTER_TYPE(::idlcpp::__bool_t_Type)
 static_assert(RuntimeTypeOf<::bool_t>::type_category == ::pafcore::primitive_object, "type category error");
 AUTO_REGISTER_TYPE(::idlcpp::__char_t_Type)
@@ -352,8 +489,6 @@ AUTO_REGISTER_TYPE(::idlcpp::__ulonglong_t_Type)
 static_assert(RuntimeTypeOf<::ulonglong_t>::type_category == ::pafcore::primitive_object, "type category error");
 AUTO_REGISTER_TYPE(::idlcpp::__int_t_Type)
 static_assert(RuntimeTypeOf<::int_t>::type_category == ::pafcore::primitive_object, "type category error");
-AUTO_REGISTER_TYPE(::idlcpp::__uint_t_Type)
-static_assert(RuntimeTypeOf<::uint_t>::type_category == ::pafcore::primitive_object, "type category error");
 AUTO_REGISTER_TYPE(::idlcpp::__float_t_Type)
 static_assert(RuntimeTypeOf<::float_t>::type_category == ::pafcore::primitive_object, "type category error");
 AUTO_REGISTER_TYPE(::idlcpp::__double_t_Type)
@@ -362,6 +497,22 @@ AUTO_REGISTER_TYPE(::idlcpp::__longdouble_t_Type)
 static_assert(RuntimeTypeOf<::longdouble_t>::type_category == ::pafcore::primitive_object, "type category error");
 AUTO_REGISTER_TYPE(::idlcpp::__byte_t_Type)
 static_assert(RuntimeTypeOf<::byte_t>::type_category == ::pafcore::primitive_object, "type category error");
+AUTO_REGISTER_TYPE(::idlcpp::__int8_t_Type)
+static_assert(RuntimeTypeOf<::int8_t>::type_category == ::pafcore::primitive_object, "type category error");
+AUTO_REGISTER_TYPE(::idlcpp::__uint8_t_Type)
+static_assert(RuntimeTypeOf<::uint8_t>::type_category == ::pafcore::primitive_object, "type category error");
+AUTO_REGISTER_TYPE(::idlcpp::__int16_t_Type)
+static_assert(RuntimeTypeOf<::int16_t>::type_category == ::pafcore::primitive_object, "type category error");
+AUTO_REGISTER_TYPE(::idlcpp::__uint16_t_Type)
+static_assert(RuntimeTypeOf<::uint16_t>::type_category == ::pafcore::primitive_object, "type category error");
+AUTO_REGISTER_TYPE(::idlcpp::__int32_t_Type)
+static_assert(RuntimeTypeOf<::int32_t>::type_category == ::pafcore::primitive_object, "type category error");
+AUTO_REGISTER_TYPE(::idlcpp::__uint32_t_Type)
+static_assert(RuntimeTypeOf<::uint32_t>::type_category == ::pafcore::primitive_object, "type category error");
+AUTO_REGISTER_TYPE(::idlcpp::__int64_t_Type)
+static_assert(RuntimeTypeOf<::int64_t>::type_category == ::pafcore::primitive_object, "type category error");
+AUTO_REGISTER_TYPE(::idlcpp::__uint64_t_Type)
+static_assert(RuntimeTypeOf<::uint64_t>::type_category == ::pafcore::primitive_object, "type category error");
 AUTO_REGISTER_TYPE(::idlcpp::__size_t_Type)
 static_assert(RuntimeTypeOf<::size_t>::type_category == ::pafcore::primitive_object, "type category error");
 AUTO_REGISTER_TYPE(::idlcpp::__ptrdiff_t_Type)

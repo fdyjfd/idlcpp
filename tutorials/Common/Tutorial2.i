@@ -67,7 +67,7 @@ namespace tutorial
 	}
 	inline Rectangle::Rectangle()
 	{}
-	inline float Rectangle::get_left()
+	inline float Rectangle::get_left() const
 	{
 		return m_min.x;
 	}
@@ -75,7 +75,7 @@ namespace tutorial
 	{
 		m_min.x = left;
 	}
-	inline float Rectangle::get_right()
+	inline float Rectangle::get_right() const
 	{
 		return m_max.x;
 	}

@@ -26,22 +26,22 @@ ClassType* InstanceField::get_objectType()
 	return m_objectType;
 }
 
-bool InstanceField::get_isArray()
+bool InstanceField::get_isArray() const
 {
 	return tc_array == m_typeCompound;
 }
 
-bool InstanceField::get_isPointer()
+bool InstanceField::get_isPointer() const
 {
 	return tc_pointer == m_typeCompound;
 }
 
-bool InstanceField::get_isConstant()
+bool InstanceField::get_isConstant() const
 {
 	return m_constant;
 }
 
-size_t InstanceField::get_offset()
+size_t InstanceField::get_offset() const
 {
 	return m_offset;
 }

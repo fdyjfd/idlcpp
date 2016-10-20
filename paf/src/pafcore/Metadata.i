@@ -64,7 +64,7 @@ namespace pafcore
 
 #{
 
-	inline const char* Metadata::get__name_()
+	inline const char* Metadata::get__name_() const
 	{
 		return m_name;
 	}

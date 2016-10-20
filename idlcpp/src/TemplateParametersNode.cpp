@@ -4,9 +4,10 @@
 #include "RaiseError.h"
 #include <set>
 
-TemplateParametersNode::TemplateParametersNode(TokenNode* leftBracket, TemplateParameterListNode* parameterList, TokenNode* rightBracket)
+TemplateParametersNode::TemplateParametersNode(TokenNode* keyword, TokenNode* leftBracket, TemplateParameterListNode* parameterList, TokenNode* rightBracket)
 {
 	m_nodeType = snt_template_parameters;
+	m_keyword = keyword;
 	m_leftBracket = leftBracket;
 	m_parameterList = parameterList;
 	m_rightBracket = rightBracket;

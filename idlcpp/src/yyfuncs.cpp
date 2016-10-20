@@ -136,6 +136,7 @@ void setFilter(SyntaxNode* syntaxNode, SyntaxNode* filterNode)
 	assert(snt_field == syntaxNode->m_nodeType
 		|| snt_property == syntaxNode->m_nodeType
 		|| snt_method == syntaxNode->m_nodeType
+		|| snt_operator == syntaxNode->m_nodeType	
 		|| snt_class == syntaxNode->m_nodeType
 		|| snt_enum == syntaxNode->m_nodeType
 		|| snt_template_class_instance == syntaxNode->m_nodeType
@@ -508,12 +509,13 @@ SyntaxNode* newTemplateParameterList(SyntaxNode* list, SyntaxNode* delimiter, Sy
 	return res;
 }
 
-SyntaxNode* newTemplateParameters(SyntaxNode* lts, SyntaxNode* parameterList, SyntaxNode* gts)
+SyntaxNode* newTemplateParameters(SyntaxNode* keyword, SyntaxNode* lts, SyntaxNode* parameterList, SyntaxNode* gts)
 {
+	assert(snt_keyword_template == keyword->m_nodeType);
 	assert('<' == lts->m_nodeType);
 	assert(snt_template_parameter_list == parameterList->m_nodeType);
 	assert('>' == gts->m_nodeType);
-	TemplateParametersNode* res = new TemplateParametersNode(
+	TemplateParametersNode* res = new TemplateParametersNode((TokenNode*)keyword,
 		(TokenNode*)lts, (TemplateParameterListNode*)parameterList, (TokenNode*)gts);
 	g_syntaxNodes.push_back(res);
 	return res;

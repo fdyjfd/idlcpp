@@ -254,9 +254,9 @@ void RaiseError_MissingReferenceBaseType(IdentifyNode* node)
 void RaiseError_InterfaceMethodIsNotVirtual(IdentifyNode* node)
 {
 	char buf[error_info_buffer_size];
-	sprintf_s(buf, "\'%s\' : interface method must be virtual or abstract", node->m_str.c_str());
+	sprintf_s(buf, "\'%s\' : override method must be virtual or abstract", node->m_str.c_str());
 	ErrorList_AddItem_CurrentFile(node->m_lineNo,
-		node->m_columnNo, semantic_error_missing_reference_base_type, buf);
+		node->m_columnNo, semantic_error_override_method_must_be_virtual_or_abstract, buf);
 }
 
 void RaiseError_TooFewFormalParameters(OperatorNode* node)
@@ -266,7 +266,7 @@ void RaiseError_TooFewFormalParameters(OperatorNode* node)
 	node->getOperatorString(str);
 	sprintf_s(buf, "\'operator %s\' : too few formal parameters", str.c_str());
 	ErrorList_AddItem_CurrentFile(node->m_sign->m_lineNo,
-		node->m_sign->m_columnNo, semantic_error_too_many_template_arguments, buf);
+		node->m_sign->m_columnNo, semantic_error_too_few_formal_parameters, buf);
 }
 
 void RaiseError_TooManyFormalParameters(OperatorNode* node)
@@ -276,7 +276,7 @@ void RaiseError_TooManyFormalParameters(OperatorNode* node)
 	node->getOperatorString(str);
 	sprintf_s(buf, "\'operator %s\' : too many formal parameters", str.c_str());
 	ErrorList_AddItem_CurrentFile(node->m_sign->m_lineNo,
-		node->m_sign->m_columnNo, semantic_error_too_many_template_arguments, buf);
+		node->m_sign->m_columnNo, semantic_error_too_many_formal_parameters, buf);
 }
 
 void RaiseError_StaticOperator(OperatorNode* node)

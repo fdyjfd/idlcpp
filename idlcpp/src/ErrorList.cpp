@@ -53,6 +53,7 @@ const char* g_errorStrings[] =
 	"too few formal parameters",
 	"too many formal parameters",
 	"semantic error operator can not be static",
+	"semantic error override method must be virtual or abstract",
 };
 
 ErrorList::ErrorList()

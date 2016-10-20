@@ -19,12 +19,12 @@ class Variant;
 		virtual size_t getAddress();
 
 		Type* get_type();
-		bool get_byValue();
-		bool get_byRef();
-		bool get_byPtr();
-		bool get_byNew();
-		bool get_byNewArray();
-		bool get_isConstant();
+		bool get_byValue() const;
+		bool get_byRef() const;
+		bool get_byPtr() const;
+		bool get_byNew() const;
+		bool get_byNewArray() const;
+		bool get_isConstant() const;
 
 	public:
 		Result(Type* type, bool constant, Passing passing);

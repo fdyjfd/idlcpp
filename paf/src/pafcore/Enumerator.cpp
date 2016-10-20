@@ -17,7 +17,7 @@ Type* Enumerator::get__type_()
 	return m_type;
 }
 
-int Enumerator::get__value_()
+int Enumerator::get__value_() const
 {
 	return m_value;
 }

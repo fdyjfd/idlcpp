@@ -42,6 +42,10 @@ void generateCode_Token(FILE* file, TokenNode* tokenNode, int indentation)
 	if(tokenNode->m_nodeType < 256)
 	{
 		char ch = tokenNode->m_nodeType;
+		if ('^' == ch)
+		{
+			ch = '*';
+		}
 		writeStringToFile(&ch, 1, file);
 	}
 	else
@@ -55,6 +59,37 @@ void generateCode_Token(FILE* file, TokenNode* tokenNode, int indentation)
 		writeStringToFile(str, file);
 	}
 }
+
+void generateCode_TokenForOperator(FILE* file, TokenNode* tokenNode, int indentation)
+{
+	char lastChar = g_compiler.outputEmbededCodes(file, tokenNode);
+
+	if (tokenNode->m_lineNo != g_compiler.m_currentLineNo)
+	{
+
+	}
+
+	if (indentation > 0)
+	{
+		writeStringToFile("", 0, file, indentation);
+	}
+	if (tokenNode->m_nodeType < 256)
+	{
+		char ch = tokenNode->m_nodeType;
+		writeStringToFile(&ch, 1, file);
+	}
+	else
+	{
+		assert(snt_begin_output < tokenNode->m_nodeType && tokenNode->m_nodeType < snt_end_output);
+		const char* str = g_keywordTokens[tokenNode->m_nodeType - snt_begin_output - 1];
+		if (0 == indentation && isNumAlpha_(lastChar))
+		{
+			writeSpaceToFile(file);
+		}
+		writeStringToFile(str, file);
+	}
+}
+
 
 void generateCode_Identify(FILE* file, IdentifyNode* identifyNode, int indentation)
 {
@@ -260,10 +295,9 @@ void HeaderFileGenerator::generateCode_Class(FILE* file, ClassNode* classNode, i
 		file = 0;
 	}
 
-	classNode->m_keyword->outputEmbededCodes(file, 0 == indentation);
 	if(classNode->m_templateParametersNode)
 	{
-		writeStringToFile("template", file, indentation);
+		generateCode_Token(file, classNode->m_templateParametersNode->m_keyword, indentation);
 		generateCode_Token(file, classNode->m_templateParametersNode->m_leftBracket, 0);
 		std::vector<std::pair<TokenNode*, IdentifyNode*>> parameterNodes;
 		classNode->m_templateParametersNode->collectParameterNodes(parameterNodes);
@@ -279,7 +313,6 @@ void HeaderFileGenerator::generateCode_Class(FILE* file, ClassNode* classNode, i
 			generateCode_Identify(file, parameterNodes[i].second, 0);
 		}
 		generateCode_Token(file, classNode->m_templateParametersNode->m_rightBracket, 0);
-		writeStringToFile("\n", file);
 	}
 
 	generateCode_Token(file, classNode->m_keyword, indentation);
@@ -502,14 +535,23 @@ void HeaderFileGenerator::generateCode_Property_Get(FILE* file, PropertyNode* pr
 		generateCode_Token(file, propertyNode->m_get->m_keyword, 0);
 		generateCode_Identify(file, propertyNode->m_name, 0);
 	}
-	if(propertyNode->m_modifier && snt_keyword_abstract == propertyNode->m_modifier->m_nodeType)
-	{
-		writeStringToFile("() = 0;", file);	
-	}
-	else
-	{
-		writeStringToFile("();", file);	
-	}
+
+	char buf[32];
+	const char* constThis =
+		(!propertyNode->isStatic() && (propertyNode->m_get->isConstant() || propertyNode->m_get->byValue())) ?
+		" const" : "";
+	const char* pure = propertyNode->isAbstract() ? " = 0" : "";
+	sprintf_s(buf, "()%s%s;", constThis, pure);
+	writeStringToFile(buf, file);
+
+	//if(propertyNode->m_modifier && snt_keyword_abstract == propertyNode->m_modifier->m_nodeType)
+	//{
+	//	writeStringToFile("() = 0;", file);	
+	//}
+	//else
+	//{
+	//	writeStringToFile("();", file);	
+	//}
 }
 
 void HeaderFileGenerator::generateCode_Property_Set(FILE* file, PropertyNode* propertyNode, int indentation)
@@ -719,7 +761,7 @@ void HeaderFileGenerator::generateCode_Operator(FILE* file, OperatorNode* operat
 		writeSpaceToFile(file);
 	}
 	generateCode_Token(file, operatorNode->m_keyword, 0);
-	generateCode_Token(file, operatorNode->m_sign, 0);
+	generateCode_TokenForOperator(file, operatorNode->m_sign, 0);
 	if ('(' == operatorNode->m_sign->m_nodeType)
 	{
 		writeStringToFile(")", file);

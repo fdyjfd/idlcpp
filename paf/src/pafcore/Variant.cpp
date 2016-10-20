@@ -320,14 +320,11 @@ bool Variant::castToValuePtr(Type* dstType, void** dst) const
 		*dst = 0;
 		return true;
 	}
-	if(m_type->isValue())
+	size_t offset;
+	if (static_cast<ClassType*>(m_type)->getClassOffset(offset, static_cast<ClassType*>(dstType)))
 	{
-		size_t offset;
-		if(static_cast<ClassType*>(m_type)->getClassOffset(offset, static_cast<ClassType*>(dstType)))
-		{
-			*dst = (void*)((size_t)m_pointer + offset);
-			return true;
-		}
+		*dst = (void*)((size_t)m_pointer + offset);
+		return true;
 	}
 	return false;
 }

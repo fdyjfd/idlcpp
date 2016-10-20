@@ -295,7 +295,7 @@ void writeOverrideFunction(ClassNode* classNode, TemplateArguments* templateArgu
 			}
 			else
 			{
-				sprintf_s(buf, "paf_delete_array(reinterpret_cast<::pafcore::RefCountObject<%s>*>(address));\n", className.c_str());
+				sprintf_s(buf, "paf_delete_array(reinterpret_cast<::pafcore::RefCountImpl<%s>*>(address));\n", className.c_str());
 			}
 		}
 		else
@@ -334,7 +334,7 @@ void writeOverrideFunction(ClassNode* classNode, TemplateArguments* templateArgu
 		}
 		else
 		{
-			sprintf_s(buf, "return new ::pafcore::RefCountObject<%s>(subclassInvoker);\n", subclassProxyName.c_str());
+			sprintf_s(buf, "return new ::pafcore::RefCountImpl<%s>(subclassInvoker);\n", subclassProxyName.c_str());
 		}
 		writeStringToFile(buf, file, indentation + 1);
 		writeStringToFile("}\n\n", file, indentation);
@@ -348,7 +348,7 @@ void writeOverrideFunction(ClassNode* classNode, TemplateArguments* templateArgu
 		}
 		else
 		{
-			sprintf_s(buf, "delete reinterpret_cast<::pafcore::RefCountObject<%s>*>(subclassProxy);\n", subclassProxyName.c_str());
+			sprintf_s(buf, "delete reinterpret_cast<::pafcore::RefCountImpl<%s>*>(subclassProxy);\n", subclassProxyName.c_str());
 		}
 		writeStringToFile(buf, file, indentation + 1);
 		writeStringToFile("}\n\n", file, indentation);
@@ -434,10 +434,10 @@ void MetaSourceFileGenerator::generateCode_Class(FILE* file, ClassNode* classNod
 							|| methodNode->m_name->m_str == "__assign__")
 						{
 							typeMethodNodes.push_back(methodNode);
-							if (0 == methodNode->m_nativeName)
-							{
-								staticMethodNodes.push_back(methodNode);
-							}
+							//if (0 == methodNode->m_nativeName)
+							//{
+							//	staticMethodNodes.push_back(methodNode);
+							//}
 						}
 						else
 						{
@@ -1259,13 +1259,13 @@ void writeMetaMethodImpl_Call(ClassNode* classNode, TemplateArguments* templateA
 				}
 				else
 				{
-					sprintf_s(buf, "new ::pafcore::RefCountObject<%s>(", className.c_str());
+					sprintf_s(buf, "new ::pafcore::RefCountImpl<%s>(", className.c_str());
 				}
 			}
 			else if ("NewARC" == methodNode->m_name->m_str)
 			{
 				assert(!classNode->isValueType());
-				sprintf_s(buf, "new ::pafcore::AtomicRefCountObject<%s>(", className.c_str());
+				sprintf_s(buf, "new ::pafcore::AtomicRefCountImpl<%s>(", className.c_str());
 			}
 			else
 			{
@@ -2353,7 +2353,7 @@ void MetaSourceFileGenerator::generateCode_TypeDeclaration(FILE* file, TypeDecla
 	writeMetaGetSingletonImpls(typeDeclarationNode, templateArguments, file, indentation);
 }
 
-void writeMethodParameter(MethodNode* methodNode, ParameterNode* parameterNode, FILE* file);
+void writeOverrideMethodParameter(MethodNode* methodNode, ParameterNode* parameterNode, FILE* file);
 
 void writeInterfaceMethodImpl_AssignThis(ClassNode* classNode, MethodNode* methodNode, FILE* file, int indentation)
 {
@@ -2678,9 +2678,14 @@ void writeInterfaceMethodImpl(ClassNode* classNode, TemplateArguments* templateA
 	std::string typeName;
 	resultTypeNode->getFullName(typeName);
 	resultName += typeName;
-	if(0 != methodNode->m_passing)
+
+	if (methodNode->byRef())
 	{
-		resultName += g_keywordTokens[methodNode->m_passing->m_nodeType - snt_begin_output - 1];
+		resultName += "&";
+	}
+	else if (methodNode->byPtr() || methodNode->byNew())
+	{
+		resultName += "*";
 	}
 	sprintf_s(buf, "%s %s::%s( ", resultName.c_str(), subclassProxyName.c_str(), methodNameNode->m_str.c_str());
 	writeStringToFile(buf, file, indentation);
@@ -2694,7 +2699,7 @@ void writeInterfaceMethodImpl(ClassNode* classNode, TemplateArguments* templateA
 		{
 			writeStringToFile(", ", file);
 		}
-		writeMethodParameter(methodNode, parameterNodes[i], file);
+		writeOverrideMethodParameter(methodNode, parameterNodes[i], file);
 	}
 	writeStringToFile(")", file);
 	if(methodNode->m_constant)

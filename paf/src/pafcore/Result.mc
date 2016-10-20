@@ -69,7 +69,7 @@ namespace idlcpp
 
 	void __pafcore__Result_Type::destroyArray(void* address)
 	{
-		paf_delete_array(reinterpret_cast<::pafcore::RefCountObject<::pafcore::Result>*>(address));
+		paf_delete_array(reinterpret_cast<::pafcore::RefCountImpl<::pafcore::Result>*>(address));
 	}
 
 	void __pafcore__Result_Type::assign(void* dst, const void* src)

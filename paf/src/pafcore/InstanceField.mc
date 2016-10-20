@@ -68,7 +68,7 @@ namespace idlcpp
 
 	void __pafcore__InstanceField_Type::destroyArray(void* address)
 	{
-		paf_delete_array(reinterpret_cast<::pafcore::RefCountObject<::pafcore::InstanceField>*>(address));
+		paf_delete_array(reinterpret_cast<::pafcore::RefCountImpl<::pafcore::InstanceField>*>(address));
 	}
 
 	void __pafcore__InstanceField_Type::assign(void* dst, const void* src)

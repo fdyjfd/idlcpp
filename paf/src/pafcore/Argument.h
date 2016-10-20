@@ -17,16 +17,16 @@ namespace pafcore
 		virtual size_t getAddress();
 
 		Type* get_type();
-		bool get_byValue();
-		bool get_byRef();
-		bool get_byPtr();
-		bool get_byOutPtr();
-		bool get_byOutRef();
-		bool get_byNewPtr();
-		bool get_byNewRef();
-		bool get_byNewArrayPtr();
-		bool get_byNewArrayRef();
-		bool get_isConstant();
+		bool get_byValue() const;
+		bool get_byRef() const;
+		bool get_byPtr() const;
+		bool get_byOutPtr() const;
+		bool get_byOutRef() const;
+		bool get_byNewPtr() const;
+		bool get_byNewRef() const;
+		bool get_byNewArrayPtr() const;
+		bool get_byNewArrayRef() const;
+		bool get_isConstant() const;
 
 	public:
 		Argument(const char* name, Type* type, Passing passing, bool constant);

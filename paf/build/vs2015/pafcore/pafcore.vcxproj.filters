@@ -342,6 +342,9 @@
     <ClInclude Include="..\..\..\src\pafcore\Overload.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\src\pafcore\RefCountImpl.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="..\..\..\src\pafcore\Argument.i">

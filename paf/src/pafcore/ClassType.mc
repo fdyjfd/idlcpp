@@ -116,7 +116,7 @@ namespace idlcpp
 
 	void __pafcore__ClassType_Type::destroyArray(void* address)
 	{
-		paf_delete_array(reinterpret_cast<::pafcore::RefCountObject<::pafcore::ClassType>*>(address));
+		paf_delete_array(reinterpret_cast<::pafcore::RefCountImpl<::pafcore::ClassType>*>(address));
 	}
 
 	void __pafcore__ClassType_Type::assign(void* dst, const void* src)
