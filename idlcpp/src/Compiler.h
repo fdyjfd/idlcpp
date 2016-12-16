@@ -75,7 +75,7 @@ public:
 	bool generateSourceFile(const char* fileName, const char* cppName);
 	bool generateMetaHeaderFile(const char* fileName, const char* cppName);
 	bool generateMetaSourceFile(const char* fileName, const char* cppName);
-	char outputEmbededCodes(FILE* file, TokenNode* tokenNode);
+	void outputEmbededCodes(FILE* file, TokenNode* tokenNode);
 private:
 	void insertUnParsedSourceFile(const std::string& fileName);
 public:

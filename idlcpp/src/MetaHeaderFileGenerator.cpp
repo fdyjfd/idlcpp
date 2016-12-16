@@ -372,7 +372,7 @@ void MetaHeaderFileGenerator::generateCode_Class(FILE* file, ClassNode* classNod
 		}
 	}
 	
-	if(!classNode->isAbstractClass())
+	//if(!classNode->isAbstractClass())
 	{
 		auto it = classNode->m_additionalMethods.begin();
 		auto end = classNode->m_additionalMethods.end();

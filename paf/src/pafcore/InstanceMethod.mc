@@ -3,10 +3,8 @@
 
 #pragma once
 
-#include "./Typedef.mh"
-#include "./Reference.mh"
 #include "./Metadata.mh"
-#include "./Type.mh"
+#include "./Typedef.mh"
 #include "./Result.mh"
 #include "./Argument.mh"
 #include "InstanceMethod.mh"
@@ -37,6 +35,12 @@ namespace idlcpp
 		};
 		m_baseClasses = s_baseClasses;
 		m_baseClassCount = paf_array_size_of(s_baseClasses);
+		static ::pafcore::ClassTypeIterator s_classTypeIterators[] =
+		{
+			::pafcore::ClassTypeIterator(RuntimeTypeOf<::pafcore::Metadata>::RuntimeType::GetSingleton()->m_firstDerivedClass, this),
+		};
+		RuntimeTypeOf<::pafcore::Metadata>::RuntimeType::GetSingleton()->m_firstDerivedClass = &s_classTypeIterators[0];
+		m_classTypeIterators = s_classTypeIterators;
 		static ::pafcore::InstanceProperty s_properties[] = 
 		{
 			::pafcore::InstanceProperty("overloadCount", GetSingleton(), InstanceMethod_get_overloadCount, RuntimeTypeOf<::size_t>::RuntimeType::GetSingleton(), ::pafcore::Metadata::by_value, false, 0, 0, ::pafcore::Metadata::by_value, false),

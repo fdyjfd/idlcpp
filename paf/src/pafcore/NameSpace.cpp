@@ -10,6 +10,28 @@
 
 BEGIN_PAFCORE
 
+NameSpace::MetadataTrieTree::Node::~Node()
+{
+	if (!isNull())
+	{
+		if (isMetadata())
+		{
+			Metadata* metadata = getMetadata();
+			if (name_space == metadata->get__category_())
+			{
+				NameSpace* nameSpace = static_cast<NameSpace*>(metadata);
+				delete nameSpace;
+			}
+		}
+		else
+		{
+			Node* node = getChildren();
+			delete[] node;
+		}
+	}
+
+}
+
 const size_t num_metadata_name_char = 68;
 
 size_t NameSpace::MetadataTrieTree::Node::GetIndex(char c)
@@ -53,7 +75,7 @@ bool NameSpace::MetadataTrieTree::Node::insert(Metadata* metadata, int offset)
 	else if(isMetadata())
 	{
 		Metadata* currentMetadata = getMetadata();
-		Node* children = new Node[num_metadata_name_char];
+		Node* children = paf_new Node[num_metadata_name_char];
 		assert(0 == ((size_t)children & 1));
 		setChildren(children);
 		size_t currentIndex = GetIndex(currentMetadata->m_name[offset]);
@@ -163,8 +185,8 @@ Metadata* NameSpace::MetadataTrieTree::getItem(size_t index)
 
 NameSpace::NameSpace(const char* name)
 	: Metadata(name)
-{
-}
+{}
+
 
 NameSpace* NameSpace::getNameSpace(const char* name)
 {
@@ -174,7 +196,7 @@ NameSpace* NameSpace::getNameSpace(const char* name)
 		Metadata* member = m_members.find(name);
 		if(0 == member)
 		{
-			subNameSpace = new NameSpace(name);
+			subNameSpace = paf_new NameSpace(name);
 			subNameSpace->m_scope = this;
 			m_members.insert(subNameSpace);
 		}

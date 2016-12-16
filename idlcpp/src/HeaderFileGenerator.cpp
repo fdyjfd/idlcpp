@@ -28,12 +28,7 @@
 
 void generateCode_Token(FILE* file, TokenNode* tokenNode, int indentation)
 {
-	char lastChar = g_compiler.outputEmbededCodes(file, tokenNode);
-
-	if(tokenNode->m_lineNo != g_compiler.m_currentLineNo)
-	{
-
-	}
+	g_compiler.outputEmbededCodes(file, tokenNode);
 
 	if(indentation > 0)
 	{
@@ -52,7 +47,7 @@ void generateCode_Token(FILE* file, TokenNode* tokenNode, int indentation)
 	{
 		assert(snt_begin_output < tokenNode->m_nodeType && tokenNode->m_nodeType < snt_end_output);
 		const char* str = g_keywordTokens[tokenNode->m_nodeType - snt_begin_output - 1];
-		if(0 == indentation && isNumAlpha_(lastChar))
+		if (isNumAlpha_(GetLastWrittenChar()))
 		{
 			writeSpaceToFile(file);
 		}
@@ -62,12 +57,7 @@ void generateCode_Token(FILE* file, TokenNode* tokenNode, int indentation)
 
 void generateCode_TokenForOperator(FILE* file, TokenNode* tokenNode, int indentation)
 {
-	char lastChar = g_compiler.outputEmbededCodes(file, tokenNode);
-
-	if (tokenNode->m_lineNo != g_compiler.m_currentLineNo)
-	{
-
-	}
+	g_compiler.outputEmbededCodes(file, tokenNode);
 
 	if (indentation > 0)
 	{
@@ -82,7 +72,7 @@ void generateCode_TokenForOperator(FILE* file, TokenNode* tokenNode, int indenta
 	{
 		assert(snt_begin_output < tokenNode->m_nodeType && tokenNode->m_nodeType < snt_end_output);
 		const char* str = g_keywordTokens[tokenNode->m_nodeType - snt_begin_output - 1];
-		if (0 == indentation && isNumAlpha_(lastChar))
+		if (isNumAlpha_(GetLastWrittenChar()))
 		{
 			writeSpaceToFile(file);
 		}
@@ -91,14 +81,14 @@ void generateCode_TokenForOperator(FILE* file, TokenNode* tokenNode, int indenta
 }
 
 
-void generateCode_Identify(FILE* file, IdentifyNode* identifyNode, int indentation)
+void generateCode_Identify(FILE* file, IdentifyNode* identifyNode, int indentation, bool addSpace = true)
 {
-	char lastChar = g_compiler.outputEmbededCodes(file, identifyNode);
+	g_compiler.outputEmbededCodes(file, identifyNode);
 	if(indentation > 0)
 	{
 		writeStringToFile("", 0, file, indentation);
 	}
-	else if(isNumAlpha_(lastChar))
+	if(addSpace && isNumAlpha_(GetLastWrittenChar()))
 	{
 		writeSpaceToFile(file);
 	}
@@ -148,13 +138,13 @@ void generateCode_TypeName(FILE* file, TypeNameNode* typeNameNode, ScopeNode* sc
 	writeStringToFile(typeName.c_str(), file, indentation);
 }
 
-void generateCode_Parameter(FILE* file, ParameterNode* parameterNode, ClassNode* classNode, int indentation)
+void generateCode_Parameter(FILE* file, ParameterNode* parameterNode, ScopeNode* scopeNode, int indentation)
 {
 	if(parameterNode->m_constant)
 	{
 		generateCode_Token(file, parameterNode->m_constant, 0);
 	}
-	generateCode_TypeName(file, parameterNode->m_typeName, classNode, true, 0);
+	generateCode_TypeName(file, parameterNode->m_typeName, scopeNode, true, 0);
 	if(0 != parameterNode->m_out)
 	{
 		generateCode_Token(file, parameterNode->m_out, 0);
@@ -343,6 +333,18 @@ void HeaderFileGenerator::generateCode_Class(FILE* file, ClassNode* classNode, i
 
 	std::vector<MemberNode*> memberNodes;
 	classNode->m_memberList->collectMemberNodes(memberNodes);
+
+	auto it = classNode->m_additionalMethods.begin();
+	auto end = classNode->m_additionalMethods.end();
+	for (; it != end; ++it)
+	{
+		MethodNode* methodNode = *it;
+		if (!methodNode->isNoCode())
+		{
+			memberNodes.push_back(methodNode);
+		}
+	}
+
 	size_t memberCount = memberNodes.size();
 	for (size_t i = 0; i < memberCount; ++i)
 	{
@@ -533,7 +535,7 @@ void HeaderFileGenerator::generateCode_Property_Get(FILE* file, PropertyNode* pr
 	//else
 	{
 		generateCode_Token(file, propertyNode->m_get->m_keyword, 0);
-		generateCode_Identify(file, propertyNode->m_name, 0);
+		generateCode_Identify(file, propertyNode->m_name, 0, false);
 	}
 
 	char buf[32];
@@ -592,7 +594,7 @@ void HeaderFileGenerator::generateCode_Property_Set(FILE* file, PropertyNode* pr
 	//else
 	{
 		generateCode_Token(file, propertyNode->m_set->m_keyword, indentation);
-		generateCode_Identify(file, propertyNode->m_name, 0);
+		generateCode_Identify(file, propertyNode->m_name, 0, false);
 	}
 	writeStringToFile("( ", file);
 	if(0 != propertyNode->m_set->m_constant)
@@ -683,6 +685,10 @@ void HeaderFileGenerator::generateCode_Method(FILE* file, MethodNode* methodNode
 	}
 
 	ClassNode* classNode = static_cast<ClassNode*>(methodNode->m_enclosing);
+	if(classNode->isAdditionalMethod(methodNode))
+	{
+		writeStringToFile("\n", file);
+	}
 	if(0 != methodNode->m_modifier)
 	{
 		generateCode_Token(file, methodNode->m_modifier, indentation);

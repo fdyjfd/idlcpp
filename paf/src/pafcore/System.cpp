@@ -3,8 +3,6 @@
 #include "System.mh"
 #include "System.mc"
 
-#ifdef WIN32
-
 #include <windows.h>
 
 namespace pafcore
@@ -15,4 +13,3 @@ namespace pafcore
 	}
 }
 
-#endif

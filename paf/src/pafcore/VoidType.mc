@@ -3,10 +3,8 @@
 
 #pragma once
 
-#include "./Typedef.mh"
-#include "./Reference.mh"
-#include "./Metadata.mh"
 #include "./Type.mh"
+#include "./Typedef.mh"
 #include "VoidType.mh"
 #include "AutoRun.h"
 #include "NameSpace.h"
@@ -35,6 +33,12 @@ namespace idlcpp
 		};
 		m_baseClasses = s_baseClasses;
 		m_baseClassCount = paf_array_size_of(s_baseClasses);
+		static ::pafcore::ClassTypeIterator s_classTypeIterators[] =
+		{
+			::pafcore::ClassTypeIterator(RuntimeTypeOf<::pafcore::Type>::RuntimeType::GetSingleton()->m_firstDerivedClass, this),
+		};
+		RuntimeTypeOf<::pafcore::Type>::RuntimeType::GetSingleton()->m_firstDerivedClass = &s_classTypeIterators[0];
+		m_classTypeIterators = s_classTypeIterators;
 		static ::pafcore::StaticProperty s_staticProperties[] = 
 		{
 			::pafcore::StaticProperty("NullPtr", VoidType_get_NullPtr, RuntimeTypeOf<void>::RuntimeType::GetSingleton(), ::pafcore::Metadata::by_ptr, false, 0, 0, ::pafcore::Metadata::by_value, false),

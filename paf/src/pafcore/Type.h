@@ -3,7 +3,6 @@
 
 #pragma once
 
-#include "./Reference.h"
 #include "./Metadata.h"
 
 namespace pafcore

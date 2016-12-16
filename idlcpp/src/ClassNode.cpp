@@ -334,7 +334,7 @@ void ClassNode::extendInternalCode(TypeNode* enclosingTypeNode, TemplateArgument
 
 	if(!isAbstractClass())
 	{
-		//New NewARC NewArray
+		//New NewArray
 		buildAdditionalMethods();
 	}
 
@@ -363,6 +363,8 @@ void ClassNode::extendInternalCode(TypeNode* enclosingTypeNode, TemplateArgument
 }
 
 extern "C" extern int yytokenno;
+extern "C" extern int yylineno;
+extern "C" extern int yycolumnno;
 
 void ClassNode::GenerateCreateInstanceMethod(const char* methodName, MethodNode* constructor)
 {
@@ -378,10 +380,10 @@ void ClassNode::GenerateCreateInstanceMethod(const char* methodName, MethodNode*
 	setMethodResult(method, typeName, passing);
 	TokenNode* modifier = (TokenNode*)newToken(snt_keyword_static);
 	setMethodModifier(method, modifier);
-	if (constructor->m_filterNode)
-	{
-		method->m_filterNode = (TokenNode*)newToken(constructor->m_filterNode->m_nodeType);
-	}
+	//if (constructor->m_filterNode)
+	//{
+	//	method->m_filterNode = (TokenNode*)newToken(constructor->m_filterNode->m_nodeType);
+	//}
 	method->m_enclosing = this;
 	m_additionalMethods.push_back(method);
 }
@@ -404,18 +406,23 @@ void ClassNode::GenerateCreateArrayMethod(const char* methodName, MethodNode* co
 	setMethodResultArray(method);
 	TokenNode* modifier = (TokenNode*)newToken(snt_keyword_static);
 	setMethodModifier(method, modifier);
-	if (constructor->m_filterNode)
-	{
-		method->m_filterNode = (TokenNode*)newToken(constructor->m_filterNode->m_nodeType);
-	}
+	//if (constructor->m_filterNode)
+	//{
+	//	method->m_filterNode = (TokenNode*)newToken(constructor->m_filterNode->m_nodeType);
+	//}
 	method->m_enclosing = this;
 	m_additionalMethods.push_back(method);
 }
 
 void ClassNode::buildAdditionalMethods()
 {
-	int backup = yytokenno;
+	int backupToken = yytokenno;
+	int backupLine = yylineno;
+	int backupColumn = yycolumnno;
 	yytokenno = 0;
+	yylineno = 0;
+	yycolumnno = 0;
+
 	MethodNode* defaultConstructor = 0;
 	std::vector<MethodNode*> constructors;	
 	std::vector<MemberNode*> memberNodes;
@@ -444,16 +451,18 @@ void ClassNode::buildAdditionalMethods()
 	{
 		MethodNode* constructor = constructors[i];
 		GenerateCreateInstanceMethod("New", constructor);
-		if(!isValueType())
-		{
-			GenerateCreateInstanceMethod("NewARC", constructor);
-		}
+		//if(!isValueType())
+		//{
+		//	GenerateCreateInstanceMethod("NewARC", constructor);
+		//}
 	}
 	if(0 != defaultConstructor && isValueType())
 	{
 		GenerateCreateArrayMethod("NewArray", defaultConstructor);
 	}
-	yytokenno = backup;
+	yytokenno = backupToken;
+	yylineno = backupLine;
+	yycolumnno = backupColumn;
 }
 
 bool ClassNode::isValueType()

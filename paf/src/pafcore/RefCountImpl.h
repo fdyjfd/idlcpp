@@ -1,12 +1,9 @@
 #pragma once
 #include "Utility.h"
-#ifdef WIN32
 #include <intrin.h>
-#endif
 
 BEGIN_PAFCORE
 
-#ifdef WIN32
 inline long_t Atomic_Increment(long_t * lpAddend)
 {
 	return _InterlockedIncrement(lpAddend);
@@ -16,7 +13,6 @@ inline long_t Atomic_Decrement(long_t * lpAddend)
 {
 	return _InterlockedDecrement(lpAddend);
 }
-#endif
 
 template<typename T>
 class RefCountImpl : public T

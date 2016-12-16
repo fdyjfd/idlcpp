@@ -13,6 +13,31 @@ namespace pafcore
 	class TypeAlias;
 	class SubclassInvoker;
 #}
+	abstract struct #PAFCORE_EXPORT ClassTypeIterator
+	{
+		nocode ClassTypeIterator* next();
+		nocode ClassType* deref();
+#{
+	public:
+		ClassTypeIterator(ClassTypeIterator* iterator, ClassType* classType)
+		{
+			m_next = iterator;
+			m_classType = classType;
+		}
+		ClassTypeIterator* next()
+		{
+			return m_next;
+		}
+		ClassType* deref()
+		{
+			return m_classType;
+		}
+	public:
+		ClassTypeIterator* m_next;
+		ClassType* m_classType;
+#}
+	};
+
 	abstract class(class_type)#PAFCORE_EXPORT ClassType : Type
 	{
 		size_t _getMemberCount_(bool includeBaseClasses);
@@ -20,6 +45,7 @@ namespace pafcore
 		Metadata* _findMember_(const char* name, bool includeBaseClasses);
 		size_t _getBaseClassCount_();
 		Metadata* _getBaseClass_(size_t index);
+		ClassTypeIterator* _getFirstDerivedClass_();
 #{
 	public:
 		struct BaseClass
@@ -51,6 +77,8 @@ namespace pafcore
 	public:
 		BaseClass* m_baseClasses;
 		size_t m_baseClassCount;
+		ClassTypeIterator* m_classTypeIterators;
+		ClassTypeIterator* m_firstDerivedClass;
 		Metadata** m_members;
 		size_t m_memberCount;
 		Type** m_nestedTypes;

@@ -22,23 +22,6 @@
 namespace idlcpp
 {
 
-	__uint_t_Type::__uint_t_Type() : TypeAlias("uint_t", RuntimeTypeOf<::uint_t>::RuntimeType::GetSingleton())
-	{
-		::pafcore::NameSpace::GetGlobalNameSpace()->registerMember(this);
-	}
-
-	__uint_t_Type* __uint_t_Type::GetSingleton()
-	{
-		static __uint_t_Type* s_instance = 0;
-		static char s_buffer[sizeof(__uint_t_Type)];
-		if(0 == s_instance)
-		{
-			s_instance = (__uint_t_Type*)s_buffer;
-			new (s_buffer)__uint_t_Type;
-		}
-		return s_instance;
-	}
-
 	__bool_t_Type::__bool_t_Type() : TypeAlias("bool_t", RuntimeTypeOf<::bool_t>::RuntimeType::GetSingleton())
 	{
 		::pafcore::NameSpace::GetGlobalNameSpace()->registerMember(this);
@@ -222,6 +205,23 @@ namespace idlcpp
 		{
 			s_instance = (__int_t_Type*)s_buffer;
 			new (s_buffer)__int_t_Type;
+		}
+		return s_instance;
+	}
+
+	__uint_t_Type::__uint_t_Type() : TypeAlias("uint_t", RuntimeTypeOf<::uint_t>::RuntimeType::GetSingleton())
+	{
+		::pafcore::NameSpace::GetGlobalNameSpace()->registerMember(this);
+	}
+
+	__uint_t_Type* __uint_t_Type::GetSingleton()
+	{
+		static __uint_t_Type* s_instance = 0;
+		static char s_buffer[sizeof(__uint_t_Type)];
+		if(0 == s_instance)
+		{
+			s_instance = (__uint_t_Type*)s_buffer;
+			new (s_buffer)__uint_t_Type;
 		}
 		return s_instance;
 	}
@@ -466,7 +466,6 @@ namespace idlcpp
 
 }
 
-AUTO_REGISTER_TYPE(::idlcpp::__uint_t_Type)
 AUTO_REGISTER_TYPE(::idlcpp::__bool_t_Type)
 static_assert(RuntimeTypeOf<::bool_t>::type_category == ::pafcore::primitive_object, "type category error");
 AUTO_REGISTER_TYPE(::idlcpp::__char_t_Type)
@@ -489,6 +488,8 @@ AUTO_REGISTER_TYPE(::idlcpp::__ulonglong_t_Type)
 static_assert(RuntimeTypeOf<::ulonglong_t>::type_category == ::pafcore::primitive_object, "type category error");
 AUTO_REGISTER_TYPE(::idlcpp::__int_t_Type)
 static_assert(RuntimeTypeOf<::int_t>::type_category == ::pafcore::primitive_object, "type category error");
+AUTO_REGISTER_TYPE(::idlcpp::__uint_t_Type)
+static_assert(RuntimeTypeOf<::uint_t>::type_category == ::pafcore::primitive_object, "type category error");
 AUTO_REGISTER_TYPE(::idlcpp::__float_t_Type)
 static_assert(RuntimeTypeOf<::float_t>::type_category == ::pafcore::primitive_object, "type category error");
 AUTO_REGISTER_TYPE(::idlcpp::__double_t_Type)

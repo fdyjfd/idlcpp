@@ -3,9 +3,7 @@
 
 #pragma once
 
-#include "./Reference.h"
 #include "./Metadata.h"
-namespace pafcore{ class Type; }
 namespace pafcore{ class Result; }
 namespace pafcore{ class Argument; }
 

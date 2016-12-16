@@ -21,9 +21,29 @@ namespace pafcore
 		virtual long_t release();
 		long_t get_refCount() const;
 
-		void* castTo(ClassType* classType);
+		bool isTypeOf(ClassType* classType);
+
 		template<typename T>
-		void* castTo(ClassType* classType)
+		bool isTypeOf()
+		{
+			return isTypeOf(T::GetType());
+		}
+
+		bool isStrictTypeOf(ClassType* classType)
+		{
+			return getType() == classType;
+		}
+
+		template<typename T>
+		bool isStrictTypeOf()
+		{
+			return isStrictTypeOf(T::GetType());
+		}
+
+		void* castTo(ClassType* classType);
+
+		template<typename T>
+		void* castTo()
 		{
 			return reinterpret_cast<T*>(castTo(T::GetType()));
 		}

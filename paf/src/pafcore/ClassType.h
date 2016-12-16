@@ -3,9 +3,9 @@
 
 #pragma once
 
-#include "./Reference.h"
-#include "./Metadata.h"
 #include "./Type.h"
+namespace pafcore{ class ClassType; }
+namespace pafcore{ class Metadata; }
 
 namespace pafcore
 {
@@ -20,6 +20,33 @@ namespace pafcore
 	class TypeAlias;
 	class SubclassInvoker;
 
+	struct PAFCORE_EXPORT ClassTypeIterator
+	{
+	public:
+
+
+
+
+	public:
+		ClassTypeIterator(ClassTypeIterator* iterator, ClassType* classType)
+		{
+			m_next = iterator;
+			m_classType = classType;
+		}
+		ClassTypeIterator* next()
+		{
+			return m_next;
+		}
+		ClassType* deref()
+		{
+			return m_classType;
+		}
+	public:
+		ClassTypeIterator* m_next;
+		ClassType* m_classType;
+
+	};
+
 	class PAFCORE_EXPORT ClassType : public Type
 	{
 	public:
@@ -32,6 +59,7 @@ namespace pafcore
 		Metadata* _findMember_(const char* name,bool includeBaseClasses);
 		size_t _getBaseClassCount_();
 		Metadata* _getBaseClass_(size_t index);
+		ClassTypeIterator* _getFirstDerivedClass_();
 
 	public:
 		struct BaseClass
@@ -63,6 +91,8 @@ namespace pafcore
 	public:
 		BaseClass* m_baseClasses;
 		size_t m_baseClassCount;
+		ClassTypeIterator* m_classTypeIterators;
+		ClassTypeIterator* m_firstDerivedClass;
 		Metadata** m_members;
 		size_t m_memberCount;
 		Type** m_nestedTypes;

@@ -22,6 +22,12 @@ long_t Reference::get_refCount() const
 	return const_cast<Reference*>(this)->release();
 };
 
+bool Reference::isTypeOf(ClassType* classType)
+{
+	ClassType* thisType = getType();
+	return thisType->isType(classType);
+}
+
 void* Reference::castTo(ClassType* classType)
 {
 	size_t offset;

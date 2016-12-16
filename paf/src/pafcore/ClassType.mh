@@ -13,6 +13,21 @@
 namespace idlcpp
 {
 
+	class __pafcore__ClassTypeIterator_Type : public ::pafcore::ClassType
+	{
+	public:
+		__pafcore__ClassTypeIterator_Type();
+	public:
+		virtual void destroyInstance(void* address);
+		virtual void destroyArray(void* address);
+		virtual void assign(void* dst, const void* src);
+	public:
+		static ::pafcore::ErrorCode ClassTypeIterator_deref(::pafcore::Variant* result, ::pafcore::Variant** args, int numArgs);
+		static ::pafcore::ErrorCode ClassTypeIterator_next(::pafcore::Variant* result, ::pafcore::Variant** args, int numArgs);
+	public:
+		PAFCORE_EXPORT static __pafcore__ClassTypeIterator_Type* GetSingleton();
+	};
+
 	class __pafcore__ClassType_Type : public ::pafcore::ClassType
 	{
 	public:
@@ -25,6 +40,7 @@ namespace idlcpp
 		static ::pafcore::ErrorCode ClassType__findMember_(::pafcore::Variant* result, ::pafcore::Variant** args, int numArgs);
 		static ::pafcore::ErrorCode ClassType__getBaseClassCount_(::pafcore::Variant* result, ::pafcore::Variant** args, int numArgs);
 		static ::pafcore::ErrorCode ClassType__getBaseClass_(::pafcore::Variant* result, ::pafcore::Variant** args, int numArgs);
+		static ::pafcore::ErrorCode ClassType__getFirstDerivedClass_(::pafcore::Variant* result, ::pafcore::Variant** args, int numArgs);
 		static ::pafcore::ErrorCode ClassType__getMemberCount_(::pafcore::Variant* result, ::pafcore::Variant** args, int numArgs);
 		static ::pafcore::ErrorCode ClassType__getMember_(::pafcore::Variant* result, ::pafcore::Variant** args, int numArgs);
 	public:
@@ -32,6 +48,13 @@ namespace idlcpp
 	};
 
 }
+
+template<>
+struct RuntimeTypeOf<::pafcore::ClassTypeIterator>
+{
+	typedef ::idlcpp::__pafcore__ClassTypeIterator_Type RuntimeType;
+	enum {type_category = ::pafcore::value_object};
+};
 
 template<>
 struct RuntimeTypeOf<::pafcore::ClassType>

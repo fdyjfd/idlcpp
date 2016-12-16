@@ -701,7 +701,7 @@ int Subclassing(lua_State *L)
 	int numArgs = lua_gettop(L);
 	if(1 == numArgs && lua_type(L, -1) == LUA_TTABLE)
 	{
-		LuaSubclassInvoker* subclassInvoker = new LuaSubclassInvoker(L);
+		LuaSubclassInvoker* subclassInvoker = paf_new LuaSubclassInvoker(L);
 		void* implementor = classType->createSubclassProxy(subclassInvoker);
 		pafcore::Variant impVar;
 		if(classType->isValue())
@@ -1115,24 +1115,38 @@ SubscriptCategory Variant_ParseSubscript(size_t& num, const char*& str, lua_Stat
 
 int Variant_Index(lua_State *L) 
 {
-	pafcore::Variant* variant = (pafcore::Variant*)luaL_checkudata(L, 1, variant_metatable_name);
-	if(variant->isNull())
-	{
-		Variant_Error(L, "", pafcore::e_void_variant);
-		return 0;
-	}
 	size_t num;
 	const char* str;
 	SubscriptCategory sc = Variant_ParseSubscript(num, str, L);
 
 	pafcore::ErrorCode errorCode = pafcore::e_invalid_subscript_type;
-	if(sc_integer == sc)
+	pafcore::Variant* variant = (pafcore::Variant*)luaL_checkudata(L, 1, variant_metatable_name);
+	if(variant->isNull())
 	{
-		errorCode = Variant_Index_Subscript(L, variant, num);
+		if (sc_string == sc && strcmp(str, "_isNullPtr_") == 0)//_isNullPtr_
+		{
+			//lua_pushboolean(L, 0 == variant->m_pointer ? 1 : 0);
+			bool isNullPtr = (0 == variant->m_pointer);
+			pafcore::Variant var;
+			var.assignPrimitive(RuntimeTypeOf<bool>::RuntimeType::GetSingleton(), &isNullPtr);
+			VariantToLua(L, &var);
+			errorCode = pafcore::s_ok;
+		}
+		else
+		{
+			errorCode = pafcore::e_void_variant;
+		}
 	}
-	else if(sc_string == sc)
+	else
 	{
-		errorCode = Variant_Index_Identify(L, variant, str);
+		if (sc_integer == sc)
+		{
+			errorCode = Variant_Index_Subscript(L, variant, num);
+		}
+		else if (sc_string == sc)
+		{
+			errorCode = Variant_Index_Identify(L, variant, str);
+		}
 	}
 	if(pafcore::s_ok != errorCode)
 	{

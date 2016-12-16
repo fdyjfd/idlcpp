@@ -18,7 +18,7 @@ typedef unsigned long			ulong_t;
 typedef long long				longlong_t;
 typedef unsigned long long		ulonglong_t;
 typedef int						int_t;
-//typedef unsigned int			uint_t;
+typedef unsigned int			uint_t;
 typedef float					float_t;
 typedef double					double_t;
 typedef long double				longdouble_t;
@@ -38,8 +38,6 @@ struct RuntimeTypeOf
 {};
 
 
-
-typedef unsigned int uint_t;
 
 
 

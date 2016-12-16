@@ -62,5 +62,15 @@ function ListMember(var, indent, recursive)
 	end
 end
 
+function ListDerivedClass(var)
+	it = var:_getFirstDerivedClass_();
+	while (not it._isNullPtr_._)
+	do
+		cls = it:deref();
+		print(cls._name_._);
+		it = it:next();
+	end
+end
 
-ListMember(paf,0,1);
+--ListMember(paf,0,1);
+ListDerivedClass(paf.pafcore.Metadata);

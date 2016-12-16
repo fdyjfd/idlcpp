@@ -194,6 +194,9 @@
     <None Include="..\..\..\src\pafcore\VoidType.mh">
       <Filter>Meta Files</Filter>
     </None>
+    <None Include="..\..\..\src\pafcore\MetadataIterator.i">
+      <Filter>Interface Files</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\src\pafcore\Enumerator.cpp">
@@ -343,6 +346,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\src\pafcore\RefCountImpl.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\pafcore\Reflection.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

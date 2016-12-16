@@ -3,7 +3,6 @@
 
 #pragma once
 
-#include "./Reference.h"
 #include "./Metadata.h"
 
 namespace pafcore
@@ -31,6 +30,7 @@ namespace pafcore
 				{
 					m_ptr = 0;
 				}
+				~Node();
 				bool isNull()
 				{
 					return 0 == m_ptr;

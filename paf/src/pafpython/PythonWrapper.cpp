@@ -488,6 +488,14 @@ pafcore::ErrorCode Variant_GetAttr(PyObject*& pyObject, VariantWrapper* self, co
 	pafcore::Variant* variant = (pafcore::Variant*)self->m_var;
 	if(variant->isNull())
 	{
+		if (strcmp(name, "_isNullPtr_") == 0)//_isNullPtr_
+		{
+			bool isNullPtr = (0 == variant->m_pointer);
+			pafcore::Variant var;
+			var.assignPrimitive(RuntimeTypeOf<bool>::RuntimeType::GetSingleton(), &isNullPtr);
+			pyObject = VariantToPython(&var);
+			return pafcore::s_ok;
+		}
 		return pafcore::e_void_variant;
 	}
 	switch(variant->m_type->m_category)
@@ -1004,7 +1012,7 @@ PyObject* ProxyCreatorWrapper_call(ProxyCreatorWrapper* wrapper, PyObject* param
 	PyObject* pyArg = PyTuple_GetItem(parameters, 0); 
 	if(pyArg)
 	{
-		PythonSubclassInvoker* subclassInvoker = new PythonSubclassInvoker(pyArg);
+		PythonSubclassInvoker* subclassInvoker = paf_new PythonSubclassInvoker(pyArg);
 		void* implementor = classType->createSubclassProxy(subclassInvoker);
 		pafcore::Variant impVar;
 		if(classType->isValue())

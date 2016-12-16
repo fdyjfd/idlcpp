@@ -28,4 +28,5 @@ public:
 	static void generateCode_Namespace(FILE* file, NamespaceNode* namespaceNode, int indentation);
 	static void generateCode_Class(FILE* file, ClassNode* classNode, int indentation);
 	static void generateCode_TemplateHeader(FILE* file, ClassNode* classNode, int indentation);
+	static void generateCode_AdditionalMethod(FILE* file, MethodNode* methodNode, int indentation);
 };

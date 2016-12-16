@@ -21,7 +21,7 @@ public:
 	~SourceFile();
 public:
 	void addEmbededCodeBlock(const char* str, int tokenNo);
-	char outputEmbededCodes(FILE* file, int tokenNo);
+	void outputEmbededCodes(FILE* file, int tokenNo);
 public:
 	std::string m_fileName;
 	ProgramNode* m_syntaxTree;

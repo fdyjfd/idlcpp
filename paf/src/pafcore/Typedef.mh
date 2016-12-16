@@ -13,14 +13,6 @@
 namespace idlcpp
 {
 
-	class __uint_t_Type : public ::pafcore::TypeAlias
-	{
-	public:
-		__uint_t_Type();
-	public:
-		PAFCORE_EXPORT static __uint_t_Type* GetSingleton();
-	};
-
 	class __bool_t_Type : public ::pafcore::TypeAlias
 	{
 	public:
@@ -107,6 +99,14 @@ namespace idlcpp
 		__int_t_Type();
 	public:
 		PAFCORE_EXPORT static __int_t_Type* GetSingleton();
+	};
+
+	class __uint_t_Type : public ::pafcore::TypeAlias
+	{
+	public:
+		__uint_t_Type();
+	public:
+		PAFCORE_EXPORT static __uint_t_Type* GetSingleton();
 	};
 
 	class __float_t_Type : public ::pafcore::TypeAlias

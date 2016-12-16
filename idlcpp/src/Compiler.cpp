@@ -205,6 +205,10 @@ void Compiler::extendInternalCode()
 
 void Compiler::useType(TypeNode* typeNode, TypeUsage usage, TypeNameNode* typeNameNode)
 {
+	if (m_mainSourceFile != m_currentSourceFile)
+	{
+		return;
+	}
 	if (0 == typeNode || typeNode->isPredefinedType()
 		|| typeNode->isTemplateParameter())
 	{
@@ -491,12 +495,12 @@ bool Compiler::generateMetaSourceFile(const char* fileName, const char* cppName)
 	return false;
 }
 
-char Compiler::outputEmbededCodes(FILE* file, TokenNode* tokenNode)
+void Compiler::outputEmbededCodes(FILE* file, TokenNode* tokenNode)
 {
 	assert(0 != m_mainSourceFile);
 
-	char lastChar = m_mainSourceFile->outputEmbededCodes(file, tokenNode ? tokenNode->m_tokenNo : INT_MAX);
-	if (m_outputLineDirective && tokenNode && m_currentLineNo != tokenNode->m_lineNo)
+	m_mainSourceFile->outputEmbededCodes(file, tokenNode ? tokenNode->m_tokenNo : INT_MAX);
+	if (m_outputLineDirective && tokenNode && m_currentLineNo < tokenNode->m_lineNo)
 	{
 		m_currentLineNo = tokenNode->m_lineNo;
 		char buf[512];
@@ -505,7 +509,6 @@ char Compiler::outputEmbededCodes(FILE* file, TokenNode* tokenNode)
 		sprintf_s(buf, "\n#line %d \"%s\"\n", m_currentLineNo, fileName.c_str());
 		writeStringToFile(buf, file);
 	}
-	return lastChar;
 }
 
 

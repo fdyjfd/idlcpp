@@ -18,14 +18,15 @@
 #include "PropertyNode.h"
 #include "MethodNode.h"
 #include "ParameterNode.h"
+#include "ParameterListNode.h"
 #include "TypedefNode.h"
 #include "Options.h"
 #include "Platform.h"
 #include <assert.h>
 
 void generateCode_Token(FILE* file, TokenNode* tokenNode, int indentation);
-void generateCode_Identify(FILE* file, IdentifyNode* identifyNode, int indentation);
-void generateCode_Parameter(FILE* file, ParameterNode* parameterNode, MethodNode* methodNode, int indentation);
+void generateCode_Identify(FILE* file, IdentifyNode* identifyNode, int indentation, bool addSpace = true);
+void generateCode_Parameter(FILE* file, ParameterNode* parameterNode, ScopeNode* scopeNode, int indentation);
 
 void SourceFileGenerator::generateCode(FILE* dstFile, SourceFile* sourceFile, const char* fullPathName, const char* baseName)
 {
@@ -123,8 +124,17 @@ void SourceFileGenerator::generateCode_Class(FILE* file, ClassNode* classNode, i
 		std::string typeName;
 		GetClassName(typeName, classNode);
 
+		bool isInline = 0 != classNode->m_templateParametersNode;
+
 		generateCode_TemplateHeader(file, classNode, indentation);
-		writeStringToFile("::pafcore::ClassType* ", file, indentation);
+		if (isInline)
+		{
+			writeStringToFile("inline ::pafcore::ClassType* ", file, indentation);
+		}
+		else
+		{
+			writeStringToFile("::pafcore::ClassType* ", file, indentation);
+		}
 		writeStringToFile(typeName.c_str(), file);
 		writeStringToFile("::GetType()\n", file);
 		writeStringToFile("{\n", file, indentation);
@@ -134,7 +144,14 @@ void SourceFileGenerator::generateCode_Class(FILE* file, ClassNode* classNode, i
 		writeStringToFile("}\n\n", file, indentation);
 
 		generateCode_TemplateHeader(file, classNode, indentation);
-		writeStringToFile("::pafcore::ClassType* ", file, indentation);
+		if (isInline)
+		{
+			writeStringToFile("inline ::pafcore::ClassType* ", file, indentation);
+		}
+		else
+		{
+			writeStringToFile("::pafcore::ClassType* ", file, indentation);
+		}
 		writeStringToFile(typeName.c_str(), file);
 		writeStringToFile("::getType()\n", file);
 		writeStringToFile("{\n", file, indentation);
@@ -144,14 +161,28 @@ void SourceFileGenerator::generateCode_Class(FILE* file, ClassNode* classNode, i
 		writeStringToFile("}\n\n", file, indentation);
 
 		generateCode_TemplateHeader(file, classNode, indentation);
-		writeStringToFile("size_t ", file, indentation);
+		if (isInline)
+		{
+			writeStringToFile("inline size_t ", file, indentation);
+		}
+		else
+		{
+			writeStringToFile("size_t ", file, indentation);
+		}
 		writeStringToFile(typeName.c_str(), file);
 		writeStringToFile("::getAddress()\n", file);
 		writeStringToFile("{\n", file, indentation);
 		writeStringToFile("return (size_t)this;\n", file, indentation + 1);
 		writeStringToFile("}\n\n", file, indentation);
 	}
-
+	if (!classNode->m_additionalMethods.empty())
+	{
+		size_t count = classNode->m_additionalMethods.size();
+		for (size_t i = 0; i < count; ++i)
+		{
+			generateCode_AdditionalMethod(file, classNode->m_additionalMethods[i], indentation);
+		}
+	}
 }
 
 void SourceFileGenerator::generateCode_TemplateHeader(FILE* file, ClassNode* classNode, int indentation)
@@ -173,4 +204,101 @@ void SourceFileGenerator::generateCode_TemplateHeader(FILE* file, ClassNode* cla
 		}
 		writeStringToFile(">\n", file);
 	}
+}
+
+
+void SourceFileGenerator::generateCode_AdditionalMethod(FILE* file, MethodNode* methodNode, int indentation)
+{
+	if (methodNode->isNoCode())
+	{
+		file = 0;
+	}
+
+	ClassNode* classNode = static_cast<ClassNode*>(methodNode->m_enclosing);
+	std::string typeName;
+	GetClassName(typeName, classNode);
+	bool isInline = 0 != classNode->m_templateParametersNode;
+
+	generateCode_TemplateHeader(file, classNode, indentation);
+
+	if (isInline)
+	{
+		writeStringToFile("inline ", file, indentation);
+		writeStringToFile(typeName.c_str(), file);
+	}
+	else
+	{
+		writeStringToFile(typeName.c_str(), file, indentation);
+	}
+
+
+	if (0 != methodNode->m_passing)
+	{
+		generateCode_Token(file, methodNode->m_passing, 0);
+	}
+	writeSpaceToFile(file);;
+	writeStringToFile(typeName.c_str(), file);
+	writeStringToFile("::", file);
+
+	generateCode_Identify(file, methodNode->m_name, 0);
+
+	generateCode_Token(file, methodNode->m_leftParenthesis, 0);
+	std::vector<ParameterNode*> parameterNodes;
+
+	methodNode->m_parameterList->collectParameterNodes(parameterNodes);
+	size_t parameterCount = parameterNodes.size();
+	for (size_t i = 0; i < parameterCount; ++i)
+	{
+		if (0 != i)
+		{
+			writeStringToFile(", ", file);
+		}
+		generateCode_Parameter(file, parameterNodes[i], classNode->m_enclosing, 0);
+	}
+	generateCode_Token(file, methodNode->m_rightParenthesis, 0);
+	writeStringToFile("\n", file);
+	char buf[512];
+	writeStringToFile("{\n", file, indentation);
+
+	if ("New" == methodNode->m_name->m_str)
+	{
+		if (classNode->isValueType())
+		{
+			sprintf_s(buf, "return paf_new %s(", typeName.c_str());
+		}
+		else
+		{
+			if (classNode->m_category && classNode->m_category->m_str == "atomic_reference_object")
+			{
+				sprintf_s(buf, "return paf_new ::pafcore::AtomicRefCountImpl<%s>(", typeName.c_str());
+			}
+			else
+			{
+				sprintf_s(buf, "return paf_new ::pafcore::RefCountImpl<%s>(", typeName.c_str());
+			}
+		}
+	}
+	//else if ("NewARC" == methodNode->m_name->m_str)
+	//{
+	//	sprintf_s(buf, "return paf_new ::pafcore::AtomicRefCountImpl<%s>(", typeName.c_str());
+	//}
+	else
+	{
+		assert("NewArray" == methodNode->m_name->m_str);
+		assert(classNode->isValueType());
+		sprintf_s(buf, "return paf_new_array<%s>(", typeName.c_str());
+	}
+
+	writeStringToFile(buf, file, indentation + 1);
+	for (size_t i = 0; i < parameterCount; ++i)
+	{
+		if (i != 0)
+		{
+			writeStringToFile(", ", file);
+		}
+		writeStringToFile(parameterNodes[i]->m_name->m_str.c_str(), file);
+	}
+	writeStringToFile(");\n", file);
+	
+	writeStringToFile("}\n\n", file, indentation);
 }

@@ -18,21 +18,26 @@ void SourceFile::addEmbededCodeBlock(const char* str, int tokenNo)
 	m_embededCodes.push_back(embededCode);
 }
 
-char SourceFile::outputEmbededCodes(FILE* file, int tokenNo)
+void SourceFile::outputEmbededCodes(FILE* file, int tokenNo)
 {
-	char lastChar = 0;
 	for (; m_currentEmbededCode < m_embededCodes.size(); ++m_currentEmbededCode)
 	{
 		EmbededCode* embededCode = m_embededCodes[m_currentEmbededCode];
 		if (embededCode->m_tokenNo <= tokenNo)
 		{
-			lastChar = embededCode->m_code.back();
-			writeStringToFile(embededCode->m_code.c_str(), embededCode->m_code.length(), file);
+			if (!embededCode->m_code.empty())
+			{
+				if (isNumAlpha_(GetLastWrittenChar()) 
+					&& isNumAlpha_(embededCode->m_code.c_str()[0]))
+				{
+					writeSpaceToFile(file);
+				}
+				writeStringToFile(embededCode->m_code.c_str(), embededCode->m_code.length(), file);
+			}
 		}
 		else
 		{
 			break;
 		}
 	}
-	return lastChar;
 }

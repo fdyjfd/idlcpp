@@ -3,9 +3,8 @@
 
 #pragma once
 
-#include "./Reference.h"
-#include "./Metadata.h"
 #include "./Type.h"
+namespace pafcore{ class Metadata; }
 
 
 #include "Variant.h"

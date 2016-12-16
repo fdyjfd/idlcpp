@@ -16,7 +16,6 @@ BEGIN_PAFCORE
 ClassType::ClassType(const char* name, Category category)
 : Type(name, category)
 {
-
 	m_baseClasses = 0;
 	m_baseClassCount = 0;
 	m_members = 0;
@@ -37,6 +36,8 @@ ClassType::ClassType(const char* name, Category category)
 	m_staticPropertyCount = 0;
 	m_staticMethods = 0;
 	m_staticMethodCount = 0;
+	m_classTypeIterators = 0;
+	m_firstDerivedClass = 0;
 }
 
 Type* ClassType::findNestedType(const char* name, bool includeBaseClasses)
@@ -237,6 +238,10 @@ Metadata* ClassType::_findMember_(const char* name, bool includeBaseClasses)
 	return 0;
 }
 
+Metadata* ClassType::findMember(const char* name, bool includeBaseClasses)
+{
+	return _findMember_(name, includeBaseClasses);
+}
 
 Metadata* ClassType::findClassMember(const char* name, bool includeBaseClasses)
 {
@@ -381,6 +386,11 @@ bool ClassType::getClassOffset(size_t& offset, ClassType* otherType)
 {
 	offset = 0;
 	return getClassOffset_(offset, otherType);
+}
+
+ClassTypeIterator* ClassType::_getFirstDerivedClass_()
+{
+	return m_firstDerivedClass;
 }
 
 bool ClassType::isType(ClassType* otherType)

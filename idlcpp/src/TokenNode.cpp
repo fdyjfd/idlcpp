@@ -55,8 +55,8 @@ TokenNode::TokenNode(int nodeType, int tokenNo, int lineNo, int columnNo)
 
 void TokenNode::outputEmbededCodes(FILE* file, bool addSpace)
 {
-	char lastChar = g_compiler.outputEmbededCodes(file, this);
-	if(isNumAlpha_(lastChar) && addSpace)
+	g_compiler.outputEmbededCodes(file, this);
+	if(isNumAlpha_(GetLastWrittenChar()) && addSpace)
 	{
 		writeSpaceToFile(file);
 	}

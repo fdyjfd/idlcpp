@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Typedef.h"
+#include <crtdbg.h>
 
 #if defined PAFCORE_EXPORTS
 	#define PAFCORE_EXPORT __declspec(dllexport)
@@ -11,12 +12,19 @@
 #define BEGIN_PAFCORE namespace pafcore {
 #define END_PAFCORE }
 
+#ifdef _DEBUG
+#define paf_new new(_NORMAL_BLOCK, __FILE__, __LINE__)
+#else
+#define paf_new new
+#endif
+
 #define paf_array_size_of(a)	(sizeof(a)/sizeof(a[0]))
 #define paf_field_size_of(s, m)	sizeof(((s*)0)->m)
 #define paf_field_array_size_of(s, m)	(sizeof(((s*)0)->m)/sizeof(((s*)0)->m[0]))
 #define paf_base_offset_of(d, b) (reinterpret_cast<ptrdiff_t>(static_cast<b*>(reinterpret_cast<d*>(1))) - 1)
 #define paf_verify
 #define AUTO_NEW_ARRAY_SIZE
+
 
 #ifdef AUTO_NEW_ARRAY_SIZE
 
@@ -28,7 +36,7 @@ inline size_t paf_new_array_size_of(void* p)
 template<typename T>
 inline T* paf_new_array(size_t count)
 {
-	size_t* p = (size_t*)malloc(sizeof(T)*count + sizeof(size_t));
+	size_t* p = (size_t*) paf_new char[sizeof(T)*count + sizeof(size_t)];
 	if(0 != p)
 	{
 		*p = count;
@@ -50,7 +58,7 @@ inline void paf_delete_array(T* p)
 			p->~T();
 			++p;
 		}
-		free(addr);
+		delete[] (char*)(addr);
 	}
 }
 #else
@@ -63,13 +71,13 @@ inline size_t paf_new_array_size_of(void* p)
 template<typename T>
 inline T* paf_new_array(size_t count)
 {
-	return new T[count];
+	return paf_new T[count];
 }
 
 template<typename T>
 inline void paf_delete_array(T* p)
 {
-	delete []p;
+	delete[] p;
 }
 
 #endif

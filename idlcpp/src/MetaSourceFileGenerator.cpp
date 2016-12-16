@@ -330,11 +330,11 @@ void writeOverrideFunction(ClassNode* classNode, TemplateArguments* templateArgu
 		writeStringToFile("{\n", file, indentation);
 		if(classNode->isValueType())
 		{
-			sprintf_s(buf, "return new %s(subclassInvoker);\n", subclassProxyName.c_str());
+			sprintf_s(buf, "return paf_new %s(subclassInvoker);\n", subclassProxyName.c_str());
 		}
 		else
 		{
-			sprintf_s(buf, "return new ::pafcore::RefCountImpl<%s>(subclassInvoker);\n", subclassProxyName.c_str());
+			sprintf_s(buf, "return paf_new ::pafcore::RefCountImpl<%s>(subclassInvoker);\n", subclassProxyName.c_str());
 		}
 		writeStringToFile(buf, file, indentation + 1);
 		writeStringToFile("}\n\n", file, indentation);
@@ -491,7 +491,7 @@ void MetaSourceFileGenerator::generateCode_Class(FILE* file, ClassNode* classNod
 		}
 	}
 
-	if(!classNode->isAbstractClass())
+	//if(!classNode->isAbstractClass())
 	{
 		auto it = classNode->m_additionalMethods.begin();
 		auto end = classNode->m_additionalMethods.end();
@@ -611,7 +611,7 @@ void writeMetaGetPropertyImpl(ClassNode* classNode, TemplateArguments* templateA
 			}
 			else
 			{
-				sprintf_s(buf, "%s* res = new %s(%s::get_%s());\n", typeName.c_str(), typeName.c_str(), className.c_str(), propertyNode->m_name->m_str.c_str());
+				sprintf_s(buf, "%s* res = paf_new %s(%s::get_%s());\n", typeName.c_str(), typeName.c_str(), className.c_str(), propertyNode->m_name->m_str.c_str());
 			}
 		}
 		else if('*' == propertyNode->m_get->m_passing->m_nodeType)
@@ -650,7 +650,7 @@ void writeMetaGetPropertyImpl(ClassNode* classNode, TemplateArguments* templateA
 			}
 			else
 			{
-				sprintf_s(buf, "%s* res = new %s(self->get_%s());\n", typeName.c_str(), typeName.c_str(), propertyNode->m_name->m_str.c_str());
+				sprintf_s(buf, "%s* res = paf_new %s(self->get_%s());\n", typeName.c_str(), typeName.c_str(), propertyNode->m_name->m_str.c_str());
 			}
 		}
 		else if('*' == propertyNode->m_get->m_passing->m_nodeType)
@@ -1238,7 +1238,7 @@ void writeMetaMethodImpl_Call(ClassNode* classNode, TemplateArguments* templateA
 			}
 			else
 			{
-				sprintf_s(buf, "%s* res = new %s(", typeName.c_str(), typeName.c_str());
+				sprintf_s(buf, "%s* res = paf_new %s(", typeName.c_str(), typeName.c_str());
 			}
 		}
 		else
@@ -1249,41 +1249,13 @@ void writeMetaMethodImpl_Call(ClassNode* classNode, TemplateArguments* templateA
 	}
 	if(methodNode->isStatic())
 	{
-		if (classNode->isAdditionalMethod(methodNode))
+		if (methodNode->m_nativeName)
 		{
-			if ("New" == methodNode->m_name->m_str)
-			{
-				if (classNode->isValueType())
-				{
-					sprintf_s(buf, "new %s(", className.c_str());
-				}
-				else
-				{
-					sprintf_s(buf, "new ::pafcore::RefCountImpl<%s>(", className.c_str());
-				}
-			}
-			else if ("NewARC" == methodNode->m_name->m_str)
-			{
-				assert(!classNode->isValueType());
-				sprintf_s(buf, "new ::pafcore::AtomicRefCountImpl<%s>(", className.c_str());
-			}
-			else
-			{
-				assert("NewArray" == methodNode->m_name->m_str);
-				assert(classNode->isValueType());
-				sprintf_s(buf, "paf_new_array<%s>(", className.c_str());
-			}
+			sprintf_s(buf, "%s(", methodNameNode->m_str.c_str());
 		}
 		else
 		{
-			if (methodNode->m_nativeName)
-			{
-				sprintf_s(buf, "%s(", methodNameNode->m_str.c_str());
-			}
-			else
-			{
-				sprintf_s(buf, "%s::%s(", className.c_str(), methodNameNode->m_str.c_str());
-			}
+			sprintf_s(buf, "%s::%s(", className.c_str(), methodNameNode->m_str.c_str());
 		}
 	}
 	else
@@ -2100,6 +2072,40 @@ void writeMetaConstructor_BaseClasses(ClassNode* classNode, TemplateArguments* t
 	writeStringToFile("m_baseClassCount = paf_array_size_of(s_baseClasses);\n", file, indentation);
 }
 
+void writeMetaConstructor_ClassTypeIterators(ClassNode* classNode, TemplateArguments* templateArguments, FILE* file, int indentation)
+{
+	char buf[512];
+	std::string typeName;
+	std::vector<std::pair<TokenNode*, TypeNameNode*>> typeNameNodes;
+	classNode->m_baseList->collectTypeNameNodes(typeNameNodes);
+	if (typeNameNodes.empty())
+	{
+		return;
+	}
+	//std::string className;
+	//classNode->getNativeName(className, templateArguments);
+
+	writeStringToFile("static ::pafcore::ClassTypeIterator s_classTypeIterators[] =\n", file, indentation);
+	writeStringToFile("{\n", file, indentation);
+	size_t count = typeNameNodes.size();
+	for (size_t i = 0; i < count; ++i)
+	{
+		TypeNameNode* typeNameNode = typeNameNodes[i].second;
+		TypeCategory typeCategory = CalcTypeNativeName(typeName, typeNameNode, templateArguments);
+		sprintf_s(buf, "::pafcore::ClassTypeIterator(RuntimeTypeOf<%s>::RuntimeType::GetSingleton()->m_firstDerivedClass, this),\n",
+			typeName.c_str());
+		writeStringToFile(buf, file, indentation + 1);
+	}
+	writeStringToFile("};\n", file, indentation);
+	for (size_t i = 0; i < count; ++i)
+	{
+		sprintf_s(buf, "RuntimeTypeOf<%s>::RuntimeType::GetSingleton()->m_firstDerivedClass = &s_classTypeIterators[%d];\n", 
+			typeName.c_str(), i);
+		writeStringToFile(buf, file, indentation);
+	}
+	writeStringToFile("m_classTypeIterators = s_classTypeIterators;\n", file, indentation);
+}
+
 void writeMetaConstructor_NestedTypes(ClassNode* classNode, TemplateArguments* templateArguments, std::vector<MemberNode*>& nestedTypeNodes, FILE* file, int indentation)
 {
 	char buf[512];
@@ -2214,6 +2220,7 @@ void writeMetaConstructor(ClassNode* classNode,
 	writeStringToFile(buf, file, indentation + 1);
 	
 	writeMetaConstructor_BaseClasses(classNode, templateArguments, file, indentation + 1);
+	writeMetaConstructor_ClassTypeIterators(classNode, templateArguments, file, indentation + 1);
 	writeMetaConstructor_NestedTypes(classNode, templateArguments, nestedTypeNodes, file, indentation + 1);
 	writeMetaConstructor_NestedTypeAliases(classNode, templateArguments, nestedTypeAliasNodes, file, indentation + 1);
 	writeMetaConstructor_Fields(classNode, templateArguments, staticFieldNodes, true, file, indentation + 1);

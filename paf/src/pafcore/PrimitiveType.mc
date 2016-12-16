@@ -3,10 +3,9 @@
 
 #pragma once
 
-#include "./Typedef.mh"
-#include "./Reference.mh"
-#include "./Metadata.mh"
 #include "./Type.mh"
+#include "./Typedef.mh"
+#include "./Metadata.mh"
 #include "PrimitiveType.mh"
 #include "AutoRun.h"
 #include "NameSpace.h"
@@ -35,6 +34,12 @@ namespace idlcpp
 		};
 		m_baseClasses = s_baseClasses;
 		m_baseClassCount = paf_array_size_of(s_baseClasses);
+		static ::pafcore::ClassTypeIterator s_classTypeIterators[] =
+		{
+			::pafcore::ClassTypeIterator(RuntimeTypeOf<::pafcore::Type>::RuntimeType::GetSingleton()->m_firstDerivedClass, this),
+		};
+		RuntimeTypeOf<::pafcore::Type>::RuntimeType::GetSingleton()->m_firstDerivedClass = &s_classTypeIterators[0];
+		m_classTypeIterators = s_classTypeIterators;
 		static ::pafcore::Result s__findMember__Result_0(RuntimeTypeOf<::pafcore::Metadata>::RuntimeType::GetSingleton(), false, ::pafcore::Result::by_ptr);
 		static ::pafcore::Argument s__findMember__Arguments_0[] = 
 		{
