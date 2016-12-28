@@ -140,6 +140,13 @@ enum SyntaxNodeType
 	snt_token_list,
 };
 
+enum PropertyArrayCategory
+{
+	not_array,
+	fixed_array,
+	dynamic_array
+};
+
 void newCodeBlock(const char* str);
 SyntaxNode* newToken(int nodeType);
 SyntaxNode* newIdentify(const char* str);
@@ -166,6 +173,8 @@ void setGetterSetterNativeName(SyntaxNode* syntaxNode, SyntaxNode* nativeName);
 SyntaxNode* newProperty(SyntaxNode* constant, SyntaxNode* type, SyntaxNode* passing, SyntaxNode* name);
 void setPropertyGetter(SyntaxNode* property, SyntaxNode* getter);
 void setPropertySetter(SyntaxNode* property, SyntaxNode* setter);
+void setPropertyArray(SyntaxNode* property);
+void setPropertyDynamicArray(SyntaxNode* property);
 void setPropertyModifier(SyntaxNode* syntaxNode, SyntaxNode* modifier);
 
 SyntaxNode* newParameter(SyntaxNode* type, SyntaxNode* out, SyntaxNode* passing, SyntaxNode* name);

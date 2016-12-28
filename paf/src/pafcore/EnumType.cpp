@@ -57,6 +57,20 @@ Enumerator* EnumType::_getEnumeratorByName_(const char* name)
 	return 0;
 }
 
+Enumerator* EnumType::get__enumerators_(unsigned int index)
+{
+	if (index < m_enumeratorCount)
+	{
+		return &m_enumerators[index];
+	}
+	return 0;
+}
+
+unsigned int EnumType::size__enumerators_() const
+{
+	return m_enumeratorCount;
+}
+
 Enumerator* EnumType::findEnumerator(const char* name)
 {
 	Metadata dummy(name);

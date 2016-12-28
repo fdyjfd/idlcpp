@@ -194,8 +194,23 @@
     <None Include="..\..\..\src\pafcore\VoidType.mh">
       <Filter>Meta Files</Filter>
     </None>
-    <None Include="..\..\..\src\pafcore\MetadataIterator.i">
-      <Filter>Interface Files</Filter>
+    <None Include="..\..\..\src\pafcore\InstanceArrayProperty.mc">
+      <Filter>Meta Files</Filter>
+    </None>
+    <None Include="..\..\..\src\pafcore\InstanceArrayProperty.mh">
+      <Filter>Meta Files</Filter>
+    </None>
+    <None Include="..\..\..\src\pafcore\InstanceArrayProperty.ic">
+      <Filter>Meta Files</Filter>
+    </None>
+    <None Include="..\..\..\src\pafcore\StaticArrayProperty.mh">
+      <Filter>Meta Files</Filter>
+    </None>
+    <None Include="..\..\..\src\pafcore\StaticArrayProperty.ic">
+      <Filter>Meta Files</Filter>
+    </None>
+    <None Include="..\..\..\src\pafcore\StaticArrayProperty.mc">
+      <Filter>Meta Files</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -266,6 +281,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\pafcore\System.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\pafcore\InstanceArrayProperty.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\pafcore\StaticArrayProperty.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -351,6 +372,12 @@
     <ClInclude Include="..\..\..\src\pafcore\Reflection.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\src\pafcore\StaticArrayProperty.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\pafcore\InstanceArrayProperty.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="..\..\..\src\pafcore\Argument.i">
@@ -411,6 +438,12 @@
       <Filter>Interface Files</Filter>
     </CustomBuild>
     <CustomBuild Include="..\..\..\src\pafcore\System.i">
+      <Filter>Interface Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\..\..\src\pafcore\InstanceArrayProperty.i">
+      <Filter>Interface Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\..\..\src\pafcore\StaticArrayProperty.i">
       <Filter>Interface Files</Filter>
     </CustomBuild>
   </ItemGroup>

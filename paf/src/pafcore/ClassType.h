@@ -12,9 +12,11 @@ namespace pafcore
 
 	class InstanceField;
 	class InstanceProperty;
+	class InstanceArrayProperty;
 	class InstanceMethod;
 	class StaticField;
 	class StaticProperty;
+	class StaticArrayProperty;
 	class StaticMethod;
 	class Enumerator;
 	class TypeAlias;
@@ -84,7 +86,9 @@ namespace pafcore
 		InstanceField* findInstanceField(const char* name, bool includeBaseClasses);
 		StaticField* findStaticField(const char* name, bool includeBaseClasses);
 		InstanceProperty* findInstanceProperty(const char* name, bool includeBaseClasses);
+		InstanceArrayProperty* findInstanceArrayProperty(const char* name, bool includeBaseClasses);
 		StaticProperty* findStaticProperty(const char* name, bool includeBaseClasses);
+		StaticArrayProperty* findStaticArrayProperty(const char* name, bool includeBaseClasses);
 		InstanceMethod* findInstanceMethod(const char* name, bool includeBaseClasses);
 		StaticMethod* findStaticMethod(const char* name, bool includeBaseClasses);
 
@@ -103,12 +107,16 @@ namespace pafcore
 		size_t m_fieldCount;
 		InstanceProperty* m_properties;
 		size_t m_propertyCount;
+		InstanceArrayProperty* m_arrayProperties;
+		size_t m_arrayPropertyCount;
 		InstanceMethod* m_methods;
 		size_t m_methodCount;
 		StaticField* m_staticFields;
 		size_t m_staticFieldCount;
 		StaticProperty* m_staticProperties;
 		size_t m_staticPropertyCount;
+		StaticArrayProperty* m_staticArrayProperties;
+		size_t m_staticArrayPropertyCount;
 		StaticMethod* m_staticMethods;
 		size_t m_staticMethodCount;
 

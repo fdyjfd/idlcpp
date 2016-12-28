@@ -12,7 +12,9 @@
 #include "InstanceField.h"
 #include "StaticField.h"
 #include "InstanceProperty.h"
+#include "InstanceArrayProperty.h"
 #include "StaticProperty.h"
+#include "StaticArrayProperty.h"
 #include "InstanceMethod.h"
 #include "StaticMethod.h"
 #include "Enumerator.h"
@@ -34,6 +36,7 @@ namespace idlcpp
 			::pafcore::Enumerator("enumerator", __pafcore__Category_Type::GetSingleton(), ::pafcore::enumerator),
 			::pafcore::Enumerator("function_argument", __pafcore__Category_Type::GetSingleton(), ::pafcore::function_argument),
 			::pafcore::Enumerator("function_result", __pafcore__Category_Type::GetSingleton(), ::pafcore::function_result),
+			::pafcore::Enumerator("instance_array_property", __pafcore__Category_Type::GetSingleton(), ::pafcore::instance_array_property),
 			::pafcore::Enumerator("instance_field", __pafcore__Category_Type::GetSingleton(), ::pafcore::instance_field),
 			::pafcore::Enumerator("instance_method", __pafcore__Category_Type::GetSingleton(), ::pafcore::instance_method),
 			::pafcore::Enumerator("instance_property", __pafcore__Category_Type::GetSingleton(), ::pafcore::instance_property),
@@ -41,6 +44,7 @@ namespace idlcpp
 			::pafcore::Enumerator("primitive_object", __pafcore__Category_Type::GetSingleton(), ::pafcore::primitive_object),
 			::pafcore::Enumerator("primitive_type", __pafcore__Category_Type::GetSingleton(), ::pafcore::primitive_type),
 			::pafcore::Enumerator("reference_object", __pafcore__Category_Type::GetSingleton(), ::pafcore::reference_object),
+			::pafcore::Enumerator("static_array_property", __pafcore__Category_Type::GetSingleton(), ::pafcore::static_array_property),
 			::pafcore::Enumerator("static_field", __pafcore__Category_Type::GetSingleton(), ::pafcore::static_field),
 			::pafcore::Enumerator("static_method", __pafcore__Category_Type::GetSingleton(), ::pafcore::static_method),
 			::pafcore::Enumerator("static_property", __pafcore__Category_Type::GetSingleton(), ::pafcore::static_property),

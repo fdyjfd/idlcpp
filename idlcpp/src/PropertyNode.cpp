@@ -19,6 +19,7 @@ PropertyNode::PropertyNode(TokenNode* constant, TypeNameNode* typeName, TokenNod
 	m_name = name;
 	m_get = 0;
 	m_set = 0;
+	m_arrayCategory = not_array;
 }
 
 bool PropertyNode::isStatic()
@@ -36,6 +37,26 @@ bool PropertyNode::isVirtual()
 bool PropertyNode::isAbstract()
 {
 	return (0 != m_modifier && snt_keyword_abstract == m_modifier->m_nodeType);
+}
+
+bool PropertyNode::isNotArray()
+{
+	return not_array == m_arrayCategory;
+}
+
+bool PropertyNode::isArray()
+{
+	return not_array != m_arrayCategory;
+}
+
+bool PropertyNode::isFixedArray()
+{
+	return fixed_array == m_arrayCategory;
+}
+
+bool PropertyNode::isDynamicArray()
+{
+	return dynamic_array == m_arrayCategory;
 }
 
 bool PropertyNode::byPtr()

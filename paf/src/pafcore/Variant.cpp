@@ -7,6 +7,9 @@
 #include "ClassType.h"
 #include "Reference.h"
 #include "Reference.mh"
+#include "InstanceArrayProperty.h"
+#include "StaticArrayProperty.h"
+
 #include <assert.h>
 #include <memory.h>
 
@@ -210,6 +213,25 @@ void Variant::assignArray(Type* type, const void* pointer, size_t arraySize, boo
 	m_arraySize = arraySize;
 	m_constant = constant;
 	m_semantic = semantic;
+}
+
+void Variant::assignInstanceArrayProperty(InstanceArrayProperty* property, Variant* object)
+{
+	clear();
+	m_type = InstanceArrayProperty::GetType();
+	m_pointer = (void*)property;
+	m_instanceArrayPropertyObject = object;
+	m_constant = object->m_constant;
+	m_semantic = by_ptr;
+}
+
+void Variant::assignStaticArrayProperty(StaticArrayProperty* property)
+{
+	clear();
+	m_type = StaticArrayProperty::GetType();
+	m_pointer = (void*)property;
+	m_constant = false;
+	m_semantic = by_ptr;
 }
 
 //void Variant::assignObject(Type* type, const void* pointer, bool constant, bool hold)

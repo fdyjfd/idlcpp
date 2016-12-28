@@ -14,7 +14,9 @@
 #include "InstanceField.h"
 #include "StaticField.h"
 #include "InstanceProperty.h"
+#include "InstanceArrayProperty.h"
 #include "StaticProperty.h"
+#include "StaticArrayProperty.h"
 #include "InstanceMethod.h"
 #include "StaticMethod.h"
 #include "Enumerator.h"
@@ -40,6 +42,12 @@ namespace idlcpp
 		};
 		RuntimeTypeOf<::pafcore::Type>::RuntimeType::GetSingleton()->m_firstDerivedClass = &s_classTypeIterators[0];
 		m_classTypeIterators = s_classTypeIterators;
+		static ::pafcore::InstanceArrayProperty s_arrayProperties[] = 
+		{
+			::pafcore::InstanceArrayProperty("_enumerators_", GetSingleton(), EnumType_get__enumerators_, RuntimeTypeOf<::pafcore::Enumerator>::RuntimeType::GetSingleton(), ::pafcore::Metadata::by_ptr, false, 0, 0, ::pafcore::Metadata::by_value, false, EnumType_size__enumerators_, 0),
+		};
+		m_arrayProperties = s_arrayProperties;
+		m_arrayPropertyCount = paf_array_size_of(s_arrayProperties);
 		static ::pafcore::Result s__getEnumeratorByName__Result_0(RuntimeTypeOf<::pafcore::Enumerator>::RuntimeType::GetSingleton(), false, ::pafcore::Result::by_ptr);
 		static ::pafcore::Argument s__getEnumeratorByName__Arguments_0[] = 
 		{
@@ -90,6 +98,7 @@ namespace idlcpp
 		m_methodCount = paf_array_size_of(s_methods);
 		static Metadata* s_members[] = 
 		{
+			&s_arrayProperties[0],
 			&s_methods[0],
 			&s_methods[1],
 			&s_methods[2],
@@ -113,6 +122,30 @@ namespace idlcpp
 	void __pafcore__EnumType_Type::assign(void* dst, const void* src)
 	{
 		*(::pafcore::EnumType*)dst = *(const ::pafcore::EnumType*)src;
+	}
+
+	::pafcore::ErrorCode __pafcore__EnumType_Type::EnumType_get__enumerators_(::pafcore::Variant* that, unsigned int index, ::pafcore::Variant* value)
+	{
+		::pafcore::EnumType* self;
+		if(!that->castToReferencePtr(GetSingleton(), (void**)&self))
+		{
+			return ::pafcore::e_invalid_this_type;
+		}
+		::pafcore::Enumerator* res = self->get__enumerators_(index);
+		value->assignReferencePtr(RuntimeTypeOf<::pafcore::Enumerator>::RuntimeType::GetSingleton(), res, false, ::pafcore::Variant::by_ptr);
+		return ::pafcore::s_ok;
+	}
+
+	::pafcore::ErrorCode __pafcore__EnumType_Type::EnumType_size__enumerators_(::pafcore::Variant* that, ::pafcore::Variant* value)
+	{
+		::pafcore::EnumType* self;
+		if(!that->castToReferencePtr(GetSingleton(), (void**)&self))
+		{
+			return ::pafcore::e_invalid_this_type;
+		}
+		unsigned int res = self->size__enumerators_();
+		value->assignPrimitive(RuntimeTypeOf<unsigned int>::RuntimeType::GetSingleton(), &res);
+		return ::pafcore::s_ok;
 	}
 
 	::pafcore::ErrorCode __pafcore__EnumType_Type::EnumType__getEnumeratorByName_(::pafcore::Variant* result, ::pafcore::Variant** args, int_t numArgs)

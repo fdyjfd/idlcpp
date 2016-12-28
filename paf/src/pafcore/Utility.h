@@ -98,6 +98,7 @@ enum ErrorCode
 	e_index_out_of_range,
 	e_property_is_read_only,
 	e_property_is_write_only,
+	e_array_property_is_not_dynamic,
 	e_item_is_constant,
 	e_field_is_an_array,
 	e_field_is_constant,

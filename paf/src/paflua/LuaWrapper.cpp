@@ -11,7 +11,9 @@
 #include "../pafcore/InstanceField.h"
 #include "../pafcore/StaticField.h"
 #include "../pafcore/InstanceProperty.h"
+#include "../pafcore/InstanceArrayProperty.h"
 #include "../pafcore/StaticProperty.h"
+#include "../pafcore/StaticArrayProperty.h"
 #include "../pafcore/InstanceMethod.h"
 #include "../pafcore/StaticMethod.h"
 #include "../pafcore/Enumerator.h"
@@ -236,13 +238,39 @@ int FunctionInvoker_Clone(lua_State *L, pafcore::FunctionInvoker invoker)
 
 pafcore::ErrorCode GetInstanceProperty(lua_State *L, pafcore::Variant* that, pafcore::InstanceProperty* property)
 {
-	if(0 == property->m_getter)
+	if (0 == property->m_getter)
 	{
 		return pafcore::e_property_is_write_only;
 	}
 	pafcore::Variant value;
 	pafcore::ErrorCode errorCode = (*property->m_getter)(that, &value);
-	if(pafcore::s_ok == errorCode)
+	if (pafcore::s_ok == errorCode)
+	{
+		VariantToLua(L, &value);
+	}
+	return errorCode;
+}
+
+pafcore::ErrorCode GetInstanceArrayPropertySize(lua_State *L, pafcore::Variant* that, pafcore::InstanceArrayProperty* property)
+{
+	pafcore::Variant value;
+	pafcore::ErrorCode errorCode = (*property->m_sizer)(that, &value);
+	if (pafcore::s_ok == errorCode)
+	{
+		VariantToLua(L, &value);
+	}
+	return errorCode;
+}
+
+pafcore::ErrorCode GetInstanceArrayProperty(lua_State *L, pafcore::Variant* that, pafcore::InstanceArrayProperty* property, size_t index)
+{
+	if (0 == property->m_getter)
+	{
+		return pafcore::e_property_is_write_only;
+	}
+	pafcore::Variant value;
+	pafcore::ErrorCode errorCode = (*property->m_getter)(that, index, &value);
+	if (pafcore::s_ok == errorCode)
 	{
 		VariantToLua(L, &value);
 	}
@@ -251,7 +279,7 @@ pafcore::ErrorCode GetInstanceProperty(lua_State *L, pafcore::Variant* that, paf
 
 pafcore::ErrorCode SetInstanceProperty(lua_State *L, pafcore::Variant* that, pafcore::InstanceProperty* property)
 {
-	if(0 == property->m_setter)
+	if (0 == property->m_setter)
 	{
 		return pafcore::e_property_is_read_only;
 	}
@@ -261,6 +289,37 @@ pafcore::ErrorCode SetInstanceProperty(lua_State *L, pafcore::Variant* that, paf
 	return errorCode;
 }
 
+pafcore::ErrorCode SetInstanceArrayPropertySize(lua_State *L, pafcore::Variant* that, pafcore::InstanceArrayProperty* property)
+{
+	if (0 == property->m_resizer)
+	{
+		return pafcore::e_array_property_is_not_dynamic;
+	}
+	pafcore::Variant value;
+	pafcore::Variant* arg = LuaToVariant(&value, L, 3);
+	pafcore::ErrorCode errorCode = (*property->m_resizer)(that, arg);
+	return errorCode;
+}
+
+pafcore::ErrorCode SetInstanceArrayProperty(lua_State *L, pafcore::Variant* that, pafcore::InstanceArrayProperty* property, size_t index)
+{
+	if (0 == property->m_setter)
+	{
+		return pafcore::e_property_is_read_only;
+	}
+	pafcore::Variant value;
+	pafcore::Variant* arg = LuaToVariant(&value, L, 3);
+	pafcore::ErrorCode errorCode = (*property->m_setter)(that, index, arg);
+	return errorCode;
+}
+
+pafcore::ErrorCode MakeInstanceArrayProperty(lua_State *L, pafcore::Variant* that, pafcore::InstanceArrayProperty* property)
+{
+	pafcore::Variant value;
+	value.assignInstanceArrayProperty(property, that);
+	VariantToLua(L, &value);
+	return pafcore::s_ok;
+}
 
 pafcore::ErrorCode GetStaticProperty(lua_State *L, pafcore::StaticProperty* property)
 {
@@ -277,9 +336,35 @@ pafcore::ErrorCode GetStaticProperty(lua_State *L, pafcore::StaticProperty* prop
 	return errorCode;
 }
 
+pafcore::ErrorCode GetStaticArrayPropertySize(lua_State *L, pafcore::StaticArrayProperty* property)
+{
+	pafcore::Variant value;
+	pafcore::ErrorCode errorCode = (*property->m_sizer)(&value);
+	if (pafcore::s_ok == errorCode)
+	{
+		VariantToLua(L, &value);
+	}
+	return errorCode;
+}
+
+pafcore::ErrorCode GetStaticArrayProperty(lua_State *L, pafcore::StaticArrayProperty* property, size_t index)
+{
+	if (0 == property->m_getter)
+	{
+		return pafcore::e_property_is_write_only;
+	}
+	pafcore::Variant value;
+	pafcore::ErrorCode errorCode = (*property->m_getter)(index, &value);
+	if (pafcore::s_ok == errorCode)
+	{
+		VariantToLua(L, &value);
+	}
+	return errorCode;
+}
+
 pafcore::ErrorCode SetStaticProperty(lua_State *L, pafcore::StaticProperty* property)
 {
-	if(0 == property->m_setter)
+	if (0 == property->m_setter)
 	{
 		return pafcore::e_property_is_read_only;
 	}
@@ -290,6 +375,38 @@ pafcore::ErrorCode SetStaticProperty(lua_State *L, pafcore::StaticProperty* prop
 	return errorCode;
 }
 
+pafcore::ErrorCode SetStaticArrayPropertySize(lua_State *L, pafcore::StaticArrayProperty* property)
+{
+	if (0 == property->m_resizer)
+	{
+		return pafcore::e_array_property_is_not_dynamic;
+	}
+	pafcore::Variant value;
+	pafcore::Variant* arg = LuaToVariant(&value, L, 3);
+	pafcore::ErrorCode errorCode = (*property->m_resizer)(arg);
+	return errorCode;
+}
+
+pafcore::ErrorCode SetStaticArrayProperty(lua_State *L, pafcore::StaticArrayProperty* property, size_t index)
+{
+	if (0 == property->m_setter)
+	{
+		return pafcore::e_property_is_read_only;
+	}
+
+	pafcore::Variant value;
+	pafcore::Variant* arg = LuaToVariant(&value, L, 3);
+	pafcore::ErrorCode errorCode = (*property->m_setter)(index, arg);
+	return errorCode;
+}
+
+pafcore::ErrorCode MakeStaticArrayProperty(lua_State *L, pafcore::StaticArrayProperty* property)
+{
+	pafcore::Variant value;
+	value.assignStaticArrayProperty(property);
+	VariantToLua(L, &value);
+	return pafcore::s_ok;
+}
 
 pafcore::ErrorCode GetNestedType(lua_State *L, pafcore::Type* nestedType)
 {
@@ -824,6 +941,20 @@ pafcore::ErrorCode Variant_Index_Identify(lua_State *L, pafcore::Variant* varian
 			}
 		}
 		break;
+	case pafcore::instance_array_property:
+		if (strcmp("_size_", name) == 0)
+		{
+			pafcore::InstanceArrayProperty* prop = (pafcore::InstanceArrayProperty*)variant->m_pointer;
+			return GetInstanceArrayPropertySize(L, variant->m_instanceArrayPropertyObject, prop);
+		}
+		break;
+	case pafcore::static_array_property:
+		if (strcmp("_size_", name) == 0)
+		{
+			pafcore::StaticArrayProperty* prop = (pafcore::StaticArrayProperty*)variant->m_pointer;
+			return GetStaticArrayPropertySize(L, prop);
+		}
+		break;
 	}
 	pafcore::Metadata* member;
 	member = variant->m_type->findMember(name);
@@ -838,8 +969,12 @@ pafcore::ErrorCode Variant_Index_Identify(lua_State *L, pafcore::Variant* varian
 			return GetStaticField(L, static_cast<pafcore::StaticField*>(member));
 		case pafcore::instance_property:
 			return GetInstanceProperty(L, variant, static_cast<pafcore::InstanceProperty*>(member));
+		case pafcore::instance_array_property:
+			return MakeInstanceArrayProperty(L, variant, static_cast<pafcore::InstanceArrayProperty*>(member));
 		case pafcore::static_property:
 			return GetStaticProperty(L, static_cast<pafcore::StaticProperty*>(member));
+		case pafcore::static_array_property:
+			return MakeStaticArrayProperty(L, static_cast<pafcore::StaticArrayProperty*>(member));
 		case pafcore::instance_method:
 			lua_pushlightuserdata(L, static_cast<pafcore::InstanceMethod*>(member)->m_invoker);
 			lua_pushcclosure(L, FunctionInvoker_Closure, 1);
@@ -1004,6 +1139,20 @@ pafcore::ErrorCode Variant_NewIndex_Identify(lua_State *L, pafcore::Variant* var
 			}
 		}
 		break;
+	case pafcore::instance_array_property:
+		if (strcmp("_size_", name) == 0)
+		{
+			pafcore::InstanceArrayProperty* prop = (pafcore::InstanceArrayProperty*)variant->m_pointer;
+			return SetInstanceArrayPropertySize(L, variant->m_instanceArrayPropertyObject, prop);
+		}
+		break;
+	case pafcore::static_array_property:
+		if (strcmp("_size_", name) == 0)
+		{
+			pafcore::StaticArrayProperty* prop = (pafcore::StaticArrayProperty*)variant->m_pointer;
+			return SetStaticArrayPropertySize(L, prop);
+		}
+		break;
 	}
 	pafcore::Metadata* member;
 	member = variant->m_type->findMember(name);
@@ -1046,6 +1195,13 @@ pafcore::ErrorCode Variant_NewIndex_Identify(lua_State *L, pafcore::Variant* var
 
 pafcore::ErrorCode Variant_Index_Subscript(lua_State *L, pafcore::Variant* variant, size_t index)
 {
+	switch (variant->m_type->m_category)
+	{
+	case pafcore::instance_array_property:
+		return GetInstanceArrayProperty(L, variant->m_instanceArrayPropertyObject, (pafcore::InstanceArrayProperty*)variant->m_pointer, index);
+	case pafcore::static_array_property:
+		return GetStaticArrayProperty(L, (pafcore::StaticArrayProperty*)variant->m_pointer, index);
+	}
 	pafcore::Variant item;
 	if(!variant->subscript(item, index))
 	{
@@ -1158,6 +1314,14 @@ int Variant_Index(lua_State *L)
 
 pafcore::ErrorCode Variant_NewIndex_Subscript(lua_State *L, pafcore::Variant* variant, size_t index)
 {
+	switch (variant->m_type->m_category)
+	{
+	case pafcore::instance_array_property:
+		return SetInstanceArrayProperty(L, variant->m_instanceArrayPropertyObject, (pafcore::InstanceArrayProperty*)variant->m_pointer, index);
+	case pafcore::static_array_property:
+		return SetStaticArrayProperty(L, (pafcore::StaticArrayProperty*)variant->m_pointer, index);
+	}
+
 	pafcore::Variant item;
 	if(!variant->subscript(item, index))
 	{

@@ -33,6 +33,8 @@ public:
 	static void generateCode_Property(FILE* file, PropertyNode* propertyNode, int indentation);
 	static void generateCode_Property_Get(FILE* file, PropertyNode* propertyNode, int indentation);
 	static void generateCode_Property_Set(FILE* file, PropertyNode* propertyNode, int indentation);
+	static void generateCode_Property_Size(FILE* file, PropertyNode* propertyNode, int indentation);
+	static void generateCode_Property_Resize(FILE* file, PropertyNode* propertyNode, int indentation);
 	static void generateCode_Method(FILE* file, MethodNode* methodNode, int indentation);
 	static void generateCode_Operator(FILE* file, OperatorNode* methodNode, int indentation);
 };

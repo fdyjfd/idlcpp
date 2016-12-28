@@ -242,6 +242,18 @@ void setPropertySetter(SyntaxNode* property, SyntaxNode* setter)
 	((PropertyNode*)property)->setSetter((GetterSetterNode*)setter);
 }
 
+void setPropertyArray(SyntaxNode* property)
+{
+	assert(snt_property == property->m_nodeType);
+	((PropertyNode*)property)->m_arrayCategory = fixed_array;
+}
+
+void setPropertyDynamicArray(SyntaxNode* property)
+{
+	assert(snt_property == property->m_nodeType);
+	((PropertyNode*)property)->m_arrayCategory = dynamic_array;
+}
+
 void setPropertyModifier(SyntaxNode* syntaxNode, SyntaxNode* modifier)
 {
 	assert(snt_property == syntaxNode->m_nodeType);

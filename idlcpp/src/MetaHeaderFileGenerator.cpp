@@ -61,20 +61,42 @@ void writeMetaMethodDecls(ClassNode* classNode, std::vector<MethodNode*> methodN
 }
 
 const char g_metaPropertyDeclPrefix[] = "static ::pafcore::ErrorCode ";
-const char g_metaPropertyDeclPostfix[] = "(::pafcore::Variant* that, ::pafcore::Variant* value);\n";
-const char g_metaStaticPropertyDeclPostfix[] = "(::pafcore::Variant* value);\n";
 
-void writeMetaPropertyDecl(const char* funcName, bool isStatic, FILE* file, int indentation)
+const char g_metaPropertyDeclPostfix[] = "(::pafcore::Variant* that, ::pafcore::Variant* value);\n";
+const char g_metaArrayPropertyDeclPostfix[] = "(::pafcore::Variant* that, unsigned int index, ::pafcore::Variant* value);\n";
+const char g_metaStaticPropertyDeclPostfix[] = "(::pafcore::Variant* value);\n";
+const char g_metaStaticArrayPropertyDeclPostfix[] = "(unsigned int index, ::pafcore::Variant* value);\n";
+
+const char metaArrayPropertyDeclSizePostfix[] = "(::pafcore::Variant* that, ::pafcore::Variant* value);\n";
+const char g_metaArrayPropertyDeclResizePostfix[] = "(::pafcore::Variant* that, ::pafcore::Variant* value);\n";
+const char g_metaStaticArrayPropertyDeclSizePostfix[] = "(::pafcore::Variant* value);\n";
+const char g_metaStaticArrayPropertyDeclResizePostfix[] = "(::pafcore::Variant* value);\n";
+
+void writeMetaPropertyDeclGetSet(const char* funcName, bool isStatic, bool isArray, FILE* file, int indentation)
 {
 	writeStringToFile(g_metaPropertyDeclPrefix, sizeof(g_metaPropertyDeclPrefix) - 1, file, indentation);
 	writeStringToFile(funcName, file);
 	if(isStatic)
 	{
-		writeStringToFile(g_metaStaticPropertyDeclPostfix, sizeof(g_metaStaticPropertyDeclPostfix) - 1, file);
+		if (isArray)
+		{
+			writeStringToFile(g_metaStaticArrayPropertyDeclPostfix, sizeof(g_metaStaticArrayPropertyDeclPostfix) - 1, file);
+		}
+		else
+		{
+			writeStringToFile(g_metaStaticPropertyDeclPostfix, sizeof(g_metaStaticPropertyDeclPostfix) - 1, file);
+		}
 	}
 	else
 	{
-		writeStringToFile(g_metaPropertyDeclPostfix, sizeof(g_metaPropertyDeclPostfix) - 1, file);
+		if (isArray)
+		{
+			writeStringToFile(g_metaArrayPropertyDeclPostfix, sizeof(g_metaArrayPropertyDeclPostfix) - 1, file);
+		}
+		else
+		{
+			writeStringToFile(g_metaPropertyDeclPostfix, sizeof(g_metaPropertyDeclPostfix) - 1, file);
+		}
 	}
 }
 
@@ -84,12 +106,40 @@ void writeMetaPropertyDecl(ClassNode* classNode, PropertyNode* propertyNode, FIL
 	if(0 != propertyNode->m_get)
 	{
 		sprintf_s(funcName, "%s_get_%s", classNode->m_name->m_str.c_str(), propertyNode->m_name->m_str.c_str());
-		writeMetaPropertyDecl(funcName, propertyNode->isStatic(), file, indentation + 1);
+		writeMetaPropertyDeclGetSet(funcName, propertyNode->isStatic(), propertyNode->isArray(), file, indentation + 1);
 	}		
 	if(0 != propertyNode->m_set)
 	{
 		sprintf_s(funcName, "%s_set_%s", classNode->m_name->m_str.c_str(), propertyNode->m_name->m_str.c_str());
-		writeMetaPropertyDecl(funcName, propertyNode->isStatic(), file, indentation + 1);
+		writeMetaPropertyDeclGetSet(funcName, propertyNode->isStatic(), propertyNode->isArray(), file, indentation + 1);
+	}
+	if(propertyNode->isArray())
+	{
+		sprintf_s(funcName, "%s_size_%s", classNode->m_name->m_str.c_str(), propertyNode->m_name->m_str.c_str());
+		writeStringToFile(g_metaPropertyDeclPrefix, sizeof(g_metaPropertyDeclPrefix) - 1, file, indentation);
+		writeStringToFile(funcName, file);
+		if (propertyNode->isStatic())
+		{
+			writeStringToFile(g_metaStaticArrayPropertyDeclSizePostfix, sizeof(g_metaStaticArrayPropertyDeclSizePostfix) - 1, file);
+		}
+		else
+		{
+			writeStringToFile(metaArrayPropertyDeclSizePostfix, sizeof(metaArrayPropertyDeclSizePostfix) - 1, file);
+		}
+		if (propertyNode->isDynamicArray())
+		{
+			sprintf_s(funcName, "%s_resize_%s", classNode->m_name->m_str.c_str(), propertyNode->m_name->m_str.c_str());
+			writeStringToFile(g_metaPropertyDeclPrefix, sizeof(g_metaPropertyDeclPrefix) - 1, file, indentation);
+			writeStringToFile(funcName, file);
+			if (propertyNode->isStatic())
+			{
+				writeStringToFile(g_metaStaticArrayPropertyDeclResizePostfix, sizeof(g_metaStaticArrayPropertyDeclResizePostfix) - 1, file);
+			}
+			else
+			{
+				writeStringToFile(g_metaArrayPropertyDeclResizePostfix, sizeof(g_metaArrayPropertyDeclResizePostfix) - 1, file);
+			}
+		}
 	}
 }
 

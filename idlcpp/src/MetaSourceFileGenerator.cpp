@@ -47,9 +47,11 @@ void writeMetaConstructor(ClassNode* classNode,
 	std::vector<MemberNode*>& nestedTypeAliasNodes,
 	std::vector<FieldNode*>& staticFieldNodes,
 	std::vector<PropertyNode*>& staticPropertyNodes,
+	std::vector<PropertyNode*>& staticArrayPropertyNodes,
 	std::vector<MethodNode*>& staticMethodNodes,
 	std::vector<FieldNode*>& fieldNodes,
 	std::vector<PropertyNode*>& propertyNodes,
+	std::vector<PropertyNode*>& arrayPropertyNodes,
 	std::vector<MethodNode*>& methodNodes,
 	FILE* file, int indentation);
 
@@ -90,7 +92,11 @@ void MetaSourceFileGenerator::generateCode_Program(FILE* file, SourceFile* sourc
 	writeStringToFile(buf, file);
 	sprintf_s(buf, "#include \"%sInstanceProperty.h\"\n", pafcorePath.c_str());
 	writeStringToFile(buf, file);
+	sprintf_s(buf, "#include \"%sInstanceArrayProperty.h\"\n", pafcorePath.c_str());
+	writeStringToFile(buf, file);
 	sprintf_s(buf, "#include \"%sStaticProperty.h\"\n", pafcorePath.c_str());
+	writeStringToFile(buf, file);
+	sprintf_s(buf, "#include \"%sStaticArrayProperty.h\"\n", pafcorePath.c_str());
 	writeStringToFile(buf, file);
 	sprintf_s(buf, "#include \"%sInstanceMethod.h\"\n", pafcorePath.c_str());
 	writeStringToFile(buf, file);
@@ -391,7 +397,9 @@ void MetaSourceFileGenerator::generateCode_Class(FILE* file, ClassNode* classNod
 	std::vector<MethodNode*> staticMethodNodes;
 	std::vector<MethodNode*> typeMethodNodes;
 	std::vector<PropertyNode*> propertyNodes;
+	std::vector<PropertyNode*> arrayPropertyNodes;
 	std::vector<PropertyNode*> staticPropertyNodes;
+	std::vector<PropertyNode*> staticArrayPropertyNodes;
 	std::vector<FieldNode*> fieldNodes;
 	std::vector<FieldNode*> staticFieldNodes;
 	std::vector<MemberNode*> nestedTypeNodes;
@@ -455,11 +463,26 @@ void MetaSourceFileGenerator::generateCode_Class(FILE* file, ClassNode* classNod
 				PropertyNode* propertyNode = static_cast<PropertyNode*>(memberNode);
 				if(propertyNode->isStatic())
 				{
-					staticPropertyNodes.push_back(propertyNode);
+					if (propertyNode->isArray())
+					{
+						staticArrayPropertyNodes.push_back(propertyNode);
+
+					}
+					else
+					{
+						staticPropertyNodes.push_back(propertyNode);
+					}
 				}
 				else
 				{
-					propertyNodes.push_back(propertyNode);
+					if (propertyNode->isArray())
+					{
+						arrayPropertyNodes.push_back(propertyNode);
+					}
+					else
+					{
+						propertyNodes.push_back(propertyNode);
+					}
 				}
 			}
 			else if(snt_field == memberNode->m_nodeType)
@@ -516,18 +539,22 @@ void MetaSourceFileGenerator::generateCode_Class(FILE* file, ClassNode* classNod
 	std::sort(nestedTypeAliasNodes.begin(), nestedTypeAliasNodes.end(), CompareMemberNodeByName());
 	std::sort(fieldNodes.begin(), fieldNodes.end(), CompareMemberNodeByName());
 	std::sort(propertyNodes.begin(), propertyNodes.end(), CompareMemberNodeByName());
+	std::sort(arrayPropertyNodes.begin(), arrayPropertyNodes.end(), CompareMemberNodeByName());
 	std::sort(methodNodes.begin(), methodNodes.end(), CompareMethodNode());
 	std::sort(staticFieldNodes.begin(), staticFieldNodes.end(), CompareMemberNodeByName());
 	std::sort(staticPropertyNodes.begin(), staticPropertyNodes.end(), CompareMemberNodeByName());
+	std::sort(staticArrayPropertyNodes.begin(), staticArrayPropertyNodes.end(), CompareMemberNodeByName());
 	std::sort(staticMethodNodes.begin(), staticMethodNodes.end(), CompareMethodNode());
 
 	writeMetaConstructor(classNode, templateArguments, nestedTypeNodes, nestedTypeAliasNodes,
-		staticFieldNodes, staticPropertyNodes, staticMethodNodes, 
-		fieldNodes, propertyNodes, methodNodes, file, indentation);
+		staticFieldNodes, staticPropertyNodes, staticArrayPropertyNodes, staticMethodNodes,
+		fieldNodes, propertyNodes, arrayPropertyNodes, methodNodes, file, indentation);
 
 	writeOverrideFunction(classNode, templateArguments, typeMethodNodes, file, indentation);
 	writeMetaPropertyImpls(classNode, templateArguments, propertyNodes, file, indentation);
+	writeMetaPropertyImpls(classNode, templateArguments, arrayPropertyNodes, file, indentation);
 	writeMetaPropertyImpls(classNode, templateArguments, staticPropertyNodes, file, indentation);
+	writeMetaPropertyImpls(classNode, templateArguments, staticArrayPropertyNodes, file, indentation);
 	writeMetaMethodImpls(classNode, templateArguments, methodNodes, false, file, indentation);
 	writeMetaMethodImpls(classNode, templateArguments, staticMethodNodes, true, file, indentation);
 	writeMetaGetSingletonImpls(classNode, templateArguments, file, indentation);
@@ -573,8 +600,16 @@ void MetaSourceFileGenerator::generateCode_Class(FILE* file, ClassNode* classNod
 }
 
 const char g_metaPropertyImplPrefix[] = "::pafcore::ErrorCode ";
+
 const char g_metaPropertyImplPostfix[] = "(::pafcore::Variant* that, ::pafcore::Variant* value)\n";
+const char g_metaArrayPropertyImplPostfix[] = "(::pafcore::Variant* that, unsigned int index, ::pafcore::Variant* value)\n";
 const char g_metaStaticPropertyImplPostfix[] = "(::pafcore::Variant* value)\n";
+const char g_metaStaticArrayPropertyImplPostfix[] = "(unsigned int index, ::pafcore::Variant* value)\n";
+
+const char g_metaArrayPropertyImplSizePostfix[] = "(::pafcore::Variant* that, ::pafcore::Variant* value)\n";
+const char g_metaArrayPropertyImplResizePostfix[] = "(::pafcore::Variant* that, ::pafcore::Variant* value)\n";
+const char g_metaStaticArrayPropertyImplSizePostfix[] = "(::pafcore::Variant* value)\n";
+const char g_metaStaticArrayPropertyImplResizePostfix[] = "(::pafcore::Variant* value)\n";
 
 void writeMetaGetPropertyImpl(ClassNode* classNode, TemplateArguments* templateArguments, PropertyNode* propertyNode, FILE* file, int indentation)
 {
@@ -592,38 +627,53 @@ void writeMetaGetPropertyImpl(ClassNode* classNode, TemplateArguments* templateA
 	writeStringToFile(buf, file);
 	if(propertyNode->isStatic())
 	{
-		writeStringToFile(g_metaStaticPropertyImplPostfix, sizeof(g_metaStaticPropertyImplPostfix) - 1, file);		
+		if (propertyNode->isArray())
+		{
+			writeStringToFile(g_metaStaticArrayPropertyImplPostfix, sizeof(g_metaStaticArrayPropertyImplPostfix) - 1, file);
+		}
+		else
+		{
+			writeStringToFile(g_metaStaticPropertyImplPostfix, sizeof(g_metaStaticPropertyImplPostfix) - 1, file);		
+		}
 	}
 	else
 	{
-		writeStringToFile(g_metaPropertyImplPostfix, sizeof(g_metaPropertyImplPostfix) - 1, file);	
+		if (propertyNode->isArray())
+		{
+			writeStringToFile(g_metaArrayPropertyImplPostfix, sizeof(g_metaArrayPropertyImplPostfix) - 1, file);
+		}
+		else
+		{
+			writeStringToFile(g_metaPropertyImplPostfix, sizeof(g_metaPropertyImplPostfix) - 1, file);
+		}
 	}
 	writeStringToFile("{\n", file, indentation);
 	TypeCategory typeCategory = CalcTypeNativeName(typeName, propertyNode->m_typeName, templateArguments);
 
+	const char* strIndex = propertyNode->isArray() ? "index" : "";
 	if(propertyNode->isStatic())
 	{
 		if(0 == propertyNode->m_get->m_passing)
 		{
 			if(primitive_type == typeCategory || enum_type == typeCategory)
 			{
-				sprintf_s(buf, "%s res = %s::get_%s();\n", typeName.c_str(), className.c_str(), propertyNode->m_name->m_str.c_str());
+				sprintf_s(buf, "%s res = %s::get_%s(%s);\n", typeName.c_str(), className.c_str(), propertyNode->m_name->m_str.c_str(), strIndex);
 			}
 			else
 			{
-				sprintf_s(buf, "%s* res = paf_new %s(%s::get_%s());\n", typeName.c_str(), typeName.c_str(), className.c_str(), propertyNode->m_name->m_str.c_str());
+				sprintf_s(buf, "%s* res = paf_new %s(%s::get_%s(%s));\n", typeName.c_str(), typeName.c_str(), className.c_str(), propertyNode->m_name->m_str.c_str(), strIndex);
 			}
 		}
 		else if('*' == propertyNode->m_get->m_passing->m_nodeType)
 		{
-			sprintf_s(buf, "%s%s* res = %s::get_%s();\n", propertyNode->m_get->isConstant() ? "const " : "",
-				typeName.c_str(), className.c_str(), propertyNode->m_name->m_str.c_str());
+			sprintf_s(buf, "%s%s* res = %s::get_%s(%s);\n", propertyNode->m_get->isConstant() ? "const " : "",
+				typeName.c_str(), className.c_str(), propertyNode->m_name->m_str.c_str(), strIndex);
 		}
 		else
 		{
 			assert('&' == propertyNode->m_get->m_passing->m_nodeType);
-			sprintf_s(buf, "%s%s* res = &%s::get_%s();\n",  propertyNode->m_get->isConstant() ? "const " : "",
-				typeName.c_str(), className.c_str(), propertyNode->m_name->m_str.c_str());
+			sprintf_s(buf, "%s%s* res = &%s::get_%s(%s);\n",  propertyNode->m_get->isConstant() ? "const " : "",
+				typeName.c_str(), className.c_str(), propertyNode->m_name->m_str.c_str(), strIndex);
 		}
 		writeStringToFile(buf, file, indentation + 1);
 	}
@@ -646,23 +696,23 @@ void writeMetaGetPropertyImpl(ClassNode* classNode, TemplateArguments* templateA
 		{
 			if(primitive_type == typeCategory || enum_type == typeCategory)
 			{
-				sprintf_s(buf, "%s res = self->get_%s();\n", typeName.c_str(), propertyNode->m_name->m_str.c_str());
+				sprintf_s(buf, "%s res = self->get_%s(%s);\n", typeName.c_str(), propertyNode->m_name->m_str.c_str(), strIndex);
 			}
 			else
 			{
-				sprintf_s(buf, "%s* res = paf_new %s(self->get_%s());\n", typeName.c_str(), typeName.c_str(), propertyNode->m_name->m_str.c_str());
+				sprintf_s(buf, "%s* res = paf_new %s(self->get_%s(%s));\n", typeName.c_str(), typeName.c_str(), propertyNode->m_name->m_str.c_str(), strIndex);
 			}
 		}
 		else if('*' == propertyNode->m_get->m_passing->m_nodeType)
 		{
-			sprintf_s(buf, "%s%s* res = self->get_%s();\n", propertyNode->m_get->isConstant() ? "const " : "",
-				typeName.c_str(), propertyNode->m_name->m_str.c_str());
+			sprintf_s(buf, "%s%s* res = self->get_%s(%s);\n", propertyNode->m_get->isConstant() ? "const " : "",
+				typeName.c_str(), propertyNode->m_name->m_str.c_str(), strIndex);
 		}
 		else
 		{
 			assert('&' == propertyNode->m_get->m_passing->m_nodeType);
-			sprintf_s(buf, "%s%s* res = &self->get_%s();\n",  propertyNode->m_get->isConstant() ? "const " : "",
-				typeName.c_str(), propertyNode->m_name->m_str.c_str());
+			sprintf_s(buf, "%s%s* res = &self->get_%s(%s);\n",  propertyNode->m_get->isConstant() ? "const " : "",
+				typeName.c_str(), propertyNode->m_name->m_str.c_str(), strIndex);
 		}
 		writeStringToFile(buf, file, indentation + 1);
 	}
@@ -749,13 +799,27 @@ void writeMetaSetPropertyImpl(ClassNode* classNode, TemplateArguments* templateA
 	sprintf_s(buf, "%s::%s_set_%s", metaClassName.c_str(),
 		classNode->m_name->m_str.c_str(), propertyNode->m_name->m_str.c_str());
 	writeStringToFile(buf, file);
-	if(propertyNode->isStatic())
+	if (propertyNode->isStatic())
 	{
-		writeStringToFile(g_metaStaticPropertyImplPostfix, sizeof(g_metaStaticPropertyImplPostfix) - 1, file);		
+		if (propertyNode->isArray())
+		{
+			writeStringToFile(g_metaStaticArrayPropertyImplPostfix, sizeof(g_metaStaticArrayPropertyImplPostfix) - 1, file);
+		}
+		else
+		{
+			writeStringToFile(g_metaStaticPropertyImplPostfix, sizeof(g_metaStaticPropertyImplPostfix) - 1, file);
+		}
 	}
 	else
 	{
-		writeStringToFile(g_metaPropertyImplPostfix, sizeof(g_metaPropertyImplPostfix) - 1, file);	
+		if (propertyNode->isArray())
+		{
+			writeStringToFile(g_metaArrayPropertyImplPostfix, sizeof(g_metaArrayPropertyImplPostfix) - 1, file);
+		}
+		else
+		{
+			writeStringToFile(g_metaPropertyImplPostfix, sizeof(g_metaPropertyImplPostfix) - 1, file);
+		}
 	}
 	writeStringToFile("{\n", file, indentation);
 
@@ -833,40 +897,161 @@ void writeMetaSetPropertyImpl(ClassNode* classNode, TemplateArguments* templateA
 	writeStringToFile("}\n", file, indentation + 1);
 	if(propertyNode->isStatic())
 	{
-		sprintf_s(buf, "%s::set_%s", className.c_str(), propertyNode->m_name->m_str.c_str());
+		sprintf_s(buf, "%s::set_%s(", className.c_str(), propertyNode->m_name->m_str.c_str());
 	}
 	else
 	{
-		sprintf_s(buf, "self->set_%s", propertyNode->m_name->m_str.c_str());
+		sprintf_s(buf, "self->set_%s(", propertyNode->m_name->m_str.c_str());
 	}
 	writeStringToFile(buf, file, indentation + 1);
+
+	if (propertyNode->isArray())
+	{
+		writeStringToFile("index, ", file);
+	}
 
 	if(primitive_type == typeCategory)
 	{
 		if(propertyNode->m_set->byRef() && !propertyNode->m_set->isConstant())
 		{
-			strcpy_s(buf, "(*arg);\n");
+			strcpy_s(buf, "*arg);\n");
 		}
 		else
 		{
-			strcpy_s(buf, "(arg);\n");
+			strcpy_s(buf, "arg);\n");
 		}
 	}
 	else
 	{
 		if(propertyNode->m_set->byPtr())
 		{
-			strcpy_s(buf, "(arg);\n");
+			strcpy_s(buf, "arg);\n");
 		}
 		else
 		{
-			strcpy_s(buf, "(*arg);\n");
+			strcpy_s(buf, "*arg);\n");
 		}
 	}
 	writeStringToFile(buf, file, 0);
 	writeStringToFile("return ::pafcore::s_ok;\n", file, indentation + 1);	
 	writeStringToFile("}\n\n", file, indentation);
 }
+
+void writeMetaPropertySizeImpl(ClassNode* classNode, TemplateArguments* templateArguments, PropertyNode* propertyNode, FILE* file, int indentation)
+{
+	char buf[512];
+	std::string typeName;
+	std::string className;
+	std::string metaClassName;
+
+	classNode->getNativeName(className, templateArguments);
+	GetMetaTypeFullName(metaClassName, classNode, templateArguments);
+
+	writeStringToFile(g_metaPropertyImplPrefix, sizeof(g_metaPropertyImplPrefix) - 1, file, indentation);
+	sprintf_s(buf, "%s::%s_size_%s", metaClassName.c_str(),
+		classNode->m_name->m_str.c_str(), propertyNode->m_name->m_str.c_str());
+	writeStringToFile(buf, file);
+	if (propertyNode->isStatic())
+	{
+		writeStringToFile(g_metaStaticArrayPropertyImplSizePostfix, sizeof(g_metaStaticArrayPropertyImplSizePostfix) - 1, file);
+	}
+	else
+	{
+		writeStringToFile(g_metaArrayPropertyImplSizePostfix, sizeof(g_metaArrayPropertyImplSizePostfix) - 1, file);
+	}
+	writeStringToFile("{\n", file, indentation);
+
+	if (propertyNode->isStatic())
+	{
+		sprintf_s(buf, "unsigned int res = %s::size_%s();\n", className.c_str(), propertyNode->m_name->m_str.c_str());
+		writeStringToFile(buf, file, indentation + 1);
+	}
+	else
+	{
+		sprintf_s(buf, "%s* self;\n", className.c_str());
+		writeStringToFile(buf, file, indentation + 1);
+		if (classNode->isValueType())
+		{
+			writeStringToFile("if(!that->castToValuePtr(GetSingleton(), (void**)&self))\n", file, indentation + 1);
+		}
+		else
+		{
+			writeStringToFile("if(!that->castToReferencePtr(GetSingleton(), (void**)&self))\n", file, indentation + 1);
+		}
+		writeStringToFile("{\n", file, indentation + 1);
+		writeStringToFile("return ::pafcore::e_invalid_this_type;\n", file, indentation + 2);
+		writeStringToFile("}\n", file, indentation + 1);
+		sprintf_s(buf, "unsigned int res = self->size_%s();\n", propertyNode->m_name->m_str.c_str());
+		writeStringToFile(buf, file, indentation + 1);
+	}
+	writeStringToFile("value->assignPrimitive(RuntimeTypeOf<unsigned int>::RuntimeType::GetSingleton(), &res);\n", file, indentation + 1);
+	writeStringToFile("return ::pafcore::s_ok;\n", file, indentation + 1);
+	writeStringToFile("}\n\n", file, indentation);
+}
+
+
+void writeMetaPropertyResizeImpl(ClassNode* classNode, TemplateArguments* templateArguments, PropertyNode* propertyNode, FILE* file, int indentation)
+{
+	char buf[512];
+	std::string typeName;
+	std::string className;
+	std::string metaClassName;
+
+	classNode->getNativeName(className, templateArguments);
+	GetMetaTypeFullName(metaClassName, classNode, templateArguments);
+
+	writeStringToFile(g_metaPropertyImplPrefix, sizeof(g_metaPropertyImplPrefix) - 1, file, indentation);
+	sprintf_s(buf, "%s::%s_resize_%s", metaClassName.c_str(),
+		classNode->m_name->m_str.c_str(), propertyNode->m_name->m_str.c_str());
+	writeStringToFile(buf, file);
+	if (propertyNode->isStatic())
+	{
+		writeStringToFile(g_metaStaticArrayPropertyImplResizePostfix, sizeof(g_metaStaticArrayPropertyImplResizePostfix) - 1, file);
+	}
+	else
+	{
+		writeStringToFile(g_metaArrayPropertyImplResizePostfix, sizeof(g_metaArrayPropertyImplResizePostfix) - 1, file);
+	}
+	writeStringToFile("{\n", file, indentation);
+
+	writeStringToFile("unsigned int arg;\n", file, indentation + 1);
+	writeStringToFile("if(!value->castToPrimitive(RuntimeTypeOf<unsigned int>::RuntimeType::GetSingleton(), &arg))\n", file, indentation + 1);
+	writeStringToFile("{\n", file, indentation + 1);
+	writeStringToFile("return ::pafcore::e_invalid_property_type;\n", file, indentation + 2);
+	writeStringToFile("}\n", file, indentation + 1);
+
+	if (propertyNode->isStatic())
+	{
+		sprintf_s(buf, "%s::resize_%s(arg);\n", className.c_str(), propertyNode->m_name->m_str.c_str());
+		writeStringToFile(buf, file, indentation + 1);
+	}
+	else
+	{
+		writeStringToFile("if(that->isConstant())\n", file, indentation + 1);
+		writeStringToFile("{\n", file, indentation + 1);
+		writeStringToFile("return ::pafcore::e_this_is_constant;\n", file, indentation + 2);
+		writeStringToFile("}\n", file, indentation + 1);
+
+		sprintf_s(buf, "%s* self;\n", className.c_str());
+		writeStringToFile(buf, file, indentation + 1);
+		if (classNode->isValueType())
+		{
+			writeStringToFile("if(!that->castToValuePtr(GetSingleton(), (void**)&self))\n", file, indentation + 1);
+		}
+		else
+		{
+			writeStringToFile("if(!that->castToReferencePtr(GetSingleton(), (void**)&self))\n", file, indentation + 1);
+		}
+		writeStringToFile("{\n", file, indentation + 1);
+		writeStringToFile("return ::pafcore::e_invalid_this_type;\n", file, indentation + 2);
+		writeStringToFile("}\n", file, indentation + 1);
+		sprintf_s(buf, "self->resize_%s(arg);\n", propertyNode->m_name->m_str.c_str());
+		writeStringToFile(buf, file, indentation + 1);
+	}
+	writeStringToFile("return ::pafcore::s_ok;\n", file, indentation + 1);
+	writeStringToFile("}\n\n", file, indentation);
+}
+
 
 void writeMetaPropertyImpls(ClassNode* classNode, TemplateArguments* templateArguments, std::vector<PropertyNode*>& propertyNodes, FILE* file, int indentation)
 {
@@ -883,6 +1068,14 @@ void writeMetaPropertyImpls(ClassNode* classNode, TemplateArguments* templateArg
 			if(0 != propertyNode->m_set)
 			{
 				writeMetaSetPropertyImpl(classNode, templateArguments, propertyNodes[i], file, indentation);
+			}
+			if (propertyNode->isArray())
+			{
+				writeMetaPropertySizeImpl(classNode, templateArguments, propertyNodes[i], file, indentation);
+				if (propertyNode->isDynamicArray())
+				{
+					writeMetaPropertyResizeImpl(classNode, templateArguments, propertyNodes[i], file, indentation);
+				}
 			}
 		}
 	}
@@ -1551,7 +1744,7 @@ void writeMetaConstructor_Fields(ClassNode* classNode, TemplateArguments* templa
 	}
 }
 
-void writeMetaConstructor_Properties(ClassNode* classNode, TemplateArguments* templateArguments, std::vector<PropertyNode*>& propertyNodes, bool isStatic, FILE* file, int indentation)
+void writeMetaConstructor_Properties(ClassNode* classNode, TemplateArguments* templateArguments, std::vector<PropertyNode*>& propertyNodes, bool isStatic, bool isArray, FILE* file, int indentation)
 {
 	char buf[512];
 	char getterFunc[256];
@@ -1562,19 +1755,36 @@ void writeMetaConstructor_Properties(ClassNode* classNode, TemplateArguments* te
 	char setterPassing[64];
 	bool getterConstant;
 	bool setterConstant;
+	char sizerFunc[256];
+	char resizerFunc[256];
 	if(propertyNodes.empty())
 	{
 		return;
 	}
 	size_t count = propertyNodes.size();
-	if(isStatic)
+	if (isArray)
 	{
-		writeStringToFile("static ::pafcore::StaticProperty s_staticProperties[] = \n", file, indentation);
+		if (isStatic)
+		{
+			writeStringToFile("static ::pafcore::StaticArrayProperty s_staticArrayProperties[] = \n", file, indentation);
+		}
+		else
+		{
+			writeStringToFile("static ::pafcore::InstanceArrayProperty s_arrayProperties[] = \n", file, indentation);
+		}
 	}
 	else
 	{
-		writeStringToFile("static ::pafcore::InstanceProperty s_properties[] = \n", file, indentation);
+		if (isStatic)
+		{
+			writeStringToFile("static ::pafcore::StaticProperty s_staticProperties[] = \n", file, indentation);
+		}
+		else
+		{
+			writeStringToFile("static ::pafcore::InstanceProperty s_properties[] = \n", file, indentation);
+		}
 	}
+
 	writeStringToFile("{\n", file, indentation);
 
 	for(size_t i = 0; i < count; ++i)
@@ -1627,33 +1837,81 @@ void writeMetaConstructor_Properties(ClassNode* classNode, TemplateArguments* te
 			strcpy_s(setterType, "0");
 			strcpy_s(setterFunc, "0");
 		}
-		if(isStatic)
+
+		if (isArray)
 		{
-			sprintf_s(buf, "::pafcore::StaticProperty(\"%s\", %s, %s, %s, %s, %s, %s, %s, %s),\n",
-				propertyNode->m_name->m_str.c_str(), 
-				getterFunc, getterType, getterPassing, getterConstant ? "true" : "false",
-				setterFunc, setterType, setterPassing, setterConstant ? "true" : "false");
+			sprintf_s(sizerFunc, "%s_size_%s", classNode->m_name->m_str.c_str(), propertyNode->m_name->m_str.c_str());
+			if(propertyNode->isDynamicArray())
+			{ 
+				sprintf_s(resizerFunc, "%s_resize_%s", classNode->m_name->m_str.c_str(), propertyNode->m_name->m_str.c_str());
+			}
+			else
+			{
+				strcpy_s(resizerFunc, "0");
+			}
+			if (isStatic)
+			{
+				sprintf_s(buf, "::pafcore::StaticArrayProperty(\"%s\", %s, %s, %s, %s, %s, %s, %s, %s, %s, %s),\n",
+					propertyNode->m_name->m_str.c_str(),
+					getterFunc, getterType, getterPassing, getterConstant ? "true" : "false",
+					setterFunc, setterType, setterPassing, setterConstant ? "true" : "false",
+					sizerFunc, resizerFunc);
+			}
+			else
+			{
+				sprintf_s(buf, "::pafcore::InstanceArrayProperty(\"%s\", GetSingleton(), %s, %s, %s, %s, %s, %s, %s, %s, %s, %s),\n",
+					propertyNode->m_name->m_str.c_str(),
+					getterFunc, getterType, getterPassing, getterConstant ? "true" : "false",
+					setterFunc, setterType, setterPassing, setterConstant ? "true" : "false",
+					sizerFunc, resizerFunc);
+			}
 		}
 		else
 		{
-			sprintf_s(buf, "::pafcore::InstanceProperty(\"%s\", GetSingleton(), %s, %s, %s, %s, %s, %s, %s, %s),\n",
-				propertyNode->m_name->m_str.c_str(), 
-				getterFunc, getterType, getterPassing, getterConstant ? "true" : "false",
-				setterFunc, setterType, setterPassing, setterConstant ? "true" : "false");
+			if (isStatic)
+			{
+				sprintf_s(buf, "::pafcore::StaticProperty(\"%s\", %s, %s, %s, %s, %s, %s, %s, %s),\n",
+					propertyNode->m_name->m_str.c_str(),
+					getterFunc, getterType, getterPassing, getterConstant ? "true" : "false",
+					setterFunc, setterType, setterPassing, setterConstant ? "true" : "false");
+			}
+			else
+			{
+				sprintf_s(buf, "::pafcore::InstanceProperty(\"%s\", GetSingleton(), %s, %s, %s, %s, %s, %s, %s, %s),\n",
+					propertyNode->m_name->m_str.c_str(),
+					getterFunc, getterType, getterPassing, getterConstant ? "true" : "false",
+					setterFunc, setterType, setterPassing, setterConstant ? "true" : "false");
+			}
 		}
 		writeStringToFile(buf, file, indentation + 1);
 	}
 	writeStringToFile("};\n", file, indentation);
 
-	if(isStatic)
+	if (isArray)
 	{
-		writeStringToFile("m_staticProperties = s_staticProperties;\n", file, indentation);
-		writeStringToFile("m_staticPropertyCount = paf_array_size_of(s_staticProperties);\n", file, indentation);
+		if (isStatic)
+		{
+			writeStringToFile("m_staticArrayProperties = s_staticArrayProperties;\n", file, indentation);
+			writeStringToFile("m_staticArrayPropertyCount = paf_array_size_of(s_staticArrayProperties);\n", file, indentation);
+		}
+		else
+		{
+			writeStringToFile("m_arrayProperties = s_arrayProperties;\n", file, indentation);
+			writeStringToFile("m_arrayPropertyCount = paf_array_size_of(s_arrayProperties);\n", file, indentation);
+		}
 	}
 	else
 	{
-		writeStringToFile("m_properties = s_properties;\n", file, indentation);
-		writeStringToFile("m_propertyCount = paf_array_size_of(s_properties);\n", file, indentation);
+		if (isStatic)
+		{
+			writeStringToFile("m_staticProperties = s_staticProperties;\n", file, indentation);
+			writeStringToFile("m_staticPropertyCount = paf_array_size_of(s_staticProperties);\n", file, indentation);
+		}
+		else
+		{
+			writeStringToFile("m_properties = s_properties;\n", file, indentation);
+			writeStringToFile("m_propertyCount = paf_array_size_of(s_properties);\n", file, indentation);
+		}
 	}
 }
 
@@ -1864,9 +2122,11 @@ void writeMetaConstructor_Member(
 	std::vector<MemberNode*>& nestedTypeAliasNodes,
 	std::vector<FieldNode*>& staticFieldNodes,
 	std::vector<PropertyNode*>& staticPropertyNodes,
+	std::vector<PropertyNode*>& staticArrayPropertyNodes,
 	const std::vector<MethodNode*>& staticMethodNodes_,
 	std::vector<FieldNode*>& fieldNodes,
 	std::vector<PropertyNode*>& propertyNodes,
+	std::vector<PropertyNode*>& arrayPropertyNodes,
 	const std::vector<MethodNode*>& methodNodes_,
 	FILE* file, int indentation)
 {
@@ -1882,8 +2142,8 @@ void writeMetaConstructor_Member(
 	methodNodes.erase(it, methodNodes.end());
 
 	if(nestedTypeNodes.empty() && nestedTypeAliasNodes.empty() &&
-		staticFieldNodes.empty() && staticPropertyNodes.empty() && staticMethodNodes.empty()
-		&& fieldNodes.empty() && propertyNodes.empty() && methodNodes.empty())
+		staticFieldNodes.empty() && staticPropertyNodes.empty() && staticArrayPropertyNodes.empty() && staticMethodNodes.empty()
+		&& fieldNodes.empty() && propertyNodes.empty() && arrayPropertyNodes.empty() && methodNodes.empty())
 	{
 		return;
 	}
@@ -1896,18 +2156,22 @@ void writeMetaConstructor_Member(
 	size_t nestedTypeAliasCount = nestedTypeAliasNodes.size();
 	size_t staticFieldCount = staticFieldNodes.size();
 	size_t staticPropertyCount = staticPropertyNodes.size();
+	size_t staticArrayPropertyCount = staticArrayPropertyNodes.size();
 	size_t staticMethodCount = staticMethodNodes.size();
 	size_t fieldCount = fieldNodes.size();
 	size_t propertyCount = propertyNodes.size();
+	size_t arrayPropertyCount = arrayPropertyNodes.size();
 	size_t methodCount = methodNodes.size();
 
 	size_t currentNestedType = 0;
 	size_t currentNestedTypeAlias = 0;
 	size_t currentStaticField = 0;
 	size_t currentStaticProperty = 0;
+	size_t currentStaticArrayProperty = 0;
 	size_t currentStaticMethod = 0;
 	size_t currentField = 0;
 	size_t currentProperty = 0;
+	size_t currentArrayProperty = 0;
 	size_t currentMethod = 0;
 
 	enum MemberCategory
@@ -1917,9 +2181,11 @@ void writeMetaConstructor_Member(
 		nested_type_alias,
 		static_field,
 		static_property,
+		static_array_property,
 		static_method,
 		instance_field,
 		instance_property,
+		instance_array_property,
 		instance_method,
 	};
 	while(true)
@@ -1949,13 +2215,22 @@ void writeMetaConstructor_Member(
 				category = static_field;
 			}
 		}
-		if(currentStaticProperty < staticPropertyCount)
+		if (currentStaticProperty < staticPropertyCount)
 		{
 			MemberNode* memberNode = staticPropertyNodes[currentStaticProperty];
-			if(0 == current || memberNode->m_name->m_str < current->m_name->m_str)
+			if (0 == current || memberNode->m_name->m_str < current->m_name->m_str)
 			{
 				current = memberNode;
 				category = static_property;
+			}
+		}
+		if (currentStaticArrayProperty < staticArrayPropertyCount)
+		{
+			MemberNode* memberNode = staticArrayPropertyNodes[currentStaticArrayProperty];
+			if (0 == current || memberNode->m_name->m_str < current->m_name->m_str)
+			{
+				current = memberNode;
+				category = static_array_property;
 			}
 		}
 		if(currentStaticMethod < staticMethodCount)
@@ -1976,13 +2251,22 @@ void writeMetaConstructor_Member(
 				category = instance_field;
 			}
 		}
-		if(currentProperty < propertyCount)
+		if (currentProperty < propertyCount)
 		{
 			MemberNode* memberNode = propertyNodes[currentProperty];
-			if(0 == current || memberNode->m_name->m_str < current->m_name->m_str)
+			if (0 == current || memberNode->m_name->m_str < current->m_name->m_str)
 			{
 				current = memberNode;
 				category = instance_property;
+			}
+		}
+		if (currentArrayProperty < arrayPropertyCount)
+		{
+			MemberNode* memberNode = arrayPropertyNodes[currentArrayProperty];
+			if (0 == current || memberNode->m_name->m_str < current->m_name->m_str)
+			{
+				current = memberNode;
+				category = instance_array_property;
 			}
 		}
 		if(currentMethod < methodCount)
@@ -2016,6 +2300,10 @@ void writeMetaConstructor_Member(
 			sprintf_s(buf, "&s_staticProperties[%d],\n", currentStaticProperty);
 			++currentStaticProperty;
 			break;
+		case static_array_property:
+			sprintf_s(buf, "&s_staticArrayProperties[%d],\n", currentStaticArrayProperty);
+			++currentStaticArrayProperty;
+			break;
 		case static_method:
 			sprintf_s(buf, "&s_staticMethods[%d],\n", currentStaticMethod);
 			++currentStaticMethod;
@@ -2027,6 +2315,10 @@ void writeMetaConstructor_Member(
 		case instance_property:
 			sprintf_s(buf, "&s_properties[%d],\n", currentProperty);
 			++currentProperty;
+			break;
+		case instance_array_property:
+			sprintf_s(buf, "&s_arrayProperties[%d],\n", currentArrayProperty);
+			++currentArrayProperty;
 			break;
 		case instance_method:
 			sprintf_s(buf, "&s_methods[%d],\n", currentMethod);
@@ -2192,9 +2484,11 @@ void writeMetaConstructor(ClassNode* classNode,
 	std::vector<MemberNode*>& nestedTypeAliasNodes,
 	std::vector<FieldNode*>& staticFieldNodes,
 	std::vector<PropertyNode*>& staticPropertyNodes,
+	std::vector<PropertyNode*>& staticArrayPropertyNodes,
 	std::vector<MethodNode*>& staticMethodNodes,
 	std::vector<FieldNode*>& fieldNodes,
 	std::vector<PropertyNode*>& propertyNodes,
+	std::vector<PropertyNode*>& arrayPropertyNodes,
 	std::vector<MethodNode*>& methodNodes,
 	FILE* file, int indentation)
 {
@@ -2224,15 +2518,17 @@ void writeMetaConstructor(ClassNode* classNode,
 	writeMetaConstructor_NestedTypes(classNode, templateArguments, nestedTypeNodes, file, indentation + 1);
 	writeMetaConstructor_NestedTypeAliases(classNode, templateArguments, nestedTypeAliasNodes, file, indentation + 1);
 	writeMetaConstructor_Fields(classNode, templateArguments, staticFieldNodes, true, file, indentation + 1);
-	writeMetaConstructor_Properties(classNode, templateArguments, staticPropertyNodes, true, file, indentation + 1);
+	writeMetaConstructor_Properties(classNode, templateArguments, staticPropertyNodes, true, false, file, indentation + 1);
+	writeMetaConstructor_Properties(classNode, templateArguments, staticArrayPropertyNodes, true, true, file, indentation + 1);
 	writeMetaConstructor_Methods(classNode, templateArguments, staticMethodNodes, true, file, indentation + 1);
 
 	writeMetaConstructor_Fields(classNode, templateArguments, fieldNodes, false, file, indentation + 1);
-	writeMetaConstructor_Properties(classNode, templateArguments, propertyNodes, false, file, indentation + 1);
+	writeMetaConstructor_Properties(classNode, templateArguments, propertyNodes, false, false, file, indentation + 1);
+	writeMetaConstructor_Properties(classNode, templateArguments, arrayPropertyNodes, false, true, file, indentation + 1);
 	writeMetaConstructor_Methods(classNode, templateArguments, methodNodes, false, file, indentation + 1);
 
-	writeMetaConstructor_Member(nestedTypeNodes, nestedTypeAliasNodes, staticFieldNodes, staticPropertyNodes,
-		staticMethodNodes, fieldNodes, propertyNodes, methodNodes, file, indentation + 1);
+	writeMetaConstructor_Member(nestedTypeNodes, nestedTypeAliasNodes, staticFieldNodes, staticPropertyNodes, staticArrayPropertyNodes,
+		staticMethodNodes, fieldNodes, propertyNodes, arrayPropertyNodes, methodNodes, file, indentation + 1);
 
 	writeMetaRegisterToNamespace(classNode, file, indentation + 1);
 

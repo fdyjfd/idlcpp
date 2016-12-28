@@ -13,7 +13,7 @@
 %token <sn> BOOL CHAR WCHAR_T SHORT LONG INT FLOAT DOUBLE SIGNED UNSIGNED
 %token <sn> NAMESPACE ENUM CLASS STRUCT STATIC VIRTUAL VOID CONST OPERATOR TYPEDEF PRIMITIVE
 %token <sn> ABSTRACT GET SET NOMETA NOCODE EXPORT OVERRIDE SCOPE IDENTIFY STRING TEMPLATE
-%type <sn> field_0 field_1 field_2 field getter_0 getter setter_0 setter property_0 property_1 property
+%type <sn> field_0 field_1 field_2 field getter_0 getter setter_0 setter property_0 property_1 property_2 property
 %type <sn> parameter_0 parameter parameterList method_0 method_1 method_2 method_3 method_4 method
 %type <sn> operatorSign operator_0 operator_1 operator_2 operator_3 operator classMember_0 classMember
 %type <sn> primitive scopeName scopeNameList_0 scopeNameList typeName typeNameList identityList classMemberList tokenList
@@ -145,7 +145,6 @@ setter					: setter_0											{$$ = $1;}
 						| setter_0 '=' STRING								{$$ = $1; setGetterSetterNativeName($$, $3);}
 ;
 
-
 property_0				: typeName IDENTIFY									{$$ = newProperty(NULL, $1, NULL, $2);}
 						| typeName '*' IDENTIFY								{$$ = newProperty(NULL, $1, $2, $3);}
 						| typeName '&' IDENTIFY 							{$$ = newProperty(NULL, $1, $2, $3);}
@@ -153,16 +152,19 @@ property_0				: typeName IDENTIFY									{$$ = newProperty(NULL, $1, NULL, $2);
 						| CONST typeName '&' IDENTIFY						{$$ = newProperty($1, $2, $3, $4);}
 ;
 
-
-property_1				: property_0 getter ';'								{$$ = $1; setPropertyGetter($1, $2);}
-						| property_0 setter ';'								{$$ = $1; setPropertySetter($1, $2);}
-						| property_0 getter setter ';'						{$$ = $1; setPropertyGetter($1, $2); setPropertySetter($1, $3);}
-						| property_0 setter getter ';'						{$$ = $1; setPropertyGetter($1, $3); setPropertySetter($1, $2);}
+property_1				: property_0										{$$ = $1;}
+						| property_0 '[' ']'								{$$ = $1; setPropertyArray($1);}
+						| property_0 '{' '}'								{$$ = $1; setPropertyDynamicArray($1);}
 ;
 
+property_2				: property_1 getter ';'								{$$ = $1; setPropertyGetter($1, $2);}
+						| property_1 setter ';'								{$$ = $1; setPropertySetter($1, $2);}
+						| property_1 getter setter ';'						{$$ = $1; setPropertyGetter($1, $2); setPropertySetter($1, $3);}
+						| property_1 setter getter ';'						{$$ = $1; setPropertyGetter($1, $3); setPropertySetter($1, $2);}
+;
 
-property				: property_1										{$$ = $1;}
-						| STATIC property_1									{$$ = $2; setPropertyModifier($$, $1);}
+property				: property_2										{$$ = $1;}
+						| STATIC property_2									{$$ = $2; setPropertyModifier($$, $1);}
 ;
 
 

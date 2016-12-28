@@ -538,22 +538,15 @@ void HeaderFileGenerator::generateCode_Property_Get(FILE* file, PropertyNode* pr
 		generateCode_Identify(file, propertyNode->m_name, 0, false);
 	}
 
-	char buf[32];
-	const char* constThis =
+	char buf[64];
+	const char* strIndex = propertyNode->isArray() ? " unsigned int " : "";
+	const char* strConst =
 		(!propertyNode->isStatic() && (propertyNode->m_get->isConstant() || propertyNode->m_get->byValue())) ?
 		" const" : "";
-	const char* pure = propertyNode->isAbstract() ? " = 0" : "";
-	sprintf_s(buf, "()%s%s;", constThis, pure);
+	const char* strPure = propertyNode->isAbstract() ? " = 0" : "";
+	sprintf_s(buf, "(%s)%s%s;", strIndex, strConst, strPure);
 	writeStringToFile(buf, file);
 
-	//if(propertyNode->m_modifier && snt_keyword_abstract == propertyNode->m_modifier->m_nodeType)
-	//{
-	//	writeStringToFile("() = 0;", file);	
-	//}
-	//else
-	//{
-	//	writeStringToFile("();", file);	
-	//}
 }
 
 void HeaderFileGenerator::generateCode_Property_Set(FILE* file, PropertyNode* propertyNode, int indentation)
@@ -597,6 +590,10 @@ void HeaderFileGenerator::generateCode_Property_Set(FILE* file, PropertyNode* pr
 		generateCode_Identify(file, propertyNode->m_name, 0, false);
 	}
 	writeStringToFile("( ", file);
+	if (propertyNode->isArray())
+	{
+		writeStringToFile("unsigned int, ", file);
+	}
 	if(0 != propertyNode->m_set->m_constant)
 	{
 		generateCode_Token(file, propertyNode->m_set->m_constant, 0);
@@ -616,6 +613,37 @@ void HeaderFileGenerator::generateCode_Property_Set(FILE* file, PropertyNode* pr
 	}
 }
 
+void HeaderFileGenerator::generateCode_Property_Size(FILE* file, PropertyNode* propertyNode, int indentation)
+{
+	if (propertyNode->isStatic())
+	{
+		writeStringToFile("static ", file, indentation);
+		indentation = 0;
+	}
+	writeStringToFile("unsigned int size_", file, indentation);
+	writeStringToFile(propertyNode->m_name->m_str.c_str(), file);
+	if (propertyNode->isStatic())
+	{
+		writeStringToFile("();", file);
+	}
+	else
+	{
+		writeStringToFile("() const;", file);
+	}
+}
+
+void HeaderFileGenerator::generateCode_Property_Resize(FILE* file, PropertyNode* propertyNode, int indentation)
+{
+	if (propertyNode->isStatic())
+	{
+		writeStringToFile("static ", file, indentation);
+		indentation = 0;
+	}
+	writeStringToFile("void resize_", file, indentation);
+	writeStringToFile(propertyNode->m_name->m_str.c_str(), file);
+	writeStringToFile("(unsigned int size);", file);
+}
+
 void HeaderFileGenerator::generateCode_Property(FILE* file, PropertyNode* propertyNode, int indentation)
 {
 	if (propertyNode->isNoCode())
@@ -623,7 +651,6 @@ void HeaderFileGenerator::generateCode_Property(FILE* file, PropertyNode* proper
 		g_compiler.outputEmbededCodes(file, propertyNode->m_filterNode);
 		file = 0;
 	}
-
 	if(0 != propertyNode->m_get && 0 != propertyNode->m_set && propertyNode->m_get->m_keyword->m_tokenNo > propertyNode->m_set->m_keyword->m_tokenNo)
 	{
 		generateCode_Property_Set(file, propertyNode, indentation);
@@ -643,6 +670,16 @@ void HeaderFileGenerator::generateCode_Property(FILE* file, PropertyNode* proper
 		if(0 != propertyNode->m_set)
 		{
 			generateCode_Property_Set(file, propertyNode, indentation);
+		}
+	}
+	if (propertyNode->isArray())
+	{
+		writeStringToFile("\n", file);
+		generateCode_Property_Size(file, propertyNode, indentation);
+		if (propertyNode->isDynamicArray())
+		{
+			writeStringToFile("\n", file);
+			generateCode_Property_Resize(file, propertyNode, indentation);
 		}
 	}
 };

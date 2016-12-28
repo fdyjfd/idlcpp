@@ -2,9 +2,11 @@
 #include "Variant.h"
 #include "InstanceField.h"
 #include "InstanceProperty.h"
+#include "InstanceArrayProperty.h"
 #include "InstanceMethod.h"
 #include "StaticField.h"
 #include "StaticProperty.h"
+#include "StaticArrayProperty.h"
 #include "StaticMethod.h"
 #include <algorithm>
 #include "ClassType.mh"
@@ -28,12 +30,16 @@ ClassType::ClassType(const char* name, Category category)
 	m_fieldCount = 0;
 	m_properties = 0;
 	m_propertyCount = 0;
+	m_arrayProperties = 0;
+	m_arrayPropertyCount = 0;
 	m_methods = 0;
 	m_methodCount = 0;
 	m_staticFields = 0;
 	m_staticFieldCount = 0;
 	m_staticProperties = 0;
 	m_staticPropertyCount = 0;
+	m_staticArrayProperties = 0;
+	m_staticArrayPropertyCount = 0;
 	m_staticMethods = 0;
 	m_staticMethodCount = 0;
 	m_classTypeIterators = 0;
@@ -136,12 +142,34 @@ InstanceProperty* ClassType::findInstanceProperty(const char* name, bool include
 	{
 		return res;
 	}
-	if(includeBaseClasses)
+	if (includeBaseClasses)
 	{
-		for(size_t i = 0; i < m_baseClassCount; ++i)
+		for (size_t i = 0; i < m_baseClassCount; ++i)
 		{
 			res = m_baseClasses[i].m_type->findInstanceProperty(name, includeBaseClasses);
-			if(0 != res)
+			if (0 != res)
+			{
+				return res;
+			}
+		}
+	}
+	return 0;
+}
+
+InstanceArrayProperty* ClassType::findInstanceArrayProperty(const char* name, bool includeBaseClasses)
+{
+	Metadata dummy(name);
+	InstanceArrayProperty* res = std::lower_bound(m_arrayProperties, m_arrayProperties + m_arrayPropertyCount, dummy);
+	if (m_arrayProperties + m_arrayPropertyCount != res && strcmp(name, res->m_name) == 0)
+	{
+		return res;
+	}
+	if (includeBaseClasses)
+	{
+		for (size_t i = 0; i < m_baseClassCount; ++i)
+		{
+			res = m_baseClasses[i].m_type->findInstanceArrayProperty(name, includeBaseClasses);
+			if (0 != res)
 			{
 				return res;
 			}
@@ -158,12 +186,34 @@ StaticProperty* ClassType::findStaticProperty(const char* name, bool includeBase
 	{
 		return res;
 	}
-	if(includeBaseClasses)
+	if (includeBaseClasses)
 	{
-		for(size_t i = 0; i < m_baseClassCount; ++i)
+		for (size_t i = 0; i < m_baseClassCount; ++i)
 		{
 			res = m_baseClasses[i].m_type->findStaticProperty(name, includeBaseClasses);
-			if(0 != res)
+			if (0 != res)
+			{
+				return res;
+			}
+		}
+	}
+	return 0;
+}
+
+StaticArrayProperty* ClassType::findStaticArrayProperty(const char* name, bool includeBaseClasses)
+{
+	Metadata dummy(name);
+	StaticArrayProperty* res = std::lower_bound(m_staticArrayProperties, m_staticArrayProperties + m_staticArrayPropertyCount, dummy);
+	if (m_staticArrayProperties + m_staticArrayPropertyCount != res && strcmp(name, res->m_name) == 0)
+	{
+		return res;
+	}
+	if (includeBaseClasses)
+	{
+		for (size_t i = 0; i < m_baseClassCount; ++i)
+		{
+			res = m_baseClasses[i].m_type->findStaticArrayProperty(name, includeBaseClasses);
+			if (0 != res)
 			{
 				return res;
 			}
@@ -261,9 +311,14 @@ Metadata* ClassType::findClassMember(const char* name, bool includeBaseClasses)
 		return field;
 	}
 	StaticProperty* prop = findStaticProperty(name, false);
-	if(0 != prop)
+	if (0 != prop)
 	{
 		return prop;
+	}
+	StaticArrayProperty* arrayProp = findStaticArrayProperty(name, false);
+	if (0 != arrayProp)
+	{
+		return arrayProp;
 	}
 	StaticMethod* method = findStaticMethod(name, false);
 	if(0 != method)
