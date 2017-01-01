@@ -539,7 +539,7 @@ void HeaderFileGenerator::generateCode_Property_Get(FILE* file, PropertyNode* pr
 	}
 
 	char buf[64];
-	const char* strIndex = propertyNode->isArray() ? " unsigned int " : "";
+	const char* strIndex = propertyNode->isArray() ? "size_t" : "";
 	const char* strConst =
 		(!propertyNode->isStatic() && (propertyNode->m_get->isConstant() || propertyNode->m_get->byValue())) ?
 		" const" : "";
@@ -589,10 +589,10 @@ void HeaderFileGenerator::generateCode_Property_Set(FILE* file, PropertyNode* pr
 		generateCode_Token(file, propertyNode->m_set->m_keyword, indentation);
 		generateCode_Identify(file, propertyNode->m_name, 0, false);
 	}
-	writeStringToFile("( ", file);
+	writeStringToFile("(", file);
 	if (propertyNode->isArray())
 	{
-		writeStringToFile("unsigned int, ", file);
+		writeStringToFile("size_t, ", file);
 	}
 	if(0 != propertyNode->m_set->m_constant)
 	{
@@ -620,7 +620,7 @@ void HeaderFileGenerator::generateCode_Property_Size(FILE* file, PropertyNode* p
 		writeStringToFile("static ", file, indentation);
 		indentation = 0;
 	}
-	writeStringToFile("unsigned int size_", file, indentation);
+	writeStringToFile("size_t size_", file, indentation);
 	writeStringToFile(propertyNode->m_name->m_str.c_str(), file);
 	if (propertyNode->isStatic())
 	{
@@ -641,7 +641,7 @@ void HeaderFileGenerator::generateCode_Property_Resize(FILE* file, PropertyNode*
 	}
 	writeStringToFile("void resize_", file, indentation);
 	writeStringToFile(propertyNode->m_name->m_str.c_str(), file);
-	writeStringToFile("(unsigned int size);", file);
+	writeStringToFile("(size_t);", file);
 }
 
 void HeaderFileGenerator::generateCode_Property(FILE* file, PropertyNode* propertyNode, int indentation)

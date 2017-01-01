@@ -124,7 +124,7 @@ namespace idlcpp
 		*(::pafcore::EnumType*)dst = *(const ::pafcore::EnumType*)src;
 	}
 
-	::pafcore::ErrorCode __pafcore__EnumType_Type::EnumType_get__enumerators_(::pafcore::Variant* that, unsigned int index, ::pafcore::Variant* value)
+	::pafcore::ErrorCode __pafcore__EnumType_Type::EnumType_get__enumerators_(::pafcore::Variant* that, size_t index, ::pafcore::Variant* value)
 	{
 		::pafcore::EnumType* self;
 		if(!that->castToReferencePtr(GetSingleton(), (void**)&self))
@@ -143,8 +143,8 @@ namespace idlcpp
 		{
 			return ::pafcore::e_invalid_this_type;
 		}
-		unsigned int res = self->size__enumerators_();
-		value->assignPrimitive(RuntimeTypeOf<unsigned int>::RuntimeType::GetSingleton(), &res);
+		size_t res = self->size__enumerators_();
+		value->assignPrimitive(RuntimeTypeOf<size_t>::RuntimeType::GetSingleton(), &res);
 		return ::pafcore::s_ok;
 	}
 

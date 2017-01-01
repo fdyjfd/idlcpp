@@ -12,7 +12,9 @@
 #include "../pafcore/InstanceField.h"
 #include "../pafcore/StaticField.h"
 #include "../pafcore/InstanceProperty.h"
+#include "../pafcore/InstanceArrayProperty.h"
 #include "../pafcore/StaticProperty.h"
+#include "../pafcore/StaticArrayProperty.h"
 #include "../pafcore/InstanceMethod.h"
 #include "../pafcore/StaticMethod.h"
 #include "../pafcore/Enumerator.h"
@@ -39,6 +41,33 @@ static PyTypeObject s_VariantWrapper_Type =
 	sizeof(VariantWrapper),
 };
 
+struct InstanceArrayPropertyWrapper
+{
+	PyObject_HEAD
+	pafcore::InstanceArrayProperty* m_property;
+	VariantWrapper* m_self;
+};
+
+static PyTypeObject s_InstanceArrayPropertyWrapper_Type =
+{
+	PyVarObject_HEAD_INIT(NULL, 0)
+	"PafPython.InstanceArrayProperty",
+	sizeof(InstanceArrayPropertyWrapper),
+};
+
+struct StaticArrayPropertyWrapper
+{
+	PyObject_HEAD
+	pafcore::StaticArrayProperty* m_property;
+};
+
+static PyTypeObject s_StaticArrayPropertyWrapper_Type =
+{
+	PyVarObject_HEAD_INIT(NULL, 0)
+	"PafPython.StaticArrayProperty",
+	sizeof(StaticArrayPropertyWrapper),
+};
+
 struct InstanceMethodWrapper
 {
 	PyObject_HEAD
@@ -46,7 +75,7 @@ struct InstanceMethodWrapper
 	VariantWrapper* m_self;
 };
 
-static PyTypeObject s_InstanceMethodWrapper_Type = 
+static PyTypeObject s_InstanceMethodWrapper_Type =
 {
 	PyVarObject_HEAD_INIT(NULL, 0)
 	"PafPython.InstanceMethod",
@@ -116,6 +145,29 @@ PyObject* FunctionInvokerWrapper_new(PyTypeObject* type, PyObject *args, PyObjec
 	FunctionInvokerWrapper* self;
 	self = (FunctionInvokerWrapper*)type->tp_alloc(type, 0);
 	self->m_invoker = 0;
+	return (PyObject*)self;
+}
+
+void InstanceArrayPropertyWrapper_dealloc(InstanceArrayPropertyWrapper* self)
+{
+	Py_XDECREF(self->m_self);
+	Py_TYPE(self)->tp_free((PyObject*)self);
+}
+
+PyObject* InstanceArrayPropertyWrapper_new(PyTypeObject* type, PyObject *args, PyObject *kwds)
+{
+	InstanceArrayPropertyWrapper* self;
+	self = (InstanceArrayPropertyWrapper*)type->tp_alloc(type, 0);
+	self->m_property = 0;
+	self->m_self = 0;
+	return (PyObject*)self;
+}
+
+PyObject* StaticArrayPropertyWrapper_new(PyTypeObject* type, PyObject *args, PyObject *kwds)
+{
+	StaticArrayPropertyWrapper* self;
+	self = (StaticArrayPropertyWrapper*)type->tp_alloc(type, 0);
+	self->m_property = 0;
 	return (PyObject*)self;
 }
 
@@ -289,6 +341,32 @@ pafcore::ErrorCode GetStaticProperty(PyObject*& pyObject, pafcore::StaticPropert
 	return errorCode;
 }
 
+pafcore::ErrorCode GetStaticArrayPropertySize(PyObject*& pyObject, pafcore::StaticArrayProperty* property)
+{
+	pafcore::Variant value;
+	pafcore::ErrorCode errorCode = (*property->m_sizer)(&value);
+	if (pafcore::s_ok == errorCode)
+	{
+		pyObject = VariantToPython(&value);
+	}
+	return errorCode;
+}
+
+pafcore::ErrorCode GetStaticArrayProperty(PyObject*& pyObject, pafcore::StaticArrayProperty* property, size_t index)
+{
+	if (0 == property->m_getter)
+	{
+		return pafcore::e_property_is_write_only;
+	}
+	pafcore::Variant value;
+	pafcore::ErrorCode errorCode = (*property->m_getter)(index, &value);
+	if (pafcore::s_ok == errorCode)
+	{
+		pyObject = VariantToPython(&value);
+	}
+	return errorCode;
+}
+
 pafcore::ErrorCode SetStaticProperty(pafcore::StaticProperty* property, PyObject* pyAttr)
 {
 	if(0 == property->m_setter)
@@ -301,6 +379,38 @@ pafcore::ErrorCode SetStaticProperty(pafcore::StaticProperty* property, PyObject
 	return errorCode;
 }
 
+pafcore::ErrorCode SetStaticArrayPropertySize(pafcore::StaticArrayProperty* property, PyObject* pyAttr)
+{
+	if (0 == property->m_resizer)
+	{
+		return pafcore::e_array_property_is_not_dynamic;
+	}
+	pafcore::Variant value;
+	pafcore::Variant* attr = PythonToVariant(&value, pyAttr);
+	pafcore::ErrorCode errorCode = (*property->m_resizer)(attr);
+	return errorCode;
+}
+
+pafcore::ErrorCode SetStaticArrayProperty(pafcore::StaticArrayProperty* property, size_t index, PyObject* pyAttr)
+{
+	if (0 == property->m_setter)
+	{
+		return pafcore::e_property_is_read_only;
+	}
+	pafcore::Variant value;
+	pafcore::Variant* attr = PythonToVariant(&value, pyAttr);
+	pafcore::ErrorCode errorCode = (*property->m_setter)(index, attr);
+	return errorCode;
+}
+
+pafcore::ErrorCode MakeStaticArrayProperty(PyObject*& pyObject, pafcore::StaticArrayProperty* property)
+{
+	PyObject* object = StaticArrayPropertyWrapper_new(&s_StaticArrayPropertyWrapper_Type, 0, 0);
+	((StaticArrayPropertyWrapper*)object)->m_property = property;
+	pyObject = object;
+	return pafcore::s_ok;
+}
+
 pafcore::ErrorCode GetInstanceProperty(PyObject*& pyObject, pafcore::Variant* that, pafcore::InstanceProperty* property)
 {
 	if(0 == property->m_getter)
@@ -310,6 +420,32 @@ pafcore::ErrorCode GetInstanceProperty(PyObject*& pyObject, pafcore::Variant* th
 	pafcore::Variant value;
 	pafcore::ErrorCode errorCode = (*property->m_getter)(that, &value);
 	if(pafcore::s_ok == errorCode)
+	{
+		pyObject = VariantToPython(&value);
+	}
+	return errorCode;
+}
+
+pafcore::ErrorCode GetInstanceArrayPropertySize(PyObject*& pyObject, pafcore::Variant* that, pafcore::InstanceArrayProperty* property)
+{
+	pafcore::Variant value;
+	pafcore::ErrorCode errorCode = (*property->m_sizer)(that, &value);
+	if (pafcore::s_ok == errorCode)
+	{
+		pyObject = VariantToPython(&value);
+	}
+	return errorCode;
+}
+
+pafcore::ErrorCode GetInstanceArrayProperty(PyObject*& pyObject, pafcore::Variant* that, pafcore::InstanceArrayProperty* property, size_t index)
+{
+	if (0 == property->m_getter)
+	{
+		return pafcore::e_property_is_write_only;
+	}
+	pafcore::Variant value;
+	pafcore::ErrorCode errorCode = (*property->m_getter)(that, index, &value);
+	if (pafcore::s_ok == errorCode)
 	{
 		pyObject = VariantToPython(&value);
 	}
@@ -328,6 +464,41 @@ pafcore::ErrorCode SetInstanceProperty(pafcore::Variant* that, pafcore::Instance
 	return errorCode;
 }
 
+
+pafcore::ErrorCode SetInstanceArrayPropertySize(pafcore::Variant* that, pafcore::InstanceArrayProperty* property, PyObject* pyAttr)
+{
+	if (0 == property->m_resizer)
+	{
+		return pafcore::e_array_property_is_not_dynamic;
+	}
+	pafcore::Variant value;
+	pafcore::Variant* attr = PythonToVariant(&value, pyAttr);
+	pafcore::ErrorCode errorCode = (*property->m_resizer)(that, attr);
+	return errorCode;
+}
+
+pafcore::ErrorCode SetInstanceArrayProperty(pafcore::Variant* that, pafcore::InstanceArrayProperty* property, size_t index, PyObject* pyAttr)
+{
+	if (0 == property->m_setter)
+	{
+		return pafcore::e_property_is_read_only;
+	}
+	pafcore::Variant value;
+	pafcore::Variant* attr = PythonToVariant(&value, pyAttr);
+	pafcore::ErrorCode errorCode = (*property->m_setter)(that, index, attr);
+	return errorCode;
+}
+
+pafcore::ErrorCode MakeInstanceArrayProperty(PyObject*& pyObject, VariantWrapper* self, pafcore::InstanceArrayProperty* property)
+{
+	PyObject* object = InstanceArrayPropertyWrapper_new(&s_InstanceArrayPropertyWrapper_Type, 0, 0);
+	((InstanceArrayPropertyWrapper*)object)->m_property = property;
+	((InstanceArrayPropertyWrapper*)object)->m_self = self;
+	Py_INCREF(self);
+	pyObject = object;
+	return pafcore::s_ok;
+}
+
 pafcore::ErrorCode SetArraySize(pafcore::Variant* that, PyObject* pyAttr)
 {
 	pafcore::Variant value;
@@ -339,7 +510,7 @@ pafcore::ErrorCode SetArraySize(pafcore::Variant* that, PyObject* pyAttr)
 	return pafcore::s_ok;
 }
 
-pafcore::ErrorCode GetFunctionInvoker(PyObject*& pyObject, pafcore::FunctionInvoker invoker)
+pafcore::ErrorCode MakeFunctionInvoker(PyObject*& pyObject, pafcore::FunctionInvoker invoker)
 {
 	PyObject* object = FunctionInvokerWrapper_new(&s_FunctionInvokerWrapper_Type, 0, 0);
 	((FunctionInvokerWrapper*)object)->m_invoker = invoker;
@@ -347,7 +518,7 @@ pafcore::ErrorCode GetFunctionInvoker(PyObject*& pyObject, pafcore::FunctionInvo
 	return pafcore::s_ok;
 }
 
-pafcore::ErrorCode GetInstanceMethod(PyObject*& pyObject, VariantWrapper* self, pafcore::InstanceMethod* method)
+pafcore::ErrorCode MakeInstanceMethod(PyObject*& pyObject, VariantWrapper* self, pafcore::InstanceMethod* method)
 {
 	PyObject* object = InstanceMethodWrapper_new(&s_InstanceMethodWrapper_Type, 0, 0);
 	((InstanceMethodWrapper*)object)->m_method = method;
@@ -467,7 +638,7 @@ pafcore::ErrorCode SetPrimitiveOrEnum(pafcore::Variant* variant, PyObject* pyAtt
 	return pafcore::s_ok;
 }
 
-pafcore::ErrorCode GetProxyCreator(PyObject*& pyObject, pafcore::ClassType* classType)
+pafcore::ErrorCode MakeProxyCreator(PyObject*& pyObject, pafcore::ClassType* classType)
 {
 	PyObject* object = ProxyCreatorWrapper_new(&s_ProxyCreatorWrapper_Type, 0, 0);
 	((ProxyCreatorWrapper*)object)->m_classType = classType;
@@ -475,7 +646,7 @@ pafcore::ErrorCode GetProxyCreator(PyObject*& pyObject, pafcore::ClassType* clas
 	return pafcore::s_ok;
 }
 
-pafcore::ErrorCode GetTypeCaster(PyObject*& pyObject, pafcore::Type* type)
+pafcore::ErrorCode MakeTypeCaster(PyObject*& pyObject, pafcore::Type* type)
 {
 	PyObject* object = TypeCasterWrapper_new(&s_TypeCasterWrapper_Type, 0, 0);
 	((TypeCasterWrapper*)object)->m_type = type;
@@ -526,8 +697,10 @@ pafcore::ErrorCode Variant_GetAttr(PyObject*& pyObject, VariantWrapper* self, co
 					return GetStaticField(pyObject, static_cast<pafcore::StaticField*>(member));
 				case pafcore::static_property:
 					return GetStaticProperty(pyObject, static_cast<pafcore::StaticProperty*>(member));
+				case pafcore::static_array_property:
+					return MakeStaticArrayProperty(pyObject, static_cast<pafcore::StaticArrayProperty*>(member));
 				case pafcore::static_method:
-					return GetFunctionInvoker(pyObject, static_cast<pafcore::StaticMethod*>(member)->m_invoker);
+					return MakeFunctionInvoker(pyObject, static_cast<pafcore::StaticMethod*>(member)->m_invoker);
 				case pafcore::enum_type:
 				case pafcore::class_type:
 					return GetNestedType(pyObject, static_cast<pafcore::Type*>(member));
@@ -545,7 +718,7 @@ pafcore::ErrorCode Variant_GetAttr(PyObject*& pyObject, VariantWrapper* self, co
 				switch(memberType->m_category)
 				{
 				case pafcore::static_method:
-					return GetFunctionInvoker(pyObject, static_cast<pafcore::StaticMethod*>(member)->m_invoker);
+					return MakeFunctionInvoker(pyObject, static_cast<pafcore::StaticMethod*>(member)->m_invoker);
 				default:
 					assert(false);
 				}
@@ -581,10 +754,14 @@ pafcore::ErrorCode Variant_GetAttr(PyObject*& pyObject, VariantWrapper* self, co
 			return GetInstanceProperty(pyObject, variant, static_cast<pafcore::InstanceProperty*>(member));
 		case pafcore::static_property:
 			return GetStaticProperty(pyObject, static_cast<pafcore::StaticProperty*>(member));
+		case pafcore::instance_array_property:
+			return MakeInstanceArrayProperty(pyObject, self, static_cast<pafcore::InstanceArrayProperty*>(member));
+		case pafcore::static_array_property:
+			return MakeStaticArrayProperty(pyObject, static_cast<pafcore::StaticArrayProperty*>(member));
 		case pafcore::instance_method:
-			return GetInstanceMethod(pyObject, self, static_cast<pafcore::InstanceMethod*>(member));
+			return MakeInstanceMethod(pyObject, self, static_cast<pafcore::InstanceMethod*>(member));
 		case pafcore::static_method:
-			return GetFunctionInvoker(pyObject, static_cast<pafcore::StaticMethod*>(member)->m_invoker);
+			return MakeFunctionInvoker(pyObject, static_cast<pafcore::StaticMethod*>(member)->m_invoker);
 		case pafcore::enum_type:
 		case pafcore::class_type:
 			return GetNestedType(pyObject, static_cast<pafcore::Type*>(member));
@@ -611,7 +788,7 @@ pafcore::ErrorCode Variant_GetAttr(PyObject*& pyObject, VariantWrapper* self, co
 					pafcore::class_type == variant->m_type->m_category)
 				{
 					pafcore::Type* type = (pafcore::Type*)variant->m_pointer;
-					return GetTypeCaster(pyObject, type);
+					return MakeTypeCaster(pyObject, type);
 				}
 				else
 				{
@@ -625,7 +802,7 @@ pafcore::ErrorCode Variant_GetAttr(PyObject*& pyObject, VariantWrapper* self, co
 				if (pafcore::class_type == variant->m_type->m_category)
 				{
 					pafcore::ClassType* classType = (pafcore::ClassType*)variant->m_pointer;
-					return GetProxyCreator(pyObject, classType);
+					return MakeProxyCreator(pyObject, classType);
 				}
 				else
 				{
@@ -889,13 +1066,29 @@ PyObject* VariantWrapper_call(VariantWrapper* wrapper, PyObject* parameters, PyO
 
 Py_ssize_t VariantWrapper_length(VariantWrapper* wrapper)
 {
+	pafcore::ErrorCode errorCode;
+	Py_ssize_t len;
 	pafcore::Variant* variant = (pafcore::Variant*)wrapper->m_var;
+
 	if (pafcore::void_object == variant->m_type->m_category && variant->byValue())
 	{
-		PyErr_SetString(PyExc_RuntimeError, ErrorCodeToString(pafcore::e_void_variant));
+		errorCode = pafcore::e_void_variant;
+	}
+	else
+	{
+		errorCode = pafcore::s_ok;
+		len = variant->m_arraySize;
+	}
+
+	if (pafcore::s_ok == errorCode)
+	{
+		return len;
+	}
+	else
+	{
+		PyErr_SetString(PyExc_RuntimeError, ErrorCodeToString(errorCode));
 		return 0;
 	}
-	return variant->m_arraySize;
 }
 
 bool VariantWrapper_ParseSubscript(size_t& num, PyObject* pyObject)
@@ -948,6 +1141,186 @@ int VariantWrapper_assign_subscript(VariantWrapper* wrapper, PyObject* subscript
 	}
 	pafcore::ErrorCode errorCode = Variant_AssignSubscript(wrapper, index, value);
 	if(pafcore::s_ok != errorCode)
+	{
+		PyErr_SetString(PyExc_RuntimeError, ErrorCodeToString(errorCode));
+		return 1;
+	}
+	return 0;
+}
+
+PyObject* InstanceArrayPropertyWrapper_getattr(InstanceArrayPropertyWrapper* wrapper, char* name)
+{
+	PyObject* res = 0;
+	pafcore::ErrorCode errorCode;
+	if (strcmp("_count_", name) == 0)
+	{
+		errorCode = GetInstanceArrayPropertySize(res, (pafcore::Variant*)wrapper->m_self->m_var, wrapper->m_property);
+	}
+	else
+	{
+		errorCode = pafcore::e_member_not_found;
+	}
+	if (pafcore::s_ok != errorCode)
+	{
+		PyErr_SetString(PyExc_RuntimeError, ErrorCodeToString(errorCode));
+	}
+	return res;
+}
+
+int InstanceArrayPropertyWrapper_setattr(InstanceArrayPropertyWrapper* wrapper, char* name, PyObject* pyAttr)
+{
+	pafcore::ErrorCode errorCode;
+	if (strcmp("_count_", name) == 0)
+	{
+		errorCode = SetInstanceArrayPropertySize((pafcore::Variant*)wrapper->m_self->m_var, wrapper->m_property, pyAttr);
+	}
+	else
+	{
+		errorCode = pafcore::e_member_not_found;
+	}
+	if (pafcore::s_ok != errorCode)
+	{
+		PyErr_SetString(PyExc_RuntimeError, ErrorCodeToString(errorCode));
+		return 1;
+	}
+	return 0;
+}
+
+Py_ssize_t InstanceArrayPropertyWrapper_length(InstanceArrayPropertyWrapper* wrapper)
+{
+	pafcore::ErrorCode errorCode;
+	pafcore::Variant value;
+	errorCode = (*wrapper->m_property->m_sizer)((pafcore::Variant*)wrapper->m_self->m_var, &value);
+	if (pafcore::s_ok == errorCode)
+	{
+		Py_ssize_t len;
+		value.castToPrimitive(RuntimeTypeOf<Py_ssize_t>::RuntimeType::GetSingleton(), &len);
+		return len;
+	}
+	else
+	{
+		PyErr_SetString(PyExc_RuntimeError, ErrorCodeToString(errorCode));
+		return 0;
+	}
+}
+
+PyObject* InstanceArrayPropertyWrapper_subscript(InstanceArrayPropertyWrapper* wrapper, PyObject* subscript)
+{
+	size_t index;
+	if (!VariantWrapper_ParseSubscript(index, subscript))
+	{
+		PyErr_SetString(PyExc_RuntimeError, ErrorCodeToString(pafcore::e_invalid_subscript_type));
+		return 0;
+	}
+	PyObject* res = 0;
+	pafcore::ErrorCode errorCode = GetInstanceArrayProperty(res, (pafcore::Variant*)wrapper->m_self->m_var, wrapper->m_property, index);
+	if (pafcore::s_ok != errorCode)
+	{
+		PyErr_SetString(PyExc_RuntimeError, ErrorCodeToString(errorCode));
+	}
+	return res;
+}
+
+int InstanceArrayPropertyWrapper_assign_subscript(InstanceArrayPropertyWrapper* wrapper, PyObject* subscript, PyObject* value)
+{
+	size_t index;
+	if (!VariantWrapper_ParseSubscript(index, subscript))
+	{
+		PyErr_SetString(PyExc_RuntimeError, ErrorCodeToString(pafcore::e_invalid_subscript_type));
+		return 1;
+	}
+	pafcore::ErrorCode errorCode = SetInstanceArrayProperty((pafcore::Variant*)wrapper->m_self->m_var, wrapper->m_property, index, value);
+	if (pafcore::s_ok != errorCode)
+	{
+		PyErr_SetString(PyExc_RuntimeError, ErrorCodeToString(errorCode));
+		return 1;
+	}
+	return 0;
+}
+
+PyObject* StaticArrayPropertyWrapper_getattr(StaticArrayPropertyWrapper* wrapper, char* name)
+{
+	PyObject* res = 0;
+	pafcore::ErrorCode errorCode;
+	if (strcmp("_count_", name) == 0)
+	{
+		errorCode = GetStaticArrayPropertySize(res, wrapper->m_property);
+	}
+	else
+	{
+		errorCode = pafcore::e_member_not_found;
+	}
+	if (pafcore::s_ok != errorCode)
+	{
+		PyErr_SetString(PyExc_RuntimeError, ErrorCodeToString(errorCode));
+	}
+	return res;
+}
+
+int StaticArrayPropertyWrapper_setattr(StaticArrayPropertyWrapper* wrapper, char* name, PyObject* pyAttr)
+{
+	pafcore::ErrorCode errorCode;
+	if (strcmp("_count_", name) == 0)
+	{
+		errorCode = SetStaticArrayPropertySize(wrapper->m_property, pyAttr);
+	}
+	else
+	{
+		errorCode = pafcore::e_member_not_found;
+	}
+	if (pafcore::s_ok != errorCode)
+	{
+		PyErr_SetString(PyExc_RuntimeError, ErrorCodeToString(errorCode));
+		return 1;
+	}
+	return 0;
+}
+
+Py_ssize_t StaticArrayPropertyWrapper_length(StaticArrayPropertyWrapper* wrapper)
+{
+	pafcore::ErrorCode errorCode;
+	pafcore::Variant value;
+	errorCode = (*wrapper->m_property->m_sizer)(&value);
+	if (pafcore::s_ok == errorCode)
+	{
+		Py_ssize_t len;
+		value.castToPrimitive(RuntimeTypeOf<Py_ssize_t>::RuntimeType::GetSingleton(), &len);
+		return len;
+	}
+	else
+	{
+		PyErr_SetString(PyExc_RuntimeError, ErrorCodeToString(errorCode));
+		return 0;
+	}
+}
+
+PyObject* StaticArrayPropertyWrapper_subscript(StaticArrayPropertyWrapper* wrapper, PyObject* subscript)
+{
+	size_t index;
+	if (!VariantWrapper_ParseSubscript(index, subscript))
+	{
+		PyErr_SetString(PyExc_RuntimeError, ErrorCodeToString(pafcore::e_invalid_subscript_type));
+		return 0;
+	}
+	PyObject* res = 0;
+	pafcore::ErrorCode errorCode = GetStaticArrayProperty(res, wrapper->m_property, index);
+	if (pafcore::s_ok != errorCode)
+	{
+		PyErr_SetString(PyExc_RuntimeError, ErrorCodeToString(errorCode));
+	}
+	return res;
+}
+
+int StaticArrayPropertyWrapper_assign_subscript(StaticArrayPropertyWrapper* wrapper, PyObject* subscript, PyObject* value)
+{
+	size_t index;
+	if (!VariantWrapper_ParseSubscript(index, subscript))
+	{
+		PyErr_SetString(PyExc_RuntimeError, ErrorCodeToString(pafcore::e_invalid_subscript_type));
+		return 1;
+	}
+	pafcore::ErrorCode errorCode = SetStaticArrayProperty(wrapper->m_property, index, value);
+	if (pafcore::s_ok != errorCode)
 	{
 		PyErr_SetString(PyExc_RuntimeError, ErrorCodeToString(errorCode));
 		return 1;
@@ -1279,12 +1652,27 @@ PyObject* VariantWrapper_richcmp(PyObject* pyObject1, PyObject* pyObject2, int o
 	return 0;
 }
 
-static PyMappingMethods s_VariantWrapper_Array_Methods = 
+static PyMappingMethods s_VariantWrapper_Array_Methods =
 {
-	(lenfunc)VariantWrapper_length, 
+	(lenfunc)VariantWrapper_length,
 	(binaryfunc)VariantWrapper_subscript,
 	(objobjargproc)VariantWrapper_assign_subscript
 };
+
+static PyMappingMethods s_InstanceArrayPropertyWrapper_Array_Methods =
+{
+	(lenfunc)InstanceArrayPropertyWrapper_length,
+	(binaryfunc)InstanceArrayPropertyWrapper_subscript,
+	(objobjargproc)InstanceArrayPropertyWrapper_assign_subscript
+};
+
+static PyMappingMethods s_StaticArrayPropertyWrapper_Array_Methods =
+{
+	(lenfunc)StaticArrayPropertyWrapper_length,
+	(binaryfunc)StaticArrayPropertyWrapper_subscript,
+	(objobjargproc)StaticArrayPropertyWrapper_assign_subscript
+};
+
 
 static PyModuleDef s_PafPythonModule = 
 {
@@ -1309,6 +1697,27 @@ PyMODINIT_FUNC PyInit_PafPython_()
 	s_VariantWrapper_Type.tp_richcompare = &VariantWrapper_richcmp;
 
 	if (PyType_Ready(&s_VariantWrapper_Type) < 0)
+	{
+		return NULL;
+	}
+
+	s_InstanceArrayPropertyWrapper_Type.tp_dealloc = (destructor)InstanceArrayPropertyWrapper_dealloc;
+	s_InstanceArrayPropertyWrapper_Type.tp_getattr = (getattrfunc)InstanceArrayPropertyWrapper_getattr;
+	s_InstanceArrayPropertyWrapper_Type.tp_setattr = (setattrfunc)InstanceArrayPropertyWrapper_setattr;
+	s_InstanceArrayPropertyWrapper_Type.tp_flags = Py_TPFLAGS_DEFAULT;
+	s_InstanceArrayPropertyWrapper_Type.tp_new = InstanceArrayPropertyWrapper_new;
+	s_InstanceArrayPropertyWrapper_Type.tp_as_mapping = &s_InstanceArrayPropertyWrapper_Array_Methods;
+	if (PyType_Ready(&s_InstanceArrayPropertyWrapper_Type) < 0)
+	{
+		return NULL;
+	}
+
+	s_StaticArrayPropertyWrapper_Type.tp_getattr = (getattrfunc)StaticArrayPropertyWrapper_getattr;
+	s_StaticArrayPropertyWrapper_Type.tp_setattr = (setattrfunc)StaticArrayPropertyWrapper_setattr;
+	s_StaticArrayPropertyWrapper_Type.tp_flags = Py_TPFLAGS_DEFAULT;
+	s_StaticArrayPropertyWrapper_Type.tp_new = StaticArrayPropertyWrapper_new;
+	s_StaticArrayPropertyWrapper_Type.tp_as_mapping = &s_StaticArrayPropertyWrapper_Array_Methods;
+	if (PyType_Ready(&s_StaticArrayPropertyWrapper_Type) < 0)
 	{
 		return NULL;
 	}

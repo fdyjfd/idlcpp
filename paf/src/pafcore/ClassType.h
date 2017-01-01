@@ -6,6 +6,7 @@
 #include "./Type.h"
 namespace pafcore{ class ClassType; }
 namespace pafcore{ class Metadata; }
+namespace pafcore{ class InstanceArrayProperty; }
 
 namespace pafcore
 {
@@ -62,6 +63,10 @@ namespace pafcore
 		size_t _getBaseClassCount_();
 		Metadata* _getBaseClass_(size_t index);
 		ClassTypeIterator* _getFirstDerivedClass_();
+		size_t _getInstanceArrayPropertyCount_(bool includeBaseClasses);
+		InstanceArrayProperty* get__instanceArrayProperties_(size_t);
+		size_t size__instanceArrayProperties_() const;
+		InstanceArrayProperty* _getInstanceArrayProperty_(size_t index,bool includeBaseClasses);
 
 	public:
 		struct BaseClass

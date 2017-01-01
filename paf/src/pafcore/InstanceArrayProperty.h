@@ -12,8 +12,8 @@ namespace pafcore
 
 
 	class Variant;
-	typedef ErrorCode(*InstanceArrayPropertyGetter)(Variant* that, unsigned int index, Variant* value);
-	typedef ErrorCode(*InstanceArrayPropertySetter)(Variant* that, unsigned int index, Variant* value);
+	typedef ErrorCode(*InstanceArrayPropertyGetter)(Variant* that, size_t index, Variant* value);
+	typedef ErrorCode(*InstanceArrayPropertySetter)(Variant* that, size_t index, Variant* value);
 	typedef ErrorCode(*InstanceArrayPropertySizer)(Variant* that, Variant* size);
 	typedef ErrorCode(*InstanceArrayPropertyResizer)(Variant* that, Variant* size);
 

@@ -57,7 +57,7 @@ Enumerator* EnumType::_getEnumeratorByName_(const char* name)
 	return 0;
 }
 
-Enumerator* EnumType::get__enumerators_(unsigned int index)
+Enumerator* EnumType::get__enumerators_(size_t index)
 {
 	if (index < m_enumeratorCount)
 	{
@@ -66,7 +66,7 @@ Enumerator* EnumType::get__enumerators_(unsigned int index)
 	return 0;
 }
 
-unsigned int EnumType::size__enumerators_() const
+size_t EnumType::size__enumerators_() const
 {
 	return m_enumeratorCount;
 }

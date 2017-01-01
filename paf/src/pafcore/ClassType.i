@@ -1,4 +1,5 @@
 #import "Type.i"
+#import "InstanceArrayProperty.i"
 
 namespace pafcore
 {
@@ -48,6 +49,9 @@ namespace pafcore
 		size_t _getBaseClassCount_();
 		Metadata* _getBaseClass_(size_t index);
 		ClassTypeIterator* _getFirstDerivedClass_();
+		size_t _getInstanceArrayPropertyCount_(bool includeBaseClasses);
+		InstanceArrayProperty* _instanceArrayProperties_[] get;
+		InstanceArrayProperty* _getInstanceArrayProperty_(size_t index, bool includeBaseClasses);
 #{
 	public:
 		struct BaseClass

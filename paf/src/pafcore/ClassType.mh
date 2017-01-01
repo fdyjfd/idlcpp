@@ -37,10 +37,15 @@ namespace idlcpp
 		virtual void destroyArray(void* address);
 		virtual void assign(void* dst, const void* src);
 	public:
+		static ::pafcore::ErrorCode ClassType_get__instanceArrayProperties_(::pafcore::Variant* that, size_t index, ::pafcore::Variant* value);
+	static ::pafcore::ErrorCode ClassType_size__instanceArrayProperties_(::pafcore::Variant* that, ::pafcore::Variant* value);
+	public:
 		static ::pafcore::ErrorCode ClassType__findMember_(::pafcore::Variant* result, ::pafcore::Variant** args, int numArgs);
 		static ::pafcore::ErrorCode ClassType__getBaseClassCount_(::pafcore::Variant* result, ::pafcore::Variant** args, int numArgs);
 		static ::pafcore::ErrorCode ClassType__getBaseClass_(::pafcore::Variant* result, ::pafcore::Variant** args, int numArgs);
 		static ::pafcore::ErrorCode ClassType__getFirstDerivedClass_(::pafcore::Variant* result, ::pafcore::Variant** args, int numArgs);
+		static ::pafcore::ErrorCode ClassType__getInstanceArrayPropertyCount_(::pafcore::Variant* result, ::pafcore::Variant** args, int numArgs);
+		static ::pafcore::ErrorCode ClassType__getInstanceArrayProperty_(::pafcore::Variant* result, ::pafcore::Variant** args, int numArgs);
 		static ::pafcore::ErrorCode ClassType__getMemberCount_(::pafcore::Variant* result, ::pafcore::Variant** args, int numArgs);
 		static ::pafcore::ErrorCode ClassType__getMember_(::pafcore::Variant* result, ::pafcore::Variant** args, int numArgs);
 	public:

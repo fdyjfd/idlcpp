@@ -448,6 +448,66 @@ ClassTypeIterator* ClassType::_getFirstDerivedClass_()
 	return m_firstDerivedClass;
 }
 
+size_t ClassType::_getInstanceArrayPropertyCount_(bool includeBaseClasses)
+{
+	size_t count = m_arrayPropertyCount;
+	if (includeBaseClasses)
+	{
+		for (size_t i = 0; i < m_baseClassCount; ++i)
+		{
+			count += m_baseClasses[i].m_type->_getInstanceArrayPropertyCount_(includeBaseClasses);
+		}
+	}
+	return count;
+}
+
+InstanceArrayProperty* ClassType::_getInstanceArrayProperty_(size_t index, bool includeBaseClasses)
+{
+	if (includeBaseClasses)
+	{
+		if (index < m_arrayPropertyCount)
+		{
+			return &m_arrayProperties[index];
+		}
+		else
+		{
+			index -= m_arrayPropertyCount;
+			for (size_t i = 0; i < m_baseClassCount; ++i)
+			{
+				size_t baseMemberCount = m_baseClasses[i].m_type->_getInstanceArrayPropertyCount_(includeBaseClasses);
+				if (index < baseMemberCount)
+				{
+					return m_baseClasses[i].m_type->_getInstanceArrayProperty_(index, includeBaseClasses);
+				}
+				index -= baseMemberCount;
+			}
+			return 0;
+		}
+	}
+	else
+	{
+		if (index < m_arrayPropertyCount)
+		{
+			return &m_arrayProperties[index];
+		}
+		return 0;
+	}
+}
+
+InstanceArrayProperty* ClassType::get__instanceArrayProperties_(size_t index)
+{
+	if (index < m_arrayPropertyCount)
+	{
+		return &m_arrayProperties[index];
+	}
+	return 0;
+}
+
+size_t ClassType::size__instanceArrayProperties_() const
+{
+	return m_arrayPropertyCount;
+}
+
 bool ClassType::isType(ClassType* otherType)
 {
 	if (this == otherType)

@@ -602,9 +602,9 @@ void MetaSourceFileGenerator::generateCode_Class(FILE* file, ClassNode* classNod
 const char g_metaPropertyImplPrefix[] = "::pafcore::ErrorCode ";
 
 const char g_metaPropertyImplPostfix[] = "(::pafcore::Variant* that, ::pafcore::Variant* value)\n";
-const char g_metaArrayPropertyImplPostfix[] = "(::pafcore::Variant* that, unsigned int index, ::pafcore::Variant* value)\n";
+const char g_metaArrayPropertyImplPostfix[] = "(::pafcore::Variant* that, size_t index, ::pafcore::Variant* value)\n";
 const char g_metaStaticPropertyImplPostfix[] = "(::pafcore::Variant* value)\n";
-const char g_metaStaticArrayPropertyImplPostfix[] = "(unsigned int index, ::pafcore::Variant* value)\n";
+const char g_metaStaticArrayPropertyImplPostfix[] = "(size_t index, ::pafcore::Variant* value)\n";
 
 const char g_metaArrayPropertyImplSizePostfix[] = "(::pafcore::Variant* that, ::pafcore::Variant* value)\n";
 const char g_metaArrayPropertyImplResizePostfix[] = "(::pafcore::Variant* that, ::pafcore::Variant* value)\n";
@@ -963,7 +963,7 @@ void writeMetaPropertySizeImpl(ClassNode* classNode, TemplateArguments* template
 
 	if (propertyNode->isStatic())
 	{
-		sprintf_s(buf, "unsigned int res = %s::size_%s();\n", className.c_str(), propertyNode->m_name->m_str.c_str());
+		sprintf_s(buf, "size_t res = %s::size_%s();\n", className.c_str(), propertyNode->m_name->m_str.c_str());
 		writeStringToFile(buf, file, indentation + 1);
 	}
 	else
@@ -981,10 +981,10 @@ void writeMetaPropertySizeImpl(ClassNode* classNode, TemplateArguments* template
 		writeStringToFile("{\n", file, indentation + 1);
 		writeStringToFile("return ::pafcore::e_invalid_this_type;\n", file, indentation + 2);
 		writeStringToFile("}\n", file, indentation + 1);
-		sprintf_s(buf, "unsigned int res = self->size_%s();\n", propertyNode->m_name->m_str.c_str());
+		sprintf_s(buf, "size_t res = self->size_%s();\n", propertyNode->m_name->m_str.c_str());
 		writeStringToFile(buf, file, indentation + 1);
 	}
-	writeStringToFile("value->assignPrimitive(RuntimeTypeOf<unsigned int>::RuntimeType::GetSingleton(), &res);\n", file, indentation + 1);
+	writeStringToFile("value->assignPrimitive(RuntimeTypeOf<size_t>::RuntimeType::GetSingleton(), &res);\n", file, indentation + 1);
 	writeStringToFile("return ::pafcore::s_ok;\n", file, indentation + 1);
 	writeStringToFile("}\n\n", file, indentation);
 }
@@ -1014,8 +1014,8 @@ void writeMetaPropertyResizeImpl(ClassNode* classNode, TemplateArguments* templa
 	}
 	writeStringToFile("{\n", file, indentation);
 
-	writeStringToFile("unsigned int arg;\n", file, indentation + 1);
-	writeStringToFile("if(!value->castToPrimitive(RuntimeTypeOf<unsigned int>::RuntimeType::GetSingleton(), &arg))\n", file, indentation + 1);
+	writeStringToFile("size_t arg;\n", file, indentation + 1);
+	writeStringToFile("if(!value->castToPrimitive(RuntimeTypeOf<size_t>::RuntimeType::GetSingleton(), &arg))\n", file, indentation + 1);
 	writeStringToFile("{\n", file, indentation + 1);
 	writeStringToFile("return ::pafcore::e_invalid_property_type;\n", file, indentation + 2);
 	writeStringToFile("}\n", file, indentation + 1);
