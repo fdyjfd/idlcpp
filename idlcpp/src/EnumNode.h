@@ -1,21 +1,22 @@
 #pragma once
-#include "ScopeNode.h"
+#include "MemberNode.h"
 
 struct TokenNode;
-struct IdentityListNode;
+struct EnumeratorListNode;
 struct EnumTypeNode;
 
-struct EnumNode : ScopeNode
+struct EnumNode : MemberNode
 {
 	TokenNode* m_keyword;
 	TokenNode* m_leftBrace;
-	IdentityListNode* m_identityList;
+	EnumeratorListNode* m_enumeratorList;
 	TokenNode* m_rightBrace;
 	TokenNode* m_semicolon;
 	EnumTypeNode* m_typeNode;
 public:
-	EnumNode(TokenNode* keyword, IdentifyNode* name, TokenNode* leftBrace, IdentityListNode* identityList, TokenNode* rightBrace);
+	EnumNode(TokenNode* keyword, IdentifyNode* name, TokenNode* leftBrace, EnumeratorListNode* enumeratorList, TokenNode* rightBrace);
 	virtual TypeNode* getTypeNode();
 	virtual void collectTypes(TypeNode* enclosingTypeNode, TemplateArguments* templateArguments);
 	virtual void checkSemantic(TemplateArguments* templateArguments);
 };
+

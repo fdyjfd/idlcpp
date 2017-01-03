@@ -6,7 +6,8 @@
 #include "TokenNode.h"
 #include "TokenListNode.h"
 #include "IdentifyNode.h"
-#include "IdentityListNode.h"
+#include "EnumeratorListNode.h"
+#include "EnumeratorNode.h"
 #include "EnumNode.h"
 #include "ClassNode.h"
 #include "TemplateParametersNode.h"
@@ -60,7 +61,7 @@ void writeMetaConstructor(ClassNode* classNode,
 void writeMetaPropertyImpls(ClassNode* classNode, TemplateArguments* templateArguments, std::vector<PropertyNode*>& propertyNodes, FILE* file, int indentation);
 void writeMetaMethodImpls(ClassNode* classNode, TemplateArguments* templateArguments, std::vector<MethodNode*>& methodNodes, bool isStatic, FILE* file, int indentation);
 void writeMetaGetSingletonImpls(MemberNode* typeNode, TemplateArguments* templateArguments, FILE* file, int indentation);
-void writeEnumMetaConstructor(EnumNode* enumNode, TemplateArguments* templateArguments, std::vector<IdentifyNode*>& enumerators, FILE* file, int indentation);
+void writeEnumMetaConstructor(EnumNode* enumNode, TemplateArguments* templateArguments, std::vector<EnumeratorNode*>& enumerators, FILE* file, int indentation);
 
 
 void MetaSourceFileGenerator::generateCode(FILE* dstFile, SourceFile* sourceFile, const char* fullPathName, const char* baseName)
@@ -211,10 +212,10 @@ void MetaSourceFileGenerator::generateCode_Enum(FILE* file, EnumNode* enumNode, 
 	{
 		return;
 	}
-	std::vector<IdentifyNode*> identifyNodes;
-	enumNode->m_identityList->collectIdentifyNodes(identifyNodes);
-	std::sort(identifyNodes.begin(), identifyNodes.end(), CompareIdentifyPtr());
-	writeEnumMetaConstructor(enumNode, templateArguments, identifyNodes, file, indentation);
+	std::vector<EnumeratorNode*> enumeratorNodes;
+	enumNode->m_enumeratorList->collectEnumeratorNodes(enumeratorNodes);
+	std::sort(enumeratorNodes.begin(), enumeratorNodes.end(), CompareEnumeratorPtr());
+	writeEnumMetaConstructor(enumNode, templateArguments, enumeratorNodes, file, indentation);
 	writeMetaGetSingletonImpls(enumNode, templateArguments, file, indentation);
 }
 
@@ -1673,16 +1674,16 @@ void writeMetaMethodImpls(ClassNode* classNode, TemplateArguments* templateArgum
 	}
 }
 
-void writeMetaConstructor_attributes(MemberNode* memberNode, FILE* file, int indentation)
+void writeMetaConstructor_attributes(AttributeListNode* attributeList, IdentifyNode* name, FILE* file, int indentation)
 {
 	char buf[512];
-	if (memberNode->m_attributeList)
+	if (attributeList)
 	{
 		std::vector<AttributeNode*> attributeNodes;
-		memberNode->m_attributeList->collectAttributeNodes(attributeNodes);
+		attributeList->collectAttributeNodes(attributeNodes);
 		std::sort(attributeNodes.begin(), attributeNodes.end(), CompareAttributePtr());
 		writeStringToFile("static ::pafcore::Attribute s_attribute_", file, indentation);
-		writeStringToFile(memberNode->m_name->m_str.c_str(), file);
+		writeStringToFile(name->m_str.c_str(), file);
 		writeStringToFile("[] = \n", file);
 		writeStringToFile("{\n", file, indentation);
 		size_t count = attributeNodes.size();
@@ -1698,11 +1699,11 @@ void writeMetaConstructor_attributes(MemberNode* memberNode, FILE* file, int ind
 		writeStringToFile("};\n", file, indentation);
 
 		writeStringToFile("static ::pafcore::Attributes s_attributes_", file, indentation);
-		writeStringToFile(memberNode->m_name->m_str.c_str(), file);
+		writeStringToFile(name->m_str.c_str(), file);
 		sprintf(buf, " = { %d, ", count);
 		writeStringToFile(buf, file);
 		writeStringToFile("s_attribute_", file);
-		writeStringToFile(memberNode->m_name->m_str.c_str(), file);
+		writeStringToFile(name->m_str.c_str(), file);
 		writeStringToFile(" };\n", file);
 	}
 }
@@ -1711,7 +1712,7 @@ void writeMetaConstructor_attributesForType(MemberNode* memberNode, FILE* file, 
 {
 	if (memberNode->m_attributeList)
 	{
-		writeMetaConstructor_attributes(memberNode, file, indentation);
+		writeMetaConstructor_attributes(memberNode->m_attributeList, memberNode->m_name, file, indentation);
 		writeStringToFile("m_attributes = &s_attributes_", file, indentation);
 		writeStringToFile(memberNode->m_name->m_str.c_str(), file);
 		writeStringToFile(";\n", file);
@@ -1733,7 +1734,7 @@ void writeMetaConstructor_Fields(ClassNode* classNode, TemplateArguments* templa
 	for (size_t i = 0; i < count; ++i)
 	{
 		FieldNode* fieldNode = fieldNodes[i];
-		writeMetaConstructor_attributes(fieldNode, file, indentation);
+		writeMetaConstructor_attributes(fieldNode->m_attributeList, fieldNode->m_name, file, indentation);
 	}
 
 	if(isStatic)
@@ -1752,12 +1753,12 @@ void writeMetaConstructor_Fields(ClassNode* classNode, TemplateArguments* templa
 
 		if (fieldNode->m_attributeList)
 		{
-			strcpy(strAttributes, "&s_attributes_");
-			strcat(strAttributes, fieldNode->m_name->m_str.c_str());
+			strcpy_s(strAttributes, "&s_attributes_");
+			strcat_s(strAttributes, fieldNode->m_name->m_str.c_str());
 		}
 		else
 		{
-			strcpy(strAttributes, "0");
+			strcpy_s(strAttributes, "0");
 		}
 
 		IdentifyNode* fieldNameNode = fieldNode->m_nativeName ? fieldNode->m_nativeName : fieldNode->m_name;
@@ -1833,7 +1834,7 @@ void writeMetaConstructor_Properties(ClassNode* classNode, TemplateArguments* te
 	for (size_t i = 0; i < count; ++i)
 	{
 		PropertyNode* propertyNode = propertyNodes[i];
-		writeMetaConstructor_attributes(propertyNode, file, indentation);
+		writeMetaConstructor_attributes(propertyNode->m_attributeList, propertyNode->m_name, file, indentation);
 	}
 
 	if (isArray)
@@ -1866,12 +1867,12 @@ void writeMetaConstructor_Properties(ClassNode* classNode, TemplateArguments* te
 		PropertyNode* propertyNode = propertyNodes[i];
 		if (propertyNode->m_attributeList)
 		{
-			strcpy(strAttributes, "&s_attributes_");
-			strcat(strAttributes, propertyNode->m_name->m_str.c_str());
+			strcpy_s(strAttributes, "&s_attributes_");
+			strcat_s(strAttributes, propertyNode->m_name->m_str.c_str());
 		}
 		else
 		{
-			strcpy(strAttributes, "0");
+			strcpy_s(strAttributes, "0");
 		}
 
 		sprintf_s(getterPassing, "::pafcore::Metadata::by_value");
@@ -2226,12 +2227,12 @@ void writeMetaConstructor_Methods(ClassNode* classNode, TemplateArguments* templ
 			const char* methodName = (*first)->m_name->m_str.c_str();
 			if (hasAttributes)
 			{
-				strcpy(strAttributes, "&s_attributes_");
-				strcat(strAttributes, (*first)->m_name->m_str.c_str());
+				strcpy_s(strAttributes, "&s_attributes_");
+				strcat_s(strAttributes, (*first)->m_name->m_str.c_str());
 			}
 			else
 			{
-				strcpy(strAttributes, "0");
+				strcpy_s(strAttributes, "0");
 			}
 			hasAttributes = false;
 			int overloadCount = last - first;
@@ -2681,27 +2682,43 @@ void writeMetaConstructor(ClassNode* classNode,
 	writeStringToFile("}\n\n", file, indentation);	
 }
 
-
-void writeEnumMetaConstructor_Enumerators(EnumNode* enumNode, TemplateArguments* templateArguments, std::vector<IdentifyNode*>& enumerators, FILE* file, int indentation)
+void writeEnumMetaConstructor_Enumerators(EnumNode* enumNode, TemplateArguments* templateArguments, std::vector<EnumeratorNode*>& enumerators, FILE* file, int indentation)
 {
 	char buf[512];
+	char strAttributes[256];
 	if (enumerators.empty())
 	{
 		return;
 	}
 	std::string metaClassName;
 	GetMetaTypeFullName(metaClassName, enumNode, templateArguments);
-
-	writeStringToFile("static ::pafcore::Enumerator s_enumerators[] = \n", file, indentation);
-	writeStringToFile("{\n", file, indentation);
 	size_t count = enumerators.size();
 	for (size_t i = 0; i < count; ++i)
 	{
-		IdentifyNode* enumerator = enumerators[i];
+		EnumeratorNode* enumerator = enumerators[i];
+		writeMetaConstructor_attributes(enumerator->m_attributeList, enumerator->m_name, file, indentation);
+	}
+
+	writeStringToFile("static ::pafcore::Enumerator s_enumerators[] = \n", file, indentation);
+	writeStringToFile("{\n", file, indentation);
+	for (size_t i = 0; i < count; ++i)
+	{
+		EnumeratorNode* enumerator = enumerators[i];
+		if (enumerator->m_attributeList)
+		{
+			strcpy_s(strAttributes, "&s_attributes_");
+			strcat_s(strAttributes, enumerator->m_name->m_str.c_str());
+		}
+		else
+		{
+			strcpy_s(strAttributes, "0");
+		}
+
 		std::string enumScopeName;
 		enumNode->m_enclosing->getFullName(enumScopeName, 0);
-		sprintf_s(buf, "::pafcore::Enumerator(\"%s\", %s::GetSingleton(), %s::%s),\n",
-			enumerator->m_str.c_str(), metaClassName.c_str(), enumScopeName.c_str(), enumerator->m_str.c_str());
+		sprintf_s(buf, "::pafcore::Enumerator(\"%s\", %s, %s::GetSingleton(), %s::%s),\n",
+			enumerator->m_name->m_str.c_str(), strAttributes,
+			metaClassName.c_str(), enumScopeName.c_str(), enumerator->m_name->m_str.c_str());
 		writeStringToFile(buf, file, indentation + 1);
 	}
 	writeStringToFile("};\n", file, indentation);
@@ -2710,7 +2727,7 @@ void writeEnumMetaConstructor_Enumerators(EnumNode* enumNode, TemplateArguments*
 	writeStringToFile("m_enumeratorCount = paf_array_size_of(s_enumerators);\n", file, indentation);
 }
 
-void writeEnumMetaConstructor(EnumNode* enumNode, TemplateArguments* templateArguments, std::vector<IdentifyNode*>& enumerators, FILE* file, int indentation)
+void writeEnumMetaConstructor(EnumNode* enumNode, TemplateArguments* templateArguments, std::vector<EnumeratorNode*>& enumerators, FILE* file, int indentation)
 {
 	char buf[512];
 	std::string typeName;

@@ -13,14 +13,14 @@
 %token <sn> BOOL CHAR WCHAR_T SHORT LONG INT FLOAT DOUBLE SIGNED UNSIGNED
 %token <sn> NAMESPACE ENUM CLASS STRUCT STATIC VIRTUAL VOID CONST OPERATOR TYPEDEF PRIMITIVE
 %token <sn> ABSTRACT GET SET NOMETA NOCODE EXPORT OVERRIDE SCOPE IDENTIFY STRING TEMPLATE
+%type <sn> enumerator enumeratorList enum_0 enum 
 %type <sn> field_0 field_1 field_2 field getter_0 getter setter_0 setter property_0 property_1 property_2 property
 %type <sn> parameter_0 parameter parameterList method_0 method_1 method_2 method_3 method_4 method
 %type <sn> operatorSign operator_0 operator_1 operator_2 operator_3 operator classMember_0 classMember
-%type <sn> primitive scopeName scopeNameList_0 scopeNameList typeName typeNameList identityList classMemberList tokenList
+%type <sn> primitive scopeName scopeNameList_0 scopeNameList typeName typeNameList classMemberList tokenList
 %type <sn> templateParameterList templateParameters templateClassInstance_0 templateClassInstance
-%type <sn> typeAlias enum_0 enum 
 %type <sn> class_0 class_1 class_2 class_3 class_4 class_5 class namespaceMember_0 namespaceMember namespaceMemberList namespace program
-%type <sn> attribute attributeList attributes
+%type <sn> typeAlias attribute attributeList attributes
 
 %start program
 
@@ -72,13 +72,17 @@ attributes				: '[' attributeList ']'								{$$ = $2;}
 						| '[' ']'											{$$ = NULL;}
 ;
 
-identityList			: IDENTIFY											{$$ = newIdentityList(NULL, NULL, $1);}
-						| identityList ',' IDENTIFY							{$$ = newIdentityList($1, $2, $3);}
+enumerator				: IDENTIFY											{$$ = newEnumerator(NULL, $1);}
+						| attributes IDENTIFY								{$$ = newEnumerator($1, $2);}
+;
+
+enumeratorList			: enumerator										{$$ = newEnumeratorList(NULL, NULL, $1);}
+						| enumeratorList ',' enumerator						{$$ = newEnumeratorList($1, $2, $3);}
 ;
 
 
-enum_0					: ENUM IDENTIFY '{' identityList '}'				{$$ = newEnum($1, $2, $3, $4, $5);}
-						| ENUM IDENTIFY '{' identityList ',' '}'			{$$ = newEnum($1, $2, $3, $4, $6);}
+enum_0					: ENUM IDENTIFY '{' enumeratorList '}'				{$$ = newEnum($1, $2, $3, $4, $5);}
+						| ENUM IDENTIFY '{' enumeratorList ',' '}'			{$$ = newEnum($1, $2, $3, $4, $6);}
 						| ENUM IDENTIFY '{' '}'								{$$ = newEnum($1, $2, $3, NULL, $4);}
 ;
 

@@ -6,7 +6,7 @@
 #include "NamespaceNode.h"
 #include "TokenNode.h"
 #include "IdentifyNode.h"
-#include "IdentityListNode.h"
+#include "EnumeratorListNode.h"
 #include "MemberListNode.h"
 #include "EnumNode.h"
 #include "ClassNode.h"

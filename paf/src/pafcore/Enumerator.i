@@ -12,7 +12,7 @@ namespace pafcore
 		Type* m_type;
 		int m_value;
 	public:
-		Enumerator(const char* name, Type* type, size_t value);
+		Enumerator(const char* name, Attributes* attributes, Type* type, size_t value);
 #}
 	};
 

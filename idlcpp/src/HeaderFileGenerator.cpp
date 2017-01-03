@@ -5,10 +5,11 @@
 #include "NamespaceNode.h"
 #include "TokenNode.h"
 #include "IdentifyNode.h"
-#include "IdentityListNode.h"
+#include "EnumeratorListNode.h"
 #include "ScopeNameListNode.h"
 #include "ScopeNameNode.h"
 #include "MemberListNode.h"
+#include "EnumeratorNode.h"
 #include "EnumNode.h"
 #include "ClassNode.h"
 #include "TemplateParametersNode.h"
@@ -257,16 +258,16 @@ void HeaderFileGenerator::generateCode_Enum(FILE* file, EnumNode* enumNode, int 
 	generateCode_Identify(file, enumNode->m_name, 0);
 	generateCode_Token(file, enumNode->m_leftBrace, indentation);
 
-	std::vector<std::pair<TokenNode*, IdentifyNode*>> identifyNodes;
-	enumNode->m_identityList->collectIdentifyNodes(identifyNodes);
-	size_t itemCount = identifyNodes.size();	
+	std::vector<std::pair<TokenNode*, EnumeratorNode*>> enumeratorNodes;
+	enumNode->m_enumeratorList->collectEnumeratorNodes(enumeratorNodes);
+	size_t itemCount = enumeratorNodes.size();
 	for(size_t i = 0; i < itemCount; ++i)
 	{
-		if(0 != identifyNodes[i].first)
+		if(0 != enumeratorNodes[i].first)
 		{
-			generateCode_Token(file, identifyNodes[i].first, 0);
+			generateCode_Token(file, enumeratorNodes[i].first, 0);
 		}
-		generateCode_Identify(file, identifyNodes[i].second, indentation + 1);
+		generateCode_Identify(file, enumeratorNodes[i].second->m_name, indentation + 1);
 	}
 	generateCode_Token(file, enumNode->m_rightBrace, indentation);
 	generateCode_Token(file, enumNode->m_semicolon, 0);

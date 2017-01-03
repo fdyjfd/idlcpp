@@ -115,9 +115,11 @@ enum SyntaxNodeType
 	snt_keyword_export,
 	snt_keyword_override,
 	snt_identify,
+	snt_enumerator,
+	snt_enumerator_list,
+	snt_enum,
 	snt_scope_name,
 	snt_scope_name_list,
-	snt_identity_list,
 	snt_type_name,
 	snt_type_name_list,
 	snt_parameter,
@@ -131,7 +133,6 @@ enum SyntaxNodeType
 	snt_method,
 	snt_operator,
 	snt_class,
-	snt_enum,
 	snt_template_class_instance,
 	snt_typedef,
 	snt_type_declaration,
@@ -160,6 +161,11 @@ SyntaxNode* newPrimitiveType(SyntaxNode* keyword, PredefinedType type);
 SyntaxNode* newAttribute(SyntaxNode* name, SyntaxNode* content);
 SyntaxNode* newAttributeList(SyntaxNode* attributeList, SyntaxNode* attribute);
 void setAttributeList(SyntaxNode* member, SyntaxNode* attributeList);
+
+SyntaxNode* newEnumerator(SyntaxNode* attributeList, SyntaxNode* identify);
+SyntaxNode* newEnumeratorList(SyntaxNode* enumeratorList, SyntaxNode* delimiter, SyntaxNode* enumerator);
+SyntaxNode* newEnum(SyntaxNode* keyword, SyntaxNode* name, SyntaxNode* leftBrace, SyntaxNode* enumeratorList, SyntaxNode* rightBrace);
+void setEnumSemicolon(SyntaxNode* enm, SyntaxNode* semicolon);
 
 SyntaxNode* newScopeName(SyntaxNode* identify, SyntaxNode* lts, SyntaxNode* parameterList, SyntaxNode* gts);
 SyntaxNode* newScopeNameList(SyntaxNode* scopeNameList, SyntaxNode* scopeName);
@@ -213,9 +219,6 @@ void setClassOverride(SyntaxNode* cls);
 void setClassTemplateParameters(SyntaxNode* cls, SyntaxNode* parameters);
 void setClassSemicolon(SyntaxNode* cls, SyntaxNode* semicolon);
 
-SyntaxNode* newIdentityList(SyntaxNode* identityList, SyntaxNode* delimiter, SyntaxNode* identify);
-SyntaxNode* newEnum(SyntaxNode* keyword, SyntaxNode* name, SyntaxNode* leftBrace, SyntaxNode* identityList, SyntaxNode* rightBrace);
-void setEnumSemicolon(SyntaxNode* enm, SyntaxNode* semicolon);
 
 SyntaxNode* newTypeDeclaration(SyntaxNode* name, TypeCategory typeCategory);
 SyntaxNode* newTypedef(SyntaxNode* keyword, SyntaxNode* name, SyntaxNode* typeName);
@@ -226,7 +229,7 @@ SyntaxNode* newTemplateParameters(SyntaxNode* keyword, SyntaxNode* lts, SyntaxNo
 SyntaxNode* newTemplateClassInstance(SyntaxNode* name, SyntaxNode* typeNameList);
 
 SyntaxNode* newTokenList(SyntaxNode* tokenList, SyntaxNode* token);
-void setTemplateClassInstanceTokenList(SyntaxNode* tci, SyntaxNode* identityList);
+void setTemplateClassInstanceTokenList(SyntaxNode* tci, SyntaxNode* enumeratorList);
 
 SyntaxNode* newNamespaceMemberList(SyntaxNode* memberList, SyntaxNode* member);
 SyntaxNode* newNamespace(SyntaxNode* keyword, SyntaxNode* name, SyntaxNode* leftBrace, SyntaxNode* memberList, SyntaxNode* rightBrace);

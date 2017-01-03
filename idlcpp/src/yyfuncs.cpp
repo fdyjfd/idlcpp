@@ -15,7 +15,8 @@
 #include "AttributeListNode.h"
 #include "ScopeNameNode.h"
 #include "ScopeNameListNode.h"
-#include "IdentityListNode.h"
+#include "EnumeratorNode.h"
+#include "EnumeratorListNode.h"
 #include "TypeNameNode.h"
 #include "TypeNameListNode.h"
 #include "FieldNode.h"
@@ -120,6 +121,45 @@ void setAttributeList(SyntaxNode* member, SyntaxNode* attributeList)
 	assert(snt_attribute_list == attributeList->m_nodeType);
 
 	((MemberNode*)member)->m_attributeList = (AttributeListNode*)attributeList;
+}
+
+SyntaxNode* newEnumerator(SyntaxNode* attributeList, SyntaxNode* identify)
+{
+	assert(0 == attributeList || == snt_attribute_list == attributeList->m_nodeType);
+	assert(snt_identify == identify->m_nodeType);
+	EnumeratorNode* res = new EnumeratorNode((AttributeListNode*)attributeList, (IdentifyNode*)identify);
+	g_syntaxNodes.push_back(res);
+	return res;
+}
+
+SyntaxNode* newEnumeratorList(SyntaxNode* enumeratorList, SyntaxNode* delimiter, SyntaxNode* enumerator)
+{
+	assert(0 == enumeratorList || snt_enumerator_list == enumeratorList->m_nodeType);
+	assert(0 == delimiter || ',' == delimiter->m_nodeType);
+	assert((0 == delimiter && 0 == enumeratorList) || (0 != delimiter && 0 != enumeratorList));
+	assert(snt_enumerator == enumerator->m_nodeType);
+	EnumeratorListNode* res = new EnumeratorListNode((EnumeratorListNode*)enumeratorList, (TokenNode*)delimiter, (EnumeratorNode*)enumerator);
+	g_syntaxNodes.push_back(res);
+	return res;
+}
+
+SyntaxNode* newEnum(SyntaxNode* keyword, SyntaxNode* name, SyntaxNode* leftBrace, SyntaxNode* enumeratorList, SyntaxNode* rightBrace)
+{
+	assert(snt_keyword_enum == keyword->m_nodeType);
+	assert(snt_identify == name->m_nodeType);
+	assert('{' == leftBrace->m_nodeType);
+	assert(0 == enumeratorList || snt_enumerator_list == enumeratorList->m_nodeType);
+	assert('}' == rightBrace->m_nodeType);
+	EnumNode* res = new EnumNode((TokenNode*)keyword, (IdentifyNode*)name, (TokenNode*)leftBrace, (EnumeratorListNode*)enumeratorList, (TokenNode*)rightBrace);
+	g_syntaxNodes.push_back(res);
+	return res;
+}
+
+void setEnumSemicolon(SyntaxNode* enm, SyntaxNode* semicolon)
+{
+	assert(snt_enum == enm->m_nodeType);
+	assert(';' == semicolon->m_nodeType);
+	((EnumNode*)enm)->m_semicolon = (TokenNode*)semicolon;
 }
 
 SyntaxNode* newScopeName(SyntaxNode* identify, SyntaxNode* lts, SyntaxNode* parameterList, SyntaxNode* gts)
@@ -489,36 +529,6 @@ void setClassTemplateParameters(SyntaxNode* cls, SyntaxNode* parameters)
 	assert(snt_class == cls->m_nodeType);
 	assert(snt_template_parameters == parameters->m_nodeType);
 	((ClassNode*)cls)->setTemplateParameters((TemplateParametersNode*)parameters);
-}
-
-SyntaxNode* newIdentityList(SyntaxNode* identityList, SyntaxNode* delimiter, SyntaxNode* identify)
-{
-	assert(0 == identityList || snt_identity_list == identityList->m_nodeType);
-	assert(0 == delimiter || ',' == delimiter->m_nodeType);
-	assert((0 == delimiter && 0 == identityList) || (0 != delimiter && 0 != identityList));
-	assert(snt_identify == identify->m_nodeType);
-	IdentityListNode* res = new IdentityListNode((IdentityListNode*)identityList, (TokenNode*)delimiter, (IdentifyNode*)identify);
-	g_syntaxNodes.push_back(res);
-	return res;
-}
-
-SyntaxNode* newEnum(SyntaxNode* keyword, SyntaxNode* name, SyntaxNode* leftBrace, SyntaxNode* identityList, SyntaxNode* rightBrace)
-{
-	assert(snt_keyword_enum == keyword->m_nodeType);
-	assert(snt_identify == name->m_nodeType);
-	assert('{' == leftBrace->m_nodeType);
-	assert(0 == identityList || snt_identity_list == identityList->m_nodeType);
-	assert('}' == rightBrace->m_nodeType);
-	EnumNode* res = new EnumNode((TokenNode*)keyword, (IdentifyNode*)name, (TokenNode*)leftBrace, (IdentityListNode*)identityList, (TokenNode*)rightBrace);
-	g_syntaxNodes.push_back(res);
-	return res;
-}
-
-void setEnumSemicolon(SyntaxNode* enm, SyntaxNode* semicolon)
-{
-	assert(snt_enum == enm->m_nodeType);
-	assert(';' == semicolon->m_nodeType);
-	((EnumNode*)enm)->m_semicolon = (TokenNode*)semicolon;
 }
 
 SyntaxNode* newTypeDeclaration(SyntaxNode* name, TypeCategory typeCategory)

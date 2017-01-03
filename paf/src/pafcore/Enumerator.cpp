@@ -5,8 +5,8 @@
 
 BEGIN_PAFCORE
 
-Enumerator::Enumerator(const char* name, Type* type, size_t value)
-: Metadata(name)
+Enumerator::Enumerator(const char* name, Attributes* attributes, Type* type, size_t value)
+: Metadata(name, attributes)
 {
 	m_type = type;
 	m_value = value;
