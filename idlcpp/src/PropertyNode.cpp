@@ -9,17 +9,17 @@
 #include "Compiler.h"
 #include <assert.h>
 
-PropertyNode::PropertyNode(TokenNode* constant, TypeNameNode* typeName, TokenNode* passing, IdentifyNode* name)
+PropertyNode::PropertyNode(IdentifyNode* name, PropertyArrayCategory category)
 {
 	m_nodeType = snt_property;
 	m_modifier = 0;
-	m_constant = constant;
-	m_typeName = typeName;
-	m_passing = passing;
+	m_constant = 0;
+	m_typeName = 0;
+	m_passing = 0;
 	m_name = name;
 	m_get = 0;
 	m_set = 0;
-	m_arrayCategory = not_array;
+	m_arrayCategory = category;
 }
 
 bool PropertyNode::isStatic()
@@ -103,6 +103,8 @@ void PropertyNode::checkTypeNames(TypeNode* enclosingTypeNode, TemplateArguments
 
 void PropertyNode::checkSemantic(TemplateArguments* templateArguments)
 {
+	MemberNode::checkSemantic(templateArguments);
+
 	assert(snt_class == m_enclosing->m_nodeType);
 	ClassNode* classNode = static_cast<ClassNode*>(m_enclosing);
 	if(m_get)

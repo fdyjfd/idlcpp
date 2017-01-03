@@ -5,10 +5,10 @@
 
 BEGIN_PAFCORE
 
-InstanceProperty::InstanceProperty(const char* name, ClassType* objectType, 
+InstanceProperty::InstanceProperty(const char* name, Attributes* attributes, ClassType* objectType,
 	InstancePropertyGetter getter, Type* getterType, Passing getterPassing, bool getterConstant,
 	InstancePropertySetter setter, Type* setterType, Passing setterPassing, bool setterConstant)
-: Metadata(name)
+: Metadata(name, attributes)
 {
 	m_objectType = objectType;
 	m_getter = getter;

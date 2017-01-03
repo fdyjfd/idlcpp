@@ -6,8 +6,8 @@
 
 BEGIN_PAFCORE
 
-StaticMethod::StaticMethod(const char* name, FunctionInvoker invoker, Overload* overloads, size_t overloadCount)
-: Metadata(name)
+StaticMethod::StaticMethod(const char* name, Attributes* attributes, FunctionInvoker invoker, Overload* overloads, size_t overloadCount)
+: Metadata(name, attributes)
 {
 	m_invoker = invoker;
 	m_overloads = overloads;

@@ -43,8 +43,8 @@ namespace idlcpp
 		m_classTypeIterators = s_classTypeIterators;
 		static ::pafcore::InstanceProperty s_properties[] = 
 		{
-			::pafcore::InstanceProperty("_type_", GetSingleton(), Enumerator_get__type_, RuntimeTypeOf<::pafcore::Type>::RuntimeType::GetSingleton(), ::pafcore::Metadata::by_ptr, false, 0, 0, ::pafcore::Metadata::by_value, false),
-			::pafcore::InstanceProperty("_value_", GetSingleton(), Enumerator_get__value_, RuntimeTypeOf<int>::RuntimeType::GetSingleton(), ::pafcore::Metadata::by_value, false, 0, 0, ::pafcore::Metadata::by_value, false),
+			::pafcore::InstanceProperty("_type_", 0, GetSingleton(), Enumerator_get__type_, RuntimeTypeOf<::pafcore::Type>::RuntimeType::GetSingleton(), ::pafcore::Metadata::by_ptr, false, 0, 0, ::pafcore::Metadata::by_value, false),
+			::pafcore::InstanceProperty("_value_", 0, GetSingleton(), Enumerator_get__value_, RuntimeTypeOf<int>::RuntimeType::GetSingleton(), ::pafcore::Metadata::by_value, false, 0, 0, ::pafcore::Metadata::by_value, false),
 		};
 		m_properties = s_properties;
 		m_propertyCount = paf_array_size_of(s_properties);

@@ -38,7 +38,7 @@ namespace idlcpp
 		};
 		static ::pafcore::StaticMethod s_staticMethods[] = 
 		{
-			::pafcore::StaticMethod("LoadDLL", System_LoadDLL, s_LoadDLL_Overloads, 1),
+			::pafcore::StaticMethod("LoadDLL", 0, System_LoadDLL, s_LoadDLL_Overloads, 1),
 		};
 		m_staticMethods = s_staticMethods;
 		m_staticMethodCount = paf_array_size_of(s_staticMethods);

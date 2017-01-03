@@ -45,6 +45,7 @@ void NamespaceNode::checkTypeNames(TypeNode* enclosingTypeNode, TemplateArgument
 
 void NamespaceNode::checkSemantic(TemplateArguments* templateArguments)
 {
+	MemberNode::checkSemantic(templateArguments);
 	assert(0 == templateArguments);
 	m_memberList->checkSemantic(templateArguments);
 }

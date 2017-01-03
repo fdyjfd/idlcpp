@@ -44,19 +44,19 @@ namespace idlcpp
 		m_classTypeIterators = s_classTypeIterators;
 		static ::pafcore::InstanceProperty s_properties[] = 
 		{
-			::pafcore::InstanceProperty("getterByPtr", GetSingleton(), InstanceProperty_get_getterByPtr, RuntimeTypeOf<bool>::RuntimeType::GetSingleton(), ::pafcore::Metadata::by_value, false, 0, 0, ::pafcore::Metadata::by_value, false),
-			::pafcore::InstanceProperty("getterByRef", GetSingleton(), InstanceProperty_get_getterByRef, RuntimeTypeOf<bool>::RuntimeType::GetSingleton(), ::pafcore::Metadata::by_value, false, 0, 0, ::pafcore::Metadata::by_value, false),
-			::pafcore::InstanceProperty("getterByValue", GetSingleton(), InstanceProperty_get_getterByValue, RuntimeTypeOf<bool>::RuntimeType::GetSingleton(), ::pafcore::Metadata::by_value, false, 0, 0, ::pafcore::Metadata::by_value, false),
-			::pafcore::InstanceProperty("getterConstant", GetSingleton(), InstanceProperty_get_getterConstant, RuntimeTypeOf<bool>::RuntimeType::GetSingleton(), ::pafcore::Metadata::by_value, false, 0, 0, ::pafcore::Metadata::by_value, false),
-			::pafcore::InstanceProperty("getterType", GetSingleton(), InstanceProperty_get_getterType, RuntimeTypeOf<::pafcore::Type>::RuntimeType::GetSingleton(), ::pafcore::Metadata::by_ptr, false, 0, 0, ::pafcore::Metadata::by_value, false),
-			::pafcore::InstanceProperty("hasGetter", GetSingleton(), InstanceProperty_get_hasGetter, RuntimeTypeOf<bool>::RuntimeType::GetSingleton(), ::pafcore::Metadata::by_value, false, 0, 0, ::pafcore::Metadata::by_value, false),
-			::pafcore::InstanceProperty("hasSetter", GetSingleton(), InstanceProperty_get_hasSetter, RuntimeTypeOf<bool>::RuntimeType::GetSingleton(), ::pafcore::Metadata::by_value, false, 0, 0, ::pafcore::Metadata::by_value, false),
-			::pafcore::InstanceProperty("objectType", GetSingleton(), InstanceProperty_get_objectType, RuntimeTypeOf<::pafcore::ClassType>::RuntimeType::GetSingleton(), ::pafcore::Metadata::by_ptr, false, 0, 0, ::pafcore::Metadata::by_value, false),
-			::pafcore::InstanceProperty("setterByPtr", GetSingleton(), InstanceProperty_get_setterByPtr, RuntimeTypeOf<bool>::RuntimeType::GetSingleton(), ::pafcore::Metadata::by_value, false, 0, 0, ::pafcore::Metadata::by_value, false),
-			::pafcore::InstanceProperty("setterByRef", GetSingleton(), InstanceProperty_get_setterByRef, RuntimeTypeOf<bool>::RuntimeType::GetSingleton(), ::pafcore::Metadata::by_value, false, 0, 0, ::pafcore::Metadata::by_value, false),
-			::pafcore::InstanceProperty("setterByValue", GetSingleton(), InstanceProperty_get_setterByValue, RuntimeTypeOf<bool>::RuntimeType::GetSingleton(), ::pafcore::Metadata::by_value, false, 0, 0, ::pafcore::Metadata::by_value, false),
-			::pafcore::InstanceProperty("setterConstant", GetSingleton(), InstanceProperty_get_setterConstant, RuntimeTypeOf<bool>::RuntimeType::GetSingleton(), ::pafcore::Metadata::by_value, false, 0, 0, ::pafcore::Metadata::by_value, false),
-			::pafcore::InstanceProperty("setterType", GetSingleton(), InstanceProperty_get_setterType, RuntimeTypeOf<::pafcore::Type>::RuntimeType::GetSingleton(), ::pafcore::Metadata::by_ptr, false, 0, 0, ::pafcore::Metadata::by_value, false),
+			::pafcore::InstanceProperty("getterByPtr", 0, GetSingleton(), InstanceProperty_get_getterByPtr, RuntimeTypeOf<bool>::RuntimeType::GetSingleton(), ::pafcore::Metadata::by_value, false, 0, 0, ::pafcore::Metadata::by_value, false),
+			::pafcore::InstanceProperty("getterByRef", 0, GetSingleton(), InstanceProperty_get_getterByRef, RuntimeTypeOf<bool>::RuntimeType::GetSingleton(), ::pafcore::Metadata::by_value, false, 0, 0, ::pafcore::Metadata::by_value, false),
+			::pafcore::InstanceProperty("getterByValue", 0, GetSingleton(), InstanceProperty_get_getterByValue, RuntimeTypeOf<bool>::RuntimeType::GetSingleton(), ::pafcore::Metadata::by_value, false, 0, 0, ::pafcore::Metadata::by_value, false),
+			::pafcore::InstanceProperty("getterConstant", 0, GetSingleton(), InstanceProperty_get_getterConstant, RuntimeTypeOf<bool>::RuntimeType::GetSingleton(), ::pafcore::Metadata::by_value, false, 0, 0, ::pafcore::Metadata::by_value, false),
+			::pafcore::InstanceProperty("getterType", 0, GetSingleton(), InstanceProperty_get_getterType, RuntimeTypeOf<::pafcore::Type>::RuntimeType::GetSingleton(), ::pafcore::Metadata::by_ptr, false, 0, 0, ::pafcore::Metadata::by_value, false),
+			::pafcore::InstanceProperty("hasGetter", 0, GetSingleton(), InstanceProperty_get_hasGetter, RuntimeTypeOf<bool>::RuntimeType::GetSingleton(), ::pafcore::Metadata::by_value, false, 0, 0, ::pafcore::Metadata::by_value, false),
+			::pafcore::InstanceProperty("hasSetter", 0, GetSingleton(), InstanceProperty_get_hasSetter, RuntimeTypeOf<bool>::RuntimeType::GetSingleton(), ::pafcore::Metadata::by_value, false, 0, 0, ::pafcore::Metadata::by_value, false),
+			::pafcore::InstanceProperty("objectType", 0, GetSingleton(), InstanceProperty_get_objectType, RuntimeTypeOf<::pafcore::ClassType>::RuntimeType::GetSingleton(), ::pafcore::Metadata::by_ptr, false, 0, 0, ::pafcore::Metadata::by_value, false),
+			::pafcore::InstanceProperty("setterByPtr", 0, GetSingleton(), InstanceProperty_get_setterByPtr, RuntimeTypeOf<bool>::RuntimeType::GetSingleton(), ::pafcore::Metadata::by_value, false, 0, 0, ::pafcore::Metadata::by_value, false),
+			::pafcore::InstanceProperty("setterByRef", 0, GetSingleton(), InstanceProperty_get_setterByRef, RuntimeTypeOf<bool>::RuntimeType::GetSingleton(), ::pafcore::Metadata::by_value, false, 0, 0, ::pafcore::Metadata::by_value, false),
+			::pafcore::InstanceProperty("setterByValue", 0, GetSingleton(), InstanceProperty_get_setterByValue, RuntimeTypeOf<bool>::RuntimeType::GetSingleton(), ::pafcore::Metadata::by_value, false, 0, 0, ::pafcore::Metadata::by_value, false),
+			::pafcore::InstanceProperty("setterConstant", 0, GetSingleton(), InstanceProperty_get_setterConstant, RuntimeTypeOf<bool>::RuntimeType::GetSingleton(), ::pafcore::Metadata::by_value, false, 0, 0, ::pafcore::Metadata::by_value, false),
+			::pafcore::InstanceProperty("setterType", 0, GetSingleton(), InstanceProperty_get_setterType, RuntimeTypeOf<::pafcore::Type>::RuntimeType::GetSingleton(), ::pafcore::Metadata::by_ptr, false, 0, 0, ::pafcore::Metadata::by_value, false),
 		};
 		m_properties = s_properties;
 		m_propertyCount = paf_array_size_of(s_properties);

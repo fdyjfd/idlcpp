@@ -5,11 +5,11 @@
 
 BEGIN_PAFCORE
 
-InstanceArrayProperty::InstanceArrayProperty(const char* name, ClassType* objectType,
+InstanceArrayProperty::InstanceArrayProperty(const char* name, Attributes* attributes, ClassType* objectType,
 	InstanceArrayPropertyGetter getter, Type* getterType, Passing getterPassing, bool getterConstant,
 	InstanceArrayPropertySetter setter, Type* setterType, Passing setterPassing, bool setterConstant,
 	InstanceArrayPropertySizer sizer, InstanceArrayPropertyResizer resizer)
-: Metadata(name)
+: Metadata(name, attributes)
 {
 	m_objectType = objectType;
 	m_getter = getter;

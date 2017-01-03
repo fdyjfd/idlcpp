@@ -1,5 +1,6 @@
 #include "MemberNode.h"
 #include "IdentifyNode.h"
+#include "AttributeListNode.h"
 #include "ScopeNode.h"
 #include "ClassNode.h"
 #include "NamespaceNode.h"
@@ -11,6 +12,7 @@
 
 MemberNode::MemberNode()
 {
+	m_attributeList = 0;
 	m_name = 0;
 	m_enclosing = 0;
 	m_filterNode = 0;
@@ -167,6 +169,10 @@ void MemberNode::checkTypeNames(TypeNode* enclosingTypeNode, TemplateArguments* 
 
 void MemberNode::checkSemantic(TemplateArguments* templateArguments)
 {
+	if (m_attributeList)
+	{
+		m_attributeList->checkSemantic();
+	}
 }
 
 

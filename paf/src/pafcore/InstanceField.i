@@ -3,6 +3,10 @@
 namespace pafcore
 {
 
+#{
+	struct Attributes;
+#}
+
 	abstract class(instance_field)#PAFCORE_EXPORT InstanceField : Metadata
 	{
 		Type* type get;
@@ -13,7 +17,7 @@ namespace pafcore
 		bool isConstant get;
 #{
 	public:
-		InstanceField(const char* name, ClassType* objectType, Type* type, size_t offset, size_t arraySize, bool constant, TypeCompound tc);
+		InstanceField(const char* name, Attributes* attributes, ClassType* objectType, Type* type, size_t offset, size_t arraySize, bool constant, TypeCompound tc);
 	public:
 		bool isArray()
 		{

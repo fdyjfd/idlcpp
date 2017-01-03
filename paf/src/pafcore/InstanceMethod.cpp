@@ -6,8 +6,8 @@
 
 BEGIN_PAFCORE
 
-InstanceMethod::InstanceMethod(const char* name, FunctionInvoker invoker, Overload* overloads, size_t overloadCount)
-: Metadata(name)
+InstanceMethod::InstanceMethod(const char* name, Attributes* attributes, FunctionInvoker invoker, Overload* overloads, size_t overloadCount)
+: Metadata(name, attributes)
 {
 	m_invoker = invoker;
 	m_overloads = overloads;

@@ -48,6 +48,7 @@ void FieldNode::checkTypeNames(TypeNode* enclosingTypeNode, TemplateArguments* t
 
 void FieldNode::checkSemantic(TemplateArguments* templateArguments)
 {
+	MemberNode::checkSemantic(templateArguments);
 	TypeNode* typeNode = m_typeName->getTypeNode(templateArguments);
 	if (0 == typeNode)
 	{

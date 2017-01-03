@@ -4,6 +4,7 @@
 #pragma once
 
 #include "./Reference.mh"
+#include "./Typedef.mh"
 #include "Metadata.mh"
 #include "AutoRun.h"
 #include "NameSpace.h"
@@ -87,16 +88,57 @@ namespace idlcpp
 		m_classTypeIterators = s_classTypeIterators;
 		static ::pafcore::InstanceProperty s_properties[] = 
 		{
-			::pafcore::InstanceProperty("_category_", GetSingleton(), Metadata_get__category_, RuntimeTypeOf<::pafcore::Category>::RuntimeType::GetSingleton(), ::pafcore::Metadata::by_value, false, 0, 0, ::pafcore::Metadata::by_value, false),
-			::pafcore::InstanceProperty("_name_", GetSingleton(), Metadata_get__name_, RuntimeTypeOf<char>::RuntimeType::GetSingleton(), ::pafcore::Metadata::by_ptr, true, 0, 0, ::pafcore::Metadata::by_value, false),
-			::pafcore::InstanceProperty("_scope_", GetSingleton(), Metadata_get__scope_, RuntimeTypeOf<::pafcore::Metadata>::RuntimeType::GetSingleton(), ::pafcore::Metadata::by_ptr, false, 0, 0, ::pafcore::Metadata::by_value, false),
+			::pafcore::InstanceProperty("_attributeCount_", 0, GetSingleton(), Metadata_get__attributeCount_, RuntimeTypeOf<::size_t>::RuntimeType::GetSingleton(), ::pafcore::Metadata::by_value, false, 0, 0, ::pafcore::Metadata::by_value, false),
+			::pafcore::InstanceProperty("_category_", 0, GetSingleton(), Metadata_get__category_, RuntimeTypeOf<::pafcore::Category>::RuntimeType::GetSingleton(), ::pafcore::Metadata::by_value, false, 0, 0, ::pafcore::Metadata::by_value, false),
+			::pafcore::InstanceProperty("_name_", 0, GetSingleton(), Metadata_get__name_, RuntimeTypeOf<char>::RuntimeType::GetSingleton(), ::pafcore::Metadata::by_ptr, true, 0, 0, ::pafcore::Metadata::by_value, false),
 		};
 		m_properties = s_properties;
 		m_propertyCount = paf_array_size_of(s_properties);
+		static ::pafcore::Result s__getAttributeContentByName__Result_0(RuntimeTypeOf<char>::RuntimeType::GetSingleton(), true, ::pafcore::Result::by_ptr);
+		static ::pafcore::Argument s__getAttributeContentByName__Arguments_0[] = 
+		{
+			::pafcore::Argument("this", GetSingleton(), ::pafcore::Argument::by_ptr, false),
+			::pafcore::Argument("attributeName", RuntimeTypeOf<char>::RuntimeType::GetSingleton(), ::pafcore::Argument::by_ptr, true),
+		};
+		static ::pafcore::Result s__getAttributeContent__Result_1(RuntimeTypeOf<char>::RuntimeType::GetSingleton(), true, ::pafcore::Result::by_ptr);
+		static ::pafcore::Argument s__getAttributeContent__Arguments_1[] = 
+		{
+			::pafcore::Argument("this", GetSingleton(), ::pafcore::Argument::by_ptr, false),
+			::pafcore::Argument("index", RuntimeTypeOf<::size_t>::RuntimeType::GetSingleton(), ::pafcore::Argument::by_value, false),
+		};
+		static ::pafcore::Result s__getAttributeName__Result_2(RuntimeTypeOf<char>::RuntimeType::GetSingleton(), true, ::pafcore::Result::by_ptr);
+		static ::pafcore::Argument s__getAttributeName__Arguments_2[] = 
+		{
+			::pafcore::Argument("this", GetSingleton(), ::pafcore::Argument::by_ptr, false),
+			::pafcore::Argument("index", RuntimeTypeOf<::size_t>::RuntimeType::GetSingleton(), ::pafcore::Argument::by_value, false),
+		};
+		static ::pafcore::Overload s__getAttributeContentByName__Overloads[] = 
+		{
+			::pafcore::Overload(&s__getAttributeContentByName__Result_0, s__getAttributeContentByName__Arguments_0, 1),
+		};
+		static ::pafcore::Overload s__getAttributeContent__Overloads[] = 
+		{
+			::pafcore::Overload(&s__getAttributeContent__Result_1, s__getAttributeContent__Arguments_1, 1),
+		};
+		static ::pafcore::Overload s__getAttributeName__Overloads[] = 
+		{
+			::pafcore::Overload(&s__getAttributeName__Result_2, s__getAttributeName__Arguments_2, 1),
+		};
+		static ::pafcore::InstanceMethod s_methods[] = 
+		{
+			::pafcore::InstanceMethod("_getAttributeContentByName_", 0, Metadata__getAttributeContentByName_, s__getAttributeContentByName__Overloads, 1),
+			::pafcore::InstanceMethod("_getAttributeContent_", 0, Metadata__getAttributeContent_, s__getAttributeContent__Overloads, 1),
+			::pafcore::InstanceMethod("_getAttributeName_", 0, Metadata__getAttributeName_, s__getAttributeName__Overloads, 1),
+		};
+		m_methods = s_methods;
+		m_methodCount = paf_array_size_of(s_methods);
 		static Metadata* s_members[] = 
 		{
 			&s_properties[0],
 			&s_properties[1],
+			&s_methods[0],
+			&s_methods[1],
+			&s_methods[2],
 			&s_properties[2],
 		};
 		m_members = s_members;
@@ -117,6 +159,18 @@ namespace idlcpp
 	void __pafcore__Metadata_Type::assign(void* dst, const void* src)
 	{
 		*(::pafcore::Metadata*)dst = *(const ::pafcore::Metadata*)src;
+	}
+
+	::pafcore::ErrorCode __pafcore__Metadata_Type::Metadata_get__attributeCount_(::pafcore::Variant* that, ::pafcore::Variant* value)
+	{
+		::pafcore::Metadata* self;
+		if(!that->castToReferencePtr(GetSingleton(), (void**)&self))
+		{
+			return ::pafcore::e_invalid_this_type;
+		}
+		::size_t res = self->get__attributeCount_();
+		value->assignPrimitive(RuntimeTypeOf<::size_t>::RuntimeType::GetSingleton(), &res);
+		return ::pafcore::s_ok;
 	}
 
 	::pafcore::ErrorCode __pafcore__Metadata_Type::Metadata_get__category_(::pafcore::Variant* that, ::pafcore::Variant* value)
@@ -143,16 +197,79 @@ namespace idlcpp
 		return ::pafcore::s_ok;
 	}
 
-	::pafcore::ErrorCode __pafcore__Metadata_Type::Metadata_get__scope_(::pafcore::Variant* that, ::pafcore::Variant* value)
+	::pafcore::ErrorCode __pafcore__Metadata_Type::Metadata__getAttributeContentByName_(::pafcore::Variant* result, ::pafcore::Variant** args, int_t numArgs)
 	{
-		::pafcore::Metadata* self;
-		if(!that->castToReferencePtr(GetSingleton(), (void**)&self))
+		if(2 == numArgs)
 		{
-			return ::pafcore::e_invalid_this_type;
+			if(args[0]->isConstant())
+			{
+				return ::pafcore::e_this_is_constant;
+			}
+			::pafcore::Metadata* self;
+			if(!args[0]->castToReferencePtr(GetSingleton(), (void**)&self))
+			{
+				return ::pafcore::e_invalid_this_type;
+			}
+			const char* a0;
+			if(!args[1]->castToPrimitivePtr(RuntimeTypeOf<char>::RuntimeType::GetSingleton(), (void**)&a0))
+			{
+				return ::pafcore::e_invalid_arg_type_1;
+			}
+			const char* res = self->_getAttributeContentByName_(a0);
+			result->assignPrimitivePtr(RuntimeTypeOf<char>::RuntimeType::GetSingleton(), res, true, ::pafcore::Variant::by_ptr);
+			return ::pafcore::s_ok;
 		}
-		::pafcore::Metadata* res = self->get__scope_();
-		value->assignReferencePtr(RuntimeTypeOf<::pafcore::Metadata>::RuntimeType::GetSingleton(), res, false, ::pafcore::Variant::by_ptr);
-		return ::pafcore::s_ok;
+		return ::pafcore::e_invalid_arg_num;
+	}
+
+	::pafcore::ErrorCode __pafcore__Metadata_Type::Metadata__getAttributeContent_(::pafcore::Variant* result, ::pafcore::Variant** args, int_t numArgs)
+	{
+		if(2 == numArgs)
+		{
+			if(args[0]->isConstant())
+			{
+				return ::pafcore::e_this_is_constant;
+			}
+			::pafcore::Metadata* self;
+			if(!args[0]->castToReferencePtr(GetSingleton(), (void**)&self))
+			{
+				return ::pafcore::e_invalid_this_type;
+			}
+			::size_t a0;
+			if(!args[1]->castToPrimitive(RuntimeTypeOf<::size_t>::RuntimeType::GetSingleton(), &a0))
+			{
+				return ::pafcore::e_invalid_arg_type_1;
+			}
+			const char* res = self->_getAttributeContent_(a0);
+			result->assignPrimitivePtr(RuntimeTypeOf<char>::RuntimeType::GetSingleton(), res, true, ::pafcore::Variant::by_ptr);
+			return ::pafcore::s_ok;
+		}
+		return ::pafcore::e_invalid_arg_num;
+	}
+
+	::pafcore::ErrorCode __pafcore__Metadata_Type::Metadata__getAttributeName_(::pafcore::Variant* result, ::pafcore::Variant** args, int_t numArgs)
+	{
+		if(2 == numArgs)
+		{
+			if(args[0]->isConstant())
+			{
+				return ::pafcore::e_this_is_constant;
+			}
+			::pafcore::Metadata* self;
+			if(!args[0]->castToReferencePtr(GetSingleton(), (void**)&self))
+			{
+				return ::pafcore::e_invalid_this_type;
+			}
+			::size_t a0;
+			if(!args[1]->castToPrimitive(RuntimeTypeOf<::size_t>::RuntimeType::GetSingleton(), &a0))
+			{
+				return ::pafcore::e_invalid_arg_type_1;
+			}
+			const char* res = self->_getAttributeName_(a0);
+			result->assignPrimitivePtr(RuntimeTypeOf<char>::RuntimeType::GetSingleton(), res, true, ::pafcore::Variant::by_ptr);
+			return ::pafcore::s_ok;
+		}
+		return ::pafcore::e_invalid_arg_num;
 	}
 
 	__pafcore__Metadata_Type* __pafcore__Metadata_Type::GetSingleton()

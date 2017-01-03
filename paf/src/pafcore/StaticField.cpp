@@ -5,8 +5,8 @@
 
 BEGIN_PAFCORE
 
-StaticField::StaticField(const char* name, Type* type, size_t offset, size_t arraySize, bool constant, TypeCompound tc)
-: Metadata(name)
+StaticField::StaticField(const char* name, Attributes* attributes, Type* type, size_t offset, size_t arraySize, bool constant, TypeCompound tc)
+: Metadata(name, attributes)
 {
 	m_type = type;
 	m_address = offset;

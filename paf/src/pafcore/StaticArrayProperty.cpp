@@ -5,11 +5,11 @@
 
 BEGIN_PAFCORE
 
-StaticArrayProperty::StaticArrayProperty(const char* name,
+StaticArrayProperty::StaticArrayProperty(const char* name, Attributes* attributes,
 	StaticArrayPropertyGetter getter, Type* getterType, Passing getterPassing, bool getterConstant,
 	StaticArrayPropertySetter setter, Type* setterType, Passing setterPassing, bool setterConstant,
 	StaticArrayPropertySizer sizer, StaticArrayPropertyResizer resizer)
-: Metadata(name)
+: Metadata(name, attributes)
 {
 	m_getter = getter;
 	m_setter = setter;

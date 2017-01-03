@@ -138,6 +138,8 @@ enum SyntaxNodeType
 	snt_namespace,
 	snt_member_list,
 	snt_token_list,
+	snt_attribute,
+	snt_attribute_list,
 };
 
 enum PropertyArrayCategory
@@ -146,6 +148,7 @@ enum PropertyArrayCategory
 	fixed_array,
 	dynamic_array
 };
+typedef enum PropertyArrayCategory PropertyArrayCategory;
 
 void newCodeBlock(const char* str);
 SyntaxNode* newToken(int nodeType);
@@ -153,6 +156,10 @@ SyntaxNode* newIdentify(const char* str);
 SyntaxNode* newString(const char* str);
 
 SyntaxNode* newPrimitiveType(SyntaxNode* keyword, PredefinedType type);
+
+SyntaxNode* newAttribute(SyntaxNode* name, SyntaxNode* content);
+SyntaxNode* newAttributeList(SyntaxNode* attributeList, SyntaxNode* attribute);
+void setAttributeList(SyntaxNode* member, SyntaxNode* attributeList);
 
 SyntaxNode* newScopeName(SyntaxNode* identify, SyntaxNode* lts, SyntaxNode* parameterList, SyntaxNode* gts);
 SyntaxNode* newScopeNameList(SyntaxNode* scopeNameList, SyntaxNode* scopeName);
@@ -170,11 +177,10 @@ void setFieldSemicolon(SyntaxNode* syntaxNode, SyntaxNode* semicolon);
 SyntaxNode* newGetterSetter(SyntaxNode* keyword, SyntaxNode* constant, SyntaxNode* type, SyntaxNode* passing);
 void setGetterSetterNativeName(SyntaxNode* syntaxNode, SyntaxNode* nativeName);
 
-SyntaxNode* newProperty(SyntaxNode* constant, SyntaxNode* type, SyntaxNode* passing, SyntaxNode* name);
+SyntaxNode* newProperty(SyntaxNode* name, PropertyArrayCategory category);
+void setPropertyType(SyntaxNode* property, SyntaxNode* constant, SyntaxNode* type, SyntaxNode* passing);
 void setPropertyGetter(SyntaxNode* property, SyntaxNode* getter);
 void setPropertySetter(SyntaxNode* property, SyntaxNode* setter);
-void setPropertyArray(SyntaxNode* property);
-void setPropertyDynamicArray(SyntaxNode* property);
 void setPropertyModifier(SyntaxNode* syntaxNode, SyntaxNode* modifier);
 
 SyntaxNode* newParameter(SyntaxNode* type, SyntaxNode* out, SyntaxNode* passing, SyntaxNode* name);

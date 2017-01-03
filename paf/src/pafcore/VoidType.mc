@@ -43,7 +43,7 @@ namespace idlcpp
 		m_classTypeIterators = s_classTypeIterators;
 		static ::pafcore::StaticProperty s_staticProperties[] = 
 		{
-			::pafcore::StaticProperty("NullPtr", VoidType_get_NullPtr, RuntimeTypeOf<void>::RuntimeType::GetSingleton(), ::pafcore::Metadata::by_ptr, false, 0, 0, ::pafcore::Metadata::by_value, false),
+			::pafcore::StaticProperty("NullPtr", 0, VoidType_get_NullPtr, RuntimeTypeOf<void>::RuntimeType::GetSingleton(), ::pafcore::Metadata::by_ptr, false, 0, 0, ::pafcore::Metadata::by_value, false),
 		};
 		m_staticProperties = s_staticProperties;
 		m_staticPropertyCount = paf_array_size_of(s_staticProperties);
@@ -58,7 +58,7 @@ namespace idlcpp
 		};
 		static ::pafcore::StaticMethod s_staticMethods[] = 
 		{
-			::pafcore::StaticMethod("AddressToPtr", VoidType_AddressToPtr, s_AddressToPtr_Overloads, 1),
+			::pafcore::StaticMethod("AddressToPtr", 0, VoidType_AddressToPtr, s_AddressToPtr_Overloads, 1),
 		};
 		m_staticMethods = s_staticMethods;
 		m_staticMethodCount = paf_array_size_of(s_staticMethods);

@@ -154,6 +154,8 @@ void MethodNode::checkTypeNames(TypeNode* enclosingTypeNode, TemplateArguments* 
 
 void MethodNode::checkSemantic(TemplateArguments* templateArguments)
 {
+	MemberNode::checkSemantic(templateArguments);
+
 	assert(snt_class == m_enclosing->m_nodeType);
 	ClassNode* classNode = static_cast<ClassNode*>(m_enclosing);
 	if(0 != m_resultTypeName)

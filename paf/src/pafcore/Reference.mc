@@ -30,7 +30,7 @@ namespace idlcpp
 		m_size = sizeof(::pafcore::Reference);
 		static ::pafcore::InstanceProperty s_properties[] = 
 		{
-			::pafcore::InstanceProperty("refCount", GetSingleton(), Reference_get_refCount, RuntimeTypeOf<::long_t>::RuntimeType::GetSingleton(), ::pafcore::Metadata::by_value, false, 0, 0, ::pafcore::Metadata::by_value, false),
+			::pafcore::InstanceProperty("refCount", 0, GetSingleton(), Reference_get_refCount, RuntimeTypeOf<::long_t>::RuntimeType::GetSingleton(), ::pafcore::Metadata::by_value, false, 0, 0, ::pafcore::Metadata::by_value, false),
 		};
 		m_properties = s_properties;
 		m_propertyCount = paf_array_size_of(s_properties);

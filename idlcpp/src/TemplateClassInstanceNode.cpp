@@ -108,6 +108,8 @@ void TemplateClassInstanceNode::collectTypes(TypeNode* enclosingTypeNode, Templa
 
 void TemplateClassInstanceNode::checkSemantic(TemplateArguments* templateArguments)
 {
+	MemberNode::checkSemantic(templateArguments);
+
 	assert(0 == templateArguments);
 	assert(m_typeNode && m_classTypeNode);
 	ClassNode* classNode = static_cast<ClassNode*>(m_classTypeNode->m_classNode);

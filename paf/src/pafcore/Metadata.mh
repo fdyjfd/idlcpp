@@ -30,9 +30,13 @@ namespace idlcpp
 		virtual void destroyArray(void* address);
 		virtual void assign(void* dst, const void* src);
 	public:
+		static ::pafcore::ErrorCode Metadata_get__attributeCount_(::pafcore::Variant* that, ::pafcore::Variant* value);
 		static ::pafcore::ErrorCode Metadata_get__category_(::pafcore::Variant* that, ::pafcore::Variant* value);
 		static ::pafcore::ErrorCode Metadata_get__name_(::pafcore::Variant* that, ::pafcore::Variant* value);
-		static ::pafcore::ErrorCode Metadata_get__scope_(::pafcore::Variant* that, ::pafcore::Variant* value);
+	public:
+		static ::pafcore::ErrorCode Metadata__getAttributeContentByName_(::pafcore::Variant* result, ::pafcore::Variant** args, int numArgs);
+		static ::pafcore::ErrorCode Metadata__getAttributeContent_(::pafcore::Variant* result, ::pafcore::Variant** args, int numArgs);
+		static ::pafcore::ErrorCode Metadata__getAttributeName_(::pafcore::Variant* result, ::pafcore::Variant** args, int numArgs);
 	public:
 		PAFCORE_EXPORT static __pafcore__Metadata_Type* GetSingleton();
 	};

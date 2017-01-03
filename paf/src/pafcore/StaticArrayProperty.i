@@ -4,6 +4,7 @@ namespace pafcore
 {
 
 #{
+	struct Attributes;
 	class Variant;
 	typedef ErrorCode(*StaticArrayPropertyGetter)(size_t index, Variant* value);
 	typedef ErrorCode(*StaticArrayPropertySetter)(size_t index, Variant* value);
@@ -32,7 +33,7 @@ namespace pafcore
 
 #{
 	public:
-		StaticArrayProperty(const char* name, 
+		StaticArrayProperty(const char* name, Attributes* attributes,
 			StaticArrayPropertyGetter getter, Type* getterType, Passing getterPassing, bool getterConstant,
 			StaticArrayPropertySetter setter, Type* setterType, Passing setterPassing, bool setterConstant,
 			StaticArrayPropertySizer sizer, StaticArrayPropertyResizer resizer);

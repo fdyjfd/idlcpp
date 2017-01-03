@@ -5,11 +5,12 @@
 
 BEGIN_PAFCORE
 
-StaticProperty::StaticProperty(const char* name, 
+StaticProperty::StaticProperty(const char* name, Attributes* attributes,
 	StaticPropertyGetter getter, Type* getterType, Passing getterPassing, bool getterConstant, 
 	StaticPropertySetter setter, Type* setterType, Passing setterPassing, bool setterConstant)
-: Metadata(name)
+: Metadata(name, attributes)
 {
+
 	m_getter = getter;
 	m_setter = setter;
 	m_getterType = getterType;

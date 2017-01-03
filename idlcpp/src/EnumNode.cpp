@@ -44,6 +44,8 @@ void EnumNode::collectTypes(TypeNode* enclosingTypeNode, TemplateArguments* temp
 
 void EnumNode::checkSemantic(TemplateArguments* templateArguments)
 {
+	MemberNode::checkSemantic(templateArguments);
+
 	std::vector<IdentifyNode*> identifyNodes;
 	m_identityList->collectIdentifyNodes(identifyNodes);
 	size_t count = identifyNodes.size();

@@ -7,6 +7,18 @@
 
 namespace pafcore
 {
+
+	struct Attribute
+	{
+		const char* name;
+		const char* content;
+	};
+	struct Attributes
+	{
+		size_t count;
+		Attribute* attributes;
+	};
+
 	enum Category
 	{
 		void_object,
@@ -43,7 +55,10 @@ namespace pafcore
 
 		const char* get__name_() const;
 		Category get__category_() const;
-		Metadata* get__scope_();
+		size_t get__attributeCount_() const;
+		const char* _getAttributeName_(size_t index);
+		const char* _getAttributeContent_(size_t index);
+		const char* _getAttributeContentByName_(const char* attributeName);
 
 	public:
 		enum Passing
@@ -67,24 +82,24 @@ namespace pafcore
 			tc_array,
 		};
 	public:
-		Metadata(const char* name);
+		Metadata(const char* name, Attributes* attributes = 0);
 		bool operator < (const Metadata& arg) const;
 	public:
 		const char* m_name;
-		Metadata* m_scope;
+		Attributes* m_attributes;
 
 	};
 
 
 
+	inline size_t Metadata::get__attributeCount_() const
+	{
+		return m_attributes ? m_attributes->count : 0;
+	}
+
 	inline const char* Metadata::get__name_() const
 	{
 		return m_name;
-	}
-
-	inline Metadata* Metadata::get__scope_()
-	{
-		return m_scope;
 	}
 
 	class CompareMetaDataPtrByName

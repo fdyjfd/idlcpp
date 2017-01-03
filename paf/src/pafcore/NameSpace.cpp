@@ -197,7 +197,6 @@ NameSpace* NameSpace::getNameSpace(const char* name)
 		if(0 == member)
 		{
 			subNameSpace = paf_new NameSpace(name);
-			subNameSpace->m_scope = this;
 			m_members.insert(subNameSpace);
 		}
 		else
@@ -217,7 +216,6 @@ ErrorCode NameSpace::registerMember(Metadata* member)
 	{
 		return e_invalid_namespace;
 	}
-	member->m_scope = this;
 	return m_members.insert(member) ? s_ok : e_name_conflict;
 }
 

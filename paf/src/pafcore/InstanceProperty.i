@@ -4,6 +4,7 @@ namespace pafcore
 {
 
 #{
+	struct Attributes;
 	class Variant;
 	typedef ErrorCode(*InstancePropertyGetter)(Variant* that, Variant* value);
 	typedef ErrorCode(*InstancePropertySetter)(Variant* that, Variant* value);
@@ -29,7 +30,7 @@ namespace pafcore
 
 #{
 	public:
-		InstanceProperty(const char* name, ClassType* objectType, 
+		InstanceProperty(const char* name, Attributes* attributes, ClassType* objectType,
 			InstancePropertyGetter getter, Type* getterType, Passing getterPassing, bool getterConstant,
 			InstancePropertySetter setter, Type* setterType, Passing setterPassing, bool setterConstant);
 	public:

@@ -72,9 +72,9 @@ namespace idlcpp
 		};
 		static ::pafcore::InstanceMethod s_methods[] = 
 		{
-			::pafcore::InstanceMethod("_findMember_", NameSpace__findMember_, s__findMember__Overloads, 1),
-			::pafcore::InstanceMethod("_getMemberCount_", NameSpace__getMemberCount_, s__getMemberCount__Overloads, 1),
-			::pafcore::InstanceMethod("_getMember_", NameSpace__getMember_, s__getMember__Overloads, 1),
+			::pafcore::InstanceMethod("_findMember_", 0, NameSpace__findMember_, s__findMember__Overloads, 1),
+			::pafcore::InstanceMethod("_getMemberCount_", 0, NameSpace__getMemberCount_, s__getMemberCount__Overloads, 1),
+			::pafcore::InstanceMethod("_getMember_", 0, NameSpace__getMember_, s__getMember__Overloads, 1),
 		};
 		m_methods = s_methods;
 		m_methodCount = paf_array_size_of(s_methods);

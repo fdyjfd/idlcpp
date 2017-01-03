@@ -9,6 +9,10 @@ namespace pafcore{ class Type; }
 namespace pafcore
 {
 
+
+	struct Attributes;
+
+
 	class PAFCORE_EXPORT StaticField : public Metadata
 	{
 	public:
@@ -23,7 +27,7 @@ namespace pafcore
 		bool get_isPointer() const;
 
 	public:
-		StaticField(const char* name, Type* type, size_t address, size_t arraySize, bool constant, TypeCompound tc);
+		StaticField(const char* name, Attributes* attributes, Type* type, size_t address, size_t arraySize, bool constant, TypeCompound tc);
 	public:
 		bool isArray()
 		{

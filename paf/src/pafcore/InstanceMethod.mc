@@ -45,7 +45,7 @@ namespace idlcpp
 		m_classTypeIterators = s_classTypeIterators;
 		static ::pafcore::InstanceProperty s_properties[] = 
 		{
-			::pafcore::InstanceProperty("overloadCount", GetSingleton(), InstanceMethod_get_overloadCount, RuntimeTypeOf<::size_t>::RuntimeType::GetSingleton(), ::pafcore::Metadata::by_value, false, 0, 0, ::pafcore::Metadata::by_value, false),
+			::pafcore::InstanceProperty("overloadCount", 0, GetSingleton(), InstanceMethod_get_overloadCount, RuntimeTypeOf<::size_t>::RuntimeType::GetSingleton(), ::pafcore::Metadata::by_value, false, 0, 0, ::pafcore::Metadata::by_value, false),
 		};
 		m_properties = s_properties;
 		m_propertyCount = paf_array_size_of(s_properties);
@@ -82,9 +82,9 @@ namespace idlcpp
 		};
 		static ::pafcore::InstanceMethod s_methods[] = 
 		{
-			::pafcore::InstanceMethod("getArgument", InstanceMethod_getArgument, s_getArgument_Overloads, 1),
-			::pafcore::InstanceMethod("getArgumentCount", InstanceMethod_getArgumentCount, s_getArgumentCount_Overloads, 1),
-			::pafcore::InstanceMethod("getResult", InstanceMethod_getResult, s_getResult_Overloads, 1),
+			::pafcore::InstanceMethod("getArgument", 0, InstanceMethod_getArgument, s_getArgument_Overloads, 1),
+			::pafcore::InstanceMethod("getArgumentCount", 0, InstanceMethod_getArgumentCount, s_getArgumentCount_Overloads, 1),
+			::pafcore::InstanceMethod("getResult", 0, InstanceMethod_getResult, s_getResult_Overloads, 1),
 		};
 		m_methods = s_methods;
 		m_methodCount = paf_array_size_of(s_methods);

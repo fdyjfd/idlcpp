@@ -19,7 +19,9 @@
 %type <sn> primitive scopeName scopeNameList_0 scopeNameList typeName typeNameList identityList classMemberList tokenList
 %type <sn> templateParameterList templateParameters templateClassInstance_0 templateClassInstance
 %type <sn> typeAlias enum_0 enum 
-%type <sn> class_0 class_1 class_2 class_3 class_4 class_5 class namespaceMember namespaceMemberList namespace program
+%type <sn> class_0 class_1 class_2 class_3 class_4 class_5 class namespaceMember_0 namespaceMember namespaceMemberList namespace program
+%type <sn> attribute attributeList attributes
+
 %start program
 
 %%
@@ -56,6 +58,18 @@ primitive				: BOOL												{$$ = newPrimitiveType($1, pt_bool);}
 						| DOUBLE											{$$ = newPrimitiveType($1, pt_double);}
 						| LONG DOUBLE										{$$ = newPrimitiveType($1, pt_long_double);}
 						| VOID												{$$ = newPrimitiveType($1, pt_void);}
+;
+
+attribute				: IDENTIFY '=' STRING								{$$ = newAttribute($1, $3);}
+;
+
+attributeList			: attribute											{$$ = newAttributeList(NULL, $1);}
+						| attributeList ',' attribute						{$$ = newAttributeList($1, $3);}
+;
+
+attributes				: '[' attributeList ']'								{$$ = $2;}
+						| '[' attributeList ',' ']'							{$$ = $2;}
+						| '[' ']'											{$$ = NULL;}
 ;
 
 identityList			: IDENTIFY											{$$ = newIdentityList(NULL, NULL, $1);}
@@ -145,22 +159,22 @@ setter					: setter_0											{$$ = $1;}
 						| setter_0 '=' STRING								{$$ = $1; setGetterSetterNativeName($$, $3);}
 ;
 
-property_0				: typeName IDENTIFY									{$$ = newProperty(NULL, $1, NULL, $2);}
-						| typeName '*' IDENTIFY								{$$ = newProperty(NULL, $1, $2, $3);}
-						| typeName '&' IDENTIFY 							{$$ = newProperty(NULL, $1, $2, $3);}
-						| CONST typeName '*' IDENTIFY						{$$ = newProperty($1, $2, $3, $4);}
-						| CONST typeName '&' IDENTIFY						{$$ = newProperty($1, $2, $3, $4);}
+property_0				: IDENTIFY											{$$ = newProperty($1, not_array);}
+						| IDENTIFY '[' ']'									{$$ = newProperty($1, fixed_array);}
+						| IDENTIFY '{' '}'									{$$ = newProperty($1, dynamic_array);}
 ;
 
-property_1				: property_0										{$$ = $1;}
-						| property_0 '[' ']'								{$$ = $1; setPropertyArray($1);}
-						| property_0 '{' '}'								{$$ = $1; setPropertyDynamicArray($1);}
+property_1				: typeName property_0								{$$ = $2; setPropertyType($$, NULL, $1, NULL);}
+						| typeName '*' property_0							{$$ = $3; setPropertyType($$, NULL, $1, $2);}
+						| typeName '&' property_0 							{$$ = $3; setPropertyType($$, NULL, $1, $2);}
+						| CONST typeName '*' property_0						{$$ = $4; setPropertyType($$, $1, $2, $3);}
+						| CONST typeName '&' property_0						{$$ = $4; setPropertyType($$, $1, $2, $3);}
 ;
 
-property_2				: property_1 getter ';'								{$$ = $1; setPropertyGetter($1, $2);}
-						| property_1 setter ';'								{$$ = $1; setPropertySetter($1, $2);}
-						| property_1 getter setter ';'						{$$ = $1; setPropertyGetter($1, $2); setPropertySetter($1, $3);}
-						| property_1 setter getter ';'						{$$ = $1; setPropertyGetter($1, $3); setPropertySetter($1, $2);}
+property_2				: property_1 getter ';'								{$$ = $1; setPropertyGetter($$, $2);}
+						| property_1 setter ';'								{$$ = $1; setPropertySetter($$, $2);}
+						| property_1 getter setter ';'						{$$ = $1; setPropertyGetter($$, $2); setPropertySetter($1, $3);}
+						| property_1 setter getter ';'						{$$ = $1; setPropertyGetter($$, $3); setPropertySetter($1, $2);}
 ;
 
 property				: property_2										{$$ = $1;}
@@ -294,11 +308,12 @@ classMember_0			: field													{$$ = $1;}
 						| class													{$$ = $1;}
 						| enum													{$$ = $1;}
 						| typeAlias												{$$ = $1;}
+						| NOCODE classMember_0									{$$ = $2; setFilter($$, $1);}
+						| NOMETA classMember_0									{$$ = $2; setFilter($$, $1);}
 ;
 			
 classMember				: classMember_0											{$$ = $1;}
-						| NOCODE classMember_0									{$$ = $2; setFilter($$, $1);}
-						| NOMETA classMember_0									{$$ = $2; setFilter($$, $1);}
+						| attributes classMember_0								{$$ = $2; setAttributeList($$, $1);}
 ;
 
 classMemberList			: classMember											{$$ = newClassMemberList(NULL, $1);}
@@ -360,13 +375,17 @@ templateClassInstance	: templateClassInstance_0 ';'							{$$ = $1;}
 						| templateClassInstance_0 '{' tokenList ',' '}' ';'		{$$ = $1; setTemplateClassInstanceTokenList($1, $3);}
 ;
 
-namespaceMember			: class													{$$ = $1;}
+namespaceMember_0		: class													{$$ = $1;}
 						| enum													{$$ = $1;}
 						| templateClassInstance									{$$ = $1;}
 						| typeAlias												{$$ = $1;}
 						| namespace												{$$ = $1;}
-						| NOCODE namespaceMember								{$$ = $2; setFilter($$, $1);}
-						| NOMETA namespaceMember								{$$ = $2; setFilter($$, $1);}
+						| NOCODE namespaceMember_0								{$$ = $2; setFilter($$, $1);}
+						| NOMETA namespaceMember_0								{$$ = $2; setFilter($$, $1);}
+;
+
+namespaceMember			: namespaceMember_0										{$$ = $1;}
+						| attributes namespaceMember_0							{$$ = $2; setAttributeList($$, $1);}
 ;
 
 namespaceMemberList		: namespaceMember										{$$ = newNamespaceMemberList(NULL, $1);}

@@ -51,8 +51,8 @@ namespace idlcpp
 		};
 		static ::pafcore::InstanceMethod s_methods[] = 
 		{
-			::pafcore::InstanceMethod("deref", ClassTypeIterator_deref, s_deref_Overloads, 1),
-			::pafcore::InstanceMethod("next", ClassTypeIterator_next, s_next_Overloads, 1),
+			::pafcore::InstanceMethod("deref", 0, ClassTypeIterator_deref, s_deref_Overloads, 1),
+			::pafcore::InstanceMethod("next", 0, ClassTypeIterator_next, s_next_Overloads, 1),
 		};
 		m_methods = s_methods;
 		m_methodCount = paf_array_size_of(s_methods);
@@ -150,7 +150,7 @@ namespace idlcpp
 		m_classTypeIterators = s_classTypeIterators;
 		static ::pafcore::InstanceArrayProperty s_arrayProperties[] = 
 		{
-			::pafcore::InstanceArrayProperty("_instanceArrayProperties_", GetSingleton(), ClassType_get__instanceArrayProperties_, RuntimeTypeOf<::pafcore::InstanceArrayProperty>::RuntimeType::GetSingleton(), ::pafcore::Metadata::by_ptr, false, 0, 0, ::pafcore::Metadata::by_value, false, ClassType_size__instanceArrayProperties_, 0),
+			::pafcore::InstanceArrayProperty("_instanceArrayProperties_", 0, GetSingleton(), ClassType_get__instanceArrayProperties_, RuntimeTypeOf<::pafcore::InstanceArrayProperty>::RuntimeType::GetSingleton(), ::pafcore::Metadata::by_ptr, false, 0, 0, ::pafcore::Metadata::by_value, false, ClassType_size__instanceArrayProperties_, 0),
 		};
 		m_arrayProperties = s_arrayProperties;
 		m_arrayPropertyCount = paf_array_size_of(s_arrayProperties);
@@ -237,14 +237,14 @@ namespace idlcpp
 		};
 		static ::pafcore::InstanceMethod s_methods[] = 
 		{
-			::pafcore::InstanceMethod("_findMember_", ClassType__findMember_, s__findMember__Overloads, 1),
-			::pafcore::InstanceMethod("_getBaseClassCount_", ClassType__getBaseClassCount_, s__getBaseClassCount__Overloads, 1),
-			::pafcore::InstanceMethod("_getBaseClass_", ClassType__getBaseClass_, s__getBaseClass__Overloads, 1),
-			::pafcore::InstanceMethod("_getFirstDerivedClass_", ClassType__getFirstDerivedClass_, s__getFirstDerivedClass__Overloads, 1),
-			::pafcore::InstanceMethod("_getInstanceArrayPropertyCount_", ClassType__getInstanceArrayPropertyCount_, s__getInstanceArrayPropertyCount__Overloads, 1),
-			::pafcore::InstanceMethod("_getInstanceArrayProperty_", ClassType__getInstanceArrayProperty_, s__getInstanceArrayProperty__Overloads, 1),
-			::pafcore::InstanceMethod("_getMemberCount_", ClassType__getMemberCount_, s__getMemberCount__Overloads, 1),
-			::pafcore::InstanceMethod("_getMember_", ClassType__getMember_, s__getMember__Overloads, 1),
+			::pafcore::InstanceMethod("_findMember_", 0, ClassType__findMember_, s__findMember__Overloads, 1),
+			::pafcore::InstanceMethod("_getBaseClassCount_", 0, ClassType__getBaseClassCount_, s__getBaseClassCount__Overloads, 1),
+			::pafcore::InstanceMethod("_getBaseClass_", 0, ClassType__getBaseClass_, s__getBaseClass__Overloads, 1),
+			::pafcore::InstanceMethod("_getFirstDerivedClass_", 0, ClassType__getFirstDerivedClass_, s__getFirstDerivedClass__Overloads, 1),
+			::pafcore::InstanceMethod("_getInstanceArrayPropertyCount_", 0, ClassType__getInstanceArrayPropertyCount_, s__getInstanceArrayPropertyCount__Overloads, 1),
+			::pafcore::InstanceMethod("_getInstanceArrayProperty_", 0, ClassType__getInstanceArrayProperty_, s__getInstanceArrayProperty__Overloads, 1),
+			::pafcore::InstanceMethod("_getMemberCount_", 0, ClassType__getMemberCount_, s__getMemberCount__Overloads, 1),
+			::pafcore::InstanceMethod("_getMember_", 0, ClassType__getMember_, s__getMember__Overloads, 1),
 		};
 		m_methods = s_methods;
 		m_methodCount = paf_array_size_of(s_methods);

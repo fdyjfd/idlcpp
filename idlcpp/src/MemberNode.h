@@ -14,6 +14,7 @@ struct NamespaceNode;
 struct TypeNameNode;
 struct TypeNode;
 struct TemplateArguments;
+struct AttributeListNode;
 enum TypeCategory;
 class SourceFile;
 
@@ -28,6 +29,7 @@ enum TypeTreeFilter
 
 struct MemberNode : SyntaxNodeImpl
 {
+	AttributeListNode* m_attributeList;
 	IdentifyNode* m_name;
 	ScopeNode* m_enclosing;
 	TokenNode* m_filterNode;

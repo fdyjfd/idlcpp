@@ -5,6 +5,11 @@
 
 namespace pafcore
 {
+
+#{
+	struct Attributes;
+#}
+
 	abstract class(instance_method)#PAFCORE_EXPORT InstanceMethod : Metadata
 	{
 		size_t overloadCount get;
@@ -13,7 +18,7 @@ namespace pafcore
 		Argument* getArgument(size_t overloadIndex, size_t index);
 #{
 	public:
-		InstanceMethod(const char* name, FunctionInvoker invoker, Overload* overloads, size_t overloadCount);
+		InstanceMethod(const char* name, Attributes* attributes, FunctionInvoker invoker, Overload* overloads, size_t overloadCount);
 	public:
 		FunctionInvoker m_invoker;
 		Overload* m_overloads;

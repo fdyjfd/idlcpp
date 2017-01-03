@@ -145,6 +145,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\src\AttributeListNode.cpp" />
+    <ClCompile Include="..\..\src\AttributeNode.cpp" />
     <ClCompile Include="..\..\src\ClassNode.cpp" />
     <ClCompile Include="..\..\src\CommonFuncs.cpp" />
     <ClCompile Include="..\..\src\Compiler.cpp" />
@@ -193,6 +195,8 @@
     <ClCompile Include="..\..\src\yyfuncs.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\src\AttributeListNode.h" />
+    <ClInclude Include="..\..\src\AttributeNode.h" />
     <ClInclude Include="..\..\src\ClassNode.h" />
     <ClInclude Include="..\..\src\CommonFuncs.h" />
     <ClInclude Include="..\..\src\Compiler.h" />

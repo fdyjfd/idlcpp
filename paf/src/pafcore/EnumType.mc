@@ -44,7 +44,7 @@ namespace idlcpp
 		m_classTypeIterators = s_classTypeIterators;
 		static ::pafcore::InstanceArrayProperty s_arrayProperties[] = 
 		{
-			::pafcore::InstanceArrayProperty("_enumerators_", GetSingleton(), EnumType_get__enumerators_, RuntimeTypeOf<::pafcore::Enumerator>::RuntimeType::GetSingleton(), ::pafcore::Metadata::by_ptr, false, 0, 0, ::pafcore::Metadata::by_value, false, EnumType_size__enumerators_, 0),
+			::pafcore::InstanceArrayProperty("_enumerators_", 0, GetSingleton(), EnumType_get__enumerators_, RuntimeTypeOf<::pafcore::Enumerator>::RuntimeType::GetSingleton(), ::pafcore::Metadata::by_ptr, false, 0, 0, ::pafcore::Metadata::by_value, false, EnumType_size__enumerators_, 0),
 		};
 		m_arrayProperties = s_arrayProperties;
 		m_arrayPropertyCount = paf_array_size_of(s_arrayProperties);
@@ -89,10 +89,10 @@ namespace idlcpp
 		};
 		static ::pafcore::InstanceMethod s_methods[] = 
 		{
-			::pafcore::InstanceMethod("_getEnumeratorByName_", EnumType__getEnumeratorByName_, s__getEnumeratorByName__Overloads, 1),
-			::pafcore::InstanceMethod("_getEnumeratorByValue_", EnumType__getEnumeratorByValue_, s__getEnumeratorByValue__Overloads, 1),
-			::pafcore::InstanceMethod("_getEnumeratorCount_", EnumType__getEnumeratorCount_, s__getEnumeratorCount__Overloads, 1),
-			::pafcore::InstanceMethod("_getEnumerator_", EnumType__getEnumerator_, s__getEnumerator__Overloads, 1),
+			::pafcore::InstanceMethod("_getEnumeratorByName_", 0, EnumType__getEnumeratorByName_, s__getEnumeratorByName__Overloads, 1),
+			::pafcore::InstanceMethod("_getEnumeratorByValue_", 0, EnumType__getEnumeratorByValue_, s__getEnumeratorByValue__Overloads, 1),
+			::pafcore::InstanceMethod("_getEnumeratorCount_", 0, EnumType__getEnumeratorCount_, s__getEnumeratorCount__Overloads, 1),
+			::pafcore::InstanceMethod("_getEnumerator_", 0, EnumType__getEnumerator_, s__getEnumerator__Overloads, 1),
 		};
 		m_methods = s_methods;
 		m_methodCount = paf_array_size_of(s_methods);

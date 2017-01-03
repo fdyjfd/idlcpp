@@ -5,8 +5,8 @@
 
 BEGIN_PAFCORE
 
-InstanceField::InstanceField(const char* name, ClassType* objectType, Type* type, size_t offset, size_t arraySize, bool constant, TypeCompound tc)
-: Metadata(name)
+InstanceField::InstanceField(const char* name, Attributes* attributes, ClassType* objectType, Type* type, size_t offset, size_t arraySize, bool constant, TypeCompound tc)
+: Metadata(name, attributes)
 {
 	m_objectType = objectType;
 	m_type = type;

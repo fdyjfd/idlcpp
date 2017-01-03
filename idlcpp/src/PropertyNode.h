@@ -15,7 +15,7 @@ struct PropertyNode : MemberNode
 	GetterSetterNode* m_set;
 	PropertyArrayCategory m_arrayCategory;
 public:
-	PropertyNode(TokenNode* constant, TypeNameNode* typeName, TokenNode* passing, IdentifyNode* name);
+	PropertyNode(IdentifyNode* name, PropertyArrayCategory category);
 	bool isStatic();
 	bool isVirtual();
 	bool isAbstract();

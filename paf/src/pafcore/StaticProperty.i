@@ -5,6 +5,7 @@ namespace pafcore
 {
 
 #{
+	struct Attributes;
 	class Variant;
 	typedef ErrorCode(*StaticPropertyGetter)(Variant* value);
 	typedef ErrorCode(*StaticPropertySetter)(Variant* value);
@@ -28,7 +29,7 @@ namespace pafcore
 		bool setterConstant get;
 #{
 	public:
-		StaticProperty(const char* name, 
+		StaticProperty(const char* name, Attributes* attributes,
 			StaticPropertyGetter getter, Type* getterType, Passing getterPassing, bool getterConstant,
 			StaticPropertySetter setter, Type* setterType, Passing setterPassing, bool setterConstant);
 	public:

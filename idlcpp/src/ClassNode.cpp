@@ -718,6 +718,8 @@ void ClassNode::checkTypeNames(TypeNode* enclosingTypeNode, TemplateArguments* t
 
 void ClassNode::checkSemantic(TemplateArguments* templateArguments)
 {
+	MemberNode::checkSemantic(templateArguments);
+
 	if (m_templateParametersNode)
 	{
 		if (0 == templateArguments)
