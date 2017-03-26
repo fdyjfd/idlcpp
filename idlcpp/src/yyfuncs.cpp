@@ -98,7 +98,7 @@ SyntaxNode* newAttribute(SyntaxNode* name, SyntaxNode* content)
 
 SyntaxNode* newAttributeList(SyntaxNode* attributeList, SyntaxNode* attribute)
 {
-	assert(0 == attributeList || snt_attribute_list == name->m_nodeType);
+	assert(0 == attributeList || snt_attribute_list == attributeList->m_nodeType);
 	assert(0 != attribute && snt_attribute == attribute->m_nodeType);
 	AttributeListNode* res = new AttributeListNode((AttributeListNode*)attributeList, (AttributeNode*)attribute);
 	g_syntaxNodes.push_back(res);
@@ -125,7 +125,7 @@ void setAttributeList(SyntaxNode* member, SyntaxNode* attributeList)
 
 SyntaxNode* newEnumerator(SyntaxNode* attributeList, SyntaxNode* identify)
 {
-	assert(0 == attributeList || == snt_attribute_list == attributeList->m_nodeType);
+	assert(0 == attributeList || snt_attribute_list == attributeList->m_nodeType);
 	assert(snt_identify == identify->m_nodeType);
 	EnumeratorNode* res = new EnumeratorNode((AttributeListNode*)attributeList, (IdentifyNode*)identify);
 	g_syntaxNodes.push_back(res);

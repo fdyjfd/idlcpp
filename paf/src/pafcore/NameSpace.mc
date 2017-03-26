@@ -70,19 +70,19 @@ namespace idlcpp
 		{
 			::pafcore::Overload(&s__getMember__Result_2, s__getMember__Arguments_2, 1),
 		};
-		static ::pafcore::InstanceMethod s_methods[] = 
+		static ::pafcore::InstanceMethod s_instanceMethods[] = 
 		{
 			::pafcore::InstanceMethod("_findMember_", 0, NameSpace__findMember_, s__findMember__Overloads, 1),
 			::pafcore::InstanceMethod("_getMemberCount_", 0, NameSpace__getMemberCount_, s__getMemberCount__Overloads, 1),
 			::pafcore::InstanceMethod("_getMember_", 0, NameSpace__getMember_, s__getMember__Overloads, 1),
 		};
-		m_methods = s_methods;
-		m_methodCount = paf_array_size_of(s_methods);
+		m_instanceMethods = s_instanceMethods;
+		m_instanceMethodCount = paf_array_size_of(s_instanceMethods);
 		static Metadata* s_members[] = 
 		{
-			&s_methods[0],
-			&s_methods[1],
-			&s_methods[2],
+			&s_instanceMethods[0],
+			&s_instanceMethods[1],
+			&s_instanceMethods[2],
 		};
 		m_members = s_members;
 		m_memberCount = paf_array_size_of(s_members);

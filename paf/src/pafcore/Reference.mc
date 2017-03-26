@@ -28,15 +28,15 @@ namespace idlcpp
 	__pafcore__Reference_Type::__pafcore__Reference_Type() : ::pafcore::ClassType("Reference", ::pafcore::reference_object)
 	{
 		m_size = sizeof(::pafcore::Reference);
-		static ::pafcore::InstanceProperty s_properties[] = 
+		static ::pafcore::InstanceProperty s_instanceProperties[] = 
 		{
 			::pafcore::InstanceProperty("refCount", 0, GetSingleton(), Reference_get_refCount, RuntimeTypeOf<::long_t>::RuntimeType::GetSingleton(), ::pafcore::Metadata::by_value, false, 0, 0, ::pafcore::Metadata::by_value, false),
 		};
-		m_properties = s_properties;
-		m_propertyCount = paf_array_size_of(s_properties);
+		m_instanceProperties = s_instanceProperties;
+		m_instancePropertyCount = paf_array_size_of(s_instanceProperties);
 		static Metadata* s_members[] = 
 		{
-			&s_properties[0],
+			&s_instanceProperties[0],
 		};
 		m_members = s_members;
 		m_memberCount = paf_array_size_of(s_members);

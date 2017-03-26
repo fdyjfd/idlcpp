@@ -25,8 +25,6 @@ namespace pafcore
 		Enumerator* _getEnumerator_(size_t index);
 		Enumerator* _getEnumeratorByValue_(int value);
 		Enumerator* _getEnumeratorByName_(const char* name);
-		Enumerator* get__enumerators_(size_t);
-		size_t size__enumerators_() const;
 
 	public:
 		EnumType(const char* name);
@@ -38,8 +36,8 @@ namespace pafcore
 	public:
 		Enumerator* m_enumerators;
 		size_t m_enumeratorCount;
-		InstanceProperty* m_properties;
-		size_t m_propertyCount;
+		InstanceProperty* m_instanceProperties;
+		size_t m_instancePropertyCount;
 
 	};
 }

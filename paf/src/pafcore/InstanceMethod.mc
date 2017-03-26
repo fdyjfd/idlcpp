@@ -43,12 +43,12 @@ namespace idlcpp
 		};
 		RuntimeTypeOf<::pafcore::Metadata>::RuntimeType::GetSingleton()->m_firstDerivedClass = &s_classTypeIterators[0];
 		m_classTypeIterators = s_classTypeIterators;
-		static ::pafcore::InstanceProperty s_properties[] = 
+		static ::pafcore::InstanceProperty s_instanceProperties[] = 
 		{
 			::pafcore::InstanceProperty("overloadCount", 0, GetSingleton(), InstanceMethod_get_overloadCount, RuntimeTypeOf<::size_t>::RuntimeType::GetSingleton(), ::pafcore::Metadata::by_value, false, 0, 0, ::pafcore::Metadata::by_value, false),
 		};
-		m_properties = s_properties;
-		m_propertyCount = paf_array_size_of(s_properties);
+		m_instanceProperties = s_instanceProperties;
+		m_instancePropertyCount = paf_array_size_of(s_instanceProperties);
 		static ::pafcore::Result s_getArgument_Result_0(RuntimeTypeOf<::pafcore::Argument>::RuntimeType::GetSingleton(), false, ::pafcore::Result::by_ptr);
 		static ::pafcore::Argument s_getArgument_Arguments_0[] = 
 		{
@@ -80,20 +80,20 @@ namespace idlcpp
 		{
 			::pafcore::Overload(&s_getResult_Result_2, s_getResult_Arguments_2, 1),
 		};
-		static ::pafcore::InstanceMethod s_methods[] = 
+		static ::pafcore::InstanceMethod s_instanceMethods[] = 
 		{
 			::pafcore::InstanceMethod("getArgument", 0, InstanceMethod_getArgument, s_getArgument_Overloads, 1),
 			::pafcore::InstanceMethod("getArgumentCount", 0, InstanceMethod_getArgumentCount, s_getArgumentCount_Overloads, 1),
 			::pafcore::InstanceMethod("getResult", 0, InstanceMethod_getResult, s_getResult_Overloads, 1),
 		};
-		m_methods = s_methods;
-		m_methodCount = paf_array_size_of(s_methods);
+		m_instanceMethods = s_instanceMethods;
+		m_instanceMethodCount = paf_array_size_of(s_instanceMethods);
 		static Metadata* s_members[] = 
 		{
-			&s_methods[0],
-			&s_methods[1],
-			&s_methods[2],
-			&s_properties[0],
+			&s_instanceMethods[0],
+			&s_instanceMethods[1],
+			&s_instanceMethods[2],
+			&s_instanceProperties[0],
 		};
 		m_members = s_members;
 		m_memberCount = paf_array_size_of(s_members);

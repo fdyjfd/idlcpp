@@ -26,14 +26,14 @@ ClassType::ClassType(const char* name, Category category)
 	m_nestedTypeCount = 0;
 	m_nestedTypeAliases = 0;
 	m_nestedTypeAliasCount = 0;
-	m_fields = 0;
-	m_fieldCount = 0;
-	m_properties = 0;
-	m_propertyCount = 0;
-	m_arrayProperties = 0;
-	m_arrayPropertyCount = 0;
-	m_methods = 0;
-	m_methodCount = 0;
+	m_instanceFields = 0;
+	m_instanceFieldCount = 0;
+	m_instanceProperties = 0;
+	m_instancePropertyCount = 0;
+	m_instanceArrayProperties = 0;
+	m_instanceArrayPropertyCount = 0;
+	m_instanceMethods = 0;
+	m_instanceMethodCount = 0;
 	m_staticFields = 0;
 	m_staticFieldCount = 0;
 	m_staticProperties = 0;
@@ -93,8 +93,8 @@ TypeAlias* ClassType::findNestedTypeAlias(const char* name, bool includeBaseClas
 InstanceField* ClassType::findInstanceField(const char* name, bool includeBaseClasses)
 {
 	Metadata dummy(name);
-	InstanceField* res = std::lower_bound(m_fields, m_fields + m_fieldCount, dummy);
-	if (m_fields + m_fieldCount != res && strcmp(name, res->m_name) == 0)
+	InstanceField* res = std::lower_bound(m_instanceFields, m_instanceFields + m_instanceFieldCount, dummy);
+	if (m_instanceFields + m_instanceFieldCount != res && strcmp(name, res->m_name) == 0)
 	{
 		return res;
 	}
@@ -137,8 +137,8 @@ StaticField* ClassType::findStaticField(const char* name, bool includeBaseClasse
 InstanceProperty* ClassType::findInstanceProperty(const char* name, bool includeBaseClasses)
 {
 	Metadata dummy(name);
-	InstanceProperty* res = std::lower_bound(m_properties, m_properties + m_propertyCount, dummy);
-	if (m_properties + m_propertyCount != res && strcmp(name, res->m_name) == 0)
+	InstanceProperty* res = std::lower_bound(m_instanceProperties, m_instanceProperties + m_instancePropertyCount, dummy);
+	if (m_instanceProperties + m_instancePropertyCount != res && strcmp(name, res->m_name) == 0)
 	{
 		return res;
 	}
@@ -159,8 +159,8 @@ InstanceProperty* ClassType::findInstanceProperty(const char* name, bool include
 InstanceArrayProperty* ClassType::findInstanceArrayProperty(const char* name, bool includeBaseClasses)
 {
 	Metadata dummy(name);
-	InstanceArrayProperty* res = std::lower_bound(m_arrayProperties, m_arrayProperties + m_arrayPropertyCount, dummy);
-	if (m_arrayProperties + m_arrayPropertyCount != res && strcmp(name, res->m_name) == 0)
+	InstanceArrayProperty* res = std::lower_bound(m_instanceArrayProperties, m_instanceArrayProperties + m_instanceArrayPropertyCount, dummy);
+	if (m_instanceArrayProperties + m_instanceArrayPropertyCount != res && strcmp(name, res->m_name) == 0)
 	{
 		return res;
 	}
@@ -225,8 +225,8 @@ StaticArrayProperty* ClassType::findStaticArrayProperty(const char* name, bool i
 InstanceMethod* ClassType::findInstanceMethod(const char* name, bool includeBaseClasses)
 {
 	Metadata dummy(name);
-	InstanceMethod* res = std::lower_bound(m_methods, m_methods + m_methodCount, dummy);
-	if (m_methods + m_methodCount != res && strcmp(name, res->m_name) == 0)
+	InstanceMethod* res = std::lower_bound(m_instanceMethods, m_instanceMethods + m_instanceMethodCount, dummy);
+	if (m_instanceMethods + m_instanceMethodCount != res && strcmp(name, res->m_name) == 0)
 	{
 		return res;
 	}
@@ -448,9 +448,55 @@ ClassTypeIterator* ClassType::_getFirstDerivedClass_()
 	return m_firstDerivedClass;
 }
 
+size_t ClassType::_getInstancePropertyCount_(bool includeBaseClasses)
+{
+	size_t count = m_instancePropertyCount;
+	if (includeBaseClasses)
+	{
+		for (size_t i = 0; i < m_baseClassCount; ++i)
+		{
+			count += m_baseClasses[i].m_type->_getInstancePropertyCount_(includeBaseClasses);
+		}
+	}
+	return count;
+}
+
+InstanceProperty* ClassType::_getInstanceProperty_(size_t index, bool includeBaseClasses)
+{
+	if (includeBaseClasses)
+	{
+		if (index < m_instancePropertyCount)
+		{
+			return &m_instanceProperties[index];
+		}
+		else
+		{
+			index -= m_instancePropertyCount;
+			for (size_t i = 0; i < m_baseClassCount; ++i)
+			{
+				size_t baseMemberCount = m_baseClasses[i].m_type->_getInstancePropertyCount_(includeBaseClasses);
+				if (index < baseMemberCount)
+				{
+					return m_baseClasses[i].m_type->_getInstanceProperty_(index, includeBaseClasses);
+				}
+				index -= baseMemberCount;
+			}
+			return 0;
+		}
+	}
+	else
+	{
+		if (index < m_instancePropertyCount)
+		{
+			return &m_instanceProperties[index];
+		}
+		return 0;
+	}
+}
+
 size_t ClassType::_getInstanceArrayPropertyCount_(bool includeBaseClasses)
 {
-	size_t count = m_arrayPropertyCount;
+	size_t count = m_instanceArrayPropertyCount;
 	if (includeBaseClasses)
 	{
 		for (size_t i = 0; i < m_baseClassCount; ++i)
@@ -465,13 +511,13 @@ InstanceArrayProperty* ClassType::_getInstanceArrayProperty_(size_t index, bool 
 {
 	if (includeBaseClasses)
 	{
-		if (index < m_arrayPropertyCount)
+		if (index < m_instanceArrayPropertyCount)
 		{
-			return &m_arrayProperties[index];
+			return &m_instanceArrayProperties[index];
 		}
 		else
 		{
-			index -= m_arrayPropertyCount;
+			index -= m_instanceArrayPropertyCount;
 			for (size_t i = 0; i < m_baseClassCount; ++i)
 			{
 				size_t baseMemberCount = m_baseClasses[i].m_type->_getInstanceArrayPropertyCount_(includeBaseClasses);
@@ -486,26 +532,12 @@ InstanceArrayProperty* ClassType::_getInstanceArrayProperty_(size_t index, bool 
 	}
 	else
 	{
-		if (index < m_arrayPropertyCount)
+		if (index < m_instanceArrayPropertyCount)
 		{
-			return &m_arrayProperties[index];
+			return &m_instanceArrayProperties[index];
 		}
 		return 0;
 	}
-}
-
-InstanceArrayProperty* ClassType::get__instanceArrayProperties_(size_t index)
-{
-	if (index < m_arrayPropertyCount)
-	{
-		return &m_arrayProperties[index];
-	}
-	return 0;
-}
-
-size_t ClassType::size__instanceArrayProperties_() const
-{
-	return m_arrayPropertyCount;
 }
 
 bool ClassType::isType(ClassType* otherType)

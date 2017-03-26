@@ -6,6 +6,7 @@
 #include "./Type.mh"
 #include "./Typedef.mh"
 #include "./Metadata.mh"
+#include "./InstanceProperty.mh"
 #include "./InstanceArrayProperty.mh"
 #include "ClassType.mh"
 #include "AutoRun.h"
@@ -49,17 +50,17 @@ namespace idlcpp
 		{
 			::pafcore::Overload(&s_next_Result_1, 0, 0),
 		};
-		static ::pafcore::InstanceMethod s_methods[] = 
+		static ::pafcore::InstanceMethod s_instanceMethods[] = 
 		{
 			::pafcore::InstanceMethod("deref", 0, ClassTypeIterator_deref, s_deref_Overloads, 1),
 			::pafcore::InstanceMethod("next", 0, ClassTypeIterator_next, s_next_Overloads, 1),
 		};
-		m_methods = s_methods;
-		m_methodCount = paf_array_size_of(s_methods);
+		m_instanceMethods = s_instanceMethods;
+		m_instanceMethodCount = paf_array_size_of(s_instanceMethods);
 		static Metadata* s_members[] = 
 		{
-			&s_methods[0],
-			&s_methods[1],
+			&s_instanceMethods[0],
+			&s_instanceMethods[1],
 		};
 		m_members = s_members;
 		m_memberCount = paf_array_size_of(s_members);
@@ -148,12 +149,6 @@ namespace idlcpp
 		};
 		RuntimeTypeOf<::pafcore::Type>::RuntimeType::GetSingleton()->m_firstDerivedClass = &s_classTypeIterators[0];
 		m_classTypeIterators = s_classTypeIterators;
-		static ::pafcore::InstanceArrayProperty s_arrayProperties[] = 
-		{
-			::pafcore::InstanceArrayProperty("_instanceArrayProperties_", 0, GetSingleton(), ClassType_get__instanceArrayProperties_, RuntimeTypeOf<::pafcore::InstanceArrayProperty>::RuntimeType::GetSingleton(), ::pafcore::Metadata::by_ptr, false, 0, 0, ::pafcore::Metadata::by_value, false, ClassType_size__instanceArrayProperties_, 0),
-		};
-		m_arrayProperties = s_arrayProperties;
-		m_arrayPropertyCount = paf_array_size_of(s_arrayProperties);
 		static ::pafcore::Result s__findMember__Result_0(RuntimeTypeOf<::pafcore::Metadata>::RuntimeType::GetSingleton(), false, ::pafcore::Result::by_ptr);
 		static ::pafcore::Argument s__findMember__Arguments_0[] = 
 		{
@@ -190,14 +185,27 @@ namespace idlcpp
 			::pafcore::Argument("index", RuntimeTypeOf<::size_t>::RuntimeType::GetSingleton(), ::pafcore::Argument::by_value, false),
 			::pafcore::Argument("includeBaseClasses", RuntimeTypeOf<bool>::RuntimeType::GetSingleton(), ::pafcore::Argument::by_value, false),
 		};
-		static ::pafcore::Result s__getMemberCount__Result_6(RuntimeTypeOf<::size_t>::RuntimeType::GetSingleton(), false, ::pafcore::Result::by_value);
-		static ::pafcore::Argument s__getMemberCount__Arguments_6[] = 
+		static ::pafcore::Result s__getInstancePropertyCount__Result_6(RuntimeTypeOf<::size_t>::RuntimeType::GetSingleton(), false, ::pafcore::Result::by_value);
+		static ::pafcore::Argument s__getInstancePropertyCount__Arguments_6[] = 
 		{
 			::pafcore::Argument("this", GetSingleton(), ::pafcore::Argument::by_ptr, false),
 			::pafcore::Argument("includeBaseClasses", RuntimeTypeOf<bool>::RuntimeType::GetSingleton(), ::pafcore::Argument::by_value, false),
 		};
-		static ::pafcore::Result s__getMember__Result_7(RuntimeTypeOf<::pafcore::Metadata>::RuntimeType::GetSingleton(), false, ::pafcore::Result::by_ptr);
-		static ::pafcore::Argument s__getMember__Arguments_7[] = 
+		static ::pafcore::Result s__getInstanceProperty__Result_7(RuntimeTypeOf<::pafcore::InstanceProperty>::RuntimeType::GetSingleton(), false, ::pafcore::Result::by_ptr);
+		static ::pafcore::Argument s__getInstanceProperty__Arguments_7[] = 
+		{
+			::pafcore::Argument("this", GetSingleton(), ::pafcore::Argument::by_ptr, false),
+			::pafcore::Argument("index", RuntimeTypeOf<::size_t>::RuntimeType::GetSingleton(), ::pafcore::Argument::by_value, false),
+			::pafcore::Argument("includeBaseClasses", RuntimeTypeOf<bool>::RuntimeType::GetSingleton(), ::pafcore::Argument::by_value, false),
+		};
+		static ::pafcore::Result s__getMemberCount__Result_8(RuntimeTypeOf<::size_t>::RuntimeType::GetSingleton(), false, ::pafcore::Result::by_value);
+		static ::pafcore::Argument s__getMemberCount__Arguments_8[] = 
+		{
+			::pafcore::Argument("this", GetSingleton(), ::pafcore::Argument::by_ptr, false),
+			::pafcore::Argument("includeBaseClasses", RuntimeTypeOf<bool>::RuntimeType::GetSingleton(), ::pafcore::Argument::by_value, false),
+		};
+		static ::pafcore::Result s__getMember__Result_9(RuntimeTypeOf<::pafcore::Metadata>::RuntimeType::GetSingleton(), false, ::pafcore::Result::by_ptr);
+		static ::pafcore::Argument s__getMember__Arguments_9[] = 
 		{
 			::pafcore::Argument("this", GetSingleton(), ::pafcore::Argument::by_ptr, false),
 			::pafcore::Argument("index", RuntimeTypeOf<::size_t>::RuntimeType::GetSingleton(), ::pafcore::Argument::by_value, false),
@@ -227,15 +235,23 @@ namespace idlcpp
 		{
 			::pafcore::Overload(&s__getInstanceArrayProperty__Result_5, s__getInstanceArrayProperty__Arguments_5, 2),
 		};
+		static ::pafcore::Overload s__getInstancePropertyCount__Overloads[] = 
+		{
+			::pafcore::Overload(&s__getInstancePropertyCount__Result_6, s__getInstancePropertyCount__Arguments_6, 1),
+		};
+		static ::pafcore::Overload s__getInstanceProperty__Overloads[] = 
+		{
+			::pafcore::Overload(&s__getInstanceProperty__Result_7, s__getInstanceProperty__Arguments_7, 2),
+		};
 		static ::pafcore::Overload s__getMemberCount__Overloads[] = 
 		{
-			::pafcore::Overload(&s__getMemberCount__Result_6, s__getMemberCount__Arguments_6, 1),
+			::pafcore::Overload(&s__getMemberCount__Result_8, s__getMemberCount__Arguments_8, 1),
 		};
 		static ::pafcore::Overload s__getMember__Overloads[] = 
 		{
-			::pafcore::Overload(&s__getMember__Result_7, s__getMember__Arguments_7, 2),
+			::pafcore::Overload(&s__getMember__Result_9, s__getMember__Arguments_9, 2),
 		};
-		static ::pafcore::InstanceMethod s_methods[] = 
+		static ::pafcore::InstanceMethod s_instanceMethods[] = 
 		{
 			::pafcore::InstanceMethod("_findMember_", 0, ClassType__findMember_, s__findMember__Overloads, 1),
 			::pafcore::InstanceMethod("_getBaseClassCount_", 0, ClassType__getBaseClassCount_, s__getBaseClassCount__Overloads, 1),
@@ -243,22 +259,25 @@ namespace idlcpp
 			::pafcore::InstanceMethod("_getFirstDerivedClass_", 0, ClassType__getFirstDerivedClass_, s__getFirstDerivedClass__Overloads, 1),
 			::pafcore::InstanceMethod("_getInstanceArrayPropertyCount_", 0, ClassType__getInstanceArrayPropertyCount_, s__getInstanceArrayPropertyCount__Overloads, 1),
 			::pafcore::InstanceMethod("_getInstanceArrayProperty_", 0, ClassType__getInstanceArrayProperty_, s__getInstanceArrayProperty__Overloads, 1),
+			::pafcore::InstanceMethod("_getInstancePropertyCount_", 0, ClassType__getInstancePropertyCount_, s__getInstancePropertyCount__Overloads, 1),
+			::pafcore::InstanceMethod("_getInstanceProperty_", 0, ClassType__getInstanceProperty_, s__getInstanceProperty__Overloads, 1),
 			::pafcore::InstanceMethod("_getMemberCount_", 0, ClassType__getMemberCount_, s__getMemberCount__Overloads, 1),
 			::pafcore::InstanceMethod("_getMember_", 0, ClassType__getMember_, s__getMember__Overloads, 1),
 		};
-		m_methods = s_methods;
-		m_methodCount = paf_array_size_of(s_methods);
+		m_instanceMethods = s_instanceMethods;
+		m_instanceMethodCount = paf_array_size_of(s_instanceMethods);
 		static Metadata* s_members[] = 
 		{
-			&s_methods[0],
-			&s_methods[1],
-			&s_methods[2],
-			&s_methods[3],
-			&s_methods[4],
-			&s_methods[5],
-			&s_methods[6],
-			&s_methods[7],
-			&s_arrayProperties[0],
+			&s_instanceMethods[0],
+			&s_instanceMethods[1],
+			&s_instanceMethods[2],
+			&s_instanceMethods[3],
+			&s_instanceMethods[4],
+			&s_instanceMethods[5],
+			&s_instanceMethods[6],
+			&s_instanceMethods[7],
+			&s_instanceMethods[8],
+			&s_instanceMethods[9],
 		};
 		m_members = s_members;
 		m_memberCount = paf_array_size_of(s_members);
@@ -278,30 +297,6 @@ namespace idlcpp
 	void __pafcore__ClassType_Type::assign(void* dst, const void* src)
 	{
 		*(::pafcore::ClassType*)dst = *(const ::pafcore::ClassType*)src;
-	}
-
-	::pafcore::ErrorCode __pafcore__ClassType_Type::ClassType_get__instanceArrayProperties_(::pafcore::Variant* that, size_t index, ::pafcore::Variant* value)
-	{
-		::pafcore::ClassType* self;
-		if(!that->castToReferencePtr(GetSingleton(), (void**)&self))
-		{
-			return ::pafcore::e_invalid_this_type;
-		}
-		::pafcore::InstanceArrayProperty* res = self->get__instanceArrayProperties_(index);
-		value->assignReferencePtr(RuntimeTypeOf<::pafcore::InstanceArrayProperty>::RuntimeType::GetSingleton(), res, false, ::pafcore::Variant::by_ptr);
-		return ::pafcore::s_ok;
-	}
-
-	::pafcore::ErrorCode __pafcore__ClassType_Type::ClassType_size__instanceArrayProperties_(::pafcore::Variant* that, ::pafcore::Variant* value)
-	{
-		::pafcore::ClassType* self;
-		if(!that->castToReferencePtr(GetSingleton(), (void**)&self))
-		{
-			return ::pafcore::e_invalid_this_type;
-		}
-		size_t res = self->size__instanceArrayProperties_();
-		value->assignPrimitive(RuntimeTypeOf<size_t>::RuntimeType::GetSingleton(), &res);
-		return ::pafcore::s_ok;
 	}
 
 	::pafcore::ErrorCode __pafcore__ClassType_Type::ClassType__findMember_(::pafcore::Variant* result, ::pafcore::Variant** args, int_t numArgs)
@@ -449,6 +444,61 @@ namespace idlcpp
 			}
 			::pafcore::InstanceArrayProperty* res = self->_getInstanceArrayProperty_(a0, a1);
 			result->assignReferencePtr(RuntimeTypeOf<::pafcore::InstanceArrayProperty>::RuntimeType::GetSingleton(), res, false, ::pafcore::Variant::by_ptr);
+			return ::pafcore::s_ok;
+		}
+		return ::pafcore::e_invalid_arg_num;
+	}
+
+	::pafcore::ErrorCode __pafcore__ClassType_Type::ClassType__getInstancePropertyCount_(::pafcore::Variant* result, ::pafcore::Variant** args, int_t numArgs)
+	{
+		if(2 == numArgs)
+		{
+			if(args[0]->isConstant())
+			{
+				return ::pafcore::e_this_is_constant;
+			}
+			::pafcore::ClassType* self;
+			if(!args[0]->castToReferencePtr(GetSingleton(), (void**)&self))
+			{
+				return ::pafcore::e_invalid_this_type;
+			}
+			bool a0;
+			if(!args[1]->castToPrimitive(RuntimeTypeOf<bool>::RuntimeType::GetSingleton(), &a0))
+			{
+				return ::pafcore::e_invalid_arg_type_1;
+			}
+			::size_t res = self->_getInstancePropertyCount_(a0);
+			result->assignPrimitive(RuntimeTypeOf<::size_t>::RuntimeType::GetSingleton(), &res);
+			return ::pafcore::s_ok;
+		}
+		return ::pafcore::e_invalid_arg_num;
+	}
+
+	::pafcore::ErrorCode __pafcore__ClassType_Type::ClassType__getInstanceProperty_(::pafcore::Variant* result, ::pafcore::Variant** args, int_t numArgs)
+	{
+		if(3 == numArgs)
+		{
+			if(args[0]->isConstant())
+			{
+				return ::pafcore::e_this_is_constant;
+			}
+			::pafcore::ClassType* self;
+			if(!args[0]->castToReferencePtr(GetSingleton(), (void**)&self))
+			{
+				return ::pafcore::e_invalid_this_type;
+			}
+			::size_t a0;
+			if(!args[1]->castToPrimitive(RuntimeTypeOf<::size_t>::RuntimeType::GetSingleton(), &a0))
+			{
+				return ::pafcore::e_invalid_arg_type_1;
+			}
+			bool a1;
+			if(!args[2]->castToPrimitive(RuntimeTypeOf<bool>::RuntimeType::GetSingleton(), &a1))
+			{
+				return ::pafcore::e_invalid_arg_type_2;
+			}
+			::pafcore::InstanceProperty* res = self->_getInstanceProperty_(a0, a1);
+			result->assignReferencePtr(RuntimeTypeOf<::pafcore::InstanceProperty>::RuntimeType::GetSingleton(), res, false, ::pafcore::Variant::by_ptr);
 			return ::pafcore::s_ok;
 		}
 		return ::pafcore::e_invalid_arg_num;

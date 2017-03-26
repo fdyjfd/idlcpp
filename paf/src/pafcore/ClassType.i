@@ -1,4 +1,5 @@
 #import "Type.i"
+#import "InstanceProperty.i"
 #import "InstanceArrayProperty.i"
 
 namespace pafcore
@@ -49,8 +50,10 @@ namespace pafcore
 		size_t _getBaseClassCount_();
 		Metadata* _getBaseClass_(size_t index);
 		ClassTypeIterator* _getFirstDerivedClass_();
+
+		size_t _getInstancePropertyCount_(bool includeBaseClasses);
+		InstanceProperty* _getInstanceProperty_(size_t index, bool includeBaseClasses);
 		size_t _getInstanceArrayPropertyCount_(bool includeBaseClasses);
-		InstanceArrayProperty* _instanceArrayProperties_[] get;
 		InstanceArrayProperty* _getInstanceArrayProperty_(size_t index, bool includeBaseClasses);
 #{
 	public:
@@ -93,14 +96,14 @@ namespace pafcore
 		size_t m_nestedTypeCount;
 		TypeAlias** m_nestedTypeAliases;
 		size_t m_nestedTypeAliasCount;
-		InstanceField* m_fields;
-		size_t m_fieldCount;
-		InstanceProperty* m_properties;
-		size_t m_propertyCount;
-		InstanceArrayProperty* m_arrayProperties;
-		size_t m_arrayPropertyCount;
-		InstanceMethod* m_methods;
-		size_t m_methodCount;
+		InstanceField* m_instanceFields;
+		size_t m_instanceFieldCount;
+		InstanceProperty* m_instanceProperties;
+		size_t m_instancePropertyCount;
+		InstanceArrayProperty* m_instanceArrayProperties;
+		size_t m_instanceArrayPropertyCount;
+		InstanceMethod* m_instanceMethods;
+		size_t m_instanceMethodCount;
 		StaticField* m_staticFields;
 		size_t m_staticFieldCount;
 		StaticProperty* m_staticProperties;

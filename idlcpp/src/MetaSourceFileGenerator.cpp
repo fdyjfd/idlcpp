@@ -1598,7 +1598,7 @@ void writeMetaMethodImpl_SameParamCount(ClassNode* classNode, TemplateArguments*
 		sprintf_s(buf, "char argMatches[%d];\n", overloadCount * argCount);
 		writeStringToFile(buf, file, indentation + 1);
 		sprintf_s(buf, "size_t matched = ::pafcore::Overload::Resolution(&GetSingleton()->%s[%d].m_overloads[%d], args, %d, %d, candidates, argMatches);\n",
-			isStatic ? "m_staticMethods" : "m_methods",  methodIndex, overloadIndex, argCount, overloadCount);
+			isStatic ? "m_staticMethods" : "m_instanceMethods",  methodIndex, overloadIndex, argCount, overloadCount);
 		writeStringToFile(buf, file, indentation + 1);
 		sprintf_s(buf, "switch(matched)\n");
 		writeStringToFile(buf, file, indentation + 1);
@@ -1743,7 +1743,7 @@ void writeMetaConstructor_Fields(ClassNode* classNode, TemplateArguments* templa
 	}
 	else
 	{
-		writeStringToFile("static ::pafcore::InstanceField s_fields[] = \n", file, indentation);
+		writeStringToFile("static ::pafcore::InstanceField s_instanceFields[] = \n", file, indentation);
 	}
 	writeStringToFile("{\n", file, indentation);
 
@@ -1806,8 +1806,8 @@ void writeMetaConstructor_Fields(ClassNode* classNode, TemplateArguments* templa
 	}
 	else
 	{
-		writeStringToFile("m_fields = s_fields;\n", file, indentation);
-		writeStringToFile("m_fieldCount = paf_array_size_of(s_fields);\n", file, indentation);
+		writeStringToFile("m_instanceFields = s_instanceFields;\n", file, indentation);
+		writeStringToFile("m_instanceFieldCount = paf_array_size_of(s_instanceFields);\n", file, indentation);
 	}
 }
 
@@ -1845,7 +1845,7 @@ void writeMetaConstructor_Properties(ClassNode* classNode, TemplateArguments* te
 		}
 		else
 		{
-			writeStringToFile("static ::pafcore::InstanceArrayProperty s_arrayProperties[] = \n", file, indentation);
+			writeStringToFile("static ::pafcore::InstanceArrayProperty s_instanceArrayProperties[] = \n", file, indentation);
 		}
 	}
 	else
@@ -1856,7 +1856,7 @@ void writeMetaConstructor_Properties(ClassNode* classNode, TemplateArguments* te
 		}
 		else
 		{
-			writeStringToFile("static ::pafcore::InstanceProperty s_properties[] = \n", file, indentation);
+			writeStringToFile("static ::pafcore::InstanceProperty s_instanceProperties[] = \n", file, indentation);
 		}
 	}
 
@@ -1981,8 +1981,8 @@ void writeMetaConstructor_Properties(ClassNode* classNode, TemplateArguments* te
 		}
 		else
 		{
-			writeStringToFile("m_arrayProperties = s_arrayProperties;\n", file, indentation);
-			writeStringToFile("m_arrayPropertyCount = paf_array_size_of(s_arrayProperties);\n", file, indentation);
+			writeStringToFile("m_instanceArrayProperties = s_instanceArrayProperties;\n", file, indentation);
+			writeStringToFile("m_instanceArrayPropertyCount = paf_array_size_of(s_instanceArrayProperties);\n", file, indentation);
 		}
 	}
 	else
@@ -1994,8 +1994,8 @@ void writeMetaConstructor_Properties(ClassNode* classNode, TemplateArguments* te
 		}
 		else
 		{
-			writeStringToFile("m_properties = s_properties;\n", file, indentation);
-			writeStringToFile("m_propertyCount = paf_array_size_of(s_properties);\n", file, indentation);
+			writeStringToFile("m_instanceProperties = s_instanceProperties;\n", file, indentation);
+			writeStringToFile("m_instancePropertyCount = paf_array_size_of(s_instanceProperties);\n", file, indentation);
 		}
 	}
 }
@@ -2206,7 +2206,7 @@ void writeMetaConstructor_Methods(ClassNode* classNode, TemplateArguments* templ
 	}
 	else
 	{
-		writeStringToFile("static ::pafcore::InstanceMethod s_methods[] = \n", file, indentation);
+		writeStringToFile("static ::pafcore::InstanceMethod s_instanceMethods[] = \n", file, indentation);
 	}
 	writeStringToFile("{\n", file, indentation);
 
@@ -2252,8 +2252,8 @@ void writeMetaConstructor_Methods(ClassNode* classNode, TemplateArguments* templ
 	}
 	else
 	{
-		writeStringToFile("m_methods = s_methods;\n", file, indentation);
-		writeStringToFile("m_methodCount = paf_array_size_of(s_methods);\n", file, indentation);
+		writeStringToFile("m_instanceMethods = s_instanceMethods;\n", file, indentation);
+		writeStringToFile("m_instanceMethodCount = paf_array_size_of(s_instanceMethods);\n", file, indentation);
 	}
 }
 
@@ -2454,19 +2454,19 @@ void writeMetaConstructor_Member(
 			++currentStaticMethod;
 			break;
 		case instance_field:
-			sprintf_s(buf, "&s_fields[%d],\n", currentField);
+			sprintf_s(buf, "&s_instanceFields[%d],\n", currentField);
 			++currentField;
 			break;
 		case instance_property:
-			sprintf_s(buf, "&s_properties[%d],\n", currentProperty);
+			sprintf_s(buf, "&s_instanceProperties[%d],\n", currentProperty);
 			++currentProperty;
 			break;
 		case instance_array_property:
-			sprintf_s(buf, "&s_arrayProperties[%d],\n", currentArrayProperty);
+			sprintf_s(buf, "&s_instanceArrayProperties[%d],\n", currentArrayProperty);
 			++currentArrayProperty;
 			break;
 		case instance_method:
-			sprintf_s(buf, "&s_methods[%d],\n", currentMethod);
+			sprintf_s(buf, "&s_instanceMethods[%d],\n", currentMethod);
 			++currentMethod;
 			break;
 		default:

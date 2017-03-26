@@ -41,8 +41,8 @@ Metadata* PrimitiveType::findMember(const char* name)
 InstanceMethod* PrimitiveType::findInstanceMethod(const char* name)
 {
 	Metadata dummy(name);
-	InstanceMethod* res = std::lower_bound(m_methods, m_methods + m_methodCount, dummy);
-	if (m_methods + m_methodCount != res && strcmp(name, res->m_name) == 0)
+	InstanceMethod* res = std::lower_bound(m_instanceMethods, m_instanceMethods + m_instanceMethodCount, dummy);
+	if (m_instanceMethods + m_instanceMethodCount != res && strcmp(name, res->m_name) == 0)
 	{
 		return res;
 	}

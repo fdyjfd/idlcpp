@@ -41,7 +41,7 @@ namespace idlcpp
 		};
 		RuntimeTypeOf<::pafcore::Metadata>::RuntimeType::GetSingleton()->m_firstDerivedClass = &s_classTypeIterators[0];
 		m_classTypeIterators = s_classTypeIterators;
-		static ::pafcore::InstanceProperty s_properties[] = 
+		static ::pafcore::InstanceProperty s_instanceProperties[] = 
 		{
 			::pafcore::InstanceProperty("byNew", 0, GetSingleton(), Result_get_byNew, RuntimeTypeOf<bool>::RuntimeType::GetSingleton(), ::pafcore::Metadata::by_value, false, 0, 0, ::pafcore::Metadata::by_value, false),
 			::pafcore::InstanceProperty("byNewArray", 0, GetSingleton(), Result_get_byNewArray, RuntimeTypeOf<bool>::RuntimeType::GetSingleton(), ::pafcore::Metadata::by_value, false, 0, 0, ::pafcore::Metadata::by_value, false),
@@ -51,17 +51,17 @@ namespace idlcpp
 			::pafcore::InstanceProperty("isConstant", 0, GetSingleton(), Result_get_isConstant, RuntimeTypeOf<bool>::RuntimeType::GetSingleton(), ::pafcore::Metadata::by_value, false, 0, 0, ::pafcore::Metadata::by_value, false),
 			::pafcore::InstanceProperty("type", 0, GetSingleton(), Result_get_type, RuntimeTypeOf<::pafcore::Type>::RuntimeType::GetSingleton(), ::pafcore::Metadata::by_ptr, false, 0, 0, ::pafcore::Metadata::by_value, false),
 		};
-		m_properties = s_properties;
-		m_propertyCount = paf_array_size_of(s_properties);
+		m_instanceProperties = s_instanceProperties;
+		m_instancePropertyCount = paf_array_size_of(s_instanceProperties);
 		static Metadata* s_members[] = 
 		{
-			&s_properties[0],
-			&s_properties[1],
-			&s_properties[2],
-			&s_properties[3],
-			&s_properties[4],
-			&s_properties[5],
-			&s_properties[6],
+			&s_instanceProperties[0],
+			&s_instanceProperties[1],
+			&s_instanceProperties[2],
+			&s_instanceProperties[3],
+			&s_instanceProperties[4],
+			&s_instanceProperties[5],
+			&s_instanceProperties[6],
 		};
 		m_members = s_members;
 		m_memberCount = paf_array_size_of(s_members);

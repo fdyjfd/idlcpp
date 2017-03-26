@@ -42,12 +42,6 @@ namespace idlcpp
 		};
 		RuntimeTypeOf<::pafcore::Type>::RuntimeType::GetSingleton()->m_firstDerivedClass = &s_classTypeIterators[0];
 		m_classTypeIterators = s_classTypeIterators;
-		static ::pafcore::InstanceArrayProperty s_arrayProperties[] = 
-		{
-			::pafcore::InstanceArrayProperty("_enumerators_", 0, GetSingleton(), EnumType_get__enumerators_, RuntimeTypeOf<::pafcore::Enumerator>::RuntimeType::GetSingleton(), ::pafcore::Metadata::by_ptr, false, 0, 0, ::pafcore::Metadata::by_value, false, EnumType_size__enumerators_, 0),
-		};
-		m_arrayProperties = s_arrayProperties;
-		m_arrayPropertyCount = paf_array_size_of(s_arrayProperties);
 		static ::pafcore::Result s__getEnumeratorByName__Result_0(RuntimeTypeOf<::pafcore::Enumerator>::RuntimeType::GetSingleton(), false, ::pafcore::Result::by_ptr);
 		static ::pafcore::Argument s__getEnumeratorByName__Arguments_0[] = 
 		{
@@ -87,22 +81,21 @@ namespace idlcpp
 		{
 			::pafcore::Overload(&s__getEnumerator__Result_3, s__getEnumerator__Arguments_3, 1),
 		};
-		static ::pafcore::InstanceMethod s_methods[] = 
+		static ::pafcore::InstanceMethod s_instanceMethods[] = 
 		{
 			::pafcore::InstanceMethod("_getEnumeratorByName_", 0, EnumType__getEnumeratorByName_, s__getEnumeratorByName__Overloads, 1),
 			::pafcore::InstanceMethod("_getEnumeratorByValue_", 0, EnumType__getEnumeratorByValue_, s__getEnumeratorByValue__Overloads, 1),
 			::pafcore::InstanceMethod("_getEnumeratorCount_", 0, EnumType__getEnumeratorCount_, s__getEnumeratorCount__Overloads, 1),
 			::pafcore::InstanceMethod("_getEnumerator_", 0, EnumType__getEnumerator_, s__getEnumerator__Overloads, 1),
 		};
-		m_methods = s_methods;
-		m_methodCount = paf_array_size_of(s_methods);
+		m_instanceMethods = s_instanceMethods;
+		m_instanceMethodCount = paf_array_size_of(s_instanceMethods);
 		static Metadata* s_members[] = 
 		{
-			&s_arrayProperties[0],
-			&s_methods[0],
-			&s_methods[1],
-			&s_methods[2],
-			&s_methods[3],
+			&s_instanceMethods[0],
+			&s_instanceMethods[1],
+			&s_instanceMethods[2],
+			&s_instanceMethods[3],
 		};
 		m_members = s_members;
 		m_memberCount = paf_array_size_of(s_members);
@@ -122,30 +115,6 @@ namespace idlcpp
 	void __pafcore__EnumType_Type::assign(void* dst, const void* src)
 	{
 		*(::pafcore::EnumType*)dst = *(const ::pafcore::EnumType*)src;
-	}
-
-	::pafcore::ErrorCode __pafcore__EnumType_Type::EnumType_get__enumerators_(::pafcore::Variant* that, size_t index, ::pafcore::Variant* value)
-	{
-		::pafcore::EnumType* self;
-		if(!that->castToReferencePtr(GetSingleton(), (void**)&self))
-		{
-			return ::pafcore::e_invalid_this_type;
-		}
-		::pafcore::Enumerator* res = self->get__enumerators_(index);
-		value->assignReferencePtr(RuntimeTypeOf<::pafcore::Enumerator>::RuntimeType::GetSingleton(), res, false, ::pafcore::Variant::by_ptr);
-		return ::pafcore::s_ok;
-	}
-
-	::pafcore::ErrorCode __pafcore__EnumType_Type::EnumType_size__enumerators_(::pafcore::Variant* that, ::pafcore::Variant* value)
-	{
-		::pafcore::EnumType* self;
-		if(!that->castToReferencePtr(GetSingleton(), (void**)&self))
-		{
-			return ::pafcore::e_invalid_this_type;
-		}
-		size_t res = self->size__enumerators_();
-		value->assignPrimitive(RuntimeTypeOf<size_t>::RuntimeType::GetSingleton(), &res);
-		return ::pafcore::s_ok;
 	}
 
 	::pafcore::ErrorCode __pafcore__EnumType_Type::EnumType__getEnumeratorByName_(::pafcore::Variant* result, ::pafcore::Variant** args, int_t numArgs)

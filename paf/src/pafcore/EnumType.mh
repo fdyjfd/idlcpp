@@ -22,9 +22,6 @@ namespace idlcpp
 		virtual void destroyArray(void* address);
 		virtual void assign(void* dst, const void* src);
 	public:
-		static ::pafcore::ErrorCode EnumType_get__enumerators_(::pafcore::Variant* that, size_t index, ::pafcore::Variant* value);
-		static ::pafcore::ErrorCode EnumType_size__enumerators_(::pafcore::Variant* that, ::pafcore::Variant* value);
-	public:
 		static ::pafcore::ErrorCode EnumType__getEnumeratorByName_(::pafcore::Variant* result, ::pafcore::Variant** args, int numArgs);
 		static ::pafcore::ErrorCode EnumType__getEnumeratorByValue_(::pafcore::Variant* result, ::pafcore::Variant** args, int numArgs);
 		static ::pafcore::ErrorCode EnumType__getEnumeratorCount_(::pafcore::Variant* result, ::pafcore::Variant** args, int numArgs);

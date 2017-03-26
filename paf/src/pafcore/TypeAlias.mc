@@ -41,15 +41,15 @@ namespace idlcpp
 		};
 		RuntimeTypeOf<::pafcore::Metadata>::RuntimeType::GetSingleton()->m_firstDerivedClass = &s_classTypeIterators[0];
 		m_classTypeIterators = s_classTypeIterators;
-		static ::pafcore::InstanceProperty s_properties[] = 
+		static ::pafcore::InstanceProperty s_instanceProperties[] = 
 		{
 			::pafcore::InstanceProperty("type", 0, GetSingleton(), TypeAlias_get_type, RuntimeTypeOf<::pafcore::Type>::RuntimeType::GetSingleton(), ::pafcore::Metadata::by_ptr, false, 0, 0, ::pafcore::Metadata::by_value, false),
 		};
-		m_properties = s_properties;
-		m_propertyCount = paf_array_size_of(s_properties);
+		m_instanceProperties = s_instanceProperties;
+		m_instancePropertyCount = paf_array_size_of(s_instanceProperties);
 		static Metadata* s_members[] = 
 		{
-			&s_properties[0],
+			&s_instanceProperties[0],
 		};
 		m_members = s_members;
 		m_memberCount = paf_array_size_of(s_members);

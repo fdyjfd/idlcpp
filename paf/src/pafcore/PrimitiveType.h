@@ -163,8 +163,8 @@ namespace pafcore
 		PrimitiveTypeCategory m_typeCategory;
 		Metadata** m_members;
 		size_t m_memberCount;
-		InstanceMethod* m_methods;
-		size_t m_methodCount;
+		InstanceMethod* m_instanceMethods;
+		size_t m_instanceMethodCount;
 		StaticMethod* m_staticMethods;
 		size_t m_staticMethodCount;
 
@@ -707,8 +707,8 @@ namespace pafcore
 				::pafcore::InstanceMethod("op_subtract", 0, Primitive_op_subtract, s_op_subtract_Overloads, 1),
 				::pafcore::InstanceMethod("op_subtractAssign", 0, Primitive_op_subtractAssign, s_op_subtractAssign_Overloads, 1),
 			};
-			m_methods = s_methods;
-			m_methodCount = paf_array_size_of(s_methods);
+			m_instanceMethods = s_methods;
+			m_instanceMethodCount = paf_array_size_of(s_methods);
 			static Metadata* s_members[] =
 			{
 				&s_staticMethods[0],
