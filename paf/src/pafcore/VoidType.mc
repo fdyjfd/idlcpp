@@ -47,18 +47,21 @@ namespace idlcpp
 		};
 		m_staticProperties = s_staticProperties;
 		m_staticPropertyCount = paf_array_size_of(s_staticProperties);
-		static ::pafcore::Result s_AddressToPtr_Result_0(RuntimeTypeOf<void>::RuntimeType::GetSingleton(), false, ::pafcore::Result::by_ptr);
-		static ::pafcore::Argument s_AddressToPtr_Arguments_0[] = 
+		static ::pafcore::Result s_staticResults[] = 
+		{
+			::pafcore::Result(RuntimeTypeOf<void>::RuntimeType::GetSingleton(), false, ::pafcore::Result::by_ptr),
+		};
+		static ::pafcore::Argument s_staticArguments[] = 
 		{
 			::pafcore::Argument("address", RuntimeTypeOf<::size_t>::RuntimeType::GetSingleton(), ::pafcore::Argument::by_value, false),
 		};
-		static ::pafcore::Overload s_AddressToPtr_Overloads[] = 
+		static ::pafcore::Overload s_staticOverloads[] = 
 		{
-			::pafcore::Overload(&s_AddressToPtr_Result_0, s_AddressToPtr_Arguments_0, 1),
+			::pafcore::Overload(&s_staticResults[0], &s_staticArguments[0], 1),
 		};
 		static ::pafcore::StaticMethod s_staticMethods[] = 
 		{
-			::pafcore::StaticMethod("AddressToPtr", 0, VoidType_AddressToPtr, s_AddressToPtr_Overloads, 1),
+			::pafcore::StaticMethod("AddressToPtr", 0, VoidType_AddressToPtr, &s_staticOverloads[0], 1),
 		};
 		m_staticMethods = s_staticMethods;
 		m_staticMethodCount = paf_array_size_of(s_staticMethods);

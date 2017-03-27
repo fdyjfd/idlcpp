@@ -1674,52 +1674,254 @@ void writeMetaMethodImpls(ClassNode* classNode, TemplateArguments* templateArgum
 	}
 }
 
-void writeMetaConstructor_attributes(AttributeListNode* attributeList, IdentifyNode* name, FILE* file, int indentation)
+void writeMetaConstructor_attributesForType(std::map<SyntaxNodeImpl*, size_t> attributesOffsets, SyntaxNodeImpl* memberNode, FILE* file, int indentation)
 {
 	char buf[512];
+	auto it = attributesOffsets.find(memberNode);
+	if (it != attributesOffsets.end())
+	{
+		sprintf(buf, "m_attributes = &s_attributeses[%d];\n", it->second);
+		writeStringToFile(buf, file, indentation);
+	}
+}
+
+struct AttributeOffsetAndCount
+{
+	SyntaxNodeImpl* node;
+	size_t offset;
+	size_t count;
+};
+
+template<typename T>
+void writeMetaConstructor_Attributes_Member(std::vector<AttributeOffsetAndCount>& attributeOffsetAndCounts, size_t& offset,
+	T* memberNode, FILE* file, int indentation)
+{
+	AttributeListNode* attributeList = memberNode->m_attributeList;
 	if (attributeList)
 	{
 		std::vector<AttributeNode*> attributeNodes;
 		attributeList->collectAttributeNodes(attributeNodes);
 		std::sort(attributeNodes.begin(), attributeNodes.end(), CompareAttributePtr());
-		writeStringToFile("static ::pafcore::Attribute s_attribute_", file, indentation);
-		writeStringToFile(name->m_str.c_str(), file);
-		writeStringToFile("[] = \n", file);
-		writeStringToFile("{\n", file, indentation);
 		size_t count = attributeNodes.size();
 		for (size_t i = 0; i < count; ++i)
 		{
 			AttributeNode* attributeNode = attributeNodes[i];
-			writeStringToFile("{ \"", file, indentation + 1);
+			writeStringToFile("{ \"", file, indentation);
 			writeStringToFile(attributeNode->m_name->m_str.c_str(), file);
 			writeStringToFile("\", \"", file);
 			writeStringToFile(attributeNode->m_content->m_str.c_str(), file);
 			writeStringToFile("\" },\n", file);
 		}
-		writeStringToFile("};\n", file, indentation);
-
-		writeStringToFile("static ::pafcore::Attributes s_attributes_", file, indentation);
-		writeStringToFile(name->m_str.c_str(), file);
-		sprintf(buf, " = { %d, ", count);
-		writeStringToFile(buf, file);
-		writeStringToFile("s_attribute_", file);
-		writeStringToFile(name->m_str.c_str(), file);
-		writeStringToFile(" };\n", file);
+		AttributeOffsetAndCount aoac;
+		aoac.node = memberNode;
+		aoac.offset = offset;
+		aoac.count = count;
+		attributeOffsetAndCounts.push_back(aoac);
+		offset += count;
 	}
 }
 
-void writeMetaConstructor_attributesForType(MemberNode* memberNode, FILE* file, int indentation)
+void writeMetaConstructor_Attributes_Method(std::vector<AttributeOffsetAndCount>& attributeOffsetAndCounts, size_t& offset,
+	std::vector<MethodNode*>::iterator first, std::vector<MethodNode*>::iterator last, FILE* file, int indentation)
 {
-	if (memberNode->m_attributeList)
+	std::vector<AttributeNode*> attributeNodes;
+	for (auto it = first; it != last; ++it)
 	{
-		writeMetaConstructor_attributes(memberNode->m_attributeList, memberNode->m_name, file, indentation);
-		writeStringToFile("m_attributes = &s_attributes_", file, indentation);
-		writeStringToFile(memberNode->m_name->m_str.c_str(), file);
-		writeStringToFile(";\n", file);
+		MethodNode* methodNode = *it;
+		AttributeListNode* attributeList = methodNode->m_attributeList;
+		if (attributeList)
+		{
+			attributeList->collectAttributeNodes(attributeNodes);
+		}
+	}
+	if (!attributeNodes.empty())
+	{
+		std::sort(attributeNodes.begin(), attributeNodes.end(), CompareAttributePtr());
+		size_t count = attributeNodes.size();
+		for (size_t i = 0; i < count; ++i)
+		{
+			AttributeNode* attributeNode = attributeNodes[i];
+			writeStringToFile("{ \"", file, indentation);
+			writeStringToFile(attributeNode->m_name->m_str.c_str(), file);
+			writeStringToFile("\", \"", file);
+			writeStringToFile(attributeNode->m_content->m_str.c_str(), file);
+			writeStringToFile("\" },\n", file);
+		}
+		AttributeOffsetAndCount aoac;
+		aoac.node = *first;
+		aoac.offset = offset;
+		aoac.count = count;
+		attributeOffsetAndCounts.push_back(aoac);
+		offset += count;
 	}
 }
 
-void writeMetaConstructor_Fields(ClassNode* classNode, TemplateArguments* templateArguments, std::vector<FieldNode*>& fieldNodes, bool isStatic, FILE* file, int indentation)
+template<typename T>
+void writeMetaConstructor_Attributes_Members(std::vector<AttributeOffsetAndCount>& attributeOffsetAndCounts, size_t& offset,
+	std::vector<T*>& memberNodes, FILE* file, int indentation)
+{
+	size_t count = memberNodes.size();
+	for (size_t i = 0; i < count; ++i)
+	{
+		T* node = memberNodes[i];
+		writeMetaConstructor_Attributes_Member(attributeOffsetAndCounts, offset, node, file, indentation);
+	}
+}
+
+void writeMetaConstructor_Attributes_Methods(std::vector<AttributeOffsetAndCount>& attributeOffsetAndCounts, size_t& offset,
+	std::vector<MethodNode*>& methodNodes, FILE* file, int indentation)
+{
+	std::vector<MethodNode*>::iterator begin = methodNodes.begin();
+	std::vector<MethodNode*>::iterator end = methodNodes.end();
+	std::vector<MethodNode*>::iterator first = begin;
+	std::vector<MethodNode*>::iterator last = begin;
+	for (; first != end;)
+	{
+		++last;
+		if (last == end || (*last)->m_name->m_str != (*first)->m_name->m_str)
+		{
+			writeMetaConstructor_Attributes_Method(attributeOffsetAndCounts, offset, first, last, file, indentation);
+			first = last;
+		}
+	}
+}
+
+template<typename T>
+bool noAttributes(T& t)
+{
+	size_t count = t.size();
+	for (size_t i = 0; i < count; ++i)
+	{
+		AttributeListNode* node = t[i]->m_attributeList;
+		if (node)
+		{
+			return false;
+		}
+	}
+	return true;
+}
+
+
+void writeMetaConstructor_Attributeses(std::map<SyntaxNodeImpl*, size_t>& attributessOffsets,
+	ClassNode* classNode,
+	std::vector<FieldNode*>& staticFieldNodes,
+	std::vector<PropertyNode*>& staticPropertyNodes,
+	std::vector<PropertyNode*>& staticArrayPropertyNodes,
+	std::vector<MethodNode*>& staticMethodNodes,
+	std::vector<FieldNode*>& fieldNodes,
+	std::vector<PropertyNode*>& propertyNodes,
+	std::vector<PropertyNode*>& arrayPropertyNodes,
+	std::vector<MethodNode*>& methodNodes,
+	FILE* file, int indentation)
+{
+	char buf[512];
+	if (0 == classNode->m_attributeList
+		&& noAttributes(staticFieldNodes)
+		&& noAttributes(staticPropertyNodes)
+		&& noAttributes(staticArrayPropertyNodes)
+		&& noAttributes(staticMethodNodes)
+		&& noAttributes(fieldNodes)
+		&& noAttributes(propertyNodes)
+		&& noAttributes(arrayPropertyNodes)
+		&& noAttributes(methodNodes) )
+	{
+		return;
+	}
+
+	size_t offset = 0;
+	std::vector<AttributeOffsetAndCount> attributeOffsetAndCounts;
+
+	writeStringToFile("static ::pafcore::Attribute s_attributes[] = \n", file, indentation);
+	writeStringToFile("{\n", file, indentation);
+
+	writeMetaConstructor_Attributes_Member(attributeOffsetAndCounts, offset, classNode, file, indentation + 1);
+	writeMetaConstructor_Attributes_Members(attributeOffsetAndCounts, offset, staticFieldNodes, file, indentation + 1);
+	writeMetaConstructor_Attributes_Members(attributeOffsetAndCounts, offset, staticPropertyNodes, file, indentation + 1);
+	writeMetaConstructor_Attributes_Members(attributeOffsetAndCounts, offset, staticArrayPropertyNodes, file, indentation + 1);
+	writeMetaConstructor_Attributes_Methods(attributeOffsetAndCounts, offset, staticMethodNodes, file, indentation + 1);
+	writeMetaConstructor_Attributes_Members(attributeOffsetAndCounts, offset, fieldNodes, file, indentation + 1);
+	writeMetaConstructor_Attributes_Members(attributeOffsetAndCounts, offset, propertyNodes, file, indentation + 1);
+	writeMetaConstructor_Attributes_Members(attributeOffsetAndCounts, offset, arrayPropertyNodes, file, indentation + 1);
+	writeMetaConstructor_Attributes_Methods(attributeOffsetAndCounts, offset, methodNodes, file, indentation + 1);
+	writeStringToFile("};\n", file, indentation);
+
+	size_t size = attributeOffsetAndCounts.size();
+
+	writeStringToFile("static ::pafcore::Attributes s_attributeses[] = \n", file, indentation);
+	writeStringToFile("{\n", file, indentation);
+	for (size_t i = 0; i < size; ++i)
+	{
+		AttributeOffsetAndCount& aoac = attributeOffsetAndCounts[i];
+		sprintf(buf, "{ %d, &s_attributes[%d] },\n", aoac.count, aoac.offset);
+		writeStringToFile(buf, file, indentation + 1);
+		attributessOffsets.insert(std::make_pair(aoac.node, i));
+	}
+	writeStringToFile("};\n", file, indentation);
+}
+
+void writeEnumMetaConstructor_Attributeses(std::map<SyntaxNodeImpl*, size_t>& attributessOffsets,
+	EnumNode* enumNode, std::vector<EnumeratorNode*>& enumeratorNodes,
+	FILE* file, int indentation)
+{
+	char buf[512];
+	if (0 == enumNode->m_attributeList
+		&& noAttributes(enumeratorNodes))
+	{
+		return;
+	}
+	size_t offset = 0;
+	std::vector<AttributeOffsetAndCount> attributeOffsetAndCounts;
+	writeStringToFile("static ::pafcore::Attribute s_attributes[] = \n", file, indentation);
+	writeStringToFile("{\n", file, indentation);
+	writeMetaConstructor_Attributes_Member(attributeOffsetAndCounts, offset, enumNode, file, indentation + 1);
+	writeMetaConstructor_Attributes_Members(attributeOffsetAndCounts, offset, enumeratorNodes, file, indentation + 1);
+	writeStringToFile("};\n", file, indentation);
+
+	size_t size = attributeOffsetAndCounts.size();
+
+	writeStringToFile("static ::pafcore::Attributes s_attributeses[] = \n", file, indentation);
+	writeStringToFile("{\n", file, indentation);
+	for (size_t i = 0; i < size; ++i)
+	{
+		AttributeOffsetAndCount& aoac = attributeOffsetAndCounts[i];
+		sprintf(buf, "{ %d, &s_attributes[%d] },\n", aoac.count, aoac.offset);
+		writeStringToFile(buf, file, indentation + 1);
+		attributessOffsets.insert(std::make_pair(aoac.node, i));
+	}
+	writeStringToFile("};\n", file, indentation);
+}
+
+void writeTypeDefMetaConstructor_Attributeses(std::map<SyntaxNodeImpl*, size_t>& attributessOffsets,
+	MemberNode* memberNode, FILE* file, int indentation)
+{
+	char buf[512];
+	if (0 == memberNode->m_attributeList)
+	{
+		return;
+	}
+	size_t offset = 0;
+	std::vector<AttributeOffsetAndCount> attributeOffsetAndCounts;
+	writeStringToFile("static ::pafcore::Attribute s_attributes[] = \n", file, indentation);
+	writeStringToFile("{\n", file, indentation);
+	writeMetaConstructor_Attributes_Member(attributeOffsetAndCounts, offset, memberNode, file, indentation + 1);
+	writeStringToFile("};\n", file, indentation);
+
+	size_t size = attributeOffsetAndCounts.size();
+
+	writeStringToFile("static ::pafcore::Attributes s_attributeses[] = \n", file, indentation);
+	writeStringToFile("{\n", file, indentation);
+	for (size_t i = 0; i < size; ++i)
+	{
+		AttributeOffsetAndCount& aoac = attributeOffsetAndCounts[i];
+		sprintf(buf, "{ %d, &s_attributes[%d] },\n", aoac.count, aoac.offset);
+		writeStringToFile(buf, file, indentation + 1);
+		attributessOffsets.insert(std::make_pair(aoac.node, i));
+	}
+	writeStringToFile("};\n", file, indentation);
+}
+
+void writeMetaConstructor_Fields(ClassNode* classNode, TemplateArguments* templateArguments, std::map<SyntaxNodeImpl*, size_t>& attributesOffsets,
+	std::vector<FieldNode*>& fieldNodes, bool isStatic, FILE* file, int indentation)
 {
 	char buf[512];
 	char strAttributes[256];
@@ -1730,12 +1932,6 @@ void writeMetaConstructor_Fields(ClassNode* classNode, TemplateArguments* templa
 	std::string className;
 	classNode->getNativeName(className, templateArguments);
 	size_t count = fieldNodes.size();
-
-	for (size_t i = 0; i < count; ++i)
-	{
-		FieldNode* fieldNode = fieldNodes[i];
-		writeMetaConstructor_attributes(fieldNode->m_attributeList, fieldNode->m_name, file, indentation);
-	}
 
 	if(isStatic)
 	{
@@ -1753,8 +1949,9 @@ void writeMetaConstructor_Fields(ClassNode* classNode, TemplateArguments* templa
 
 		if (fieldNode->m_attributeList)
 		{
-			strcpy_s(strAttributes, "&s_attributes_");
-			strcat_s(strAttributes, fieldNode->m_name->m_str.c_str());
+			auto it = attributesOffsets.find(fieldNode);
+			assert(it != attributesOffsets.end());
+			sprintf_s(strAttributes, "&s_attributeses[%d]", it->second);
 		}
 		else
 		{
@@ -1811,7 +2008,8 @@ void writeMetaConstructor_Fields(ClassNode* classNode, TemplateArguments* templa
 	}
 }
 
-void writeMetaConstructor_Properties(ClassNode* classNode, TemplateArguments* templateArguments, std::vector<PropertyNode*>& propertyNodes, bool isStatic, bool isArray, FILE* file, int indentation)
+void writeMetaConstructor_Properties(ClassNode* classNode, TemplateArguments* templateArguments, std::map<SyntaxNodeImpl*, size_t> attributesOffsets,
+	std::vector<PropertyNode*>& propertyNodes, bool isStatic, bool isArray, FILE* file, int indentation)
 {
 	char buf[512];
 	char strAttributes[256];
@@ -1830,12 +2028,6 @@ void writeMetaConstructor_Properties(ClassNode* classNode, TemplateArguments* te
 		return;
 	}
 	size_t count = propertyNodes.size();
-
-	for (size_t i = 0; i < count; ++i)
-	{
-		PropertyNode* propertyNode = propertyNodes[i];
-		writeMetaConstructor_attributes(propertyNode->m_attributeList, propertyNode->m_name, file, indentation);
-	}
 
 	if (isArray)
 	{
@@ -1867,8 +2059,9 @@ void writeMetaConstructor_Properties(ClassNode* classNode, TemplateArguments* te
 		PropertyNode* propertyNode = propertyNodes[i];
 		if (propertyNode->m_attributeList)
 		{
-			strcpy_s(strAttributes, "&s_attributes_");
-			strcat_s(strAttributes, propertyNode->m_name->m_str.c_str());
+			auto it = attributesOffsets.find(propertyNode);
+			assert(it != attributesOffsets.end());
+			sprintf_s(strAttributes, "&s_attributeses[%d]", it->second);
 		}
 		else
 		{
@@ -2036,8 +2229,8 @@ void writeMetaConstructor_Method_Result(ClassNode* classNode, TemplateArguments*
 	{
 		typeName = "void";
 	}
-	sprintf_s(buf, "static ::pafcore::Result s_%s_Result_%d(RuntimeTypeOf<%s>::RuntimeType::GetSingleton(), %s, %s);\n",
-		methodNode->m_name->m_str.c_str(), index, typeName.c_str(), methodNode->m_resultConst ? "true" : "false", passing);
+	sprintf_s(buf, "::pafcore::Result(RuntimeTypeOf<%s>::RuntimeType::GetSingleton(), %s, %s),\n",
+		typeName.c_str(), methodNode->m_resultConst ? "true" : "false", passing);
 	writeStringToFile(buf, file, indentation);
 }
 
@@ -2048,21 +2241,16 @@ void writeMetaConstructor_Method_Arguments(ClassNode* classNode, TemplateArgumen
 	char passing[32];
 	assert(methodNode->isStatic() == isStatic);
 	size_t paramCount = methodNode->getParameterCount();
-	size_t argCount = isStatic ? paramCount : paramCount + 1;
+	//size_t argCount = isStatic ? paramCount : paramCount + 1;
 
-	if(0 < argCount)
+	if(0 < paramCount)
 	{
-		sprintf_s(buf, "static ::pafcore::Argument s_%s_Arguments_%d[] = \n", 
-			methodNode->m_name->m_str.c_str(), index);
-		writeStringToFile(buf, file, indentation);
-		writeStringToFile("{\n", file, indentation);
-
-		if(!isStatic)
-		{
-			sprintf_s(buf, "::pafcore::Argument(\"this\", GetSingleton(), ::pafcore::Argument::by_ptr, %s),\n",
-				methodNode->isConstant() ? "true" : "false");
-			writeStringToFile(buf, file, indentation + 1);
-		}
+		//if(!isStatic)
+		//{
+		//	sprintf_s(buf, "::pafcore::Argument(\"this\", GetSingleton(), ::pafcore::Argument::by_ptr, %s),\n",
+		//		methodNode->isConstant() ? "true" : "false");
+		//	writeStringToFile(buf, file, indentation);
+		//}
 		std::vector<ParameterNode*> parameterNodes;
 		methodNode->m_parameterList->collectParameterNodes(parameterNodes);
 		assert(parameterNodes.size() == paramCount);
@@ -2088,86 +2276,16 @@ void writeMetaConstructor_Method_Arguments(ClassNode* classNode, TemplateArgumen
 			sprintf_s(buf, "::pafcore::Argument(\"%s\", RuntimeTypeOf<%s>::RuntimeType::GetSingleton(), %s, %s),\n",
 				parameterNode->m_name->m_str.c_str(), typeName.c_str(), passing,
 				parameterNode->isConstant() ? "true" : "false");
-			writeStringToFile(buf, file, indentation + 1);
+			writeStringToFile(buf, file, indentation);
 		}
-		writeStringToFile("};\n", file, indentation);
 	}
 }
 
-void writeMetaConstructor_Method_Overloads(std::vector<MethodNode*>::iterator first, std::vector<MethodNode*>::iterator last, size_t firstIndex, FILE* file, int indentation)
+void writeMetaConstructor_Methods(ClassNode* classNode, TemplateArguments* templateArguments, std::map<SyntaxNodeImpl*, size_t> attributesOffsets, 
+	std::vector<MethodNode*>& methodNodes, bool isStatic, FILE* file, int indentation)
 {
 	char buf[512];
-	char arguments[256];
-	sprintf_s(buf, "static ::pafcore::Overload s_%s_Overloads[] = \n",
-		(*first)->m_name->m_str.c_str());
-	writeStringToFile(buf, file, indentation);
-	writeStringToFile("{\n", file, indentation);
-	size_t index = firstIndex;
-	for(auto it = first; it != last; ++it, ++index)
-	{
-		MethodNode* methodNode = *it;
-		size_t parameterCount = methodNode->getParameterCount();
-		if(0 == parameterCount)
-		{
-			strcpy_s(arguments, "0");
-		}
-		else
-		{
-			sprintf_s(arguments, "s_%s_Arguments_%d", methodNode->m_name->m_str.c_str(), index);
-		}
-		sprintf_s(buf, "::pafcore::Overload(&s_%s_Result_%d, %s, %d),\n",
-			methodNode->m_name->m_str.c_str(), index, arguments, parameterCount);
-		writeStringToFile(buf, file, indentation + 1);
-	}
-	writeStringToFile("};\n", file, indentation);
-}
 
-
-void writeMetaConstructor_attributesForMethod(std::vector<MethodNode*>::iterator first, 
-	std::vector<MethodNode*>::iterator last,
-	FILE* file, int indentation)
-{
-	char buf[512];
-	std::vector<AttributeNode*> attributeNodes;
-	for (auto it = first; it != last; ++it)
-	{
-		MethodNode* methodNode = *it;
-		if (methodNode->m_attributeList)
-		{
-			methodNode->m_attributeList->collectAttributeNodes(attributeNodes);
-		}
-	}
-	if (!attributeNodes.empty())
-	{
-		std::sort(attributeNodes.begin(), attributeNodes.end(), CompareAttributePtr());
-		writeStringToFile("static ::pafcore::Attribute s_attribute_", file, indentation);
-		writeStringToFile((*first)->m_name->m_str.c_str(), file);
-		writeStringToFile("[] = \n", file);
-		writeStringToFile("{\n", file, indentation);
-		size_t count = attributeNodes.size();
-		for (size_t i = 0; i < count; ++i)
-		{
-			AttributeNode* attributeNode = attributeNodes[i];
-			writeStringToFile("{ \"", file, indentation + 1);
-			writeStringToFile(attributeNode->m_name->m_str.c_str(), file);
-			writeStringToFile("\", \"", file);
-			writeStringToFile(attributeNode->m_content->m_str.c_str(), file);
-			writeStringToFile("\" },\n", file);
-		}
-		writeStringToFile("};\n", file, indentation);
-
-		writeStringToFile("static ::pafcore::Attributes s_attributes_", file, indentation);
-		writeStringToFile((*first)->m_name->m_str.c_str(), file);
-		sprintf(buf, " = { %d, ", count);
-		writeStringToFile(buf, file);
-		writeStringToFile("s_attribute_", file);
-		writeStringToFile((*first)->m_name->m_str.c_str(), file);
-		writeStringToFile(" };\n", file);
-	}
-}
-
-void writeMetaConstructor_Methods(ClassNode* classNode, TemplateArguments* templateArguments, std::vector<MethodNode*>& methodNodes, bool isStatic, FILE* file, int indentation)
-{
 	if(methodNodes.empty())
 	{
 		return;
@@ -2175,29 +2293,102 @@ void writeMetaConstructor_Methods(ClassNode* classNode, TemplateArguments* templ
 
 	//Result & Arguments
 	size_t count = methodNodes.size();
+
+	if (isStatic)
+	{
+		writeStringToFile("static ::pafcore::Result s_staticResults[] = \n", file, indentation);
+	}
+	else
+	{
+		writeStringToFile("static ::pafcore::Result s_instanceResults[] = \n", file, indentation);
+	}
+	writeStringToFile("{\n", file, indentation);
 	for(size_t i = 0; i < count; ++i)
 	{
 		MethodNode* methodNode = methodNodes[i];
-		writeMetaConstructor_Method_Result(classNode, templateArguments, methodNode, i, file, indentation);
-		writeMetaConstructor_Method_Arguments(classNode, templateArguments, methodNode, i, isStatic, file, indentation);
+		writeMetaConstructor_Method_Result(classNode, templateArguments, methodNode, i, file, indentation + 1);
+	}
+	writeStringToFile("};\n", file, indentation);
+
+
+	bool hasArguments = false;
+	for (size_t i = 0; i < count; ++i)
+	{
+		MethodNode* methodNode = methodNodes[i];
+		size_t paramCount = methodNode->getParameterCount();
+		if (paramCount > 0)
+		{
+			hasArguments = true;
+			break;
+		}
+	}
+
+	if (hasArguments)
+	{
+		if (isStatic)
+		{
+			writeStringToFile("static ::pafcore::Argument s_staticArguments[] = \n", file, indentation);
+		}
+		else
+		{
+			writeStringToFile("static ::pafcore::Argument s_instanceArguments[] = \n", file, indentation);
+		}
+		writeStringToFile("{\n", file, indentation);
+		for (size_t i = 0; i < count; ++i)
+		{
+			MethodNode* methodNode = methodNodes[i];
+			writeMetaConstructor_Method_Arguments(classNode, templateArguments, methodNode, i, isStatic, file, indentation + 1);
+		}
+		writeStringToFile("};\n", file, indentation);
 	}
 
 	//Overloads
+	if (isStatic)
+	{
+		writeStringToFile("static ::pafcore::Overload s_staticOverloads[] = \n", file, indentation);
+	}
+	else
+	{
+		writeStringToFile("static ::pafcore::Overload s_instanceOverloads[] = \n", file, indentation);
+	}
+	writeStringToFile("{\n", file, indentation);
+
 	std::vector<MethodNode*>::iterator begin = methodNodes.begin();
 	std::vector<MethodNode*>::iterator end = methodNodes.end();
-
 	std::vector<MethodNode*>::iterator first = begin;
 	std::vector<MethodNode*>::iterator last = begin;
+	
+	size_t resultOffset = 0;
+	size_t argumentOffset = 0;
 	for(; first != end;)
 	{
 		++last;
 		if(last == end || (*last)->m_name->m_str != (*first)->m_name->m_str)
 		{
-			writeMetaConstructor_Method_Overloads(first, last, first - begin, file, indentation);
-			writeMetaConstructor_attributesForMethod(first, last, file, indentation);
+			for (auto it = first; it != last; ++it)
+			{
+				char strArguments[256];
+				MethodNode* methodNode = *it;
+				size_t parameterCount = methodNode->getParameterCount();
+				if (parameterCount > 0)
+				{
+					sprintf_s(strArguments, "&%s[%d]", isStatic ? "s_staticArguments" : "s_instanceArguments", argumentOffset);
+				}
+				else
+				{
+					strcpy_s(strArguments, "0");
+				}
+				sprintf_s(buf, "::pafcore::Overload(&%s[%d], %s, %d),\n",
+					isStatic ? "s_staticResults" : "s_instanceResults", resultOffset,
+					strArguments, parameterCount);
+				writeStringToFile(buf, file, indentation + 1);
+				++resultOffset;
+				argumentOffset += parameterCount;
+			}
 			first = last;
 		}
 	}
+	writeStringToFile("};\n", file, indentation);
 
 	//Method
 	if(isStatic)
@@ -2206,40 +2397,39 @@ void writeMetaConstructor_Methods(ClassNode* classNode, TemplateArguments* templ
 	}
 	else
 	{
-		writeStringToFile("static ::pafcore::InstanceMethod s_instanceMethods[] = \n", file, indentation);
+		writeStringToFile("static ::pafcore::InstanceMethod s_instanceMethods[] = \n", file, indentation + 1);
 	}
 	writeStringToFile("{\n", file, indentation);
 
 	first = begin;
 	last = first;
-	bool hasAttributes = false;
+	size_t overloadOffset = 0;
+
 	for(; first != end;)
 	{
-		if ((*last)->m_attributeList)
-		{
-			hasAttributes = true;
-		}
 		++last;
 		if(last == end || (*last)->m_name->m_str != (*first)->m_name->m_str)
 		{
-			char buf[512];
 			char strAttributes[256];
 			const char* methodName = (*first)->m_name->m_str.c_str();
-			if (hasAttributes)
+			auto it = attributesOffsets.find(*first);
+			if (it != attributesOffsets.end())
 			{
-				strcpy_s(strAttributes, "&s_attributes_");
-				strcat_s(strAttributes, (*first)->m_name->m_str.c_str());
+				sprintf_s(strAttributes, "&s_attributeses[%d]", it->second);
 			}
 			else
 			{
 				strcpy_s(strAttributes, "0");
 			}
-			hasAttributes = false;
 			int overloadCount = last - first;
-			sprintf_s(buf, "::pafcore::%s(\"%s\", %s, %s_%s, s_%s_Overloads, %d),\n",
+
+			sprintf_s(buf, "::pafcore::%s(\"%s\", %s, %s_%s, &%s[%d], %d),\n",
 				isStatic ? "StaticMethod" : "InstanceMethod",
-				methodName, strAttributes, classNode->m_name->m_str.c_str(), methodName, methodName, overloadCount);
+				methodName, strAttributes, classNode->m_name->m_str.c_str(), methodName, 
+				isStatic ? "s_staticOverloads" : "s_instanceOverloads", overloadOffset, overloadCount);
 			writeStringToFile(buf, file, indentation + 1);
+
+			overloadOffset += overloadCount;
 			first = last;
 		}
 	}
@@ -2655,7 +2845,11 @@ void writeMetaConstructor(ClassNode* classNode,
 	writeStringToFile(buf, file, indentation);
 	writeStringToFile("{\n", file, indentation);
 
-	writeMetaConstructor_attributesForType(classNode, file, indentation + 1);
+	std::map<SyntaxNodeImpl*, size_t> attributesOffsets;
+	writeMetaConstructor_Attributeses(attributesOffsets, classNode, staticFieldNodes, staticPropertyNodes, staticArrayPropertyNodes, staticMethodNodes,
+		fieldNodes, propertyNodes, arrayPropertyNodes, methodNodes, file, indentation + 1);
+
+	writeMetaConstructor_attributesForType(attributesOffsets, classNode, file, indentation + 1);
 
 	sprintf_s(buf, "m_size = sizeof(%s);\n", className.c_str());
 	writeStringToFile(buf, file, indentation + 1);
@@ -2664,15 +2858,15 @@ void writeMetaConstructor(ClassNode* classNode,
 	writeMetaConstructor_ClassTypeIterators(classNode, templateArguments, file, indentation + 1);
 	writeMetaConstructor_NestedTypes(classNode, templateArguments, nestedTypeNodes, file, indentation + 1);
 	writeMetaConstructor_NestedTypeAliases(classNode, templateArguments, nestedTypeAliasNodes, file, indentation + 1);
-	writeMetaConstructor_Fields(classNode, templateArguments, staticFieldNodes, true, file, indentation + 1);
-	writeMetaConstructor_Properties(classNode, templateArguments, staticPropertyNodes, true, false, file, indentation + 1);
-	writeMetaConstructor_Properties(classNode, templateArguments, staticArrayPropertyNodes, true, true, file, indentation + 1);
-	writeMetaConstructor_Methods(classNode, templateArguments, staticMethodNodes, true, file, indentation + 1);
+	writeMetaConstructor_Fields(classNode, templateArguments, attributesOffsets, staticFieldNodes, true, file, indentation + 1);
+	writeMetaConstructor_Properties(classNode, templateArguments, attributesOffsets, staticPropertyNodes, true, false, file, indentation + 1);
+	writeMetaConstructor_Properties(classNode, templateArguments, attributesOffsets, staticArrayPropertyNodes, true, true, file, indentation + 1);
+	writeMetaConstructor_Methods(classNode, templateArguments, attributesOffsets, staticMethodNodes, true, file, indentation + 1);
 
-	writeMetaConstructor_Fields(classNode, templateArguments, fieldNodes, false, file, indentation + 1);
-	writeMetaConstructor_Properties(classNode, templateArguments, propertyNodes, false, false, file, indentation + 1);
-	writeMetaConstructor_Properties(classNode, templateArguments, arrayPropertyNodes, false, true, file, indentation + 1);
-	writeMetaConstructor_Methods(classNode, templateArguments, methodNodes, false, file, indentation + 1);
+	writeMetaConstructor_Fields(classNode, templateArguments, attributesOffsets, fieldNodes, false, file, indentation + 1);
+	writeMetaConstructor_Properties(classNode, templateArguments, attributesOffsets, propertyNodes, false, false, file, indentation + 1);
+	writeMetaConstructor_Properties(classNode, templateArguments, attributesOffsets, arrayPropertyNodes, false, true, file, indentation + 1);
+	writeMetaConstructor_Methods(classNode, templateArguments, attributesOffsets, methodNodes, false, file, indentation + 1);
 
 	writeMetaConstructor_Member(nestedTypeNodes, nestedTypeAliasNodes, staticFieldNodes, staticPropertyNodes, staticArrayPropertyNodes,
 		staticMethodNodes, fieldNodes, propertyNodes, arrayPropertyNodes, methodNodes, file, indentation + 1);
@@ -2682,7 +2876,8 @@ void writeMetaConstructor(ClassNode* classNode,
 	writeStringToFile("}\n\n", file, indentation);	
 }
 
-void writeEnumMetaConstructor_Enumerators(EnumNode* enumNode, TemplateArguments* templateArguments, std::vector<EnumeratorNode*>& enumerators, FILE* file, int indentation)
+void writeEnumMetaConstructor_Enumerators(EnumNode* enumNode, TemplateArguments* templateArguments, std::map<SyntaxNodeImpl*, size_t> attributesOffsets, 
+	std::vector<EnumeratorNode*>& enumerators, FILE* file, int indentation)
 {
 	char buf[512];
 	char strAttributes[256];
@@ -2693,11 +2888,6 @@ void writeEnumMetaConstructor_Enumerators(EnumNode* enumNode, TemplateArguments*
 	std::string metaClassName;
 	GetMetaTypeFullName(metaClassName, enumNode, templateArguments);
 	size_t count = enumerators.size();
-	for (size_t i = 0; i < count; ++i)
-	{
-		EnumeratorNode* enumerator = enumerators[i];
-		writeMetaConstructor_attributes(enumerator->m_attributeList, enumerator->m_name, file, indentation);
-	}
 
 	writeStringToFile("static ::pafcore::Enumerator s_enumerators[] = \n", file, indentation);
 	writeStringToFile("{\n", file, indentation);
@@ -2706,8 +2896,9 @@ void writeEnumMetaConstructor_Enumerators(EnumNode* enumNode, TemplateArguments*
 		EnumeratorNode* enumerator = enumerators[i];
 		if (enumerator->m_attributeList)
 		{
-			strcpy_s(strAttributes, "&s_attributes_");
-			strcat_s(strAttributes, enumerator->m_name->m_str.c_str());
+			auto it = attributesOffsets.find(enumerator);
+			assert(it != attributesOffsets.end());
+			sprintf_s(strAttributes, "&s_attributeses[%d]", it->second);
 		}
 		else
 		{
@@ -2743,11 +2934,14 @@ void writeEnumMetaConstructor(EnumNode* enumNode, TemplateArguments* templateArg
 	writeStringToFile(buf, file, indentation);
 	writeStringToFile("{\n", file, indentation);
 
-	writeMetaConstructor_attributesForType(enumNode, file, indentation + 1);
+	std::map<SyntaxNodeImpl*, size_t> attributesOffsets;
+	writeEnumMetaConstructor_Attributeses(attributesOffsets, enumNode, enumerators, file, indentation + 1);
+	writeMetaConstructor_attributesForType(attributesOffsets, enumNode, file, indentation + 1);
+
 	sprintf_s(buf, "m_size = sizeof(%s);\n", typeName.c_str());
 	writeStringToFile(buf, file, indentation + 1);
 	
-	writeEnumMetaConstructor_Enumerators(enumNode, templateArguments, enumerators, file, indentation + 1);
+	writeEnumMetaConstructor_Enumerators(enumNode, templateArguments, attributesOffsets, enumerators, file, indentation + 1);
 	writeMetaRegisterToNamespace(enumNode, file, indentation + 1);
 	writeStringToFile("}\n\n", file, indentation);
 }
@@ -2793,7 +2987,11 @@ void MetaSourceFileGenerator::generateCode_Typedef(FILE* file, TypedefNode* type
 		metaTypeName.c_str(), metaTypeName.c_str(), typedefNode->m_name->m_str.c_str(), typeName.c_str());
 	writeStringToFile(buf, file, indentation);
 	writeStringToFile("{\n", file, indentation);
-	writeMetaConstructor_attributesForType(typedefNode, file, indentation + 1);
+	
+	std::map<SyntaxNodeImpl*, size_t> attributesOffsets;
+	writeTypeDefMetaConstructor_Attributeses(attributesOffsets, typedefNode, file, indentation + 1);
+	writeMetaConstructor_attributesForType(attributesOffsets, typedefNode, file, indentation + 1);
+
 	writeMetaRegisterToNamespace(typedefNode, file, indentation + 1);
 	writeStringToFile("}\n\n", file, indentation);
 	writeMetaGetSingletonImpls(typedefNode, templateArguments, file, indentation);
@@ -2816,7 +3014,9 @@ void MetaSourceFileGenerator::generateCode_TypeDeclaration(FILE* file, TypeDecla
 		metaTypeName.c_str(), metaTypeName.c_str(), typeDeclarationNode->m_name->m_str.c_str(), typeName.c_str());
 	writeStringToFile(buf, file, indentation);
 	writeStringToFile("{\n", file, indentation);
-	writeMetaConstructor_attributesForType(typeDeclarationNode, file, indentation + 1);
+	std::map<SyntaxNodeImpl*, size_t> attributesOffsets;
+	writeTypeDefMetaConstructor_Attributeses(attributesOffsets, typeDeclarationNode, file, indentation + 1);
+	writeMetaConstructor_attributesForType(attributesOffsets, typeDeclarationNode, file, indentation + 1);
 	writeMetaRegisterToNamespace(typeDeclarationNode, file, indentation + 1);
 	writeStringToFile("}\n\n", file, indentation);
 	writeMetaGetSingletonImpls(typeDeclarationNode, templateArguments, file, indentation);

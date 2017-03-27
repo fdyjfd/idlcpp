@@ -19,7 +19,6 @@ void AttributeListNode::collectAttributeNodes(std::vector<AttributeNode*>& attri
 		attributeNodes.push_back(list->m_attribute);
 		list = list->m_attributeList;
 	}
-	//std::reverse(attributeNodes.begin(), attributeNodes.end());
 }
 
 void AttributeListNode::checkSemantic()

@@ -30,6 +30,9 @@ void GetExePath(std::string& path)
 
 int _tmain(int argc, _TCHAR* argv[])
 {
+	int tmpFlag = _CrtSetDbgFlag(_CRTDBG_REPORT_FLAG);
+	tmpFlag |= _CRTDBG_LEAK_CHECK_DF;
+	_CrtSetDbgFlag(tmpFlag);
 	int error;
 	lua_State *L = luaL_newstate();
 	luaL_openlibs(L);

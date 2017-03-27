@@ -300,454 +300,215 @@ namespace pafcore
 			m_name = name;
 			m_size = sizeof(T);
 
-			static ::pafcore::Result s_New_Result_0(this, false, ::pafcore::Result::by_new);
-			static ::pafcore::Result s_New_Result_1(this, false, ::pafcore::Result::by_new);
-			static ::pafcore::Argument s_New_Arguments_1[] =
+			static ::pafcore::Result s_staticResults[] =
 			{
-				::pafcore::Argument("arg", this, ::pafcore::Argument::by_ref, true),
+				::pafcore::Result(this, false, ::pafcore::Result::by_new),
+				::pafcore::Result(this, false, ::pafcore::Result::by_new),
+				::pafcore::Result(this, false, ::pafcore::Result::by_new_array),
 			};
-			static ::pafcore::Result s_NewArray_Result_2(this, false, ::pafcore::Result::by_new_array);
-			static ::pafcore::Argument s_NewArray_Arguments_2[] =
+			static ::pafcore::Argument s_staticArguments[] =
 			{
+				::pafcore::Argument("arg", this, ::pafcore::Argument::by_value, false),
 				::pafcore::Argument("count", RuntimeTypeOf<unsigned int>::RuntimeType::GetSingleton(), ::pafcore::Argument::by_value, false),
 			};
-			static ::pafcore::Overload s_New_Overloads[] =
+			static ::pafcore::Overload s_staticOverloads[] =
 			{
-				::pafcore::Overload(&s_New_Result_0, 0, 0),
-				::pafcore::Overload(&s_New_Result_1, s_New_Arguments_1, 1),
-			};
-			static ::pafcore::Overload s_NewArray_Overloads[] =
-			{
-				::pafcore::Overload(&s_NewArray_Result_2, s_NewArray_Arguments_2, 1),
+				::pafcore::Overload(&s_staticResults[0], &s_staticArguments[0], 0),
+				::pafcore::Overload(&s_staticResults[1], &s_staticArguments[0], 1),
+				::pafcore::Overload(&s_staticResults[2], &s_staticArguments[1], 1),
 			};
 			static ::pafcore::StaticMethod s_staticMethods[] =
 			{
-				::pafcore::StaticMethod("New", 0, Primitive_New, s_New_Overloads, 2),
-				::pafcore::StaticMethod("NewArray", 0, Primitive_NewArray, s_NewArray_Overloads, 1),
+				::pafcore::StaticMethod("New", 0, Primitive_New, &s_staticOverloads[0], 2),
+				::pafcore::StaticMethod("NewArray", 0, Primitive_NewArray, &s_staticOverloads[2], 1),
 			};
 			m_staticMethods = s_staticMethods;
 			m_staticMethodCount = paf_array_size_of(s_staticMethods);
-			static ::pafcore::Result s_op_add_Result_0(this, false, ::pafcore::Result::by_value);
-			static ::pafcore::Argument s_op_add_Arguments_0[] =
+			static ::pafcore::Result s_instanceResults[] =
 			{
-				::pafcore::Argument("this", this, ::pafcore::Argument::by_ptr, false),
+				::pafcore::Result(this, false, ::pafcore::Result::by_value),
+				::pafcore::Result(this, false, ::pafcore::Result::by_ref),
+				::pafcore::Result(this, false, ::pafcore::Result::by_ref),
+				::pafcore::Result(this, false, ::pafcore::Result::by_value),
+				::pafcore::Result(this, false, ::pafcore::Result::by_ref),
+				::pafcore::Result(this, false, ::pafcore::Result::by_value),
+				::pafcore::Result(this, false, ::pafcore::Result::by_value),
+				::pafcore::Result(this, false, ::pafcore::Result::by_ref),
+				::pafcore::Result(this, false, ::pafcore::Result::by_value),
+				::pafcore::Result(this, false, ::pafcore::Result::by_ref),
+				::pafcore::Result(this, false, ::pafcore::Result::by_ref),
+				::pafcore::Result(this, false, ::pafcore::Result::by_value),
+				::pafcore::Result(this, false, ::pafcore::Result::by_ref),
+				::pafcore::Result(RuntimeTypeOf<bool>::RuntimeType::GetSingleton(), false, ::pafcore::Result::by_value),
+				::pafcore::Result(RuntimeTypeOf<bool>::RuntimeType::GetSingleton(), false, ::pafcore::Result::by_value),
+				::pafcore::Result(RuntimeTypeOf<bool>::RuntimeType::GetSingleton(), false, ::pafcore::Result::by_value),
+				::pafcore::Result(this, false, ::pafcore::Result::by_ref),
+				::pafcore::Result(this, false, ::pafcore::Result::by_value),
+				::pafcore::Result(this, false, ::pafcore::Result::by_ref),
+				::pafcore::Result(RuntimeTypeOf<bool>::RuntimeType::GetSingleton(), false, ::pafcore::Result::by_value),
+				::pafcore::Result(RuntimeTypeOf<bool>::RuntimeType::GetSingleton(), false, ::pafcore::Result::by_value),
+				::pafcore::Result(this, false, ::pafcore::Result::by_value),
+				::pafcore::Result(this, false, ::pafcore::Result::by_ref),
+				::pafcore::Result(this, false, ::pafcore::Result::by_value),
+				::pafcore::Result(this, false, ::pafcore::Result::by_ref),
+				::pafcore::Result(this, false, ::pafcore::Result::by_value),
+				::pafcore::Result(RuntimeTypeOf<bool>::RuntimeType::GetSingleton(), false, ::pafcore::Result::by_value),
+				::pafcore::Result(RuntimeTypeOf<bool>::RuntimeType::GetSingleton(), false, ::pafcore::Result::by_value),
+				::pafcore::Result(this, false, ::pafcore::Result::by_value),
+				::pafcore::Result(this, false, ::pafcore::Result::by_value),
+				::pafcore::Result(this, false, ::pafcore::Result::by_value),
+				::pafcore::Result(this, false, ::pafcore::Result::by_value),
+				::pafcore::Result(this, false, ::pafcore::Result::by_ref),
+				::pafcore::Result(this, false, ::pafcore::Result::by_value),
+				::pafcore::Result(this, false, ::pafcore::Result::by_ref),
+			};
+			static ::pafcore::Argument s_instanceArguments[] =
+			{
+				::pafcore::Argument("arg", this, ::pafcore::Argument::by_value, false),
+				::pafcore::Argument("arg", this, ::pafcore::Argument::by_value, false),
+				::pafcore::Argument("arg", this, ::pafcore::Argument::by_value, false),
+				::pafcore::Argument("arg", this, ::pafcore::Argument::by_value, false),
+				::pafcore::Argument("arg", this, ::pafcore::Argument::by_value, false),
+				::pafcore::Argument("arg", this, ::pafcore::Argument::by_value, false),
+				::pafcore::Argument("arg", this, ::pafcore::Argument::by_value, false),
+				::pafcore::Argument("arg", this, ::pafcore::Argument::by_value, false),
+				::pafcore::Argument("arg", this, ::pafcore::Argument::by_value, false),
+				::pafcore::Argument("arg", this, ::pafcore::Argument::by_value, false),
+				::pafcore::Argument("arg", this, ::pafcore::Argument::by_value, false),
+				::pafcore::Argument("arg", this, ::pafcore::Argument::by_value, false),
+				::pafcore::Argument("arg", this, ::pafcore::Argument::by_value, false),
+				::pafcore::Argument("arg", this, ::pafcore::Argument::by_value, false),
+				::pafcore::Argument("arg", this, ::pafcore::Argument::by_value, false),
+				::pafcore::Argument("arg", this, ::pafcore::Argument::by_value, false),
+				::pafcore::Argument("arg", this, ::pafcore::Argument::by_value, false),
+				::pafcore::Argument("arg", this, ::pafcore::Argument::by_value, false),
+				::pafcore::Argument("arg", this, ::pafcore::Argument::by_value, false),
+				::pafcore::Argument("arg", this, ::pafcore::Argument::by_value, false),
+				::pafcore::Argument("arg", this, ::pafcore::Argument::by_value, false),
+				::pafcore::Argument("arg", this, ::pafcore::Argument::by_value, false),
+				::pafcore::Argument("arg", this, ::pafcore::Argument::by_value, false),
+				::pafcore::Argument("arg", this, ::pafcore::Argument::by_value, false),
+				::pafcore::Argument("arg", this, ::pafcore::Argument::by_value, false),
+				::pafcore::Argument("arg", this, ::pafcore::Argument::by_value, false),
 				::pafcore::Argument("arg", this, ::pafcore::Argument::by_value, false),
 			};
-			static ::pafcore::Result s_op_addAssign_Result_1(this, false, ::pafcore::Result::by_ref);
-			static ::pafcore::Argument s_op_addAssign_Arguments_1[] =
-			{
-				::pafcore::Argument("this", this, ::pafcore::Argument::by_ptr, false),
-				::pafcore::Argument("arg", this, ::pafcore::Argument::by_value, false),
-			};
-			static ::pafcore::Result s_op_assign_Result_2(this, false, ::pafcore::Result::by_ref);
-			static ::pafcore::Argument s_op_assign_Arguments_2[] =
-			{
-				::pafcore::Argument("this", this, ::pafcore::Argument::by_ptr, false),
-				::pafcore::Argument("arg", this, ::pafcore::Argument::by_value, false),
-			};
-			static ::pafcore::Result s_op_bitwiseAnd_Result_3(this, false, ::pafcore::Result::by_value);
-			static ::pafcore::Argument s_op_bitwiseAnd_Arguments_3[] =
-			{
-				::pafcore::Argument("this", this, ::pafcore::Argument::by_ptr, false),
-				::pafcore::Argument("arg", this, ::pafcore::Argument::by_value, false),
-			};
-			static ::pafcore::Result s_op_bitwiseAndAssign_Result_4(this, false, ::pafcore::Result::by_ref);
-			static ::pafcore::Argument s_op_bitwiseAndAssign_Arguments_4[] =
-			{
-				::pafcore::Argument("this", this, ::pafcore::Argument::by_ptr, false),
-				::pafcore::Argument("arg", this, ::pafcore::Argument::by_value, false),
-			};
-			static ::pafcore::Result s_op_bitwiseNot_Result_5(this, false, ::pafcore::Result::by_value);
-			static ::pafcore::Argument s_op_bitwiseNot_Arguments_5[] =
-			{
-				::pafcore::Argument("this", this, ::pafcore::Argument::by_ptr, false),
-			};
-			static ::pafcore::Result s_op_bitwiseOr_Result_6(this, false, ::pafcore::Result::by_value);
-			static ::pafcore::Argument s_op_bitwiseOr_Arguments_6[] =
-			{
-				::pafcore::Argument("this", this, ::pafcore::Argument::by_ptr, false),
-				::pafcore::Argument("arg", this, ::pafcore::Argument::by_value, false),
-			};
-			static ::pafcore::Result s_op_bitwiseOrAssign_Result_7(this, false, ::pafcore::Result::by_ref);
-			static ::pafcore::Argument s_op_bitwiseOrAssign_Arguments_7[] =
-			{
-				::pafcore::Argument("this", this, ::pafcore::Argument::by_ptr, false),
-				::pafcore::Argument("arg", this, ::pafcore::Argument::by_value, false),
-			};
-			static ::pafcore::Result s_op_bitwiseXor_Result_8(this, false, ::pafcore::Result::by_value);
-			static ::pafcore::Argument s_op_bitwiseXor_Arguments_8[] =
-			{
-				::pafcore::Argument("this", this, ::pafcore::Argument::by_ptr, false),
-				::pafcore::Argument("arg", this, ::pafcore::Argument::by_value, false),
-			};
-			static ::pafcore::Result s_op_bitwiseXorAssign_Result_9(this, false, ::pafcore::Result::by_ref);
-			static ::pafcore::Argument s_op_bitwiseXorAssign_Arguments_9[] =
-			{
-				::pafcore::Argument("this", this, ::pafcore::Argument::by_ptr, false),
-				::pafcore::Argument("arg", this, ::pafcore::Argument::by_value, false),
-			};
-			static ::pafcore::Result s_op_decrement_Result_10(this, false, ::pafcore::Result::by_ref);
-			static ::pafcore::Argument s_op_decrement_Arguments_10[] =
-			{
-				::pafcore::Argument("this", this, ::pafcore::Argument::by_ptr, false),
-			};
-			static ::pafcore::Result s_op_divide_Result_11(this, false, ::pafcore::Result::by_value);
-			static ::pafcore::Argument s_op_divide_Arguments_11[] =
-			{
-				::pafcore::Argument("this", this, ::pafcore::Argument::by_ptr, false),
-				::pafcore::Argument("arg", this, ::pafcore::Argument::by_value, false),
-			};
-			static ::pafcore::Result s_op_divideAssign_Result_12(this, false, ::pafcore::Result::by_ref);
-			static ::pafcore::Argument s_op_divideAssign_Arguments_12[] =
-			{
-				::pafcore::Argument("this", this, ::pafcore::Argument::by_ptr, false),
-				::pafcore::Argument("arg", this, ::pafcore::Argument::by_value, false),
-			};
-			static ::pafcore::Result s_op_equal_Result_13(RuntimeTypeOf<bool>::RuntimeType::GetSingleton(), false, ::pafcore::Result::by_value);
-			static ::pafcore::Argument s_op_equal_Arguments_13[] =
-			{
-				::pafcore::Argument("this", this, ::pafcore::Argument::by_ptr, false),
-				::pafcore::Argument("arg", this, ::pafcore::Argument::by_value, false),
-			};
-			static ::pafcore::Result s_op_greater_Result_14(RuntimeTypeOf<bool>::RuntimeType::GetSingleton(), false, ::pafcore::Result::by_value);
-			static ::pafcore::Argument s_op_greater_Arguments_14[] =
-			{
-				::pafcore::Argument("this", this, ::pafcore::Argument::by_ptr, false),
-				::pafcore::Argument("arg", this, ::pafcore::Argument::by_value, false),
-			};
-			static ::pafcore::Result s_op_greaterEqual_Result_15(RuntimeTypeOf<bool>::RuntimeType::GetSingleton(), false, ::pafcore::Result::by_value);
-			static ::pafcore::Argument s_op_greaterEqual_Arguments_15[] =
-			{
-				::pafcore::Argument("this", this, ::pafcore::Argument::by_ptr, false),
-				::pafcore::Argument("arg", this, ::pafcore::Argument::by_value, false),
-			};
-			static ::pafcore::Result s_op_increment_Result_16(this, false, ::pafcore::Result::by_ref);
-			static ::pafcore::Argument s_op_increment_Arguments_16[] =
-			{
-				::pafcore::Argument("this", this, ::pafcore::Argument::by_ptr, false),
-			};
-			static ::pafcore::Result s_op_leftShift_Result_17(this, false, ::pafcore::Result::by_value);
-			static ::pafcore::Argument s_op_leftShift_Arguments_17[] =
-			{
-				::pafcore::Argument("this", this, ::pafcore::Argument::by_ptr, false),
-				::pafcore::Argument("arg", this, ::pafcore::Argument::by_value, false),
-			};
-			static ::pafcore::Result s_op_leftShiftAssign_Result_18(this, false, ::pafcore::Result::by_ref);
-			static ::pafcore::Argument s_op_leftShiftAssign_Arguments_18[] =
-			{
-				::pafcore::Argument("this", this, ::pafcore::Argument::by_ptr, false),
-				::pafcore::Argument("arg", this, ::pafcore::Argument::by_value, false),
-			};
-			static ::pafcore::Result s_op_less_Result_19(RuntimeTypeOf<bool>::RuntimeType::GetSingleton(), false, ::pafcore::Result::by_value);
-			static ::pafcore::Argument s_op_less_Arguments_19[] =
-			{
-				::pafcore::Argument("this", this, ::pafcore::Argument::by_ptr, false),
-				::pafcore::Argument("arg", this, ::pafcore::Argument::by_value, false),
-			};
-			static ::pafcore::Result s_op_lessEqual_Result_20(RuntimeTypeOf<bool>::RuntimeType::GetSingleton(), false, ::pafcore::Result::by_value);
-			static ::pafcore::Argument s_op_lessEqual_Arguments_20[] =
-			{
-				::pafcore::Argument("this", this, ::pafcore::Argument::by_ptr, false),
-				::pafcore::Argument("arg", this, ::pafcore::Argument::by_value, false),
-			};
-			static ::pafcore::Result s_op_mod_Result_21(this, false, ::pafcore::Result::by_value);
-			static ::pafcore::Argument s_op_mod_Arguments_21[] =
-			{
-				::pafcore::Argument("this", this, ::pafcore::Argument::by_ptr, false),
-				::pafcore::Argument("arg", this, ::pafcore::Argument::by_value, false),
-			};
-			static ::pafcore::Result s_op_modAssign_Result_22(this, false, ::pafcore::Result::by_ref);
-			static ::pafcore::Argument s_op_modAssign_Arguments_22[] =
-			{
-				::pafcore::Argument("this", this, ::pafcore::Argument::by_ptr, false),
-				::pafcore::Argument("arg", this, ::pafcore::Argument::by_value, false),
-			};
-			static ::pafcore::Result s_op_multiply_Result_23(this, false, ::pafcore::Result::by_value);
-			static ::pafcore::Argument s_op_multiply_Arguments_23[] =
-			{
-				::pafcore::Argument("this", this, ::pafcore::Argument::by_ptr, false),
-				::pafcore::Argument("arg", this, ::pafcore::Argument::by_value, false),
-			};
-			static ::pafcore::Result s_op_multiplyAssign_Result_24(this, false, ::pafcore::Result::by_ref);
-			static ::pafcore::Argument s_op_multiplyAssign_Arguments_24[] =
-			{
-				::pafcore::Argument("this", this, ::pafcore::Argument::by_ptr, false),
-				::pafcore::Argument("arg", this, ::pafcore::Argument::by_value, false),
-			};
-			static ::pafcore::Result s_op_negate_Result_25(this, false, ::pafcore::Result::by_value);
-			static ::pafcore::Argument s_op_negate_Arguments_25[] =
-			{
-				::pafcore::Argument("this", this, ::pafcore::Argument::by_ptr, false),
-			};
-			static ::pafcore::Result s_op_not_Result_26(RuntimeTypeOf<bool>::RuntimeType::GetSingleton(), false, ::pafcore::Result::by_value);
-			static ::pafcore::Argument s_op_not_Arguments_26[] =
-			{
-				::pafcore::Argument("this", this, ::pafcore::Argument::by_ptr, false),
-			};
-			static ::pafcore::Result s_op_notEqual_Result_27(RuntimeTypeOf<bool>::RuntimeType::GetSingleton(), false, ::pafcore::Result::by_value);
-			static ::pafcore::Argument s_op_notEqual_Arguments_27[] =
-			{
-				::pafcore::Argument("this", this, ::pafcore::Argument::by_ptr, false),
-				::pafcore::Argument("arg", this, ::pafcore::Argument::by_value, false),
-			};
-			static ::pafcore::Result s_op_plus_Result_28(this, false, ::pafcore::Result::by_value);
-			static ::pafcore::Argument s_op_plus_Arguments_28[] =
-			{
-				::pafcore::Argument("this", this, ::pafcore::Argument::by_ptr, false),
-			};
-			static ::pafcore::Result s_op_postDecrement_Result_29(this, false, ::pafcore::Result::by_value);
-			static ::pafcore::Argument s_op_postDecrement_Arguments_29[] =
-			{
-				::pafcore::Argument("this", this, ::pafcore::Argument::by_ptr, false),
-			};
-			static ::pafcore::Result s_op_postIncrement_Result_30(this, false, ::pafcore::Result::by_value);
-			static ::pafcore::Argument s_op_postIncrement_Arguments_30[] =
-			{
-				::pafcore::Argument("this", this, ::pafcore::Argument::by_ptr, false),
-			};
-			static ::pafcore::Result s_op_rightShift_Result_31(this, false, ::pafcore::Result::by_value);
-			static ::pafcore::Argument s_op_rightShift_Arguments_31[] =
-			{
-				::pafcore::Argument("this", this, ::pafcore::Argument::by_ptr, false),
-				::pafcore::Argument("arg", this, ::pafcore::Argument::by_value, false),
-			};
-			static ::pafcore::Result s_op_rightShiftAssign_Result_32(this, false, ::pafcore::Result::by_ref);
-			static ::pafcore::Argument s_op_rightShiftAssign_Arguments_32[] =
-			{
-				::pafcore::Argument("this", this, ::pafcore::Argument::by_ptr, false),
-				::pafcore::Argument("arg", this, ::pafcore::Argument::by_value, false),
-			};
-			static ::pafcore::Result s_op_subtract_Result_33(this, false, ::pafcore::Result::by_value);
-			static ::pafcore::Argument s_op_subtract_Arguments_33[] =
-			{
-				::pafcore::Argument("this", this, ::pafcore::Argument::by_ptr, false),
-				::pafcore::Argument("arg", this, ::pafcore::Argument::by_value, false),
-			};
-			static ::pafcore::Result s_op_subtractAssign_Result_34(this, false, ::pafcore::Result::by_ref);
-			static ::pafcore::Argument s_op_subtractAssign_Arguments_34[] =
-			{
-				::pafcore::Argument("this", this, ::pafcore::Argument::by_ptr, false),
-				::pafcore::Argument("arg", this, ::pafcore::Argument::by_value, false),
-			};
-			static ::pafcore::Overload s_op_add_Overloads[] =
-			{
-				::pafcore::Overload(&s_op_add_Result_0, s_op_add_Arguments_0, 1),
-			};
-			static ::pafcore::Overload s_op_addAssign_Overloads[] =
-			{
-				::pafcore::Overload(&s_op_addAssign_Result_1, s_op_addAssign_Arguments_1, 1),
-			};
-			static ::pafcore::Overload s_op_assign_Overloads[] =
-			{
-				::pafcore::Overload(&s_op_assign_Result_2, s_op_assign_Arguments_2, 1),
-			};
-			static ::pafcore::Overload s_op_bitwiseAnd_Overloads[] =
-			{
-				::pafcore::Overload(&s_op_bitwiseAnd_Result_3, s_op_bitwiseAnd_Arguments_3, 1),
-			};
-			static ::pafcore::Overload s_op_bitwiseAndAssign_Overloads[] =
-			{
-				::pafcore::Overload(&s_op_bitwiseAndAssign_Result_4, s_op_bitwiseAndAssign_Arguments_4, 1),
-			};
-			static ::pafcore::Overload s_op_bitwiseNot_Overloads[] =
-			{
-				::pafcore::Overload(&s_op_bitwiseNot_Result_5, 0, 0),
-			};
-			static ::pafcore::Overload s_op_bitwiseOr_Overloads[] =
-			{
-				::pafcore::Overload(&s_op_bitwiseOr_Result_6, s_op_bitwiseOr_Arguments_6, 1),
-			};
-			static ::pafcore::Overload s_op_bitwiseOrAssign_Overloads[] =
-			{
-				::pafcore::Overload(&s_op_bitwiseOrAssign_Result_7, s_op_bitwiseOrAssign_Arguments_7, 1),
-			};
-			static ::pafcore::Overload s_op_bitwiseXor_Overloads[] =
-			{
-				::pafcore::Overload(&s_op_bitwiseXor_Result_8, s_op_bitwiseXor_Arguments_8, 1),
-			};
-			static ::pafcore::Overload s_op_bitwiseXorAssign_Overloads[] =
-			{
-				::pafcore::Overload(&s_op_bitwiseXorAssign_Result_9, s_op_bitwiseXorAssign_Arguments_9, 1),
-			};
-			static ::pafcore::Overload s_op_decrement_Overloads[] =
-			{
-				::pafcore::Overload(&s_op_decrement_Result_10, 0, 0),
-			};
-			static ::pafcore::Overload s_op_divide_Overloads[] =
-			{
-				::pafcore::Overload(&s_op_divide_Result_11, s_op_divide_Arguments_11, 1),
-			};
-			static ::pafcore::Overload s_op_divideAssign_Overloads[] =
-			{
-				::pafcore::Overload(&s_op_divideAssign_Result_12, s_op_divideAssign_Arguments_12, 1),
-			};
-			static ::pafcore::Overload s_op_equal_Overloads[] =
-			{
-				::pafcore::Overload(&s_op_equal_Result_13, s_op_equal_Arguments_13, 1),
-			};
-			static ::pafcore::Overload s_op_greater_Overloads[] =
-			{
-				::pafcore::Overload(&s_op_greater_Result_14, s_op_greater_Arguments_14, 1),
-			};
-			static ::pafcore::Overload s_op_greaterEqual_Overloads[] =
-			{
-				::pafcore::Overload(&s_op_greaterEqual_Result_15, s_op_greaterEqual_Arguments_15, 1),
-			};
-			static ::pafcore::Overload s_op_increment_Overloads[] =
-			{
-				::pafcore::Overload(&s_op_increment_Result_16, 0, 0),
-			};
-			static ::pafcore::Overload s_op_leftShift_Overloads[] =
-			{
-				::pafcore::Overload(&s_op_leftShift_Result_17, s_op_leftShift_Arguments_17, 1),
-			};
-			static ::pafcore::Overload s_op_leftShiftAssign_Overloads[] =
-			{
-				::pafcore::Overload(&s_op_leftShiftAssign_Result_18, s_op_leftShiftAssign_Arguments_18, 1),
-			};
-			static ::pafcore::Overload s_op_less_Overloads[] =
-			{
-				::pafcore::Overload(&s_op_less_Result_19, s_op_less_Arguments_19, 1),
-			};
-			static ::pafcore::Overload s_op_lessEqual_Overloads[] =
-			{
-				::pafcore::Overload(&s_op_lessEqual_Result_20, s_op_lessEqual_Arguments_20, 1),
-			};
-			static ::pafcore::Overload s_op_mod_Overloads[] =
-			{
-				::pafcore::Overload(&s_op_mod_Result_21, s_op_mod_Arguments_21, 1),
-			};
-			static ::pafcore::Overload s_op_modAssign_Overloads[] =
-			{
-				::pafcore::Overload(&s_op_modAssign_Result_22, s_op_modAssign_Arguments_22, 1),
-			};
-			static ::pafcore::Overload s_op_multiply_Overloads[] =
-			{
-				::pafcore::Overload(&s_op_multiply_Result_23, s_op_multiply_Arguments_23, 1),
-			};
-			static ::pafcore::Overload s_op_multiplyAssign_Overloads[] =
-			{
-				::pafcore::Overload(&s_op_multiplyAssign_Result_24, s_op_multiplyAssign_Arguments_24, 1),
-			};
-			static ::pafcore::Overload s_op_negate_Overloads[] =
-			{
-				::pafcore::Overload(&s_op_negate_Result_25, 0, 0),
-			};
-			static ::pafcore::Overload s_op_not_Overloads[] =
-			{
-				::pafcore::Overload(&s_op_not_Result_26, 0, 0),
-			};
-			static ::pafcore::Overload s_op_notEqual_Overloads[] =
-			{
-				::pafcore::Overload(&s_op_notEqual_Result_27, s_op_notEqual_Arguments_27, 1),
-			};
-			static ::pafcore::Overload s_op_plus_Overloads[] =
-			{
-				::pafcore::Overload(&s_op_plus_Result_28, 0, 0),
-			};
-			static ::pafcore::Overload s_op_postDecrement_Overloads[] =
-			{
-				::pafcore::Overload(&s_op_postDecrement_Result_29, 0, 0),
-			};
-			static ::pafcore::Overload s_op_postIncrement_Overloads[] =
-			{
-				::pafcore::Overload(&s_op_postIncrement_Result_30, 0, 0),
-			};
-			static ::pafcore::Overload s_op_rightShift_Overloads[] =
-			{
-				::pafcore::Overload(&s_op_rightShift_Result_31, s_op_rightShift_Arguments_31, 1),
-			};
-			static ::pafcore::Overload s_op_rightShiftAssign_Overloads[] =
-			{
-				::pafcore::Overload(&s_op_rightShiftAssign_Result_32, s_op_rightShiftAssign_Arguments_32, 1),
-			};
-			static ::pafcore::Overload s_op_subtract_Overloads[] =
-			{
-				::pafcore::Overload(&s_op_subtract_Result_33, s_op_subtract_Arguments_33, 1),
-			};
-			static ::pafcore::Overload s_op_subtractAssign_Overloads[] =
-			{
-				::pafcore::Overload(&s_op_subtractAssign_Result_34, s_op_subtractAssign_Arguments_34, 1),
-			};
-			static ::pafcore::InstanceMethod s_methods[] =
-			{
-				::pafcore::InstanceMethod("op_add", 0, Primitive_op_add, s_op_add_Overloads, 1),
-				::pafcore::InstanceMethod("op_addAssign", 0, Primitive_op_addAssign, s_op_addAssign_Overloads, 1),
-				::pafcore::InstanceMethod("op_assign", 0, Primitive_op_assign, s_op_assign_Overloads, 1),
-				::pafcore::InstanceMethod("op_bitwiseAnd", 0, Primitive_op_bitwiseAnd, s_op_bitwiseAnd_Overloads, 1),
-				::pafcore::InstanceMethod("op_bitwiseAndAssign", 0, Primitive_op_bitwiseAndAssign, s_op_bitwiseAndAssign_Overloads, 1),
-				::pafcore::InstanceMethod("op_bitwiseNot", 0, Primitive_op_bitwiseNot, s_op_bitwiseNot_Overloads, 1),
-				::pafcore::InstanceMethod("op_bitwiseOr", 0, Primitive_op_bitwiseOr, s_op_bitwiseOr_Overloads, 1),
-				::pafcore::InstanceMethod("op_bitwiseOrAssign", 0, Primitive_op_bitwiseOrAssign, s_op_bitwiseOrAssign_Overloads, 1),
-				::pafcore::InstanceMethod("op_bitwiseXor", 0, Primitive_op_bitwiseXor, s_op_bitwiseXor_Overloads, 1),
-				::pafcore::InstanceMethod("op_bitwiseXorAssign", 0, Primitive_op_bitwiseXorAssign, s_op_bitwiseXorAssign_Overloads, 1),
-				::pafcore::InstanceMethod("op_decrement", 0, Primitive_op_decrement, s_op_decrement_Overloads, 1),
-				::pafcore::InstanceMethod("op_divide", 0, Primitive_op_divide, s_op_divide_Overloads, 1),
-				::pafcore::InstanceMethod("op_divideAssign", 0, Primitive_op_divideAssign, s_op_divideAssign_Overloads, 1),
-				::pafcore::InstanceMethod("op_equal", 0, Primitive_op_equal, s_op_equal_Overloads, 1),
-				::pafcore::InstanceMethod("op_greater", 0, Primitive_op_greater, s_op_greater_Overloads, 1),
-				::pafcore::InstanceMethod("op_greaterEqual", 0, Primitive_op_greaterEqual, s_op_greaterEqual_Overloads, 1),
-				::pafcore::InstanceMethod("op_increment", 0, Primitive_op_increment, s_op_increment_Overloads, 1),
-				::pafcore::InstanceMethod("op_leftShift", 0, Primitive_op_leftShift, s_op_leftShift_Overloads, 1),
-				::pafcore::InstanceMethod("op_leftShiftAssign", 0, Primitive_op_leftShiftAssign, s_op_leftShiftAssign_Overloads, 1),
-				::pafcore::InstanceMethod("op_less", 0, Primitive_op_less, s_op_less_Overloads, 1),
-				::pafcore::InstanceMethod("op_lessEqual", 0, Primitive_op_lessEqual, s_op_lessEqual_Overloads, 1),
-				::pafcore::InstanceMethod("op_mod", 0, Primitive_op_mod, s_op_mod_Overloads, 1),
-				::pafcore::InstanceMethod("op_modAssign", 0, Primitive_op_modAssign, s_op_modAssign_Overloads, 1),
-				::pafcore::InstanceMethod("op_multiply", 0, Primitive_op_multiply, s_op_multiply_Overloads, 1),
-				::pafcore::InstanceMethod("op_multiplyAssign", 0, Primitive_op_multiplyAssign, s_op_multiplyAssign_Overloads, 1),
-				::pafcore::InstanceMethod("op_negate", 0, Primitive_op_negate, s_op_negate_Overloads, 1),
-				::pafcore::InstanceMethod("op_not", 0, Primitive_op_not, s_op_not_Overloads, 1),
-				::pafcore::InstanceMethod("op_notEqual", 0, Primitive_op_notEqual, s_op_notEqual_Overloads, 1),
-				::pafcore::InstanceMethod("op_plus", 0, Primitive_op_plus, s_op_plus_Overloads, 1),
-				::pafcore::InstanceMethod("op_postDecrement", 0, Primitive_op_postDecrement, s_op_postDecrement_Overloads, 1),
-				::pafcore::InstanceMethod("op_postIncrement", 0, Primitive_op_postIncrement, s_op_postIncrement_Overloads, 1),
-				::pafcore::InstanceMethod("op_rightShift", 0, Primitive_op_rightShift, s_op_rightShift_Overloads, 1),
-				::pafcore::InstanceMethod("op_rightShiftAssign", 0, Primitive_op_rightShiftAssign, s_op_rightShiftAssign_Overloads, 1),
-				::pafcore::InstanceMethod("op_subtract", 0, Primitive_op_subtract, s_op_subtract_Overloads, 1),
-				::pafcore::InstanceMethod("op_subtractAssign", 0, Primitive_op_subtractAssign, s_op_subtractAssign_Overloads, 1),
-			};
-			m_instanceMethods = s_methods;
-			m_instanceMethodCount = paf_array_size_of(s_methods);
+			static ::pafcore::Overload s_instanceOverloads[] =
+			{
+				::pafcore::Overload(&s_instanceResults[0], &s_instanceArguments[0], 1),
+				::pafcore::Overload(&s_instanceResults[1], &s_instanceArguments[1], 1),
+				::pafcore::Overload(&s_instanceResults[2], &s_instanceArguments[2], 1),
+				::pafcore::Overload(&s_instanceResults[3], &s_instanceArguments[3], 1),
+				::pafcore::Overload(&s_instanceResults[4], &s_instanceArguments[4], 1),
+				::pafcore::Overload(&s_instanceResults[5], &s_instanceArguments[5], 0),
+				::pafcore::Overload(&s_instanceResults[6], &s_instanceArguments[5], 1),
+				::pafcore::Overload(&s_instanceResults[7], &s_instanceArguments[6], 1),
+				::pafcore::Overload(&s_instanceResults[8], &s_instanceArguments[7], 1),
+				::pafcore::Overload(&s_instanceResults[9], &s_instanceArguments[8], 1),
+				::pafcore::Overload(&s_instanceResults[10], &s_instanceArguments[9], 0),
+				::pafcore::Overload(&s_instanceResults[11], &s_instanceArguments[9], 1),
+				::pafcore::Overload(&s_instanceResults[12], &s_instanceArguments[10], 1),
+				::pafcore::Overload(&s_instanceResults[13], &s_instanceArguments[11], 1),
+				::pafcore::Overload(&s_instanceResults[14], &s_instanceArguments[12], 1),
+				::pafcore::Overload(&s_instanceResults[15], &s_instanceArguments[13], 1),
+				::pafcore::Overload(&s_instanceResults[16], &s_instanceArguments[14], 0),
+				::pafcore::Overload(&s_instanceResults[17], &s_instanceArguments[14], 1),
+				::pafcore::Overload(&s_instanceResults[18], &s_instanceArguments[15], 1),
+				::pafcore::Overload(&s_instanceResults[19], &s_instanceArguments[16], 1),
+				::pafcore::Overload(&s_instanceResults[20], &s_instanceArguments[17], 1),
+				::pafcore::Overload(&s_instanceResults[21], &s_instanceArguments[18], 1),
+				::pafcore::Overload(&s_instanceResults[22], &s_instanceArguments[19], 1),
+				::pafcore::Overload(&s_instanceResults[23], &s_instanceArguments[20], 1),
+				::pafcore::Overload(&s_instanceResults[24], &s_instanceArguments[21], 1),
+				::pafcore::Overload(&s_instanceResults[25], &s_instanceArguments[22], 0),
+				::pafcore::Overload(&s_instanceResults[26], &s_instanceArguments[22], 0),
+				::pafcore::Overload(&s_instanceResults[27], &s_instanceArguments[22], 1),
+				::pafcore::Overload(&s_instanceResults[28], &s_instanceArguments[23], 0),
+				::pafcore::Overload(&s_instanceResults[29], &s_instanceArguments[23], 0),
+				::pafcore::Overload(&s_instanceResults[30], &s_instanceArguments[23], 0),
+				::pafcore::Overload(&s_instanceResults[31], &s_instanceArguments[23], 1),
+				::pafcore::Overload(&s_instanceResults[32], &s_instanceArguments[24], 1),
+				::pafcore::Overload(&s_instanceResults[33], &s_instanceArguments[25], 1),
+				::pafcore::Overload(&s_instanceResults[34], &s_instanceArguments[26], 1),
+			};
+			static ::pafcore::InstanceMethod s_instanceMethods[] =
+			{
+				::pafcore::InstanceMethod("op_add", 0, Primitive_op_add, &s_instanceOverloads[0], 1),
+				::pafcore::InstanceMethod("op_addAssign", 0, Primitive_op_addAssign, &s_instanceOverloads[1], 1),
+				::pafcore::InstanceMethod("op_assign", 0, Primitive_op_assign, &s_instanceOverloads[2], 1),
+				::pafcore::InstanceMethod("op_bitwiseAnd", 0, Primitive_op_bitwiseAnd, &s_instanceOverloads[3], 1),
+				::pafcore::InstanceMethod("op_bitwiseAndAssign", 0, Primitive_op_bitwiseAndAssign, &s_instanceOverloads[4], 1),
+				::pafcore::InstanceMethod("op_bitwiseNot", 0, Primitive_op_bitwiseNot, &s_instanceOverloads[5], 1),
+				::pafcore::InstanceMethod("op_bitwiseOr", 0, Primitive_op_bitwiseOr, &s_instanceOverloads[6], 1),
+				::pafcore::InstanceMethod("op_bitwiseOrAssign", 0, Primitive_op_bitwiseOrAssign, &s_instanceOverloads[7], 1),
+				::pafcore::InstanceMethod("op_bitwiseXor", 0, Primitive_op_bitwiseXor, &s_instanceOverloads[8], 1),
+				::pafcore::InstanceMethod("op_bitwiseXorAssign", 0, Primitive_op_bitwiseXorAssign, &s_instanceOverloads[9], 1),
+				::pafcore::InstanceMethod("op_decrement", 0, Primitive_op_decrement, &s_instanceOverloads[10], 1),
+				::pafcore::InstanceMethod("op_divide", 0, Primitive_op_divide, &s_instanceOverloads[11], 1),
+				::pafcore::InstanceMethod("op_divideAssign", 0, Primitive_op_divideAssign, &s_instanceOverloads[12], 1),
+				::pafcore::InstanceMethod("op_equal", 0, Primitive_op_equal, &s_instanceOverloads[13], 1),
+				::pafcore::InstanceMethod("op_greater", 0, Primitive_op_greater, &s_instanceOverloads[14], 1),
+				::pafcore::InstanceMethod("op_greaterEqual", 0, Primitive_op_greaterEqual, &s_instanceOverloads[15], 1),
+				::pafcore::InstanceMethod("op_increment", 0, Primitive_op_increment, &s_instanceOverloads[16], 1),
+				::pafcore::InstanceMethod("op_leftShift", 0, Primitive_op_leftShift, &s_instanceOverloads[17], 1),
+				::pafcore::InstanceMethod("op_leftShiftAssign", 0, Primitive_op_leftShiftAssign, &s_instanceOverloads[18], 1),
+				::pafcore::InstanceMethod("op_less", 0, Primitive_op_less, &s_instanceOverloads[19], 1),
+				::pafcore::InstanceMethod("op_lessEqual", 0, Primitive_op_lessEqual, &s_instanceOverloads[20], 1),
+				::pafcore::InstanceMethod("op_mod", 0, Primitive_op_mod, &s_instanceOverloads[21], 1),
+				::pafcore::InstanceMethod("op_modAssign", 0, Primitive_op_modAssign, &s_instanceOverloads[22], 1),
+				::pafcore::InstanceMethod("op_multiply", 0, Primitive_op_multiply, &s_instanceOverloads[23], 1),
+				::pafcore::InstanceMethod("op_multiplyAssign", 0, Primitive_op_multiplyAssign, &s_instanceOverloads[24], 1),
+				::pafcore::InstanceMethod("op_negate", 0, Primitive_op_negate, &s_instanceOverloads[25], 1),
+				::pafcore::InstanceMethod("op_not", 0, Primitive_op_not, &s_instanceOverloads[26], 1),
+				::pafcore::InstanceMethod("op_notEqual", 0, Primitive_op_notEqual, &s_instanceOverloads[27], 1),
+				::pafcore::InstanceMethod("op_plus", 0, Primitive_op_plus, &s_instanceOverloads[28], 1),
+				::pafcore::InstanceMethod("op_postDecrement", 0, Primitive_op_postDecrement, &s_instanceOverloads[29], 1),
+				::pafcore::InstanceMethod("op_postIncrement", 0, Primitive_op_postIncrement, &s_instanceOverloads[30], 1),
+				::pafcore::InstanceMethod("op_rightShift", 0, Primitive_op_rightShift, &s_instanceOverloads[31], 1),
+				::pafcore::InstanceMethod("op_rightShiftAssign", 0, Primitive_op_rightShiftAssign, &s_instanceOverloads[32], 1),
+				::pafcore::InstanceMethod("op_subtract", 0, Primitive_op_subtract, &s_instanceOverloads[33], 1),
+				::pafcore::InstanceMethod("op_subtractAssign", 0, Primitive_op_subtractAssign, &s_instanceOverloads[34], 1),
+			};
+			m_instanceMethods = s_instanceMethods;
+			m_instanceMethodCount = paf_array_size_of(s_instanceMethods);
 			static Metadata* s_members[] =
 			{
 				&s_staticMethods[0],
 				&s_staticMethods[1],
-				&s_methods[0],
-				&s_methods[1],
-				&s_methods[2],
-				&s_methods[3],
-				&s_methods[4],
-				&s_methods[5],
-				&s_methods[6],
-				&s_methods[7],
-				&s_methods[8],
-				&s_methods[9],
-				&s_methods[10],
-				&s_methods[11],
-				&s_methods[12],
-				&s_methods[13],
-				&s_methods[14],
-				&s_methods[15],
-				&s_methods[16],
-				&s_methods[17],
-				&s_methods[18],
-				&s_methods[19],
-				&s_methods[20],
-				&s_methods[21],
-				&s_methods[22],
-				&s_methods[23],
-				&s_methods[24],
-				&s_methods[25],
-				&s_methods[26],
-				&s_methods[27],
-				&s_methods[28],
-				&s_methods[29],
-				&s_methods[30],
-				&s_methods[31],
-				&s_methods[32],
-				&s_methods[33],
-				&s_methods[34],
+				&s_instanceMethods[0],
+				&s_instanceMethods[1],
+				&s_instanceMethods[2],
+				&s_instanceMethods[3],
+				&s_instanceMethods[4],
+				&s_instanceMethods[5],
+				&s_instanceMethods[6],
+				&s_instanceMethods[7],
+				&s_instanceMethods[8],
+				&s_instanceMethods[9],
+				&s_instanceMethods[10],
+				&s_instanceMethods[11],
+				&s_instanceMethods[12],
+				&s_instanceMethods[13],
+				&s_instanceMethods[14],
+				&s_instanceMethods[15],
+				&s_instanceMethods[16],
+				&s_instanceMethods[17],
+				&s_instanceMethods[18],
+				&s_instanceMethods[19],
+				&s_instanceMethods[20],
+				&s_instanceMethods[21],
+				&s_instanceMethods[22],
+				&s_instanceMethods[23],
+				&s_instanceMethods[24],
+				&s_instanceMethods[25],
+				&s_instanceMethods[26],
+				&s_instanceMethods[27],
+				&s_instanceMethods[28],
+				&s_instanceMethods[29],
+				&s_instanceMethods[30],
+				&s_instanceMethods[31],
+				&s_instanceMethods[32],
+				&s_instanceMethods[33],
+				&s_instanceMethods[34],
 			};
 			m_members = s_members;
 			m_memberCount = paf_array_size_of(s_members);

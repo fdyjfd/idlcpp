@@ -29,7 +29,6 @@ NameSpace::MetadataTrieTree::Node::~Node()
 			delete[] node;
 		}
 	}
-
 }
 
 const size_t num_metadata_name_char = 68;
@@ -146,19 +145,20 @@ Metadata* NameSpace::MetadataTrieTree::getItem(size_t index)
 {
 	if(index < m_size)
 	{
-		std::vector<Node> nodes;
-		nodes.push_back(m_root);	
+		std::vector<size_t> nodes;
+		nodes.push_back(m_root.m_ptr);	
 		while(!nodes.empty())
 		{
-			Node node = nodes.back();
+			size_t ptr = nodes.back();
+			Node* node = (Node*)&ptr;
 			nodes.pop_back();
-			if(!node.isNull())
+			if(!node->isNull())
 			{
-				if(node.isMetadata())
+				if(node->isMetadata())
 				{
 					if(0 == index)
 					{
-						return node.getMetadata();
+						return node->getMetadata();
 					}
 					else
 					{
@@ -167,13 +167,13 @@ Metadata* NameSpace::MetadataTrieTree::getItem(size_t index)
 				}
 				else
 				{
-					Node* children = node.getChildren();
+					Node* children = node->getChildren();
 					for(size_t i = 0; i < num_metadata_name_char; ++i)
 					{
-						Node child = children[num_metadata_name_char - 1 - i];
-						if(!child.isNull())
+						Node* child = &children[num_metadata_name_char - 1 - i];
+						if(!child->isNull())
 						{
-							nodes.push_back(child);
+							nodes.push_back(child->m_ptr);
 						}
 					}
 				}

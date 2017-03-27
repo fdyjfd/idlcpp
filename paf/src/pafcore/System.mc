@@ -27,18 +27,21 @@ namespace idlcpp
 	__pafcore__System_Type::__pafcore__System_Type() : ::pafcore::ClassType("System", ::pafcore::value_object)
 	{
 		m_size = sizeof(::pafcore::System);
-		static ::pafcore::Result s_LoadDLL_Result_0(RuntimeTypeOf<void>::RuntimeType::GetSingleton(), false, ::pafcore::Result::by_value);
-		static ::pafcore::Argument s_LoadDLL_Arguments_0[] = 
+		static ::pafcore::Result s_staticResults[] = 
+		{
+			::pafcore::Result(RuntimeTypeOf<void>::RuntimeType::GetSingleton(), false, ::pafcore::Result::by_value),
+		};
+		static ::pafcore::Argument s_staticArguments[] = 
 		{
 			::pafcore::Argument("fileName", RuntimeTypeOf<char>::RuntimeType::GetSingleton(), ::pafcore::Argument::by_ptr, true),
 		};
-		static ::pafcore::Overload s_LoadDLL_Overloads[] = 
+		static ::pafcore::Overload s_staticOverloads[] = 
 		{
-			::pafcore::Overload(&s_LoadDLL_Result_0, s_LoadDLL_Arguments_0, 1),
+			::pafcore::Overload(&s_staticResults[0], &s_staticArguments[0], 1),
 		};
 		static ::pafcore::StaticMethod s_staticMethods[] = 
 		{
-			::pafcore::StaticMethod("LoadDLL", 0, System_LoadDLL, s_LoadDLL_Overloads, 1),
+			::pafcore::StaticMethod("LoadDLL", 0, System_LoadDLL, &s_staticOverloads[0], 1),
 		};
 		m_staticMethods = s_staticMethods;
 		m_staticMethodCount = paf_array_size_of(s_staticMethods);

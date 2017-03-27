@@ -42,51 +42,32 @@ namespace idlcpp
 		};
 		RuntimeTypeOf<::pafcore::Type>::RuntimeType::GetSingleton()->m_firstDerivedClass = &s_classTypeIterators[0];
 		m_classTypeIterators = s_classTypeIterators;
-		static ::pafcore::Result s__getEnumeratorByName__Result_0(RuntimeTypeOf<::pafcore::Enumerator>::RuntimeType::GetSingleton(), false, ::pafcore::Result::by_ptr);
-		static ::pafcore::Argument s__getEnumeratorByName__Arguments_0[] = 
+		static ::pafcore::Result s_instanceResults[] = 
 		{
-			::pafcore::Argument("this", GetSingleton(), ::pafcore::Argument::by_ptr, false),
+			::pafcore::Result(RuntimeTypeOf<::pafcore::Enumerator>::RuntimeType::GetSingleton(), false, ::pafcore::Result::by_ptr),
+			::pafcore::Result(RuntimeTypeOf<::pafcore::Enumerator>::RuntimeType::GetSingleton(), false, ::pafcore::Result::by_ptr),
+			::pafcore::Result(RuntimeTypeOf<::size_t>::RuntimeType::GetSingleton(), false, ::pafcore::Result::by_value),
+			::pafcore::Result(RuntimeTypeOf<::pafcore::Enumerator>::RuntimeType::GetSingleton(), false, ::pafcore::Result::by_ptr),
+		};
+		static ::pafcore::Argument s_instanceArguments[] = 
+		{
 			::pafcore::Argument("name", RuntimeTypeOf<char>::RuntimeType::GetSingleton(), ::pafcore::Argument::by_ptr, true),
-		};
-		static ::pafcore::Result s__getEnumeratorByValue__Result_1(RuntimeTypeOf<::pafcore::Enumerator>::RuntimeType::GetSingleton(), false, ::pafcore::Result::by_ptr);
-		static ::pafcore::Argument s__getEnumeratorByValue__Arguments_1[] = 
-		{
-			::pafcore::Argument("this", GetSingleton(), ::pafcore::Argument::by_ptr, false),
 			::pafcore::Argument("value", RuntimeTypeOf<int>::RuntimeType::GetSingleton(), ::pafcore::Argument::by_value, false),
-		};
-		static ::pafcore::Result s__getEnumeratorCount__Result_2(RuntimeTypeOf<::size_t>::RuntimeType::GetSingleton(), false, ::pafcore::Result::by_value);
-		static ::pafcore::Argument s__getEnumeratorCount__Arguments_2[] = 
-		{
-			::pafcore::Argument("this", GetSingleton(), ::pafcore::Argument::by_ptr, false),
-		};
-		static ::pafcore::Result s__getEnumerator__Result_3(RuntimeTypeOf<::pafcore::Enumerator>::RuntimeType::GetSingleton(), false, ::pafcore::Result::by_ptr);
-		static ::pafcore::Argument s__getEnumerator__Arguments_3[] = 
-		{
-			::pafcore::Argument("this", GetSingleton(), ::pafcore::Argument::by_ptr, false),
 			::pafcore::Argument("index", RuntimeTypeOf<::size_t>::RuntimeType::GetSingleton(), ::pafcore::Argument::by_value, false),
 		};
-		static ::pafcore::Overload s__getEnumeratorByName__Overloads[] = 
+		static ::pafcore::Overload s_instanceOverloads[] = 
 		{
-			::pafcore::Overload(&s__getEnumeratorByName__Result_0, s__getEnumeratorByName__Arguments_0, 1),
+			::pafcore::Overload(&s_instanceResults[0], &s_instanceArguments[0], 1),
+			::pafcore::Overload(&s_instanceResults[1], &s_instanceArguments[1], 1),
+			::pafcore::Overload(&s_instanceResults[2], 0, 0),
+			::pafcore::Overload(&s_instanceResults[3], &s_instanceArguments[2], 1),
 		};
-		static ::pafcore::Overload s__getEnumeratorByValue__Overloads[] = 
+			static ::pafcore::InstanceMethod s_instanceMethods[] = 
 		{
-			::pafcore::Overload(&s__getEnumeratorByValue__Result_1, s__getEnumeratorByValue__Arguments_1, 1),
-		};
-		static ::pafcore::Overload s__getEnumeratorCount__Overloads[] = 
-		{
-			::pafcore::Overload(&s__getEnumeratorCount__Result_2, 0, 0),
-		};
-		static ::pafcore::Overload s__getEnumerator__Overloads[] = 
-		{
-			::pafcore::Overload(&s__getEnumerator__Result_3, s__getEnumerator__Arguments_3, 1),
-		};
-		static ::pafcore::InstanceMethod s_instanceMethods[] = 
-		{
-			::pafcore::InstanceMethod("_getEnumeratorByName_", 0, EnumType__getEnumeratorByName_, s__getEnumeratorByName__Overloads, 1),
-			::pafcore::InstanceMethod("_getEnumeratorByValue_", 0, EnumType__getEnumeratorByValue_, s__getEnumeratorByValue__Overloads, 1),
-			::pafcore::InstanceMethod("_getEnumeratorCount_", 0, EnumType__getEnumeratorCount_, s__getEnumeratorCount__Overloads, 1),
-			::pafcore::InstanceMethod("_getEnumerator_", 0, EnumType__getEnumerator_, s__getEnumerator__Overloads, 1),
+			::pafcore::InstanceMethod("_getEnumeratorByName_", 0, EnumType__getEnumeratorByName_, &s_instanceOverloads[0], 1),
+			::pafcore::InstanceMethod("_getEnumeratorByValue_", 0, EnumType__getEnumeratorByValue_, &s_instanceOverloads[1], 1),
+			::pafcore::InstanceMethod("_getEnumeratorCount_", 0, EnumType__getEnumeratorCount_, &s_instanceOverloads[2], 1),
+			::pafcore::InstanceMethod("_getEnumerator_", 0, EnumType__getEnumerator_, &s_instanceOverloads[3], 1),
 		};
 		m_instanceMethods = s_instanceMethods;
 		m_instanceMethodCount = paf_array_size_of(s_instanceMethods);

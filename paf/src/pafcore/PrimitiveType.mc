@@ -42,40 +42,28 @@ namespace idlcpp
 		};
 		RuntimeTypeOf<::pafcore::Type>::RuntimeType::GetSingleton()->m_firstDerivedClass = &s_classTypeIterators[0];
 		m_classTypeIterators = s_classTypeIterators;
-		static ::pafcore::Result s__findMember__Result_0(RuntimeTypeOf<::pafcore::Metadata>::RuntimeType::GetSingleton(), false, ::pafcore::Result::by_ptr);
-		static ::pafcore::Argument s__findMember__Arguments_0[] = 
+		static ::pafcore::Result s_instanceResults[] = 
 		{
-			::pafcore::Argument("this", GetSingleton(), ::pafcore::Argument::by_ptr, false),
+			::pafcore::Result(RuntimeTypeOf<::pafcore::Metadata>::RuntimeType::GetSingleton(), false, ::pafcore::Result::by_ptr),
+			::pafcore::Result(RuntimeTypeOf<::size_t>::RuntimeType::GetSingleton(), false, ::pafcore::Result::by_value),
+			::pafcore::Result(RuntimeTypeOf<::pafcore::Metadata>::RuntimeType::GetSingleton(), false, ::pafcore::Result::by_ptr),
+		};
+		static ::pafcore::Argument s_instanceArguments[] = 
+		{
 			::pafcore::Argument("name", RuntimeTypeOf<char>::RuntimeType::GetSingleton(), ::pafcore::Argument::by_ptr, true),
-		};
-		static ::pafcore::Result s__getMemberCount__Result_1(RuntimeTypeOf<::size_t>::RuntimeType::GetSingleton(), false, ::pafcore::Result::by_value);
-		static ::pafcore::Argument s__getMemberCount__Arguments_1[] = 
-		{
-			::pafcore::Argument("this", GetSingleton(), ::pafcore::Argument::by_ptr, false),
-		};
-		static ::pafcore::Result s__getMember__Result_2(RuntimeTypeOf<::pafcore::Metadata>::RuntimeType::GetSingleton(), false, ::pafcore::Result::by_ptr);
-		static ::pafcore::Argument s__getMember__Arguments_2[] = 
-		{
-			::pafcore::Argument("this", GetSingleton(), ::pafcore::Argument::by_ptr, false),
 			::pafcore::Argument("index", RuntimeTypeOf<::size_t>::RuntimeType::GetSingleton(), ::pafcore::Argument::by_value, false),
 		};
-		static ::pafcore::Overload s__findMember__Overloads[] = 
+		static ::pafcore::Overload s_instanceOverloads[] = 
 		{
-			::pafcore::Overload(&s__findMember__Result_0, s__findMember__Arguments_0, 1),
+			::pafcore::Overload(&s_instanceResults[0], &s_instanceArguments[0], 1),
+			::pafcore::Overload(&s_instanceResults[1], 0, 0),
+			::pafcore::Overload(&s_instanceResults[2], &s_instanceArguments[1], 1),
 		};
-		static ::pafcore::Overload s__getMemberCount__Overloads[] = 
+			static ::pafcore::InstanceMethod s_instanceMethods[] = 
 		{
-			::pafcore::Overload(&s__getMemberCount__Result_1, 0, 0),
-		};
-		static ::pafcore::Overload s__getMember__Overloads[] = 
-		{
-			::pafcore::Overload(&s__getMember__Result_2, s__getMember__Arguments_2, 1),
-		};
-		static ::pafcore::InstanceMethod s_instanceMethods[] = 
-		{
-			::pafcore::InstanceMethod("_findMember_", 0, PrimitiveType__findMember_, s__findMember__Overloads, 1),
-			::pafcore::InstanceMethod("_getMemberCount_", 0, PrimitiveType__getMemberCount_, s__getMemberCount__Overloads, 1),
-			::pafcore::InstanceMethod("_getMember_", 0, PrimitiveType__getMember_, s__getMember__Overloads, 1),
+			::pafcore::InstanceMethod("_findMember_", 0, PrimitiveType__findMember_, &s_instanceOverloads[0], 1),
+			::pafcore::InstanceMethod("_getMemberCount_", 0, PrimitiveType__getMemberCount_, &s_instanceOverloads[1], 1),
+			::pafcore::InstanceMethod("_getMember_", 0, PrimitiveType__getMember_, &s_instanceOverloads[2], 1),
 		};
 		m_instanceMethods = s_instanceMethods;
 		m_instanceMethodCount = paf_array_size_of(s_instanceMethods);
