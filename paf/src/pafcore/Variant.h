@@ -7,8 +7,6 @@ BEGIN_PAFCORE
 class Type;
 class Reference;
 class Value;
-class InstanceArrayProperty;
-class StaticArrayProperty;
 
 const size_t max_primitive_type_size = 8;//(longlong_t, double_t);
 const size_t unknown_array_size = ((size_t)-1) >> 1;
@@ -59,9 +57,6 @@ public:
 	void assignPtr(Type* type, const void* pointer, bool constant, Semantic semantic);
 	void assignArray(Type* type, const void* pointer, size_t arraySize, bool constant, Semantic semantic);
 
-	void assignInstanceArrayProperty(InstanceArrayProperty* property, Variant* object);
-	void assignStaticArrayProperty(StaticArrayProperty* property);
-	
 	bool castToPrimitive(Type* dstType, void* dst) const;
 	bool castToEnum(Type* dstType, void* dst) const;
 	bool castToValue(Type* dstType, void* dst) const;
@@ -81,11 +76,7 @@ public:
 public:
 	Type* m_type;
 	void* m_pointer;
-	union
-	{
-		byte_t m_primitiveValue[max_primitive_type_size];
-		Variant* m_instanceArrayPropertyObject;
-	};
+	byte_t m_primitiveValue[max_primitive_type_size];
 	size_t m_arraySize;
 	byte_t m_semantic;
 	bool m_constant;
