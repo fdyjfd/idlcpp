@@ -14,6 +14,54 @@ inline long_t Atomic_Decrement(long_t * lpAddend)
 	return _InterlockedDecrement(lpAddend);
 }
 
+class RefCountObject
+{
+public:
+	RefCountObject() : m_refCount(1)
+	{}
+	virtual ~RefCountObject()
+	{}
+	long_t addRef()
+	{
+		return ++m_refCount;
+	}
+	long_t release()
+	{
+		long_t res = --m_refCount;
+		if (0 == res)
+		{
+			delete this;
+		}
+		return res;
+	}
+private:
+	long_t m_refCount;
+};
+
+class AtomicRefCountObject
+{
+public:
+	AtomicRefCountObject() : m_refCount(1)
+	{}
+	virtual ~AtomicRefCountObject()
+	{}
+	long_t addRef()
+	{
+		return Atomic_Increment(&m_refCount);
+	}
+	long_t release()
+	{
+		long_t res = Atomic_Decrement(&m_refCount);
+		if (0 == res)
+		{
+			delete this;
+		}
+		return res;
+	}
+private:
+	long_t m_refCount;
+};
+
 template<typename T>
 class RefCountImpl : public T
 {

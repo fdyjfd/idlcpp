@@ -171,4 +171,11 @@ PAFCORE_EXPORT void DummyDestroyInstance(void* address);
 PAFCORE_EXPORT void DummyDestroyArray(void* address);
 PAFCORE_EXPORT void DummyAssign(void* dst, const void* src);
 
+class VirtualDestructor
+{
+public:
+	virtual ~VirtualDestructor()
+	{}
+};
+
 END_PAFCORE
