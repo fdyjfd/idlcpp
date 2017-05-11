@@ -685,24 +685,40 @@ ErrorCode PrimitiveType::Primitive_op_rightShiftAssign(Variant* result, Variant*
 	return Primitive_op_compoundAssign_IntegerOnly(result, args, numArgs, &op_rightShift);
 }
 
-const char* PrimitiveTypeTraits<bool>::s_typeName					= "bool";
-const char* PrimitiveTypeTraits<char>::s_typeName					= "char";
-const char* PrimitiveTypeTraits<signed char>::s_typeName			= "signed char";
-const char* PrimitiveTypeTraits<unsigned char>::s_typeName			= "unsigned char";
-const char* PrimitiveTypeTraits<wchar_t>::s_typeName				= "wchar_t";
-const char* PrimitiveTypeTraits<short>::s_typeName					= "short";
-const char* PrimitiveTypeTraits<unsigned short>::s_typeName			= "unsigned short";
-const char* PrimitiveTypeTraits<long>::s_typeName					= "long";
-const char* PrimitiveTypeTraits<unsigned long>::s_typeName			= "unsigned long";
-const char* PrimitiveTypeTraits<long long>::s_typeName				= "long long";
-const char* PrimitiveTypeTraits<unsigned long long>::s_typeName		= "unsigned long long";
-const char* PrimitiveTypeTraits<int>::s_typeName					= "int";
-const char* PrimitiveTypeTraits<unsigned int>::s_typeName			= "unsigned int";
-const char* PrimitiveTypeTraits<float>::s_typeName					= "float";
-const char* PrimitiveTypeTraits<double>::s_typeName					= "double";
-const char* PrimitiveTypeTraits<long double>::s_typeName			= "long double";
+//const char* PrimitiveTypeTraits<bool>::s_typeName					= "bool";
+//const char* PrimitiveTypeTraits<char>::s_typeName					= "char";
+//const char* PrimitiveTypeTraits<signed char>::s_typeName			= "signed char";
+//const char* PrimitiveTypeTraits<unsigned char>::s_typeName			= "unsigned char";
+//const char* PrimitiveTypeTraits<wchar_t>::s_typeName				= "wchar_t";
+//const char* PrimitiveTypeTraits<short>::s_typeName					= "short";
+//const char* PrimitiveTypeTraits<unsigned short>::s_typeName			= "unsigned short";
+//const char* PrimitiveTypeTraits<long>::s_typeName					= "long";
+//const char* PrimitiveTypeTraits<unsigned long>::s_typeName			= "unsigned long";
+//const char* PrimitiveTypeTraits<long long>::s_typeName				= "long long";
+//const char* PrimitiveTypeTraits<unsigned long long>::s_typeName		= "unsigned long long";
+//const char* PrimitiveTypeTraits<int>::s_typeName					= "int";
+//const char* PrimitiveTypeTraits<unsigned int>::s_typeName			= "unsigned int";
+//const char* PrimitiveTypeTraits<float>::s_typeName					= "float";
+//const char* PrimitiveTypeTraits<double>::s_typeName					= "double";
+//const char* PrimitiveTypeTraits<long double>::s_typeName			= "long double";
 
 
+BoolType				BoolType::				s_instance("bool");
+CharType				CharType::				s_instance("char");
+SignedCharType			SignedCharType::		s_instance("signed char");
+UnsignedCharType		UnsignedCharType::		s_instance("unsigned char");
+WcharType				WcharType::				s_instance("wchar_t");
+ShortType				ShortType::				s_instance("short");
+UnsignedShortType		UnsignedShortType::		s_instance("unsigned short");
+LongType				LongType::				s_instance("long");
+UnsignedLongType		UnsignedLongType::		s_instance("unsigned long");
+LongLongType			LongLongType::			s_instance("long long");
+UnsignedLongLongType	UnsignedLongLongType::	s_instance("unsigned long long");
+IntType					IntType::				s_instance("int");
+UnsignedIntType			UnsignedIntType::		s_instance("unsigned int");
+FloatType				FloatType::				s_instance("float");
+DoubleType				DoubleType::			s_instance("double");
+LongDoubleType			LongDoubleType::		s_instance("long double");
 
 END_PAFCORE
 

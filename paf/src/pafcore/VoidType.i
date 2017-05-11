@@ -12,7 +12,11 @@ namespace pafcore
 	public:
 		virtual Metadata* findMember(const char* name);
 	public:
-		static VoidType* GetSingleton();
+		static VoidType s_instance;
+		static VoidType* GetSingleton()
+		{
+			return &s_instance;
+		}
 #}
 	};
 #{

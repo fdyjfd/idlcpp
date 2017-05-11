@@ -30,7 +30,11 @@
 
 inline size_t paf_new_array_size_of(void* p)
 {
-	return *((size_t*)p - 1);
+	if (0 != p)
+	{
+		return *((size_t*)p - 1);
+	}
+	return 0;
 }
 
 template<typename T>
@@ -65,7 +69,7 @@ inline void paf_delete_array(T* p)
 
 inline size_t paf_new_array_size_of(void* p)
 {
-	return 1;
+	return 0 != p ? 1 : 0;
 }
 
 template<typename T>

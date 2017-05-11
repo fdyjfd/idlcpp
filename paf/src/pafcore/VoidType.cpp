@@ -18,11 +18,7 @@ Metadata* VoidType::findMember(const char* name)
 	return 0;
 }
 
-VoidType* VoidType::GetSingleton()
-{
-	static VoidType s_instance;
-	return &s_instance;
-}
+VoidType VoidType::s_instance;
 
 END_PAFCORE
 

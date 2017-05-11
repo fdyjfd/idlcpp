@@ -169,21 +169,18 @@ namespace pafcore
 	struct PAFCORE_EXPORT PrimitiveTypeTraits<bool>
 	{
 		enum { type_category = bool_type };
-		static const char* s_typeName;;
 	};
 
 	template<>
 	struct PAFCORE_EXPORT PrimitiveTypeTraits<char>
 	{
 		enum { type_category = char_type };
-		static const char* s_typeName;;
 	};
 
 	template<>
 	struct PAFCORE_EXPORT PrimitiveTypeTraits<unsigned char>
 	{
 		enum { type_category = unsigned_char_type };
-		static const char* s_typeName;;
 	};
 
 
@@ -191,91 +188,78 @@ namespace pafcore
 	struct PAFCORE_EXPORT PrimitiveTypeTraits<signed char>
 	{
 		enum { type_category = signed_char_type };
-		static const char* s_typeName;;
 	};
 
 	template<>
 	struct PAFCORE_EXPORT PrimitiveTypeTraits<wchar_t>
 	{
 		enum { type_category = wchar_type };
-		static const char* s_typeName;;
 	};
 
 	template<>
 	struct PAFCORE_EXPORT PrimitiveTypeTraits<short>
 	{
 		enum { type_category = short_type };
-		static const char* s_typeName;;
 	};
 
 	template<>
 	struct PAFCORE_EXPORT PrimitiveTypeTraits<unsigned short>
 	{
 		enum { type_category = unsigned_short_type };
-		static const char* s_typeName;;
 	};
 
 	template<>
 	struct PAFCORE_EXPORT PrimitiveTypeTraits<int>
 	{
 		enum { type_category = int_type };
-		static const char* s_typeName;;
 	};
 
 	template<>
 	struct PAFCORE_EXPORT PrimitiveTypeTraits<unsigned int>
 	{
 		enum { type_category = unsigned_int_type };
-		static const char* s_typeName;;
 	};
 
 	template<>
 	struct PAFCORE_EXPORT PrimitiveTypeTraits<long>
 	{
 		enum { type_category = long_type };
-		static const char* s_typeName;;
 	};
 
 	template<>
 	struct PAFCORE_EXPORT PrimitiveTypeTraits<unsigned long>
 	{
 		enum { type_category = unsigned_long_type };
-		static const char* s_typeName;;
 	};
 
 	template<>
 	struct PAFCORE_EXPORT PrimitiveTypeTraits<long long>
 	{
 		enum { type_category = long_long_type };
-		static const char* s_typeName;;
 	};
 
 	template<>
 	struct PAFCORE_EXPORT PrimitiveTypeTraits<unsigned long long>
 	{
 		enum { type_category = unsigned_long_long_type };
-		static const char* s_typeName;;
 	};
 
 	template<>
 	struct PAFCORE_EXPORT PrimitiveTypeTraits<float>
 	{
 		enum { type_category = float_type };
-		static const char* s_typeName;;
 	};
 
 	template<>
 	struct PAFCORE_EXPORT PrimitiveTypeTraits<double>
 	{
 		enum { type_category = double_type };
-		static const char* s_typeName;;
 	};
 
 	template<>
 	struct PAFCORE_EXPORT PrimitiveTypeTraits<long double>
 	{
 		enum { type_category = long_double_type };
-		static const char* s_typeName;;
 	};
 
 
@@ -702,16 +686,10 @@ namespace pafcore
 	public:
 		PrimitiveTypeImpl_Bool(const char* name) : PrimitiveTypeImpl_Integer(name)
 		{}
+		static ThisType s_instance;
 		static ThisType* GetSingleton()
 		{
-			static ThisType* s_instance = 0;
-			static char s_buffer[sizeof(ThisType)];
-			if (0 == s_instance)
-			{
-				s_instance = (ThisType*)s_buffer;
-				new (s_buffer)ThisType(PrimitiveTypeTraits<T>::s_typeName);
-			}
-			return s_instance;
+			return &s_instance;
 		}
 		virtual void op_negate(void* dst, const void* arg)
 		{
@@ -731,16 +709,10 @@ namespace pafcore
 	public:
 		PrimitiveTypeImpl_ForbidNegate(const char* name) : PrimitiveTypeImpl_Integer(name)
 		{}
+		static ThisType s_instance;
 		static ThisType* GetSingleton()
 		{
-			static ThisType* s_instance = 0;
-			static char s_buffer[sizeof(ThisType)];
-			if (0 == s_instance)
-			{
-				s_instance = (ThisType*)s_buffer;
-				new (s_buffer)ThisType(PrimitiveTypeTraits<T>::s_typeName);
-			}
-			return s_instance;
+			return &s_instance;
 		}
 		virtual void op_negate(void* dst, const void* arg)
 		{}
@@ -762,16 +734,10 @@ namespace pafcore
 	public:
 		PrimitiveTypeImpl_AllowNegate(const char* name) : PrimitiveTypeImpl_Integer(name)
 		{}
+		static ThisType s_instance;
 		static ThisType* GetSingleton()
 		{
-			static ThisType* s_instance = 0;
-			static char s_buffer[sizeof(ThisType)];
-			if (0 == s_instance)
-			{
-				s_instance = (ThisType*)s_buffer;
-				new (s_buffer)ThisType(PrimitiveTypeTraits<T>::s_typeName);
-			}
-			return s_instance;
+			return &s_instance;
 		}
 		virtual void op_negate(void* dst, const void* arg)
 		{
@@ -795,16 +761,10 @@ namespace pafcore
 	public:
 		PrimitiveTypeImpl_Real(const char* name) : PrimitiveTypeImpl(name)
 		{}
+		static ThisType s_instance;
 		static ThisType* GetSingleton()
 		{
-			static ThisType* s_instance = 0;
-			static char s_buffer[sizeof(ThisType)];
-			if (0 == s_instance)
-			{
-				s_instance = (ThisType*)s_buffer;
-				new (s_buffer)ThisType(PrimitiveTypeTraits<T>::s_typeName);
-			}
-			return s_instance;
+			return &s_instance;
 		}
 		virtual void op_negate(void* dst, const void* arg)
 		{
@@ -841,12 +801,12 @@ namespace pafcore
 	typedef PrimitiveTypeImpl_AllowNegate<wchar_t>				WcharType;
 	typedef PrimitiveTypeImpl_AllowNegate<short>				ShortType;
 	typedef PrimitiveTypeImpl_AllowNegate<unsigned short>		UnsignedShortType;
-	typedef PrimitiveTypeImpl_AllowNegate<int>					IntType;
-	typedef PrimitiveTypeImpl_ForbidNegate<unsigned int>		UnsignedIntType;
 	typedef PrimitiveTypeImpl_AllowNegate<long>					LongType;
 	typedef PrimitiveTypeImpl_ForbidNegate<unsigned long>		UnsignedLongType;
 	typedef PrimitiveTypeImpl_AllowNegate<long long>			LongLongType;
 	typedef PrimitiveTypeImpl_ForbidNegate<unsigned long long>	UnsignedLongLongType;
+	typedef PrimitiveTypeImpl_AllowNegate<int>					IntType;
+	typedef PrimitiveTypeImpl_ForbidNegate<unsigned int>		UnsignedIntType;
 	typedef PrimitiveTypeImpl_Real<float>						FloatType;
 	typedef PrimitiveTypeImpl_Real<double>						DoubleType;
 	typedef PrimitiveTypeImpl_Real<long double>					LongDoubleType;

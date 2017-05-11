@@ -24,7 +24,18 @@ Variant::Variant()
 
 Variant::~Variant()
 {
-	clear();
+	if (0 != m_pointer && (by_new_ptr == m_semantic || by_new_array == m_semantic))
+	{
+		assert(m_primitiveValue != m_pointer);
+		if (by_new_array == m_semantic)
+		{
+			m_type->destroyArray(m_pointer);
+		}
+		else
+		{
+			m_type->destroyInstance(m_pointer);
+		}
+	}
 }
 
 void Variant::clear()
