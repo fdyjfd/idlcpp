@@ -111,7 +111,7 @@ void MetaSourceFileGenerator::generateCode_Program(FILE* file, SourceFile* sourc
 	writeStringToFile(buf, file);
 	sprintf_s(buf, "#include \"%sVoidType.h\"\n", pafcorePath.c_str());
 	writeStringToFile(buf, file);
-	writeStringToFile("\n", file);
+	writeStringToFile("#include <new>\n\n", file);
 
 	writeStringToFile("\nnamespace idlcpp\n{\n\n", file);
 	generateCode_Namespace(file, programNode, 1);
