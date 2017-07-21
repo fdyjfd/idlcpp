@@ -3,7 +3,7 @@
 #include "System.mh"
 #include "System.mc"
 
-#ifdef WIN32
+#ifdef _WINDOWS
 
 #include <windows.h>
 
