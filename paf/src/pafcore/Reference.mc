@@ -3,7 +3,6 @@
 
 #pragma once
 
-#include "./Typedef.mh"
 #include "Reference.mh"
 #include "AutoRun.h"
 #include "NameSpace.h"
@@ -20,6 +19,7 @@
 #include "Enumerator.h"
 #include "PrimitiveType.h"
 #include "VoidType.h"
+#include <new>
 
 
 namespace idlcpp
@@ -28,18 +28,6 @@ namespace idlcpp
 	__pafcore__Reference_Type::__pafcore__Reference_Type() : ::pafcore::ClassType("Reference", ::pafcore::reference_object)
 	{
 		m_size = sizeof(::pafcore::Reference);
-		static ::pafcore::InstanceProperty s_instanceProperties[] = 
-		{
-			::pafcore::InstanceProperty("refCount", 0, GetSingleton(), Reference_get_refCount, RuntimeTypeOf<::long_t>::RuntimeType::GetSingleton(), ::pafcore::Metadata::by_value, false, 0, 0, ::pafcore::Metadata::by_value, false),
-		};
-		m_instanceProperties = s_instanceProperties;
-		m_instancePropertyCount = paf_array_size_of(s_instanceProperties);
-		static Metadata* s_members[] = 
-		{
-			&s_instanceProperties[0],
-		};
-		m_members = s_members;
-		m_memberCount = paf_array_size_of(s_members);
 		::pafcore::NameSpace::GetGlobalNameSpace()->getNameSpace("pafcore")->registerMember(this);
 	}
 
@@ -56,18 +44,6 @@ namespace idlcpp
 	void __pafcore__Reference_Type::assign(void* dst, const void* src)
 	{
 		*(::pafcore::Reference*)dst = *(const ::pafcore::Reference*)src;
-	}
-
-	::pafcore::ErrorCode __pafcore__Reference_Type::Reference_get_refCount(::pafcore::Variant* that, ::pafcore::Variant* value)
-	{
-		::pafcore::Reference* self;
-		if(!that->castToReferencePtr(GetSingleton(), (void**)&self))
-		{
-			return ::pafcore::e_invalid_this_type;
-		}
-		::long_t res = self->get_refCount();
-		value->assignPrimitive(RuntimeTypeOf<::long_t>::RuntimeType::GetSingleton(), &res);
-		return ::pafcore::s_ok;
 	}
 
 	__pafcore__Reference_Type* __pafcore__Reference_Type::GetSingleton()

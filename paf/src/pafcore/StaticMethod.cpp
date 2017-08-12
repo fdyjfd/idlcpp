@@ -1,8 +1,8 @@
 #include "StaticMethod.h"
-#include "Argument.h"
 #include "StaticMethod.mh"
 #include "StaticMethod.ic"
 #include "StaticMethod.mc"
+#include "Argument.h"
 
 BEGIN_PAFCORE
 

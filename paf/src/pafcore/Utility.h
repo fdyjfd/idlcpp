@@ -1,21 +1,42 @@
 #pragma once
 
 #include "Typedef.h"
-#include <crtdbg.h>
 
 #if defined PAFCORE_EXPORTS
 	#define PAFCORE_EXPORT __declspec(dllexport)
+	#define PAFCORE_TEMPLATE __declspec(dllexport)
 #else
 	#define PAFCORE_EXPORT __declspec(dllimport)
+	#define PAFCORE_TEMPLATE
 #endif
 
 #define BEGIN_PAFCORE namespace pafcore {
 #define END_PAFCORE }
 
+PAFCORE_EXPORT void* __cdecl operator new(size_t size, const char* fileName, int line, int);
+PAFCORE_EXPORT void* __cdecl operator new[](size_t size, const char* fileName, int line, int);
+PAFCORE_EXPORT void __cdecl operator delete(void* block, const char* fileName, int line, int);
+PAFCORE_EXPORT void __cdecl operator delete[](void* block, const char* fileName, int line, int);
+
+#define PAF_WIDE_(s) L ## s
+#define PAF_WIDE(s) PAF_WIDE_(s)
+
 #ifdef _DEBUG
-#define paf_new new(_NORMAL_BLOCK, __FILE__, __LINE__)
+#define paf_new new(__FILE__, __LINE__, 0)
+
+
+PAFCORE_EXPORT void PafAsset(wchar_t const* _Message, wchar_t const* _File, unsigned _Line);
+
+#define PAF_ASSERT(expression) (void)(			\
+		(!!(expression)) ||							\
+		(PafAsset(PAF_WIDE(#expression), PAF_WIDE(__FILE__), (unsigned)(__LINE__)), 0) \
+	)
+
 #else
+
 #define paf_new new
+#define PAF_ASSERT(expression) ((void)0)
+
 #endif
 
 #define paf_array_size_of(a)	(sizeof(a)/sizeof(a[0]))
@@ -88,94 +109,12 @@ inline void paf_delete_array(T* p)
 
 BEGIN_PAFCORE
 
-enum ErrorCode
-{
-	s_ok,
-	e_invalid_namespace,
-	e_name_conflict,
-	e_void_variant,
-	e_is_not_array,
-	e_is_not_type,
-	e_is_not_class,
-	e_invalid_subscript_type,
-	e_member_not_found,
-	e_index_out_of_range,
-	e_property_is_read_only,
-	e_property_is_write_only,
-	e_array_property_is_not_dynamic,
-	e_item_is_constant,
-	e_field_is_an_array,
-	e_field_is_constant,
-	e_invalid_type,
-	e_invalid_object_type,
-	e_invalid_field_type,
-	e_invalid_property_type,
-	e_invalid_arg_num,
-	e_no_match_overload,
-	e_ambiguous_overload,
-	e_invalid_this_type,
-	e_invalid_arg_type_1,
-	e_invalid_arg_type_2,
-	e_invalid_arg_type_3,
-	e_invalid_arg_type_4,
-	e_invalid_arg_type_5,
-	e_invalid_arg_type_6,
-	e_invalid_arg_type_7,
-	e_invalid_arg_type_8,
-	e_invalid_arg_type_9,
-	e_invalid_arg_type_10,
-	e_invalid_arg_type_11,
-	e_invalid_arg_type_12,
-	e_invalid_arg_type_13,
-	e_invalid_arg_type_14,
-	e_invalid_arg_type_15,
-	e_invalid_arg_type_16,
-	e_invalid_arg_type_17,
-	e_invalid_arg_type_18,
-	e_invalid_arg_type_19,
-	e_this_is_constant,
-	e_arg_is_constant_1,
-	e_arg_is_constant_2,
-	e_arg_is_constant_3,
-	e_arg_is_constant_4,
-	e_arg_is_constant_5,
-	e_arg_is_constant_6,
-	e_arg_is_constant_7,
-	e_arg_is_constant_8,
-	e_arg_is_constant_9,
-	e_arg_is_constant_10,
-	e_arg_is_constant_11,
-	e_arg_is_constant_12,
-	e_arg_is_constant_13,
-	e_arg_is_constant_14,
-	e_arg_is_constant_15,
-	e_arg_is_constant_16,
-	e_arg_is_constant_17,
-	e_arg_is_constant_18,
-	e_arg_is_constant_19,
-	e_not_implemented,
-	e_script_error,
-	e_script_dose_not_override,
-};
-
-extern const char* g_errorStrings[];
-
-PAFCORE_EXPORT const char* ErrorCodeToString(ErrorCode errorCode);
-
-enum ArgumentMatch
-{
-	no_match,
-	type_conversion, 
-	type_promotion,
-	const_transformation,
-	exact_match,
-};
 
 PAFCORE_EXPORT void DummyDestroyInstance(void* address);
 PAFCORE_EXPORT void DummyDestroyArray(void* address);
 PAFCORE_EXPORT void DummyAssign(void* dst, const void* src);
 
-class VirtualDestructor
+class PAFCORE_EXPORT VirtualDestructor
 {
 public:
 	virtual ~VirtualDestructor()
@@ -183,3 +122,99 @@ public:
 };
 
 END_PAFCORE
+
+template<typename T>
+inline void DeleteSetNull(T*& p)
+{
+	delete p;
+	p = 0;
+}
+
+template<typename T>
+inline void DeleteArraySetNull(T*& p)
+{
+	delete[] p;
+	p = 0;
+}
+
+template<typename T>
+inline void SafeAddRef(T* p)
+{
+	if (0 != p)
+	{
+		p->addRef();
+	}
+}
+
+template<typename T>
+inline void SafeRelease(T* p)
+{
+	if (0 != p)
+	{
+		p->release();
+	}
+}
+
+template<typename T>
+inline void SafeReleaseSetNull(T*& p)
+{
+	if (0 != p)
+	{
+		p->release();
+		p = 0;
+	}
+}
+
+
+template<typename T>
+inline void SafeReleaseArray(T** p, size_t count)
+{
+	for (size_t i = 0; i < count; ++i)
+	{
+		if (0 != p[i])
+		{
+			p[i]->release();
+		}
+	}
+}
+
+template<typename T>
+inline void SafeReleaseArraySetNull(T** p, size_t count)
+{
+	for (size_t i = 0; i < count; ++i)
+	{
+		if (0 != p[i])
+		{
+			p[i]->release();
+			p[i] = 0;
+		}
+	}
+}
+
+template<typename T>
+inline void CoSafeAddRef(T* p)
+{
+	if (0 != p)
+	{
+		p->AddRef();
+	}
+}
+
+template<typename T>
+inline void CoSafeRelease(T* p)
+{
+	if (0 != p)
+	{
+		p->Release();
+	}
+}
+
+template<typename T>
+inline void CoSafeReleaseSetNull(T*& p)
+{
+	if (0 != p)
+	{
+		p->Release();
+		p = 0;
+	}
+}

@@ -1,5 +1,5 @@
-#include "LuaWrapper.h"
-#include "lua.hpp"
+#include "paflua.h"
+#include "LuaSubclassInvoker.h"
 #include "../pafcore/Variant.h"
 #include "../pafcore/NameSpace.h"
 #include "../pafcore/NameSpace.mh"
@@ -19,7 +19,6 @@
 #include "../pafcore/Enumerator.h"
 #include "../pafcore/VoidType.h"
 #include "../pafcore/PrimitiveType.h"
-#include "LuaSubclassInvoker.h"
 
 #include <new.h>
 #include <string.h>
@@ -28,8 +27,7 @@
 
 BEGIN_PAFLUA
 
-
-void stackDump (lua_State *L) 
+static void stackDump (lua_State *L) 
 {
 	int i;
 	int top = lua_gettop(L);
@@ -65,10 +63,10 @@ void stackDump (lua_State *L)
 }
 
 
+const size_t max_param_count = 20;
 const char* variant_metatable_name = "paf.Variant";
 const char* instanceArrayProperty_metatable_name = "paf.InstanceArrayProperty";
 const char* staticArrayProperty_metatable_name = "paf.StaticArrayProperty";
-const size_t max_param_count = 20;
 
 struct InstanceArrayPropertyInstance
 {
@@ -91,6 +89,63 @@ int Variant_GC(lua_State *L)
 	pafcore::Variant* variant = (pafcore::Variant*)lua_touserdata(L, 1);
 	variant->~Variant();
 	return 0;
+}
+
+
+pafcore::ErrorCode GetPrimitiveOrEnum(lua_State *L, pafcore::Variant* variant)
+{
+	if (variant->m_type->isPrimitive())
+	{
+		if (variant->byValue() || variant->byRef())
+		{
+			pafcore::PrimitiveType* primitiveType = static_cast<pafcore::PrimitiveType*>(variant->m_type);
+			switch (primitiveType->m_typeCategory)
+			{
+			case pafcore::float_type:
+			case pafcore::double_type:
+			{
+				lua_Number value;
+				primitiveType->castTo(&value, RuntimeTypeOf<lua_Number>::RuntimeType::GetSingleton(), variant->m_pointer);
+				lua_pushnumber(L, value);
+			}
+			break;
+			case pafcore::bool_type:
+			{
+				bool value;
+				primitiveType->castTo(&value, RuntimeTypeOf<bool>::RuntimeType::GetSingleton(), variant->m_pointer);
+				lua_pushboolean(L, value ? 1 : 0);
+			}
+			break;
+			default:
+			{
+				lua_Integer value;
+				primitiveType->castTo(&value, RuntimeTypeOf<lua_Integer>::RuntimeType::GetSingleton(), variant->m_pointer);
+				lua_pushinteger(L, value);
+			}
+			}
+			return pafcore::s_ok;
+		}
+		else
+		{
+			pafcore::PrimitiveType* primitiveType = static_cast<pafcore::PrimitiveType*>(variant->m_type);
+			if (pafcore::char_type == primitiveType->m_typeCategory)
+			{
+				lua_pushstring(L, (const char*)variant->m_pointer);
+				return pafcore::s_ok;
+			}
+		}
+	}
+	else if (variant->m_type->isEnum())
+	{
+		if (variant->byValue() || variant->byRef())
+		{
+			lua_Integer value;
+			variant->castToPrimitive(RuntimeTypeOf<lua_Integer>::RuntimeType::GetSingleton(), &value);
+			lua_pushinteger(L, value);
+			return pafcore::s_ok;
+		}
+	}
+	return pafcore::e_invalid_type;
 }
 
 pafcore::Variant* LuaToVariant(pafcore::Variant* value, lua_State *L, int index)
@@ -131,6 +186,7 @@ pafcore::Variant* LuaToVariant(pafcore::Variant* value, lua_State *L, int index)
 		{
 			bool b = lua_toboolean(L, index) != 0;
 			value->assignPrimitive(RuntimeTypeOf<bool>::RuntimeType::GetSingleton(), &b);
+			value->setTemporary();
 		}
 		break;
 	case LUA_TNUMBER:
@@ -138,16 +194,18 @@ pafcore::Variant* LuaToVariant(pafcore::Variant* value, lua_State *L, int index)
 		{
 			lua_Integer i = lua_tointeger(L, index);
 			value->assignPrimitive(RuntimeTypeOf<lua_Integer>::RuntimeType::GetSingleton(), &i);
+			value->setTemporary();
 		}
 		else
 		{
 			lua_Number n = lua_tonumber(L, index);
 			value->assignPrimitive(RuntimeTypeOf<lua_Number>::RuntimeType::GetSingleton(), &n);
+			value->setTemporary();
 		}
 		break;
 	case LUA_TUSERDATA:
 		{
-			pafcore::Variant* variant = (pafcore::Variant*)luaL_checkudata(L, index, variant_metatable_name);//lua_touserdata(L, index);// 
+			pafcore::Variant* variant = (pafcore::Variant*)luaL_checkudata(L, index, variant_metatable_name); 
 			if(variant)
 			{
 				res = variant;
@@ -158,20 +216,53 @@ pafcore::Variant* LuaToVariant(pafcore::Variant* value, lua_State *L, int index)
 	return res;
 }
 
-pafcore::Variant* VariantToLua(lua_State *L, pafcore::Variant* variant)
+void VariantToLua(lua_State *L, pafcore::Variant* variant)
 {
-	void* p = lua_newuserdata(L, sizeof(pafcore::Variant));
-	pafcore::Variant* res = new(p)pafcore::Variant;
-	res->move(*variant);
-	luaL_getmetatable(L, variant_metatable_name);
-	lua_setmetatable(L, -2);
-	return res;
+	if (variant->isNull())
+	{
+		lua_pushnil(L);
+	}
+	else if (variant->m_type->isPrimitive() && (variant->byValue() || (/*variant->isConstant() &&*/ variant->byRef())))
+	{
+		pafcore::PrimitiveType* primitiveType = static_cast<pafcore::PrimitiveType*>(variant->m_type);
+		switch (primitiveType->m_typeCategory)
+		{
+		case pafcore::float_type:
+		case pafcore::double_type:
+		{
+			lua_Number value;
+			primitiveType->castTo(&value, RuntimeTypeOf<lua_Number>::RuntimeType::GetSingleton(), variant->m_pointer);
+			lua_pushnumber(L, value);
+		}
+		break;
+		case pafcore::bool_type:
+		{
+			bool value;
+			primitiveType->castTo(&value, RuntimeTypeOf<bool>::RuntimeType::GetSingleton(), variant->m_pointer);
+			lua_pushboolean(L, value ? 1 : 0);
+		}
+		break;
+		default:
+		{
+			lua_Integer value;
+			primitiveType->castTo(&value, RuntimeTypeOf<lua_Integer>::RuntimeType::GetSingleton(), variant->m_pointer);
+			lua_pushinteger(L, value);
+		}
+		}
+	}
+	else
+	{
+		void* p = lua_newuserdata(L, sizeof(pafcore::Variant));
+		pafcore::Variant* res = new(p)pafcore::Variant;
+		res->move(*variant);
+		luaL_getmetatable(L, variant_metatable_name);
+		lua_setmetatable(L, -2);
+	}
 }
 
 int InvokeFunction(lua_State *L, pafcore::FunctionInvoker invoker, int numArgs, int startIndex)
 {
 	char argumentsBuf[sizeof(pafcore::Variant)*max_param_count];
-	//pafcore::Variant arguments[max_param_count];
 	pafcore::Variant* args[max_param_count]; 
 	if(numArgs > max_param_count)
 	{
@@ -566,61 +657,6 @@ pafcore::ErrorCode SetArraySize(lua_State *L, pafcore::Variant* that)
 	return pafcore::s_ok;
 }
 
-pafcore::ErrorCode GetPrimitiveOrEnum(lua_State *L, pafcore::Variant* variant)
-{
-	if(variant->m_type->isPrimitive())
-	{
-		if(variant->byValue() || variant->byRef())
-		{
-			pafcore::PrimitiveType* primitiveType = static_cast<pafcore::PrimitiveType*>(variant->m_type);
-			switch(primitiveType->m_typeCategory)
-			{
-			case pafcore::float_type:
-			case pafcore::double_type:
-				{
-					lua_Number value;
-					primitiveType->castTo(&value, RuntimeTypeOf<lua_Number>::RuntimeType::GetSingleton(), variant->m_pointer);
-					lua_pushnumber(L, value);
-				}
-				break;
-			case pafcore::bool_type:
-				{
-					bool value;
-					primitiveType->castTo(&value, RuntimeTypeOf<bool>::RuntimeType::GetSingleton(), variant->m_pointer);
-					lua_pushboolean(L, value ? 1 : 0);
-				}
-				break;
-			default:
-				{
-					lua_Integer value;
-					primitiveType->castTo(&value, RuntimeTypeOf<lua_Integer>::RuntimeType::GetSingleton(), variant->m_pointer);
-					lua_pushinteger(L, value);
-				}
-			}
-			return pafcore::s_ok;
-		}
-		else
-		{
-			pafcore::PrimitiveType* primitiveType = static_cast<pafcore::PrimitiveType*>(variant->m_type);
-			if(pafcore::char_type == primitiveType->m_typeCategory)
-			{
-				lua_pushstring(L, (const char*)variant->m_pointer);
-				return pafcore::s_ok;
-			}
-		}
-	}
-	else if(variant->m_type->isEnum())
-	{
-		if(variant->byValue() || variant->byRef())
-		{
-			lua_Integer value;
-			variant->castToPrimitive(RuntimeTypeOf<lua_Integer>::RuntimeType::GetSingleton(), &value);
-			lua_pushinteger(L, value);
-			return pafcore::s_ok;
-		}
-	}
-	return pafcore::e_invalid_type;
-}
 
 pafcore::ErrorCode SetPrimitiveOrEnum(lua_State *L, pafcore::Variant* variant)
 {
@@ -873,6 +909,7 @@ int Subclassing(lua_State *L)
 		{
 			impVar.assignReferencePtr(classType, implementor, false, ::pafcore::Variant::by_new_ptr);
 		}
+		impVar.setSubClassProxy();
 		VariantToLua(L, &impVar);
 		return 1;
 	}
@@ -1373,22 +1410,22 @@ int Variant_NewIndex(lua_State *L)
 	return 1;
 }
 
-const struct luaL_Reg g_variant_reg [] = 
+struct luaL_Reg g_variant_reg [] = 
 {
-	{"__gc", Variant_GC},
-	{"__index", Variant_Index},
-	{"__newindex", Variant_NewIndex},
-	{"__call", Variant_Call},
-	{"__len", Variant_Len},
-	{"__add", Variant_Add},
-	{"__sub", Variant_Sub},
-	{"__mul", Variant_Mul},
-	{"__div", Variant_Div},
-	{"__mod", Variant_Mod},
-	{"__unm", Variant_Unm},
-	{"__lt", Variant_Less},
-	{"__eq", Variant_Equal},
-	{"__le", Variant_LessEqual},
+	{ "__gc", Variant_GC },
+	{ "__index", Variant_Index },
+	{ "__newindex", Variant_NewIndex },
+	{ "__call", Variant_Call },
+	{ "__len", Variant_Len },
+	{ "__add", Variant_Add },
+	{ "__sub", Variant_Sub },
+	{ "__mul", Variant_Mul },
+	{ "__div", Variant_Div },
+	{ "__mod", Variant_Mod },
+	{ "__unm", Variant_Unm },
+	{ "__lt", Variant_Less },
+	{ "__eq", Variant_Equal },
+	{ "__le", Variant_LessEqual },
 	{NULL, NULL}
 };
 
@@ -1497,7 +1534,7 @@ int InstanceArrayProperty_Len(lua_State *L)
 	}
 }
 
-const struct luaL_Reg g_instanceArrayPropertyInstance_reg[] =
+struct luaL_Reg g_instanceArrayPropertyInstance_reg[] =
 {
 	{ "__index", InstanceArrayProperty_Index },
 	{ "__newindex", InstanceArrayProperty_NewIndex },
@@ -1597,7 +1634,7 @@ int StaticArrayProperty_Len(lua_State *L)
 	}
 }
 
-const struct luaL_Reg g_staticArrayPropertyInstance_reg[] =
+struct luaL_Reg g_staticArrayPropertyInstance_reg[] =
 {
 	{ "__index", StaticArrayProperty_Index },
 	{ "__newindex", StaticArrayProperty_NewIndex },
@@ -1606,25 +1643,3 @@ const struct luaL_Reg g_staticArrayPropertyInstance_reg[] =
 };
 
 END_PAFLUA
-
-int luaopen_paflua (lua_State *L)
-{
-	luaL_newmetatable(L, paflua::instanceArrayProperty_metatable_name);
-	luaL_setfuncs(L, paflua::g_instanceArrayPropertyInstance_reg, 0);
-
-	luaL_newmetatable(L, paflua::staticArrayProperty_metatable_name);
-	luaL_setfuncs(L, paflua::g_staticArrayPropertyInstance_reg, 0);
-
-	luaL_newmetatable(L, paflua::variant_metatable_name);
-	luaL_setfuncs(L, paflua::g_variant_reg, 0);
-
-	void* p = lua_newuserdata(L, sizeof(pafcore::Variant));
-	pafcore::Variant* variant = new(p)pafcore::Variant;
-	variant->assignReferencePtr(RuntimeTypeOf<pafcore::NameSpace>::RuntimeType::GetSingleton(), pafcore::NameSpace::GetGlobalNameSpace(), false, ::pafcore::Variant::by_ptr);
-	luaL_getmetatable(L, paflua::variant_metatable_name);
-	lua_setmetatable(L, -2);
-	lua_setglobal(L, "paf");
-
-	//paflua::stackDump(L);
-	return 1;
-}

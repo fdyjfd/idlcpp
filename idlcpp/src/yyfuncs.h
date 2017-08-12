@@ -114,6 +114,8 @@ enum SyntaxNodeType
 	snt_keyword_primitive,
 	snt_keyword_export,
 	snt_keyword_override,
+	snt_keyword_allow_null,
+
 	snt_identify,
 	snt_enumerator,
 	snt_enumerator_list,
@@ -181,6 +183,7 @@ void setFieldStatic(SyntaxNode* syntaxNode, SyntaxNode* stat);
 void setFieldSemicolon(SyntaxNode* syntaxNode, SyntaxNode* semicolon);
 
 SyntaxNode* newGetterSetter(SyntaxNode* keyword, SyntaxNode* constant, SyntaxNode* type, SyntaxNode* passing);
+void setSetterAllowNull(SyntaxNode* syntaxNode);
 void setGetterSetterNativeName(SyntaxNode* syntaxNode, SyntaxNode* nativeName);
 
 SyntaxNode* newProperty(SyntaxNode* name, PropertyArrayCategory category);
@@ -192,6 +195,7 @@ void setPropertyModifier(SyntaxNode* syntaxNode, SyntaxNode* modifier);
 SyntaxNode* newParameter(SyntaxNode* type, SyntaxNode* out, SyntaxNode* passing, SyntaxNode* name);
 void setParameterArray(SyntaxNode* parameter);
 void setParameterConst(SyntaxNode* parameter, SyntaxNode* constant);
+void setParameterAllowNull(SyntaxNode* parameter);
 SyntaxNode* newParameterList(SyntaxNode* parameterList, SyntaxNode* delimiter, SyntaxNode* parameter);
 
 SyntaxNode* newMethod(SyntaxNode* name, SyntaxNode* leftParenthesis, SyntaxNode* parameterList, SyntaxNode* rightParenthesis, SyntaxNode* constant);

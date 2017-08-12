@@ -16,6 +16,7 @@ struct ParameterNode : SyntaxNodeImpl
 	TokenNode* m_passing;
 	IdentifyNode* m_name;
 	bool m_array;
+	bool m_allowNull;
 public:
 	ParameterNode(TypeNameNode* typeName, TokenNode* out, TokenNode* passing, IdentifyNode* name);
 	bool isConstant();
@@ -26,5 +27,6 @@ public:
 	bool isArray();
 	bool isInput();
 	bool isOutput();
+	bool isAllowNull();
 	void checkSemantic(TemplateArguments* templateArguments);
 };

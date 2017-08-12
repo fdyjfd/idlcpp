@@ -21,6 +21,7 @@
 #include "Enumerator.h"
 #include "PrimitiveType.h"
 #include "VoidType.h"
+#include <new>
 
 
 namespace idlcpp
@@ -57,7 +58,7 @@ namespace idlcpp
 		};
 		static ::pafcore::Overload s_staticOverloads[] = 
 		{
-			::pafcore::Overload(&s_staticResults[0], &s_staticArguments[0], 1),
+			::pafcore::Overload(&s_staticResults[0], &s_staticArguments[0], 1, true, false),
 		};
 		static ::pafcore::StaticMethod s_staticMethods[] = 
 		{

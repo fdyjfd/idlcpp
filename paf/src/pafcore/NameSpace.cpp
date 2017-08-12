@@ -1,12 +1,11 @@
 #include "NameSpace.h"
+#include "NameSpace.mh"
+#include "NameSpace.ic"
+#include "NameSpace.mc"
 #include "Metadata.h"
 #include "Type.h"
 #include <vector>
 #include <assert.h>
-#include "TypeAlias.mh"
-#include "NameSpace.mh"
-#include "NameSpace.ic"
-#include "NameSpace.mc"
 
 BEGIN_PAFCORE
 

@@ -8,6 +8,82 @@
 namespace pafcore
 {
 
+	enum ErrorCode
+	{
+		s_ok,
+		e_invalid_namespace,
+		e_name_conflict,
+		e_void_variant,
+		e_is_not_array,
+		e_is_not_type,
+		e_is_not_class,
+		e_invalid_subscript_type,
+		e_member_not_found,
+		e_index_out_of_range,
+		e_property_is_read_only,
+		e_property_is_write_only,
+		e_array_property_is_not_dynamic,
+		e_item_is_constant,
+		e_field_is_an_array,
+		e_field_is_constant,
+		e_invalid_type,
+		e_invalid_object_type,
+		e_invalid_field_type,
+		e_invalid_property_type,
+		e_invalid_arg_num,
+		e_no_match_overload,
+		e_ambiguous_overload,
+		e_invalid_this_type,
+		e_invalid_arg_type_1,
+		e_invalid_arg_type_2,
+		e_invalid_arg_type_3,
+		e_invalid_arg_type_4,
+		e_invalid_arg_type_5,
+		e_invalid_arg_type_6,
+		e_invalid_arg_type_7,
+		e_invalid_arg_type_8,
+		e_invalid_arg_type_9,
+		e_invalid_arg_type_10,
+		e_invalid_arg_type_11,
+		e_invalid_arg_type_12,
+		e_invalid_arg_type_13,
+		e_invalid_arg_type_14,
+		e_invalid_arg_type_15,
+		e_invalid_arg_type_16,
+		e_invalid_arg_type_17,
+		e_invalid_arg_type_18,
+		e_invalid_arg_type_19,
+		e_invalid_arg_type_20,
+		e_this_is_constant,
+		e_arg_is_constant_1,
+		e_arg_is_constant_2,
+		e_arg_is_constant_3,
+		e_arg_is_constant_4,
+		e_arg_is_constant_5,
+		e_arg_is_constant_6,
+		e_arg_is_constant_7,
+		e_arg_is_constant_8,
+		e_arg_is_constant_9,
+		e_arg_is_constant_10,
+		e_arg_is_constant_11,
+		e_arg_is_constant_12,
+		e_arg_is_constant_13,
+		e_arg_is_constant_14,
+		e_arg_is_constant_15,
+		e_arg_is_constant_16,
+		e_arg_is_constant_17,
+		e_arg_is_constant_18,
+		e_arg_is_constant_19,
+		e_arg_is_constant_20,
+		e_not_implemented,
+		e_script_error,
+		e_script_dose_not_override,
+	};
+
+	extern const char* g_errorStrings[];
+
+	PAFCORE_EXPORT const char* ErrorCodeToString(ErrorCode errorCode);
+
 	struct Attribute
 	{
 		const char* name;
@@ -84,6 +160,9 @@ namespace pafcore
 	public:
 		Metadata(const char* name, Attributes* attributes = 0);
 		bool operator < (const Metadata& arg) const;
+	public:
+		virtual long_t addRef();
+		virtual long_t release();
 	public:
 		const char* m_name;
 		Attributes* m_attributes;

@@ -3,7 +3,7 @@
 #include <windows.h>
 
 #include "lua.hpp"
-#include "../../../paf/src/paflua/LuaWrapper.h"
+#include "../../../paf/src/paflua/paflua.h"
 
 #if defined(_DEBUG)
 #pragma comment(lib,"pafcore_d.lib")

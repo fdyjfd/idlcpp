@@ -13,10 +13,12 @@ struct GetterSetterNode : SyntaxNodeImpl
 	TypeNameNode* m_typeName;
 	TokenNode* m_passing;//* or &
 	IdentifyNode* m_nativeName;
+	bool m_allowNull;
 public:
 	GetterSetterNode(TokenNode* keyword, TokenNode* constant, TypeNameNode* typeName, TokenNode* passing);
 	bool isConstant();
 	bool byValue();
 	bool byPtr();
 	bool byRef();
+	bool isAllowNull();
 };

@@ -1,6 +1,4 @@
 #{
-#include <stddef.h>
-#include <stdint.h>
 
 typedef bool					bool_t;
 typedef char					char_t;
@@ -17,16 +15,24 @@ typedef unsigned int			uint_t;
 typedef float					float_t;
 typedef double					double_t;
 typedef long double				longdouble_t;
-typedef uchar_t					byte_t;
-//typedef char_t					int8_t;
-//typedef uchar_t					uint8_t;
-//typedef short_t					int16_t;
-//typedef ushort_t				uint16_t;
-//typedef int_t					int32_t;
-//typedef uint_t					uint32_t;
-//typedef longlong_t				int64_t;
-//typedef ulonglong_t				uint64_t;
 
+typedef unsigned char			byte_t;
+typedef signed char				int8_t;
+typedef unsigned char			uint8_t;
+typedef short					int16_t;
+typedef unsigned short			uint16_t;
+typedef int						int32_t;
+typedef unsigned int			uint32_t;
+typedef long long				int64_t;
+typedef unsigned long long		uint64_t;
+
+#ifdef _WIN64
+typedef unsigned __int64		size_t;
+typedef __int64					ptrdiff_t;
+#else
+typedef unsigned int			size_t;
+typedef int						ptrdiff_t;
+#endif
 
 template<typename T>
 struct RuntimeTypeOf

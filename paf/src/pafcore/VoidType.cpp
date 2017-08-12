@@ -1,9 +1,9 @@
 #include "VoidType.h"
-#include "NameSpace.h"
-#include "AutoRun.h"
 #include "VoidType.mh"
 #include "VoidType.ic"
 #include "VoidType.mc"
+#include "NameSpace.h"
+#include "AutoRun.h"
 
 BEGIN_PAFCORE
 

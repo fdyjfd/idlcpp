@@ -90,7 +90,8 @@
      SCOPE = 306,
      IDENTIFY = 307,
      STRING = 308,
-     TEMPLATE = 309
+     TEMPLATE = 309,
+     ALLOW_NULL = 310
    };
 #endif
 
@@ -108,7 +109,7 @@ typedef union YYSTYPE
 
 
 /* Line 1676 of yacc.c  */
-#line 112 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.y.h"
+#line 113 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.y.h"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */

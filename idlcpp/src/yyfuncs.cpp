@@ -284,6 +284,13 @@ SyntaxNode* newGetterSetter(SyntaxNode* keyword, SyntaxNode* constant, SyntaxNod
 	return res;
 }
 
+void setSetterAllowNull(SyntaxNode* syntaxNode)
+{
+	assert(snt_getter_setter == syntaxNode->m_nodeType);
+	GetterSetterNode* getterSetterNode = (GetterSetterNode*)syntaxNode;
+	getterSetterNode->m_allowNull = true;
+}
+
 void setGetterSetterNativeName(SyntaxNode* syntaxNode, SyntaxNode* nativeName)
 {
 	assert(snt_getter_setter == syntaxNode->m_nodeType);
@@ -353,6 +360,12 @@ void setParameterConst(SyntaxNode* parameter, SyntaxNode* constant)
 {
 	assert(snt_parameter == parameter->m_nodeType && snt_keyword_const == constant->m_nodeType);
 	static_cast<ParameterNode*>(parameter)->m_constant = (TokenNode*)constant;
+}
+
+void setParameterAllowNull(SyntaxNode* parameter)
+{
+	assert(snt_parameter == parameter->m_nodeType);
+	static_cast<ParameterNode*>(parameter)->m_allowNull = true;
 }
 
 SyntaxNode* newParameterList(SyntaxNode* parameterList, SyntaxNode* delimiter, SyntaxNode* parameter)

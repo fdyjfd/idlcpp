@@ -17,11 +17,11 @@ circle = Circle.New();
 circle.radius = 2.0;
 shapeManager = paf.tutorial.ShapeManager.GetInstance();
 shapeManager:addShape(circle.shape);
-print(shapeManager:getTotalArea()._);
+print(shapeManager:getTotalArea());
 
 triangle = paf.tutorial.Triangle();
 triangle.m_vertices[0] = paf.tutorial.Point(0,0);
 triangle.m_vertices[1] = paf.tutorial.Point(0,1);
 triangle.m_vertices[2] = paf.tutorial.Point(1,1);
 shapeManager:addShape(triangle);
-print(shapeManager:getTotalArea()._);
+print(shapeManager:getTotalArea());

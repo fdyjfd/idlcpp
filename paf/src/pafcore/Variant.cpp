@@ -6,7 +6,6 @@
 #include "EnumType.h"
 #include "ClassType.h"
 #include "Reference.h"
-#include "Reference.mh"
 
 #include <assert.h>
 #include <memory.h>
@@ -20,6 +19,8 @@ Variant::Variant()
 	m_arraySize = 0;
 	m_semantic = by_value;
 	m_constant = false;
+	m_temporary = false;
+	m_subClassProxy = false;
 }
 
 Variant::~Variant()
@@ -33,7 +34,15 @@ Variant::~Variant()
 		}
 		else
 		{
-			m_type->destroyInstance(m_pointer);
+			if (m_subClassProxy)
+			{
+				PAF_ASSERT(m_type->isValue() || m_type->isReference());
+				static_cast<ClassType*>(m_type)->destroySubclassProxy(m_pointer);
+			}
+			else
+			{
+				m_type->destroyInstance(m_pointer);
+			}
 		}
 	}
 }
@@ -298,14 +307,18 @@ bool Variant::castToReference(Type* dstType, void* dst) const
 
 bool Variant::castToVoidPtr(void** dst) const
 {
-	*dst = m_pointer;
-	return true;
+	if (0 != m_pointer)
+	{
+		*dst = m_pointer;
+		return true;
+	}
+	return false;
 }
 
 bool Variant::castToPrimitivePtr(Type* dstType, void** dst) const
 {
 	assert(dstType->isPrimitive());
-	if(m_type == dstType || 0 == m_pointer)
+	if(m_type == dstType && 0 != m_pointer)
 	{
 		*dst = m_pointer;
 		return true;
@@ -316,7 +329,7 @@ bool Variant::castToPrimitivePtr(Type* dstType, void** dst) const
 bool Variant::castToEnumPtr(Type* dstType, void** dst) const
 {
 	assert(dstType->isEnum());
-	if(m_type == dstType || 0 == m_pointer)
+	if(m_type == dstType && 0 != m_pointer)
 	{
 		*dst = m_pointer;
 		return true;
@@ -329,8 +342,7 @@ bool Variant::castToValuePtr(Type* dstType, void** dst) const
 	assert(dstType->isValue());
 	if(0 == m_pointer)
 	{
-		*dst = 0;
-		return true;
+		return false;
 	}
 	size_t offset;
 	if (static_cast<ClassType*>(m_type)->getClassOffset(offset, static_cast<ClassType*>(dstType)))
@@ -346,13 +358,78 @@ bool Variant::castToReferencePtr(Type* dstType, void** dst) const
 	assert(dstType->isReference());
 	if(0 == m_pointer)
 	{
-		*dst = 0;
-		return true;
+		return false;
 	}
 	if(m_type->isReference())
 	{
 		size_t offset;
 		if(static_cast<ClassType*>(m_type)->getClassOffset(offset, static_cast<ClassType*>(dstType)))
+		{
+			*(size_t*)dst = (size_t)m_pointer + offset;
+			return true;
+		}
+	}
+	return false;
+}
+
+
+bool Variant::castToVoidPtrAllowNull(void** dst) const
+{
+	*dst = m_pointer;
+	return true;
+}
+
+bool Variant::castToPrimitivePtrAllowNull(Type* dstType, void** dst) const
+{
+	assert(dstType->isPrimitive());
+	if (m_type == dstType || 0 == m_pointer)
+	{
+		*dst = m_pointer;
+		return true;
+	}
+	return false;
+}
+
+bool Variant::castToEnumPtrAllowNull(Type* dstType, void** dst) const
+{
+	assert(dstType->isEnum());
+	if (m_type == dstType || 0 == m_pointer)
+	{
+		*dst = m_pointer;
+		return true;
+	}
+	return false;
+}
+
+bool Variant::castToValuePtrAllowNull(Type* dstType, void** dst) const
+{
+	assert(dstType->isValue());
+	if (0 == m_pointer)
+	{
+		*dst = 0;
+		return true;
+	}
+	size_t offset;
+	if (static_cast<ClassType*>(m_type)->getClassOffset(offset, static_cast<ClassType*>(dstType)))
+	{
+		*dst = (void*)((size_t)m_pointer + offset);
+		return true;
+	}
+	return false;
+}
+
+bool Variant::castToReferencePtrAllowNull(Type* dstType, void** dst) const
+{
+	assert(dstType->isReference());
+	if (0 == m_pointer)
+	{
+		*dst = 0;
+		return true;
+	}
+	if (m_type->isReference())
+	{
+		size_t offset;
+		if (static_cast<ClassType*>(m_type)->getClassOffset(offset, static_cast<ClassType*>(dstType)))
 		{
 			*(size_t*)dst = (size_t)m_pointer + offset;
 			return true;

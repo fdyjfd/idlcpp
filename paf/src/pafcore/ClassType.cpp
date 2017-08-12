@@ -1,4 +1,7 @@
 #include "ClassType.h"
+#include "ClassType.mh"
+#include "ClassType.ic"
+#include "ClassType.mc"
 #include "Variant.h"
 #include "InstanceField.h"
 #include "InstanceProperty.h"
@@ -9,9 +12,6 @@
 #include "StaticArrayProperty.h"
 #include "StaticMethod.h"
 #include <algorithm>
-#include "ClassType.mh"
-#include "ClassType.ic"
-#include "ClassType.mc"
 
 BEGIN_PAFCORE
 

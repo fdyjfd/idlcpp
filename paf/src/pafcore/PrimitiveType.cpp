@@ -5,6 +5,7 @@
 #include "TypeAlias.h"
 #include "AutoRun.h"
 #include <assert.h>
+#include <algorithm>
 
 BEGIN_PAFCORE
 

@@ -23,6 +23,7 @@
 #include "Enumerator.h"
 #include "PrimitiveType.h"
 #include "VoidType.h"
+#include <new>
 
 
 namespace idlcpp
@@ -54,6 +55,7 @@ namespace idlcpp
 			::pafcore::Result(RuntimeTypeOf<::pafcore::Argument>::RuntimeType::GetSingleton(), false, ::pafcore::Result::by_ptr),
 			::pafcore::Result(RuntimeTypeOf<::size_t>::RuntimeType::GetSingleton(), false, ::pafcore::Result::by_value),
 			::pafcore::Result(RuntimeTypeOf<::pafcore::Result>::RuntimeType::GetSingleton(), false, ::pafcore::Result::by_ptr),
+			::pafcore::Result(RuntimeTypeOf<bool>::RuntimeType::GetSingleton(), false, ::pafcore::Result::by_value),
 		};
 		static ::pafcore::Argument s_instanceArguments[] = 
 		{
@@ -61,18 +63,21 @@ namespace idlcpp
 			::pafcore::Argument("index", RuntimeTypeOf<::size_t>::RuntimeType::GetSingleton(), ::pafcore::Argument::by_value, false),
 			::pafcore::Argument("overloadIndex", RuntimeTypeOf<::size_t>::RuntimeType::GetSingleton(), ::pafcore::Argument::by_value, false),
 			::pafcore::Argument("overloadIndex", RuntimeTypeOf<::size_t>::RuntimeType::GetSingleton(), ::pafcore::Argument::by_value, false),
+			::pafcore::Argument("overloadIndex", RuntimeTypeOf<::size_t>::RuntimeType::GetSingleton(), ::pafcore::Argument::by_value, false),
 		};
 		static ::pafcore::Overload s_instanceOverloads[] = 
 		{
-			::pafcore::Overload(&s_instanceResults[0], &s_instanceArguments[0], 2),
-			::pafcore::Overload(&s_instanceResults[1], &s_instanceArguments[2], 1),
-			::pafcore::Overload(&s_instanceResults[2], &s_instanceArguments[3], 1),
+			::pafcore::Overload(&s_instanceResults[0], &s_instanceArguments[0], 2, false, false),
+			::pafcore::Overload(&s_instanceResults[1], &s_instanceArguments[2], 1, false, false),
+			::pafcore::Overload(&s_instanceResults[2], &s_instanceArguments[3], 1, false, false),
+			::pafcore::Overload(&s_instanceResults[3], &s_instanceArguments[4], 1, false, false),
 		};
 			static ::pafcore::InstanceMethod s_instanceMethods[] = 
 		{
 			::pafcore::InstanceMethod("getArgument", 0, InstanceMethod_getArgument, &s_instanceOverloads[0], 1),
 			::pafcore::InstanceMethod("getArgumentCount", 0, InstanceMethod_getArgumentCount, &s_instanceOverloads[1], 1),
 			::pafcore::InstanceMethod("getResult", 0, InstanceMethod_getResult, &s_instanceOverloads[2], 1),
+			::pafcore::InstanceMethod("isConstant", 0, InstanceMethod_isConstant, &s_instanceOverloads[3], 1),
 		};
 		m_instanceMethods = s_instanceMethods;
 		m_instanceMethodCount = paf_array_size_of(s_instanceMethods);
@@ -81,6 +86,7 @@ namespace idlcpp
 			&s_instanceMethods[0],
 			&s_instanceMethods[1],
 			&s_instanceMethods[2],
+			&s_instanceMethods[3],
 			&s_instanceProperties[0],
 		};
 		m_members = s_members;
@@ -190,6 +196,31 @@ namespace idlcpp
 			}
 			::pafcore::Result* res = self->getResult(a0);
 			result->assignReferencePtr(RuntimeTypeOf<::pafcore::Result>::RuntimeType::GetSingleton(), res, false, ::pafcore::Variant::by_ptr);
+			return ::pafcore::s_ok;
+		}
+		return ::pafcore::e_invalid_arg_num;
+	}
+
+	::pafcore::ErrorCode __pafcore__InstanceMethod_Type::InstanceMethod_isConstant(::pafcore::Variant* result, ::pafcore::Variant** args, int_t numArgs)
+	{
+		if(2 == numArgs)
+		{
+			if(args[0]->isConstant())
+			{
+				return ::pafcore::e_this_is_constant;
+			}
+			::pafcore::InstanceMethod* self;
+			if(!args[0]->castToReferencePtr(GetSingleton(), (void**)&self))
+			{
+				return ::pafcore::e_invalid_this_type;
+			}
+			::size_t a0;
+			if(!args[1]->castToPrimitive(RuntimeTypeOf<::size_t>::RuntimeType::GetSingleton(), &a0))
+			{
+				return ::pafcore::e_invalid_arg_type_1;
+			}
+			bool res = self->isConstant(a0);
+			result->assignPrimitive(RuntimeTypeOf<bool>::RuntimeType::GetSingleton(), &res);
 			return ::pafcore::s_ok;
 		}
 		return ::pafcore::e_invalid_arg_num;

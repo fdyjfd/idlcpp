@@ -2,25 +2,8 @@
 #include "Reference.mh"
 #include "Reference.ic"
 #include "Reference.mc"
-#include "ClassType.mh"
 
 BEGIN_PAFCORE
-
-long_t Reference::addRef()
-{
-	return 0x40000000;
-};
-
-long_t Reference::release()
-{
-	return 0x40000000;
-};
-
-long_t Reference::get_refCount() const
-{
-	const_cast<Reference*>(this)->addRef();
-	return const_cast<Reference*>(this)->release();
-};
 
 bool Reference::isTypeOf(ClassType* classType)
 {

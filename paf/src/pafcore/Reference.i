@@ -8,9 +8,6 @@ namespace pafcore
 
 	class #PAFCORE_EXPORT Reference ## : public RefCount
 	{
-		nometa virtual long_t addRef();
-		nometa virtual long_t release();
-		long_t refCount get;
 #{
 		bool isTypeOf(ClassType* classType);
 

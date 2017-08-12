@@ -17,6 +17,7 @@ ParameterNode::ParameterNode(TypeNameNode* typeName, TokenNode* out, TokenNode* 
 	m_passing = passing;
 	m_name = name;
 	m_array = false;
+	m_allowNull = false;
 }
 
 bool ParameterNode::isConstant()
@@ -57,6 +58,11 @@ bool ParameterNode::isInput()
 bool ParameterNode::isOutput()
 {
 	return 0 != m_out;
+}
+
+bool ParameterNode::isAllowNull()
+{
+	return m_allowNull;
 }
 
 void ParameterNode::checkSemantic(TemplateArguments* templateArguments)

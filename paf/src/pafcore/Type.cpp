@@ -2,7 +2,6 @@
 #include "Type.mh"
 #include "Type.ic"
 #include "Type.mc"
-#include <assert.h>
 
 BEGIN_PAFCORE
 

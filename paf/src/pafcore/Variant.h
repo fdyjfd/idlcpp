@@ -68,11 +68,22 @@ public:
 	bool castToValuePtr(Type* dstType, void** dst) const;
 	bool castToReferencePtr(Type* dstType, void** dst) const;
 
+	bool castToVoidPtrAllowNull(void** dst) const;
+	bool castToPrimitivePtrAllowNull(Type* dstType, void** dst) const;
+	bool castToEnumPtrAllowNull(Type* dstType, void** dst) const;
+	bool castToValuePtrAllowNull(Type* dstType, void** dst) const;
+	bool castToReferencePtrAllowNull(Type* dstType, void** dst) const;
+
 	bool castToObjectPtr(Type* dstType, void** dst) const;
 	bool castToObject(Type* dstType, void* dst) const;
 
 	void reinterpretCastToPtr(Variant& var, Type* dstType) const;
 
+	void setTemporary();
+	bool isTemporary() const;
+
+	void setSubClassProxy();
+	bool isSubClassProxy() const;
 public:
 	Type* m_type;
 	void* m_pointer;
@@ -80,6 +91,8 @@ public:
 	size_t m_arraySize;
 	byte_t m_semantic;
 	bool m_constant;
+	bool m_temporary;
+	bool m_subClassProxy;
 };
 
 //------------------------------------------------------------------------------
@@ -111,6 +124,26 @@ inline bool Variant::isConstant()
 inline Variant::Semantic Variant::getSemantic()
 {
 	return (Semantic)m_semantic;
+}
+
+inline void Variant::setTemporary()
+{
+	m_temporary = true;
+}
+
+inline bool Variant::isTemporary() const
+{
+	return m_temporary;
+}
+
+inline void Variant::setSubClassProxy()
+{
+	m_subClassProxy = true;
+}
+
+inline bool Variant::isSubClassProxy() const
+{
+	return m_subClassProxy;
 }
 
 END_PAFCORE

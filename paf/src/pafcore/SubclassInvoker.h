@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Variant.h"
+#include "Metadata.h"
 
 BEGIN_PAFCORE
 

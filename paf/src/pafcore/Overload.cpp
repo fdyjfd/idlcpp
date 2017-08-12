@@ -8,11 +8,22 @@
 
 BEGIN_PAFCORE
 
-Overload::Overload(Result* result, Argument* args, size_t argCount)
+enum ArgumentMatch
+{
+	no_match,
+	type_conversion,
+	type_promotion,
+	const_transformation,
+	exact_match,
+};
+
+Overload::Overload(Result* result, Argument* args, size_t argCount, bool isStatic, bool isConstant)
 {
 	m_result = result;
 	m_args = args;
 	m_argCount = argCount;
+	m_isStatic = isStatic;
+	m_isConstant = isConstant;
 }
 
 const char nm = no_match;
@@ -146,6 +157,14 @@ ArgumentMatch MatchArgumentByPassingPtr(Type* dstType, Type* srcType)
 
 bool Overload::matchArguments(char* matches, Variant** variants)
 {
+	if (!m_isStatic)
+	{
+		if (!m_isConstant && variants[0]->m_constant)
+		{
+			return false;
+		}
+		++variants;
+	}
 	for (size_t i = 0; i < m_argCount; ++i)
 	{
 		ArgumentMatch match;
@@ -201,7 +220,7 @@ size_t Overload::Resolution(Overload* overloads, Variant** variants, size_t argC
 	size_t candidateCount = 0;
 	for (size_t i = 0; i < overloadCount; ++i)
 	{
-		assert(argCount == overloads[i].m_argCount);
+		assert(argCount == overloads[i].m_argCount + overloads[i].m_isStatic ? 0 : 1);
 		if (overloads[i].matchArguments(&argMatches[i*argCount], variants))
 		{
 			candidates[candidateCount] = i;

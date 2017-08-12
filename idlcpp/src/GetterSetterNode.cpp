@@ -11,6 +11,7 @@ GetterSetterNode::GetterSetterNode(TokenNode* keyword, TokenNode* constant, Type
 	m_typeName = typeName;
 	m_passing = passing;
 	m_nativeName = 0;
+	m_allowNull = false;
 }
 
 bool GetterSetterNode::isConstant()
@@ -31,4 +32,9 @@ bool GetterSetterNode::byPtr()
 bool GetterSetterNode::byRef()
 {
 	return (0 != m_passing && '&' == m_passing->m_nodeType);
+}
+
+bool GetterSetterNode::isAllowNull()
+{
+	return m_allowNull;
 }

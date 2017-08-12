@@ -6,4 +6,4 @@ triangle.m_vertices[2] = paf.tutorial.Point(1,1);
 
 shapeManager = paf.tutorial.ShapeManager.GetInstance();
 shapeManager:addShape(triangle);
-print(shapeManager:getTotalArea()._);
+print(shapeManager:getTotalArea());

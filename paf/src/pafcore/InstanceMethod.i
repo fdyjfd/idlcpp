@@ -16,6 +16,7 @@ namespace pafcore
 		Result* getResult(size_t overloadIndex);
 		size_t getArgumentCount(size_t overloadIndex);
 		Argument* getArgument(size_t overloadIndex, size_t index);
+		bool isConstant(size_t overloadIndex);
 #{
 	public:
 		InstanceMethod(const char* name, Attributes* attributes, FunctionInvoker invoker, Overload* overloads, size_t overloadCount);

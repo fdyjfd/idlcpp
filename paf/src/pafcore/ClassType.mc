@@ -24,6 +24,7 @@
 #include "Enumerator.h"
 #include "PrimitiveType.h"
 #include "VoidType.h"
+#include <new>
 
 
 namespace idlcpp
@@ -39,8 +40,8 @@ namespace idlcpp
 		};
 		static ::pafcore::Overload s_instanceOverloads[] = 
 		{
-			::pafcore::Overload(&s_instanceResults[0], 0, 0),
-			::pafcore::Overload(&s_instanceResults[1], 0, 0),
+			::pafcore::Overload(&s_instanceResults[0], 0, 0, false, false),
+			::pafcore::Overload(&s_instanceResults[1], 0, 0, false, false),
 		};
 			static ::pafcore::InstanceMethod s_instanceMethods[] = 
 		{
@@ -171,16 +172,16 @@ namespace idlcpp
 		};
 		static ::pafcore::Overload s_instanceOverloads[] = 
 		{
-			::pafcore::Overload(&s_instanceResults[0], &s_instanceArguments[0], 2),
-			::pafcore::Overload(&s_instanceResults[1], 0, 0),
-			::pafcore::Overload(&s_instanceResults[2], &s_instanceArguments[2], 1),
-			::pafcore::Overload(&s_instanceResults[3], 0, 0),
-			::pafcore::Overload(&s_instanceResults[4], &s_instanceArguments[3], 1),
-			::pafcore::Overload(&s_instanceResults[5], &s_instanceArguments[4], 2),
-			::pafcore::Overload(&s_instanceResults[6], &s_instanceArguments[6], 1),
-			::pafcore::Overload(&s_instanceResults[7], &s_instanceArguments[7], 2),
-			::pafcore::Overload(&s_instanceResults[8], &s_instanceArguments[9], 1),
-			::pafcore::Overload(&s_instanceResults[9], &s_instanceArguments[10], 2),
+			::pafcore::Overload(&s_instanceResults[0], &s_instanceArguments[0], 2, false, false),
+			::pafcore::Overload(&s_instanceResults[1], 0, 0, false, false),
+			::pafcore::Overload(&s_instanceResults[2], &s_instanceArguments[2], 1, false, false),
+			::pafcore::Overload(&s_instanceResults[3], 0, 0, false, false),
+			::pafcore::Overload(&s_instanceResults[4], &s_instanceArguments[3], 1, false, false),
+			::pafcore::Overload(&s_instanceResults[5], &s_instanceArguments[4], 2, false, false),
+			::pafcore::Overload(&s_instanceResults[6], &s_instanceArguments[6], 1, false, false),
+			::pafcore::Overload(&s_instanceResults[7], &s_instanceArguments[7], 2, false, false),
+			::pafcore::Overload(&s_instanceResults[8], &s_instanceArguments[9], 1, false, false),
+			::pafcore::Overload(&s_instanceResults[9], &s_instanceArguments[10], 2, false, false),
 		};
 			static ::pafcore::InstanceMethod s_instanceMethods[] = 
 		{
@@ -242,6 +243,10 @@ namespace idlcpp
 			if(!args[0]->castToReferencePtr(GetSingleton(), (void**)&self))
 			{
 				return ::pafcore::e_invalid_this_type;
+			}
+			if(args[1]->isTemporary())
+			{
+				return ::pafcore::e_invalid_arg_type_1;
 			}
 			const char* a0;
 			if(!args[1]->castToPrimitivePtr(RuntimeTypeOf<char>::RuntimeType::GetSingleton(), (void**)&a0))

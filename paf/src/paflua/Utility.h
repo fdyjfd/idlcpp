@@ -10,3 +10,6 @@
 
 #define BEGIN_PAFLUA namespace paflua {
 #define END_PAFLUA }
+
+#define BEGIN_PAFLUA2 namespace paflua2 {
+#define END_PAFLUA2 }

@@ -1,8 +1,8 @@
 #include "InstanceMethod.h"
-#include "Argument.h"
 #include "InstanceMethod.mh"
 #include "InstanceMethod.ic"
 #include "InstanceMethod.mc"
+#include "Argument.h"
 
 BEGIN_PAFCORE
 
@@ -47,6 +47,15 @@ Argument* InstanceMethod::getArgument(size_t overloadIndex, size_t index)
 		}
 	}
 	return 0;
+}
+
+bool InstanceMethod::isConstant(size_t overloadIndex)
+{
+	if (overloadIndex < m_overloadCount)
+	{
+		return m_overloads[overloadIndex].m_isConstant;
+	}
+	return false;
 }
 
 END_PAFCORE

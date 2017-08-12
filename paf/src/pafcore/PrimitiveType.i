@@ -7,7 +7,6 @@
 #include "InstanceMethod.h"
 #include "StaticMethod.h"
 #include "NameSpace.h"
-#include <algorithm>
 
 #pragma warning( push )
 #pragma warning( disable : 4804 )
@@ -286,9 +285,9 @@ namespace pafcore
 			};
 			static ::pafcore::Overload s_staticOverloads[] =
 			{
-				::pafcore::Overload(&s_staticResults[0], &s_staticArguments[0], 0),
-				::pafcore::Overload(&s_staticResults[1], &s_staticArguments[0], 1),
-				::pafcore::Overload(&s_staticResults[2], &s_staticArguments[1], 1),
+				::pafcore::Overload(&s_staticResults[0], &s_staticArguments[0], 0, true, false),
+				::pafcore::Overload(&s_staticResults[1], &s_staticArguments[0], 1, true, false),
+				::pafcore::Overload(&s_staticResults[2], &s_staticArguments[1], 1, true, false),
 			};
 			static ::pafcore::StaticMethod s_staticMethods[] =
 			{
@@ -367,41 +366,41 @@ namespace pafcore
 			};
 			static ::pafcore::Overload s_instanceOverloads[] =
 			{
-				::pafcore::Overload(&s_instanceResults[0], &s_instanceArguments[0], 1),
-				::pafcore::Overload(&s_instanceResults[1], &s_instanceArguments[1], 1),
-				::pafcore::Overload(&s_instanceResults[2], &s_instanceArguments[2], 1),
-				::pafcore::Overload(&s_instanceResults[3], &s_instanceArguments[3], 1),
-				::pafcore::Overload(&s_instanceResults[4], &s_instanceArguments[4], 1),
-				::pafcore::Overload(&s_instanceResults[5], &s_instanceArguments[5], 0),
-				::pafcore::Overload(&s_instanceResults[6], &s_instanceArguments[5], 1),
-				::pafcore::Overload(&s_instanceResults[7], &s_instanceArguments[6], 1),
-				::pafcore::Overload(&s_instanceResults[8], &s_instanceArguments[7], 1),
-				::pafcore::Overload(&s_instanceResults[9], &s_instanceArguments[8], 1),
-				::pafcore::Overload(&s_instanceResults[10], &s_instanceArguments[9], 0),
-				::pafcore::Overload(&s_instanceResults[11], &s_instanceArguments[9], 1),
-				::pafcore::Overload(&s_instanceResults[12], &s_instanceArguments[10], 1),
-				::pafcore::Overload(&s_instanceResults[13], &s_instanceArguments[11], 1),
-				::pafcore::Overload(&s_instanceResults[14], &s_instanceArguments[12], 1),
-				::pafcore::Overload(&s_instanceResults[15], &s_instanceArguments[13], 1),
-				::pafcore::Overload(&s_instanceResults[16], &s_instanceArguments[14], 0),
-				::pafcore::Overload(&s_instanceResults[17], &s_instanceArguments[14], 1),
-				::pafcore::Overload(&s_instanceResults[18], &s_instanceArguments[15], 1),
-				::pafcore::Overload(&s_instanceResults[19], &s_instanceArguments[16], 1),
-				::pafcore::Overload(&s_instanceResults[20], &s_instanceArguments[17], 1),
-				::pafcore::Overload(&s_instanceResults[21], &s_instanceArguments[18], 1),
-				::pafcore::Overload(&s_instanceResults[22], &s_instanceArguments[19], 1),
-				::pafcore::Overload(&s_instanceResults[23], &s_instanceArguments[20], 1),
-				::pafcore::Overload(&s_instanceResults[24], &s_instanceArguments[21], 1),
-				::pafcore::Overload(&s_instanceResults[25], &s_instanceArguments[22], 0),
-				::pafcore::Overload(&s_instanceResults[26], &s_instanceArguments[22], 0),
-				::pafcore::Overload(&s_instanceResults[27], &s_instanceArguments[22], 1),
-				::pafcore::Overload(&s_instanceResults[28], &s_instanceArguments[23], 0),
-				::pafcore::Overload(&s_instanceResults[29], &s_instanceArguments[23], 0),
-				::pafcore::Overload(&s_instanceResults[30], &s_instanceArguments[23], 0),
-				::pafcore::Overload(&s_instanceResults[31], &s_instanceArguments[23], 1),
-				::pafcore::Overload(&s_instanceResults[32], &s_instanceArguments[24], 1),
-				::pafcore::Overload(&s_instanceResults[33], &s_instanceArguments[25], 1),
-				::pafcore::Overload(&s_instanceResults[34], &s_instanceArguments[26], 1),
+				::pafcore::Overload(&s_instanceResults[0], &s_instanceArguments[0], 1, false, true),
+				::pafcore::Overload(&s_instanceResults[1], &s_instanceArguments[1], 1, false, false),
+				::pafcore::Overload(&s_instanceResults[2], &s_instanceArguments[2], 1, false, false),
+				::pafcore::Overload(&s_instanceResults[3], &s_instanceArguments[3], 1, false, true),
+				::pafcore::Overload(&s_instanceResults[4], &s_instanceArguments[4], 1, false, false),
+				::pafcore::Overload(&s_instanceResults[5], &s_instanceArguments[5], 0, false, true),
+				::pafcore::Overload(&s_instanceResults[6], &s_instanceArguments[5], 1, false, true),
+				::pafcore::Overload(&s_instanceResults[7], &s_instanceArguments[6], 1, false, false),
+				::pafcore::Overload(&s_instanceResults[8], &s_instanceArguments[7], 1, false, true),
+				::pafcore::Overload(&s_instanceResults[9], &s_instanceArguments[8], 1, false, false),
+				::pafcore::Overload(&s_instanceResults[10], &s_instanceArguments[9], 0, false, false),
+				::pafcore::Overload(&s_instanceResults[11], &s_instanceArguments[9], 1, false, true),
+				::pafcore::Overload(&s_instanceResults[12], &s_instanceArguments[10], 1, false, false),
+				::pafcore::Overload(&s_instanceResults[13], &s_instanceArguments[11], 1, false, true),
+				::pafcore::Overload(&s_instanceResults[14], &s_instanceArguments[12], 1, false, true),
+				::pafcore::Overload(&s_instanceResults[15], &s_instanceArguments[13], 1, false, true),
+				::pafcore::Overload(&s_instanceResults[16], &s_instanceArguments[14], 0, false, false),
+				::pafcore::Overload(&s_instanceResults[17], &s_instanceArguments[14], 1, false, true),
+				::pafcore::Overload(&s_instanceResults[18], &s_instanceArguments[15], 1, false, false),
+				::pafcore::Overload(&s_instanceResults[19], &s_instanceArguments[16], 1, false, true),
+				::pafcore::Overload(&s_instanceResults[20], &s_instanceArguments[17], 1, false, true),
+				::pafcore::Overload(&s_instanceResults[21], &s_instanceArguments[18], 1, false, true),
+				::pafcore::Overload(&s_instanceResults[22], &s_instanceArguments[19], 1, false, false),
+				::pafcore::Overload(&s_instanceResults[23], &s_instanceArguments[20], 1, false, true),
+				::pafcore::Overload(&s_instanceResults[24], &s_instanceArguments[21], 1, false, false),
+				::pafcore::Overload(&s_instanceResults[25], &s_instanceArguments[22], 0, false, true),
+				::pafcore::Overload(&s_instanceResults[26], &s_instanceArguments[22], 0, false, true),
+				::pafcore::Overload(&s_instanceResults[27], &s_instanceArguments[22], 1, false, true),
+				::pafcore::Overload(&s_instanceResults[28], &s_instanceArguments[23], 0, false, true),
+				::pafcore::Overload(&s_instanceResults[29], &s_instanceArguments[23], 0, false, false),
+				::pafcore::Overload(&s_instanceResults[30], &s_instanceArguments[23], 0, false, false),
+				::pafcore::Overload(&s_instanceResults[31], &s_instanceArguments[23], 1, false, true),
+				::pafcore::Overload(&s_instanceResults[32], &s_instanceArguments[24], 1, false, false),
+				::pafcore::Overload(&s_instanceResults[33], &s_instanceArguments[25], 1, false, true),
+				::pafcore::Overload(&s_instanceResults[34], &s_instanceArguments[26], 1, false, false),
 			};
 			static ::pafcore::InstanceMethod s_instanceMethods[] =
 			{

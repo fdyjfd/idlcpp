@@ -22,6 +22,7 @@
 #include "Enumerator.h"
 #include "PrimitiveType.h"
 #include "VoidType.h"
+#include <new>
 
 
 namespace idlcpp
@@ -55,9 +56,9 @@ namespace idlcpp
 		};
 		static ::pafcore::Overload s_instanceOverloads[] = 
 		{
-			::pafcore::Overload(&s_instanceResults[0], &s_instanceArguments[0], 1),
-			::pafcore::Overload(&s_instanceResults[1], 0, 0),
-			::pafcore::Overload(&s_instanceResults[2], &s_instanceArguments[1], 1),
+			::pafcore::Overload(&s_instanceResults[0], &s_instanceArguments[0], 1, false, false),
+			::pafcore::Overload(&s_instanceResults[1], 0, 0, false, false),
+			::pafcore::Overload(&s_instanceResults[2], &s_instanceArguments[1], 1, false, false),
 		};
 			static ::pafcore::InstanceMethod s_instanceMethods[] = 
 		{
@@ -105,6 +106,10 @@ namespace idlcpp
 			if(!args[0]->castToReferencePtr(GetSingleton(), (void**)&self))
 			{
 				return ::pafcore::e_invalid_this_type;
+			}
+			if(args[1]->isTemporary())
+			{
+				return ::pafcore::e_invalid_arg_type_1;
 			}
 			const char* a0;
 			if(!args[1]->castToPrimitivePtr(RuntimeTypeOf<char>::RuntimeType::GetSingleton(), (void**)&a0))

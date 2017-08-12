@@ -27,6 +27,7 @@ namespace idlcpp
 		static ::pafcore::ErrorCode InstanceMethod_getArgument(::pafcore::Variant* result, ::pafcore::Variant** args, int numArgs);
 		static ::pafcore::ErrorCode InstanceMethod_getArgumentCount(::pafcore::Variant* result, ::pafcore::Variant** args, int numArgs);
 		static ::pafcore::ErrorCode InstanceMethod_getResult(::pafcore::Variant* result, ::pafcore::Variant** args, int numArgs);
+		static ::pafcore::ErrorCode InstanceMethod_isConstant(::pafcore::Variant* result, ::pafcore::Variant** args, int numArgs);
 	public:
 		PAFCORE_EXPORT static __pafcore__InstanceMethod_Type* GetSingleton();
 	};

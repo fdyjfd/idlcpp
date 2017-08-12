@@ -3,7 +3,7 @@
 #include <windows.h>
 
 #include "lua.hpp"
-#include "../../../paf/src/paflua/LuaWrapper.h"
+#include "../../../paf/src/paflua/paflua.h"
 #include "../../Common/Tutorial0.h"
 #include "../../Common/Tutorial0.mh"
 #include "../../Common/Tutorial0.ic"

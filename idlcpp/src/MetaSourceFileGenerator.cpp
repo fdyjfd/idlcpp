@@ -351,15 +351,26 @@ void writeOverrideFunction(ClassNode* classNode, TemplateArguments* templateArgu
 		sprintf_s(buf, "void %s::destroySubclassProxy(void* subclassProxy)\n", metaClassName.c_str());
 		writeStringToFile(buf, file, indentation);
 		writeStringToFile("{\n", file, indentation);
-		if(classNode->isValueType())
+
+		if (classNode->isValueType())
 		{
-			sprintf_s(buf, "delete reinterpret_cast<%s*>(subclassProxy);\n", subclassProxyName.c_str());
+			sprintf_s(buf, "delete reinterpret_cast<%s*>(subclassProxy)->m_subclassInvoker;\n", subclassProxyName.c_str());
 		}
 		else
 		{
-			sprintf_s(buf, "delete reinterpret_cast<::pafcore::RefCountImpl<%s>*>(subclassProxy);\n", subclassProxyName.c_str());
+			sprintf_s(buf, "delete reinterpret_cast<::pafcore::RefCountImpl<%s>*>(subclassProxy)->m_subclassInvoker;\n", subclassProxyName.c_str());
 		}
 		writeStringToFile(buf, file, indentation + 1);
+		if (classNode->isValueType())
+		{
+			sprintf_s(buf, "reinterpret_cast<%s*>(subclassProxy)->m_subclassInvoker = 0;\n", subclassProxyName.c_str());
+		}
+		else
+		{
+			sprintf_s(buf, "reinterpret_cast<::pafcore::RefCountImpl<%s>*>(subclassProxy)->m_subclassInvoker = 0;\n", subclassProxyName.c_str());
+		}
+		writeStringToFile(buf, file, indentation + 1);
+		writeStringToFile("destroyInstance(subclassProxy);\n", file, indentation + 1);
 		writeStringToFile("}\n\n", file, indentation);
 	}
 }
@@ -854,7 +865,7 @@ void writeMetaSetPropertyImpl(ClassNode* classNode, TemplateArguments* templateA
 	case void_type:
 		sprintf_s(buf, "%s* arg;\n", typeName.c_str());
 		writeStringToFile(buf, file, indentation + 1);
-		sprintf_s(buf, "if(!value->castToVoidPtr((void**)&arg))\n");
+		sprintf_s(buf, "if(!value->%s((void**)&arg))\n", propertyNode->m_set->isAllowNull() ? "castToVoidPtrAllowNull" : "castToVoidPtr");
 		writeStringToFile(buf, file, indentation + 1);
 		break;
 	case primitive_type:
@@ -869,26 +880,40 @@ void writeMetaSetPropertyImpl(ClassNode* classNode, TemplateArguments* templateA
 		{
 			sprintf_s(buf, "%s* arg;\n", typeName.c_str());
 			writeStringToFile(buf, file, indentation + 1);
-			sprintf_s(buf, "if(!value->castToPrimitivePtr(RuntimeTypeOf<%s>::RuntimeType::GetSingleton(), (void**)&arg))\n", typeName.c_str());
+			sprintf_s(buf, "if(!value->%s(RuntimeTypeOf<%s>::RuntimeType::GetSingleton(), (void**)&arg))\n", 
+				propertyNode->m_set->isAllowNull() ? "castToPrimitivePtrAllowNull" : "castToPrimitivePtr", typeName.c_str());
 			writeStringToFile(buf, file, indentation + 1);
 		}
 		break;
 	case enum_type:
-		sprintf_s(buf, "%s* arg;\n", typeName.c_str());
-		writeStringToFile(buf, file, indentation + 1);
-		sprintf_s(buf, "if(!value->castToEnumPtr(RuntimeTypeOf<%s>::RuntimeType::GetSingleton(), (void**)&arg))\n", typeName.c_str());
-		writeStringToFile(buf, file, indentation + 1);
+		if (propertyNode->m_set->byValue() || (propertyNode->m_set->isConstant() && propertyNode->m_set->byRef()))
+		{
+			sprintf_s(buf, "%s arg;\n", typeName.c_str());
+			writeStringToFile(buf, file, indentation + 1);
+			sprintf_s(buf, "if(!value->castToEnum(RuntimeTypeOf<%s>::RuntimeType::GetSingleton(), &arg))\n", typeName.c_str());
+			writeStringToFile(buf, file, indentation + 1);
+		}
+		else
+		{
+			sprintf_s(buf, "%s* arg;\n", typeName.c_str());
+			writeStringToFile(buf, file, indentation + 1);
+			sprintf_s(buf, "if(!value->%s(RuntimeTypeOf<%s>::RuntimeType::GetSingleton(), (void**)&arg))\n",
+				propertyNode->m_set->isAllowNull() ? "castToEnumPtrAllowNull" : "castToEnumPtr", typeName.c_str());
+			writeStringToFile(buf, file, indentation + 1);
+		}
 		break;
 	case value_type:
 		sprintf_s(buf, "%s* arg;\n", typeName.c_str());
 		writeStringToFile(buf, file, indentation + 1);
-		sprintf_s(buf, "if(!value->castToValuePtr(RuntimeTypeOf<%s>::RuntimeType::GetSingleton(), (void**)&arg))\n", typeName.c_str());
+		sprintf_s(buf, "if(!value->%s(RuntimeTypeOf<%s>::RuntimeType::GetSingleton(), (void**)&arg))\n", 
+			propertyNode->m_set->isAllowNull() ? "castToValuePtrAllowNull" : "castToValuePtr", typeName.c_str());
 		writeStringToFile(buf, file, indentation + 1);
 		break;
 	case reference_type:
 		sprintf_s(buf, "%s* arg;\n", typeName.c_str());
 		writeStringToFile(buf, file, indentation + 1);
-		sprintf_s(buf, "if(!value->castToReferencePtr(RuntimeTypeOf<%s>::RuntimeType::GetSingleton(), (void**)&arg))\n", typeName.c_str());
+		sprintf_s(buf, "if(!value->%s(RuntimeTypeOf<%s>::RuntimeType::GetSingleton(), (void**)&arg))\n", 
+			propertyNode->m_set->isAllowNull() ? "castToReferencePtrAllowNull" : "castToReferencePtr", typeName.c_str());
 		writeStringToFile(buf, file, indentation + 1);
 		break;
 	default:
@@ -1140,13 +1165,25 @@ void writeMetaMethodImpl_CastParam(ClassNode* classNode, TemplateArguments* temp
 
 	if(0 == parameterNode->m_out)
 	{
+		if ((void_type == typeCategory) ||
+			(primitive_type == typeCategory && !(parameterNode->byValue() || (parameterNode->isConstant() && parameterNode->byRef()))))
+		{
+			sprintf_s(buf, "if(args[%d]->isTemporary())\n", argIndex);
+			writeStringToFile(buf, file, indentation);
+			writeStringToFile("{\n", file, indentation);
+			sprintf_s(buf, "return ::pafcore::e_invalid_arg_type_%d;\n", paramIndex + 1);
+			writeStringToFile(buf, file, indentation + 1);
+			writeStringToFile("}\n", file, indentation);
+		}
+
 		switch(typeCategory)
 		{
 		case void_type:
 			assert(parameterNode->byPtr());
 			sprintf_s(buf, "%s%s* a%d;\n", strConstant, typeName.c_str(), paramIndex);
 			writeStringToFile(buf, file, indentation);
-			sprintf_s(buf, "args[%d]->castToVoidPtr((void**)&a%d)", argIndex, paramIndex);
+			sprintf_s(buf, "args[%d]->%s((void**)&a%d)", argIndex, 
+				parameterNode->isAllowNull() ? "castToVoidPtrAllowNull" : "castToVoidPtr", paramIndex);
 			break;
 		case primitive_type:
 			if(parameterNode->byValue() || (parameterNode->isConstant() && parameterNode->byRef()))
@@ -1160,7 +1197,8 @@ void writeMetaMethodImpl_CastParam(ClassNode* classNode, TemplateArguments* temp
 				assert('*' == parameterNode->m_passing->m_nodeType || '&' == parameterNode->m_passing->m_nodeType);
 				sprintf_s(buf, "%s%s* a%d;\n", strConstant, typeName.c_str(), paramIndex);
 				writeStringToFile(buf, file, indentation);
-				sprintf_s(buf, "args[%d]->castToPrimitivePtr(RuntimeTypeOf<%s>::RuntimeType::GetSingleton(), (void**)&a%d)", argIndex, typeName.c_str(), paramIndex);
+				sprintf_s(buf, "args[%d]->%s(RuntimeTypeOf<%s>::RuntimeType::GetSingleton(), (void**)&a%d)", argIndex, 
+					parameterNode->isAllowNull() ? "castToPrimitivePtrAllowNull" : "castToPrimitivePtr", typeName.c_str(), paramIndex);
 			}
 			break;
 		case enum_type:
@@ -1174,18 +1212,21 @@ void writeMetaMethodImpl_CastParam(ClassNode* classNode, TemplateArguments* temp
 			{
 				sprintf_s(buf, "%s%s* a%d;\n", strConstant, typeName.c_str(), paramIndex);
 				writeStringToFile(buf, file, indentation);
-				sprintf_s(buf, "args[%d]->castToEnumPtr(RuntimeTypeOf<%s>::RuntimeType::GetSingleton(), (void**)&a%d)", argIndex, typeName.c_str(), paramIndex);
+				sprintf_s(buf, "args[%d]->%s(RuntimeTypeOf<%s>::RuntimeType::GetSingleton(), (void**)&a%d)", argIndex, 
+					parameterNode->isAllowNull() ? "castToEnumPtrAllowNull" : "castToEnumPtr", typeName.c_str(), paramIndex);
 			}
 			break;
 		case value_type:
 			sprintf_s(buf, "%s%s* a%d;\n", strConstant, typeName.c_str(), paramIndex);
 			writeStringToFile(buf, file, indentation);
-			sprintf_s(buf, "args[%d]->castToValuePtr(RuntimeTypeOf<%s>::RuntimeType::GetSingleton(), (void**)&a%d)", argIndex, typeName.c_str(), paramIndex);
+			sprintf_s(buf, "args[%d]->%s(RuntimeTypeOf<%s>::RuntimeType::GetSingleton(), (void**)&a%d)", argIndex, 
+				parameterNode->isAllowNull() ? "castToValuePtrAllowNull" : "castToValuePtr", typeName.c_str(), paramIndex);
 			break;
 		case reference_type:
 			sprintf_s(buf, "%s%s* a%d;\n", strConstant, typeName.c_str(), paramIndex);
 			writeStringToFile(buf, file, indentation);
-			sprintf_s(buf, "args[%d]->castToReferencePtr(RuntimeTypeOf<%s>::RuntimeType::GetSingleton(), (void**)&a%d)", argIndex, typeName.c_str(), paramIndex);
+			sprintf_s(buf, "args[%d]->%s(RuntimeTypeOf<%s>::RuntimeType::GetSingleton(), (void**)&a%d)", argIndex, 
+				parameterNode->isAllowNull() ? "castToReferencePtrAllowNull" : "castToReferencePtr", typeName.c_str(), paramIndex);
 			break;
 		default:
 			assert(false);
@@ -1608,7 +1649,7 @@ void writeMetaMethodImpl_SameParamCount(ClassNode* classNode, TemplateArguments*
 			sprintf_s(buf, "case %d:\n", i);
 			writeStringToFile(buf, file, indentation + 1);
 			writeStringToFile("{\n", file, indentation + 1);
-			writeMetaMethodImpl_OneOverload(classNode, templateArguments, *(begin + i), isStatic, false, file, indentation + 2);
+			writeMetaMethodImpl_OneOverload(classNode, templateArguments, *(begin + i), isStatic, true, file, indentation + 2);
 			writeStringToFile("}\n", file, indentation + 1);
 		}
 		sprintf_s(buf, "case %d:\n", overloadCount);
@@ -2378,9 +2419,9 @@ void writeMetaConstructor_Methods(ClassNode* classNode, TemplateArguments* templ
 				{
 					strcpy_s(strArguments, "0");
 				}
-				sprintf_s(buf, "::pafcore::Overload(&%s[%d], %s, %d),\n",
+				sprintf_s(buf, "::pafcore::Overload(&%s[%d], %s, %d, %s, %s),\n",
 					isStatic ? "s_staticResults" : "s_instanceResults", resultOffset,
-					strArguments, parameterCount);
+					strArguments, parameterCount, isStatic ? "true" : "false", methodNode->isConstant() ? "true" : "false");
 				writeStringToFile(buf, file, indentation + 1);
 				++resultOffset;
 				argumentOffset += parameterCount;
@@ -3403,14 +3444,17 @@ void writeInterfaceMethodImpl(ClassNode* classNode, TemplateArguments* templateA
 			writeInterfaceMethodImpl_SetOutputParamType(classNode, methodNode, parameterNode, i, file, indentation + 1);
 		}
 	}
+	writeStringToFile("if(m_subclassInvoker)\n", file, indentation + 1);
+	writeStringToFile("{\n", file, indentation + 1);
 	sprintf_s(buf, "::pafcore::ErrorCode __error__ = m_subclassInvoker->invoke(\"%s\", &__result__, &__self__, %s, %d);\n", 
 		methodNode->m_name->m_str.c_str(), paramCount > 0 ? "__args__" : "0", paramCount);
-	writeStringToFile(buf, file, indentation + 1);
+	writeStringToFile(buf, file, indentation + 2);
+	writeStringToFile("}\n", file, indentation + 1);
 
-	if(!methodNode->isAbstract() || methodNode->m_enclosing != classNode)
-	{
-		writeInterfaceMethodImpl_CallBaseClass(classNode, templateArguments, methodNode, parameterNodes, file, indentation + 1);
-	}
+	//if(!methodNode->isAbstract() || methodNode->m_enclosing != classNode)
+	//{
+	//	writeInterfaceMethodImpl_CallBaseClass(classNode, templateArguments, methodNode, parameterNodes, file, indentation + 1);
+	//}
 	for(size_t i = 0 ; i < paramCount; ++i)
 	{
 		ParameterNode* parameterNode = parameterNodes[i];

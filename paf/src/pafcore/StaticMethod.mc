@@ -23,6 +23,7 @@
 #include "Enumerator.h"
 #include "PrimitiveType.h"
 #include "VoidType.h"
+#include <new>
 
 
 namespace idlcpp
@@ -64,9 +65,9 @@ namespace idlcpp
 		};
 		static ::pafcore::Overload s_instanceOverloads[] = 
 		{
-			::pafcore::Overload(&s_instanceResults[0], &s_instanceArguments[0], 2),
-			::pafcore::Overload(&s_instanceResults[1], &s_instanceArguments[2], 1),
-			::pafcore::Overload(&s_instanceResults[2], &s_instanceArguments[3], 1),
+			::pafcore::Overload(&s_instanceResults[0], &s_instanceArguments[0], 2, false, false),
+			::pafcore::Overload(&s_instanceResults[1], &s_instanceArguments[2], 1, false, false),
+			::pafcore::Overload(&s_instanceResults[2], &s_instanceArguments[3], 1, false, false),
 		};
 			static ::pafcore::InstanceMethod s_instanceMethods[] = 
 		{

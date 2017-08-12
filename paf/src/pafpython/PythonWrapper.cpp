@@ -225,16 +225,19 @@ pafcore::Variant* PythonToVariant(pafcore::Variant* value, PyObject* pyObject)
 	{
 		bool b = (pyObject != Py_False);
 		value->assignPrimitive(RuntimeTypeOf<bool>::RuntimeType::GetSingleton(), &b);
+		value->setTemporary();
 	}
 	else if(PyLong_Check(pyObject))
 	{
 		PY_LONG_LONG i = PyLong_AsLongLong(pyObject);
 		value->assignPrimitive(RuntimeTypeOf<PY_LONG_LONG>::RuntimeType::GetSingleton(), &i);
+		value->setTemporary();
 	}
 	else if(PyFloat_Check(pyObject))
 	{
 		double d = PyFloat_AsDouble(pyObject);
 		value->assignPrimitive(RuntimeTypeOf<double>::RuntimeType::GetSingleton(), &d);
+		value->setTemporary();
 	}
 	else if(PyUnicode_Check(pyObject))
 	{

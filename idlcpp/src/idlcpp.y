@@ -12,10 +12,10 @@
 %token <sn> LEFT_SHIFT RIGHT_SHIFT EQUAL NOT_EQUAL LESS_EQUAL GREATER_EQUAL AND OR INC DEC
 %token <sn> BOOL CHAR WCHAR_T SHORT LONG INT FLOAT DOUBLE SIGNED UNSIGNED
 %token <sn> NAMESPACE ENUM CLASS STRUCT STATIC VIRTUAL VOID CONST OPERATOR TYPEDEF PRIMITIVE
-%token <sn> ABSTRACT GET SET NOMETA NOCODE EXPORT OVERRIDE SCOPE IDENTIFY STRING TEMPLATE
+%token <sn> ABSTRACT GET SET NOMETA NOCODE EXPORT OVERRIDE SCOPE IDENTIFY STRING TEMPLATE ALLOW_NULL
 %type <sn> enumerator enumeratorList enum_0 enum 
-%type <sn> field_0 field_1 field_2 field getter_0 getter setter_0 setter property_0 property_1 property_2 property
-%type <sn> parameter_0 parameter parameterList method_0 method_1 method_2 method_3 method_4 method
+%type <sn> field_0 field_1 field_2 field getter_0 getter setter_0 setter_1 setter property_0 property_1 property_2 property
+%type <sn> parameter_0 parameter_1 parameter parameterList method_0 method_1 method_2 method_3 method_4 method
 %type <sn> operatorSign operator_0 operator_1 operator_2 operator_3 operator classMember_0 classMember
 %type <sn> primitive scopeName scopeNameList_0 scopeNameList typeName typeNameList classMemberList tokenList
 %type <sn> templateParameterList templateParameters templateClassInstance_0 templateClassInstance
@@ -147,6 +147,7 @@ getter_0				: GET												{$$ = newGetterSetter($1, NULL, NULL, NULL);}
 						| GET '(' CONST typeName '&' ')'					{$$ = newGetterSetter($1, $3, $4, $5);}
 ;
 
+
 getter					: getter_0											{$$ = $1;}
 						| getter_0 '=' STRING								{$$ = $1; setGetterSetterNativeName($$, $3);}
 ;
@@ -159,8 +160,12 @@ setter_0				: SET												{$$ = newGetterSetter($1, NULL, NULL, NULL);}
 						| SET '(' CONST typeName '&' ')'					{$$ = newGetterSetter($1, $3, $4, $5);}
 ;
 
-setter					: setter_0											{$$ = $1;}
-						| setter_0 '=' STRING								{$$ = $1; setGetterSetterNativeName($$, $3);}
+setter_1				: setter_0											{$$ = $1;}
+						| setter_0 ALLOW_NULL								{$$ = $1; setSetterAllowNull($$);}
+;
+
+setter					: setter_1											{$$ = $1;}
+						| setter_1 '=' STRING								{$$ = $1; setGetterSetterNativeName($$, $3);}
 ;
 
 property_0				: IDENTIFY											{$$ = newProperty($1, not_array);}
@@ -197,8 +202,12 @@ parameter_0				: typeName IDENTIFY									{$$ = newParameter($1, NULL, NULL, $2
 						| typeName '^' '[' ']' '&' IDENTIFY					{$$ = newParameter($1, $2, $5, $6); setParameterArray($$);}
 ;
 
-parameter				: parameter_0										{$$ = $1;}
+parameter_1				: parameter_0										{$$ = $1;}
 						| CONST parameter_0									{$$ = $2; setParameterConst($$, $1);}
+;
+
+parameter				: parameter_1										{$$ = $1;}
+						| parameter_1 ALLOW_NULL							{$$ = $1; setParameterAllowNull($$);}
 ;
 
 parameterList			: parameter											{$$ = newParameterList(NULL, NULL, $1);}

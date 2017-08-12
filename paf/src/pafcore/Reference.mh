@@ -22,8 +22,6 @@ namespace idlcpp
 		virtual void destroyArray(void* address);
 		virtual void assign(void* dst, const void* src);
 	public:
-		static ::pafcore::ErrorCode Reference_get_refCount(::pafcore::Variant* that, ::pafcore::Variant* value);
-	public:
 		PAFCORE_EXPORT static __pafcore__Reference_Type* GetSingleton();
 	};
 

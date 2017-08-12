@@ -1,4 +1,5 @@
 #import "../../paf/src/pafcore/typedef.i"
+###include <math.h>
 
 namespace tutorial
 {
@@ -65,13 +66,13 @@ namespace tutorial
 	template<typename N>
 	inline N Vector3<N>::getLength()
 	{
-		return N(sqrt(x * x + y * y + z * z));
+		return N(sqrtf(x * x + y * y + z * z));
 	}
 
 	template<typename N>
 	inline N Vector3<N>::get_length() const
 	{
-		return N(sqrt(x * x + y * y + z * z));
+		return N(sqrtf(x * x + y * y + z * z));
 	}
 
 	template<typename N>

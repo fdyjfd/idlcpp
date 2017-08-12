@@ -1,11 +1,22 @@
 #include "LuaSubclassInvoker.h"
 #include "lua.hpp"
+#include <new>
 
 BEGIN_PAFLUA
 
+extern const char* variant_metatable_name;
 void stackDump (lua_State *L);
-pafcore::Variant* VariantToLua(lua_State *L, pafcore::Variant* variant);
 pafcore::Variant* LuaToVariant(pafcore::Variant* value, lua_State *L, int index);
+
+pafcore::Variant* VariantToLua2(lua_State *L, pafcore::Variant* variant)
+{
+	void* p = lua_newuserdata(L, sizeof(pafcore::Variant));
+	pafcore::Variant* res = new(p)pafcore::Variant;
+	res->move(*variant);
+	luaL_getmetatable(L, variant_metatable_name);
+	lua_setmetatable(L, -2);
+	return res;
+}
 
 LuaSubclassInvoker::LuaSubclassInvoker(lua_State* luaState)
 {
@@ -27,9 +38,14 @@ pafcore::ErrorCode LuaSubclassInvoker::invoke(const char* name, pafcore::Variant
 	lua_pushvalue(m_luaState, -2);
 	for(size_t i = 0; i < numArgs; ++i)
 	{
-		luaArgs[i] = VariantToLua(m_luaState, &args[i]);
+		luaArgs[i] = VariantToLua2(m_luaState, &args[i]);
 	}
 	int error = lua_pcall(m_luaState, numArgs + 1, 1, 0);
+	if (error)
+	{
+		const char* str = lua_tostring(m_luaState, -1);
+		lua_pop(m_luaState, 1);
+	}
 	pafcore::Variant* value = LuaToVariant(result, m_luaState, -1);
 	if(value != result)
 	{

@@ -1,7 +1,7 @@
 
 File = paf.crt.File;
-file = File.New("D:\\GitHub\\idlcpp\\bin\\tutorial9.luass", "rb");
-if not file._isNullPtr_._  then
+file = File.New("D:\\GitHub\\idlcpp\\bin\\tutorial9.lua", "rb");
+if file then
 	file:seek(0, File.SeekFlag.seek_end);
 	size = file:tell();
 	file:seek(0, File.SeekFlag.seek_set);

@@ -601,6 +601,7 @@ void MetaHeaderFileGenerator::generateCode_SubclassProxy(FILE* file, ClassNode* 
 	sprintf_s(buf, "class %s : public %s\n", subclassProxyName.c_str(), className.c_str());
 	writeStringToFile(buf, file, indentation);
 	writeStringToFile("{\n", file, indentation);
+	writeStringToFile("public:\n", file, indentation);
 	writeStringToFile("::pafcore::SubclassInvoker* m_subclassInvoker;\n", file, indentation + 1);
 	writeStringToFile("public:\n", file, indentation);
 	sprintf_s(buf, "%s(::pafcore::SubclassInvoker* subclassInvoker);\n", subclassProxyName.c_str());

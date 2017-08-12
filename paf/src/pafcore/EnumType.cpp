@@ -1,8 +1,9 @@
 #include "EnumType.h"
-#include "InstanceProperty.h"
 #include "EnumType.mh"
 #include "EnumType.ic"
 #include "EnumType.mc"
+#include "InstanceProperty.h"
+#include <algorithm>
 
 BEGIN_PAFCORE
 
