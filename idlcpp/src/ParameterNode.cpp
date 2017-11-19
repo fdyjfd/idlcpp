@@ -79,5 +79,13 @@ void ParameterNode::checkSemantic(TemplateArguments* templateArguments)
 			RaiseError_InvalidParameterType(this);
 		}
 	}
-	g_compiler.useType(typeNode, byValue() ? tu_definition : tu_declaration, m_typeName);
+	else if (primitive_type == typeNode->getTypeCategory(templateArguments))
+	{
+		if (byRef() && !isConstant())
+		{
+			RaiseError_InvalidParameterType(this);
+		}
+	}
+
+	g_compiler.useType(typeNode, templateArguments, byValue() ? tu_use_definition : tu_use_declaration, m_typeName);
 }

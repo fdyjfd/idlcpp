@@ -84,6 +84,7 @@ namespace pafcore
 	public:
 		typedef MetadataTrieTree MetadataContainer;
 		MetadataContainer m_members;
+		Metadata* m_enclosing;
 	public:
 		static NameSpace* GetGlobalNameSpace();
 #}

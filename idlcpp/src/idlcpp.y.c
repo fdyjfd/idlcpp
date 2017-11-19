@@ -152,8 +152,7 @@
      SCOPE = 306,
      IDENTIFY = 307,
      STRING = 308,
-     TEMPLATE = 309,
-     ALLOW_NULL = 310
+     TEMPLATE = 309
    };
 #endif
 
@@ -171,7 +170,7 @@ typedef union YYSTYPE
 
 
 /* Line 214 of yacc.c  */
-#line 175 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 174 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
@@ -183,7 +182,7 @@ typedef union YYSTYPE
 
 
 /* Line 264 of yacc.c  */
-#line 187 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 186 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
 
 #ifdef short
 # undef short
@@ -411,7 +410,7 @@ union yyalloc
 
 /* YYTRANSLATE(YYLEX) -- Bison symbol number corresponding to YYLEX.  */
 #define YYUNDEFTOK  2
-#define YYMAXUTOK   310
+#define YYMAXUTOK   309
 
 #define YYTRANSLATE(YYX)						\
   ((unsigned int) (YYX) <= YYMAXUTOK ? yytranslate[YYX] : YYUNDEFTOK)
@@ -425,7 +424,7 @@ static const yytype_uint8 yytranslate[] =
        2,     2,     2,    24,     2,     2,     2,    21,    16,     2,
        7,     8,    15,    18,     3,    19,     4,    20,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     5,     6,
-      13,    25,    14,     2,     2,     2,     2,     2,     2,     2,
+      13,    25,    14,    78,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     9,     2,    10,    17,     2,     2,     2,     2,     2,
@@ -449,8 +448,7 @@ static const yytype_uint8 yytranslate[] =
       38,    39,    40,    41,    42,    43,    44,    45,    46,    47,
       48,    49,    50,    51,    52,    53,    54,    55,    56,    57,
       58,    59,    60,    61,    62,    63,    64,    65,    66,    67,
-      68,    69,    70,    71,    72,    73,    74,    75,    76,    77,
-      78
+      68,    69,    70,    71,    72,    73,    74,    75,    76,    77
 };
 
 #if YYDEBUG
@@ -626,7 +624,7 @@ static const char *const yytname[] =
   "UNSIGNED", "NAMESPACE", "ENUM", "CLASS", "STRUCT", "STATIC", "VIRTUAL",
   "VOID", "CONST", "OPERATOR", "TYPEDEF", "PRIMITIVE", "ABSTRACT", "GET",
   "SET", "NOMETA", "NOCODE", "EXPORT", "OVERRIDE", "SCOPE", "IDENTIFY",
-  "STRING", "TEMPLATE", "ALLOW_NULL", "$accept", "primitive", "attribute",
+  "STRING", "TEMPLATE", "'?'", "$accept", "primitive", "attribute",
   "attributeList", "attributes", "enumerator", "enumeratorList", "enum_0",
   "enum", "scopeName", "scopeNameList_0", "scopeNameList", "typeName",
   "typeNameList", "typeAlias", "field_0", "field_1", "field_2", "field",
@@ -655,7 +653,7 @@ static const yytype_uint16 yytoknum[] =
      272,   273,   274,   275,   276,   277,   278,   279,   280,   281,
      282,   283,   284,   285,   286,   287,   288,   289,   290,   291,
      292,   293,   294,   295,   296,   297,   298,   299,   300,   301,
-     302,   303,   304,   305,   306,   307,   308,   309,   310
+     302,   303,   304,   305,   306,   307,   308,   309,    63
 };
 # endif
 
@@ -3433,7 +3431,7 @@ yyreduce:
 
 
 /* Line 1455 of yacc.c  */
-#line 3437 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 3435 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
       default: break;
     }
   YY_SYMBOL_PRINT ("-> $$ =", yyr1[yyn], &yyval, &yyloc);

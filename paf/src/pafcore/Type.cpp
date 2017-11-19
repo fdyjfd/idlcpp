@@ -5,11 +5,12 @@
 
 BEGIN_PAFCORE
 
-Type::Type(const char* name, Category category)
-: Metadata(name)
+Type::Type(const char* name, Category category) : 
+	Metadata(name),
+	m_category(category),
+	m_size(0),
+	m_enclosing(0)
 {
-	m_category = category;
-	m_size = 0;
 }
 
 void Type::destroyInstance(void* address)

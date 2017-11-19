@@ -21,6 +21,7 @@ namespace pafcore
 		TypeAlias(const char* name, Type* type);
 	public:
 		Type* m_type;
+		Metadata* m_enclosing;
 
 	};
 

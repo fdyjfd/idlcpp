@@ -500,14 +500,14 @@ namespace pafcore
 					return e_invalid_arg_type_1;
 				}
 			}
-			result->assignPrimitive(RuntimeTypeOf<T>::RuntimeType::GetSingleton(), &a0);
+			result->assignPrimitiveForNew(RuntimeTypeOf<T>::RuntimeType::GetSingleton(), &a0);
 			return s_ok;
 		}
 		static ErrorCode Primitive_NewArray(Variant* result, Variant** args, int_t numArgs)
 		{
 			if(1 == numArgs)
 			{
-				size_t count;
+				unsigned int count;
 				if(!args[0]->castToPrimitive(RuntimeTypeOf<unsigned int>::RuntimeType::GetSingleton(), &count))
 				{
 					return e_invalid_arg_type_1;

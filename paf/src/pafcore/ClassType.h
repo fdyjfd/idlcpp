@@ -82,13 +82,13 @@ namespace pafcore
 		virtual Metadata* findMember(const char* name);
 		virtual void* createSubclassProxy(SubclassInvoker* subclassInvoker);
 		virtual void destroySubclassProxy(void* subclassProxy);
-		Metadata* findMember(const char* name, bool includeBaseClasses);
-		Metadata* findClassMember(const char* name, bool includeBaseClasses);
+		Metadata* findMember(const char* name, bool includeBaseClasses, bool typeAliasToType);
+		Metadata* findClassMember(const char* name, bool includeBaseClasses, bool typeAliasToType);
 	public:
 		bool isType(ClassType* otherType);
 		bool getClassOffset_(size_t& offset, ClassType* otherType);
 		bool getClassOffset(size_t& offset, ClassType* otherType);
-		Type* findNestedType(const char* name, bool includeBaseClasses);
+		Type* findNestedType(const char* name, bool includeBaseClasses, bool typeAliasToType);
 		TypeAlias* findNestedTypeAlias(const char* name, bool includeBaseClasses);
 		InstanceField* findInstanceField(const char* name, bool includeBaseClasses);
 		StaticField* findStaticField(const char* name, bool includeBaseClasses);

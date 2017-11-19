@@ -202,6 +202,15 @@ void Compiler::extendInternalCode()
 	//}
 }
 
+void Compiler::useType(TypeNode* typeNode, TemplateArguments* templateArguments, TypeUsage usage, TypeNameNode* typeNameNode)
+{
+	useType(typeNode, usage, typeNameNode);
+	TypeNode* actualTypeNode = typeNode->getActualTypeNode(templateArguments);
+	if (actualTypeNode != typeNode)
+	{
+		useType(actualTypeNode, tu_use_definition, typeNameNode);
+	}
+}
 
 void Compiler::useType(TypeNode* typeNode, TypeUsage usage, TypeNameNode* typeNameNode)
 {
@@ -252,7 +261,7 @@ void Compiler::outputUsedTypes(FILE* file, SourceFile* sourceFile)
 		}
 		if (typeNode->m_sourceFile != sourceFile)
 		{
-			if ( (it->usage & tu_definition) || !typeNode->getEnclosing()->isNamespace()
+			if ( (it->usage & tu_use_definition) || !typeNode->getEnclosing()->isNamespace()
 				|| typeNode->isTemplateClass() || typeNode->isTypedef() || typeNode->isTemplateClassInstance())
 			{
 				if (std::find(sourceFiles.begin(), sourceFiles.end(), typeNode->m_sourceFile)
@@ -365,6 +374,47 @@ void Compiler::outputUsedTypes(FILE* file, SourceFile* sourceFile)
 	}
 }
 
+void Compiler::outputUsedTypesForMetaHeader(FILE* file, SourceFile* sourceFile)
+{
+	std::vector<SourceFile*> sourceFiles;
+	auto begin = m_usedTypes.begin();
+	auto end = m_usedTypes.end();
+	for (auto it = begin; it != end; ++it)
+	{
+		if (it->usage & tu_use_meta)
+		{
+			TypeNode* typeNode = it->typeNode;
+			if (typeNode->m_sourceFile != sourceFile)
+			{
+				if (std::find(sourceFiles.begin(), sourceFiles.end(), typeNode->m_sourceFile)
+					== sourceFiles.end())
+				{
+					sourceFiles.push_back(typeNode->m_sourceFile);
+				}
+			}
+		}
+	}
+	auto begin2 = sourceFiles.begin();
+	auto end2 = sourceFiles.end();
+	for (auto it2 = begin2; it2 != end2; ++it2)
+	{
+		std::string fileName;
+		GetRelativePath(fileName, m_mainSourceFile->m_fileName.c_str(), (*it2)->m_fileName.c_str());
+		size_t dotPos = fileName.find_last_of('.');
+		size_t slashPos = fileName.find_last_of('\\');
+		if (std::string::npos == slashPos || slashPos < dotPos)
+		{
+			fileName.erase(dotPos);
+		}
+		fileName += g_options.m_metaHeaderFilePostfix;
+		writeStringToFile("#include \"", file);
+
+		FormatPathForInclude(fileName);
+		writeStringToFile(fileName.c_str(), fileName.length(), file);
+		writeStringToFile("\"\n", file);
+	}
+}
+
 void Compiler::outputUsedTypesForMetaSource(FILE* file, SourceFile* sourceFile)
 {
 	std::vector<SourceFile*> sourceFiles;
@@ -402,7 +452,6 @@ void Compiler::outputUsedTypesForMetaSource(FILE* file, SourceFile* sourceFile)
 		writeStringToFile("\"\n", file);
 	}
 }
-
 
 const char g_strHeader[] =
 {

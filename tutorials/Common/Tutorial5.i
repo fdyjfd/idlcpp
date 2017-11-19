@@ -15,6 +15,7 @@ namespace tutorial
 	override class Shape : Reference
 	{
 		override abstract float getArea();
+		override abstract void getArea2(float* area);
 		##		virtual ~Shape() {}
 	};
 
@@ -36,6 +37,8 @@ namespace tutorial
 		Point m_vertices[#3];
 		nocode Triangle();
 		##virtual float getArea();
+		##virtual void getArea2(float* area);
+
 	};
 
 }

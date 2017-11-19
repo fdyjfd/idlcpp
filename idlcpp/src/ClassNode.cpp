@@ -739,7 +739,7 @@ void ClassNode::checkSemantic(TemplateArguments* templateArguments)
 		if (0 != typeNode)
 		{
 			baseTypeNodes.push_back(typeNode);
-			g_compiler.useType(typeNode, tu_definition, typeNameNode);
+			g_compiler.useType(typeNode, templateArguments, tu_use_definition, typeNameNode);
 		}
 	}
 

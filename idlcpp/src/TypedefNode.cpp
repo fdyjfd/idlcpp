@@ -68,3 +68,9 @@ TypeNode* TypedefNode::getActualTypeNode(TemplateArguments* templateArguments)
 		}
 	}
 }
+
+void TypedefNode::checkSemantic(TemplateArguments* templateArguments)
+{
+	TypeNode* typeNode = m_typeName->getTypeNode(templateArguments);
+	g_compiler.useType(typeNode, templateArguments, TypeUsage(tu_use_definition | tu_use_meta), m_typeName);
+}

@@ -25,9 +25,10 @@ Variant::Variant()
 
 Variant::~Variant()
 {
-	if (0 != m_pointer && (by_new_ptr == m_semantic || by_new_array == m_semantic))
+	if (0 != m_pointer && m_primitiveValue != m_pointer && 
+		(by_value == m_semantic || by_new_ptr == m_semantic || by_new_array == m_semantic))
 	{
-		assert(m_primitiveValue != m_pointer);
+		//PAF_ASSERT(m_primitiveValue != m_pointer);
 		if (by_new_array == m_semantic)
 		{
 			m_type->destroyArray(m_pointer);
@@ -110,6 +111,17 @@ void Variant::assignPrimitive(Type* type, const void* pointer)
 	m_type = type;
 	m_pointer = m_primitiveValue;
 	memcpy(m_pointer, pointer, type->m_size);
+}
+
+void Variant::assignPrimitiveForNew(Type* type, const void* pointer)
+{
+	assert(type->isPrimitive());
+	clear();
+	m_type = type;
+	m_pointer = m_primitiveValue;
+	memcpy(m_pointer, pointer, type->m_size);
+	m_constant = false;
+	m_semantic = by_ptr;
 }
 
 void Variant::assignEnum(Type* type, const void* pointer)

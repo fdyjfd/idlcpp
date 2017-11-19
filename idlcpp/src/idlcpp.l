@@ -72,7 +72,8 @@ int yycolumnno = 1;
 ")"	|
 ","	|
 ";"	|
-":"				{yylval.sn = newToken(yytext[0]);				yycolumnno++; yytokenno++; return yytext[0];}
+":"	|
+"?"				{yylval.sn = newToken(yytext[0]);				yycolumnno++; yytokenno++; return yytext[0];}
 
 "::"			{yylval.sn = newToken(snt_operator_scope);					yycolumnno += strlen(yytext); yytokenno++; return SCOPE;}
 "+="			{yylval.sn = newToken(snt_operator_add_assign);				yycolumnno += strlen(yytext); yytokenno++; return ADD_ASSIGN;}
@@ -125,7 +126,6 @@ int yycolumnno = 1;
 "export"		{yylval.sn = newToken(snt_keyword_export);					yycolumnno += strlen(yytext); yytokenno++; return EXPORT;}
 "override"		{yylval.sn = newToken(snt_keyword_override);				yycolumnno += strlen(yytext); yytokenno++; return OVERRIDE;}
 "template"		{yylval.sn = newToken(snt_keyword_template);				yycolumnno += strlen(yytext); yytokenno++; return TEMPLATE;}
-"allow_null"	{yylval.sn = newToken(snt_keyword_allow_null);				yycolumnno += strlen(yytext); yytokenno++; return ALLOW_NULL;}
 
 
 [a-zA-Z_][a-zA-Z_0-9]*	{yylval.sn = newIdentify(yytext);					yycolumnno += strlen(yytext); yytokenno++; return IDENTIFY;}
@@ -135,7 +135,7 @@ int yycolumnno = 1;
 [ \t]							{++yycolumnno;}
 "\n"							{newCodeBlock(yytext); yycolumnno = 1;}
 
-[^ ,;:{}\[\]<>()&*^$"/+%^|!~=\-\t\n]*		{invalidString(yytext); yycolumnno += strlen(yytext);}
+[^ ,;:{}\[\]<>()&*^$"/+%^|!~=?\-\t\n]*		{invalidString(yytext); yycolumnno += strlen(yytext);}
 .								{invalidString(yytext); yycolumnno += strlen(yytext);}
 
 %%

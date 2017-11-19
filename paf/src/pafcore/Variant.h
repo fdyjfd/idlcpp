@@ -42,6 +42,7 @@ public:
 	bool subscript(Variant& var, size_t index);
 
 	void assignPrimitive(Type* type, const void* pointer);
+	void assignPrimitiveForNew(Type* type, const void* pointer);
 	void assignEnum(Type* type, const void* pointer);
 	
 	void assignVoidPtr(const void* pointer, bool constant);

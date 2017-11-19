@@ -45,7 +45,9 @@ namespace tutorial
 		for (; it != end; ++it)
 		{
 			Shape* shape = (*it);
-			area += shape->getArea();
+			float tmp;
+			shape->getArea2(&tmp);
+			area += tmp;
 		}
 		return area;
 	}
@@ -53,6 +55,11 @@ namespace tutorial
 	float Triangle::getArea()
 	{
 		return fabs(m_vertices[0].x * m_vertices[1].y + m_vertices[1].x * m_vertices[2].y + m_vertices[2].x * m_vertices[0].y
+			- m_vertices[0].x * m_vertices[2].y - m_vertices[1].x * m_vertices[0].y - m_vertices[2].x * m_vertices[1].y) * 0.5;
+	}
+	void Triangle::getArea2(float* area)
+	{
+		*area =  fabs(m_vertices[0].x * m_vertices[1].y + m_vertices[1].x * m_vertices[2].y + m_vertices[2].x * m_vertices[0].y
 			- m_vertices[0].x * m_vertices[2].y - m_vertices[1].x * m_vertices[0].y - m_vertices[2].x * m_vertices[1].y) * 0.5;
 	}
 

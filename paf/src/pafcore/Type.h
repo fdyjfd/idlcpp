@@ -31,6 +31,7 @@ namespace pafcore
 	public:
 		Category m_category;
 		size_t m_size;
+		Metadata* m_enclosing;
 
 	};
 

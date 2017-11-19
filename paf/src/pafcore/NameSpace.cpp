@@ -182,8 +182,9 @@ Metadata* NameSpace::MetadataTrieTree::getItem(size_t index)
 	return 0;
 }
 
-NameSpace::NameSpace(const char* name)
-	: Metadata(name)
+NameSpace::NameSpace(const char* name) : 
+	Metadata(name),
+	m_enclosing(0)
 {}
 
 
@@ -197,12 +198,14 @@ NameSpace* NameSpace::getNameSpace(const char* name)
 		{
 			subNameSpace = paf_new NameSpace(name);
 			m_members.insert(subNameSpace);
+			subNameSpace->m_enclosing = this;
 		}
 		else
 		{
 			if(name_space == member->get__category_())
 			{
 				subNameSpace = static_cast<NameSpace*>(member);
+				PAF_ASSERT(this == subNameSpace->m_enclosing);
 			}
 		}
 	}
@@ -214,6 +217,16 @@ ErrorCode NameSpace::registerMember(Metadata* member)
 	if(0 == this)
 	{
 		return e_invalid_namespace;
+	}
+	Category category = member->get__category_();
+	if (type_alias == category)
+	{
+		static_cast<TypeAlias*>(member)->m_enclosing = this;
+	}
+	else
+	{
+		PAF_ASSERT(void_type == category || primitive_type == category || enum_type == category || class_type == category);
+		static_cast<Type*>(member)->m_enclosing = this;
 	}
 	return m_members.insert(member) ? s_ok : e_name_conflict;
 }

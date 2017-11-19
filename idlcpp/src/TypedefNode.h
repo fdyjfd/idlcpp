@@ -17,5 +17,6 @@ public:
 	TypeNode* getActualTypeNode(TemplateArguments* templateArguments);
 	virtual TypeNode* getTypeNode();
 	virtual void collectTypes(TypeNode* enclosingTypeNode, TemplateArguments* templateArguments);
+	virtual void checkSemantic(TemplateArguments* templateArguments);
 };
 

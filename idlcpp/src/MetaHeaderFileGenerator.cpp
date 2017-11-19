@@ -158,11 +158,12 @@ void writeMetaPropertyDecls(ClassNode* classNode, std::vector<PropertyNode*> pro
 
 void MetaHeaderFileGenerator::generateCode(FILE* dstFile, SourceFile* sourceFile, const char* fullPathName, const char* baseName)
 {
-	generateCode_Program(dstFile, sourceFile->m_syntaxTree, fullPathName, baseName);
+	generateCode_Program(dstFile, sourceFile, sourceFile->m_syntaxTree, fullPathName, baseName);
 }
 
-void MetaHeaderFileGenerator::generateCode_Program(FILE* file, ProgramNode* programNode, const char* fileName, const char* cppName)
+void MetaHeaderFileGenerator::generateCode_Program(FILE* file, SourceFile* sourceFile, ProgramNode* programNode, const char* fileName, const char* cppName)
 {
+	char buf[512];
 	std::string pafcorePath;
 	GetRelativePath(pafcorePath, fileName, g_options.m_pafcorePath.c_str());
 	FormatPathForInclude(pafcorePath);
@@ -174,7 +175,7 @@ void MetaHeaderFileGenerator::generateCode_Program(FILE* file, ProgramNode* prog
 		return;
 	}
 
-	char buf[512];
+	g_compiler.outputUsedTypesForMetaHeader(file, sourceFile);
 	sprintf_s(buf, "#include \"%s.h\"\n", cppName);
 	writeStringToFile(buf, file);
 	sprintf_s(buf, "#include \"%sClassType.h\"\n", pafcorePath.c_str());

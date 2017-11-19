@@ -1,5 +1,5 @@
 #include "paflua.h"
-#include "LuaSubclassInvoker.h"
+#include "LuaSubclassInvoker2.h"
 #include "../pafcore/Variant.h"
 #include "../pafcore/NameSpace.h"
 #include "../pafcore/NameSpace.mh"
@@ -25,9 +25,9 @@
 #include <assert.h>
 
 
-BEGIN_PAFLUA
+BEGIN_PAFLUA2
 
-static void stackDump (lua_State *L) 
+static void stackDump(lua_State *L)
 {
 	int i;
 	int top = lua_gettop(L);
@@ -41,7 +41,7 @@ static void stackDump (lua_State *L)
 			printf(lua_toboolean(L, i) ? "true" : "false");
 			break;
 		case LUA_TNUMBER:
-			if(lua_isinteger(L, i))
+			if (lua_isinteger(L, i))
 			{
 				printf("integer: %lld", lua_tointeger(L, i));
 			}
@@ -51,7 +51,7 @@ static void stackDump (lua_State *L)
 			}
 			break;
 		case LUA_TUSERDATA:
-			printf("userdata: %s", lua_tostring(L, i));	
+			printf("userdata: %s", lua_tostring(L, i));
 			break;
 		default:
 			printf("other: %s", lua_typename(L, t));
@@ -64,9 +64,9 @@ static void stackDump (lua_State *L)
 
 
 const size_t max_param_count = 20;
-const char* variant_metatable_name = "paf.Variant";
-const char* instanceArrayProperty_metatable_name = "paf.InstanceArrayProperty";
-const char* staticArrayProperty_metatable_name = "paf.StaticArrayProperty";
+const char* variant_metatable_name = "paf2.Variant";
+const char* instanceArrayProperty_metatable_name = "paf2.InstanceArrayProperty";
+const char* staticArrayProperty_metatable_name = "paf2.StaticArrayProperty";
 
 struct InstanceArrayPropertyInstance
 {
@@ -84,68 +84,11 @@ void Variant_Error(lua_State *L, const char* name, pafcore::ErrorCode errorCode)
 	luaL_error(L, "idlcpp error: %s, Error: %d, %s", name, errorCode, pafcore::ErrorCodeToString(errorCode));
 }
 
-int Variant_GC(lua_State *L) 
+int Variant_GC(lua_State *L)
 {
 	pafcore::Variant* variant = (pafcore::Variant*)lua_touserdata(L, 1);
 	variant->~Variant();
 	return 0;
-}
-
-
-pafcore::ErrorCode GetPrimitiveOrEnum(lua_State *L, pafcore::Variant* variant)
-{
-	if (variant->m_type->isPrimitive())
-	{
-		if (variant->byValue() || variant->byRef())
-		{
-			pafcore::PrimitiveType* primitiveType = static_cast<pafcore::PrimitiveType*>(variant->m_type);
-			switch (primitiveType->m_typeCategory)
-			{
-			case pafcore::float_type:
-			case pafcore::double_type:
-			{
-				lua_Number value;
-				primitiveType->castTo(&value, RuntimeTypeOf<lua_Number>::RuntimeType::GetSingleton(), variant->m_pointer);
-				lua_pushnumber(L, value);
-			}
-			break;
-			case pafcore::bool_type:
-			{
-				bool value;
-				primitiveType->castTo(&value, RuntimeTypeOf<bool>::RuntimeType::GetSingleton(), variant->m_pointer);
-				lua_pushboolean(L, value ? 1 : 0);
-			}
-			break;
-			default:
-			{
-				lua_Integer value;
-				primitiveType->castTo(&value, RuntimeTypeOf<lua_Integer>::RuntimeType::GetSingleton(), variant->m_pointer);
-				lua_pushinteger(L, value);
-			}
-			}
-			return pafcore::s_ok;
-		}
-		else
-		{
-			pafcore::PrimitiveType* primitiveType = static_cast<pafcore::PrimitiveType*>(variant->m_type);
-			if (pafcore::char_type == primitiveType->m_typeCategory)
-			{
-				lua_pushstring(L, (const char*)variant->m_pointer);
-				return pafcore::s_ok;
-			}
-		}
-	}
-	else if (variant->m_type->isEnum())
-	{
-		if (variant->byValue() || variant->byRef())
-		{
-			lua_Integer value;
-			variant->castToPrimitive(RuntimeTypeOf<lua_Integer>::RuntimeType::GetSingleton(), &value);
-			lua_pushinteger(L, value);
-			return pafcore::s_ok;
-		}
-	}
-	return pafcore::e_invalid_type;
 }
 
 pafcore::Variant* LuaToVariant(pafcore::Variant* value, lua_State *L, int index)
@@ -155,42 +98,42 @@ pafcore::Variant* LuaToVariant(pafcore::Variant* value, lua_State *L, int index)
 	switch (type)
 	{
 	case LUA_TSTRING:
+	{
+		size_t len;
+		const char* s = lua_tolstring(L, index, &len);
+		if (value->m_type->isPrimitive() && value->byValue())
 		{
-			size_t len;
-			const char* s = lua_tolstring(L, index, &len);
-			if(value->m_type->isPrimitive() && value->byValue())
+			pafcore::PrimitiveType* primitiveType = static_cast<pafcore::PrimitiveType*>(value->m_type);
+			if (pafcore::float_type == primitiveType->m_typeCategory ||
+				pafcore::double_type == primitiveType->m_typeCategory ||
+				pafcore::long_double_type == primitiveType->m_typeCategory)
 			{
-				pafcore::PrimitiveType* primitiveType = static_cast<pafcore::PrimitiveType*>(value->m_type);
-				if(pafcore::float_type == primitiveType->m_typeCategory ||
-					pafcore::double_type == primitiveType->m_typeCategory ||
-					pafcore::long_double_type == primitiveType->m_typeCategory)
-				{
-					lua_Number n = lua_tonumber(L, index);
-					value->assignPrimitive(RuntimeTypeOf<lua_Number>::RuntimeType::GetSingleton(), &n);
-				}
-				else
-				{
-					lua_Integer i = lua_tointeger(L, index);
-					value->assignPrimitive(RuntimeTypeOf<lua_Integer>::RuntimeType::GetSingleton(), &i);
-				}
+				lua_Number n = lua_tonumber(L, index);
+				value->assignPrimitive(RuntimeTypeOf<lua_Number>::RuntimeType::GetSingleton(), &n);
 			}
 			else
 			{
-				char* p = paf_new_array<char>(len + 1);
-				memcpy(p, s, len + 1);
-				value->assignPrimitivePtr(RuntimeTypeOf<char>::RuntimeType::GetSingleton(), p, false, ::pafcore::Variant::by_new_array);
+				lua_Integer i = lua_tointeger(L, index);
+				value->assignPrimitive(RuntimeTypeOf<lua_Integer>::RuntimeType::GetSingleton(), &i);
 			}
 		}
-		break;
-	case LUA_TBOOLEAN:
+		else
 		{
-			bool b = lua_toboolean(L, index) != 0;
-			value->assignPrimitive(RuntimeTypeOf<bool>::RuntimeType::GetSingleton(), &b);
-			value->setTemporary();
+			char* p = paf_new_array<char>(len + 1);
+			memcpy(p, s, len + 1);
+			value->assignPrimitivePtr(RuntimeTypeOf<char>::RuntimeType::GetSingleton(), p, false, ::pafcore::Variant::by_new_array);
 		}
-		break;
+	}
+	break;
+	case LUA_TBOOLEAN:
+	{
+		bool b = lua_toboolean(L, index) != 0;
+		value->assignPrimitive(RuntimeTypeOf<bool>::RuntimeType::GetSingleton(), &b);
+		value->setTemporary();
+	}
+	break;
 	case LUA_TNUMBER:
-		if(lua_isinteger(L, index))
+		if (lua_isinteger(L, index))
 		{
 			lua_Integer i = lua_tointeger(L, index);
 			value->assignPrimitive(RuntimeTypeOf<lua_Integer>::RuntimeType::GetSingleton(), &i);
@@ -204,67 +147,33 @@ pafcore::Variant* LuaToVariant(pafcore::Variant* value, lua_State *L, int index)
 		}
 		break;
 	case LUA_TUSERDATA:
+	{
+		pafcore::Variant* variant = (pafcore::Variant*)luaL_checkudata(L, index, variant_metatable_name);
+		if (variant)
 		{
-			pafcore::Variant* variant = (pafcore::Variant*)luaL_checkudata(L, index, variant_metatable_name); 
-			if(variant)
-			{
-				res = variant;
-			}
+			res = variant;
 		}
-		break;
+	}
+	break;
 	}
 	return res;
 }
 
-void VariantToLua(lua_State *L, pafcore::Variant* variant)
+pafcore::Variant* VariantToLua(lua_State *L, pafcore::Variant* variant)
 {
-	if (variant->isNull())
-	{
-		lua_pushnil(L);
-	}
-	else if (variant->m_type->isPrimitive() && (variant->byValue() || (variant->isConstant() && variant->byRef())))
-	{
-		pafcore::PrimitiveType* primitiveType = static_cast<pafcore::PrimitiveType*>(variant->m_type);
-		switch (primitiveType->m_typeCategory)
-		{
-		case pafcore::float_type:
-		case pafcore::double_type:
-		{
-			lua_Number value;
-			primitiveType->castTo(&value, RuntimeTypeOf<lua_Number>::RuntimeType::GetSingleton(), variant->m_pointer);
-			lua_pushnumber(L, value);
-		}
-		break;
-		case pafcore::bool_type:
-		{
-			bool value;
-			primitiveType->castTo(&value, RuntimeTypeOf<bool>::RuntimeType::GetSingleton(), variant->m_pointer);
-			lua_pushboolean(L, value ? 1 : 0);
-		}
-		break;
-		default:
-		{
-			lua_Integer value;
-			primitiveType->castTo(&value, RuntimeTypeOf<lua_Integer>::RuntimeType::GetSingleton(), variant->m_pointer);
-			lua_pushinteger(L, value);
-		}
-		}
-	}
-	else
-	{
-		void* p = lua_newuserdata(L, sizeof(pafcore::Variant));
-		pafcore::Variant* res = new(p)pafcore::Variant;
-		res->move(*variant);
-		luaL_getmetatable(L, variant_metatable_name);
-		lua_setmetatable(L, -2);
-	}
+	void* p = lua_newuserdata(L, sizeof(pafcore::Variant));
+	pafcore::Variant* res = new(p)pafcore::Variant;
+	res->move(*variant);
+	luaL_getmetatable(L, variant_metatable_name);
+	lua_setmetatable(L, -2);
+	return res;
 }
 
 int InvokeFunction(lua_State *L, pafcore::FunctionInvoker invoker, int numArgs, int startIndex)
 {
 	char argumentsBuf[sizeof(pafcore::Variant)*max_param_count];
-	pafcore::Variant* args[max_param_count]; 
-	if(numArgs > max_param_count)
+	pafcore::Variant* args[max_param_count];
+	if (numArgs > max_param_count)
 	{
 		numArgs = max_param_count;
 	}
@@ -281,7 +190,7 @@ int InvokeFunction(lua_State *L, pafcore::FunctionInvoker invoker, int numArgs, 
 		pafcore::Variant* argument = (pafcore::Variant*)&argumentsBuf[sizeof(pafcore::Variant)*i];
 		argument->~Variant();
 	}
-	if(pafcore::s_ok == errorCode)
+	if (pafcore::s_ok == errorCode)
 	{
 		if (pafcore::VoidType::GetSingleton() == result.m_type && result.byValue())
 		{
@@ -313,8 +222,8 @@ int InvokeFunction_ComparisonOperator(lua_State *L, pafcore::FunctionInvoker inv
 {
 	int numArgs = lua_gettop(L);
 	pafcore::Variant arguments[max_param_count];
-	pafcore::Variant* args[max_param_count]; 
-	if(numArgs > max_param_count)
+	pafcore::Variant* args[max_param_count];
+	if (numArgs > max_param_count)
 	{
 		numArgs = max_param_count;
 	}
@@ -324,7 +233,7 @@ int InvokeFunction_ComparisonOperator(lua_State *L, pafcore::FunctionInvoker inv
 	}
 	pafcore::Variant result;
 	pafcore::ErrorCode errorCode = (*invoker)(&result, args, numArgs);
-	if(pafcore::s_ok == errorCode)
+	if (pafcore::s_ok == errorCode)
 	{
 		if (pafcore::BoolType::GetSingleton() == result.m_type && result.byValue())
 		{
@@ -443,13 +352,13 @@ pafcore::ErrorCode MakeInstanceArrayProperty(lua_State *L, pafcore::Variant* tha
 
 pafcore::ErrorCode GetStaticProperty(lua_State *L, pafcore::StaticProperty* property)
 {
-	if(0 == property->m_getter)
+	if (0 == property->m_getter)
 	{
 		return pafcore::e_property_is_write_only;
 	}
 	pafcore::Variant value;
 	pafcore::ErrorCode errorCode = (*property->m_getter)(&value);
-	if(pafcore::s_ok == errorCode)
+	if (pafcore::s_ok == errorCode)
 	{
 		VariantToLua(L, &value);
 	}
@@ -540,24 +449,24 @@ pafcore::ErrorCode GetNestedType(lua_State *L, pafcore::Type* nestedType)
 pafcore::ErrorCode GetInstanceField(lua_State *L, pafcore::Variant* that, pafcore::InstanceField* field)
 {
 	size_t baseOffset;
-	if(!static_cast<pafcore::ClassType*>(that->m_type)->getClassOffset(baseOffset, field->m_objectType))
+	if (!static_cast<pafcore::ClassType*>(that->m_type)->getClassOffset(baseOffset, field->m_objectType))
 	{
 		return pafcore::e_invalid_type;
 	}
 	size_t fieldAddress = (size_t)that->m_pointer + baseOffset + field->m_offset;
 	pafcore::Variant value;
-	
-	if(field->isArray())
+
+	if (field->isArray())
 	{
 		value.assignArray(field->m_type, (void*)fieldAddress, field->m_arraySize, field->m_constant, ::pafcore::Variant::by_array);
 	}
-	else if(field->isPointer())
+	else if (field->isPointer())
 	{
 		value.assignPtr(field->m_type, *(void**)fieldAddress, field->m_constant, ::pafcore::Variant::by_ref);
 	}
 	else
-	{		
-		value.assignPtr(field->m_type, (void*)fieldAddress, field->m_type->isPrimitive() ? true : field->m_constant, ::pafcore::Variant::by_ref);
+	{
+		value.assignPtr(field->m_type, (void*)fieldAddress, field->m_constant, ::pafcore::Variant::by_ref);
 	}
 	VariantToLua(L, &value);
 	return pafcore::s_ok;
@@ -565,16 +474,16 @@ pafcore::ErrorCode GetInstanceField(lua_State *L, pafcore::Variant* that, pafcor
 
 pafcore::ErrorCode SetInstanceField(lua_State *L, pafcore::Variant* that, pafcore::InstanceField* field)
 {
-	if(field->isArray())
+	if (field->isArray())
 	{
 		return pafcore::e_field_is_an_array;
 	}
-	if(field->isConstant())
+	if (field->isConstant())
 	{
 		return pafcore::e_field_is_constant;
 	}
 	size_t baseOffset;
-	if(!static_cast<pafcore::ClassType*>(that->m_type)->getClassOffset(baseOffset, field->m_objectType))
+	if (!static_cast<pafcore::ClassType*>(that->m_type)->getClassOffset(baseOffset, field->m_objectType))
 	{
 		return pafcore::e_invalid_object_type;
 	}
@@ -601,7 +510,7 @@ pafcore::ErrorCode SetInstanceField(lua_State *L, pafcore::Variant* that, pafcor
 pafcore::ErrorCode GetStaticField(lua_State *L, pafcore::StaticField* field)
 {
 	pafcore::Variant value;
-	if(field->isArray())
+	if (field->isArray())
 	{
 		value.assignArray(field->m_type, (void*)field->m_address, field->m_arraySize, field->m_constant, ::pafcore::Variant::by_array);
 	}
@@ -610,8 +519,8 @@ pafcore::ErrorCode GetStaticField(lua_State *L, pafcore::StaticField* field)
 		value.assignPtr(field->m_type, *(void**)field->m_address, field->m_constant, ::pafcore::Variant::by_ref);
 	}
 	else
-	{	
-		value.assignPtr(field->m_type, (void*)field->m_address, field->m_type->isPrimitive() ? true : field->m_constant, ::pafcore::Variant::by_ref);
+	{
+		value.assignPtr(field->m_type, (void*)field->m_address, field->m_constant, ::pafcore::Variant::by_ref);
 	}
 	VariantToLua(L, &value);
 	return pafcore::s_ok;
@@ -619,11 +528,11 @@ pafcore::ErrorCode GetStaticField(lua_State *L, pafcore::StaticField* field)
 
 pafcore::ErrorCode SetStaticField(lua_State *L, pafcore::StaticField* field)
 {
-	if(field->isArray())
+	if (field->isArray())
 	{
 		return pafcore::e_field_is_an_array;
 	}
-	if(field->isConstant())
+	if (field->isConstant())
 	{
 		return pafcore::e_field_is_constant;
 	}
@@ -657,6 +566,61 @@ pafcore::ErrorCode SetArraySize(lua_State *L, pafcore::Variant* that)
 	return pafcore::s_ok;
 }
 
+pafcore::ErrorCode GetPrimitiveOrEnum(lua_State *L, pafcore::Variant* variant)
+{
+	if (variant->m_type->isPrimitive())
+	{
+		if (variant->byValue() || variant->byRef())
+		{
+			pafcore::PrimitiveType* primitiveType = static_cast<pafcore::PrimitiveType*>(variant->m_type);
+			switch (primitiveType->m_typeCategory)
+			{
+			case pafcore::float_type:
+			case pafcore::double_type:
+			{
+				lua_Number value;
+				primitiveType->castTo(&value, RuntimeTypeOf<lua_Number>::RuntimeType::GetSingleton(), variant->m_pointer);
+				lua_pushnumber(L, value);
+			}
+			break;
+			case pafcore::bool_type:
+			{
+				bool value;
+				primitiveType->castTo(&value, RuntimeTypeOf<bool>::RuntimeType::GetSingleton(), variant->m_pointer);
+				lua_pushboolean(L, value ? 1 : 0);
+			}
+			break;
+			default:
+			{
+				lua_Integer value;
+				primitiveType->castTo(&value, RuntimeTypeOf<lua_Integer>::RuntimeType::GetSingleton(), variant->m_pointer);
+				lua_pushinteger(L, value);
+			}
+			}
+			return pafcore::s_ok;
+		}
+		else
+		{
+			pafcore::PrimitiveType* primitiveType = static_cast<pafcore::PrimitiveType*>(variant->m_type);
+			if (pafcore::char_type == primitiveType->m_typeCategory)
+			{
+				lua_pushstring(L, (const char*)variant->m_pointer);
+				return pafcore::s_ok;
+			}
+		}
+	}
+	else if (variant->m_type->isEnum())
+	{
+		if (variant->byValue() || variant->byRef())
+		{
+			lua_Integer value;
+			variant->castToPrimitive(RuntimeTypeOf<lua_Integer>::RuntimeType::GetSingleton(), &value);
+			lua_pushinteger(L, value);
+			return pafcore::s_ok;
+		}
+	}
+	return pafcore::e_invalid_type;
+}
 
 pafcore::ErrorCode SetPrimitiveOrEnum(lua_State *L, pafcore::Variant* variant)
 {
@@ -678,48 +642,48 @@ int Variant_Call(lua_State *L)
 {
 	int numArgs = lua_gettop(L);
 	pafcore::Variant* variant = (pafcore::Variant*)lua_touserdata(L, 1);
-	switch(variant->m_type->m_category)
+	switch (variant->m_type->m_category)
 	{
 	case pafcore::instance_method:
-		{
-			pafcore::InstanceMethod* method = (pafcore::InstanceMethod*)variant->m_pointer;
-			return InvokeFunction_Method(L, method->m_invoker);
-		}
-		break;
+	{
+		pafcore::InstanceMethod* method = (pafcore::InstanceMethod*)variant->m_pointer;
+		return InvokeFunction_Method(L, method->m_invoker);
+	}
+	break;
 	case pafcore::static_method:
+	{
+		pafcore::StaticMethod* method = (pafcore::StaticMethod*)variant->m_pointer;
+		return InvokeFunction_Method(L, method->m_invoker);
+	}
+	break;
+	case pafcore::primitive_type:
+	{
+		pafcore::PrimitiveType* type = (pafcore::PrimitiveType*)variant->m_pointer;
+		assert(strcmp(type->m_staticMethods[0].m_name, "New") == 0);
+		return InvokeFunction_Method(L, type->m_staticMethods[0].m_invoker);
+	}
+	break;
+	case pafcore::class_type:
+	{
+		pafcore::ClassType* type = (pafcore::ClassType*)variant->m_pointer;
+		pafcore::StaticMethod* method = type->findStaticMethod("New", false);
+		if (0 != method)
 		{
-			pafcore::StaticMethod* method = (pafcore::StaticMethod*)variant->m_pointer;
 			return InvokeFunction_Method(L, method->m_invoker);
 		}
-		break;
-	case pafcore::primitive_type:
-		{
-			pafcore::PrimitiveType* type = (pafcore::PrimitiveType*)variant->m_pointer;
-			assert(strcmp(type->m_staticMethods[0].m_name, "New") == 0);
-			return InvokeFunction_Method(L, type->m_staticMethods[0].m_invoker);
-		}
-		break;
-	case pafcore::class_type:
-		{
-			pafcore::ClassType* type = (pafcore::ClassType*)variant->m_pointer;
-			pafcore::StaticMethod* method = type->findStaticMethod("New", false);
-			if(0 != method)
-			{
-				return InvokeFunction_Method(L, method->m_invoker);
-			}
-		}
-		break;
+	}
+	break;
 	case pafcore::value_object:
 	case pafcore::reference_object:
+	{
+		pafcore::ClassType* type = (pafcore::ClassType*)variant->m_type;
+		pafcore::InstanceMethod* method = type->findInstanceMethod("op_call", true);
+		if (0 != method)
 		{
-			pafcore::ClassType* type = (pafcore::ClassType*)variant->m_type;
-			pafcore::InstanceMethod* method = type->findInstanceMethod("op_call", true);
-			if (0 != method)
-			{
-				return InvokeFunction_Operator(L, method->m_invoker);
-			}
+			return InvokeFunction_Operator(L, method->m_invoker);
 		}
-		break;
+	}
+	break;
 	}
 	Variant_Error(L, "", pafcore::e_is_not_type);
 	return 0;
@@ -762,9 +726,9 @@ int GetEnumerator(lua_State *L, pafcore::Enumerator* enumerator)
 inline bool isNumberString(const char* str)
 {
 	char c;
-	while(c = *str++)
+	while (c = *str++)
 	{
-		if(c < '0' || '9' < c)
+		if (c < '0' || '9' < c)
 		{
 			return false;
 		}
@@ -781,18 +745,18 @@ int Variant_Operator(lua_State *L, const char* op)
 	switch (variant->m_type->m_category)
 	{
 	case pafcore::primitive_object:
-		{
-			pafcore::PrimitiveType* type = (pafcore::PrimitiveType*)variant->m_type;
-			method = type->findInstanceMethod(op);
-		}
-		break;
+	{
+		pafcore::PrimitiveType* type = (pafcore::PrimitiveType*)variant->m_type;
+		method = type->findInstanceMethod(op);
+	}
+	break;
 	case pafcore::value_object:
 	case pafcore::reference_object:
-		{
-			pafcore::ClassType* type = (pafcore::ClassType*)variant->m_type;
-			method = type->findInstanceMethod(op, true);
-		}
-		break;
+	{
+		pafcore::ClassType* type = (pafcore::ClassType*)variant->m_type;
+		method = type->findInstanceMethod(op, true);
+	}
+	break;
 	default:
 		method = 0;
 	}
@@ -896,12 +860,12 @@ int Subclassing(lua_State *L)
 	const void* p = lua_topointer(L, lua_upvalueindex(1));
 	pafcore::ClassType* classType = (pafcore::ClassType*)p;
 	int numArgs = lua_gettop(L);
-	if(1 == numArgs && lua_type(L, -1) == LUA_TTABLE)
+	if (1 == numArgs && lua_type(L, -1) == LUA_TTABLE)
 	{
 		LuaSubclassInvoker* subclassInvoker = paf_new LuaSubclassInvoker(L);
 		void* implementor = classType->createSubclassProxy(subclassInvoker);
 		pafcore::Variant impVar;
-		if(classType->isValue())
+		if (classType->isValue())
 		{
 			impVar.assignValuePtr(classType, implementor, false, ::pafcore::Variant::by_new_ptr);
 		}
@@ -937,100 +901,100 @@ int CastPtr(lua_State *L)
 
 pafcore::ErrorCode Variant_Index_Identify(lua_State *L, pafcore::Variant* variant, const char *name)
 {
-	switch(variant->m_type->m_category)
+	switch (variant->m_type->m_category)
 	{
 	case pafcore::name_space:
+	{
+		pafcore::NameSpace* ns = (pafcore::NameSpace*)variant->m_pointer;
+		pafcore::Metadata* member = ns->findMember(name);
+		if (0 != member)
 		{
-			pafcore::NameSpace* ns = (pafcore::NameSpace*)variant->m_pointer;
-			pafcore::Metadata* member = ns->findMember(name);
-			if(0 != member)
-			{
-				pafcore::Variant value;
-				value.assignReferencePtr(RuntimeTypeOf<pafcore::Metadata>::RuntimeType::GetSingleton(), member, false, ::pafcore::Variant::by_ptr);
-				VariantToLua(L, &value);
-				return pafcore::s_ok;
-			}
+			pafcore::Variant value;
+			value.assignReferencePtr(RuntimeTypeOf<pafcore::Metadata>::RuntimeType::GetSingleton(), member, false, ::pafcore::Variant::by_ptr);
+			VariantToLua(L, &value);
+			return pafcore::s_ok;
 		}
-		break;
+	}
+	break;
 	case pafcore::class_type:
+	{
+		pafcore::ClassType* type = (pafcore::ClassType*)variant->m_pointer;
+		pafcore::Metadata* member = type->findClassMember(name, true, true);
+		if (0 != member)
 		{
-			pafcore::ClassType* type = (pafcore::ClassType*)variant->m_pointer;
-			pafcore::Metadata* member = type->findClassMember(name, true, true);
-			if(0 != member)
+			pafcore::Type* memberType = member->getType();
+			switch (memberType->m_category)
 			{
-				pafcore::Type* memberType = member->getType();
-				switch(memberType->m_category)
-				{
-				case pafcore::static_field:
-					return GetStaticField(L, static_cast<pafcore::StaticField*>(member));
-				case pafcore::static_property:
-					return GetStaticProperty(L, static_cast<pafcore::StaticProperty*>(member));
-				case pafcore::static_array_property:
-					return MakeStaticArrayProperty(L, static_cast<pafcore::StaticArrayProperty*>(member));
-				case pafcore::static_method:
-					lua_pushlightuserdata(L, static_cast<pafcore::StaticMethod*>(member)->m_invoker);
-					lua_pushcclosure(L, FunctionInvoker_Closure, 1);
-					return pafcore::s_ok;
-				//case pafcore::static_method:
-				//	{
-				//		pafcore::Variant value;
-				//		value.assignReferencePtr(RuntimeTypeOf<pafcore::Metadata>::RuntimeType::GetSingleton(), member, false, ::pafcore::Variant::by_ptr);
-				//		VariantToLua(L, &value);
-				//		return pafcore::s_ok;
-				//	}
-				case pafcore::enum_type:
-				case pafcore::class_type:
-					return GetNestedType(L, static_cast<pafcore::Type*>(member));
-				}
-			}
-		}
-		break;
-	case pafcore::primitive_type:
-		{
-			pafcore::PrimitiveType* type = (pafcore::PrimitiveType*)variant->m_pointer;
-			pafcore::Metadata* member = type->findTypeMember(name);
-			if(0 != member)
-			{
-				pafcore::Type* memberType = member->getType();
-				switch(memberType->m_category)
-				{
-				case pafcore::static_method:
-					lua_pushlightuserdata(L, static_cast<pafcore::StaticMethod*>(member)->m_invoker);
-					lua_pushcclosure(L, FunctionInvoker_Closure, 1);
-					return pafcore::s_ok;
-				//case pafcore::static_method:
-				//	{
-				//		pafcore::Variant value;
-				//		value.assignReferencePtr(RuntimeTypeOf<pafcore::Metadata>::RuntimeType::GetSingleton(), member, false, ::pafcore::Variant::by_ptr);
-				//		VariantToLua(L, &value);
-				//		return pafcore::s_ok;
-				//	}
-				default:
-					assert(false);
-				}
-			}
-		}
-		break;
-	case pafcore::enum_type:
-		{
-			pafcore::EnumType* et = (pafcore::EnumType*)variant->m_pointer;
-			pafcore::Enumerator* enumerator = et->findEnumerator(name);
-			if(0 != enumerator)
-			{
-				pafcore::Variant value;
-				value.assignEnum(enumerator->m_type, &enumerator->m_value);
-				VariantToLua(L, &value);
+			case pafcore::static_field:
+				return GetStaticField(L, static_cast<pafcore::StaticField*>(member));
+			case pafcore::static_property:
+				return GetStaticProperty(L, static_cast<pafcore::StaticProperty*>(member));
+			case pafcore::static_array_property:
+				return MakeStaticArrayProperty(L, static_cast<pafcore::StaticArrayProperty*>(member));
+			case pafcore::static_method:
+				lua_pushlightuserdata(L, static_cast<pafcore::StaticMethod*>(member)->m_invoker);
+				lua_pushcclosure(L, FunctionInvoker_Closure, 1);
 				return pafcore::s_ok;
+				//case pafcore::static_method:
+				//	{
+				//		pafcore::Variant value;
+				//		value.assignReferencePtr(RuntimeTypeOf<pafcore::Metadata>::RuntimeType::GetSingleton(), member, false, ::pafcore::Variant::by_ptr);
+				//		VariantToLua(L, &value);
+				//		return pafcore::s_ok;
+				//	}
+			case pafcore::enum_type:
+			case pafcore::class_type:
+				return GetNestedType(L, static_cast<pafcore::Type*>(member));
 			}
 		}
-		break;
+	}
+	break;
+	case pafcore::primitive_type:
+	{
+		pafcore::PrimitiveType* type = (pafcore::PrimitiveType*)variant->m_pointer;
+		pafcore::Metadata* member = type->findTypeMember(name);
+		if (0 != member)
+		{
+			pafcore::Type* memberType = member->getType();
+			switch (memberType->m_category)
+			{
+			case pafcore::static_method:
+				lua_pushlightuserdata(L, static_cast<pafcore::StaticMethod*>(member)->m_invoker);
+				lua_pushcclosure(L, FunctionInvoker_Closure, 1);
+				return pafcore::s_ok;
+				//case pafcore::static_method:
+				//	{
+				//		pafcore::Variant value;
+				//		value.assignReferencePtr(RuntimeTypeOf<pafcore::Metadata>::RuntimeType::GetSingleton(), member, false, ::pafcore::Variant::by_ptr);
+				//		VariantToLua(L, &value);
+				//		return pafcore::s_ok;
+				//	}
+			default:
+				assert(false);
+			}
+		}
+	}
+	break;
+	case pafcore::enum_type:
+	{
+		pafcore::EnumType* et = (pafcore::EnumType*)variant->m_pointer;
+		pafcore::Enumerator* enumerator = et->findEnumerator(name);
+		if (0 != enumerator)
+		{
+			pafcore::Variant value;
+			value.assignEnum(enumerator->m_type, &enumerator->m_value);
+			VariantToLua(L, &value);
+			return pafcore::s_ok;
+		}
+	}
+	break;
 	}
 	pafcore::Metadata* member;
 	member = variant->m_type->findMember(name);
-	if(0 != member)
+	if (0 != member)
 	{
 		pafcore::Type* memberType = member->getType();
-		switch(memberType->m_category)
+		switch (memberType->m_category)
 		{
 		case pafcore::instance_field:
 			return GetInstanceField(L, variant, static_cast<pafcore::InstanceField*>(member));
@@ -1052,14 +1016,14 @@ pafcore::ErrorCode Variant_Index_Identify(lua_State *L, pafcore::Variant* varian
 			lua_pushlightuserdata(L, static_cast<pafcore::StaticMethod*>(member)->m_invoker);
 			lua_pushcclosure(L, FunctionInvoker_Closure, 1);
 			return pafcore::s_ok;
-		//case pafcore::static_method:
-		//case pafcore::instance_method:
-		//	{
-		//		pafcore::Variant value;
-		//		value.assignReferencePtr(RuntimeTypeOf<pafcore::Metadata>::RuntimeType::GetSingleton(), member, false, ::pafcore::Variant::by_ptr);
-		//		VariantToLua(L, &value);
-		//		return pafcore::s_ok;
-		//	}
+			//case pafcore::static_method:
+			//case pafcore::instance_method:
+			//	{
+			//		pafcore::Variant value;
+			//		value.assignReferencePtr(RuntimeTypeOf<pafcore::Metadata>::RuntimeType::GetSingleton(), member, false, ::pafcore::Variant::by_ptr);
+			//		VariantToLua(L, &value);
+			//		return pafcore::s_ok;
+			//	}
 		case pafcore::enum_type:
 		case pafcore::class_type:
 			return GetNestedType(L, static_cast<pafcore::Type*>(member));
@@ -1071,7 +1035,7 @@ pafcore::ErrorCode Variant_Index_Identify(lua_State *L, pafcore::Variant* varian
 	{
 		switch (name[1])
 		{
-		case '\0':			
+		case '\0':
 			if (variant->m_type->isPrimitive() || variant->m_type->isEnum())//_
 			{
 				return GetPrimitiveOrEnum(L, variant);
@@ -1115,31 +1079,31 @@ pafcore::ErrorCode Variant_Index_Identify(lua_State *L, pafcore::Variant* varian
 		case 'a':
 			if (strcmp(&name[2], "ddress_") == 0)//_address_
 			{
-				lua_pushinteger(L, (size_t)variant->m_pointer);
-				//pafcore::Variant address;
-				//address.assignPrimitive(RuntimeTypeOf<size_t>::RuntimeType::GetSingleton(), &variant->m_pointer);
-				//VariantToLua(L, &address);
+				//lua_pushinteger(L, (size_t)variant->m_pointer);
+				pafcore::Variant address;
+				address.assignPrimitive(RuntimeTypeOf<size_t>::RuntimeType::GetSingleton(), &variant->m_pointer);
+				VariantToLua(L, &address);
 				return pafcore::s_ok;
 			}
 			break;
 		case 'c':
 			if (strcmp(&name[2], "ount_") == 0)//_count_
 			{
-				lua_pushinteger(L, variant->m_arraySize);
-				//pafcore::Variant count;
-				//count.assignPrimitive(RuntimeTypeOf<size_t>::RuntimeType::GetSingleton(), &variant->m_arraySize);
-				//VariantToLua(L, &count);
+				//lua_pushinteger(L, variant->m_arraySize);
+				pafcore::Variant count;
+				count.assignPrimitive(RuntimeTypeOf<size_t>::RuntimeType::GetSingleton(), &variant->m_arraySize);
+				VariantToLua(L, &count);
 				return pafcore::s_ok;
 			}
 			break;
 		case 'i':
 			if (strcmp(&name[2], "sNullPtr_") == 0)//_isNullPtr_
 			{
-				lua_pushboolean(L, 0 == variant->m_pointer ? 1 : 0);
-				//bool isNullPtr = (0 == variant->m_pointer);
-				//pafcore::Variant var;
-				//var.assignPrimitive(RuntimeTypeOf<bool>::RuntimeType::GetSingleton(), &isNullPtr);
-				//VariantToLua(L, &var);
+				//lua_pushboolean(L, 0 == variant->m_pointer ? 1 : 0);
+				bool isNullPtr = (0 == variant->m_pointer);
+				pafcore::Variant var;
+				var.assignPrimitive(RuntimeTypeOf<bool>::RuntimeType::GetSingleton(), &isNullPtr);
+				VariantToLua(L, &var);
 				return pafcore::s_ok;
 			}
 			break;
@@ -1166,10 +1130,10 @@ pafcore::ErrorCode Variant_Index_Identify(lua_State *L, pafcore::Variant* varian
 		case 's':
 			if (strcmp(&name[2], "ize_") == 0)//_size_
 			{
-				lua_pushinteger(L, variant->m_type->m_size);
-				//pafcore::Variant size;
-				//size.assignPrimitive(RuntimeTypeOf<size_t>::RuntimeType::GetSingleton(), &variant->m_type->m_size);
-				//VariantToLua(L, &size);
+				//lua_pushinteger(L, variant->m_type->m_size);
+				pafcore::Variant size;
+				size.assignPrimitive(RuntimeTypeOf<size_t>::RuntimeType::GetSingleton(), &variant->m_type->m_size);
+				VariantToLua(L, &size);
 				return pafcore::s_ok;
 			}
 			break;
@@ -1189,32 +1153,32 @@ pafcore::ErrorCode Variant_Index_Identify(lua_State *L, pafcore::Variant* varian
 
 pafcore::ErrorCode Variant_NewIndex_Identify(lua_State *L, pafcore::Variant* variant, const char *name)
 {
-	switch(variant->m_type->m_category)
+	switch (variant->m_type->m_category)
 	{
 	case pafcore::class_type:
+	{
+		pafcore::ClassType* type = (pafcore::ClassType*)variant->m_pointer;
+		pafcore::Metadata* member = type->findClassMember(name, true, true);
+		if (0 != member)
 		{
-			pafcore::ClassType* type = (pafcore::ClassType*)variant->m_pointer;
-			pafcore::Metadata* member = type->findClassMember(name, true, true);
-			if(0 != member)
+			pafcore::Type* memberType = member->getType();
+			switch (memberType->m_category)
 			{
-				pafcore::Type* memberType = member->getType();
-				switch(memberType->m_category)
-				{
-				case pafcore::static_field:
-					return SetStaticField(L, static_cast<pafcore::StaticField*>(member));
-				case pafcore::static_property:
-					return SetStaticProperty(L, static_cast<pafcore::StaticProperty*>(member));
-				}
+			case pafcore::static_field:
+				return SetStaticField(L, static_cast<pafcore::StaticField*>(member));
+			case pafcore::static_property:
+				return SetStaticProperty(L, static_cast<pafcore::StaticProperty*>(member));
 			}
 		}
-		break;
+	}
+	break;
 	}
 	pafcore::Metadata* member;
 	member = variant->m_type->findMember(name);
-	if(0 != member)
+	if (0 != member)
 	{
 		pafcore::Type* memberType = member->getType();
-		switch(memberType->m_category)
+		switch (memberType->m_category)
 		{
 		case pafcore::instance_field:
 			return SetInstanceField(L, variant, static_cast<pafcore::InstanceField*>(member));
@@ -1231,7 +1195,7 @@ pafcore::ErrorCode Variant_NewIndex_Identify(lua_State *L, pafcore::Variant* var
 		switch (name[1])
 		{
 		case '\0':
-			if ((variant->m_type->isPrimitive() || variant->m_type->isEnum()) && 
+			if ((variant->m_type->isPrimitive() || variant->m_type->isEnum()) &&
 				(variant->byValue() || variant->byRef()))//_
 			{
 				return SetPrimitiveOrEnum(L, variant);
@@ -1251,13 +1215,9 @@ pafcore::ErrorCode Variant_NewIndex_Identify(lua_State *L, pafcore::Variant* var
 pafcore::ErrorCode Variant_Index_Subscript(lua_State *L, pafcore::Variant* variant, size_t index)
 {
 	pafcore::Variant item;
-	if(!variant->subscript(item, index))
+	if (!variant->subscript(item, index))
 	{
 		return pafcore::e_index_out_of_range;
-	}
-	if (item.m_type->isPrimitive())
-	{
-		item.m_constant = true;
 	}
 	VariantToLua(L, &item);
 	return pafcore::s_ok;
@@ -1277,51 +1237,51 @@ SubscriptCategory Variant_ParseSubscript(size_t& num, const char*& str, lua_Stat
 	switch (type)
 	{
 	case LUA_TSTRING:
-		{
-			str = lua_tostring(L, index);
-			return sc_string;
-		}
-		break;
+	{
+		str = lua_tostring(L, index);
+		return sc_string;
+	}
+	break;
 	case LUA_TBOOLEAN:
-		{
-			num = lua_toboolean(L, index) ? 1 : 0;
-			return sc_integer;
-		}
-		break;
+	{
+		num = lua_toboolean(L, index) ? 1 : 0;
+		return sc_integer;
+	}
+	break;
 	case LUA_TNUMBER:
-		{
-			num = lua_tointeger(L, index);
-			return sc_integer;
-		}
-		break;
+	{
+		num = lua_tointeger(L, index);
+		return sc_integer;
+	}
+	break;
 	case LUA_TUSERDATA:
+	{
+		pafcore::Variant* variant = (pafcore::Variant*)luaL_checkudata(L, index, variant_metatable_name);
+		if (variant)
 		{
-			pafcore::Variant* variant = (pafcore::Variant*)luaL_checkudata(L, index, variant_metatable_name);
-			if(variant)
+			if (variant->byValue() || variant->byRef())
 			{
-				if(variant->byValue() || variant->byRef())
+				if (variant->castToPrimitive(RuntimeTypeOf<size_t>::RuntimeType::GetSingleton(), &num))
 				{
-					if(variant->castToPrimitive(RuntimeTypeOf<size_t>::RuntimeType::GetSingleton(), &num))
-					{
-						return sc_integer;
-					}
+					return sc_integer;
 				}
-				else
+			}
+			else
+			{
+				pafcore::PrimitiveType* primitiveType = static_cast<pafcore::PrimitiveType*>(variant->m_type);
+				if (pafcore::char_type == primitiveType->m_typeCategory)
 				{
-					pafcore::PrimitiveType* primitiveType = static_cast<pafcore::PrimitiveType*>(variant->m_type);
-					if(pafcore::char_type == primitiveType->m_typeCategory)
-					{
-						str = (const char*)variant->m_pointer;
-						return sc_string;
-					}
+					str = (const char*)variant->m_pointer;
+					return sc_string;
 				}
 			}
 		}
 	}
+	}
 	return sc_error;
 }
 
-int Variant_Index(lua_State *L) 
+int Variant_Index(lua_State *L)
 {
 	size_t num;
 	const char* str;
@@ -1329,7 +1289,7 @@ int Variant_Index(lua_State *L)
 
 	pafcore::ErrorCode errorCode = pafcore::e_invalid_subscript_type;
 	pafcore::Variant* variant = (pafcore::Variant*)lua_touserdata(L, 1);
-	if(variant->isNull())
+	if (variant->isNull())
 	{
 		if (sc_string == sc && strcmp(str, "_isNullPtr_") == 0)//_isNullPtr_
 		{
@@ -1356,7 +1316,7 @@ int Variant_Index(lua_State *L)
 			errorCode = Variant_Index_Identify(L, variant, str);
 		}
 	}
-	if(pafcore::s_ok != errorCode)
+	if (pafcore::s_ok != errorCode)
 	{
 		Variant_Error(L, "", errorCode);
 		return 0;
@@ -1367,17 +1327,17 @@ int Variant_Index(lua_State *L)
 pafcore::ErrorCode Variant_NewIndex_Subscript(lua_State *L, pafcore::Variant* variant, size_t index)
 {
 	pafcore::Variant item;
-	if(!variant->subscript(item, index))
+	if (!variant->subscript(item, index))
 	{
 		return pafcore::e_index_out_of_range;
 	}
-	if(item.isConstant())
+	if (item.isConstant())
 	{
 		return pafcore::e_item_is_constant;
 	}
 	pafcore::Variant value;
 	pafcore::Variant* arg = LuaToVariant(&value, L, 3);
-	if(!arg->castToObject(item.m_type, item.m_pointer))
+	if (!arg->castToObject(item.m_type, item.m_pointer))
 	{
 		return pafcore::e_invalid_type;
 	}
@@ -1385,10 +1345,10 @@ pafcore::ErrorCode Variant_NewIndex_Subscript(lua_State *L, pafcore::Variant* va
 }
 
 
-int Variant_NewIndex(lua_State *L) 
+int Variant_NewIndex(lua_State *L)
 {
 	pafcore::Variant* variant = (pafcore::Variant*)lua_touserdata(L, 1);
-	if(variant->isNull())
+	if (variant->isNull())
 	{
 		Variant_Error(L, "", pafcore::e_void_variant);
 		return 0;
@@ -1398,15 +1358,15 @@ int Variant_NewIndex(lua_State *L)
 	SubscriptCategory sc = Variant_ParseSubscript(num, str, L);
 
 	pafcore::ErrorCode errorCode = pafcore::e_invalid_subscript_type;
-	if(sc_integer == sc)
+	if (sc_integer == sc)
 	{
 		errorCode = Variant_NewIndex_Subscript(L, variant, num);
 	}
-	else if(sc_string == sc)
+	else if (sc_string == sc)
 	{
 		errorCode = Variant_NewIndex_Identify(L, variant, str);
 	}
-	if(pafcore::s_ok != errorCode)
+	if (pafcore::s_ok != errorCode)
 	{
 		Variant_Error(L, "", errorCode);
 		return 0;
@@ -1414,7 +1374,7 @@ int Variant_NewIndex(lua_State *L)
 	return 1;
 }
 
-struct luaL_Reg g_variant_reg [] = 
+struct luaL_Reg g_variant_reg[] =
 {
 	{ "__gc", Variant_GC },
 	{ "__index", Variant_Index },
@@ -1430,7 +1390,7 @@ struct luaL_Reg g_variant_reg [] =
 	{ "__lt", Variant_Less },
 	{ "__eq", Variant_Equal },
 	{ "__le", Variant_LessEqual },
-	{NULL, NULL}
+	{ NULL, NULL }
 };
 
 int InstanceArrayProperty_Index(lua_State *L)
@@ -1646,4 +1606,4 @@ struct luaL_Reg g_staticArrayPropertyInstance_reg[] =
 	{ NULL, NULL }
 };
 
-END_PAFLUA
+END_PAFLUA2

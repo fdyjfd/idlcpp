@@ -118,7 +118,7 @@ void PropertyNode::checkSemantic(TemplateArguments* templateArguments)
 		{
 			RaiseError_InvalidPropertyType(m_get, true);
 		}
-		g_compiler.useType(typeNode, m_get->byValue() ? tu_definition : tu_declaration, m_get->m_typeName);
+		g_compiler.useType(typeNode, templateArguments, m_get->byValue() ? tu_use_definition : tu_use_declaration, m_get->m_typeName);
 	}
 	if(m_set)
 	{
@@ -131,6 +131,6 @@ void PropertyNode::checkSemantic(TemplateArguments* templateArguments)
 		{
 			RaiseError_InvalidPropertyType(m_set, false);
 		}
-		g_compiler.useType(typeNode, m_set->byValue() ? tu_definition : tu_declaration, m_set->m_typeName);
+		g_compiler.useType(typeNode, templateArguments, m_set->byValue() ? tu_use_definition : tu_use_declaration, m_set->m_typeName);
 	}
 };

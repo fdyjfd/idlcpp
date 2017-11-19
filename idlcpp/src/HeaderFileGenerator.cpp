@@ -604,7 +604,7 @@ void HeaderFileGenerator::generateCode_Property_Set(FILE* file, PropertyNode* pr
 	{
 		generateCode_Token(file, propertyNode->m_set->m_passing, 0);
 	}
-	if(propertyNode->m_modifier && snt_keyword_abstract == propertyNode->m_modifier->m_nodeType)
+	if(propertyNode->isAbstract())
 	{
 		writeStringToFile(") = 0;", file);	
 	}
@@ -763,13 +763,13 @@ void HeaderFileGenerator::generateCode_Method(FILE* file, MethodNode* methodNode
 		generateCode_Parameter(file, parameterNodes[i].second, classNode, 0);
 	}
 	generateCode_Token(file, methodNode->m_rightParenthesis, 0);
-	if(methodNode->m_modifier && snt_keyword_abstract == methodNode->m_modifier->m_nodeType)
-	{
-		writeStringToFile(" = 0 ", file);
-	}
 	if(methodNode->m_constant)
 	{
 		generateCode_Token(file, methodNode->m_constant, 0);
+	}
+	if(methodNode->isAbstract())
+	{
+		writeStringToFile(" = 0 ", file);
 	}
 	generateCode_Token(file, methodNode->m_semicolon, 0);
 }
@@ -832,13 +832,13 @@ void HeaderFileGenerator::generateCode_Operator(FILE* file, OperatorNode* operat
 		writeStringToFile("int", file);
 	}
 	generateCode_Token(file, operatorNode->m_rightParenthesis, 0);
-	if (operatorNode->m_modifier && snt_keyword_abstract == operatorNode->m_modifier->m_nodeType)
-	{
-		writeStringToFile(" = 0 ", file);
-	}
 	if (operatorNode->m_constant)
 	{
 		generateCode_Token(file, operatorNode->m_constant, 0);
+	}
+	if (operatorNode->isAbstract())
+	{
+		writeStringToFile(" = 0 ", file);
 	}
 	generateCode_Token(file, operatorNode->m_semicolon, 0);
 }

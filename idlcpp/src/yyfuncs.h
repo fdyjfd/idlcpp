@@ -114,7 +114,6 @@ enum SyntaxNodeType
 	snt_keyword_primitive,
 	snt_keyword_export,
 	snt_keyword_override,
-	snt_keyword_allow_null,
 
 	snt_identify,
 	snt_enumerator,

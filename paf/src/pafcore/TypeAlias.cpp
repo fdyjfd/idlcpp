@@ -5,10 +5,11 @@
 
 BEGIN_PAFCORE
 
-TypeAlias::TypeAlias(const char* name, Type* type)
-: Metadata(name)
+TypeAlias::TypeAlias(const char* name, Type* type) : 
+	Metadata(name),
+	m_type(type),
+	m_enclosing(0)
 {
-	m_type = type;
 }
 
 Type* TypeAlias::get_type()

@@ -12,7 +12,7 @@
 %token <sn> LEFT_SHIFT RIGHT_SHIFT EQUAL NOT_EQUAL LESS_EQUAL GREATER_EQUAL AND OR INC DEC
 %token <sn> BOOL CHAR WCHAR_T SHORT LONG INT FLOAT DOUBLE SIGNED UNSIGNED
 %token <sn> NAMESPACE ENUM CLASS STRUCT STATIC VIRTUAL VOID CONST OPERATOR TYPEDEF PRIMITIVE
-%token <sn> ABSTRACT GET SET NOMETA NOCODE EXPORT OVERRIDE SCOPE IDENTIFY STRING TEMPLATE ALLOW_NULL
+%token <sn> ABSTRACT GET SET NOMETA NOCODE EXPORT OVERRIDE SCOPE IDENTIFY STRING TEMPLATE
 %type <sn> enumerator enumeratorList enum_0 enum 
 %type <sn> field_0 field_1 field_2 field getter_0 getter setter_0 setter_1 setter property_0 property_1 property_2 property
 %type <sn> parameter_0 parameter_1 parameter parameterList method_0 method_1 method_2 method_3 method_4 method
@@ -161,7 +161,7 @@ setter_0				: SET												{$$ = newGetterSetter($1, NULL, NULL, NULL);}
 ;
 
 setter_1				: setter_0											{$$ = $1;}
-						| setter_0 ALLOW_NULL								{$$ = $1; setSetterAllowNull($$);}
+						| setter_0 '?'										{$$ = $1; setSetterAllowNull($$);}
 ;
 
 setter					: setter_1											{$$ = $1;}
@@ -207,7 +207,7 @@ parameter_1				: parameter_0										{$$ = $1;}
 ;
 
 parameter				: parameter_1										{$$ = $1;}
-						| parameter_1 ALLOW_NULL							{$$ = $1; setParameterAllowNull($$);}
+						| parameter_1 '?'									{$$ = $1; setParameterAllowNull($$);}
 ;
 
 parameterList			: parameter											{$$ = newParameterList(NULL, NULL, $1);}

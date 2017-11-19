@@ -22,14 +22,17 @@ struct NamespaceNode;
 struct TemplateClassInstanceNode;
 struct ProgramNode;
 struct TypeNameNode;
+struct TemplateArguments;
 
 class SourceFile;
 struct TypeNode;
 
 enum TypeUsage
 {
-	tu_definition = 1,
-	tu_declaration = 2,
+	tu_use_definition = 1,
+	tu_use_declaration = 2,
+	tu_use_meta = 4,
+	tu_use_all = 7,
 };
 
 struct UsedType
@@ -67,8 +70,10 @@ public:
 	void extendInternalCode();
 	void checkTypeNames();
 	void checkSemantic();
+	void useType(TypeNode* typeNode, TemplateArguments* templateArguments, TypeUsage usage, TypeNameNode* typeNameNode);
 	void useType(TypeNode* typeNode, TypeUsage usage, TypeNameNode* typeNameNode);
 	void outputUsedTypes(FILE* file, SourceFile* sourceFile);
+	void outputUsedTypesForMetaHeader(FILE* file, SourceFile* sourceFile);
 	void outputUsedTypesForMetaSource(FILE* file, SourceFile* sourceFile);
 	bool generateCode(const char* fileName);
 	bool generateHeaderFile(const char* fileName);

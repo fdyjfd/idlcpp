@@ -172,7 +172,7 @@ void MethodNode::checkSemantic(TemplateArguments* templateArguments)
 				RaiseError_InvalidResultType(this);
 			}
 		}
-		g_compiler.useType(typeNode, byValue() ? tu_definition : tu_declaration, m_resultTypeName);
+		g_compiler.useType(typeNode, templateArguments, byValue() ? tu_use_definition : tu_use_declaration, m_resultTypeName);
 	}
 	if(m_override)
 	{

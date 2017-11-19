@@ -1409,11 +1409,11 @@ void writeMetaMethodImpl_AssignResult(const std::string& typeName, TypeCategory 
 			break;
 		case value_type:
 			sprintf_s(buf, "result->assignValuePtr(RuntimeTypeOf<%s>::RuntimeType::GetSingleton(), res, %s, %s);\n", 
-				typeName.c_str(), methodNode->m_resultConst ? "true" : "false", s_variantSemantic_ByValue);
+				typeName.c_str(), methodNode->m_resultConst ? "true" : "false", s_variantSemantic_ByNewPtr);
 			break;
 		case reference_type:
 			sprintf_s(buf, "result->assignReferencePtr(RuntimeTypeOf<%s>::RuntimeType::GetSingleton(), res, %s, %s);\n", 
-				typeName.c_str(), methodNode->m_resultConst ? "true" : "false", s_variantSemantic_ByValue);
+				typeName.c_str(), methodNode->m_resultConst ? "true" : "false", s_variantSemantic_ByNewPtr);
 			break;
 		default:
 			assert(false);
@@ -2825,7 +2825,7 @@ void writeMetaConstructor_NestedTypeAliases(ClassNode* classNode, TemplateArgume
 	writeStringToFile("m_nestedTypeAliasCount = paf_array_size_of(s_nestedTypeAliases);\n", file, indentation);
 }
 
-void writeMetaRegisterToNamespace(MemberNode* memberNode, FILE* file, int indentation)
+void writeMetaConstructor_Scope(MemberNode* memberNode, TemplateArguments* templateArguments, FILE* file, int indentation)
 {
 	char buf[512];
 	assert(0 != memberNode->m_enclosing);
@@ -2851,6 +2851,17 @@ void writeMetaRegisterToNamespace(MemberNode* memberNode, FILE* file, int indent
 			}
 		}
 		writeStringToFile("->registerMember(this);\n", file);
+	}
+	else if (snt_class == memberNode->m_enclosing->m_nodeType)
+	{
+		std::string metaTypeName;
+		GetMetaTypeFullName(metaTypeName, memberNode->m_enclosing, templateArguments);
+		sprintf_s(buf, "m_enclosing = %s::GetSingleton();\n", metaTypeName.c_str());
+		writeStringToFile(buf, file, indentation);
+	}
+	else
+	{
+		assert(false);
 	}
 }
 
@@ -2912,7 +2923,7 @@ void writeMetaConstructor(ClassNode* classNode,
 	writeMetaConstructor_Member(nestedTypeNodes, nestedTypeAliasNodes, staticFieldNodes, staticPropertyNodes, staticArrayPropertyNodes,
 		staticMethodNodes, fieldNodes, propertyNodes, arrayPropertyNodes, methodNodes, file, indentation + 1);
 
-	writeMetaRegisterToNamespace(classNode, file, indentation + 1);
+	writeMetaConstructor_Scope(classNode, templateArguments, file, indentation + 1);
 
 	writeStringToFile("}\n\n", file, indentation);	
 }
@@ -2983,7 +2994,7 @@ void writeEnumMetaConstructor(EnumNode* enumNode, TemplateArguments* templateArg
 	writeStringToFile(buf, file, indentation + 1);
 	
 	writeEnumMetaConstructor_Enumerators(enumNode, templateArguments, attributesOffsets, enumerators, file, indentation + 1);
-	writeMetaRegisterToNamespace(enumNode, file, indentation + 1);
+	writeMetaConstructor_Scope(enumNode, templateArguments, file, indentation + 1);
 	writeStringToFile("}\n\n", file, indentation);
 }
 
@@ -3033,7 +3044,7 @@ void MetaSourceFileGenerator::generateCode_Typedef(FILE* file, TypedefNode* type
 	writeTypeDefMetaConstructor_Attributeses(attributesOffsets, typedefNode, file, indentation + 1);
 	writeMetaConstructor_attributesForType(attributesOffsets, typedefNode, file, indentation + 1);
 
-	writeMetaRegisterToNamespace(typedefNode, file, indentation + 1);
+	writeMetaConstructor_Scope(typedefNode, templateArguments, file, indentation + 1);
 	writeStringToFile("}\n\n", file, indentation);
 	writeMetaGetSingletonImpls(typedefNode, templateArguments, file, indentation);
 }
@@ -3058,7 +3069,7 @@ void MetaSourceFileGenerator::generateCode_TypeDeclaration(FILE* file, TypeDecla
 	std::map<SyntaxNodeImpl*, size_t> attributesOffsets;
 	writeTypeDefMetaConstructor_Attributeses(attributesOffsets, typeDeclarationNode, file, indentation + 1);
 	writeMetaConstructor_attributesForType(attributesOffsets, typeDeclarationNode, file, indentation + 1);
-	writeMetaRegisterToNamespace(typeDeclarationNode, file, indentation + 1);
+	writeMetaConstructor_Scope(typeDeclarationNode, templateArguments, file, indentation + 1);
 	writeStringToFile("}\n\n", file, indentation);
 	writeMetaGetSingletonImpls(typeDeclarationNode, templateArguments, file, indentation);
 }
