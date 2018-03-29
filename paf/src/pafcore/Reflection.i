@@ -27,6 +27,15 @@ namespace pafcore
 		
 		static String ObjectToString(const Variant& value);
 		static bool StringToObject(Variant& value, ClassType* classType, const char* str);
+
+		static String InstancePropertyToString(Reference* that, InstanceProperty* instanceProperty);
+		static String InstancePropertyToString(Variant* that, InstanceProperty* instanceProperty);
+		static ErrorCode StringToInstanceProperty(Variant& that, InstanceProperty* instanceProperty, const char* str);
+		static ErrorCode StringToInstanceProperty(Variant& that, const char* propertyName, const char* str);
+
+		static ErrorCode NewObject(Variant& result, ClassType* type);
+
+		//static ErrorCode CallInstanceMethod(Variant& result, Reference* that, const char* methodName, Variant** args, int_t numArgs);
 #}
 	};
 }

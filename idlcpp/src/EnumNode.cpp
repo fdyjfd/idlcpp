@@ -9,10 +9,11 @@
 #include <vector>
 #include <assert.h>
 
-EnumNode::EnumNode(TokenNode* keyword, IdentifyNode* name, TokenNode* leftBrace, EnumeratorListNode* enumeratorList, TokenNode* rightBrace)
+EnumNode::EnumNode(TokenNode* keyword, TokenNode* keyword2, IdentifyNode* name, TokenNode* leftBrace, EnumeratorListNode* enumeratorList, TokenNode* rightBrace)
 {
 	m_nodeType = snt_enum;
 	m_keyword = keyword;
+	m_keyword2 = keyword2;
 	m_name = name;
 	m_leftBrace = leftBrace;
 	m_enumeratorList = enumeratorList;
@@ -26,6 +27,10 @@ TypeNode* EnumNode::getTypeNode()
 	return m_typeNode;
 }
 
+bool EnumNode::isStronglyTypedEnum()
+{
+	return 0 != m_keyword2;
+}
 
 void EnumNode::collectTypes(TypeNode* enclosingTypeNode, TemplateArguments* templateArguments)
 {

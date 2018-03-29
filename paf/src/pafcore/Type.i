@@ -8,6 +8,7 @@ namespace pafcore
 #{
 	public:
 		Type(const char* name, Category category);
+		~Type();
 	public:
 		virtual void destroyInstance(void* address);
 		virtual void destroyArray(void* address);

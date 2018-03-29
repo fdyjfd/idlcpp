@@ -53,6 +53,7 @@ void ShowHelpInfo()
 		"-mc<postfix>\t\t define meta source file postfix\n"
 		"-em<macro>\t\t set vc dllexport macro\n"
 		"-I<dir>\t\t\t add to import search path\n"
+		"-sac\t\t\t strict arguments count\n"
 		);
 }
 
@@ -111,6 +112,10 @@ void ParseOption(const char* arg)
 	{
 		g_importDirectories.addImportDirectory(arg + 2);
 	}
+	else if (strncmp(arg + 1, "sac", 3) == 0)
+	{
+		g_options.m_strictArgumentsCount = true;
+	}	
 }
 
 int _tmain(int argc, _TCHAR* argv[])
@@ -179,6 +184,7 @@ int _tmain(int argc, _TCHAR* argv[])
 		ErrorList_Output();
 		return -1;
 	}
+	g_compiler.extendInternalCode();
 	g_compiler.collectTypes();
 	if (0 != ErrorList_ErrorCount())
 	{
@@ -197,7 +203,6 @@ int _tmain(int argc, _TCHAR* argv[])
 		ErrorList_Output();
 		return -4;
 	}
-	g_compiler.extendInternalCode();
 	assert(0 == ErrorList_ErrorCount());
 	g_compiler.generateCode(outputFileName.c_str());
 	return 0;

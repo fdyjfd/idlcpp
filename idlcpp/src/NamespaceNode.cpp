@@ -1,6 +1,7 @@
 #include "NamespaceNode.h"
 #include "MemberListNode.h"
 #include "ClassNode.h"
+#include "DelegateNode.h"
 #include "TypeTree.h"
 #include "Compiler.h"
 #include <assert.h>
@@ -65,6 +66,9 @@ void NamespaceNode::extendInternalCode(TypeNode* enclosingTypeNode, TemplateArgu
 			break;
 		case snt_class:
 			static_cast<ClassNode*>(memberNode)->extendInternalCode(m_typeNode, templateArguments);
+			break;
+		case snt_delegate:
+			static_cast<DelegateNode*>(memberNode)->extendInternalCode(m_typeNode, templateArguments);
 			break;
 		}
 	}

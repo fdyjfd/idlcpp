@@ -21,6 +21,7 @@
 #include "Enumerator.h"
 #include "PrimitiveType.h"
 #include "VoidType.h"
+#include "RefCountImpl.h"
 #include <new>
 
 
@@ -59,7 +60,7 @@ namespace idlcpp
 			::pafcore::Overload(&s_instanceResults[1], 0, 0, false, false),
 			::pafcore::Overload(&s_instanceResults[2], &s_instanceArguments[1], 1, false, false),
 		};
-			static ::pafcore::InstanceMethod s_instanceMethods[] = 
+		static ::pafcore::InstanceMethod s_instanceMethods[] = 
 		{
 			::pafcore::InstanceMethod("_findMember_", 0, NameSpace__findMember_, &s_instanceOverloads[0], 1),
 			::pafcore::InstanceMethod("_getMemberCount_", 0, NameSpace__getMemberCount_, &s_instanceOverloads[1], 1),
@@ -95,7 +96,7 @@ namespace idlcpp
 
 	::pafcore::ErrorCode __pafcore__NameSpace_Type::NameSpace__findMember_(::pafcore::Variant* result, ::pafcore::Variant** args, int_t numArgs)
 	{
-		if(2 == numArgs)
+		if(2 <= numArgs)
 		{
 			if(args[0]->isConstant())
 			{
@@ -124,7 +125,7 @@ namespace idlcpp
 
 	::pafcore::ErrorCode __pafcore__NameSpace_Type::NameSpace__getMemberCount_(::pafcore::Variant* result, ::pafcore::Variant** args, int_t numArgs)
 	{
-		if(1 == numArgs)
+		if(1 <= numArgs)
 		{
 			if(args[0]->isConstant())
 			{
@@ -144,7 +145,7 @@ namespace idlcpp
 
 	::pafcore::ErrorCode __pafcore__NameSpace_Type::NameSpace__getMember_(::pafcore::Variant* result, ::pafcore::Variant** args, int_t numArgs)
 	{
-		if(2 == numArgs)
+		if(2 <= numArgs)
 		{
 			if(args[0]->isConstant())
 			{

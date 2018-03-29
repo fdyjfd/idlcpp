@@ -284,19 +284,19 @@ void Reflection::StringToPrimitive(Variant& value, PrimitiveType* primitiveType,
 	break;
 	case long_long_type:
 	{
-		long long val = atoll(str);
+		long long val = _atoi64(str);
 		value.assignPrimitive(primitiveType, &val);
 	}
 	break;
 	case unsigned_long_long_type:
 	{
-		unsigned long long val = atoll(str);
+		unsigned long long val = _atoi64(str);
 		value.assignPrimitive(primitiveType, &val);
 	}
 	break;
 	case float_type:
 	{
-		float val = atof(str);
+		float val = (float)atof(str);
 		value.assignPrimitive(primitiveType, &val);
 	}
 	break;
@@ -374,5 +374,107 @@ bool Reflection::StringToObject(Variant& value, ClassType* classType, const char
 	}
 	return false;
 }
+
+String Reflection::InstancePropertyToString(Reference* that, InstanceProperty* instanceProperty)
+{
+	pafcore::Variant varThat;
+	varThat.assignReferencePtr(that->getType(), that, false, pafcore::Variant::by_ptr);
+	return InstancePropertyToString(&varThat, instanceProperty);
+}
+
+String Reflection::InstancePropertyToString(Variant* that, InstanceProperty* instanceProperty)
+{
+	pafcore::Variant value;
+	pafcore::ErrorCode errorCode = (*instanceProperty->m_getter)(that, &value);
+	if (pafcore::s_ok == errorCode)
+	{
+		if (value.m_type->isPrimitive())
+		{
+			return pafcore::Reflection::PrimitiveToString(value);
+		}
+		else if (value.m_type->isEnum())
+		{
+			return pafcore::Reflection::EnumToString(value);
+		}
+		else
+		{
+			PAF_ASSERT(value.m_type->isValue() || value.m_type->isReference());
+			return pafcore::Reflection::ObjectToString(value);
+		}
+	}
+	return pafcore::String();
+}
+
+ErrorCode Reflection::StringToInstanceProperty(Variant& that, InstanceProperty* instanceProperty, const char* str)
+{
+	if (0 == instanceProperty->m_setter)
+	{
+		return e_property_is_read_only;
+	}
+	pafcore::Variant value;
+	if (instanceProperty->m_setterType->isPrimitive())
+	{
+		pafcore::Reflection::StringToPrimitive(value, static_cast<pafcore::PrimitiveType*>(instanceProperty->m_setterType), str);
+	}
+	else if (instanceProperty->m_setterType->isEnum())
+	{
+		pafcore::Reflection::StringToEnum(value, static_cast<pafcore::EnumType*>(instanceProperty->m_setterType), str);
+	}
+	else
+	{
+		PAF_ASSERT(instanceProperty->m_setterType->isValue() || instanceProperty->m_setterType->isReference());
+		pafcore::Reflection::StringToObject(value, static_cast<pafcore::ClassType*>(instanceProperty->m_setterType), str);
+	}
+	pafcore::ErrorCode errorCode = (*instanceProperty->m_setter)(&that, &value);
+	return errorCode;
+}
+
+ErrorCode Reflection::StringToInstanceProperty(Variant& that, const char* propertyName, const char* str)
+{
+	if (pafcore::class_type != that.m_type->get__category_())
+	{
+		return e_is_not_class;
+	}
+	pafcore::ClassType* classType = static_cast<pafcore::ClassType*>(that.m_type);
+	pafcore::InstanceProperty* instanceProperty = classType->findInstanceProperty(propertyName, true);
+	if (0 == instanceProperty)
+	{
+		return e_member_not_found;
+	}
+	return StringToInstanceProperty(that, instanceProperty, str);
+}
+
+
+ErrorCode Reflection::NewObject(Variant& result, ClassType* type)
+{
+	pafcore::StaticMethod* staticMethod = type->findStaticMethod("New", false);
+	if (staticMethod)
+	{
+		pafcore::ErrorCode errorCode = (*staticMethod->m_invoker)(&result, 0, 0);
+		return errorCode;
+	}
+	return e_member_not_found;
+}
+//
+//ErrorCode Reflection::CallInstanceMethod(Variant& result, Reference* that, const char* methodName, Variant** args, int_t numArgs)
+//{
+//	ClassType* classType = that->getType();
+//	InstanceMethod* instanceMethod = classType->findInstanceMethod(methodName, true);
+//	if (0 == instanceMethod)
+//	{
+//		return e_member_not_found;
+//	}
+//
+//	pafcore::ErrorCode errorCode = (*invoker)(&result, args, numArgs);
+//	for (int i = 0; i < numArgs; i++)
+//	{
+//		pafcore::Variant* argument = (pafcore::Variant*)&argumentsBuf[sizeof(pafcore::Variant)*i];
+//		argument->~Variant();
+//	}
+//
+//	pafcore::Metadata* member;
+//	member = variant->m_type->findMember(name);
+//
+//}
 
 END_PAFCORE

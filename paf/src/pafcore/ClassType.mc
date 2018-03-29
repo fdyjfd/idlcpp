@@ -24,6 +24,7 @@
 #include "Enumerator.h"
 #include "PrimitiveType.h"
 #include "VoidType.h"
+#include "RefCountImpl.h"
 #include <new>
 
 
@@ -43,7 +44,7 @@ namespace idlcpp
 			::pafcore::Overload(&s_instanceResults[0], 0, 0, false, false),
 			::pafcore::Overload(&s_instanceResults[1], 0, 0, false, false),
 		};
-			static ::pafcore::InstanceMethod s_instanceMethods[] = 
+		static ::pafcore::InstanceMethod s_instanceMethods[] = 
 		{
 			::pafcore::InstanceMethod("deref", 0, ClassTypeIterator_deref, &s_instanceOverloads[0], 1),
 			::pafcore::InstanceMethod("next", 0, ClassTypeIterator_next, &s_instanceOverloads[1], 1),
@@ -77,7 +78,7 @@ namespace idlcpp
 
 	::pafcore::ErrorCode __pafcore__ClassTypeIterator_Type::ClassTypeIterator_deref(::pafcore::Variant* result, ::pafcore::Variant** args, int_t numArgs)
 	{
-		if(1 == numArgs)
+		if(1 <= numArgs)
 		{
 			if(args[0]->isConstant())
 			{
@@ -97,7 +98,7 @@ namespace idlcpp
 
 	::pafcore::ErrorCode __pafcore__ClassTypeIterator_Type::ClassTypeIterator_next(::pafcore::Variant* result, ::pafcore::Variant** args, int_t numArgs)
 	{
-		if(1 == numArgs)
+		if(1 <= numArgs)
 		{
 			if(args[0]->isConstant())
 			{
@@ -183,7 +184,7 @@ namespace idlcpp
 			::pafcore::Overload(&s_instanceResults[8], &s_instanceArguments[9], 1, false, false),
 			::pafcore::Overload(&s_instanceResults[9], &s_instanceArguments[10], 2, false, false),
 		};
-			static ::pafcore::InstanceMethod s_instanceMethods[] = 
+		static ::pafcore::InstanceMethod s_instanceMethods[] = 
 		{
 			::pafcore::InstanceMethod("_findMember_", 0, ClassType__findMember_, &s_instanceOverloads[0], 1),
 			::pafcore::InstanceMethod("_getBaseClassCount_", 0, ClassType__getBaseClassCount_, &s_instanceOverloads[1], 1),
@@ -233,7 +234,7 @@ namespace idlcpp
 
 	::pafcore::ErrorCode __pafcore__ClassType_Type::ClassType__findMember_(::pafcore::Variant* result, ::pafcore::Variant** args, int_t numArgs)
 	{
-		if(3 == numArgs)
+		if(3 <= numArgs)
 		{
 			if(args[0]->isConstant())
 			{
@@ -267,7 +268,7 @@ namespace idlcpp
 
 	::pafcore::ErrorCode __pafcore__ClassType_Type::ClassType__getBaseClassCount_(::pafcore::Variant* result, ::pafcore::Variant** args, int_t numArgs)
 	{
-		if(1 == numArgs)
+		if(1 <= numArgs)
 		{
 			if(args[0]->isConstant())
 			{
@@ -287,7 +288,7 @@ namespace idlcpp
 
 	::pafcore::ErrorCode __pafcore__ClassType_Type::ClassType__getBaseClass_(::pafcore::Variant* result, ::pafcore::Variant** args, int_t numArgs)
 	{
-		if(2 == numArgs)
+		if(2 <= numArgs)
 		{
 			if(args[0]->isConstant())
 			{
@@ -312,7 +313,7 @@ namespace idlcpp
 
 	::pafcore::ErrorCode __pafcore__ClassType_Type::ClassType__getFirstDerivedClass_(::pafcore::Variant* result, ::pafcore::Variant** args, int_t numArgs)
 	{
-		if(1 == numArgs)
+		if(1 <= numArgs)
 		{
 			if(args[0]->isConstant())
 			{
@@ -332,7 +333,7 @@ namespace idlcpp
 
 	::pafcore::ErrorCode __pafcore__ClassType_Type::ClassType__getInstanceArrayPropertyCount_(::pafcore::Variant* result, ::pafcore::Variant** args, int_t numArgs)
 	{
-		if(2 == numArgs)
+		if(2 <= numArgs)
 		{
 			if(args[0]->isConstant())
 			{
@@ -357,7 +358,7 @@ namespace idlcpp
 
 	::pafcore::ErrorCode __pafcore__ClassType_Type::ClassType__getInstanceArrayProperty_(::pafcore::Variant* result, ::pafcore::Variant** args, int_t numArgs)
 	{
-		if(3 == numArgs)
+		if(3 <= numArgs)
 		{
 			if(args[0]->isConstant())
 			{
@@ -387,7 +388,7 @@ namespace idlcpp
 
 	::pafcore::ErrorCode __pafcore__ClassType_Type::ClassType__getInstancePropertyCount_(::pafcore::Variant* result, ::pafcore::Variant** args, int_t numArgs)
 	{
-		if(2 == numArgs)
+		if(2 <= numArgs)
 		{
 			if(args[0]->isConstant())
 			{
@@ -412,7 +413,7 @@ namespace idlcpp
 
 	::pafcore::ErrorCode __pafcore__ClassType_Type::ClassType__getInstanceProperty_(::pafcore::Variant* result, ::pafcore::Variant** args, int_t numArgs)
 	{
-		if(3 == numArgs)
+		if(3 <= numArgs)
 		{
 			if(args[0]->isConstant())
 			{
@@ -442,7 +443,7 @@ namespace idlcpp
 
 	::pafcore::ErrorCode __pafcore__ClassType_Type::ClassType__getMemberCount_(::pafcore::Variant* result, ::pafcore::Variant** args, int_t numArgs)
 	{
-		if(2 == numArgs)
+		if(2 <= numArgs)
 		{
 			if(args[0]->isConstant())
 			{
@@ -467,7 +468,7 @@ namespace idlcpp
 
 	::pafcore::ErrorCode __pafcore__ClassType_Type::ClassType__getMember_(::pafcore::Variant* result, ::pafcore::Variant** args, int_t numArgs)
 	{
-		if(3 == numArgs)
+		if(3 <= numArgs)
 		{
 			if(args[0]->isConstant())
 			{

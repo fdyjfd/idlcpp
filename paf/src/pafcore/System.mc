@@ -19,6 +19,7 @@
 #include "Enumerator.h"
 #include "PrimitiveType.h"
 #include "VoidType.h"
+#include "RefCountImpl.h"
 #include <new>
 
 
@@ -72,7 +73,7 @@ namespace idlcpp
 
 	::pafcore::ErrorCode __pafcore__System_Type::System_LoadDLL(::pafcore::Variant* result, ::pafcore::Variant** args, int_t numArgs)
 	{
-		if(1 == numArgs)
+		if(1 <= numArgs)
 		{
 			if(args[0]->isTemporary())
 			{

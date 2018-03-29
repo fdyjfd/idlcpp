@@ -1,5 +1,8 @@
 #pragma once
 
+#pragma warning(disable:4251)
+#pragma warning(error:4150)
+
 #include "Typedef.h"
 
 #if defined PAFCORE_EXPORTS
@@ -147,6 +150,18 @@ inline void SafeAddRef(T* p)
 }
 
 template<typename T>
+inline void SafeAddRefArray(T* const * p, size_t count)
+{
+	for (size_t i = 0; i < count; ++i)
+	{
+		if (0 != p[i])
+		{
+			p[i]->addRef();
+		}
+	}
+}
+
+template<typename T>
 inline void SafeRelease(T* p)
 {
 	if (0 != p)
@@ -165,9 +180,8 @@ inline void SafeReleaseSetNull(T*& p)
 	}
 }
 
-
 template<typename T>
-inline void SafeReleaseArray(T** p, size_t count)
+inline void SafeReleaseArray(T* const* p, size_t count)
 {
 	for (size_t i = 0; i < count; ++i)
 	{
@@ -218,3 +232,17 @@ inline void CoSafeReleaseSetNull(T*& p)
 		p = 0;
 	}
 }
+
+template<typename T>
+class AutoDeleteArray
+{
+public:
+	AutoDeleteArray(T* p) : m_p(p)
+	{}
+	~AutoDeleteArray()
+	{
+		delete[]m_p;
+	}
+public:
+	T* m_p;
+};

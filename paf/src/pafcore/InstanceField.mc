@@ -23,6 +23,7 @@
 #include "Enumerator.h"
 #include "PrimitiveType.h"
 #include "VoidType.h"
+#include "RefCountImpl.h"
 #include <new>
 
 

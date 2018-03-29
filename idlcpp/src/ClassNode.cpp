@@ -21,6 +21,7 @@
 #include "Options.h"
 #include "Compiler.h"
 #include "TypeTree.h"
+#include "DelegateNode.h"
 
 #include <assert.h>
 #include <vector>
@@ -282,7 +283,9 @@ void checkMemberNames(ClassNode* classNode, std::vector<MemberNode*>& memberNode
 
 ClassNode::ClassNode(TokenNode* keyword, IdentifyNode* category, IdentifyNode* name)
 {
-	assert(snt_keyword_struct == keyword->m_nodeType || snt_keyword_class == keyword->m_nodeType);
+	assert(snt_keyword_struct == keyword->m_nodeType 
+		|| snt_keyword_class == keyword->m_nodeType 
+		|| snt_keyword_delegate == keyword->m_nodeType);
 
 	m_nodeType = snt_class;
 	m_keyword = keyword;
@@ -299,7 +302,7 @@ ClassNode::ClassNode(TokenNode* keyword, IdentifyNode* category, IdentifyNode* n
 	m_typeNode = 0;
 	if(0 == category)
 	{
-		m_isValueType = (snt_keyword_struct == keyword->m_nodeType);
+		m_isValueType = (snt_keyword_struct == keyword->m_nodeType || snt_keyword_delegate == keyword->m_nodeType);
 	}
 	else
 	{
@@ -338,17 +341,17 @@ void ClassNode::extendInternalCode(TypeNode* enclosingTypeNode, TemplateArgument
 		buildAdditionalMethods();
 	}
 
-	size_t count = m_additionalMethods.size();
-	for (size_t i = 0; i < count; ++i)
-	{
-		MethodNode* methodNode = m_additionalMethods[i];
-		assert(methodNode->m_resultTypeName);
-		methodNode->m_resultTypeName->calcTypeNodes(m_typeNode, templateArguments);
-	}
+	//size_t count = m_additionalMethods.size();
+	//for (size_t i = 0; i < count; ++i)
+	//{
+	//	MethodNode* methodNode = m_additionalMethods[i];
+	//	assert(methodNode->m_resultTypeName);
+	//	methodNode->m_resultTypeName->calcTypeNodes(m_typeNode, templateArguments);
+	//}
 
 	std::vector<MemberNode*> memberNodes;
 	m_memberList->collectMemberNodes(memberNodes);
-	count = memberNodes.size();
+	size_t count = memberNodes.size();
 	for (size_t i = 0; i < count; ++i)
 	{
 		MemberNode* memberNode = memberNodes[i];
@@ -356,6 +359,9 @@ void ClassNode::extendInternalCode(TypeNode* enclosingTypeNode, TemplateArgument
 		{
 		case snt_class:
 			static_cast<ClassNode*>(memberNode)->extendInternalCode(m_typeNode, templateArguments);
+			break;
+		case snt_delegate:
+			static_cast<DelegateNode*>(memberNode)->extendInternalCode(m_typeNode, templateArguments);
 			break;
 		}
 	}
@@ -714,6 +720,14 @@ void ClassNode::checkTypeNames(TypeNode* enclosingTypeNode, TemplateArguments* t
 	m_memberList->checkTypeNames(m_typeNode, templateArguments);
 
 
+	size_t count = m_additionalMethods.size();
+	for (size_t i = 0; i < count; ++i)
+	{
+		MethodNode* methodNode = m_additionalMethods[i];
+		//methodNode->checkTypeNames(m_typeNode, templateArguments);
+		assert(methodNode->m_resultTypeName);
+		methodNode->m_resultTypeName->calcTypeNodes(m_typeNode, templateArguments);
+	}
 }
 
 void ClassNode::checkSemantic(TemplateArguments* templateArguments)

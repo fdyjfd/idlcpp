@@ -9,6 +9,7 @@
 #include "MemberListNode.h"
 #include "TypeNameNode.h"
 #include "ClassNode.h"
+#include "DelegateNode.h"
 #include "TemplateParametersNode.h"
 #include "TemplateClassInstanceNode.h"
 #include "NamespaceNode.h"
@@ -92,6 +93,9 @@ void CollectTypeNodes(std::vector<TypeNode*>& typeNodes, MemberNode* memberNode)
 		{
 			CollectTypeNodes(typeNodes, static_cast<ClassNode*>(memberNode)->m_typeNode);
 		}
+		break;
+	case snt_delegate:
+		typeNodes.push_back(static_cast<DelegateNode*>(memberNode)->m_classNode->m_typeNode);
 		break;
 	case snt_template_class_instance:
 		CollectTypeNodes(typeNodes, static_cast<TemplateClassInstanceNode*>(memberNode)->m_typeNode);

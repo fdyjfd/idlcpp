@@ -150,6 +150,7 @@
     <ClCompile Include="..\..\src\ClassNode.cpp" />
     <ClCompile Include="..\..\src\CommonFuncs.cpp" />
     <ClCompile Include="..\..\src\Compiler.cpp" />
+    <ClCompile Include="..\..\src\DelegateNode.cpp" />
     <ClCompile Include="..\..\src\EnumeratorNode.cpp" />
     <ClCompile Include="..\..\src\EnumeratorListNode.cpp" />
     <ClCompile Include="..\..\src\EnumNode.cpp" />
@@ -201,6 +202,7 @@
     <ClInclude Include="..\..\src\ClassNode.h" />
     <ClInclude Include="..\..\src\CommonFuncs.h" />
     <ClInclude Include="..\..\src\Compiler.h" />
+    <ClInclude Include="..\..\src\DelegateNode.h" />
     <ClInclude Include="..\..\src\EnumeratorNode.h" />
     <ClInclude Include="..\..\src\EnumeratorListNode.h" />
     <ClInclude Include="..\..\src\EnumNode.h" />

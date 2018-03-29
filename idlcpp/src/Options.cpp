@@ -9,6 +9,7 @@ Options::Options()
 	m_metaHeaderFilePostfix = ".mh";
 	m_metaSourceFilePostfix = ".mc";
 	m_outputLineDirective = false;
+	m_strictArgumentsCount = false;
 }
 
 

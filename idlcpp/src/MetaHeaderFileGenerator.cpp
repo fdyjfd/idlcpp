@@ -9,6 +9,7 @@
 #include "EnumeratorListNode.h"
 #include "MemberListNode.h"
 #include "EnumNode.h"
+#include "DelegateNode.h"
 #include "ClassNode.h"
 #include "TemplateClassInstanceNode.h"
 #include "TemplateParametersNode.h"
@@ -262,6 +263,9 @@ void MetaHeaderFileGenerator::generateCode_Namespace(FILE* file, NamespaceNode* 
 				generateCode_Class(file, static_cast<ClassNode*>(memberNode), 0, indentation);
 			}
 			break;
+		case snt_delegate:
+			generateCode_Delegate(file, static_cast<DelegateNode*>(memberNode), 0, indentation);
+			break;
 		case snt_namespace:
 			generateCode_Namespace(file, static_cast<NamespaceNode*>(memberNode), indentation);
 			break;
@@ -279,6 +283,7 @@ void MetaHeaderFileGenerator::generateCode_Namespace(FILE* file, NamespaceNode* 
 		}
 	}
 }
+
 
 void MetaHeaderFileGenerator::generateCode_Enum(FILE* file, EnumNode* enumNode, TemplateArguments* templateArguments, int indentation)
 {
@@ -306,6 +311,15 @@ void MetaHeaderFileGenerator::generateCode_Enum(FILE* file, EnumNode* enumNode, 
 		g_options.m_exportMacro.c_str(), metaTypeName.c_str());
 	writeStringToFile(buf, file, indentation + 1);
 	writeStringToFile("};\n\n", file, indentation);
+}
+
+void MetaHeaderFileGenerator::generateCode_Delegate(FILE* file, DelegateNode* delegateNode, TemplateArguments* templateArguments, int indentation)
+{
+	if (delegateNode->isNoMeta())
+	{
+		return;
+	}
+	generateCode_Class(file, delegateNode->m_classNode, 0, indentation);
 }
 
 void MetaHeaderFileGenerator::generateCode_Class(FILE* file, ClassNode* classNode, TemplateClassInstanceNode* templateClassInstance, int indentation)
@@ -411,6 +425,7 @@ void MetaHeaderFileGenerator::generateCode_Class(FILE* file, ClassNode* classNod
 			}
 			else if(snt_enum == memberNode->m_nodeType
 				|| snt_class == memberNode->m_nodeType
+				|| snt_delegate == memberNode->m_nodeType
 				|| snt_typedef == memberNode->m_nodeType
 				|| snt_type_declaration == memberNode->m_nodeType)
 			{
@@ -493,6 +508,9 @@ void MetaHeaderFileGenerator::generateCode_Class(FILE* file, ClassNode* classNod
 			break;
 		case snt_class:
 			generateCode_Class(file, static_cast<ClassNode*>(typeNode), templateClassInstance, indentation);
+			break;
+		case snt_delegate:
+			generateCode_Delegate(file, static_cast<DelegateNode*>(typeNode), templateArguments, indentation);
 			break;
 		case snt_typedef:
 			generateCode_Typedef(file, static_cast<TypedefNode*>(typeNode), templateArguments, indentation);

@@ -14,7 +14,6 @@ namespace tutorial
 
 	override class Shape : Reference
 	{
-		override abstract float getArea();
 		override abstract void getArea2(float* area);
 		##		virtual ~Shape() {}
 	};

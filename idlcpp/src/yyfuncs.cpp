@@ -29,6 +29,7 @@
 #include "TokenListNode.h"
 #include "MemberListNode.h"
 #include "ClassNode.h"
+#include "DelegateNode.h"
 #include "EnumNode.h"
 #include "TypedefNode.h"
 #include "TypeDeclarationNode.h"
@@ -143,14 +144,15 @@ SyntaxNode* newEnumeratorList(SyntaxNode* enumeratorList, SyntaxNode* delimiter,
 	return res;
 }
 
-SyntaxNode* newEnum(SyntaxNode* keyword, SyntaxNode* name, SyntaxNode* leftBrace, SyntaxNode* enumeratorList, SyntaxNode* rightBrace)
+SyntaxNode* newEnum(SyntaxNode* keyword, SyntaxNode* keyword2, SyntaxNode* name, SyntaxNode* leftBrace, SyntaxNode* enumeratorList, SyntaxNode* rightBrace)
 {
 	assert(snt_keyword_enum == keyword->m_nodeType);
+	assert(0 == keyword2 || snt_keyword_class == keyword2->m_nodeType);
 	assert(snt_identify == name->m_nodeType);
 	assert('{' == leftBrace->m_nodeType);
 	assert(0 == enumeratorList || snt_enumerator_list == enumeratorList->m_nodeType);
 	assert('}' == rightBrace->m_nodeType);
-	EnumNode* res = new EnumNode((TokenNode*)keyword, (IdentifyNode*)name, (TokenNode*)leftBrace, (EnumeratorListNode*)enumeratorList, (TokenNode*)rightBrace);
+	EnumNode* res = new EnumNode((TokenNode*)keyword, (TokenNode*)keyword2, (IdentifyNode*)name, (TokenNode*)leftBrace, (EnumeratorListNode*)enumeratorList, (TokenNode*)rightBrace);
 	g_syntaxNodes.push_back(res);
 	return res;
 }
@@ -215,6 +217,7 @@ void setFilter(SyntaxNode* syntaxNode, SyntaxNode* filterNode)
 		|| snt_method == syntaxNode->m_nodeType
 		|| snt_operator == syntaxNode->m_nodeType	
 		|| snt_class == syntaxNode->m_nodeType
+		|| snt_delegate == syntaxNode->m_nodeType
 		|| snt_enum == syntaxNode->m_nodeType
 		|| snt_template_class_instance == syntaxNode->m_nodeType
 		|| snt_typedef == syntaxNode->m_nodeType
@@ -480,10 +483,15 @@ void setOperatorOverride(SyntaxNode* opt)
 SyntaxNode* newClassMemberList(SyntaxNode* memberList, SyntaxNode* member)
 {
 	assert(0 == memberList || snt_member_list == memberList->m_nodeType);
-	assert(snt_field == member->m_nodeType || snt_property == member->m_nodeType 
-		|| snt_method == member->m_nodeType || snt_operator == member->m_nodeType
-		|| snt_class == member->m_nodeType || snt_enum == member->m_nodeType 
-		|| snt_typedef == member->m_nodeType || snt_type_declaration  == member->m_nodeType);
+	assert(snt_field == member->m_nodeType 
+		|| snt_property == member->m_nodeType 
+		|| snt_method == member->m_nodeType 
+		|| snt_operator == member->m_nodeType
+		|| snt_class == member->m_nodeType
+		|| snt_delegate == member->m_nodeType
+		|| snt_enum == member->m_nodeType
+		|| snt_typedef == member->m_nodeType 
+		|| snt_type_declaration  == member->m_nodeType);
 	MemberListNode* res = new MemberListNode((MemberListNode*)memberList, (MemberNode*)member);
 	g_syntaxNodes.push_back(res);
 	return res;
@@ -491,7 +499,7 @@ SyntaxNode* newClassMemberList(SyntaxNode* memberList, SyntaxNode* member)
 
 SyntaxNode* newClass(SyntaxNode* keyword, SyntaxNode* category, SyntaxNode* name)
 {
-	assert(snt_keyword_class == keyword->m_nodeType || snt_keyword_struct == keyword->m_nodeType);
+	assert(snt_keyword_class == keyword->m_nodeType || snt_keyword_struct == keyword->m_nodeType || snt_keyword_delegate == keyword->m_nodeType);
 	assert(snt_identify == name->m_nodeType);
 	assert(0 == category || snt_identify == category->m_nodeType);
 	ClassNode* res = new ClassNode((TokenNode*)keyword, (IdentifyNode*)category, (IdentifyNode*)name);
@@ -542,6 +550,44 @@ void setClassTemplateParameters(SyntaxNode* cls, SyntaxNode* parameters)
 	assert(snt_class == cls->m_nodeType);
 	assert(snt_template_parameters == parameters->m_nodeType);
 	((ClassNode*)cls)->setTemplateParameters((TemplateParametersNode*)parameters);
+}
+
+SyntaxNode* newDelegate(SyntaxNode* name, SyntaxNode* leftParenthesis, SyntaxNode* parameterList, SyntaxNode* rightParenthesis, SyntaxNode* semicolon)
+{
+	assert(snt_identify == name->m_nodeType);
+	assert('(' == leftParenthesis->m_nodeType && ')' == rightParenthesis->m_nodeType);
+	assert(0 == semicolon || ';' == semicolon->m_nodeType);
+	assert(0 == parameterList || snt_parameter_list == parameterList->m_nodeType);
+	DelegateNode* res = new DelegateNode((IdentifyNode*)name, (TokenNode*)leftParenthesis, (ParameterListNode*)parameterList,
+		(TokenNode*)rightParenthesis, (TokenNode*)semicolon);
+	g_syntaxNodes.push_back(res);
+	return res;
+}
+
+void setDelegateResult(SyntaxNode* delegate, SyntaxNode* result, SyntaxNode* passing)
+{
+	assert(snt_delegate == delegate->m_nodeType && snt_type_name == result->m_nodeType);
+	assert(0 == passing || '&' == passing->m_nodeType || '*' == passing->m_nodeType || '^' == passing->m_nodeType);
+	((DelegateNode*)delegate)->m_resultTypeName = (TypeNameNode*)result;
+	((DelegateNode*)delegate)->m_passing = (TokenNode*)passing;
+}
+
+void setDelegateResultArray(SyntaxNode* delegate)
+{
+	assert(snt_delegate == delegate->m_nodeType);
+	((DelegateNode*)delegate)->m_resultArray = true;
+}
+
+void setDelegateResultConst(SyntaxNode* delegate, SyntaxNode* constant)
+{
+	assert(snt_delegate == delegate->m_nodeType && snt_keyword_const == constant->m_nodeType);
+	((DelegateNode*)delegate)->m_resultConst = (TokenNode*)constant;
+}
+
+void setDelegateKeyword(SyntaxNode* delegate, SyntaxNode* keyword)
+{
+	assert(snt_delegate == delegate->m_nodeType && snt_keyword_delegate == keyword->m_nodeType);
+	((DelegateNode*)delegate)->m_keyword = (TokenNode*)keyword;
 }
 
 SyntaxNode* newTypeDeclaration(SyntaxNode* name, TypeCategory typeCategory)
@@ -614,7 +660,8 @@ SyntaxNode* newNamespaceMemberList(SyntaxNode* memberList, SyntaxNode* member)
 {
 	assert(0 == memberList || snt_member_list == memberList->m_nodeType);
 	assert(snt_class == member->m_nodeType 
-		|| snt_enum == member->m_nodeType 
+		|| snt_delegate == member->m_nodeType
+		|| snt_enum == member->m_nodeType
 		|| snt_template_class_instance == member->m_nodeType
 		|| snt_typedef == member->m_nodeType 
 		|| snt_type_declaration == member->m_nodeType

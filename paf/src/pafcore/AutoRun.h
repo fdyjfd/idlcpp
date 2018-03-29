@@ -31,4 +31,3 @@ public:
 };
 
 #define AUTO_REGISTER_TYPEALIAS(T) AutoRegisterTypeAlias<T> g_auto_register_##T;
-

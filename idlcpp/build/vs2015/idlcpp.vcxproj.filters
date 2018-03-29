@@ -162,6 +162,9 @@
     <ClCompile Include="..\..\src\EnumeratorListNode.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\DelegateNode.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\HeaderFileGenerator.h">
@@ -312,6 +315,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\EnumeratorListNode.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\DelegateNode.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

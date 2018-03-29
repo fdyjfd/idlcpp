@@ -9,6 +9,7 @@ struct MethodNode;
 struct OperatorNode;
 struct GetterSetterNode;
 struct FieldNode;
+struct DelegateNode;
 
 void RaiseError_NestedTemplateClass(IdentifyNode* node);
 void RaiseError_InvalidTypeName(IdentifyNode* node);
@@ -17,6 +18,7 @@ void RaiseError_InvalidTypeName(TypeNameNode* node);
 void RaiseError_InvalidParameterType(ParameterNode* node);
 void RaiseError_InvalidResultType(MethodNode* node);
 void RaiseError_InvalidResultType(OperatorNode* node);
+void RaiseError_InvalidResultType(DelegateNode* node);
 void RaiseError_InvalidFieldType(FieldNode* node);
 void RaiseError_InvalidPropertyType(GetterSetterNode* node, bool getter);
 void RaiseError_InvalidClassTemplateName(IdentifyNode* node);

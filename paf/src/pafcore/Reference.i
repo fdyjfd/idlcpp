@@ -9,6 +9,7 @@ namespace pafcore
 	class #PAFCORE_EXPORT Reference ## : public RefCount
 	{
 #{
+	public:
 		bool isTypeOf(ClassType* classType);
 
 		template<typename T>
@@ -34,6 +35,11 @@ namespace pafcore
 		void* castTo()
 		{
 			return reinterpret_cast<T*>(castTo(T::GetType()));
+		}
+
+		void deleteThis()
+		{
+			delete this;
 		}
 #}
 	};

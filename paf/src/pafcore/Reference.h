@@ -18,6 +18,7 @@ namespace pafcore
 		virtual size_t getAddress();
 
 
+	public:
 		bool isTypeOf(ClassType* classType);
 
 		template<typename T>
@@ -43,6 +44,11 @@ namespace pafcore
 		void* castTo()
 		{
 			return reinterpret_cast<T*>(castTo(T::GetType()));
+		}
+
+		void deleteThis()
+		{
+			delete this;
 		}
 
 	};

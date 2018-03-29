@@ -1,6 +1,5 @@
 #include "LuaSubclassInvoker.h"
 #include "lua.hpp"
-#include <new>
 #include <Windows.h>
 
 BEGIN_PAFLUA

@@ -21,7 +21,7 @@ Overload::Overload(Result* result, Argument* args, size_t argCount, bool isStati
 {
 	m_result = result;
 	m_args = args;
-	m_argCount = argCount;
+	m_argCount = (uint16_t)argCount;
 	m_isStatic = isStatic;
 	m_isConstant = isConstant;
 }
@@ -271,7 +271,7 @@ size_t Overload::Resolution(Overload* overloads, Variant** variants, size_t argC
 			return candidates[index];
 		}
 		++index;
-		value = 1 << index;
+		value = size_t(1) << index;
 	}
 	size_t error_ambiguous = overloadCount + 1;
 	return error_ambiguous;

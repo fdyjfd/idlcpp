@@ -1,14 +1,19 @@
-p = paf.float.NewArray(3);
-p[0] = 1;
-p[1] = 2;
-p[2] = 3;
-ray = paf.tutorial.Ray3f(paf.tutorial.Vector3f.s_zero, paf.tutorial.Vector3f(p));
-pt = paf.tutorial.Vector3f(0,0,0);
-ray:getPoint(pt, 2);
-print(pt.x);
-print(pt.y);
-print(pt.z);
-pt = ray:getPoint(3);
-print(pt.x);
-print(pt.y);
-print(pt.z);
+Window = {}
+Window.__index = Window;
+
+function Window.New()
+	window = {}
+	setmetatable(window, Window);
+	window.button = paf.tutorial.Button();
+	window.callback = window.button.click._add_(window, "onClick");	
+	return window;
+end
+
+function Window:onClick(sender)
+	print("Window:onClick()" );
+end
+
+window = Window.New();
+window.button:raiseClick();
+window.button.click._remove_(window, "onClick");
+window.button:raiseClick();

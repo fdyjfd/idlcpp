@@ -4,197 +4,64 @@
 #include "NameSpace.mc"
 #include "Metadata.h"
 #include "Type.h"
+#include "String.h"
 #include <vector>
 #include <assert.h>
 
 BEGIN_PAFCORE
 
-NameSpace::MetadataTrieTree::Node::~Node()
+size_t NameSpace::Hash_Metadata::operator ()(const Metadata* metadata) const
 {
-	if (!isNull())
-	{
-		if (isMetadata())
-		{
-			Metadata* metadata = getMetadata();
-			if (name_space == metadata->get__category_())
-			{
-				NameSpace* nameSpace = static_cast<NameSpace*>(metadata);
-				delete nameSpace;
-			}
-		}
-		else
-		{
-			Node* node = getChildren();
-			delete[] node;
-		}
-	}
+	return StringToHash(metadata->m_name);
 }
 
-const size_t num_metadata_name_char = 68;
-
-size_t NameSpace::MetadataTrieTree::Node::GetIndex(char c)
+bool NameSpace::Equal_Metadata::operator() (const Metadata* lhs, const Metadata* rhs) const
 {
-	assert('\0' == c || ' ' == c || ':' == c || '<' == c || '>' == c || '_' == c
-		|| '0' <= c && c <= '9' || 'A' <= c && c <= 'Z' || 'a' <= c && c <= 'z');
-	switch(c)
-	{
-	case '\0':
-		return 0;
-	case ' ':
-		return 1;
-	case ':':
-		return 2;
-	case '<':
-		return 3;
-	case '>':
-		return 4;
-	case '_':
-		return 5;
- 	}
-	if(c <= '9')
-	{
-		return c - '0' + 6;
-	}
-	if(c <= 'Z')
-	{
-		return c - 'A' + 16;
-	}
-	return c - 'a' + 42;
-}
-
-bool NameSpace::MetadataTrieTree::Node::insert(Metadata* metadata, int offset)
-{
-	assert(0 == ((size_t)metadata & 1));
-	if(isNull())
-	{
-		setMetadata(metadata);
-		return true;
-	}
-	else if(isMetadata())
-	{
-		Metadata* currentMetadata = getMetadata();
-		Node* children = paf_new Node[num_metadata_name_char];
-		assert(0 == ((size_t)children & 1));
-		setChildren(children);
-		size_t currentIndex = GetIndex(currentMetadata->m_name[offset]);
-		children[currentIndex].setMetadata(currentMetadata);
-		size_t index = GetIndex(metadata->m_name[offset]);
-		if(0 == currentIndex && 0 == index)
-		{
-			return false;
-		}
-		else
-		{
-			return children[index].insert(metadata, offset + 1);
-		}
-	}
-	else
-	{
-		Node* children = getChildren();
-		size_t index = GetIndex(metadata->m_name[offset]);
-		return children[index].insert(metadata, offset + 1);
-	}
-}
-
-Metadata* NameSpace::MetadataTrieTree::Node::find(const char* name, int offset)
-{
-	if(isNull())
-	{
-		return 0;
-	}
-	else if(isMetadata())
-	{
-		Metadata* metadata = getMetadata();
-		if(0 == strcmp(metadata->m_name + offset, name + offset))
-		{
-			assert(0 == strcmp(metadata->m_name, name));
-			return metadata;
-		}
-		else
-		{
-			return 0;
-		}
-	}
-	else
-	{
-		size_t index = GetIndex(name[offset]);
-		Node* children = getChildren();
-		if(0 == index)
-		{
-			if(!children[index].isNull())
-			{
-				assert(children[index].isMetadata());
-				Metadata* metadata = children[index].getMetadata();
-				assert(0 == strcmp(metadata->m_name, name));
-				return metadata;
-			}
-			else
-			{
-				return 0;
-			}
-		}
-		else
-		{
-			return children[index].find(name, offset + 1);
-		}
-	}
-}
-
-Metadata* NameSpace::MetadataTrieTree::getItem(size_t index)
-{
-	if(index < m_size)
-	{
-		std::vector<size_t> nodes;
-		nodes.push_back(m_root.m_ptr);	
-		while(!nodes.empty())
-		{
-			size_t ptr = nodes.back();
-			Node* node = (Node*)&ptr;
-			nodes.pop_back();
-			if(!node->isNull())
-			{
-				if(node->isMetadata())
-				{
-					if(0 == index)
-					{
-						return node->getMetadata();
-					}
-					else
-					{
-						--index;
-					}
-				}
-				else
-				{
-					Node* children = node->getChildren();
-					for(size_t i = 0; i < num_metadata_name_char; ++i)
-					{
-						Node* child = &children[num_metadata_name_char - 1 - i];
-						if(!child->isNull())
-						{
-							nodes.push_back(child->m_ptr);
-						}
-					}
-				}
-			}
-		}
-	}
-	return 0;
-}
+	return (0 == strcmp(lhs->m_name, rhs->m_name));
+};
 
 NameSpace::NameSpace(const char* name) : 
 	Metadata(name),
 	m_enclosing(0)
-{}
+{
+}
 
+NameSpace::~NameSpace()
+{
+	auto it = m_members.begin();
+	auto end = m_members.end();
+	for (; it != end; ++it)
+	{
+		Metadata* member = *it;
+		Category category = member->get__category_();
+		switch (category)
+		{
+		case name_space:
+			PAF_ASSERT(static_cast<NameSpace*>(member)->m_enclosing == this);
+			delete static_cast<NameSpace*>(member);
+			break;
+		case type_alias:
+			PAF_ASSERT(static_cast<TypeAlias*>(member)->m_enclosing == this);
+			static_cast<TypeAlias*>(member)->m_enclosing = 0;
+			break;
+		default:
+			PAF_ASSERT(void_type == category || primitive_type == category || enum_type == category || class_type == category);
+			PAF_ASSERT(static_cast<Type*>(member)->m_enclosing == this);
+			static_cast<Type*>(member)->m_enclosing = 0;
+		}
+	}
+}
 
 NameSpace* NameSpace::getNameSpace(const char* name)
 {
+	char buffer[sizeof(Metadata)];
+	Metadata* fakeMetadata = (Metadata*)buffer;
+	fakeMetadata->m_name = name;
 	NameSpace* subNameSpace = 0;
 	if(0 != this)
 	{
-		Metadata* member = m_members.find(name);
-		if(0 == member)
+		auto it = m_members.find(fakeMetadata);
+		if(m_members.end() == it)
 		{
 			subNameSpace = paf_new NameSpace(name);
 			m_members.insert(subNameSpace);
@@ -202,6 +69,7 @@ NameSpace* NameSpace::getNameSpace(const char* name)
 		}
 		else
 		{
+			Metadata* member = *it;
 			if(name_space == member->get__category_())
 			{
 				subNameSpace = static_cast<NameSpace*>(member);
@@ -228,13 +96,27 @@ ErrorCode NameSpace::registerMember(Metadata* member)
 		PAF_ASSERT(void_type == category || primitive_type == category || enum_type == category || class_type == category);
 		static_cast<Type*>(member)->m_enclosing = this;
 	}
-	return m_members.insert(member) ? s_ok : e_name_conflict;
+	return m_members.insert(member).second ? s_ok : e_name_conflict;
+}
+
+void NameSpace::unregisterMember(Metadata* metadata)
+{
+	m_members.erase(metadata);
 }
 
 
 Metadata* NameSpace::_findMember_(const char* name)
 {
-	return m_members.find(name);
+	Metadata* member = 0;
+	char buffer[sizeof(Metadata)];
+	Metadata* fakeMetadata = (Metadata*)buffer;
+	fakeMetadata->m_name = name;
+	auto it = m_members.find(fakeMetadata);
+	if (m_members.end() != it)
+	{
+		member = *it;
+	}
+	return member;
 }
 
 size_t NameSpace::_getMemberCount_()
@@ -244,12 +126,21 @@ size_t NameSpace::_getMemberCount_()
 
 Metadata* NameSpace::_getMember_(size_t index)
 {
-	return m_members.getItem(index);
+	if (index < m_members.size())
+	{
+		auto it = m_members.begin();
+		std::advance(it, index);
+		return *it;
+	}
+	else
+	{
+		return 0;
+	}
 }
 
 Metadata* NameSpace::findMember(const char * name)
 {
-	Metadata* member = m_members.find(name);
+	Metadata* member = _findMember_(name);
 	if(0 != member)
 	{
 		if(member->get__category_() == type_alias)

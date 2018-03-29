@@ -167,6 +167,9 @@
     <CustomBuild Include="..\..\..\src\pafcore\Enumerator.i">
       <FileType>Document</FileType>
     </CustomBuild>
+    <CustomBuild Include="..\..\..\src\pafcore\Delegate.i">
+      <FileType>Document</FileType>
+    </CustomBuild>
     <None Include="..\..\..\src\pafcore\Enumerator.ic" />
     <None Include="..\..\..\src\pafcore\Enumerator.mc" />
     <None Include="..\..\..\src\pafcore\Enumerator.mh" />
@@ -230,6 +233,9 @@
     <CustomBuild Include="..\..\..\src\pafcore\Result.i">
       <FileType>Document</FileType>
     </CustomBuild>
+    <CustomBuild Include="..\..\..\src\pafcore\Reflection.i">
+      <FileType>Document</FileType>
+    </CustomBuild>
     <None Include="..\..\..\src\pafcore\Result.ic" />
     <None Include="..\..\..\src\pafcore\Result.mc" />
     <None Include="..\..\..\src\pafcore\Result.mh" />
@@ -263,6 +269,9 @@
     <CustomBuild Include="..\..\..\src\pafcore\System.i">
       <FileType>Document</FileType>
     </CustomBuild>
+    <CustomBuild Include="..\..\..\src\pafcore\String.i">
+      <FileType>Document</FileType>
+    </CustomBuild>
     <None Include="..\..\..\src\pafcore\Type.ic" />
     <None Include="..\..\..\src\pafcore\Type.mc" />
     <None Include="..\..\..\src\pafcore\Type.mh" />
@@ -285,6 +294,7 @@
   <ItemGroup>
     <ClCompile Include="..\..\..\src\pafcore\Argument.cpp" />
     <ClCompile Include="..\..\..\src\pafcore\ClassType.cpp" />
+    <ClCompile Include="..\..\..\src\pafcore\Delegate.cpp" />
     <ClCompile Include="..\..\..\src\pafcore\Enumerator.cpp" />
     <ClCompile Include="..\..\..\src\pafcore\EnumType.cpp" />
     <ClCompile Include="..\..\..\src\pafcore\InstanceArrayProperty.cpp" />
@@ -294,7 +304,9 @@
     <ClCompile Include="..\..\..\src\pafcore\Metadata.cpp" />
     <ClCompile Include="..\..\..\src\pafcore\NameSpace.cpp" />
     <ClCompile Include="..\..\..\src\pafcore\Overload.cpp" />
+    <ClCompile Include="..\..\..\src\pafcore\Reflection.cpp" />
     <ClCompile Include="..\..\..\src\pafcore\StaticArrayProperty.cpp" />
+    <ClCompile Include="..\..\..\src\pafcore\String.cpp" />
     <ClCompile Include="..\..\..\src\pafcore\System.cpp" />
     <ClCompile Include="..\..\..\src\pafcore\VoidType.cpp" />
     <ClCompile Include="..\..\..\src\pafcore\PrimitiveType.cpp" />
@@ -328,6 +340,7 @@
     <ClInclude Include="..\..\..\src\pafcore\RefCountImpl.h" />
     <ClInclude Include="..\..\..\src\pafcore\Reference.h" />
     <ClInclude Include="..\..\..\src\pafcore\Reflection.h" />
+    <ClInclude Include="..\..\..\src\pafcore\RefPtr.h" />
     <ClInclude Include="..\..\..\src\pafcore\Result.h" />
     <ClInclude Include="..\..\..\src\pafcore\StaticArrayProperty.h" />
     <ClInclude Include="..\..\..\src\pafcore\StaticField.h" />

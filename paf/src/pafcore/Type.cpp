@@ -2,6 +2,7 @@
 #include "Type.mh"
 #include "Type.ic"
 #include "Type.mc"
+#include "NameSpace.h"
 
 BEGIN_PAFCORE
 
@@ -11,6 +12,14 @@ Type::Type(const char* name, Category category) :
 	m_size(0),
 	m_enclosing(0)
 {
+}
+
+Type::~Type()
+{
+	if (m_enclosing && name_space == m_enclosing->get__category_())
+	{
+		static_cast<NameSpace*>(m_enclosing)->unregisterMember(this);
+	}
 }
 
 void Type::destroyInstance(void* address)

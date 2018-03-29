@@ -50,6 +50,7 @@ public:
 	void assignEnumPtr(Type* type, const void* pointer, bool constant, Semantic semantic);
 	void assignValuePtr(Type* type, const void* pointer, bool constant, Semantic semantic);
 	void assignReferencePtr(Type* type, const void* pointer, bool constant, Semantic semantic);
+	void assignReferencePtr(Reference* pointer, bool constant, Semantic semantic);
 
 	void assignNullPrimitive(Type* type);
 	void assignNullEnum(Type* type);

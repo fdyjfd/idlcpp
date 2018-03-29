@@ -7,6 +7,7 @@ struct ProgramNode;
 struct NamespaceNode;
 struct TypedefNode;
 struct ClassNode;
+struct DelegateNode;
 struct TemplateParametersNode;
 struct EnumNode;
 struct TokenNode;
@@ -17,6 +18,7 @@ struct MethodNode;
 struct OperatorNode;
 struct TypeNameNode;
 struct ParameterNode;
+struct ParameterListNode;
 struct ScopeNode;
 
 class HeaderFileGenerator
@@ -28,6 +30,7 @@ public:
 	static void generateCode_Namespace(FILE* file, NamespaceNode* namespaceNode, int indentation);
 	static void generateCode_Enum(FILE* file, EnumNode* enumNode, int indentation);
 	static void generateCode_Class(FILE* file, ClassNode* classNode, int indentation);
+	static void generateCode_Delegate(FILE* file, DelegateNode* delegateNode, int indentation);	
 	static void generateCode_Typedef(FILE* file, TypedefNode* typedefNode, int indentation);
 	static void generateCode_Field(FILE* file, FieldNode* fieldNode, int indentation);
 	static void generateCode_Property(FILE* file, PropertyNode* propertyNode, int indentation);

@@ -13,6 +13,10 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Interface Files">
+      <UniqueIdentifier>{eb39a3e5-1b90-47cb-9ee5-2f8f6bc38c6d}</UniqueIdentifier>
+      <Extensions>i</Extensions>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\src\paflua\LuaSubclassInvoker.h">
@@ -50,5 +54,13 @@
     <ClCompile Include="..\..\..\src\paflua\paflua.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\src\paflua\LuaCallBack.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="..\..\..\src\paflua\LuaCallBack.i">
+      <Filter>Interface Files</Filter>
+    </CustomBuild>
   </ItemGroup>
 </Project>

@@ -12,6 +12,7 @@
 #include "EnumeratorNode.h"
 #include "EnumNode.h"
 #include "ClassNode.h"
+#include "DelegateNode.h"
 #include "TemplateParametersNode.h"
 #include "TemplateParameterListNode.h"
 #include "TypeNameListNode.h"
@@ -139,7 +140,7 @@ void generateCode_TypeName(FILE* file, TypeNameNode* typeNameNode, ScopeNode* sc
 	writeStringToFile(typeName.c_str(), file, indentation);
 }
 
-void generateCode_Parameter(FILE* file, ParameterNode* parameterNode, ScopeNode* scopeNode, int indentation)
+void generateCode_Parameter(FILE* file, ParameterNode* parameterNode, ScopeNode* scopeNode)
 {
 	if(parameterNode->m_constant)
 	{
@@ -157,6 +158,22 @@ void generateCode_Parameter(FILE* file, ParameterNode* parameterNode, ScopeNode*
 	writeSpaceToFile(file);
 	generateCode_Identify(file, parameterNode->m_name, 0);
 };
+
+void generateCode_ParameterList(FILE* file, ParameterListNode* parameterListNode, ScopeNode* scopeNode)
+{
+	std::vector<std::pair<TokenNode*, ParameterNode*>> parameterNodes;
+	parameterListNode->collectParameterNodes(parameterNodes);
+	size_t parameterCount = parameterNodes.size();
+	for (size_t i = 0; i < parameterCount; ++i)
+	{
+		if (parameterNodes[i].first)
+		{
+			generateCode_Token(file, parameterNodes[i].first, 0);
+		}
+		generateCode_Parameter(file, parameterNodes[i].second, scopeNode);
+	}
+}
+
 
 
 void HeaderFileGenerator::generateCode(FILE* dstFile, SourceFile* sourceFile)
@@ -201,6 +218,9 @@ void HeaderFileGenerator::generateCode_Namespace(FILE* file, NamespaceNode* name
 			break;
 		case snt_class:
 			generateCode_Class(file, static_cast<ClassNode*>(memberNode), indentation + 1);
+			break;
+		case snt_delegate:
+			generateCode_Delegate(file, static_cast<DelegateNode*>(memberNode), indentation + 1);
 			break;
 		case snt_template_class_instance:
 			break;
@@ -255,6 +275,10 @@ void HeaderFileGenerator::generateCode_Enum(FILE* file, EnumNode* enumNode, int 
 	}
 
 	generateCode_Token(file, enumNode->m_keyword, indentation);
+	if (enumNode->m_keyword2)
+	{
+		generateCode_Token(file, enumNode->m_keyword2, 0);
+	}
 	generateCode_Identify(file, enumNode->m_name, 0);
 	generateCode_Token(file, enumNode->m_leftBrace, indentation);
 
@@ -404,6 +428,9 @@ void HeaderFileGenerator::generateCode_Class(FILE* file, ClassNode* classNode, i
 		case snt_class:
 			generateCode_Class(file, static_cast<ClassNode*>(memberNode), indentation + 1);
 			break;
+		case snt_delegate:
+			generateCode_Delegate(file, static_cast<DelegateNode*>(memberNode), indentation + 1);
+			break;
 		case snt_enum:
 			generateCode_Enum(file, static_cast<EnumNode*>(memberNode), indentation + 1);
 			break;
@@ -421,6 +448,65 @@ void HeaderFileGenerator::generateCode_Class(FILE* file, ClassNode* classNode, i
 	generateCode_Token(file, classNode->m_semicolon, 0);
 }
 
+void HeaderFileGenerator::generateCode_Delegate(FILE* file, DelegateNode* delegateNode, int indentation)
+{
+	if (delegateNode->isNoCode())
+	{
+		g_compiler.outputEmbededCodes(file, delegateNode->m_filterNode);
+		file = 0;
+	}
+	generateCode_Token(file, delegateNode->m_keyword, indentation);
+	generateCode_Identify(file, delegateNode->m_name, 0);
+	
+	writeStringToFile(" : public pafcore::Delegate\n", file);
+	writeStringToFile("{\n", file, indentation);
+	writeStringToFile("public:\n", file, indentation);
+	
+	int methodIndentation = indentation + 1;
+	if (0 != delegateNode->m_resultConst)
+	{
+		generateCode_Token(file, delegateNode->m_resultConst, methodIndentation);
+		methodIndentation = 0;
+	}
+	if (0 != delegateNode->m_resultTypeName)
+	{
+		generateCode_TypeName(file, delegateNode->m_resultTypeName, delegateNode->m_enclosing, true, methodIndentation);
+		methodIndentation = 0;
+		if (0 != delegateNode->m_passing)
+		{
+			generateCode_Token(file, delegateNode->m_passing, methodIndentation);
+			methodIndentation = 0;
+		}
+		writeSpaceToFile(file);
+	}
+	writeStringToFile("invoke", file, methodIndentation);
+	generateCode_Token(file, delegateNode->m_leftParenthesis, 0);
+	generateCode_ParameterList(file, delegateNode->m_parameterList, delegateNode->m_enclosing);
+	generateCode_Token(file, delegateNode->m_rightParenthesis, 0);
+	generateCode_Token(file, delegateNode->m_semicolon, 0);
+	writeStringToFile("\n", file);
+
+	writeStringToFile("typedef ", file, indentation + 1);
+	if (0 != delegateNode->m_resultConst)
+	{
+		generateCode_Token(file, delegateNode->m_resultConst, 0);
+	}
+	if (0 != delegateNode->m_resultTypeName)
+	{
+		generateCode_TypeName(file, delegateNode->m_resultTypeName, delegateNode->m_enclosing, true, 0);
+		if (0 != delegateNode->m_passing)
+		{
+			generateCode_Token(file, delegateNode->m_passing, 0);
+		}
+		writeSpaceToFile(file);
+	}
+	writeStringToFile("(*CallBackFunction)(void* userData, ", file, 0);
+	generateCode_ParameterList(file, delegateNode->m_parameterList, delegateNode->m_enclosing);
+	writeStringToFile(");\n", file);
+	writeStringToFile("FunctionCallBack* addFunction(CallBackFunction function, void* userData)\n", file, indentation + 1);
+	writeStringToFile("{return Delegate::addFunction(function, userData);}\n", file, indentation + 1);
+	writeStringToFile("};\n", file, indentation);
+}
 
 void HeaderFileGenerator::generateCode_Field(FILE* file, FieldNode* fieldNode, int indentation)
 {
@@ -760,7 +846,7 @@ void HeaderFileGenerator::generateCode_Method(FILE* file, MethodNode* methodNode
 		{
 			generateCode_Token(file, parameterNodes[i].first, 0);
 		}
-		generateCode_Parameter(file, parameterNodes[i].second, classNode, 0);
+		generateCode_Parameter(file, parameterNodes[i].second, classNode);
 	}
 	generateCode_Token(file, methodNode->m_rightParenthesis, 0);
 	if(methodNode->m_constant)
@@ -824,7 +910,7 @@ void HeaderFileGenerator::generateCode_Operator(FILE* file, OperatorNode* operat
 		{
 			generateCode_Token(file, parameterNodes[i].first, 0);
 		}
-		generateCode_Parameter(file, parameterNodes[i].second, classNode, 0);
+		generateCode_Parameter(file, parameterNodes[i].second, classNode);
 	}
 	if (snt_operator_post_inc == operatorNode->m_sign->m_nodeType
 		|| snt_operator_post_inc == operatorNode->m_sign->m_nodeType)

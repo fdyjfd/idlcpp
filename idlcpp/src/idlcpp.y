@@ -12,11 +12,12 @@
 %token <sn> LEFT_SHIFT RIGHT_SHIFT EQUAL NOT_EQUAL LESS_EQUAL GREATER_EQUAL AND OR INC DEC
 %token <sn> BOOL CHAR WCHAR_T SHORT LONG INT FLOAT DOUBLE SIGNED UNSIGNED
 %token <sn> NAMESPACE ENUM CLASS STRUCT STATIC VIRTUAL VOID CONST OPERATOR TYPEDEF PRIMITIVE
-%token <sn> ABSTRACT GET SET NOMETA NOCODE EXPORT OVERRIDE SCOPE IDENTIFY STRING TEMPLATE
+%token <sn> ABSTRACT GET SET NOMETA NOCODE EXPORT OVERRIDE SCOPE IDENTIFY STRING TEMPLATE DELEGATE
 %type <sn> enumerator enumeratorList enum_0 enum 
 %type <sn> field_0 field_1 field_2 field getter_0 getter setter_0 setter_1 setter property_0 property_1 property_2 property
 %type <sn> parameter_0 parameter_1 parameter parameterList method_0 method_1 method_2 method_3 method_4 method
 %type <sn> operatorSign operator_0 operator_1 operator_2 operator_3 operator classMember_0 classMember
+%type <sn> delegate_0 delegate_1 delegate
 %type <sn> primitive scopeName scopeNameList_0 scopeNameList typeName typeNameList classMemberList tokenList
 %type <sn> templateParameterList templateParameters templateClassInstance_0 templateClassInstance
 %type <sn> class_0 class_1 class_2 class_3 class_4 class_5 class namespaceMember_0 namespaceMember namespaceMemberList namespace program
@@ -81,9 +82,12 @@ enumeratorList			: enumerator										{$$ = newEnumeratorList(NULL, NULL, $1);}
 ;
 
 
-enum_0					: ENUM IDENTIFY '{' enumeratorList '}'				{$$ = newEnum($1, $2, $3, $4, $5);}
-						| ENUM IDENTIFY '{' enumeratorList ',' '}'			{$$ = newEnum($1, $2, $3, $4, $6);}
-						| ENUM IDENTIFY '{' '}'								{$$ = newEnum($1, $2, $3, NULL, $4);}
+enum_0					: ENUM IDENTIFY '{' enumeratorList '}'				{$$ = newEnum($1, NULL, $2, $3, $4, $5);}
+						| ENUM IDENTIFY '{' enumeratorList ',' '}'			{$$ = newEnum($1, NULL, $2, $3, $4, $6);}
+						| ENUM IDENTIFY '{' '}'								{$$ = newEnum($1, NULL, $2, $3, NULL, $4);}
+						| ENUM CLASS IDENTIFY '{' enumeratorList '}'		{$$ = newEnum($1, $2, $3, $4, $5, $6);}
+						| ENUM CLASS IDENTIFY '{' enumeratorList ',' '}'	{$$ = newEnum($1, $2, $3, $4, $5, $7);}
+						| ENUM CLASS IDENTIFY '{' '}'						{$$ = newEnum($1, $2, $3, $4, NULL, $5);}
 ;
 
 enum					: enum_0 ';'										{$$ = $1; setEnumSemicolon($$, $2);}
@@ -314,11 +318,28 @@ operator				: operator_3											{$$ = $1;}
 						| OVERRIDE operator_3									{$$ = $2; setOperatorOverride($$);}
 ;
 
+delegate_0				: IDENTIFY '(' ')' ';'									{$$ = newDelegate($1, $2, NULL, $3, $4);}
+						| IDENTIFY '(' VOID ')' ';'								{$$ = newDelegate($1, $2, NULL, $4, $5);}
+						| IDENTIFY '(' parameterList ')' ';'					{$$ = newDelegate($1, $2, $3, $4, $5);}
+;
+
+delegate_1				: typeName delegate_0									{$$ = $2; setDelegateResult($$, $1, NULL);}
+						| typeName '&' delegate_0								{$$ = $3; setDelegateResult($$, $1, $2);}
+						| typeName '*' delegate_0								{$$ = $3; setDelegateResult($$, $1, $2);}
+						| typeName '^' delegate_0								{$$ = $3; setDelegateResult($$, $1, $2);}
+						| typeName '^' '[' ']' delegate_0						{$$ = $5; setDelegateResult($$, $1, $2); setDelegateResultArray($$);}
+;
+
+delegate				: DELEGATE delegate_1									{$$ = $2; setDelegateKeyword($$, $1)}
+						| DELEGATE CONST delegate_1								{$$ = $3; setDelegateKeyword($$, $1); setDelegateResultConst($$, $2);}
+;
+
 classMember_0			: field													{$$ = $1;}
 						| property												{$$ = $1;}
 						| method												{$$ = $1;}
 						| operator												{$$ = $1;}
 						| class													{$$ = $1;}
+						| delegate												{$$ = $1;}
 						| enum													{$$ = $1;}
 						| typeAlias												{$$ = $1;}
 						| NOCODE classMember_0									{$$ = $2; setFilter($$, $1);}
@@ -388,7 +409,9 @@ templateClassInstance	: templateClassInstance_0 ';'							{$$ = $1;}
 						| templateClassInstance_0 '{' tokenList ',' '}' ';'		{$$ = $1; setTemplateClassInstanceTokenList($1, $3);}
 ;
 
+
 namespaceMember_0		: class													{$$ = $1;}
+						| delegate												{$$ = $1;}
 						| enum													{$$ = $1;}
 						| templateClassInstance									{$$ = $1;}
 						| typeAlias												{$$ = $1;}

@@ -19,6 +19,7 @@
 #include "Enumerator.h"
 #include "PrimitiveType.h"
 #include "VoidType.h"
+#include "RefCountImpl.h"
 #include <new>
 
 
@@ -86,7 +87,7 @@ namespace idlcpp
 			::pafcore::Overload(&s_instanceResults[6], &s_instanceArguments[5], 1, false, true),
 			::pafcore::Overload(&s_instanceResults[7], 0, 0, false, true),
 		};
-			static ::pafcore::InstanceMethod s_instanceMethods[] = 
+		static ::pafcore::InstanceMethod s_instanceMethods[] = 
 		{
 			::pafcore::InstanceMethod("append", 0, String_append, &s_instanceOverloads[0], 2),
 			::pafcore::InstanceMethod("assign", 0, String_assign, &s_instanceOverloads[2], 2),
@@ -128,7 +129,7 @@ namespace idlcpp
 
 	::pafcore::ErrorCode __pafcore__String_Type::String_append(::pafcore::Variant* result, ::pafcore::Variant** args, int_t numArgs)
 	{
-		if(2 == numArgs)
+		if(2 <= numArgs)
 		{
 			size_t candidates[2];
 			char argMatches[4];
@@ -188,7 +189,7 @@ namespace idlcpp
 
 	::pafcore::ErrorCode __pafcore__String_Type::String_assign(::pafcore::Variant* result, ::pafcore::Variant** args, int_t numArgs)
 	{
-		if(2 == numArgs)
+		if(2 <= numArgs)
 		{
 			size_t candidates[2];
 			char argMatches[4];
@@ -248,7 +249,7 @@ namespace idlcpp
 
 	::pafcore::ErrorCode __pafcore__String_Type::String_c_str(::pafcore::Variant* result, ::pafcore::Variant** args, int_t numArgs)
 	{
-		if(1 == numArgs)
+		if(1 <= numArgs)
 		{
 			const ::pafcore::String* self;
 			if(!args[0]->castToValuePtr(GetSingleton(), (void**)&self))
@@ -264,7 +265,7 @@ namespace idlcpp
 
 	::pafcore::ErrorCode __pafcore__String_Type::String_compare(::pafcore::Variant* result, ::pafcore::Variant** args, int_t numArgs)
 	{
-		if(2 == numArgs)
+		if(2 <= numArgs)
 		{
 			size_t candidates[2];
 			char argMatches[4];
@@ -318,7 +319,7 @@ namespace idlcpp
 
 	::pafcore::ErrorCode __pafcore__String_Type::String_empty(::pafcore::Variant* result, ::pafcore::Variant** args, int_t numArgs)
 	{
-		if(1 == numArgs)
+		if(1 <= numArgs)
 		{
 			const ::pafcore::String* self;
 			if(!args[0]->castToValuePtr(GetSingleton(), (void**)&self))
@@ -340,7 +341,7 @@ namespace idlcpp
 			result->assignValuePtr(RuntimeTypeOf<::pafcore::String>::RuntimeType::GetSingleton(), res, false, ::pafcore::Variant::by_new_ptr);
 			return ::pafcore::s_ok;
 		}
-		if(1 == numArgs)
+		if(1 <= numArgs)
 		{
 			size_t candidates[2];
 			char argMatches[2];
@@ -384,7 +385,7 @@ namespace idlcpp
 
 	::pafcore::ErrorCode __pafcore__String_Type::String_NewArray(::pafcore::Variant* result, ::pafcore::Variant** args, int_t numArgs)
 	{
-		if(1 == numArgs)
+		if(1 <= numArgs)
 		{
 			unsigned int a0;
 			if(!args[0]->castToPrimitive(RuntimeTypeOf<unsigned int>::RuntimeType::GetSingleton(), &a0))

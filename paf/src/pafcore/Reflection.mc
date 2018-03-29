@@ -22,6 +22,7 @@
 #include "Enumerator.h"
 #include "PrimitiveType.h"
 #include "VoidType.h"
+#include "RefCountImpl.h"
 #include <new>
 
 
@@ -85,7 +86,7 @@ namespace idlcpp
 
 	::pafcore::ErrorCode __pafcore__Reflection_Type::Reflection_GetTypeAliasFullName(::pafcore::Variant* result, ::pafcore::Variant** args, int_t numArgs)
 	{
-		if(1 == numArgs)
+		if(1 <= numArgs)
 		{
 			::pafcore::TypeAlias* a0;
 			if(!args[0]->castToReferencePtr(RuntimeTypeOf<::pafcore::TypeAlias>::RuntimeType::GetSingleton(), (void**)&a0))
@@ -101,7 +102,7 @@ namespace idlcpp
 
 	::pafcore::ErrorCode __pafcore__Reflection_Type::Reflection_GetTypeFromFullName(::pafcore::Variant* result, ::pafcore::Variant** args, int_t numArgs)
 	{
-		if(1 == numArgs)
+		if(1 <= numArgs)
 		{
 			if(args[0]->isTemporary())
 			{
@@ -121,7 +122,7 @@ namespace idlcpp
 
 	::pafcore::ErrorCode __pafcore__Reflection_Type::Reflection_GetTypeFullName(::pafcore::Variant* result, ::pafcore::Variant** args, int_t numArgs)
 	{
-		if(1 == numArgs)
+		if(1 <= numArgs)
 		{
 			::pafcore::Type* a0;
 			if(!args[0]->castToReferencePtr(RuntimeTypeOf<::pafcore::Type>::RuntimeType::GetSingleton(), (void**)&a0))

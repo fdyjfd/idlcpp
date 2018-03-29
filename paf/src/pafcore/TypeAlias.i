@@ -8,6 +8,7 @@ namespace pafcore
 #{
 	public:
 		TypeAlias(const char* name, Type* type);
+		~TypeAlias();
 	public:
 		Type* m_type;
 		Metadata* m_enclosing;

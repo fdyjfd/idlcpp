@@ -21,6 +21,7 @@
 #include "Enumerator.h"
 #include "PrimitiveType.h"
 #include "VoidType.h"
+#include "RefCountImpl.h"
 #include <new>
 
 
@@ -113,7 +114,7 @@ namespace idlcpp
 			::pafcore::Overload(&s_instanceResults[1], &s_instanceArguments[1], 1, false, false),
 			::pafcore::Overload(&s_instanceResults[2], &s_instanceArguments[2], 1, false, false),
 		};
-			static ::pafcore::InstanceMethod s_instanceMethods[] = 
+		static ::pafcore::InstanceMethod s_instanceMethods[] = 
 		{
 			::pafcore::InstanceMethod("_getAttributeContentByName_", 0, Metadata__getAttributeContentByName_, &s_instanceOverloads[0], 1),
 			::pafcore::InstanceMethod("_getAttributeContent_", 0, Metadata__getAttributeContent_, &s_instanceOverloads[1], 1),
@@ -188,7 +189,7 @@ namespace idlcpp
 
 	::pafcore::ErrorCode __pafcore__Metadata_Type::Metadata__getAttributeContentByName_(::pafcore::Variant* result, ::pafcore::Variant** args, int_t numArgs)
 	{
-		if(2 == numArgs)
+		if(2 <= numArgs)
 		{
 			if(args[0]->isConstant())
 			{
@@ -217,7 +218,7 @@ namespace idlcpp
 
 	::pafcore::ErrorCode __pafcore__Metadata_Type::Metadata__getAttributeContent_(::pafcore::Variant* result, ::pafcore::Variant** args, int_t numArgs)
 	{
-		if(2 == numArgs)
+		if(2 <= numArgs)
 		{
 			if(args[0]->isConstant())
 			{
@@ -242,7 +243,7 @@ namespace idlcpp
 
 	::pafcore::ErrorCode __pafcore__Metadata_Type::Metadata__getAttributeName_(::pafcore::Variant* result, ::pafcore::Variant** args, int_t numArgs)
 	{
-		if(2 == numArgs)
+		if(2 <= numArgs)
 		{
 			if(args[0]->isConstant())
 			{

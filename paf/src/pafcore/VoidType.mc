@@ -21,6 +21,7 @@
 #include "Enumerator.h"
 #include "PrimitiveType.h"
 #include "VoidType.h"
+#include "RefCountImpl.h"
 #include <new>
 
 
@@ -100,7 +101,7 @@ namespace idlcpp
 
 	::pafcore::ErrorCode __pafcore__VoidType_Type::VoidType_AddressToPtr(::pafcore::Variant* result, ::pafcore::Variant** args, int_t numArgs)
 	{
-		if(1 == numArgs)
+		if(1 <= numArgs)
 		{
 			::size_t a0;
 			if(!args[0]->castToPrimitive(RuntimeTypeOf<::size_t>::RuntimeType::GetSingleton(), &a0))

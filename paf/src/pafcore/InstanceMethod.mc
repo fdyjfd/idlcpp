@@ -23,6 +23,7 @@
 #include "Enumerator.h"
 #include "PrimitiveType.h"
 #include "VoidType.h"
+#include "RefCountImpl.h"
 #include <new>
 
 
@@ -72,7 +73,7 @@ namespace idlcpp
 			::pafcore::Overload(&s_instanceResults[2], &s_instanceArguments[3], 1, false, false),
 			::pafcore::Overload(&s_instanceResults[3], &s_instanceArguments[4], 1, false, false),
 		};
-			static ::pafcore::InstanceMethod s_instanceMethods[] = 
+		static ::pafcore::InstanceMethod s_instanceMethods[] = 
 		{
 			::pafcore::InstanceMethod("getArgument", 0, InstanceMethod_getArgument, &s_instanceOverloads[0], 1),
 			::pafcore::InstanceMethod("getArgumentCount", 0, InstanceMethod_getArgumentCount, &s_instanceOverloads[1], 1),
@@ -123,7 +124,7 @@ namespace idlcpp
 
 	::pafcore::ErrorCode __pafcore__InstanceMethod_Type::InstanceMethod_getArgument(::pafcore::Variant* result, ::pafcore::Variant** args, int_t numArgs)
 	{
-		if(3 == numArgs)
+		if(3 <= numArgs)
 		{
 			if(args[0]->isConstant())
 			{
@@ -153,7 +154,7 @@ namespace idlcpp
 
 	::pafcore::ErrorCode __pafcore__InstanceMethod_Type::InstanceMethod_getArgumentCount(::pafcore::Variant* result, ::pafcore::Variant** args, int_t numArgs)
 	{
-		if(2 == numArgs)
+		if(2 <= numArgs)
 		{
 			if(args[0]->isConstant())
 			{
@@ -178,7 +179,7 @@ namespace idlcpp
 
 	::pafcore::ErrorCode __pafcore__InstanceMethod_Type::InstanceMethod_getResult(::pafcore::Variant* result, ::pafcore::Variant** args, int_t numArgs)
 	{
-		if(2 == numArgs)
+		if(2 <= numArgs)
 		{
 			if(args[0]->isConstant())
 			{
@@ -203,7 +204,7 @@ namespace idlcpp
 
 	::pafcore::ErrorCode __pafcore__InstanceMethod_Type::InstanceMethod_isConstant(::pafcore::Variant* result, ::pafcore::Variant** args, int_t numArgs)
 	{
-		if(2 == numArgs)
+		if(2 <= numArgs)
 		{
 			if(args[0]->isConstant())
 			{

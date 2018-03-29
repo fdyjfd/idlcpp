@@ -25,10 +25,10 @@ Variant::Variant()
 
 Variant::~Variant()
 {
-	if (0 != m_pointer && m_primitiveValue != m_pointer && 
+	if (0 != m_pointer && m_primitiveValue != m_pointer &&
 		(by_value == m_semantic || by_new_ptr == m_semantic || by_new_array == m_semantic))
 	{
-		//PAF_ASSERT(m_primitiveValue != m_pointer);
+		assert(m_primitiveValue != m_pointer);
 		if (by_new_array == m_semantic)
 		{
 			m_type->destroyArray(m_pointer);
@@ -188,6 +188,19 @@ void Variant::assignReferencePtr(Type* type, const void* pointer, bool constant,
 	m_constant = constant;
 	m_semantic = semantic;
 }
+
+void Variant::assignReferencePtr(Reference* pointer, bool constant, Semantic semantic)
+{
+	clear();
+	if (0 != pointer)
+	{
+		m_type = pointer->getType();
+		m_pointer = (void*)pointer->getAddress();
+	}
+	m_constant = constant;
+	m_semantic = semantic;
+}
+
 
 void Variant::assignNullPrimitive(Type* type)
 {

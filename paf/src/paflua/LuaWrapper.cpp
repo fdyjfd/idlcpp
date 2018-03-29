@@ -1,5 +1,7 @@
 #include "paflua.h"
 #include "LuaSubclassInvoker.h"
+#include "LuaCallBack.h"
+#include "LuaCallBack.mh"
 #include "../pafcore/Variant.h"
 #include "../pafcore/NameSpace.h"
 #include "../pafcore/NameSpace.mh"
@@ -19,6 +21,8 @@
 #include "../pafcore/Enumerator.h"
 #include "../pafcore/VoidType.h"
 #include "../pafcore/PrimitiveType.h"
+#include "../pafcore/Delegate.h"
+#include "../pafcore/Delegate.mh"
 
 #include <new.h>
 #include <string.h>
@@ -27,7 +31,7 @@
 
 BEGIN_PAFLUA
 
-static void stackDump (lua_State *L) 
+void stackDump (lua_State *L) 
 {
 	int i;
 	int top = lua_gettop(L);
@@ -81,7 +85,7 @@ struct StaticArrayPropertyInstance
 
 void Variant_Error(lua_State *L, const char* name, pafcore::ErrorCode errorCode)
 {
-	luaL_error(L, "idlcpp error: %s, Error: %d, %s", name, errorCode, pafcore::ErrorCodeToString(errorCode));
+	luaL_error(L, "idlcpp error: %s, Error: %d, %s\n", name, errorCode, pafcore::ErrorCodeToString(errorCode));
 }
 
 int Variant_GC(lua_State *L) 
@@ -293,7 +297,7 @@ int InvokeFunction(lua_State *L, pafcore::FunctionInvoker invoker, int numArgs, 
 			return 1;
 		}
 	}
-	luaL_error(L, ErrorCodeToString(errorCode));
+	luaL_error(L, "%s\n", ErrorCodeToString(errorCode));
 	return 0;
 }
 
@@ -337,7 +341,7 @@ int InvokeFunction_ComparisonOperator(lua_State *L, pafcore::FunctionInvoker inv
 		}
 		return 1;
 	}
-	luaL_error(L, ErrorCodeToString(errorCode));
+	luaL_error(L, "%s\n", ErrorCodeToString(errorCode));
 	return 0;
 }
 
@@ -802,7 +806,7 @@ int Variant_Operator(lua_State *L, const char* op)
 	}
 	else
 	{
-		luaL_error(L, ErrorCodeToString(pafcore::e_member_not_found));
+		luaL_error(L, "%s\n", ErrorCodeToString(pafcore::e_member_not_found));
 		return 0;
 	}
 }
@@ -842,7 +846,7 @@ int Variant_ComparisonOperator(lua_State *L, const char* op)
 	}
 	break;
 	}
-	luaL_error(L, ErrorCodeToString(pafcore::e_member_not_found));
+	luaL_error(L, "%s\n", ErrorCodeToString(pafcore::e_member_not_found));
 	return 0;
 }
 
@@ -896,12 +900,12 @@ int Subclassing(lua_State *L)
 	const void* p = lua_topointer(L, lua_upvalueindex(1));
 	pafcore::ClassType* classType = (pafcore::ClassType*)p;
 	int numArgs = lua_gettop(L);
-	if(1 == numArgs && lua_type(L, -1) == LUA_TTABLE)
+	if (1 == numArgs && lua_type(L, -1) == LUA_TTABLE)
 	{
 		LuaSubclassInvoker* subclassInvoker = paf_new LuaSubclassInvoker(L);
 		void* implementor = classType->createSubclassProxy(subclassInvoker);
 		pafcore::Variant impVar;
-		if(classType->isValue())
+		if (classType->isValue())
 		{
 			impVar.assignValuePtr(classType, implementor, false, ::pafcore::Variant::by_new_ptr);
 		}
@@ -916,6 +920,89 @@ int Subclassing(lua_State *L)
 	Variant_Error(L, "the argument of _Derive_ must be a table", pafcore::e_invalid_arg_type_1);
 	return 0;
 }
+
+int Delegate_AddCallBack(lua_State *L)
+{
+	const void* p = lua_topointer(L, lua_upvalueindex(1));
+	pafcore::Delegate* delegate = (pafcore::Delegate*)p;
+	int numArgs = lua_gettop(L);
+	if (numArgs != 2)
+	{
+		Variant_Error(L, "the argument count of _delegate_ must be 2", pafcore::e_invalid_arg_num);
+		return 0;
+	}
+	if (lua_type(L, -2) != LUA_TTABLE)
+	{
+		Variant_Error(L, "the first argument of _delegate_ must be a table", pafcore::e_invalid_arg_type_1);
+		return 0;
+	}
+	if (!lua_isstring(L, -1))
+	{
+		Variant_Error(L, "the second argument of _delegate_ must be a string", pafcore::e_invalid_arg_type_2);
+		return 0;
+	}
+	const char* str = lua_tostring(L, -1);
+	LuaCallBack* callBack = paf_new LuaCallBack(L, str);
+	delegate->addCallBack(callBack);
+	pafcore::Variant impVar;
+	impVar.assignReferencePtr(RuntimeTypeOf<::paflua::LuaCallBack>::RuntimeType::GetSingleton(), callBack, false, ::pafcore::Variant::by_new_ptr);
+	impVar.setSubClassProxy();
+	VariantToLua(L, &impVar);
+	return 1;
+}
+
+//int Delegate_RemoveCallBack(lua_State *L)
+//{
+//	const void* p = lua_topointer(L, lua_upvalueindex(1));
+//	pafcore::Delegate* delegate = (pafcore::Delegate*)p;
+//	int numArgs = lua_gettop(L);
+//	if (numArgs != 1)
+//	{
+//		Variant_Error(L, "the argument count of _delegate_ must be 1", pafcore::e_invalid_arg_num);
+//		return 0;
+//	}
+//	int type = lua_type(L, index);
+//	if (LUA_TUSERDATA == type)
+//	{
+//		pafcore::Variant* variant = (pafcore::Variant*)luaL_checkudata(L, -1, variant_metatable_name);
+//		if (variant)
+//		{
+//			if (pafcore::reference_object == variant->m_type->m_category &&
+//				static_cast<pafcore::ClassType*>(variant->m_type)->isType(RuntimeTypeOf<::pafcore::Lu>::RuntimeType::GetSingleton()))
+//
+//		}
+//	}
+//	if(0)
+//	case LUA_TSTRING:
+//	case :
+//	{
+//	}
+//	break;
+//
+//
+//	pafcore::Variant value;
+//	pafcore::Variant* arg = LuaToVariant(&value, L, 3);
+//
+//	LuaToVariant()
+//	if (lua_type(L, -2) != LUA_TTABLE)
+//	{
+//		Variant_Error(L, "the first argument of _delegate_ must be a table", pafcore::e_invalid_arg_type_1);
+//		return 0;
+//	}
+//	if (!lua_isstring(L, -1))
+//	{
+//		Variant_Error(L, "the second argument of _delegate_ must be a string", pafcore::e_invalid_arg_type_2);
+//		return 0;
+//	}
+//	const char* str = lua_tostring(L, -1);
+//	LuaCallBack* callBack = paf_new LuaCallBack(L, str);
+//	delegate->addCallBack(callBack);
+//	pafcore::Variant impVar;
+//	impVar.assignReferencePtr(RuntimeTypeOf<::paflua::LuaCallBack>::RuntimeType::GetSingleton(), callBack, false, ::pafcore::Variant::by_new_ptr);
+//	impVar.setSubClassProxy();
+//	VariantToLua(L, &impVar);
+//	return 1;
+//}
 
 int CastPtr(lua_State *L)
 {
@@ -1113,7 +1200,21 @@ pafcore::ErrorCode Variant_Index_Identify(lua_State *L, pafcore::Variant* varian
 			}
 			break;
 		case 'a':
-			if (strcmp(&name[2], "ddress_") == 0)//_address_
+			if (strcmp(&name[2], "dd_") == 0)//_Derive_
+			{
+				if (pafcore::value_object == variant->m_type->m_category &&
+					static_cast<pafcore::ClassType*>(variant->m_type)->isType(RuntimeTypeOf<::pafcore::Delegate>::RuntimeType::GetSingleton()))
+				{
+					lua_pushlightuserdata(L, variant->m_pointer);
+					lua_pushcclosure(L, Delegate_AddCallBack, 1);
+					return pafcore::s_ok;
+				}
+				else
+				{
+					return pafcore::e_is_not_class;
+				}
+			}
+			else if (strcmp(&name[2], "ddress_") == 0)//_address_
 			{
 				lua_pushinteger(L, (size_t)variant->m_pointer);
 				//pafcore::Variant address;
@@ -1163,6 +1264,22 @@ pafcore::ErrorCode Variant_Index_Identify(lua_State *L, pafcore::Variant* varian
 				}
 			}
 			break;
+		//case 'r':
+		//	if (strcmp(&name[2], "emove_") == 0)//_remove_
+		//	{
+		//		if (pafcore::value_object == variant->m_type->m_category &&
+		//			static_cast<pafcore::ClassType*>(variant->m_type)->isType(RuntimeTypeOf<::pafcore::Delegate>::RuntimeType::GetSingleton()))
+		//		{
+		//			lua_pushlightuserdata(L, variant->m_pointer);
+		//			lua_pushcclosure(L, Delegate_RemoveCallBack, 1);
+		//			return pafcore::s_ok;
+		//		}
+		//		else
+		//		{
+		//			return pafcore::e_is_not_class;
+		//		}
+		//	}
+		//	break;
 		case 's':
 			if (strcmp(&name[2], "ize_") == 0)//_size_
 			{

@@ -81,7 +81,7 @@ struct StaticArrayPropertyInstance
 
 void Variant_Error(lua_State *L, const char* name, pafcore::ErrorCode errorCode)
 {
-	luaL_error(L, "idlcpp error: %s, Error: %d, %s", name, errorCode, pafcore::ErrorCodeToString(errorCode));
+	luaL_error(L, "idlcpp error: %s, Error: %d, %s\n", name, errorCode, pafcore::ErrorCodeToString(errorCode));
 }
 
 int Variant_GC(lua_State *L)
@@ -202,7 +202,7 @@ int InvokeFunction(lua_State *L, pafcore::FunctionInvoker invoker, int numArgs, 
 			return 1;
 		}
 	}
-	luaL_error(L, ErrorCodeToString(errorCode));
+	luaL_error(L, "%s\n", ErrorCodeToString(errorCode));
 	return 0;
 }
 
@@ -246,7 +246,7 @@ int InvokeFunction_ComparisonOperator(lua_State *L, pafcore::FunctionInvoker inv
 		}
 		return 1;
 	}
-	luaL_error(L, ErrorCodeToString(errorCode));
+	luaL_error(L, "%s\n", ErrorCodeToString(errorCode));
 	return 0;
 }
 
@@ -766,7 +766,7 @@ int Variant_Operator(lua_State *L, const char* op)
 	}
 	else
 	{
-		luaL_error(L, ErrorCodeToString(pafcore::e_member_not_found));
+		luaL_error(L, "%s\n", ErrorCodeToString(pafcore::e_member_not_found));
 		return 0;
 	}
 }
@@ -806,7 +806,7 @@ int Variant_ComparisonOperator(lua_State *L, const char* op)
 	}
 	break;
 	}
-	luaL_error(L, ErrorCodeToString(pafcore::e_member_not_found));
+	luaL_error(L, "%s\n", ErrorCodeToString(pafcore::e_member_not_found));
 	return 0;
 }
 

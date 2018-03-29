@@ -4,6 +4,7 @@
 #include "TypeNameNode.h"
 #include "ParameterNode.h"
 #include "MethodNode.h"
+#include "DelegateNode.h"
 #include "OperatorNode.h"
 #include "GetterSetterNode.h"
 #include "FieldNode.h"
@@ -130,7 +131,12 @@ void RaiseError_InvalidResultType(MethodNode* node)
 	RaiseError_InvalidResultType(node->m_resultTypeName, node->m_passing, node->m_resultArray);
 }
 
-void RaiseError_InvalidResultType(OperatorNode* node) 
+void RaiseError_InvalidResultType(OperatorNode* node)
+{
+	RaiseError_InvalidResultType(node->m_resultTypeName, node->m_passing, node->m_resultArray);
+}
+
+void RaiseError_InvalidResultType(DelegateNode* node)
 {
 	RaiseError_InvalidResultType(node->m_resultTypeName, node->m_passing, node->m_resultArray);
 }

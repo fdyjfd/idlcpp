@@ -16,6 +16,7 @@ public:
 	std::string m_pafcorePath;
 	std::string m_exportMacro;
 	bool m_outputLineDirective;
+	bool m_strictArgumentsCount;
 public:
 	void setPafcorePath(const char* path);
 };

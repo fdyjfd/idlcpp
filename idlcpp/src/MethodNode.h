@@ -13,7 +13,7 @@ public:
 	TokenNode* m_modifier;
 	TokenNode* m_resultConst;
 	TypeNameNode* m_resultTypeName;
-	TokenNode* m_passing;//REF PTR NEW
+	TokenNode* m_passing;//& * ^
 	TokenNode* m_leftParenthesis;
 	ParameterListNode* m_parameterList;
 	TokenNode* m_rightParenthesis;

@@ -43,6 +43,31 @@ namespace pafcore
 	{
 		return m_str;
 	}
+
+	inline void Hash_Combine(size_t& seed, size_t value)
+	{
+		seed ^= value + 0x9e3779b9 + (seed << 6) + (seed >> 2);
+	}
+
+	inline size_t StringToHash(const char* str, size_t length)
+	{
+		size_t seed = 0;
+		for (size_t i = 0; i < length; ++i)
+		{
+			Hash_Combine(seed, size_t(str[i]));
+		}
+		return seed;
+	}
+
+	inline size_t StringToHash(const char* str)
+	{
+		size_t seed = 0;
+		for (const char* p = str; 0 != *p; ++p)
+		{
+			Hash_Combine(seed, size_t(*p));
+		}
+		return seed;
+	}
 #}
 
 }

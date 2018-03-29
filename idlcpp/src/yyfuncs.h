@@ -108,6 +108,7 @@ enum SyntaxNodeType
 	snt_keyword_get,
 	snt_keyword_set,
 	snt_keyword_typedef,
+	snt_keyword_delegate,
 
 	snt_end_output,
 
@@ -135,6 +136,7 @@ enum SyntaxNodeType
 	snt_operator,
 	snt_class,
 	snt_template_class_instance,
+	snt_delegate,
 	snt_typedef,
 	snt_type_declaration,
 	snt_namespace,
@@ -165,7 +167,7 @@ void setAttributeList(SyntaxNode* member, SyntaxNode* attributeList);
 
 SyntaxNode* newEnumerator(SyntaxNode* attributeList, SyntaxNode* identify);
 SyntaxNode* newEnumeratorList(SyntaxNode* enumeratorList, SyntaxNode* delimiter, SyntaxNode* enumerator);
-SyntaxNode* newEnum(SyntaxNode* keyword, SyntaxNode* name, SyntaxNode* leftBrace, SyntaxNode* enumeratorList, SyntaxNode* rightBrace);
+SyntaxNode* newEnum(SyntaxNode* keyword, SyntaxNode* keyword2, SyntaxNode* name, SyntaxNode* leftBrace, SyntaxNode* enumeratorList, SyntaxNode* rightBrace);
 void setEnumSemicolon(SyntaxNode* enm, SyntaxNode* semicolon);
 
 SyntaxNode* newScopeName(SyntaxNode* identify, SyntaxNode* lts, SyntaxNode* parameterList, SyntaxNode* gts);
@@ -205,7 +207,6 @@ void setMethodModifier(SyntaxNode* method, SyntaxNode* modifier);
 void setMethodOverride(SyntaxNode* method);
 void setMethodSemicolon(SyntaxNode* syntaxNode, SyntaxNode* semicolon);
 
-
 SyntaxNode* newOperator(SyntaxNode* keyword, SyntaxNode* sign, SyntaxNode* leftParenthesis, SyntaxNode* parameterList, SyntaxNode* rightParenthesis, SyntaxNode* constant, SyntaxNode* semicolon);
 void setOperatorResult(SyntaxNode* opt, SyntaxNode* result, SyntaxNode* passing);
 void setOperatorResultArray(SyntaxNode* opt);
@@ -222,6 +223,11 @@ void setClassOverride(SyntaxNode* cls);
 void setClassTemplateParameters(SyntaxNode* cls, SyntaxNode* parameters);
 void setClassSemicolon(SyntaxNode* cls, SyntaxNode* semicolon);
 
+SyntaxNode* newDelegate(SyntaxNode* name, SyntaxNode* leftParenthesis, SyntaxNode* parameterList, SyntaxNode* rightParenthesis, SyntaxNode* semicolon);
+void setDelegateResult(SyntaxNode* delegate, SyntaxNode* result, SyntaxNode* passing);
+void setDelegateResultArray(SyntaxNode* delegate);
+void setDelegateResultConst(SyntaxNode* delegate, SyntaxNode* constant);
+void setDelegateKeyword(SyntaxNode* delegate, SyntaxNode* keyword);
 
 SyntaxNode* newTypeDeclaration(SyntaxNode* name, TypeCategory typeCategory);
 SyntaxNode* newTypedef(SyntaxNode* keyword, SyntaxNode* name, SyntaxNode* typeName);
