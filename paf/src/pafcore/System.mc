@@ -35,7 +35,7 @@ namespace idlcpp
 		};
 		static ::pafcore::Argument s_staticArguments[] = 
 		{
-			::pafcore::Argument("fileName", RuntimeTypeOf<char>::RuntimeType::GetSingleton(), ::pafcore::Argument::by_ptr, true),
+			::pafcore::Argument("fileName", RuntimeTypeOf<string_t>::RuntimeType::GetSingleton(), ::pafcore::Argument::by_value, false),
 		};
 		static ::pafcore::Overload s_staticOverloads[] = 
 		{
@@ -75,12 +75,8 @@ namespace idlcpp
 	{
 		if(1 <= numArgs)
 		{
-			if(args[0]->isTemporary())
-			{
-				return ::pafcore::e_invalid_arg_type_1;
-			}
-			const char* a0;
-			if(!args[0]->castToPrimitivePtr(RuntimeTypeOf<char>::RuntimeType::GetSingleton(), (void**)&a0))
+			string_t a0;
+			if(!args[0]->castToPrimitive(RuntimeTypeOf<string_t>::RuntimeType::GetSingleton(), &a0))
 			{
 				return ::pafcore::e_invalid_arg_type_1;
 			}

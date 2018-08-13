@@ -285,8 +285,20 @@ bool Variant::castToPrimitive(Type* dstType, void* dst) const
 	}
 	if(m_type->isEnum())
 	{
-		IntType::GetSingleton()->castTo(dst, dstType, m_pointer);
-		return true;
+		switch (m_type->m_size)
+		{
+		case 1:
+			CharType::GetSingleton()->castTo(dst, dstType, m_pointer);
+			return true;
+		case 2:
+			ShortType::GetSingleton()->castTo(dst, dstType, m_pointer);
+			return true;
+		case 4:
+			IntType::GetSingleton()->castTo(dst, dstType, m_pointer);
+			return true;
+		default:
+			assert(false);
+		}
 	}
 	return false;
 }
@@ -294,14 +306,45 @@ bool Variant::castToPrimitive(Type* dstType, void* dst) const
 bool Variant::castToEnum(Type* dstType, void* dst) const
 {
 	assert(dstType->isEnum());
+	int tmp;
 	if(m_type->isPrimitive())
 	{
-		return static_cast<PrimitiveType*>(m_type)->castTo(dst, IntType::GetSingleton(), m_pointer);
+		static_cast<PrimitiveType*>(m_type)->castTo(&tmp, IntType::GetSingleton(), m_pointer);
 	}
-	if(m_type->isEnum())
+	else if(m_type->isEnum())
 	{
-		memcpy(dst, m_pointer, m_type->m_size);
+		switch (m_type->m_size)
+		{
+		case 1:
+			CharType::GetSingleton()->castTo(&tmp, IntType::GetSingleton(), m_pointer);
+			break;
+		case 2:
+			ShortType::GetSingleton()->castTo(&tmp, IntType::GetSingleton(), m_pointer);
+			break;
+		case 4:
+			IntType::GetSingleton()->castTo(&tmp, IntType::GetSingleton(), m_pointer);
+			break;
+		default:
+			assert(false);
+		}
+	}
+	else
+	{
+		return false;
+	}
+	switch (dstType->m_size)
+	{
+	case 1:
+		IntType::GetSingleton()->castTo(dst, CharType::GetSingleton(), &tmp);
 		return true;
+	case 2:
+		IntType::GetSingleton()->castTo(dst, ShortType::GetSingleton(), &tmp);
+		return true;
+	case 4:
+		IntType::GetSingleton()->castTo(dst, IntType::GetSingleton(), &tmp);
+		return true;
+	default:
+		assert(false);
 	}
 	return false;
 }

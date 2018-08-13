@@ -151,6 +151,7 @@
   <ItemGroup>
     <CustomBuild Include="..\..\Common\Tutorial1.i">
       <FileType>Document</FileType>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">D:/GitHub/idlcpp/bin/idlcpp.exe -ld -pc../../paf/src/pafcore/ %(FullPath)</Command>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>

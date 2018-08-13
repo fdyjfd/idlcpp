@@ -690,7 +690,7 @@ pafcore::ErrorCode Variant_GetAttr(PyObject*& pyObject, VariantWrapper* self, co
 	case pafcore::class_type:
 		{
 			pafcore::ClassType* type = (pafcore::ClassType*)variant->m_pointer;
-			pafcore::Metadata* member = type->findClassMember(name, true);
+			pafcore::Metadata* member = type->findClassMember(name, true, true);
 			if(0 != member)
 			{
 				pafcore::Type* memberType = member->getType();
@@ -892,7 +892,7 @@ pafcore::ErrorCode Variant_SetAttr(pafcore::Variant* variant, char* name, PyObje
 	case pafcore::class_type:
 		{
 			pafcore::ClassType* type = (pafcore::ClassType*)variant->m_pointer;
-			pafcore::Metadata* member = type->findClassMember(name, true);
+			pafcore::Metadata* member = type->findClassMember(name, true, true);
 			if(0 != member)
 			{
 				pafcore::Type* memberType = member->getType();
@@ -1007,7 +1007,7 @@ PyObject* VariantWrapper_call(VariantWrapper* wrapper, PyObject* parameters, PyO
 	case pafcore::class_type:
 		{
 			pafcore::ClassType* type = (pafcore::ClassType*)self->m_pointer;
-			pafcore::Metadata* member = type->findClassMember("New", false);
+			pafcore::Metadata* member = type->findClassMember("New", false, true);
 			if(0 != member)
 			{
 				pafcore::Type* memberType = member->getType();

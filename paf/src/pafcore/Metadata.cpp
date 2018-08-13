@@ -39,7 +39,7 @@ Category Metadata::get__category_() const
 	return type->m_category;
 }
 
-const char* Metadata::_getAttributeName_(size_t index)
+string_t Metadata::_getAttributeName_(size_t index)
 {
 	if (m_attributes && index < m_attributes->count)
 	{
@@ -48,7 +48,7 @@ const char* Metadata::_getAttributeName_(size_t index)
 	return "";
 }
 
-const char* Metadata::_getAttributeContent_(size_t index)
+string_t Metadata::_getAttributeContent_(size_t index)
 {
 	if (m_attributes && index < m_attributes->count)
 	{
@@ -57,7 +57,7 @@ const char* Metadata::_getAttributeContent_(size_t index)
 	return "";
 }
 
-const char* Metadata::_getAttributeContentByName_(const char* attributeName)
+string_t Metadata::_getAttributeContentByName_(string_t attributeName)
 {
 	if (0 != m_attributes)
 	{

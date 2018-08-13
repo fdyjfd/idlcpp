@@ -35,11 +35,12 @@ namespace pafcore
 		float_type,
 		double_type,
 		long_double_type,
+		string_type,
 		primitive_type_count,
 	};	
 #}
 
-	abstract class(primitive_type)#PAFCORE_EXPORT PrimitiveType : Type
+	class(primitive_type)#PAFCORE_EXPORT PrimitiveType : Type
 	{
 		size_t _getMemberCount_();
 		Metadata* _getMember_(size_t index);
@@ -49,11 +50,31 @@ namespace pafcore
 		PrimitiveType(const char* name) : Type(name, primitive_object)
 		{}
 	public:
-		InstanceMethod* findInstanceMethod(const char* name);
+		virtual bool castTo(void* dst, Type* dstType, const void* src) = 0;
+	public:
+		InstanceMethod * findInstanceMethod(const char* name);
 		StaticMethod* findStaticMethod(const char* name);
 		Metadata* findTypeMember(const char* name);
 		virtual Metadata* findMember(const char* name);
-		virtual bool castTo(void* dst, Type* dstType, const void* src) = 0;
+
+	public:
+		PrimitiveTypeCategory m_typeCategory;
+		Metadata** m_members;
+		size_t m_memberCount;
+		InstanceMethod* m_instanceMethods;
+		size_t m_instanceMethodCount;
+		StaticMethod* m_staticMethods;
+#}
+		size_t m_staticMethodCount;
+	};
+#{
+
+	class PAFCORE_EXPORT CPPPrimitiveType : public PrimitiveType
+	{
+	public:
+		CPPPrimitiveType(const char* name) : PrimitiveType(name)
+		{}
+	public:
 		//dst = +arg
 		virtual void op_plus(void* dst, const void* arg) = 0;
 		//dst = -arg
@@ -147,18 +168,8 @@ namespace pafcore
 		static ErrorCode Primitive_op_bitwiseOrAssign(Variant* result, Variant** args, int_t numArgs);
 		static ErrorCode Primitive_op_leftShiftAssign(Variant* result, Variant** args, int_t numArgs);
 		static ErrorCode Primitive_op_rightShiftAssign(Variant* result, Variant** args, int_t numArgs);
-	public:
-		PrimitiveTypeCategory m_typeCategory;
-		Metadata** m_members;
-		size_t m_memberCount;
-		InstanceMethod* m_instanceMethods;
-		size_t m_instanceMethodCount;
-		StaticMethod* m_staticMethods;
-		size_t m_staticMethodCount;
-#}
 	};
 
-#{
 	template<typename T>
 	struct PAFCORE_EXPORT PrimitiveTypeTraits
 	{
@@ -261,12 +272,18 @@ namespace pafcore
 		enum { type_category = long_double_type };
 	};
 
+	template<>
+	struct PAFCORE_EXPORT PrimitiveTypeTraits<string_t>
+	{
+		enum { type_category = string_type };
+	};
+
 
 	template<typename T>
-	class PAFCORE_EXPORT PrimitiveTypeImpl : public PrimitiveType
+	class PAFCORE_EXPORT PrimitiveTypeImpl : public CPPPrimitiveType
 	{
 	public:
-		PrimitiveTypeImpl(const char* name) : PrimitiveType(name)
+		PrimitiveTypeImpl(const char* name) : CPPPrimitiveType(name)
 		{
 			m_typeCategory = (PrimitiveTypeCategory)PrimitiveTypeTraits<T>::type_category;
 			m_name = name;
@@ -810,6 +827,93 @@ namespace pafcore
 	typedef PrimitiveTypeImpl_Real<double>						DoubleType;
 	typedef PrimitiveTypeImpl_Real<long double>					LongDoubleType;
 
+
+
+	class PAFCORE_EXPORT StringType : public PrimitiveType
+	{
+	public:
+		StringType(const char* name) : PrimitiveType(name)
+		{
+			m_typeCategory = (PrimitiveTypeCategory)PrimitiveTypeTraits<::string_t>::type_category;
+			m_name = name;
+			m_size = sizeof(::string_t);
+
+			static ::pafcore::Result s_staticResults[] =
+			{
+				::pafcore::Result(this, false, ::pafcore::Result::by_new),
+				::pafcore::Result(this, false, ::pafcore::Result::by_new),
+			};
+			static ::pafcore::Argument s_staticArguments[] =
+			{
+				::pafcore::Argument("str", CharType::GetSingleton(), ::pafcore::Argument::by_ptr, true),
+			};
+			static ::pafcore::Overload s_staticOverloads[] =
+			{
+				::pafcore::Overload(&s_staticResults[0], 0, 0, true, false),
+				::pafcore::Overload(&s_staticResults[1], &s_staticArguments[0], 1, true, false),
+			};
+			static ::pafcore::StaticMethod s_staticMethods[] =
+			{
+				::pafcore::StaticMethod("New", 0, string_t_New, &s_staticOverloads[0], 2),
+			};
+			m_staticMethods = s_staticMethods;
+			m_staticMethodCount = paf_array_size_of(s_staticMethods);
+			static Metadata* s_members[] =
+			{
+				&s_staticMethods[0],
+			};
+			m_members = s_members;
+			m_memberCount = paf_array_size_of(s_members);
+			::pafcore::NameSpace::GetGlobalNameSpace()->registerMember(this);
+		}
+		static ErrorCode string_t_New(::pafcore::Variant* result, ::pafcore::Variant** args, int_t numArgs)
+		{
+			if (0 == numArgs)
+			{
+				result->assignNullPrimitive(GetSingleton());
+				return ::pafcore::s_ok;
+			}
+			if (1 <= numArgs)
+			{
+				if (args[0]->isTemporary())
+				{
+					return ::pafcore::e_invalid_arg_type_1;
+				}
+				const char* a0;
+				if (!args[0]->castToPrimitivePtr(CharType::GetSingleton(), (void**)&a0))
+				{
+					return ::pafcore::e_invalid_arg_type_1;
+				}
+				::string_t res(a0);
+				result->assignPrimitive(GetSingleton(), &res);
+				return ::pafcore::s_ok;
+			}
+			return ::pafcore::e_invalid_arg_num;
+		}
+
+		virtual bool castTo(void* dst, Type* dstType, const void* src)
+		{
+			if (!dstType->isPrimitive())
+			{
+				return false;
+			}
+			if (string_type != static_cast<PrimitiveType*>(dstType)->m_typeCategory)
+			{
+				return false;
+			}
+			*reinterpret_cast<::string_t*>(dst) = (*reinterpret_cast<const ::string_t*>(src));
+			return true;
+		}
+
+	public:
+		static StringType s_instance;
+		static StringType* GetSingleton()
+		{
+			return &s_instance;
+		}
+	};
+
+
 #}
 }
 
@@ -923,7 +1027,14 @@ template<>
 struct RuntimeTypeOf<long double>
 {
 	typedef ::pafcore::LongDoubleType RuntimeType;
-	enum {type_category = ::pafcore::primitive_object};
+	enum { type_category = ::pafcore::primitive_object };
+};
+
+template<>
+struct RuntimeTypeOf<string_t>
+{
+	typedef ::pafcore::StringType RuntimeType;
+	enum { type_category = ::pafcore::primitive_object };
 };
 
 template<typename T>

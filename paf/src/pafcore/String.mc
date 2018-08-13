@@ -62,18 +62,19 @@ namespace idlcpp
 			::pafcore::Result(RuntimeTypeOf<void>::RuntimeType::GetSingleton(), false, ::pafcore::Result::by_value),
 			::pafcore::Result(RuntimeTypeOf<void>::RuntimeType::GetSingleton(), false, ::pafcore::Result::by_value),
 			::pafcore::Result(RuntimeTypeOf<void>::RuntimeType::GetSingleton(), false, ::pafcore::Result::by_value),
-			::pafcore::Result(RuntimeTypeOf<char>::RuntimeType::GetSingleton(), true, ::pafcore::Result::by_ptr),
+			::pafcore::Result(RuntimeTypeOf<string_t>::RuntimeType::GetSingleton(), false, ::pafcore::Result::by_value),
 			::pafcore::Result(RuntimeTypeOf<int>::RuntimeType::GetSingleton(), false, ::pafcore::Result::by_value),
 			::pafcore::Result(RuntimeTypeOf<int>::RuntimeType::GetSingleton(), false, ::pafcore::Result::by_value),
 			::pafcore::Result(RuntimeTypeOf<bool>::RuntimeType::GetSingleton(), false, ::pafcore::Result::by_value),
+			::pafcore::Result(RuntimeTypeOf<::pafcore::String>::RuntimeType::GetSingleton(), false, ::pafcore::Result::by_value),
 		};
 		static ::pafcore::Argument s_instanceArguments[] = 
 		{
-			::pafcore::Argument("str", RuntimeTypeOf<char>::RuntimeType::GetSingleton(), ::pafcore::Argument::by_ptr, true),
+			::pafcore::Argument("str", RuntimeTypeOf<string_t>::RuntimeType::GetSingleton(), ::pafcore::Argument::by_value, false),
 			::pafcore::Argument("arg", RuntimeTypeOf<::pafcore::String>::RuntimeType::GetSingleton(), ::pafcore::Argument::by_ref, true),
-			::pafcore::Argument("str", RuntimeTypeOf<char>::RuntimeType::GetSingleton(), ::pafcore::Argument::by_ptr, true),
+			::pafcore::Argument("str", RuntimeTypeOf<string_t>::RuntimeType::GetSingleton(), ::pafcore::Argument::by_value, false),
 			::pafcore::Argument("arg", RuntimeTypeOf<::pafcore::String>::RuntimeType::GetSingleton(), ::pafcore::Argument::by_ref, true),
-			::pafcore::Argument("str", RuntimeTypeOf<char>::RuntimeType::GetSingleton(), ::pafcore::Argument::by_ptr, true),
+			::pafcore::Argument("str", RuntimeTypeOf<string_t>::RuntimeType::GetSingleton(), ::pafcore::Argument::by_value, false),
 			::pafcore::Argument("arg", RuntimeTypeOf<::pafcore::String>::RuntimeType::GetSingleton(), ::pafcore::Argument::by_ref, true),
 		};
 		static ::pafcore::Overload s_instanceOverloads[] = 
@@ -86,6 +87,7 @@ namespace idlcpp
 			::pafcore::Overload(&s_instanceResults[5], &s_instanceArguments[4], 1, false, true),
 			::pafcore::Overload(&s_instanceResults[6], &s_instanceArguments[5], 1, false, true),
 			::pafcore::Overload(&s_instanceResults[7], 0, 0, false, true),
+			::pafcore::Overload(&s_instanceResults[8], 0, 0, false, false),
 		};
 		static ::pafcore::InstanceMethod s_instanceMethods[] = 
 		{
@@ -94,6 +96,7 @@ namespace idlcpp
 			::pafcore::InstanceMethod("c_str", 0, String_c_str, &s_instanceOverloads[4], 1),
 			::pafcore::InstanceMethod("compare", 0, String_compare, &s_instanceOverloads[5], 2),
 			::pafcore::InstanceMethod("empty", 0, String_empty, &s_instanceOverloads[7], 1),
+			::pafcore::InstanceMethod("toString", 0, String_toString, &s_instanceOverloads[8], 1),
 		};
 		m_instanceMethods = s_instanceMethods;
 		m_instanceMethodCount = paf_array_size_of(s_instanceMethods);
@@ -106,6 +109,7 @@ namespace idlcpp
 			&s_instanceMethods[2],
 			&s_instanceMethods[3],
 			&s_instanceMethods[4],
+			&s_instanceMethods[5],
 		};
 		m_members = s_members;
 		m_memberCount = paf_array_size_of(s_members);
@@ -147,12 +151,8 @@ namespace idlcpp
 				{
 					return ::pafcore::e_invalid_this_type;
 				}
-				if(args[1]->isTemporary())
-				{
-					return ::pafcore::e_invalid_arg_type_1;
-				}
-				const char* a0;
-				if(!args[1]->castToPrimitivePtr(RuntimeTypeOf<char>::RuntimeType::GetSingleton(), (void**)&a0))
+				string_t a0;
+				if(!args[1]->castToPrimitive(RuntimeTypeOf<string_t>::RuntimeType::GetSingleton(), &a0))
 				{
 					return ::pafcore::e_invalid_arg_type_1;
 				}
@@ -207,12 +207,8 @@ namespace idlcpp
 				{
 					return ::pafcore::e_invalid_this_type;
 				}
-				if(args[1]->isTemporary())
-				{
-					return ::pafcore::e_invalid_arg_type_1;
-				}
-				const char* a0;
-				if(!args[1]->castToPrimitivePtr(RuntimeTypeOf<char>::RuntimeType::GetSingleton(), (void**)&a0))
+				string_t a0;
+				if(!args[1]->castToPrimitive(RuntimeTypeOf<string_t>::RuntimeType::GetSingleton(), &a0))
 				{
 					return ::pafcore::e_invalid_arg_type_1;
 				}
@@ -256,8 +252,8 @@ namespace idlcpp
 			{
 				return ::pafcore::e_invalid_this_type;
 			}
-			const char* res = self->c_str();
-			result->assignPrimitivePtr(RuntimeTypeOf<char>::RuntimeType::GetSingleton(), res, true, ::pafcore::Variant::by_ptr);
+			string_t res = self->c_str();
+			result->assignPrimitive(RuntimeTypeOf<string_t>::RuntimeType::GetSingleton(), &res);
 			return ::pafcore::s_ok;
 		}
 		return ::pafcore::e_invalid_arg_num;
@@ -279,12 +275,8 @@ namespace idlcpp
 				{
 					return ::pafcore::e_invalid_this_type;
 				}
-				if(args[1]->isTemporary())
-				{
-					return ::pafcore::e_invalid_arg_type_1;
-				}
-				const char* a0;
-				if(!args[1]->castToPrimitivePtr(RuntimeTypeOf<char>::RuntimeType::GetSingleton(), (void**)&a0))
+				string_t a0;
+				if(!args[1]->castToPrimitive(RuntimeTypeOf<string_t>::RuntimeType::GetSingleton(), &a0))
 				{
 					return ::pafcore::e_invalid_arg_type_1;
 				}
@@ -328,6 +320,26 @@ namespace idlcpp
 			}
 			bool res = self->empty();
 			result->assignPrimitive(RuntimeTypeOf<bool>::RuntimeType::GetSingleton(), &res);
+			return ::pafcore::s_ok;
+		}
+		return ::pafcore::e_invalid_arg_num;
+	}
+
+	::pafcore::ErrorCode __pafcore__String_Type::String_toString(::pafcore::Variant* result, ::pafcore::Variant** args, int_t numArgs)
+	{
+		if(1 <= numArgs)
+		{
+			if(args[0]->isConstant())
+			{
+				return ::pafcore::e_this_is_constant;
+			}
+			::pafcore::String* self;
+			if(!args[0]->castToValuePtr(GetSingleton(), (void**)&self))
+			{
+				return ::pafcore::e_invalid_this_type;
+			}
+			::pafcore::String* res = paf_new ::pafcore::String(self->toString());
+			result->assignValuePtr(RuntimeTypeOf<::pafcore::String>::RuntimeType::GetSingleton(), res, false, ::pafcore::Variant::by_new_ptr);
 			return ::pafcore::s_ok;
 		}
 		return ::pafcore::e_invalid_arg_num;

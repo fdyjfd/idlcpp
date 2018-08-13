@@ -53,7 +53,7 @@ String::~String()
 	}
 }
 
-void String::assign(const char* str)
+void String::assign(string_t str)
 {
 	if (s_emptyString != m_str)
 	{
@@ -76,7 +76,7 @@ void String::assign(const String& arg)
 	assign(arg.m_str);
 }
 
-void String::append(const char* str)
+void String::append(string_t str)
 {
 	if (0 != str && 0 != *str)
 	{
@@ -131,7 +131,7 @@ bool String::operator < (const String& arg) const
 	return strcmp(m_str, arg.m_str) < 0;
 }
 
-int String::compare(const char* str) const
+int String::compare(string_t str) const
 {
 	return strcmp(m_str, str);
 }

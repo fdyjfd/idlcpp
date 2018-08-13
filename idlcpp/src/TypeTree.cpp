@@ -77,6 +77,9 @@ void GetPrimitiveTypeName(std::string& typeName, PredefinedType type)
 	case pt_long_double:
 		typeName = "long double";
 		break;
+	case pt_string_t:
+		typeName = "string_t";
+		break;
 	default:
 		assert(false);
 	}

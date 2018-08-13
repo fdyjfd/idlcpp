@@ -14,7 +14,7 @@ EnumType::EnumType(const char* name)
 	m_enumeratorCount = 0;
 	static pafcore::InstanceProperty s_properties[] = 
 	{
-		::pafcore::InstanceProperty("_name_", 0, 0, Enum_get__name_, RuntimeTypeOf<char>::RuntimeType::GetSingleton(), Metadata::by_ptr, true, 0, 0, Metadata::by_value, false),
+		::pafcore::InstanceProperty("_name_", 0, 0, Enum_get__name_, RuntimeTypeOf<string_t>::RuntimeType::GetSingleton(), Metadata::by_value, false, 0, 0, Metadata::by_value, false),
 	};
 	m_instanceProperties = s_properties;
 	m_instancePropertyCount = paf_array_size_of(s_properties);
@@ -47,7 +47,7 @@ Enumerator* EnumType::_getEnumeratorByValue_(int value)
 	return 0;
 }
 
-Enumerator* EnumType::_getEnumeratorByName_(const char* name)
+Enumerator* EnumType::_getEnumeratorByName_(string_t name)
 {
 	Metadata dummy(name);
 	Enumerator* res = std::lower_bound(m_enumerators, m_enumerators + m_enumeratorCount, dummy);
@@ -86,8 +86,8 @@ pafcore::ErrorCode EnumType::Enum_get__name_(pafcore::Variant* that, pafcore::Va
 	{	
 		return pafcore::e_invalid_this_type;
 	}
-	const char* res = enumerator->get__name_();
-	value->assignPrimitivePtr(RuntimeTypeOf<char>::RuntimeType::GetSingleton(), res, true, Variant::by_ptr);
+	string_t res = enumerator->get__name_();
+	value->assignPrimitive(RuntimeTypeOf<string_t>::RuntimeType::GetSingleton(), &res);
 	return pafcore::s_ok;
 }
 

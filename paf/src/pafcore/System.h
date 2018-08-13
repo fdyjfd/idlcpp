@@ -13,7 +13,7 @@ namespace pafcore
 	{
 	public:
 
-		static void LoadDLL(const char* fileName);
+		static void LoadDLL(string_t fileName);
 	};
 }
 

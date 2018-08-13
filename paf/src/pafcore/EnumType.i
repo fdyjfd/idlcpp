@@ -14,7 +14,7 @@ namespace pafcore
 		size_t _getEnumeratorCount_();
 		Enumerator* _getEnumerator_(size_t index);
 		Enumerator* _getEnumeratorByValue_(int value);
-		Enumerator* _getEnumeratorByName_(const char* name);
+		Enumerator* _getEnumeratorByName_(string_t name);
 #{
 	public:
 		EnumType(const char* name);

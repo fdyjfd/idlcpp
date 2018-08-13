@@ -69,29 +69,30 @@
      DOUBLE = 285,
      SIGNED = 286,
      UNSIGNED = 287,
-     NAMESPACE = 288,
-     ENUM = 289,
-     CLASS = 290,
-     STRUCT = 291,
-     STATIC = 292,
-     VIRTUAL = 293,
-     VOID = 294,
-     CONST = 295,
-     OPERATOR = 296,
-     TYPEDEF = 297,
-     PRIMITIVE = 298,
-     ABSTRACT = 299,
-     GET = 300,
-     SET = 301,
-     NOMETA = 302,
-     NOCODE = 303,
-     EXPORT = 304,
-     OVERRIDE = 305,
-     SCOPE = 306,
-     IDENTIFY = 307,
-     STRING = 308,
-     TEMPLATE = 309,
-     DELEGATE = 310
+     STRING_T = 288,
+     NAMESPACE = 289,
+     ENUM = 290,
+     CLASS = 291,
+     STRUCT = 292,
+     STATIC = 293,
+     VIRTUAL = 294,
+     VOID = 295,
+     CONST = 296,
+     OPERATOR = 297,
+     TYPEDEF = 298,
+     PRIMITIVE = 299,
+     ABSTRACT = 300,
+     GET = 301,
+     SET = 302,
+     NOMETA = 303,
+     NOCODE = 304,
+     EXPORT = 305,
+     OVERRIDE = 306,
+     SCOPE = 307,
+     IDENTIFY = 308,
+     STRING = 309,
+     TEMPLATE = 310,
+     DELEGATE = 311
    };
 #endif
 
@@ -109,7 +110,7 @@ typedef union YYSTYPE
 
 
 /* Line 1676 of yacc.c  */
-#line 113 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.y.h"
+#line 114 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.y.h"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */

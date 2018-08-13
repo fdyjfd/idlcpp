@@ -105,7 +105,7 @@ void NameSpace::unregisterMember(Metadata* metadata)
 }
 
 
-Metadata* NameSpace::_findMember_(const char* name)
+Metadata* NameSpace::_findMember_(string_t name)
 {
 	Metadata* member = 0;
 	char buffer[sizeof(Metadata)];

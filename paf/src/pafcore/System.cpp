@@ -9,7 +9,7 @@
 
 namespace pafcore
 {
-	inline void System::LoadDLL(const char* fileName)
+	inline void System::LoadDLL(string_t fileName)
 	{
 		LoadLibraryA(fileName);
 	}

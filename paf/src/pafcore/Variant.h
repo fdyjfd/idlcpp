@@ -8,7 +8,7 @@ class Type;
 class Reference;
 class Value;
 
-const size_t max_primitive_type_size = 8;//(longlong_t, double_t);
+const size_t max_primitive_type_size = 8;//(longlong_t, double_t, string_t);
 const size_t unknown_array_size = ((size_t)-1) >> 1;
 
 class PAFCORE_EXPORT Variant

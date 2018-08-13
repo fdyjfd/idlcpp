@@ -9,6 +9,10 @@ namespace pafcore
 	class #PAFCORE_EXPORT Reference ## : public RefCount
 	{
 #{
+	//public:
+	//	Reference() = default;
+	//	Reference(const Reference&) = delete;
+	//	Reference& operator=(const Reference&) = delete;
 	public:
 		bool isTypeOf(ClassType* classType);
 

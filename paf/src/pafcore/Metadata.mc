@@ -92,19 +92,19 @@ namespace idlcpp
 		{
 			::pafcore::InstanceProperty("_attributeCount_", 0, GetSingleton(), Metadata_get__attributeCount_, RuntimeTypeOf<::size_t>::RuntimeType::GetSingleton(), ::pafcore::Metadata::by_value, false, 0, 0, ::pafcore::Metadata::by_value, false),
 			::pafcore::InstanceProperty("_category_", 0, GetSingleton(), Metadata_get__category_, RuntimeTypeOf<::pafcore::Category>::RuntimeType::GetSingleton(), ::pafcore::Metadata::by_value, false, 0, 0, ::pafcore::Metadata::by_value, false),
-			::pafcore::InstanceProperty("_name_", 0, GetSingleton(), Metadata_get__name_, RuntimeTypeOf<char>::RuntimeType::GetSingleton(), ::pafcore::Metadata::by_ptr, true, 0, 0, ::pafcore::Metadata::by_value, false),
+			::pafcore::InstanceProperty("_name_", 0, GetSingleton(), Metadata_get__name_, RuntimeTypeOf<string_t>::RuntimeType::GetSingleton(), ::pafcore::Metadata::by_value, false, 0, 0, ::pafcore::Metadata::by_value, false),
 		};
 		m_instanceProperties = s_instanceProperties;
 		m_instancePropertyCount = paf_array_size_of(s_instanceProperties);
 		static ::pafcore::Result s_instanceResults[] = 
 		{
-			::pafcore::Result(RuntimeTypeOf<char>::RuntimeType::GetSingleton(), true, ::pafcore::Result::by_ptr),
-			::pafcore::Result(RuntimeTypeOf<char>::RuntimeType::GetSingleton(), true, ::pafcore::Result::by_ptr),
-			::pafcore::Result(RuntimeTypeOf<char>::RuntimeType::GetSingleton(), true, ::pafcore::Result::by_ptr),
+			::pafcore::Result(RuntimeTypeOf<string_t>::RuntimeType::GetSingleton(), false, ::pafcore::Result::by_value),
+			::pafcore::Result(RuntimeTypeOf<string_t>::RuntimeType::GetSingleton(), false, ::pafcore::Result::by_value),
+			::pafcore::Result(RuntimeTypeOf<string_t>::RuntimeType::GetSingleton(), false, ::pafcore::Result::by_value),
 		};
 		static ::pafcore::Argument s_instanceArguments[] = 
 		{
-			::pafcore::Argument("attributeName", RuntimeTypeOf<char>::RuntimeType::GetSingleton(), ::pafcore::Argument::by_ptr, true),
+			::pafcore::Argument("attributeName", RuntimeTypeOf<string_t>::RuntimeType::GetSingleton(), ::pafcore::Argument::by_value, false),
 			::pafcore::Argument("index", RuntimeTypeOf<::size_t>::RuntimeType::GetSingleton(), ::pafcore::Argument::by_value, false),
 			::pafcore::Argument("index", RuntimeTypeOf<::size_t>::RuntimeType::GetSingleton(), ::pafcore::Argument::by_value, false),
 		};
@@ -182,8 +182,8 @@ namespace idlcpp
 		{
 			return ::pafcore::e_invalid_this_type;
 		}
-		const char* res = self->get__name_();
-		value->assignPrimitivePtr(RuntimeTypeOf<char>::RuntimeType::GetSingleton(), res, true, ::pafcore::Variant::by_ptr);
+		string_t res = self->get__name_();
+		value->assignPrimitive(RuntimeTypeOf<string_t>::RuntimeType::GetSingleton(), &res);
 		return ::pafcore::s_ok;
 	}
 
@@ -200,17 +200,13 @@ namespace idlcpp
 			{
 				return ::pafcore::e_invalid_this_type;
 			}
-			if(args[1]->isTemporary())
+			string_t a0;
+			if(!args[1]->castToPrimitive(RuntimeTypeOf<string_t>::RuntimeType::GetSingleton(), &a0))
 			{
 				return ::pafcore::e_invalid_arg_type_1;
 			}
-			const char* a0;
-			if(!args[1]->castToPrimitivePtr(RuntimeTypeOf<char>::RuntimeType::GetSingleton(), (void**)&a0))
-			{
-				return ::pafcore::e_invalid_arg_type_1;
-			}
-			const char* res = self->_getAttributeContentByName_(a0);
-			result->assignPrimitivePtr(RuntimeTypeOf<char>::RuntimeType::GetSingleton(), res, true, ::pafcore::Variant::by_ptr);
+			string_t res = self->_getAttributeContentByName_(a0);
+			result->assignPrimitive(RuntimeTypeOf<string_t>::RuntimeType::GetSingleton(), &res);
 			return ::pafcore::s_ok;
 		}
 		return ::pafcore::e_invalid_arg_num;
@@ -234,8 +230,8 @@ namespace idlcpp
 			{
 				return ::pafcore::e_invalid_arg_type_1;
 			}
-			const char* res = self->_getAttributeContent_(a0);
-			result->assignPrimitivePtr(RuntimeTypeOf<char>::RuntimeType::GetSingleton(), res, true, ::pafcore::Variant::by_ptr);
+			string_t res = self->_getAttributeContent_(a0);
+			result->assignPrimitive(RuntimeTypeOf<string_t>::RuntimeType::GetSingleton(), &res);
 			return ::pafcore::s_ok;
 		}
 		return ::pafcore::e_invalid_arg_num;
@@ -259,8 +255,8 @@ namespace idlcpp
 			{
 				return ::pafcore::e_invalid_arg_type_1;
 			}
-			const char* res = self->_getAttributeName_(a0);
-			result->assignPrimitivePtr(RuntimeTypeOf<char>::RuntimeType::GetSingleton(), res, true, ::pafcore::Variant::by_ptr);
+			string_t res = self->_getAttributeName_(a0);
+			result->assignPrimitive(RuntimeTypeOf<string_t>::RuntimeType::GetSingleton(), &res);
 			return ::pafcore::s_ok;
 		}
 		return ::pafcore::e_invalid_arg_num;

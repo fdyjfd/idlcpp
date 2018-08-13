@@ -523,6 +523,7 @@ void MetaSourceFileGenerator::generateCode_Class(FILE* file, ClassNode* classNod
 				}
 				else
 				{
+					fieldNode->m_orderIndex = fieldNodes.size();
 					fieldNodes.push_back(fieldNode);
 				}
 			}
@@ -565,16 +566,6 @@ void MetaSourceFileGenerator::generateCode_Class(FILE* file, ClassNode* classNod
 		}
 	}
 
-	std::sort(nestedTypeNodes.begin(), nestedTypeNodes.end(), CompareMemberNodeByName());
-	std::sort(nestedTypeAliasNodes.begin(), nestedTypeAliasNodes.end(), CompareMemberNodeByName());
-	std::sort(fieldNodes.begin(), fieldNodes.end(), CompareMemberNodeByName());
-	std::sort(propertyNodes.begin(), propertyNodes.end(), CompareMemberNodeByName());
-	std::sort(arrayPropertyNodes.begin(), arrayPropertyNodes.end(), CompareMemberNodeByName());
-	std::sort(methodNodes.begin(), methodNodes.end(), CompareMethodNode());
-	std::sort(staticFieldNodes.begin(), staticFieldNodes.end(), CompareMemberNodeByName());
-	std::sort(staticPropertyNodes.begin(), staticPropertyNodes.end(), CompareMemberNodeByName());
-	std::sort(staticArrayPropertyNodes.begin(), staticArrayPropertyNodes.end(), CompareMemberNodeByName());
-	std::sort(staticMethodNodes.begin(), staticMethodNodes.end(), CompareMethodNode());
 
 	writeMetaConstructor(classNode, templateArguments, nestedTypeNodes, nestedTypeAliasNodes,
 		staticFieldNodes, staticPropertyNodes, staticArrayPropertyNodes, staticMethodNodes,
@@ -2705,7 +2696,7 @@ void writeMetaConstructor_Member(
 			++currentStaticMethod;
 			break;
 		case instance_field:
-			sprintf_s(buf, "&s_instanceFields[%d],\n", currentField);
+			sprintf_s(buf, "&s_instanceFields[%d],\n", fieldNodes[currentField]->m_orderIndex);
 			++currentField;
 			break;
 		case instance_property:
@@ -2900,13 +2891,24 @@ void writeMetaConstructor(ClassNode* classNode,
 	FILE* file, int indentation)
 {
 	char buf[512];
-
 	std::string localClassName;
 	std::string className;
 	std::string metaClassName;
 	classNode->getLocalName(localClassName, templateArguments);
 	classNode->getNativeName(className, templateArguments);
 	GetMetaTypeFullName(metaClassName, classNode, templateArguments);
+
+
+	std::sort(nestedTypeNodes.begin(), nestedTypeNodes.end(), CompareMemberNodeByName());
+	std::sort(nestedTypeAliasNodes.begin(), nestedTypeAliasNodes.end(), CompareMemberNodeByName());
+	//std::sort(fieldNodes.begin(), fieldNodes.end(), CompareMemberNodeByName());
+	std::sort(propertyNodes.begin(), propertyNodes.end(), CompareMemberNodeByName());
+	std::sort(arrayPropertyNodes.begin(), arrayPropertyNodes.end(), CompareMemberNodeByName());
+	std::sort(methodNodes.begin(), methodNodes.end(), CompareMethodNode());
+	std::sort(staticFieldNodes.begin(), staticFieldNodes.end(), CompareMemberNodeByName());
+	std::sort(staticPropertyNodes.begin(), staticPropertyNodes.end(), CompareMemberNodeByName());
+	std::sort(staticArrayPropertyNodes.begin(), staticArrayPropertyNodes.end(), CompareMemberNodeByName());
+	std::sort(staticMethodNodes.begin(), staticMethodNodes.end(), CompareMethodNode());
 
 	sprintf_s(buf, "%s::%s() : ::pafcore::ClassType(\"%s\", ::pafcore::%s)\n", 
 		metaClassName.c_str(), metaClassName.c_str(),
@@ -2939,6 +2941,8 @@ void writeMetaConstructor(ClassNode* classNode,
 	writeMetaConstructor_Properties(classNode, templateArguments, attributesOffsets, propertyNodes, false, false, file, indentation + 1);
 	writeMetaConstructor_Properties(classNode, templateArguments, attributesOffsets, arrayPropertyNodes, false, true, file, indentation + 1);
 	writeMetaConstructor_Methods(classNode, templateArguments, attributesOffsets, methodNodes, false, file, indentation + 1);
+
+	std::sort(fieldNodes.begin(), fieldNodes.end(), CompareMemberNodeByName());
 
 	writeMetaConstructor_Member(nestedTypeNodes, nestedTypeAliasNodes, staticFieldNodes, staticPropertyNodes, staticArrayPropertyNodes,
 		staticMethodNodes, fieldNodes, propertyNodes, arrayPropertyNodes, methodNodes, file, indentation + 1);

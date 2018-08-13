@@ -53,7 +53,7 @@ namespace idlcpp
 		};
 		static ::pafcore::Argument s_instanceArguments[] = 
 		{
-			::pafcore::Argument("name", RuntimeTypeOf<char>::RuntimeType::GetSingleton(), ::pafcore::Argument::by_ptr, true),
+			::pafcore::Argument("name", RuntimeTypeOf<string_t>::RuntimeType::GetSingleton(), ::pafcore::Argument::by_value, false),
 			::pafcore::Argument("value", RuntimeTypeOf<int>::RuntimeType::GetSingleton(), ::pafcore::Argument::by_value, false),
 			::pafcore::Argument("index", RuntimeTypeOf<::size_t>::RuntimeType::GetSingleton(), ::pafcore::Argument::by_value, false),
 		};
@@ -113,12 +113,8 @@ namespace idlcpp
 			{
 				return ::pafcore::e_invalid_this_type;
 			}
-			if(args[1]->isTemporary())
-			{
-				return ::pafcore::e_invalid_arg_type_1;
-			}
-			const char* a0;
-			if(!args[1]->castToPrimitivePtr(RuntimeTypeOf<char>::RuntimeType::GetSingleton(), (void**)&a0))
+			string_t a0;
+			if(!args[1]->castToPrimitive(RuntimeTypeOf<string_t>::RuntimeType::GetSingleton(), &a0))
 			{
 				return ::pafcore::e_invalid_arg_type_1;
 			}

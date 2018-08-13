@@ -231,27 +231,29 @@ void VariantToLua(lua_State *L, pafcore::Variant* variant)
 		pafcore::PrimitiveType* primitiveType = static_cast<pafcore::PrimitiveType*>(variant->m_type);
 		switch (primitiveType->m_typeCategory)
 		{
+		case pafcore::string_type: {
+			const char* str = ((::string_t*)variant->m_pointer)->m_str;
+			lua_pushstring(L, str ? str : "");
+			break; }
+
 		case pafcore::float_type:
-		case pafcore::double_type:
-		{
+		case pafcore::double_type: {
 			lua_Number value;
 			primitiveType->castTo(&value, RuntimeTypeOf<lua_Number>::RuntimeType::GetSingleton(), variant->m_pointer);
 			lua_pushnumber(L, value);
-		}
-		break;
-		case pafcore::bool_type:
-		{
+			break; }
+
+		case pafcore::bool_type: {
 			bool value;
 			primitiveType->castTo(&value, RuntimeTypeOf<bool>::RuntimeType::GetSingleton(), variant->m_pointer);
 			lua_pushboolean(L, value ? 1 : 0);
-		}
-		break;
-		default:
-		{
+			break; }
+
+		default: {
 			lua_Integer value;
 			primitiveType->castTo(&value, RuntimeTypeOf<lua_Integer>::RuntimeType::GetSingleton(), variant->m_pointer);
 			lua_pushinteger(L, value);
-		}
+			break; }
 		}
 	}
 	else

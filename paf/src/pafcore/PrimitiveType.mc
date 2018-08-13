@@ -44,6 +44,12 @@ namespace idlcpp
 		};
 		RuntimeTypeOf<::pafcore::Type>::RuntimeType::GetSingleton()->m_firstDerivedClass = &s_classTypeIterators[0];
 		m_classTypeIterators = s_classTypeIterators;
+		static ::pafcore::InstanceField s_instanceFields[] = 
+		{
+			::pafcore::InstanceField("m_staticMethodCount", 0, GetSingleton(), RuntimeTypeOf<::size_t>::RuntimeType::GetSingleton(), offsetof(::pafcore::PrimitiveType, m_staticMethodCount), 0, false, ::pafcore::Metadata::tc_none),
+		};
+		m_instanceFields = s_instanceFields;
+		m_instanceFieldCount = paf_array_size_of(s_instanceFields);
 		static ::pafcore::Result s_instanceResults[] = 
 		{
 			::pafcore::Result(RuntimeTypeOf<::pafcore::Metadata>::RuntimeType::GetSingleton(), false, ::pafcore::Result::by_ptr),
@@ -74,6 +80,7 @@ namespace idlcpp
 			&s_instanceMethods[0],
 			&s_instanceMethods[1],
 			&s_instanceMethods[2],
+			&s_instanceFields[0],
 		};
 		m_members = s_members;
 		m_memberCount = paf_array_size_of(s_members);

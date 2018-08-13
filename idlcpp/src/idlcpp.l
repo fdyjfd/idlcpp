@@ -108,6 +108,7 @@ int yycolumnno = 1;
 "float"			{yylval.sn = newToken(snt_keyword_float);					yycolumnno += strlen(yytext); yytokenno++; return FLOAT;}
 "double"		{yylval.sn = newToken(snt_keyword_double);					yycolumnno += strlen(yytext); yytokenno++; return DOUBLE;}
 "void"			{yylval.sn = newToken(snt_keyword_void);					yycolumnno += strlen(yytext); yytokenno++; return VOID;}
+"string_t"		{yylval.sn = newToken(snt_keyword_string_t);				yycolumnno += strlen(yytext); yytokenno++; return STRING_T;}
 "abstract"		{yylval.sn = newToken(snt_keyword_abstract);				yycolumnno += strlen(yytext); yytokenno++; return ABSTRACT;}
 "namespace"		{yylval.sn = newToken(snt_keyword_namespace);				yycolumnno += strlen(yytext); yytokenno++; return NAMESPACE;}
 "enum"			{yylval.sn = newToken(snt_keyword_enum);					yycolumnno += strlen(yytext); yytokenno++; return ENUM;}

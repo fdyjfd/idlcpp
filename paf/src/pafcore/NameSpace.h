@@ -21,7 +21,7 @@ namespace pafcore
 
 		size_t _getMemberCount_();
 		Metadata* _getMember_(size_t index);
-		Metadata* _findMember_(const char* name);
+		Metadata* _findMember_(string_t name);
 
 	private:
 		struct Hash_Metadata

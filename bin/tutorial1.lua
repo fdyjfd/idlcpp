@@ -9,3 +9,4 @@ pt:getX(x);
 print(x[0]);
 print(pt.x);
 print(pt.y);
+print(pt:test());

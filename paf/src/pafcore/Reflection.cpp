@@ -477,4 +477,62 @@ ErrorCode Reflection::NewObject(Variant& result, ClassType* type)
 //
 //}
 
+//ErrorCode Reflection::GetInstanceField(pafcore::Variant& value, pafcore::Variant* that, pafcore::InstanceField* field)
+//{
+//	size_t baseOffset;
+//	if (!static_cast<pafcore::ClassType*>(that->m_type)->getClassOffset(baseOffset, field->m_objectType))
+//	{
+//		return pafcore::e_invalid_type;
+//	}
+//	size_t fieldAddress = (size_t)that->m_pointer + baseOffset + field->m_offset;
+//
+//	if (field->isArray())
+//	{
+//		value.assignArray(field->m_type, (void*)fieldAddress, field->m_arraySize, field->m_constant, ::pafcore::Variant::by_array);
+//	}
+//	else if (field->isPointer())
+//	{
+//		value.assignPtr(field->m_type, *(void**)fieldAddress, field->m_constant, ::pafcore::Variant::by_ref);
+//	}
+//	else
+//	{
+//		value.assignPtr(field->m_type, (void*)fieldAddress, field->m_type->isPrimitive() ? true : field->m_constant, ::pafcore::Variant::by_ref);
+//	}
+//	return pafcore::s_ok;
+//}
+//
+//ErrorCode Reflection::SetInstanceField(pafcore::Variant* that, pafcore::InstanceField* field, pafcore::Variant& value)
+//{
+//	if (field->isArray())
+//	{
+//		return pafcore::e_field_is_an_array;
+//	}
+//	if (field->isConstant())
+//	{
+//		return pafcore::e_field_is_constant;
+//	}
+//	size_t baseOffset;
+//	if (!static_cast<pafcore::ClassType*>(that->m_type)->getClassOffset(baseOffset, field->m_objectType))
+//	{
+//		return pafcore::e_invalid_object_type;
+//	}
+//	size_t fieldAddress = (size_t)that->m_pointer + baseOffset + field->m_offset;
+//	if (field->isPointer())
+//	{
+//		if (!value.castToObjectPtr(field->m_type, (void**)fieldAddress))
+//		{
+//			return pafcore::e_invalid_field_type;
+//		}
+//	}
+//	else
+//	{
+//		if (!value.castToObject(field->m_type, (void*)fieldAddress))
+//		{
+//			return pafcore::e_invalid_field_type;
+//		}
+//	}
+//	return pafcore::s_ok;
+//}
+
+
 END_PAFCORE

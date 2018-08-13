@@ -34,6 +34,26 @@ typedef unsigned int			size_t;
 typedef int						ptrdiff_t;
 #endif
 
+class string_t
+{
+public:
+	string_t() : m_str(0)
+	{}
+	string_t(const char* str) : m_str((char*)str)
+	{}
+public:
+	const char* c_str() const
+	{
+		return m_str;
+	}
+	operator const char* () const
+	{
+		return m_str;
+	}
+public:
+	char* m_str;
+};
+
 template<typename T>
 struct RuntimeTypeOf
 {};

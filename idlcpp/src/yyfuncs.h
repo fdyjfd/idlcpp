@@ -30,6 +30,7 @@ enum PredefinedType
 	pt_float,
 	pt_double,
 	pt_long_double,
+	pt_string_t,
 	pt_end,
 };
 
@@ -67,6 +68,7 @@ enum SyntaxNodeType
 	snt_keyword_unsigned,
 	snt_keyword_float,
 	snt_keyword_double,
+	snt_keyword_string_t,
 	snt_keyword_end_primitive,
 
 	snt_begin_output,

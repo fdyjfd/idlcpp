@@ -129,12 +129,12 @@ namespace pafcore
 		virtual ::pafcore::ClassType* getType();
 		virtual size_t getAddress();
 
-		const char* get__name_() const;
+		string_t get__name_() const;
 		Category get__category_() const;
 		size_t get__attributeCount_() const;
-		const char* _getAttributeName_(size_t index);
-		const char* _getAttributeContent_(size_t index);
-		const char* _getAttributeContentByName_(const char* attributeName);
+		string_t _getAttributeName_(size_t index);
+		string_t _getAttributeContent_(size_t index);
+		string_t _getAttributeContentByName_(string_t attributeName);
 
 	public:
 		enum Passing
@@ -159,6 +159,9 @@ namespace pafcore
 		};
 	public:
 		Metadata(const char* name, Attributes* attributes = 0);
+		//Metadata(const Metadata&) = default;
+		//Metadata& operator=(const Metadata&) = default;
+	public:
 		bool operator < (const Metadata& arg) const;
 	public:
 		virtual long_t addRef();
@@ -176,7 +179,7 @@ namespace pafcore
 		return m_attributes ? m_attributes->count : 0;
 	}
 
-	inline const char* Metadata::get__name_() const
+	inline string_t Metadata::get__name_() const
 	{
 		return m_name;
 	}

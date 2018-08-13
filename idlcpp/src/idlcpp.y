@@ -10,7 +10,7 @@
 %token <sn> ',' '.' ':' ';' '(' ')' '[' ']' '{' '}' '<' '>' '*' '&' '^' '+' '-' '/' '%' '|' '~' '!' '='
 %token <sn> ADD_ASSIGN SUB_ASSIGN MUL_ASSIGN DIV_ASSIGN MOD_ASSIGN BIT_XOR_ASSIGN BIT_AND_ASSIGN BIT_OR_ASSIGN LEFT_SHIFT_ASSIGN RIGHT_SHIFT_ASSIGN
 %token <sn> LEFT_SHIFT RIGHT_SHIFT EQUAL NOT_EQUAL LESS_EQUAL GREATER_EQUAL AND OR INC DEC
-%token <sn> BOOL CHAR WCHAR_T SHORT LONG INT FLOAT DOUBLE SIGNED UNSIGNED
+%token <sn> BOOL CHAR WCHAR_T SHORT LONG INT FLOAT DOUBLE SIGNED UNSIGNED STRING_T
 %token <sn> NAMESPACE ENUM CLASS STRUCT STATIC VIRTUAL VOID CONST OPERATOR TYPEDEF PRIMITIVE
 %token <sn> ABSTRACT GET SET NOMETA NOCODE EXPORT OVERRIDE SCOPE IDENTIFY STRING TEMPLATE DELEGATE
 %type <sn> enumerator enumeratorList enum_0 enum 
@@ -27,7 +27,8 @@
 
 %%
 
-primitive				: BOOL												{$$ = newPrimitiveType($1, pt_bool);}
+primitive				: VOID												{$$ = newPrimitiveType($1, pt_void);}
+						| BOOL												{$$ = newPrimitiveType($1, pt_bool);}
 						| CHAR												{$$ = newPrimitiveType($1, pt_char);}
 						| SIGNED CHAR										{$$ = newPrimitiveType($1, pt_schar);}
 						| UNSIGNED CHAR										{$$ = newPrimitiveType($1, pt_uchar);}
@@ -58,7 +59,7 @@ primitive				: BOOL												{$$ = newPrimitiveType($1, pt_bool);}
 						| FLOAT												{$$ = newPrimitiveType($1, pt_float);}
 						| DOUBLE											{$$ = newPrimitiveType($1, pt_double);}
 						| LONG DOUBLE										{$$ = newPrimitiveType($1, pt_long_double);}
-						| VOID												{$$ = newPrimitiveType($1, pt_void);}
+						| STRING_T											{$$ = newPrimitiveType($1, pt_string_t);}
 ;
 
 attribute				: IDENTIFY '=' STRING								{$$ = newAttribute($1, $3);}
