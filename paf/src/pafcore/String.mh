@@ -27,6 +27,7 @@ namespace idlcpp
 		static ::pafcore::ErrorCode String_c_str(::pafcore::Variant* result, ::pafcore::Variant** args, int numArgs);
 		static ::pafcore::ErrorCode String_compare(::pafcore::Variant* result, ::pafcore::Variant** args, int numArgs);
 		static ::pafcore::ErrorCode String_empty(::pafcore::Variant* result, ::pafcore::Variant** args, int numArgs);
+		static ::pafcore::ErrorCode String_length(::pafcore::Variant* result, ::pafcore::Variant** args, int numArgs);
 		static ::pafcore::ErrorCode String_toString(::pafcore::Variant* result, ::pafcore::Variant** args, int numArgs);
 	public:
 		static ::pafcore::ErrorCode String_New(::pafcore::Variant* result, ::pafcore::Variant** args, int numArgs);

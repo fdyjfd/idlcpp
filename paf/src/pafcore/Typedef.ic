@@ -7,3 +7,8 @@
 #include "Typedef.mh"
 #include "RefCountImpl.h"
 
+namespace pafcore
+{
+
+}
+

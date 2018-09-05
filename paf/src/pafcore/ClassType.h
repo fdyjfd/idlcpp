@@ -7,14 +7,13 @@
 namespace pafcore{ class ClassType; }
 namespace pafcore{ class Metadata; }
 namespace pafcore{ class InstanceProperty; }
-namespace pafcore{ class InstanceArrayProperty; }
+namespace pafcore{ class InstanceField; }
 
 namespace pafcore
 {
 
 	class InstanceField;
 	class InstanceProperty;
-	class InstanceArrayProperty;
 	class InstanceMethod;
 	class StaticField;
 	class StaticProperty;
@@ -64,11 +63,10 @@ namespace pafcore
 		size_t _getBaseClassCount_();
 		Metadata* _getBaseClass_(size_t index);
 		ClassTypeIterator* _getFirstDerivedClass_();
-
 		size_t _getInstancePropertyCount_(bool includeBaseClasses);
 		InstanceProperty* _getInstanceProperty_(size_t index,bool includeBaseClasses);
-		size_t _getInstanceArrayPropertyCount_(bool includeBaseClasses);
-		InstanceArrayProperty* _getInstanceArrayProperty_(size_t index,bool includeBaseClasses);
+		size_t _getInstanceFieldCount_(bool includeBaseClasses);
+		InstanceField* _getInstanceField_(size_t index,bool includeBaseClasses);
 
 	public:
 		struct BaseClass
@@ -90,12 +88,9 @@ namespace pafcore
 		bool getClassOffset(size_t& offset, ClassType* otherType);
 		Type* findNestedType(const char* name, bool includeBaseClasses, bool typeAliasToType);
 		TypeAlias* findNestedTypeAlias(const char* name, bool includeBaseClasses);
-		InstanceField* findInstanceField(const char* name, bool includeBaseClasses);
 		StaticField* findStaticField(const char* name, bool includeBaseClasses);
 		InstanceProperty* findInstanceProperty(const char* name, bool includeBaseClasses);
-		InstanceArrayProperty* findInstanceArrayProperty(const char* name, bool includeBaseClasses);
 		StaticProperty* findStaticProperty(const char* name, bool includeBaseClasses);
-		StaticArrayProperty* findStaticArrayProperty(const char* name, bool includeBaseClasses);
 		InstanceMethod* findInstanceMethod(const char* name, bool includeBaseClasses);
 		StaticMethod* findStaticMethod(const char* name, bool includeBaseClasses);
 
@@ -114,16 +109,12 @@ namespace pafcore
 		size_t m_instanceFieldCount;
 		InstanceProperty* m_instanceProperties;
 		size_t m_instancePropertyCount;
-		InstanceArrayProperty* m_instanceArrayProperties;
-		size_t m_instanceArrayPropertyCount;
 		InstanceMethod* m_instanceMethods;
 		size_t m_instanceMethodCount;
 		StaticField* m_staticFields;
 		size_t m_staticFieldCount;
 		StaticProperty* m_staticProperties;
 		size_t m_staticPropertyCount;
-		StaticArrayProperty* m_staticArrayProperties;
-		size_t m_staticArrayPropertyCount;
 		StaticMethod* m_staticMethods;
 		size_t m_staticMethodCount;
 

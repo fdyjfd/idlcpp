@@ -42,9 +42,9 @@ typedef int						ptrdiff_t;
 class string_t
 {
 public:
-	string_t() : m_str(0)
+	string_t() : m_str("")
 	{}
-	string_t(const char* str) : m_str((char*)str)
+	string_t(const char* str) : m_str(str ? str : "")
 	{}
 public:
 	const char* c_str() const
@@ -55,8 +55,16 @@ public:
 	{
 		return m_str;
 	}
-public:
-	char* m_str;
+	bool empty() const
+	{
+		return (0 == *m_str);
+	}
+	void assign(const char* str)
+	{
+		m_str = str ? str : "";
+	}
+protected:
+	const char* m_str;
 };
 
 template<typename T>
@@ -91,3 +99,20 @@ struct RuntimeTypeOf
 
 
 
+
+namespace pafcore
+{
+	struct Buffer
+	{
+	public:
+
+
+		void* pointer;
+		size_t size;
+		Buffer()
+		{}
+		Buffer(void*p, size_t s) : pointer(p), size(s)
+		{}
+
+	};
+}

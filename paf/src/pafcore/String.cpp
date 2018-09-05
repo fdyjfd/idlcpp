@@ -53,6 +53,11 @@ String::~String()
 	}
 }
 
+size_t String::length() const
+{
+	return strlen(m_str);
+}
+
 void String::assign(string_t str)
 {
 	if (s_emptyString != m_str)

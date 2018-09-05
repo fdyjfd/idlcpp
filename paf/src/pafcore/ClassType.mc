@@ -7,7 +7,7 @@
 #include "./Typedef.mh"
 #include "./Metadata.mh"
 #include "./InstanceProperty.mh"
-#include "./InstanceArrayProperty.mh"
+#include "./InstanceField.mh"
 #include "ClassType.mh"
 #include "AutoRun.h"
 #include "NameSpace.h"
@@ -16,9 +16,7 @@
 #include "InstanceField.h"
 #include "StaticField.h"
 #include "InstanceProperty.h"
-#include "InstanceArrayProperty.h"
 #include "StaticProperty.h"
-#include "StaticArrayProperty.h"
 #include "InstanceMethod.h"
 #include "StaticMethod.h"
 #include "Enumerator.h"
@@ -150,7 +148,7 @@ namespace idlcpp
 			::pafcore::Result(RuntimeTypeOf<::pafcore::Metadata>::RuntimeType::GetSingleton(), false, ::pafcore::Result::by_ptr),
 			::pafcore::Result(RuntimeTypeOf<::pafcore::ClassTypeIterator>::RuntimeType::GetSingleton(), false, ::pafcore::Result::by_ptr),
 			::pafcore::Result(RuntimeTypeOf<::size_t>::RuntimeType::GetSingleton(), false, ::pafcore::Result::by_value),
-			::pafcore::Result(RuntimeTypeOf<::pafcore::InstanceArrayProperty>::RuntimeType::GetSingleton(), false, ::pafcore::Result::by_ptr),
+			::pafcore::Result(RuntimeTypeOf<::pafcore::InstanceField>::RuntimeType::GetSingleton(), false, ::pafcore::Result::by_ptr),
 			::pafcore::Result(RuntimeTypeOf<::size_t>::RuntimeType::GetSingleton(), false, ::pafcore::Result::by_value),
 			::pafcore::Result(RuntimeTypeOf<::pafcore::InstanceProperty>::RuntimeType::GetSingleton(), false, ::pafcore::Result::by_ptr),
 			::pafcore::Result(RuntimeTypeOf<::size_t>::RuntimeType::GetSingleton(), false, ::pafcore::Result::by_value),
@@ -190,8 +188,8 @@ namespace idlcpp
 			::pafcore::InstanceMethod("_getBaseClassCount_", 0, ClassType__getBaseClassCount_, &s_instanceOverloads[1], 1),
 			::pafcore::InstanceMethod("_getBaseClass_", 0, ClassType__getBaseClass_, &s_instanceOverloads[2], 1),
 			::pafcore::InstanceMethod("_getFirstDerivedClass_", 0, ClassType__getFirstDerivedClass_, &s_instanceOverloads[3], 1),
-			::pafcore::InstanceMethod("_getInstanceArrayPropertyCount_", 0, ClassType__getInstanceArrayPropertyCount_, &s_instanceOverloads[4], 1),
-			::pafcore::InstanceMethod("_getInstanceArrayProperty_", 0, ClassType__getInstanceArrayProperty_, &s_instanceOverloads[5], 1),
+			::pafcore::InstanceMethod("_getInstanceFieldCount_", 0, ClassType__getInstanceFieldCount_, &s_instanceOverloads[4], 1),
+			::pafcore::InstanceMethod("_getInstanceField_", 0, ClassType__getInstanceField_, &s_instanceOverloads[5], 1),
 			::pafcore::InstanceMethod("_getInstancePropertyCount_", 0, ClassType__getInstancePropertyCount_, &s_instanceOverloads[6], 1),
 			::pafcore::InstanceMethod("_getInstanceProperty_", 0, ClassType__getInstanceProperty_, &s_instanceOverloads[7], 1),
 			::pafcore::InstanceMethod("_getMemberCount_", 0, ClassType__getMemberCount_, &s_instanceOverloads[8], 1),
@@ -331,7 +329,7 @@ namespace idlcpp
 		return ::pafcore::e_invalid_arg_num;
 	}
 
-	::pafcore::ErrorCode __pafcore__ClassType_Type::ClassType__getInstanceArrayPropertyCount_(::pafcore::Variant* result, ::pafcore::Variant** args, int_t numArgs)
+	::pafcore::ErrorCode __pafcore__ClassType_Type::ClassType__getInstanceFieldCount_(::pafcore::Variant* result, ::pafcore::Variant** args, int_t numArgs)
 	{
 		if(2 <= numArgs)
 		{
@@ -349,14 +347,14 @@ namespace idlcpp
 			{
 				return ::pafcore::e_invalid_arg_type_1;
 			}
-			::size_t res = self->_getInstanceArrayPropertyCount_(a0);
+			::size_t res = self->_getInstanceFieldCount_(a0);
 			result->assignPrimitive(RuntimeTypeOf<::size_t>::RuntimeType::GetSingleton(), &res);
 			return ::pafcore::s_ok;
 		}
 		return ::pafcore::e_invalid_arg_num;
 	}
 
-	::pafcore::ErrorCode __pafcore__ClassType_Type::ClassType__getInstanceArrayProperty_(::pafcore::Variant* result, ::pafcore::Variant** args, int_t numArgs)
+	::pafcore::ErrorCode __pafcore__ClassType_Type::ClassType__getInstanceField_(::pafcore::Variant* result, ::pafcore::Variant** args, int_t numArgs)
 	{
 		if(3 <= numArgs)
 		{
@@ -379,8 +377,8 @@ namespace idlcpp
 			{
 				return ::pafcore::e_invalid_arg_type_2;
 			}
-			::pafcore::InstanceArrayProperty* res = self->_getInstanceArrayProperty_(a0, a1);
-			result->assignReferencePtr(RuntimeTypeOf<::pafcore::InstanceArrayProperty>::RuntimeType::GetSingleton(), res, false, ::pafcore::Variant::by_ptr);
+			::pafcore::InstanceField* res = self->_getInstanceField_(a0, a1);
+			result->assignReferencePtr(RuntimeTypeOf<::pafcore::InstanceField>::RuntimeType::GetSingleton(), res, false, ::pafcore::Variant::by_ptr);
 			return ::pafcore::s_ok;
 		}
 		return ::pafcore::e_invalid_arg_num;

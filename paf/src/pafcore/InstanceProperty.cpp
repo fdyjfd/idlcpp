@@ -7,8 +7,8 @@ BEGIN_PAFCORE
 
 InstanceProperty::InstanceProperty(const char* name, Attributes* attributes, ClassType* objectType,
 	InstancePropertyGetter getter, Type* getterType, Passing getterPassing, bool getterConstant,
-	InstancePropertySetter setter, Type* setterType, Passing setterPassing, bool setterConstant)
-: Metadata(name, attributes)
+	InstancePropertySetter setter, Type* setterType, Passing setterPassing, bool setterConstant) : 
+	Metadata(name, attributes)
 {
 	m_objectType = objectType;
 	m_getter = getter;
@@ -19,11 +19,37 @@ InstanceProperty::InstanceProperty(const char* name, Attributes* attributes, Cla
 	m_setterPassing = setterPassing;
 	m_getterConstant = getterConstant;
 	m_setterConstant = setterConstant;
+	m_array = false;
+}
+
+InstanceProperty::InstanceProperty(const char* name, Attributes* attributes, ClassType* objectType,
+	ArrayInstancePropertyGetter getter, Type* getterType, Passing getterPassing, bool getterConstant,
+	ArrayInstancePropertySetter setter, Type* setterType, Passing setterPassing, bool setterConstant,
+	ArrayInstancePropertySizer sizer, ArrayInstancePropertyResizer resizer) : 
+	Metadata(name, attributes)
+{
+	m_objectType = objectType;
+	m_arrayGetter = getter;
+	m_arraySetter = setter;
+	m_getterType = getterType;
+	m_setterType = setterType;
+	m_getterPassing = getterPassing;
+	m_setterPassing = setterPassing;
+	m_getterConstant = getterConstant;
+	m_setterConstant = setterConstant;
+	m_sizer = sizer;
+	m_resizer = resizer;
+	m_array = true;
 }
 
 ClassType* InstanceProperty::get_objectType()
 {
 	return m_objectType;
+}
+
+bool InstanceProperty::get_isArray() const
+{
+	return m_array;
 }
 
 bool InstanceProperty::get_hasGetter() const
@@ -34,6 +60,16 @@ bool InstanceProperty::get_hasGetter() const
 bool InstanceProperty::get_hasSetter() const
 {
 	return (0 != m_setter);
+}
+
+bool InstanceProperty::get_hasSizer() const
+{
+	return (0 != m_sizer);
+}
+
+bool InstanceProperty::get_hasResizer() const
+{
+	return (0 != m_resizer);
 }
 
 Type* InstanceProperty::get_getterType()

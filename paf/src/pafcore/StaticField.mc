@@ -14,9 +14,7 @@
 #include "InstanceField.h"
 #include "StaticField.h"
 #include "InstanceProperty.h"
-#include "InstanceArrayProperty.h"
 #include "StaticProperty.h"
-#include "StaticArrayProperty.h"
 #include "InstanceMethod.h"
 #include "StaticMethod.h"
 #include "Enumerator.h"
@@ -46,21 +44,21 @@ namespace idlcpp
 		m_classTypeIterators = s_classTypeIterators;
 		static ::pafcore::InstanceProperty s_instanceProperties[] = 
 		{
-			::pafcore::InstanceProperty("address", 0, GetSingleton(), StaticField_get_address, RuntimeTypeOf<::size_t>::RuntimeType::GetSingleton(), ::pafcore::Metadata::by_value, false, 0, 0, ::pafcore::Metadata::by_value, false),
-			::pafcore::InstanceProperty("isArray", 0, GetSingleton(), StaticField_get_isArray, RuntimeTypeOf<bool>::RuntimeType::GetSingleton(), ::pafcore::Metadata::by_value, false, 0, 0, ::pafcore::Metadata::by_value, false),
-			::pafcore::InstanceProperty("isConstant", 0, GetSingleton(), StaticField_get_isConstant, RuntimeTypeOf<bool>::RuntimeType::GetSingleton(), ::pafcore::Metadata::by_value, false, 0, 0, ::pafcore::Metadata::by_value, false),
-			::pafcore::InstanceProperty("isPointer", 0, GetSingleton(), StaticField_get_isPointer, RuntimeTypeOf<bool>::RuntimeType::GetSingleton(), ::pafcore::Metadata::by_value, false, 0, 0, ::pafcore::Metadata::by_value, false),
 			::pafcore::InstanceProperty("type", 0, GetSingleton(), StaticField_get_type, RuntimeTypeOf<::pafcore::Type>::RuntimeType::GetSingleton(), ::pafcore::Metadata::by_ptr, false, 0, 0, ::pafcore::Metadata::by_value, false),
+			::pafcore::InstanceProperty("address", 0, GetSingleton(), StaticField_get_address, RuntimeTypeOf<::size_t>::RuntimeType::GetSingleton(), ::pafcore::Metadata::by_value, false, 0, 0, ::pafcore::Metadata::by_value, false),
+			::pafcore::InstanceProperty("isConstant", 0, GetSingleton(), StaticField_get_isConstant, RuntimeTypeOf<bool>::RuntimeType::GetSingleton(), ::pafcore::Metadata::by_value, false, 0, 0, ::pafcore::Metadata::by_value, false),
+			::pafcore::InstanceProperty("isArray", 0, GetSingleton(), StaticField_get_isArray, RuntimeTypeOf<bool>::RuntimeType::GetSingleton(), ::pafcore::Metadata::by_value, false, 0, 0, ::pafcore::Metadata::by_value, false),
+			::pafcore::InstanceProperty("isPointer", 0, GetSingleton(), StaticField_get_isPointer, RuntimeTypeOf<bool>::RuntimeType::GetSingleton(), ::pafcore::Metadata::by_value, false, 0, 0, ::pafcore::Metadata::by_value, false),
 		};
 		m_instanceProperties = s_instanceProperties;
 		m_instancePropertyCount = paf_array_size_of(s_instanceProperties);
 		static Metadata* s_members[] = 
 		{
-			&s_instanceProperties[0],
 			&s_instanceProperties[1],
-			&s_instanceProperties[2],
 			&s_instanceProperties[3],
+			&s_instanceProperties[2],
 			&s_instanceProperties[4],
+			&s_instanceProperties[0],
 		};
 		m_members = s_members;
 		m_memberCount = paf_array_size_of(s_members);
@@ -82,7 +80,7 @@ namespace idlcpp
 		*(::pafcore::StaticField*)dst = *(const ::pafcore::StaticField*)src;
 	}
 
-	::pafcore::ErrorCode __pafcore__StaticField_Type::StaticField_get_address(::pafcore::Variant* that, ::pafcore::Variant* value)
+	::pafcore::ErrorCode __pafcore__StaticField_Type::StaticField_get_address(::pafcore::InstanceProperty* instanceProperty, ::pafcore::Variant* that, ::pafcore::Variant* value)
 	{
 		::pafcore::StaticField* self;
 		if(!that->castToReferencePtr(GetSingleton(), (void**)&self))
@@ -94,7 +92,7 @@ namespace idlcpp
 		return ::pafcore::s_ok;
 	}
 
-	::pafcore::ErrorCode __pafcore__StaticField_Type::StaticField_get_isArray(::pafcore::Variant* that, ::pafcore::Variant* value)
+	::pafcore::ErrorCode __pafcore__StaticField_Type::StaticField_get_isArray(::pafcore::InstanceProperty* instanceProperty, ::pafcore::Variant* that, ::pafcore::Variant* value)
 	{
 		::pafcore::StaticField* self;
 		if(!that->castToReferencePtr(GetSingleton(), (void**)&self))
@@ -106,7 +104,7 @@ namespace idlcpp
 		return ::pafcore::s_ok;
 	}
 
-	::pafcore::ErrorCode __pafcore__StaticField_Type::StaticField_get_isConstant(::pafcore::Variant* that, ::pafcore::Variant* value)
+	::pafcore::ErrorCode __pafcore__StaticField_Type::StaticField_get_isConstant(::pafcore::InstanceProperty* instanceProperty, ::pafcore::Variant* that, ::pafcore::Variant* value)
 	{
 		::pafcore::StaticField* self;
 		if(!that->castToReferencePtr(GetSingleton(), (void**)&self))
@@ -118,7 +116,7 @@ namespace idlcpp
 		return ::pafcore::s_ok;
 	}
 
-	::pafcore::ErrorCode __pafcore__StaticField_Type::StaticField_get_isPointer(::pafcore::Variant* that, ::pafcore::Variant* value)
+	::pafcore::ErrorCode __pafcore__StaticField_Type::StaticField_get_isPointer(::pafcore::InstanceProperty* instanceProperty, ::pafcore::Variant* that, ::pafcore::Variant* value)
 	{
 		::pafcore::StaticField* self;
 		if(!that->castToReferencePtr(GetSingleton(), (void**)&self))
@@ -130,7 +128,7 @@ namespace idlcpp
 		return ::pafcore::s_ok;
 	}
 
-	::pafcore::ErrorCode __pafcore__StaticField_Type::StaticField_get_type(::pafcore::Variant* that, ::pafcore::Variant* value)
+	::pafcore::ErrorCode __pafcore__StaticField_Type::StaticField_get_type(::pafcore::InstanceProperty* instanceProperty, ::pafcore::Variant* that, ::pafcore::Variant* value)
 	{
 		::pafcore::StaticField* self;
 		if(!that->castToReferencePtr(GetSingleton(), (void**)&self))

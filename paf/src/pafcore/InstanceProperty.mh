@@ -22,19 +22,22 @@ namespace idlcpp
 		virtual void destroyArray(void* address);
 		virtual void assign(void* dst, const void* src);
 	public:
-		static ::pafcore::ErrorCode InstanceProperty_get_getterByPtr(::pafcore::Variant* that, ::pafcore::Variant* value);
-		static ::pafcore::ErrorCode InstanceProperty_get_getterByRef(::pafcore::Variant* that, ::pafcore::Variant* value);
-		static ::pafcore::ErrorCode InstanceProperty_get_getterByValue(::pafcore::Variant* that, ::pafcore::Variant* value);
-		static ::pafcore::ErrorCode InstanceProperty_get_getterConstant(::pafcore::Variant* that, ::pafcore::Variant* value);
-		static ::pafcore::ErrorCode InstanceProperty_get_getterType(::pafcore::Variant* that, ::pafcore::Variant* value);
-		static ::pafcore::ErrorCode InstanceProperty_get_hasGetter(::pafcore::Variant* that, ::pafcore::Variant* value);
-		static ::pafcore::ErrorCode InstanceProperty_get_hasSetter(::pafcore::Variant* that, ::pafcore::Variant* value);
-		static ::pafcore::ErrorCode InstanceProperty_get_objectType(::pafcore::Variant* that, ::pafcore::Variant* value);
-		static ::pafcore::ErrorCode InstanceProperty_get_setterByPtr(::pafcore::Variant* that, ::pafcore::Variant* value);
-		static ::pafcore::ErrorCode InstanceProperty_get_setterByRef(::pafcore::Variant* that, ::pafcore::Variant* value);
-		static ::pafcore::ErrorCode InstanceProperty_get_setterByValue(::pafcore::Variant* that, ::pafcore::Variant* value);
-		static ::pafcore::ErrorCode InstanceProperty_get_setterConstant(::pafcore::Variant* that, ::pafcore::Variant* value);
-		static ::pafcore::ErrorCode InstanceProperty_get_setterType(::pafcore::Variant* that, ::pafcore::Variant* value);
+		static ::pafcore::ErrorCode InstanceProperty_get_getterByPtr(::pafcore::InstanceProperty* instanceProperty, ::pafcore::Variant* that, ::pafcore::Variant* value);
+		static ::pafcore::ErrorCode InstanceProperty_get_getterByRef(::pafcore::InstanceProperty* instanceProperty, ::pafcore::Variant* that, ::pafcore::Variant* value);
+		static ::pafcore::ErrorCode InstanceProperty_get_getterByValue(::pafcore::InstanceProperty* instanceProperty, ::pafcore::Variant* that, ::pafcore::Variant* value);
+		static ::pafcore::ErrorCode InstanceProperty_get_getterConstant(::pafcore::InstanceProperty* instanceProperty, ::pafcore::Variant* that, ::pafcore::Variant* value);
+		static ::pafcore::ErrorCode InstanceProperty_get_getterType(::pafcore::InstanceProperty* instanceProperty, ::pafcore::Variant* that, ::pafcore::Variant* value);
+		static ::pafcore::ErrorCode InstanceProperty_get_hasGetter(::pafcore::InstanceProperty* instanceProperty, ::pafcore::Variant* that, ::pafcore::Variant* value);
+		static ::pafcore::ErrorCode InstanceProperty_get_hasResizer(::pafcore::InstanceProperty* instanceProperty, ::pafcore::Variant* that, ::pafcore::Variant* value);
+		static ::pafcore::ErrorCode InstanceProperty_get_hasSetter(::pafcore::InstanceProperty* instanceProperty, ::pafcore::Variant* that, ::pafcore::Variant* value);
+		static ::pafcore::ErrorCode InstanceProperty_get_hasSizer(::pafcore::InstanceProperty* instanceProperty, ::pafcore::Variant* that, ::pafcore::Variant* value);
+		static ::pafcore::ErrorCode InstanceProperty_get_isArray(::pafcore::InstanceProperty* instanceProperty, ::pafcore::Variant* that, ::pafcore::Variant* value);
+		static ::pafcore::ErrorCode InstanceProperty_get_objectType(::pafcore::InstanceProperty* instanceProperty, ::pafcore::Variant* that, ::pafcore::Variant* value);
+		static ::pafcore::ErrorCode InstanceProperty_get_setterByPtr(::pafcore::InstanceProperty* instanceProperty, ::pafcore::Variant* that, ::pafcore::Variant* value);
+		static ::pafcore::ErrorCode InstanceProperty_get_setterByRef(::pafcore::InstanceProperty* instanceProperty, ::pafcore::Variant* that, ::pafcore::Variant* value);
+		static ::pafcore::ErrorCode InstanceProperty_get_setterByValue(::pafcore::InstanceProperty* instanceProperty, ::pafcore::Variant* that, ::pafcore::Variant* value);
+		static ::pafcore::ErrorCode InstanceProperty_get_setterConstant(::pafcore::InstanceProperty* instanceProperty, ::pafcore::Variant* that, ::pafcore::Variant* value);
+		static ::pafcore::ErrorCode InstanceProperty_get_setterType(::pafcore::InstanceProperty* instanceProperty, ::pafcore::Variant* that, ::pafcore::Variant* value);
 	public:
 		PAFCORE_EXPORT static __pafcore__InstanceProperty_Type* GetSingleton();
 	};

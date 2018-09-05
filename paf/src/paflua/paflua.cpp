@@ -6,6 +6,7 @@
 #include "../pafcore/NameSpace.h"
 #include "../pafcore/NameSpace.mh"
 #include <new.h>
+#include <Windows.h>
 
 void init_paf(lua_State *L)
 {
@@ -50,4 +51,17 @@ int luaopen_paflua(lua_State *L)
 	init_paf(L);
 	init_paf2(L);
 	return 1;
+}
+
+BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID lpReserved)
+{
+	if (DLL_PROCESS_ATTACH == dwReason)
+	{
+		OutputDebugStringA("paflua Process Attach\n");
+	}
+	else if (DLL_PROCESS_DETACH == dwReason)
+	{
+		OutputDebugStringA("paflua Process Detach\n");
+	}
+	return TRUE;
 }

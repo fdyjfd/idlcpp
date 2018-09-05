@@ -22,7 +22,7 @@ namespace pafcore
 		Enumerator* findEnumerator(const char* name);
 		Metadata* findMember(const char* name);
 	public:
-		static pafcore::ErrorCode Enum_get__name_(pafcore::Variant* that, pafcore::Variant* value);
+		static pafcore::ErrorCode Enum_get__name_(pafcore::InstanceProperty* instanceProperty, pafcore::Variant* that, pafcore::Variant* value);
 	public:
 		Enumerator* m_enumerators;
 		size_t m_enumeratorCount;

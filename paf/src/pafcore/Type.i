@@ -19,6 +19,7 @@ namespace pafcore
 		bool isEnum() const;
 		bool isValue() const;
 		bool isReference() const;
+		bool isClass() const;
 	public:
 		Category m_category;
 		size_t m_size;
@@ -48,7 +49,10 @@ namespace pafcore
 	{
 		return reference_object <= m_category;
 	}
-
+	inline bool Type::isClass() const
+	{
+		return value_object <= m_category;
+	}
 #}
 
 }

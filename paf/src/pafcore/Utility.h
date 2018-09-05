@@ -2,6 +2,7 @@
 
 #pragma warning(disable:4251)
 #pragma warning(error:4150)
+#pragma warning(error:4715)
 
 #include "Typedef.h"
 
@@ -230,6 +231,18 @@ inline void CoSafeReleaseSetNull(T*& p)
 	{
 		p->Release();
 		p = 0;
+	}
+}
+
+template<typename T>
+inline void CoSafeReleaseArray(T* const* p, size_t count)
+{
+	for (size_t i = 0; i < count; ++i)
+	{
+		if (0 != p[i])
+		{
+			p[i]->Release();
+		}
 	}
 }
 

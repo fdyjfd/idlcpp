@@ -4,11 +4,15 @@
 #pragma once
 
 
+
 #include "RefCount.h"
+
 
 namespace pafcore
 {
+
 	class ClassType;
+	class InstanceProperty;
 
 	class PAFCORE_EXPORT Reference : public RefCount
 	{
@@ -18,7 +22,12 @@ namespace pafcore
 		virtual size_t getAddress();
 
 
-	//public:
+#ifdef _DEBUG
+	public:
+		Reference();
+		Reference(const Reference&);
+		~Reference();
+#endif
 	//	Reference() = default;
 	//	Reference(const Reference&) = delete;
 	//	Reference& operator=(const Reference&) = delete;
@@ -54,6 +63,17 @@ namespace pafcore
 		{
 			delete this;
 		}
+
+		virtual uint32_t dynamicInstancePropertyCount()
+		{
+			return 0;
+		}
+
+		virtual InstanceProperty* dynamicInstanceProperty(uint32_t index)
+		{
+			return 0;
+		}
+
 
 	};
 }

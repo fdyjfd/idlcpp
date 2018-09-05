@@ -13,9 +13,7 @@
 #include "InstanceField.h"
 #include "StaticField.h"
 #include "InstanceProperty.h"
-#include "InstanceArrayProperty.h"
 #include "StaticProperty.h"
-#include "StaticArrayProperty.h"
 #include "InstanceMethod.h"
 #include "StaticMethod.h"
 #include "Enumerator.h"
@@ -75,7 +73,7 @@ namespace idlcpp
 		*(::pafcore::Enumerator*)dst = *(const ::pafcore::Enumerator*)src;
 	}
 
-	::pafcore::ErrorCode __pafcore__Enumerator_Type::Enumerator_get__type_(::pafcore::Variant* that, ::pafcore::Variant* value)
+	::pafcore::ErrorCode __pafcore__Enumerator_Type::Enumerator_get__type_(::pafcore::InstanceProperty* instanceProperty, ::pafcore::Variant* that, ::pafcore::Variant* value)
 	{
 		::pafcore::Enumerator* self;
 		if(!that->castToReferencePtr(GetSingleton(), (void**)&self))
@@ -87,7 +85,7 @@ namespace idlcpp
 		return ::pafcore::s_ok;
 	}
 
-	::pafcore::ErrorCode __pafcore__Enumerator_Type::Enumerator_get__value_(::pafcore::Variant* that, ::pafcore::Variant* value)
+	::pafcore::ErrorCode __pafcore__Enumerator_Type::Enumerator_get__value_(::pafcore::InstanceProperty* instanceProperty, ::pafcore::Variant* that, ::pafcore::Variant* value)
 	{
 		::pafcore::Enumerator* self;
 		if(!that->castToReferencePtr(GetSingleton(), (void**)&self))

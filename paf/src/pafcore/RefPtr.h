@@ -19,6 +19,11 @@ public:
 			m_ptr->addRef();
 		}
 	}
+	RefPtr(RefPtr&& arg)
+		: m_ptr(arg.m_ptr)
+	{
+		arg.m_ptr = 0;
+	}
 
 	~RefPtr()
 	{

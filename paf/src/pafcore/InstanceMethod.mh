@@ -22,7 +22,7 @@ namespace idlcpp
 		virtual void destroyArray(void* address);
 		virtual void assign(void* dst, const void* src);
 	public:
-		static ::pafcore::ErrorCode InstanceMethod_get_overloadCount(::pafcore::Variant* that, ::pafcore::Variant* value);
+		static ::pafcore::ErrorCode InstanceMethod_get_overloadCount(::pafcore::InstanceProperty* instanceProperty, ::pafcore::Variant* that, ::pafcore::Variant* value);
 	public:
 		static ::pafcore::ErrorCode InstanceMethod_getArgument(::pafcore::Variant* result, ::pafcore::Variant** args, int numArgs);
 		static ::pafcore::ErrorCode InstanceMethod_getArgumentCount(::pafcore::Variant* result, ::pafcore::Variant** args, int numArgs);

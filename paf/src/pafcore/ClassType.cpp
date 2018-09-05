@@ -5,11 +5,9 @@
 #include "Variant.h"
 #include "InstanceField.h"
 #include "InstanceProperty.h"
-#include "InstanceArrayProperty.h"
 #include "InstanceMethod.h"
 #include "StaticField.h"
 #include "StaticProperty.h"
-#include "StaticArrayProperty.h"
 #include "StaticMethod.h"
 #include <algorithm>
 
@@ -30,16 +28,12 @@ ClassType::ClassType(const char* name, Category category)
 	m_instanceFieldCount = 0;
 	m_instanceProperties = 0;
 	m_instancePropertyCount = 0;
-	m_instanceArrayProperties = 0;
-	m_instanceArrayPropertyCount = 0;
 	m_instanceMethods = 0;
 	m_instanceMethodCount = 0;
 	m_staticFields = 0;
 	m_staticFieldCount = 0;
 	m_staticProperties = 0;
 	m_staticPropertyCount = 0;
-	m_staticArrayProperties = 0;
-	m_staticArrayPropertyCount = 0;
 	m_staticMethods = 0;
 	m_staticMethodCount = 0;
 	m_classTypeIterators = 0;
@@ -98,28 +92,6 @@ TypeAlias* ClassType::findNestedTypeAlias(const char* name, bool includeBaseClas
 	return 0;
 }
 
-InstanceField* ClassType::findInstanceField(const char* name, bool includeBaseClasses)
-{
-	Metadata dummy(name);
-	InstanceField* res = std::lower_bound(m_instanceFields, m_instanceFields + m_instanceFieldCount, dummy);
-	if (m_instanceFields + m_instanceFieldCount != res && strcmp(name, res->m_name) == 0)
-	{
-		return res;
-	}
-	if(includeBaseClasses)
-	{
-		for(size_t i = 0; i < m_baseClassCount; ++i)
-		{
-			res = m_baseClasses[i].m_type->findInstanceField(name, includeBaseClasses);
-			if(0 != res)
-			{
-				return res;
-			}
-		}
-	}
-	return 0;
-}
-
 StaticField* ClassType::findStaticField(const char* name, bool includeBaseClasses)
 {
 	Metadata dummy(name);
@@ -164,28 +136,6 @@ InstanceProperty* ClassType::findInstanceProperty(const char* name, bool include
 	return 0;
 }
 
-InstanceArrayProperty* ClassType::findInstanceArrayProperty(const char* name, bool includeBaseClasses)
-{
-	Metadata dummy(name);
-	InstanceArrayProperty* res = std::lower_bound(m_instanceArrayProperties, m_instanceArrayProperties + m_instanceArrayPropertyCount, dummy);
-	if (m_instanceArrayProperties + m_instanceArrayPropertyCount != res && strcmp(name, res->m_name) == 0)
-	{
-		return res;
-	}
-	if (includeBaseClasses)
-	{
-		for (size_t i = 0; i < m_baseClassCount; ++i)
-		{
-			res = m_baseClasses[i].m_type->findInstanceArrayProperty(name, includeBaseClasses);
-			if (0 != res)
-			{
-				return res;
-			}
-		}
-	}
-	return 0;
-}
-
 StaticProperty* ClassType::findStaticProperty(const char* name, bool includeBaseClasses)
 {
 	Metadata dummy(name);
@@ -199,28 +149,6 @@ StaticProperty* ClassType::findStaticProperty(const char* name, bool includeBase
 		for (size_t i = 0; i < m_baseClassCount; ++i)
 		{
 			res = m_baseClasses[i].m_type->findStaticProperty(name, includeBaseClasses);
-			if (0 != res)
-			{
-				return res;
-			}
-		}
-	}
-	return 0;
-}
-
-StaticArrayProperty* ClassType::findStaticArrayProperty(const char* name, bool includeBaseClasses)
-{
-	Metadata dummy(name);
-	StaticArrayProperty* res = std::lower_bound(m_staticArrayProperties, m_staticArrayProperties + m_staticArrayPropertyCount, dummy);
-	if (m_staticArrayProperties + m_staticArrayPropertyCount != res && strcmp(name, res->m_name) == 0)
-	{
-		return res;
-	}
-	if (includeBaseClasses)
-	{
-		for (size_t i = 0; i < m_baseClassCount; ++i)
-		{
-			res = m_baseClasses[i].m_type->findStaticArrayProperty(name, includeBaseClasses);
 			if (0 != res)
 			{
 				return res;
@@ -334,11 +262,6 @@ Metadata* ClassType::findClassMember(const char* name, bool includeBaseClasses, 
 	if (0 != prop)
 	{
 		return prop;
-	}
-	StaticArrayProperty* arrayProp = findStaticArrayProperty(name, false);
-	if (0 != arrayProp)
-	{
-		return arrayProp;
 	}
 	StaticMethod* method = findStaticMethod(name, false);
 	if(0 != method)
@@ -514,36 +437,36 @@ InstanceProperty* ClassType::_getInstanceProperty_(size_t index, bool includeBas
 	}
 }
 
-size_t ClassType::_getInstanceArrayPropertyCount_(bool includeBaseClasses)
+size_t ClassType::_getInstanceFieldCount_(bool includeBaseClasses)
 {
-	size_t count = m_instanceArrayPropertyCount;
+	size_t count = m_instanceFieldCount;
 	if (includeBaseClasses)
 	{
 		for (size_t i = 0; i < m_baseClassCount; ++i)
 		{
-			count += m_baseClasses[i].m_type->_getInstanceArrayPropertyCount_(includeBaseClasses);
+			count += m_baseClasses[i].m_type->_getInstanceFieldCount_(includeBaseClasses);
 		}
 	}
 	return count;
 }
 
-InstanceArrayProperty* ClassType::_getInstanceArrayProperty_(size_t index, bool includeBaseClasses)
+InstanceField* ClassType::_getInstanceField_(size_t index, bool includeBaseClasses)
 {
 	if (includeBaseClasses)
 	{
-		if (index < m_instanceArrayPropertyCount)
+		if (index < m_instanceFieldCount)
 		{
-			return &m_instanceArrayProperties[index];
+			return &m_instanceFields[index];
 		}
 		else
 		{
-			index -= m_instanceArrayPropertyCount;
+			index -= m_instanceFieldCount;
 			for (size_t i = 0; i < m_baseClassCount; ++i)
 			{
-				size_t baseMemberCount = m_baseClasses[i].m_type->_getInstanceArrayPropertyCount_(includeBaseClasses);
+				size_t baseMemberCount = m_baseClasses[i].m_type->_getInstanceFieldCount_(includeBaseClasses);
 				if (index < baseMemberCount)
 				{
-					return m_baseClasses[i].m_type->_getInstanceArrayProperty_(index, includeBaseClasses);
+					return m_baseClasses[i].m_type->_getInstanceField_(index, includeBaseClasses);
 				}
 				index -= baseMemberCount;
 			}
@@ -552,9 +475,9 @@ InstanceArrayProperty* ClassType::_getInstanceArrayProperty_(size_t index, bool 
 	}
 	else
 	{
-		if (index < m_instanceArrayPropertyCount)
+		if (index < m_instanceFieldCount)
 		{
-			return &m_instanceArrayProperties[index];
+			return &m_instanceFields[index];
 		}
 		return 0;
 	}

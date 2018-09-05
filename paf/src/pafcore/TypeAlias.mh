@@ -22,7 +22,7 @@ namespace idlcpp
 		virtual void destroyArray(void* address);
 		virtual void assign(void* dst, const void* src);
 	public:
-		static ::pafcore::ErrorCode TypeAlias_get_type(::pafcore::Variant* that, ::pafcore::Variant* value);
+		static ::pafcore::ErrorCode TypeAlias_get_type(::pafcore::InstanceProperty* instanceProperty, ::pafcore::Variant* that, ::pafcore::Variant* value);
 	public:
 		PAFCORE_EXPORT static __pafcore__TypeAlias_Type* GetSingleton();
 	};

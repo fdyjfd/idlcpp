@@ -4,6 +4,7 @@
 #pragma once
 
 
+
 #include "Utility.h"
 
 
@@ -17,7 +18,8 @@ namespace pafcore
 		String(const String& arg);
 explicit		String(const char* str);
 		bool empty()const ;
-		string_t c_str()const ;
+		const char* c_str()const ;
+		size_t length()const ;
 		int compare(string_t str)const ;
 		int compare(const String& arg)const ;
 		void assign(string_t str);
@@ -51,7 +53,7 @@ explicit		String(const char* str);
 		return 0 == *m_str;
 	}
 
-	inline string_t String::c_str() const
+	inline const char* String::c_str() const
 	{
 		return m_str;
 	}

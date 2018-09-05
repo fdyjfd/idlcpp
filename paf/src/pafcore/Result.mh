@@ -22,13 +22,13 @@ namespace idlcpp
 		virtual void destroyArray(void* address);
 		virtual void assign(void* dst, const void* src);
 	public:
-		static ::pafcore::ErrorCode Result_get_byNew(::pafcore::Variant* that, ::pafcore::Variant* value);
-		static ::pafcore::ErrorCode Result_get_byNewArray(::pafcore::Variant* that, ::pafcore::Variant* value);
-		static ::pafcore::ErrorCode Result_get_byPtr(::pafcore::Variant* that, ::pafcore::Variant* value);
-		static ::pafcore::ErrorCode Result_get_byRef(::pafcore::Variant* that, ::pafcore::Variant* value);
-		static ::pafcore::ErrorCode Result_get_byValue(::pafcore::Variant* that, ::pafcore::Variant* value);
-		static ::pafcore::ErrorCode Result_get_isConstant(::pafcore::Variant* that, ::pafcore::Variant* value);
-		static ::pafcore::ErrorCode Result_get_type(::pafcore::Variant* that, ::pafcore::Variant* value);
+		static ::pafcore::ErrorCode Result_get_byNew(::pafcore::InstanceProperty* instanceProperty, ::pafcore::Variant* that, ::pafcore::Variant* value);
+		static ::pafcore::ErrorCode Result_get_byNewArray(::pafcore::InstanceProperty* instanceProperty, ::pafcore::Variant* that, ::pafcore::Variant* value);
+		static ::pafcore::ErrorCode Result_get_byPtr(::pafcore::InstanceProperty* instanceProperty, ::pafcore::Variant* that, ::pafcore::Variant* value);
+		static ::pafcore::ErrorCode Result_get_byRef(::pafcore::InstanceProperty* instanceProperty, ::pafcore::Variant* that, ::pafcore::Variant* value);
+		static ::pafcore::ErrorCode Result_get_byValue(::pafcore::InstanceProperty* instanceProperty, ::pafcore::Variant* that, ::pafcore::Variant* value);
+		static ::pafcore::ErrorCode Result_get_isConstant(::pafcore::InstanceProperty* instanceProperty, ::pafcore::Variant* that, ::pafcore::Variant* value);
+		static ::pafcore::ErrorCode Result_get_type(::pafcore::InstanceProperty* instanceProperty, ::pafcore::Variant* that, ::pafcore::Variant* value);
 	public:
 		PAFCORE_EXPORT static __pafcore__Result_Type* GetSingleton();
 	};

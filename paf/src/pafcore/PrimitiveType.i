@@ -56,7 +56,15 @@ namespace pafcore
 		StaticMethod* findStaticMethod(const char* name);
 		Metadata* findTypeMember(const char* name);
 		virtual Metadata* findMember(const char* name);
-
+	public:
+		PrimitiveTypeCategory getPrimitiveTypeCategory() const
+		{
+			return m_typeCategory;
+		}
+		bool isString() const
+		{
+			return (string_type == m_typeCategory);
+		}
 	public:
 		PrimitiveTypeCategory m_typeCategory;
 		Metadata** m_members;

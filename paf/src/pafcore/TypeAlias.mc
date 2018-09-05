@@ -13,9 +13,7 @@
 #include "InstanceField.h"
 #include "StaticField.h"
 #include "InstanceProperty.h"
-#include "InstanceArrayProperty.h"
 #include "StaticProperty.h"
-#include "StaticArrayProperty.h"
 #include "InstanceMethod.h"
 #include "StaticMethod.h"
 #include "Enumerator.h"
@@ -73,7 +71,7 @@ namespace idlcpp
 		*(::pafcore::TypeAlias*)dst = *(const ::pafcore::TypeAlias*)src;
 	}
 
-	::pafcore::ErrorCode __pafcore__TypeAlias_Type::TypeAlias_get_type(::pafcore::Variant* that, ::pafcore::Variant* value)
+	::pafcore::ErrorCode __pafcore__TypeAlias_Type::TypeAlias_get_type(::pafcore::InstanceProperty* instanceProperty, ::pafcore::Variant* that, ::pafcore::Variant* value)
 	{
 		::pafcore::TypeAlias* self;
 		if(!that->castToReferencePtr(GetSingleton(), (void**)&self))

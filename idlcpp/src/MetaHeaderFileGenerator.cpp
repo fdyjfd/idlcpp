@@ -63,13 +63,13 @@ void writeMetaMethodDecls(ClassNode* classNode, std::vector<MethodNode*> methodN
 
 const char g_metaPropertyDeclPrefix[] = "static ::pafcore::ErrorCode ";
 
-const char g_metaPropertyDeclPostfix[] = "(::pafcore::Variant* that, ::pafcore::Variant* value);\n";
-const char g_metaArrayPropertyDeclPostfix[] = "(::pafcore::Variant* that, size_t index, ::pafcore::Variant* value);\n";
+const char g_metaPropertyDeclPostfix[] = "(::pafcore::InstanceProperty* instanceProperty, ::pafcore::Variant* that, ::pafcore::Variant* value);\n";
+const char g_metaArrayPropertyDeclPostfix[] = "(::pafcore::InstanceProperty* instanceProperty, ::pafcore::Variant* that, size_t index, ::pafcore::Variant* value);\n";
 const char g_metaStaticPropertyDeclPostfix[] = "(::pafcore::Variant* value);\n";
 const char g_metaStaticArrayPropertyDeclPostfix[] = "(size_t index, ::pafcore::Variant* value);\n";
 
-const char g_metaArrayPropertyDeclSizePostfix[] = "(::pafcore::Variant* that, ::pafcore::Variant* value);\n";
-const char g_metaArrayPropertyDeclResizePostfix[] = "(::pafcore::Variant* that, ::pafcore::Variant* value);\n";
+const char g_metaArrayPropertyDeclSizePostfix[] = "(::pafcore::InstanceProperty* instanceProperty, ::pafcore::Variant* that, ::pafcore::Variant* value);\n";
+const char g_metaArrayPropertyDeclResizePostfix[] = "(::pafcore::InstanceProperty* instanceProperty, ::pafcore::Variant* that, ::pafcore::Variant* value);\n";
 const char g_metaStaticArrayPropertyDeclSizePostfix[] = "(::pafcore::Variant* value);\n";
 const char g_metaStaticArrayPropertyDeclResizePostfix[] = "(::pafcore::Variant* value);\n";
 

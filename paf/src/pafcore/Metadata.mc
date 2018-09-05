@@ -13,9 +13,7 @@
 #include "InstanceField.h"
 #include "StaticField.h"
 #include "InstanceProperty.h"
-#include "InstanceArrayProperty.h"
 #include "StaticProperty.h"
-#include "StaticArrayProperty.h"
 #include "InstanceMethod.h"
 #include "StaticMethod.h"
 #include "Enumerator.h"
@@ -39,7 +37,6 @@ namespace idlcpp
 			::pafcore::Enumerator("enumerator", 0, __pafcore__Category_Type::GetSingleton(), ::pafcore::enumerator),
 			::pafcore::Enumerator("function_argument", 0, __pafcore__Category_Type::GetSingleton(), ::pafcore::function_argument),
 			::pafcore::Enumerator("function_result", 0, __pafcore__Category_Type::GetSingleton(), ::pafcore::function_result),
-			::pafcore::Enumerator("instance_array_property", 0, __pafcore__Category_Type::GetSingleton(), ::pafcore::instance_array_property),
 			::pafcore::Enumerator("instance_field", 0, __pafcore__Category_Type::GetSingleton(), ::pafcore::instance_field),
 			::pafcore::Enumerator("instance_method", 0, __pafcore__Category_Type::GetSingleton(), ::pafcore::instance_method),
 			::pafcore::Enumerator("instance_property", 0, __pafcore__Category_Type::GetSingleton(), ::pafcore::instance_property),
@@ -47,7 +44,6 @@ namespace idlcpp
 			::pafcore::Enumerator("primitive_object", 0, __pafcore__Category_Type::GetSingleton(), ::pafcore::primitive_object),
 			::pafcore::Enumerator("primitive_type", 0, __pafcore__Category_Type::GetSingleton(), ::pafcore::primitive_type),
 			::pafcore::Enumerator("reference_object", 0, __pafcore__Category_Type::GetSingleton(), ::pafcore::reference_object),
-			::pafcore::Enumerator("static_array_property", 0, __pafcore__Category_Type::GetSingleton(), ::pafcore::static_array_property),
 			::pafcore::Enumerator("static_field", 0, __pafcore__Category_Type::GetSingleton(), ::pafcore::static_field),
 			::pafcore::Enumerator("static_method", 0, __pafcore__Category_Type::GetSingleton(), ::pafcore::static_method),
 			::pafcore::Enumerator("static_property", 0, __pafcore__Category_Type::GetSingleton(), ::pafcore::static_property),
@@ -90,9 +86,9 @@ namespace idlcpp
 		m_classTypeIterators = s_classTypeIterators;
 		static ::pafcore::InstanceProperty s_instanceProperties[] = 
 		{
-			::pafcore::InstanceProperty("_attributeCount_", 0, GetSingleton(), Metadata_get__attributeCount_, RuntimeTypeOf<::size_t>::RuntimeType::GetSingleton(), ::pafcore::Metadata::by_value, false, 0, 0, ::pafcore::Metadata::by_value, false),
-			::pafcore::InstanceProperty("_category_", 0, GetSingleton(), Metadata_get__category_, RuntimeTypeOf<::pafcore::Category>::RuntimeType::GetSingleton(), ::pafcore::Metadata::by_value, false, 0, 0, ::pafcore::Metadata::by_value, false),
 			::pafcore::InstanceProperty("_name_", 0, GetSingleton(), Metadata_get__name_, RuntimeTypeOf<string_t>::RuntimeType::GetSingleton(), ::pafcore::Metadata::by_value, false, 0, 0, ::pafcore::Metadata::by_value, false),
+			::pafcore::InstanceProperty("_category_", 0, GetSingleton(), Metadata_get__category_, RuntimeTypeOf<::pafcore::Category>::RuntimeType::GetSingleton(), ::pafcore::Metadata::by_value, false, 0, 0, ::pafcore::Metadata::by_value, false),
+			::pafcore::InstanceProperty("_attributeCount_", 0, GetSingleton(), Metadata_get__attributeCount_, RuntimeTypeOf<::size_t>::RuntimeType::GetSingleton(), ::pafcore::Metadata::by_value, false, 0, 0, ::pafcore::Metadata::by_value, false),
 		};
 		m_instanceProperties = s_instanceProperties;
 		m_instancePropertyCount = paf_array_size_of(s_instanceProperties);
@@ -124,12 +120,12 @@ namespace idlcpp
 		m_instanceMethodCount = paf_array_size_of(s_instanceMethods);
 		static Metadata* s_members[] = 
 		{
-			&s_instanceProperties[0],
+			&s_instanceProperties[2],
 			&s_instanceProperties[1],
 			&s_instanceMethods[0],
 			&s_instanceMethods[1],
 			&s_instanceMethods[2],
-			&s_instanceProperties[2],
+			&s_instanceProperties[0],
 		};
 		m_members = s_members;
 		m_memberCount = paf_array_size_of(s_members);
@@ -151,7 +147,7 @@ namespace idlcpp
 		*(::pafcore::Metadata*)dst = *(const ::pafcore::Metadata*)src;
 	}
 
-	::pafcore::ErrorCode __pafcore__Metadata_Type::Metadata_get__attributeCount_(::pafcore::Variant* that, ::pafcore::Variant* value)
+	::pafcore::ErrorCode __pafcore__Metadata_Type::Metadata_get__attributeCount_(::pafcore::InstanceProperty* instanceProperty, ::pafcore::Variant* that, ::pafcore::Variant* value)
 	{
 		::pafcore::Metadata* self;
 		if(!that->castToReferencePtr(GetSingleton(), (void**)&self))
@@ -163,7 +159,7 @@ namespace idlcpp
 		return ::pafcore::s_ok;
 	}
 
-	::pafcore::ErrorCode __pafcore__Metadata_Type::Metadata_get__category_(::pafcore::Variant* that, ::pafcore::Variant* value)
+	::pafcore::ErrorCode __pafcore__Metadata_Type::Metadata_get__category_(::pafcore::InstanceProperty* instanceProperty, ::pafcore::Variant* that, ::pafcore::Variant* value)
 	{
 		::pafcore::Metadata* self;
 		if(!that->castToReferencePtr(GetSingleton(), (void**)&self))
@@ -175,7 +171,7 @@ namespace idlcpp
 		return ::pafcore::s_ok;
 	}
 
-	::pafcore::ErrorCode __pafcore__Metadata_Type::Metadata_get__name_(::pafcore::Variant* that, ::pafcore::Variant* value)
+	::pafcore::ErrorCode __pafcore__Metadata_Type::Metadata_get__name_(::pafcore::InstanceProperty* instanceProperty, ::pafcore::Variant* that, ::pafcore::Variant* value)
 	{
 		::pafcore::Metadata* self;
 		if(!that->castToReferencePtr(GetSingleton(), (void**)&self))

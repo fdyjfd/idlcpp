@@ -221,5 +221,24 @@ namespace idlcpp
 		PAFCORE_EXPORT static __ptrdiff_t_Type* GetSingleton();
 	};
 
+	class __pafcore__Buffer_Type : public ::pafcore::ClassType
+	{
+	public:
+		__pafcore__Buffer_Type();
+	public:
+		virtual void destroyInstance(void* address);
+		virtual void destroyArray(void* address);
+		virtual void assign(void* dst, const void* src);
+	public:
+		PAFCORE_EXPORT static __pafcore__Buffer_Type* GetSingleton();
+	};
+
 }
+
+template<>
+struct RuntimeTypeOf<::pafcore::Buffer>
+{
+	typedef ::idlcpp::__pafcore__Buffer_Type RuntimeType;
+	enum {type_category = ::pafcore::value_object};
+};
 

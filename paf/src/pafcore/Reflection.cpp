@@ -208,6 +208,9 @@ String Reflection::PrimitiveToString(const Variant& value)
 		sprintf_s(buf, "%.16g", *reinterpret_cast<const long double*>(value.m_pointer));
 		res.assign(buf);
 		break;
+	case string_type:
+		res.assign(*reinterpret_cast<::string_t*>(value.m_pointer));
+		break;		
 	}
 	return res;
 }
@@ -216,102 +219,90 @@ void Reflection::StringToPrimitive(Variant& value, PrimitiveType* primitiveType,
 {
 	switch (primitiveType->m_typeCategory)
 	{
-	case bool_type:
-	{
+	case bool_type: {
 		bool val = (0 == strcmp(str, "true")) ? true : false;
 		value.assignPrimitive(primitiveType, &val);
-	}
-	break;
-	case char_type:
-	{
-		char val = atoi(str);
+		break; }
+
+	case char_type: {
+		char val = (char)strtol(str, 0, 0);
 		value.assignPrimitive(primitiveType, &val);
-	}
-	break;
-	case signed_char_type:
-	{
-		signed char val = atoi(str);
+		break; }
+
+	case signed_char_type: {
+		signed char val = (signed char)strtol(str, 0, 0);
 		value.assignPrimitive(primitiveType, &val);
-	}
-	break;
-	case unsigned_char_type:
-	{
-		unsigned char val = atoi(str);
+		break; }
+
+	case unsigned_char_type: {
+		unsigned char val = (unsigned char)strtoul(str, 0, 0);
 		value.assignPrimitive(primitiveType, &val);
-	}
-	break;
-	case wchar_type:
-	{
-		wchar_t val = atoi(str);
+		break; }
+
+	case wchar_type: {
+		wchar_t val = (wchar_t)strtoul(str, 0, 0);
 		value.assignPrimitive(primitiveType, &val);
-	}
-	break;
-	case short_type:
-	{
-		short val = atoi(str);
+		break; }
+
+	case short_type: {
+		short val = (short)strtol(str, 0, 0);
 		value.assignPrimitive(primitiveType, &val);
-	}
-	break;
-	case unsigned_short_type:
-	{
-		unsigned short val = atoi(str);
+		break; }
+
+	case unsigned_short_type: {
+		unsigned short val = (unsigned short)strtoul(str, 0, 0);
 		value.assignPrimitive(primitiveType, &val);
-	}
-	break;
-	case int_type:
-	{
-		int val = atoi(str);
+		break; }
+
+	case int_type: {
+		int val = strtol(str, 0, 0);
 		value.assignPrimitive(primitiveType, &val);
-	}
-	break;
-	case unsigned_int_type:
-	{
-		unsigned int val = atoi(str);
+		break; }
+
+	case unsigned_int_type: {
+		unsigned int val = strtoul(str, 0, 0);
 		value.assignPrimitive(primitiveType, &val);
-	}
-	break;
-	case long_type:
-	{
-		long val = atol(str);
+		break; }
+
+	case long_type: {
+		long val = strtol(str, 0, 0);
 		value.assignPrimitive(primitiveType, &val);
-	}
-	break;
-	case unsigned_long_type:
-	{
-		unsigned long val = atol(str);
+		break; }
+
+	case unsigned_long_type: {
+		unsigned long val = strtoul(str, 0, 0);
 		value.assignPrimitive(primitiveType, &val);
-	}
-	break;
-	case long_long_type:
-	{
-		long long val = _atoi64(str);
+		break; }
+
+	case long_long_type: {
+		long long val = strtoll(str, 0, 0);
 		value.assignPrimitive(primitiveType, &val);
-	}
-	break;
-	case unsigned_long_long_type:
-	{
-		unsigned long long val = _atoi64(str);
+		break; }
+
+	case unsigned_long_long_type: {
+		unsigned long long val = strtoull(str, 0, 0);
 		value.assignPrimitive(primitiveType, &val);
-	}
-	break;
-	case float_type:
-	{
+		break; }
+
+	case float_type: {
 		float val = (float)atof(str);
 		value.assignPrimitive(primitiveType, &val);
-	}
-	break;
-	case double_type:
-	{
+		break; }
+
+	case double_type: {
 		double val = atof(str);
 		value.assignPrimitive(primitiveType, &val);
-	}
-	break;
-	case long_double_type:
-	{
+		break; }
+
+	case long_double_type: {
 		long double val = atof(str);
 		value.assignPrimitive(primitiveType, &val);
-	}
-	break;
+		break; }
+
+	case string_type: {
+		::string_t s(str);
+		value.assignPrimitive(primitiveType, &s);
+		break; }
 	}
 }
 
@@ -334,7 +325,7 @@ bool Reflection::StringToEnum(Variant& value, EnumType* enumType, const char* st
 	Enumerator* enumerator = enumType->findEnumerator(str);
 	if (enumerator)
 	{
-		value.assignEnum(enumType, &enumerator->m_value);	
+		value.assignEnum(enumType, &enumerator->m_value);
 		return true;
 	}
 	return false;
@@ -377,32 +368,32 @@ bool Reflection::StringToObject(Variant& value, ClassType* classType, const char
 
 String Reflection::InstancePropertyToString(Reference* that, InstanceProperty* instanceProperty)
 {
-	pafcore::Variant varThat;
-	varThat.assignReferencePtr(that->getType(), that, false, pafcore::Variant::by_ptr);
+	Variant varThat;
+	varThat.assignReferencePtr(that->getType(), that, false, Variant::by_ptr);
 	return InstancePropertyToString(&varThat, instanceProperty);
 }
 
 String Reflection::InstancePropertyToString(Variant* that, InstanceProperty* instanceProperty)
 {
-	pafcore::Variant value;
-	pafcore::ErrorCode errorCode = (*instanceProperty->m_getter)(that, &value);
-	if (pafcore::s_ok == errorCode)
+	Variant value;
+	ErrorCode errorCode = (*instanceProperty->m_getter)(instanceProperty, that, &value);
+	if (s_ok == errorCode)
 	{
 		if (value.m_type->isPrimitive())
 		{
-			return pafcore::Reflection::PrimitiveToString(value);
+			return Reflection::PrimitiveToString(value);
 		}
 		else if (value.m_type->isEnum())
 		{
-			return pafcore::Reflection::EnumToString(value);
+			return Reflection::EnumToString(value);
 		}
 		else
 		{
 			PAF_ASSERT(value.m_type->isValue() || value.m_type->isReference());
-			return pafcore::Reflection::ObjectToString(value);
+			return Reflection::ObjectToString(value);
 		}
 	}
-	return pafcore::String();
+	return String();
 }
 
 ErrorCode Reflection::StringToInstanceProperty(Variant& that, InstanceProperty* instanceProperty, const char* str)
@@ -411,32 +402,32 @@ ErrorCode Reflection::StringToInstanceProperty(Variant& that, InstanceProperty* 
 	{
 		return e_property_is_read_only;
 	}
-	pafcore::Variant value;
+	Variant value;
 	if (instanceProperty->m_setterType->isPrimitive())
 	{
-		pafcore::Reflection::StringToPrimitive(value, static_cast<pafcore::PrimitiveType*>(instanceProperty->m_setterType), str);
+		Reflection::StringToPrimitive(value, static_cast<PrimitiveType*>(instanceProperty->m_setterType), str);
 	}
 	else if (instanceProperty->m_setterType->isEnum())
 	{
-		pafcore::Reflection::StringToEnum(value, static_cast<pafcore::EnumType*>(instanceProperty->m_setterType), str);
+		Reflection::StringToEnum(value, static_cast<EnumType*>(instanceProperty->m_setterType), str);
 	}
 	else
 	{
 		PAF_ASSERT(instanceProperty->m_setterType->isValue() || instanceProperty->m_setterType->isReference());
-		pafcore::Reflection::StringToObject(value, static_cast<pafcore::ClassType*>(instanceProperty->m_setterType), str);
+		Reflection::StringToObject(value, static_cast<ClassType*>(instanceProperty->m_setterType), str);
 	}
-	pafcore::ErrorCode errorCode = (*instanceProperty->m_setter)(&that, &value);
+	ErrorCode errorCode = (*instanceProperty->m_setter)(instanceProperty, &that, &value);
 	return errorCode;
 }
 
 ErrorCode Reflection::StringToInstanceProperty(Variant& that, const char* propertyName, const char* str)
 {
-	if (pafcore::class_type != that.m_type->get__category_())
+	if (class_type != that.m_type->get__category_())
 	{
 		return e_is_not_class;
 	}
-	pafcore::ClassType* classType = static_cast<pafcore::ClassType*>(that.m_type);
-	pafcore::InstanceProperty* instanceProperty = classType->findInstanceProperty(propertyName, true);
+	ClassType* classType = static_cast<ClassType*>(that.m_type);
+	InstanceProperty* instanceProperty = classType->findInstanceProperty(propertyName, true);
 	if (0 == instanceProperty)
 	{
 		return e_member_not_found;
@@ -444,17 +435,55 @@ ErrorCode Reflection::StringToInstanceProperty(Variant& that, const char* proper
 	return StringToInstanceProperty(that, instanceProperty, str);
 }
 
-
-ErrorCode Reflection::NewObject(Variant& result, ClassType* type)
+ErrorCode Reflection::NewPrimitive(Variant& result, PrimitiveType* type)
 {
-	pafcore::StaticMethod* staticMethod = type->findStaticMethod("New", false);
+	StaticMethod* staticMethod = type->findStaticMethod("New");
 	if (staticMethod)
 	{
-		pafcore::ErrorCode errorCode = (*staticMethod->m_invoker)(&result, 0, 0);
+		ErrorCode errorCode = (*staticMethod->m_invoker)(&result, 0, 0);
 		return errorCode;
 	}
 	return e_member_not_found;
 }
+
+ErrorCode Reflection::NewEnum(Variant& result, EnumType* type)
+{
+	size_t value = 0;
+	result.assignEnum(type, &value);
+	return s_ok;
+}
+
+ErrorCode Reflection::NewClass(Variant& result, ClassType* type)
+{
+	StaticMethod* staticMethod = type->findStaticMethod("New", false);
+	if (staticMethod)
+	{
+		ErrorCode errorCode = (*staticMethod->m_invoker)(&result, 0, 0);
+		return errorCode;
+	}
+	return e_member_not_found;
+}
+
+ErrorCode Reflection::NewObject(Variant& result, Type* type)
+{
+	if (type->isPrimitive())
+	{
+		return NewPrimitive(result, static_cast<PrimitiveType*>(type));
+	}
+	else if (type->isEnum())
+	{
+		return NewEnum(result, static_cast<EnumType*>(type));
+	}
+	else if (type->isClass())
+	{
+		return NewClass(result, static_cast<ClassType*>(type));
+	}
+	else
+	{
+		return e_invalid_type;
+	}
+}
+
 //
 //ErrorCode Reflection::CallInstanceMethod(Variant& result, Reference* that, const char* methodName, Variant** args, int_t numArgs)
 //{
@@ -465,74 +494,257 @@ ErrorCode Reflection::NewObject(Variant& result, ClassType* type)
 //		return e_member_not_found;
 //	}
 //
-//	pafcore::ErrorCode errorCode = (*invoker)(&result, args, numArgs);
+//	ErrorCode errorCode = (*invoker)(&result, args, numArgs);
 //	for (int i = 0; i < numArgs; i++)
 //	{
-//		pafcore::Variant* argument = (pafcore::Variant*)&argumentsBuf[sizeof(pafcore::Variant)*i];
+//		Variant* argument = (Variant*)&argumentsBuf[sizeof(Variant)*i];
 //		argument->~Variant();
 //	}
 //
-//	pafcore::Metadata* member;
+//	Metadata* member;
 //	member = variant->m_type->findMember(name);
 //
 //}
 
-//ErrorCode Reflection::GetInstanceField(pafcore::Variant& value, pafcore::Variant* that, pafcore::InstanceField* field)
+ErrorCode Reflection::GetInstanceFieldRef(Variant& value, Variant* that, InstanceField* field)
+{
+	size_t baseOffset;
+	if (!static_cast<ClassType*>(that->m_type)->getClassOffset(baseOffset, field->m_objectType))
+	{
+		return e_invalid_type;
+	}
+	size_t fieldAddress = (size_t)that->m_pointer + baseOffset + field->m_offset;
+
+	if (field->isArray())
+	{
+		value.assignArray(field->m_type, (void*)fieldAddress, field->m_arraySize, field->m_constant, Variant::by_array);
+	}
+	else if (field->isPointer())
+	{
+		value.assignPtr(field->m_type, *(void**)fieldAddress, field->m_constant, Variant::by_ref);
+	}
+	else
+	{
+		value.assignPtr(field->m_type, (void*)fieldAddress, field->m_type->isPrimitive() ? true : field->m_constant, Variant::by_ref);
+	}
+	return s_ok;
+}
+
+ErrorCode Reflection::SetInstanceField(Variant* that, InstanceField* field, Variant& value)
+{
+	if (field->isArray())
+	{
+		return e_field_is_an_array;
+	}
+	if (field->isConstant())
+	{
+		return e_field_is_constant;
+	}
+	size_t baseOffset;
+	if (!static_cast<ClassType*>(that->m_type)->getClassOffset(baseOffset, field->m_objectType))
+	{
+		return e_invalid_object_type;
+	}
+	size_t fieldAddress = (size_t)that->m_pointer + baseOffset + field->m_offset;
+	if (field->isPointer())
+	{
+		if (!value.castToObjectPtr(field->m_type, (void**)fieldAddress))
+		{
+			return e_invalid_field_type;
+		}
+	}
+	else
+	{
+		if (!value.castToObject(field->m_type, (void*)fieldAddress))
+		{
+			return e_invalid_field_type;
+		}
+	}
+	return s_ok;
+}
+
+ErrorCode Reflection::GetInstanceProperty(Variant& value, Variant* that, InstanceProperty* property)
+{
+	if (property->get_isArray())
+	{
+		if (0 == property->m_arrayGetter)
+		{
+			return e_property_is_write_only;
+		}
+		ErrorCode errorCode = (*property->m_arrayGetter)(property, that, 0, &value);
+		return errorCode;
+	}
+	else
+	{
+		if (0 == property->m_getter)
+		{
+			return e_property_is_write_only;
+		}
+		ErrorCode errorCode = (*property->m_getter)(property, that, &value);
+		return errorCode;
+	}
+}
+
+ErrorCode Reflection::SetInstanceProperty(Variant* that, InstanceProperty* property, Variant& value)
+{
+	if (property->get_isArray())
+	{
+		if (0 == property->m_arraySetter)
+		{
+			return e_property_is_read_only;
+		}
+		ErrorCode errorCode = (*property->m_arraySetter)(property, that, 0, &value);
+		return errorCode;
+	}
+	else
+	{
+		if (0 == property->m_setter)
+		{
+			return e_property_is_read_only;
+		}
+		ErrorCode errorCode = (*property->m_setter)(property, that, &value);
+		return errorCode;
+	}
+}
+
+ErrorCode Reflection::GetArrayInstancePropertySize(Variant& value, Variant* that, InstanceProperty* property)
+{
+	if (property->get_isArray())
+	{
+		ErrorCode errorCode = (*property->m_sizer)(property, that, &value);
+		return errorCode;
+	}
+	else
+	{
+		size_t size = 1;	
+		value.assignPrimitive(RuntimeTypeOf<size_t>::RuntimeType::GetSingleton(), &size);
+		return s_ok;
+	}
+}
+
+ErrorCode Reflection::GetArrayInstancePropertySize(size_t& size, Variant* that, InstanceProperty* property)
+{
+	if (property->get_isArray())
+	{
+		Variant value;
+		ErrorCode errorCode = (*property->m_sizer)(property, that, &value);
+		if (s_ok == errorCode)
+		{
+			value.castToPrimitive(RuntimeTypeOf<size_t>::RuntimeType::GetSingleton(), &size);
+		}
+		else
+		{
+			size = 0;
+		}
+		return errorCode;
+	}
+	else
+	{
+		size = 1;
+		return s_ok;
+	}
+}
+
+ErrorCode Reflection::ResizeArrayInstanceProperty(Variant* that, InstanceProperty* property, size_t size)
+{
+	if (property->get_isArray())
+	{
+		if (property->get_hasResizer())
+		{
+			Variant value;
+			value.assignPrimitive(RuntimeTypeOf<size_t>::RuntimeType::GetSingleton(), &size);
+			ErrorCode errorCode = (*property->m_resizer)(property, that, &value);
+			return errorCode;
+		}
+		else
+		{
+			return e_array_property_is_not_dynamic;
+		}
+	}
+	else
+	{
+		return e_is_not_array;
+	}
+}
+
+ErrorCode Reflection::GetArrayInstanceProperty(Variant& value, Variant* that, InstanceProperty* property, size_t index)
+{
+	if (property->get_isArray())
+	{
+		if (0 == property->m_arrayGetter)
+		{
+			return e_property_is_write_only;
+		}
+		ErrorCode errorCode = (*property->m_arrayGetter)(property, that, index, &value);
+		return errorCode;
+	}
+	else
+	{
+		if (0 == property->m_getter)
+		{
+			return e_property_is_write_only;
+		}
+		if (0 != index)
+		{
+			return e_is_not_array;
+		}
+		ErrorCode errorCode = (*property->m_getter)(property, that, &value);
+		return errorCode;
+	}
+}
+
+ErrorCode Reflection::SetArrayInstanceProperty(Variant* that, InstanceProperty* property, size_t index, Variant& value)
+{
+	if (property->get_isArray())
+	{
+		if (0 == property->m_arraySetter)
+		{
+			return e_property_is_read_only;
+		}
+		ErrorCode errorCode = (*property->m_arraySetter)(property, that, index, &value);
+		return errorCode;
+	}
+	else
+	{
+		if (0 == property->m_setter)
+		{
+			return e_property_is_read_only;
+		}
+		if (0 != index)
+		{
+			return e_is_not_array;
+		}
+		ErrorCode errorCode = (*property->m_setter)(property, that, &value);
+		return errorCode;
+	}
+}
+
+
+//ErrorCode Reflection::GetInstanceArrayProperty(Variant& value, Variant* that, InstanceArrayProperty* property, size_t index)
 //{
-//	size_t baseOffset;
-//	if (!static_cast<pafcore::ClassType*>(that->m_type)->getClassOffset(baseOffset, field->m_objectType))
+//	if (0 == property->m_getter)
 //	{
-//		return pafcore::e_invalid_type;
+//		return e_property_is_write_only;
 //	}
-//	size_t fieldAddress = (size_t)that->m_pointer + baseOffset + field->m_offset;
-//
-//	if (field->isArray())
-//	{
-//		value.assignArray(field->m_type, (void*)fieldAddress, field->m_arraySize, field->m_constant, ::pafcore::Variant::by_array);
-//	}
-//	else if (field->isPointer())
-//	{
-//		value.assignPtr(field->m_type, *(void**)fieldAddress, field->m_constant, ::pafcore::Variant::by_ref);
-//	}
-//	else
-//	{
-//		value.assignPtr(field->m_type, (void*)fieldAddress, field->m_type->isPrimitive() ? true : field->m_constant, ::pafcore::Variant::by_ref);
-//	}
-//	return pafcore::s_ok;
-//}
-//
-//ErrorCode Reflection::SetInstanceField(pafcore::Variant* that, pafcore::InstanceField* field, pafcore::Variant& value)
-//{
-//	if (field->isArray())
-//	{
-//		return pafcore::e_field_is_an_array;
-//	}
-//	if (field->isConstant())
-//	{
-//		return pafcore::e_field_is_constant;
-//	}
-//	size_t baseOffset;
-//	if (!static_cast<pafcore::ClassType*>(that->m_type)->getClassOffset(baseOffset, field->m_objectType))
-//	{
-//		return pafcore::e_invalid_object_type;
-//	}
-//	size_t fieldAddress = (size_t)that->m_pointer + baseOffset + field->m_offset;
-//	if (field->isPointer())
-//	{
-//		if (!value.castToObjectPtr(field->m_type, (void**)fieldAddress))
-//		{
-//			return pafcore::e_invalid_field_type;
-//		}
-//	}
-//	else
-//	{
-//		if (!value.castToObject(field->m_type, (void*)fieldAddress))
-//		{
-//			return pafcore::e_invalid_field_type;
-//		}
-//	}
-//	return pafcore::s_ok;
+//	ErrorCode errorCode = (*property->m_getter)(that, index, &value);
+//	return errorCode;
 //}
 
+ErrorCode Reflection::CallInstanceMethod(Variant& result, Variant* that, InstanceMethod* method, Variant* arguments, int_t numArgs)
+{
+	const size_t max_param_count = 20;
+	Variant* args[max_param_count + 1];
+	if (numArgs > max_param_count)
+	{
+		numArgs = max_param_count;
+	}
+	args[0] = that;
+	for (int_t i = 0; i < numArgs; ++i)
+	{
+		args[i + 1] = &arguments[i];
+	}
+	ErrorCode errorCode = (*method->m_invoker)(&result, args, numArgs + 1);
+	return errorCode;
+}
 
 END_PAFCORE

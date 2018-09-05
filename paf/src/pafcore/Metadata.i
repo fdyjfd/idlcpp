@@ -103,8 +103,6 @@ namespace pafcore
 		static_field,
 		instance_property,
 		static_property,
-		instance_array_property,
-		static_array_property,
 		instance_method,
 		static_method,
 		function_argument,

@@ -10,7 +10,6 @@ StaticProperty::StaticProperty(const char* name, Attributes* attributes,
 	StaticPropertySetter setter, Type* setterType, Passing setterPassing, bool setterConstant)
 : Metadata(name, attributes)
 {
-
 	m_getter = getter;
 	m_setter = setter;
 	m_getterType = getterType;
@@ -19,6 +18,32 @@ StaticProperty::StaticProperty(const char* name, Attributes* attributes,
 	m_setterPassing = setterPassing;
 	m_getterConstant = getterConstant;
 	m_setterConstant = setterConstant;
+	m_array = false;
+}
+
+StaticProperty::StaticProperty(const char* name, Attributes* attributes,
+	ArrayStaticPropertyGetter getter, Type* getterType, Passing getterPassing, bool getterConstant,
+	ArrayStaticPropertySetter setter, Type* setterType, Passing setterPassing, bool setterConstant,
+	ArrayStaticPropertySizer sizer, ArrayStaticPropertyResizer resizer)
+	: Metadata(name, attributes)
+{
+	m_arrayGetter = getter;
+	m_arraySetter = setter;
+	m_getterType = getterType;
+	m_setterType = setterType;
+	m_getterPassing = getterPassing;
+	m_setterPassing = setterPassing;
+	m_getterConstant = getterConstant;
+	m_setterConstant = setterConstant;
+	m_sizer = sizer;
+	m_resizer = resizer;
+	m_array = true;
+}
+
+
+bool StaticProperty::get_isArray() const
+{
+	return m_array;
 }
 
 bool StaticProperty::get_hasGetter() const
@@ -29,6 +54,16 @@ bool StaticProperty::get_hasGetter() const
 bool StaticProperty::get_hasSetter() const
 {
 	return (0 != m_setter);
+}
+
+bool StaticProperty::get_hasSizer() const
+{
+	return (0 != m_sizer);
+}
+
+bool StaticProperty::get_hasResizer() const
+{
+	return (0 != m_resizer);
 }
 
 Type* StaticProperty::get_getterType()

@@ -11,9 +11,7 @@
 #include "InstanceField.h"
 #include "StaticField.h"
 #include "InstanceProperty.h"
-#include "InstanceArrayProperty.h"
 #include "StaticProperty.h"
-#include "StaticArrayProperty.h"
 #include "InstanceMethod.h"
 #include "StaticMethod.h"
 #include "Enumerator.h"
@@ -468,6 +466,39 @@ namespace idlcpp
 		return s_instance;
 	}
 
+	__pafcore__Buffer_Type::__pafcore__Buffer_Type() : ::pafcore::ClassType("Buffer", ::pafcore::value_object)
+	{
+		m_size = sizeof(::pafcore::Buffer);
+		::pafcore::NameSpace::GetGlobalNameSpace()->getNameSpace("pafcore")->registerMember(this);
+	}
+
+	void __pafcore__Buffer_Type::destroyInstance(void* address)
+	{
+		delete reinterpret_cast<::pafcore::Buffer*>(address);
+	}
+
+	void __pafcore__Buffer_Type::destroyArray(void* address)
+	{
+		paf_delete_array(reinterpret_cast<::pafcore::Buffer*>(address));
+	}
+
+	void __pafcore__Buffer_Type::assign(void* dst, const void* src)
+	{
+		*(::pafcore::Buffer*)dst = *(const ::pafcore::Buffer*)src;
+	}
+
+	__pafcore__Buffer_Type* __pafcore__Buffer_Type::GetSingleton()
+	{
+		static __pafcore__Buffer_Type* s_instance = 0;
+		static char s_buffer[sizeof(__pafcore__Buffer_Type)];
+		if(0 == s_instance)
+		{
+			s_instance = (__pafcore__Buffer_Type*)s_buffer;
+			new (s_buffer)__pafcore__Buffer_Type;
+		}
+		return s_instance;
+	}
+
 }
 
 AUTO_REGISTER_TYPE(::idlcpp::__bool_t_Type)
@@ -522,3 +553,4 @@ AUTO_REGISTER_TYPE(::idlcpp::__size_t_Type)
 static_assert(RuntimeTypeOf<::size_t>::type_category == ::pafcore::primitive_object, "type category error");
 AUTO_REGISTER_TYPE(::idlcpp::__ptrdiff_t_Type)
 static_assert(RuntimeTypeOf<::ptrdiff_t>::type_category == ::pafcore::primitive_object, "type category error");
+AUTO_REGISTER_TYPE(::idlcpp::__pafcore__Buffer_Type)

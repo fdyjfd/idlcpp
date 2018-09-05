@@ -3,6 +3,7 @@
 
 #pragma once
 
+#include "./Typedef.mh"
 #include "String.mh"
 #include "AutoRun.h"
 #include "NameSpace.h"
@@ -11,9 +12,7 @@
 #include "InstanceField.h"
 #include "StaticField.h"
 #include "InstanceProperty.h"
-#include "InstanceArrayProperty.h"
 #include "StaticProperty.h"
-#include "StaticArrayProperty.h"
 #include "InstanceMethod.h"
 #include "StaticMethod.h"
 #include "Enumerator.h"
@@ -62,10 +61,11 @@ namespace idlcpp
 			::pafcore::Result(RuntimeTypeOf<void>::RuntimeType::GetSingleton(), false, ::pafcore::Result::by_value),
 			::pafcore::Result(RuntimeTypeOf<void>::RuntimeType::GetSingleton(), false, ::pafcore::Result::by_value),
 			::pafcore::Result(RuntimeTypeOf<void>::RuntimeType::GetSingleton(), false, ::pafcore::Result::by_value),
-			::pafcore::Result(RuntimeTypeOf<string_t>::RuntimeType::GetSingleton(), false, ::pafcore::Result::by_value),
+			::pafcore::Result(RuntimeTypeOf<char>::RuntimeType::GetSingleton(), true, ::pafcore::Result::by_ptr),
 			::pafcore::Result(RuntimeTypeOf<int>::RuntimeType::GetSingleton(), false, ::pafcore::Result::by_value),
 			::pafcore::Result(RuntimeTypeOf<int>::RuntimeType::GetSingleton(), false, ::pafcore::Result::by_value),
 			::pafcore::Result(RuntimeTypeOf<bool>::RuntimeType::GetSingleton(), false, ::pafcore::Result::by_value),
+			::pafcore::Result(RuntimeTypeOf<::size_t>::RuntimeType::GetSingleton(), false, ::pafcore::Result::by_value),
 			::pafcore::Result(RuntimeTypeOf<::pafcore::String>::RuntimeType::GetSingleton(), false, ::pafcore::Result::by_value),
 		};
 		static ::pafcore::Argument s_instanceArguments[] = 
@@ -87,7 +87,8 @@ namespace idlcpp
 			::pafcore::Overload(&s_instanceResults[5], &s_instanceArguments[4], 1, false, true),
 			::pafcore::Overload(&s_instanceResults[6], &s_instanceArguments[5], 1, false, true),
 			::pafcore::Overload(&s_instanceResults[7], 0, 0, false, true),
-			::pafcore::Overload(&s_instanceResults[8], 0, 0, false, false),
+			::pafcore::Overload(&s_instanceResults[8], 0, 0, false, true),
+			::pafcore::Overload(&s_instanceResults[9], 0, 0, false, false),
 		};
 		static ::pafcore::InstanceMethod s_instanceMethods[] = 
 		{
@@ -96,7 +97,8 @@ namespace idlcpp
 			::pafcore::InstanceMethod("c_str", 0, String_c_str, &s_instanceOverloads[4], 1),
 			::pafcore::InstanceMethod("compare", 0, String_compare, &s_instanceOverloads[5], 2),
 			::pafcore::InstanceMethod("empty", 0, String_empty, &s_instanceOverloads[7], 1),
-			::pafcore::InstanceMethod("toString", 0, String_toString, &s_instanceOverloads[8], 1),
+			::pafcore::InstanceMethod("length", 0, String_length, &s_instanceOverloads[8], 1),
+			::pafcore::InstanceMethod("toString", 0, String_toString, &s_instanceOverloads[9], 1),
 		};
 		m_instanceMethods = s_instanceMethods;
 		m_instanceMethodCount = paf_array_size_of(s_instanceMethods);
@@ -110,6 +112,7 @@ namespace idlcpp
 			&s_instanceMethods[3],
 			&s_instanceMethods[4],
 			&s_instanceMethods[5],
+			&s_instanceMethods[6],
 		};
 		m_members = s_members;
 		m_memberCount = paf_array_size_of(s_members);
@@ -252,8 +255,8 @@ namespace idlcpp
 			{
 				return ::pafcore::e_invalid_this_type;
 			}
-			string_t res = self->c_str();
-			result->assignPrimitive(RuntimeTypeOf<string_t>::RuntimeType::GetSingleton(), &res);
+			const char* res = self->c_str();
+			result->assignPrimitivePtr(RuntimeTypeOf<char>::RuntimeType::GetSingleton(), res, true, ::pafcore::Variant::by_ptr);
 			return ::pafcore::s_ok;
 		}
 		return ::pafcore::e_invalid_arg_num;
@@ -320,6 +323,22 @@ namespace idlcpp
 			}
 			bool res = self->empty();
 			result->assignPrimitive(RuntimeTypeOf<bool>::RuntimeType::GetSingleton(), &res);
+			return ::pafcore::s_ok;
+		}
+		return ::pafcore::e_invalid_arg_num;
+	}
+
+	::pafcore::ErrorCode __pafcore__String_Type::String_length(::pafcore::Variant* result, ::pafcore::Variant** args, int_t numArgs)
+	{
+		if(1 <= numArgs)
+		{
+			const ::pafcore::String* self;
+			if(!args[0]->castToValuePtr(GetSingleton(), (void**)&self))
+			{
+				return ::pafcore::e_invalid_this_type;
+			}
+			::size_t res = self->length();
+			result->assignPrimitive(RuntimeTypeOf<::size_t>::RuntimeType::GetSingleton(), &res);
 			return ::pafcore::s_ok;
 		}
 		return ::pafcore::e_invalid_arg_num;

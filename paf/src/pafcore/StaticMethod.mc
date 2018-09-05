@@ -15,9 +15,7 @@
 #include "InstanceField.h"
 #include "StaticField.h"
 #include "InstanceProperty.h"
-#include "InstanceArrayProperty.h"
 #include "StaticProperty.h"
-#include "StaticArrayProperty.h"
 #include "InstanceMethod.h"
 #include "StaticMethod.h"
 #include "Enumerator.h"
@@ -105,7 +103,7 @@ namespace idlcpp
 		*(::pafcore::StaticMethod*)dst = *(const ::pafcore::StaticMethod*)src;
 	}
 
-	::pafcore::ErrorCode __pafcore__StaticMethod_Type::StaticMethod_get_overloadCount(::pafcore::Variant* that, ::pafcore::Variant* value)
+	::pafcore::ErrorCode __pafcore__StaticMethod_Type::StaticMethod_get_overloadCount(::pafcore::InstanceProperty* instanceProperty, ::pafcore::Variant* that, ::pafcore::Variant* value)
 	{
 		::pafcore::StaticMethod* self;
 		if(!that->castToReferencePtr(GetSingleton(), (void**)&self))

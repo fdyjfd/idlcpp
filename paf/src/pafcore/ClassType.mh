@@ -41,8 +41,8 @@ namespace idlcpp
 		static ::pafcore::ErrorCode ClassType__getBaseClassCount_(::pafcore::Variant* result, ::pafcore::Variant** args, int numArgs);
 		static ::pafcore::ErrorCode ClassType__getBaseClass_(::pafcore::Variant* result, ::pafcore::Variant** args, int numArgs);
 		static ::pafcore::ErrorCode ClassType__getFirstDerivedClass_(::pafcore::Variant* result, ::pafcore::Variant** args, int numArgs);
-		static ::pafcore::ErrorCode ClassType__getInstanceArrayPropertyCount_(::pafcore::Variant* result, ::pafcore::Variant** args, int numArgs);
-		static ::pafcore::ErrorCode ClassType__getInstanceArrayProperty_(::pafcore::Variant* result, ::pafcore::Variant** args, int numArgs);
+		static ::pafcore::ErrorCode ClassType__getInstanceFieldCount_(::pafcore::Variant* result, ::pafcore::Variant** args, int numArgs);
+		static ::pafcore::ErrorCode ClassType__getInstanceField_(::pafcore::Variant* result, ::pafcore::Variant** args, int numArgs);
 		static ::pafcore::ErrorCode ClassType__getInstancePropertyCount_(::pafcore::Variant* result, ::pafcore::Variant** args, int numArgs);
 		static ::pafcore::ErrorCode ClassType__getInstanceProperty_(::pafcore::Variant* result, ::pafcore::Variant** args, int numArgs);
 		static ::pafcore::ErrorCode ClassType__getMemberCount_(::pafcore::Variant* result, ::pafcore::Variant** args, int numArgs);

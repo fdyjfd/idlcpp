@@ -283,12 +283,6 @@
     <ClCompile Include="..\..\..\src\pafcore\System.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\pafcore\InstanceArrayProperty.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\pafcore\StaticArrayProperty.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\src\pafcore\Delegate.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -450,12 +444,6 @@
       <Filter>Interface Files</Filter>
     </CustomBuild>
     <CustomBuild Include="..\..\..\src\pafcore\System.i">
-      <Filter>Interface Files</Filter>
-    </CustomBuild>
-    <CustomBuild Include="..\..\..\src\pafcore\InstanceArrayProperty.i">
-      <Filter>Interface Files</Filter>
-    </CustomBuild>
-    <CustomBuild Include="..\..\..\src\pafcore\StaticArrayProperty.i">
       <Filter>Interface Files</Filter>
     </CustomBuild>
     <CustomBuild Include="..\..\..\src\pafcore\Delegate.i">

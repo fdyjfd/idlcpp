@@ -69,7 +69,7 @@ Enumerator* EnumType::findEnumerator(const char* name)
 	return 0;
 }
 
-pafcore::ErrorCode EnumType::Enum_get__name_(pafcore::Variant* that, pafcore::Variant* value)
+pafcore::ErrorCode EnumType::Enum_get__name_(pafcore::InstanceProperty* instanceProperty, pafcore::Variant* that, pafcore::Variant* value)
 {
 	if(enum_object != that->m_type->m_category)
 	{

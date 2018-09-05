@@ -48,6 +48,7 @@ pafcore::ErrorCode LuaSubclassInvoker::invoke(const char* name, pafcore::Variant
 		const char* str = lua_tostring(m_luaState, -1);
 #ifdef _DEBUG
 		OutputDebugStringA(str);
+		OutputDebugStringA("\n");
 #endif
 		lua_pop(m_luaState, 1);
 	}
