@@ -212,6 +212,9 @@
     <None Include="..\..\..\src\pafcore\StaticArrayProperty.mc">
       <Filter>Meta Files</Filter>
     </None>
+    <None Include="..\..\..\src\pafcore\Iterator.i">
+      <Filter>Interface Files</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\src\pafcore\Enumerator.cpp">
@@ -290,6 +293,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\pafcore\String.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\pafcore\Iterator.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

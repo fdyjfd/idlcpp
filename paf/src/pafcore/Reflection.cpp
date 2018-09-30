@@ -400,7 +400,7 @@ ErrorCode Reflection::StringToInstanceProperty(Variant& that, InstanceProperty* 
 {
 	if (0 == instanceProperty->m_setter)
 	{
-		return e_property_is_read_only;
+		return e_property_is_not_readable;
 	}
 	Variant value;
 	if (instanceProperty->m_setterType->isPrimitive())
@@ -569,7 +569,7 @@ ErrorCode Reflection::GetInstanceProperty(Variant& value, Variant* that, Instanc
 	{
 		if (0 == property->m_arrayGetter)
 		{
-			return e_property_is_write_only;
+			return e_property_is_not_writable;
 		}
 		ErrorCode errorCode = (*property->m_arrayGetter)(property, that, 0, &value);
 		return errorCode;
@@ -578,7 +578,7 @@ ErrorCode Reflection::GetInstanceProperty(Variant& value, Variant* that, Instanc
 	{
 		if (0 == property->m_getter)
 		{
-			return e_property_is_write_only;
+			return e_property_is_not_writable;
 		}
 		ErrorCode errorCode = (*property->m_getter)(property, that, &value);
 		return errorCode;
@@ -591,7 +591,7 @@ ErrorCode Reflection::SetInstanceProperty(Variant* that, InstanceProperty* prope
 	{
 		if (0 == property->m_arraySetter)
 		{
-			return e_property_is_read_only;
+			return e_property_is_not_readable;
 		}
 		ErrorCode errorCode = (*property->m_arraySetter)(property, that, 0, &value);
 		return errorCode;
@@ -600,7 +600,7 @@ ErrorCode Reflection::SetInstanceProperty(Variant* that, InstanceProperty* prope
 	{
 		if (0 == property->m_setter)
 		{
-			return e_property_is_read_only;
+			return e_property_is_not_readable;
 		}
 		ErrorCode errorCode = (*property->m_setter)(property, that, &value);
 		return errorCode;
@@ -611,7 +611,7 @@ ErrorCode Reflection::GetArrayInstancePropertySize(Variant& value, Variant* that
 {
 	if (property->get_isArray())
 	{
-		ErrorCode errorCode = (*property->m_sizer)(property, that, &value);
+		ErrorCode errorCode = (*property->m_arraySizer)(property, that, &value);
 		return errorCode;
 	}
 	else
@@ -627,7 +627,7 @@ ErrorCode Reflection::GetArrayInstancePropertySize(size_t& size, Variant* that, 
 	if (property->get_isArray())
 	{
 		Variant value;
-		ErrorCode errorCode = (*property->m_sizer)(property, that, &value);
+		ErrorCode errorCode = (*property->m_arraySizer)(property, that, &value);
 		if (s_ok == errorCode)
 		{
 			value.castToPrimitive(RuntimeTypeOf<size_t>::RuntimeType::GetSingleton(), &size);
@@ -653,7 +653,7 @@ ErrorCode Reflection::ResizeArrayInstanceProperty(Variant* that, InstancePropert
 		{
 			Variant value;
 			value.assignPrimitive(RuntimeTypeOf<size_t>::RuntimeType::GetSingleton(), &size);
-			ErrorCode errorCode = (*property->m_resizer)(property, that, &value);
+			ErrorCode errorCode = (*property->m_arrayResizer)(property, that, &value);
 			return errorCode;
 		}
 		else
@@ -663,7 +663,7 @@ ErrorCode Reflection::ResizeArrayInstanceProperty(Variant* that, InstancePropert
 	}
 	else
 	{
-		return e_is_not_array;
+		return e_is_not_array_property;
 	}
 }
 
@@ -673,7 +673,7 @@ ErrorCode Reflection::GetArrayInstanceProperty(Variant& value, Variant* that, In
 	{
 		if (0 == property->m_arrayGetter)
 		{
-			return e_property_is_write_only;
+			return e_property_is_not_writable;
 		}
 		ErrorCode errorCode = (*property->m_arrayGetter)(property, that, index, &value);
 		return errorCode;
@@ -682,11 +682,11 @@ ErrorCode Reflection::GetArrayInstanceProperty(Variant& value, Variant* that, In
 	{
 		if (0 == property->m_getter)
 		{
-			return e_property_is_write_only;
+			return e_property_is_not_writable;
 		}
 		if (0 != index)
 		{
-			return e_is_not_array;
+			return e_is_not_array_property;
 		}
 		ErrorCode errorCode = (*property->m_getter)(property, that, &value);
 		return errorCode;
@@ -699,7 +699,7 @@ ErrorCode Reflection::SetArrayInstanceProperty(Variant* that, InstanceProperty* 
 	{
 		if (0 == property->m_arraySetter)
 		{
-			return e_property_is_read_only;
+			return e_property_is_not_readable;
 		}
 		ErrorCode errorCode = (*property->m_arraySetter)(property, that, index, &value);
 		return errorCode;
@@ -708,11 +708,11 @@ ErrorCode Reflection::SetArrayInstanceProperty(Variant* that, InstanceProperty* 
 	{
 		if (0 == property->m_setter)
 		{
-			return e_property_is_read_only;
+			return e_property_is_not_readable;
 		}
 		if (0 != index)
 		{
-			return e_is_not_array;
+			return e_is_not_array_property;
 		}
 		ErrorCode errorCode = (*property->m_setter)(property, that, &value);
 		return errorCode;
@@ -724,11 +724,97 @@ ErrorCode Reflection::SetArrayInstanceProperty(Variant* that, InstanceProperty* 
 //{
 //	if (0 == property->m_getter)
 //	{
-//		return e_property_is_write_only;
+//		return e_property_is_not_writable;
 //	}
 //	ErrorCode errorCode = (*property->m_getter)(that, index, &value);
 //	return errorCode;
 //}
+
+ErrorCode Reflection::GetMapInstanceProperty(Variant& value, Variant* that, InstanceProperty* property, Variant* key)
+{
+	if (property->get_isMap())
+	{
+		if (0 == property->m_mapGetter)
+		{
+			return e_property_is_not_writable;
+		}
+		ErrorCode errorCode = (*property->m_mapGetter)(property, that, key, &value);
+		return errorCode;
+	}
+	else
+	{
+		return e_is_not_map_property;
+	}
+}
+
+ErrorCode Reflection::SetMapInstanceProperty(Variant* that, InstanceProperty* property, Variant* key, Variant& value)
+{
+	if (property->get_isMap())
+	{
+		if (0 == property->m_mapSetter)
+		{
+			return e_property_is_not_readable;
+		}
+		ErrorCode errorCode = (*property->m_mapSetter)(property, that, key, &value);
+		return errorCode;
+	}
+	else
+	{
+		return e_is_not_map_property;
+	}
+}
+
+ErrorCode Reflection::GetMapInstanceIterator(Iterator*& iterator, Variant* that, InstanceProperty* property)
+{
+	if (property->get_isMap())
+	{
+		if (0 == property->m_mapGetIterator)
+		{
+			return e_property_is_not_iterable;
+		}
+		ErrorCode errorCode = (*property->m_mapGetIterator)(property, that, iterator);
+		return errorCode;
+	}
+	else
+	{
+		return e_is_not_map_property;
+	}
+}
+
+ErrorCode Reflection::GetMapInstanceKey(Variant& key, Variant* that, InstanceProperty* property, Iterator* iterator)
+{
+	if (property->get_isMap())
+	{
+		if (0 == property->m_mapGetKey)
+		{
+			return e_property_is_not_dereferenceable;
+		}
+		ErrorCode errorCode = (*property->m_mapGetKey)(property, that, iterator, &key);
+		return errorCode;
+	}
+	else
+	{
+		return e_is_not_map_property;
+	}
+}
+
+ErrorCode Reflection::GetMapInstanceValue(Variant& value, Variant* that, InstanceProperty* property, Iterator* iterator)
+{
+	if (property->get_isMap())
+	{
+		if (0 == property->m_mapGetValue)
+		{
+			return e_property_is_not_dereferenceable;
+		}
+		ErrorCode errorCode = (*property->m_mapGetValue)(property, that, iterator, &value);
+		return errorCode;
+	}
+	else
+	{
+		return e_is_not_map_property;
+	}
+}
+
 
 ErrorCode Reflection::CallInstanceMethod(Variant& result, Variant* that, InstanceMethod* method, Variant* arguments, int_t numArgs)
 {

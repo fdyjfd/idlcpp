@@ -13,13 +13,23 @@ namespace pafcore
 
 	struct Attributes;
 	class InstanceProperty;
+	class Iterator;
 	class Variant;
+	
 	typedef ErrorCode(*InstancePropertyGetter)(InstanceProperty* instanceProperty, Variant* that, Variant* value);
 	typedef ErrorCode(*InstancePropertySetter)(InstanceProperty* instanceProperty, Variant* that, Variant* value);
+
 	typedef ErrorCode(*ArrayInstancePropertyGetter)(InstanceProperty* instanceProperty, Variant* that, size_t index, Variant* value);
 	typedef ErrorCode(*ArrayInstancePropertySetter)(InstanceProperty* instanceProperty, Variant* that, size_t index, Variant* value);
 	typedef ErrorCode(*ArrayInstancePropertySizer)(InstanceProperty* instanceProperty, Variant* that, Variant* size);
 	typedef ErrorCode(*ArrayInstancePropertyResizer)(InstanceProperty* instanceProperty, Variant* that, Variant* size);
+	
+	typedef ErrorCode(*MapInstancePropertyGetter)(InstanceProperty* instanceProperty, Variant* that, Variant* key, Variant* value);
+	typedef ErrorCode(*MapInstancePropertySetter)(InstanceProperty* instanceProperty, Variant* that, Variant* key, Variant* value);
+	typedef ErrorCode(*MapInstancePropertyGetIterator)(InstanceProperty* instanceProperty, Variant* that, Iterator*& iterator);
+	typedef ErrorCode(*MapInstancePropertyGetKey)(InstanceProperty* instanceProperty, Variant* that, Iterator* iterator, Variant* key);
+	typedef ErrorCode(*MapInstancePropertyGetValue)(InstanceProperty* instanceProperty, Variant* that, Iterator* iterator, Variant* value);
+
 
 
 	class PAFCORE_EXPORT InstanceProperty : public Metadata
@@ -32,6 +42,8 @@ namespace pafcore
 		ClassType* get_objectType();
 
 		bool get_isArray() const;
+		bool get_isMap() const;
+		bool get_isSimple() const;
 
 		bool get_hasGetter() const;
 		bool get_hasSetter() const;
@@ -55,31 +67,58 @@ namespace pafcore
 		InstanceProperty(const char* name, Attributes* attributes, ClassType* objectType,
 			InstancePropertyGetter getter, Type* getterType, Passing getterPassing, bool getterConstant,
 			InstancePropertySetter setter, Type* setterType, Passing setterPassing, bool setterConstant);
+
 		InstanceProperty(const char* name, Attributes* attributes, ClassType* objectType,
 			ArrayInstancePropertyGetter getter, Type* getterType, Passing getterPassing, bool getterConstant,
 			ArrayInstancePropertySetter setter, Type* setterType, Passing setterPassing, bool setterConstant,
-			ArrayInstancePropertySizer sizer, ArrayInstancePropertyResizer resizer);
+			ArrayInstancePropertySizer sizer, 
+			ArrayInstancePropertyResizer resizer);
+
+		InstanceProperty(const char* name, Attributes* attributes, ClassType* objectType,
+			MapInstancePropertyGetter getter, Type* getterType, Passing getterPassing, bool getterConstant,
+			MapInstancePropertySetter setter, Type* setterType, Passing setterPassing, bool setterConstant,
+			MapInstancePropertyGetIterator getIterator, 
+			MapInstancePropertyGetKey getKey,
+			MapInstancePropertyGetValue getValue);
+	public:
+		enum InstancePropertyCategory
+		{
+			simple_instance_property,
+			array_instance_property,
+			map_instance_property,
+		};
 	public:
 		ClassType * m_objectType;
 		union
 		{
-			InstancePropertyGetter m_getter;
-			ArrayInstancePropertyGetter m_arrayGetter;
+			struct
+			{
+				InstancePropertyGetter m_getter;
+				InstancePropertySetter m_setter;
+			};
+			struct
+			{
+				ArrayInstancePropertyGetter m_arrayGetter;
+				ArrayInstancePropertySetter m_arraySetter;
+				ArrayInstancePropertySizer m_arraySizer;
+				ArrayInstancePropertyResizer m_arrayResizer;
+			};
+			struct
+			{
+				MapInstancePropertyGetter m_mapGetter;
+				MapInstancePropertySetter m_mapSetter;
+				MapInstancePropertyGetIterator m_mapGetIterator;
+				MapInstancePropertyGetKey m_mapGetKey;
+				MapInstancePropertyGetValue m_mapGetValue;
+			};
 		};
-		union
-		{
-			InstancePropertySetter m_setter;
-			ArrayInstancePropertySetter m_arraySetter;
-		};
-		ArrayInstancePropertySizer m_sizer;
-		ArrayInstancePropertyResizer m_resizer;
 		Type* m_getterType;
 		Type* m_setterType;
 		byte_t m_getterPassing;
 		byte_t m_setterPassing;
 		bool m_getterConstant;
 		bool m_setterConstant;
-		bool m_array;
+		InstancePropertyCategory m_category;
 
 	};
 

@@ -35,8 +35,8 @@ StaticProperty::StaticProperty(const char* name, Attributes* attributes,
 	m_setterPassing = setterPassing;
 	m_getterConstant = getterConstant;
 	m_setterConstant = setterConstant;
-	m_sizer = sizer;
-	m_resizer = resizer;
+	m_arraySizer = sizer;
+	m_arrayResizer = resizer;
 	m_array = true;
 }
 
@@ -58,12 +58,12 @@ bool StaticProperty::get_hasSetter() const
 
 bool StaticProperty::get_hasSizer() const
 {
-	return (0 != m_sizer);
+	return (0 != m_arraySizer);
 }
 
 bool StaticProperty::get_hasResizer() const
 {
-	return (0 != m_resizer);
+	return (0 != m_arrayResizer);
 }
 
 Type* StaticProperty::get_getterType()

@@ -13,9 +13,11 @@ struct PropertyNode : MemberNode
 	TokenNode* m_passing;//PTR or REF
 	GetterSetterNode* m_get;
 	GetterSetterNode* m_set;
-	PropertyArrayCategory m_arrayCategory;
+	PropertyCategory m_propertyCategory;
+	TypeNameNode* m_keyTypeName;
+	TokenNode* m_keyPassing;//PTR
 public:
-	PropertyNode(IdentifyNode* name, PropertyArrayCategory category);
+	PropertyNode(IdentifyNode* name, PropertyCategory category);
 	bool isStatic();
 	bool isVirtual();
 	bool isAbstract();

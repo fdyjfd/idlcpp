@@ -302,12 +302,21 @@ void setGetterSetterNativeName(SyntaxNode* syntaxNode, SyntaxNode* nativeName)
 	getterSetterNode->m_nativeName = (IdentifyNode*)nativeName;
 }
 
-SyntaxNode* newProperty(SyntaxNode* name, PropertyArrayCategory category)
+SyntaxNode* newProperty(SyntaxNode* name, PropertyCategory category)
 {
 	assert(snt_identify == name->m_nodeType);
 	PropertyNode* res = new PropertyNode((IdentifyNode*)name, category);
 	g_syntaxNodes.push_back(res);
 	return res;
+}
+
+void setMapPropertyKeyType(SyntaxNode* property, SyntaxNode* type, SyntaxNode* passing)
+{
+	assert(snt_property == property->m_nodeType);
+	assert(0 == type || snt_type_name == type->m_nodeType);
+
+	((PropertyNode*)property)->m_keyTypeName = (TypeNameNode*)type;
+	((PropertyNode*)property)->m_keyPassing = (TokenNode*)passing;
 }
 
 void setPropertyType(SyntaxNode* property, SyntaxNode* constant, SyntaxNode* type, SyntaxNode* passing)

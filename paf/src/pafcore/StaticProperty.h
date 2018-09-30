@@ -67,8 +67,8 @@ namespace pafcore
 			StaticPropertySetter m_setter;
 			ArrayStaticPropertySetter m_arraySetter;
 		};
-		ArrayStaticPropertySizer m_sizer;
-		ArrayStaticPropertyResizer m_resizer;
+		ArrayStaticPropertySizer m_arraySizer;
+		ArrayStaticPropertyResizer m_arrayResizer;
 		Type* m_getterType;
 		Type* m_setterType;
 		byte_t m_getterPassing;

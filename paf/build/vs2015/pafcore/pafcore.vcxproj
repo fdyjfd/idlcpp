@@ -203,6 +203,9 @@
     <CustomBuild Include="..\..\..\src\pafcore\Metadata.i">
       <FileType>Document</FileType>
     </CustomBuild>
+    <CustomBuild Include="..\..\..\src\pafcore\Iterator.i">
+      <FileType>Document</FileType>
+    </CustomBuild>
     <None Include="..\..\..\src\pafcore\Metadata.ic" />
     <None Include="..\..\..\src\pafcore\Metadata.mc" />
     <None Include="..\..\..\src\pafcore\Metadata.mh" />
@@ -294,6 +297,7 @@
     <ClCompile Include="..\..\..\src\pafcore\InstanceField.cpp" />
     <ClCompile Include="..\..\..\src\pafcore\InstanceMethod.cpp" />
     <ClCompile Include="..\..\..\src\pafcore\InstanceProperty.cpp" />
+    <ClCompile Include="..\..\..\src\pafcore\Iterator.cpp" />
     <ClCompile Include="..\..\..\src\pafcore\Metadata.cpp" />
     <ClCompile Include="..\..\..\src\pafcore\NameSpace.cpp" />
     <ClCompile Include="..\..\..\src\pafcore\Overload.cpp" />

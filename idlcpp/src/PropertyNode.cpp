@@ -9,7 +9,7 @@
 #include "Compiler.h"
 #include <assert.h>
 
-PropertyNode::PropertyNode(IdentifyNode* name, PropertyArrayCategory category)
+PropertyNode::PropertyNode(IdentifyNode* name, PropertyCategory category)
 {
 	m_nodeType = snt_property;
 	m_modifier = 0;
@@ -19,7 +19,10 @@ PropertyNode::PropertyNode(IdentifyNode* name, PropertyArrayCategory category)
 	m_name = name;
 	m_get = 0;
 	m_set = 0;
-	m_arrayCategory = category;
+	m_propertyCategory = category;
+	m_keyTypeName = 0;
+	m_keyPassing = 0;
+
 }
 
 bool PropertyNode::isStatic()
@@ -41,22 +44,22 @@ bool PropertyNode::isAbstract()
 
 bool PropertyNode::isNotArray()
 {
-	return not_array == m_arrayCategory;
+	return simple_property == m_propertyCategory;
 }
 
 bool PropertyNode::isArray()
 {
-	return not_array != m_arrayCategory;
+	return simple_property != m_propertyCategory;
 }
 
 bool PropertyNode::isFixedArray()
 {
-	return fixed_array == m_arrayCategory;
+	return fixed_array_property == m_propertyCategory;
 }
 
 bool PropertyNode::isDynamicArray()
 {
-	return dynamic_array == m_arrayCategory;
+	return dynamic_array_property == m_propertyCategory;
 }
 
 bool PropertyNode::byPtr()

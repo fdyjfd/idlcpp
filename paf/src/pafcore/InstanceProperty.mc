@@ -46,6 +46,8 @@ namespace idlcpp
 		{
 			::pafcore::InstanceProperty("objectType", 0, GetSingleton(), InstanceProperty_get_objectType, RuntimeTypeOf<::pafcore::ClassType>::RuntimeType::GetSingleton(), ::pafcore::Metadata::by_ptr, false, 0, 0, ::pafcore::Metadata::by_value, false),
 			::pafcore::InstanceProperty("isArray", 0, GetSingleton(), InstanceProperty_get_isArray, RuntimeTypeOf<bool>::RuntimeType::GetSingleton(), ::pafcore::Metadata::by_value, false, 0, 0, ::pafcore::Metadata::by_value, false),
+			::pafcore::InstanceProperty("isMap", 0, GetSingleton(), InstanceProperty_get_isMap, RuntimeTypeOf<bool>::RuntimeType::GetSingleton(), ::pafcore::Metadata::by_value, false, 0, 0, ::pafcore::Metadata::by_value, false),
+			::pafcore::InstanceProperty("isSimple", 0, GetSingleton(), InstanceProperty_get_isSimple, RuntimeTypeOf<bool>::RuntimeType::GetSingleton(), ::pafcore::Metadata::by_value, false, 0, 0, ::pafcore::Metadata::by_value, false),
 			::pafcore::InstanceProperty("hasGetter", 0, GetSingleton(), InstanceProperty_get_hasGetter, RuntimeTypeOf<bool>::RuntimeType::GetSingleton(), ::pafcore::Metadata::by_value, false, 0, 0, ::pafcore::Metadata::by_value, false),
 			::pafcore::InstanceProperty("hasSetter", 0, GetSingleton(), InstanceProperty_get_hasSetter, RuntimeTypeOf<bool>::RuntimeType::GetSingleton(), ::pafcore::Metadata::by_value, false, 0, 0, ::pafcore::Metadata::by_value, false),
 			::pafcore::InstanceProperty("hasSizer", 0, GetSingleton(), InstanceProperty_get_hasSizer, RuntimeTypeOf<bool>::RuntimeType::GetSingleton(), ::pafcore::Metadata::by_value, false, 0, 0, ::pafcore::Metadata::by_value, false),
@@ -65,22 +67,24 @@ namespace idlcpp
 		m_instancePropertyCount = paf_array_size_of(s_instanceProperties);
 		static Metadata* s_members[] = 
 		{
-			&s_instanceProperties[9],
-			&s_instanceProperties[8],
-			&s_instanceProperties[7],
-			&s_instanceProperties[10],
-			&s_instanceProperties[6],
-			&s_instanceProperties[2],
-			&s_instanceProperties[5],
-			&s_instanceProperties[3],
-			&s_instanceProperties[4],
-			&s_instanceProperties[1],
-			&s_instanceProperties[0],
-			&s_instanceProperties[14],
-			&s_instanceProperties[13],
-			&s_instanceProperties[12],
-			&s_instanceProperties[15],
 			&s_instanceProperties[11],
+			&s_instanceProperties[10],
+			&s_instanceProperties[9],
+			&s_instanceProperties[12],
+			&s_instanceProperties[8],
+			&s_instanceProperties[4],
+			&s_instanceProperties[7],
+			&s_instanceProperties[5],
+			&s_instanceProperties[6],
+			&s_instanceProperties[1],
+			&s_instanceProperties[2],
+			&s_instanceProperties[3],
+			&s_instanceProperties[0],
+			&s_instanceProperties[16],
+			&s_instanceProperties[15],
+			&s_instanceProperties[14],
+			&s_instanceProperties[17],
+			&s_instanceProperties[13],
 		};
 		m_members = s_members;
 		m_memberCount = paf_array_size_of(s_members);
@@ -218,6 +222,30 @@ namespace idlcpp
 			return ::pafcore::e_invalid_this_type;
 		}
 		bool res = self->get_isArray();
+		value->assignPrimitive(RuntimeTypeOf<bool>::RuntimeType::GetSingleton(), &res);
+		return ::pafcore::s_ok;
+	}
+
+	::pafcore::ErrorCode __pafcore__InstanceProperty_Type::InstanceProperty_get_isMap(::pafcore::InstanceProperty* instanceProperty, ::pafcore::Variant* that, ::pafcore::Variant* value)
+	{
+		::pafcore::InstanceProperty* self;
+		if(!that->castToReferencePtr(GetSingleton(), (void**)&self))
+		{
+			return ::pafcore::e_invalid_this_type;
+		}
+		bool res = self->get_isMap();
+		value->assignPrimitive(RuntimeTypeOf<bool>::RuntimeType::GetSingleton(), &res);
+		return ::pafcore::s_ok;
+	}
+
+	::pafcore::ErrorCode __pafcore__InstanceProperty_Type::InstanceProperty_get_isSimple(::pafcore::InstanceProperty* instanceProperty, ::pafcore::Variant* that, ::pafcore::Variant* value)
+	{
+		::pafcore::InstanceProperty* self;
+		if(!that->castToReferencePtr(GetSingleton(), (void**)&self))
+		{
+			return ::pafcore::e_invalid_this_type;
+		}
+		bool res = self->get_isSimple();
 		value->assignPrimitive(RuntimeTypeOf<bool>::RuntimeType::GetSingleton(), &res);
 		return ::pafcore::s_ok;
 	}

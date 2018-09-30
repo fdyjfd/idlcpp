@@ -6,11 +6,57 @@
 #include "EnumType.h"
 #include "ClassType.h"
 #include "Reference.h"
-
+#include "Debug.h"
 #include <assert.h>
 #include <memory.h>
 
 BEGIN_PAFCORE
+
+
+#ifdef _DEBUG
+
+class VariantLeakReporter
+{
+public:
+	~VariantLeakReporter()
+	{
+		m_liveObjects.lock();
+		for (auto& item : m_liveObjects.m_objects)
+		{
+			Variant* variant = item.first;
+			size_t serialNumber = item.second;
+			char buf[1024];
+#ifdef _WIN64
+			sprintf_s(buf, "pafcore Warning: Live Variant at 0x%p, SerialNumber:%llu\n",
+				variant, serialNumber);
+#else
+			sprintf_s(buf, "pafcore Warning: Live Variant at 0x%p, SerialNumber:%lu\n",
+				variant, serialNumber);
+#endif
+			OutputDebugStringA(buf);
+		}
+		m_liveObjects.unlock();
+	}
+public:
+	void onVariantConstruct(Variant* variant)
+	{
+		m_liveObjects.addPtr(variant);
+	}
+	void onVariantDestruct(Variant* variant)
+	{
+		m_liveObjects.removePtr(variant);
+	}
+public:
+	LiveObjects<Variant> m_liveObjects;
+public:
+	static VariantLeakReporter* GetInstance()
+	{
+		static VariantLeakReporter s_instance;
+		return &s_instance;
+	}
+};
+
+#endif//_DEBUG
 
 Variant::Variant()
 {
@@ -21,6 +67,10 @@ Variant::Variant()
 	m_constant = false;
 	m_temporary = false;
 	m_subClassProxy = false;
+
+#ifdef _DEBUG
+	VariantLeakReporter::GetInstance()->onVariantConstruct(this);
+#endif//_DEBUG
 }
 
 Variant::~Variant()
@@ -46,6 +96,10 @@ Variant::~Variant()
 			}
 		}
 	}
+
+#ifdef _DEBUG
+	VariantLeakReporter::GetInstance()->onVariantDestruct(this);
+#endif//_DEBUG
 }
 
 void Variant::clear()

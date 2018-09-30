@@ -333,7 +333,7 @@ pafcore::ErrorCode GetStaticProperty(PyObject*& pyObject, pafcore::StaticPropert
 {
 	if(0 == property->m_getter)
 	{
-		return pafcore::e_property_is_write_only;
+		return pafcore::e_property_is_not_writable;
 	}
 	pafcore::Variant value;
 	pafcore::ErrorCode errorCode = (*property->m_getter)(&value);
@@ -347,7 +347,7 @@ pafcore::ErrorCode GetStaticProperty(PyObject*& pyObject, pafcore::StaticPropert
 pafcore::ErrorCode GetStaticArrayPropertySize(PyObject*& pyObject, pafcore::StaticArrayProperty* property)
 {
 	pafcore::Variant value;
-	pafcore::ErrorCode errorCode = (*property->m_sizer)(&value);
+	pafcore::ErrorCode errorCode = (*property->m_arraySizer)(&value);
 	if (pafcore::s_ok == errorCode)
 	{
 		pyObject = VariantToPython(&value);
@@ -359,7 +359,7 @@ pafcore::ErrorCode GetStaticArrayProperty(PyObject*& pyObject, pafcore::StaticAr
 {
 	if (0 == property->m_getter)
 	{
-		return pafcore::e_property_is_write_only;
+		return pafcore::e_property_is_not_writable;
 	}
 	pafcore::Variant value;
 	pafcore::ErrorCode errorCode = (*property->m_getter)(index, &value);
@@ -374,7 +374,7 @@ pafcore::ErrorCode SetStaticProperty(pafcore::StaticProperty* property, PyObject
 {
 	if(0 == property->m_setter)
 	{
-		return pafcore::e_property_is_read_only;
+		return pafcore::e_property_is_not_readable;
 	}
 	pafcore::Variant value;
 	pafcore::Variant* attr = PythonToVariant(&value, pyAttr);
@@ -384,13 +384,13 @@ pafcore::ErrorCode SetStaticProperty(pafcore::StaticProperty* property, PyObject
 
 pafcore::ErrorCode SetStaticArrayPropertySize(pafcore::StaticArrayProperty* property, PyObject* pyAttr)
 {
-	if (0 == property->m_resizer)
+	if (0 == property->m_arrayResizer)
 	{
 		return pafcore::e_array_property_is_not_dynamic;
 	}
 	pafcore::Variant value;
 	pafcore::Variant* attr = PythonToVariant(&value, pyAttr);
-	pafcore::ErrorCode errorCode = (*property->m_resizer)(attr);
+	pafcore::ErrorCode errorCode = (*property->m_arrayResizer)(attr);
 	return errorCode;
 }
 
@@ -398,7 +398,7 @@ pafcore::ErrorCode SetStaticArrayProperty(pafcore::StaticArrayProperty* property
 {
 	if (0 == property->m_setter)
 	{
-		return pafcore::e_property_is_read_only;
+		return pafcore::e_property_is_not_readable;
 	}
 	pafcore::Variant value;
 	pafcore::Variant* attr = PythonToVariant(&value, pyAttr);
@@ -418,7 +418,7 @@ pafcore::ErrorCode GetInstanceProperty(PyObject*& pyObject, pafcore::Variant* th
 {
 	if(0 == property->m_getter)
 	{
-		return pafcore::e_property_is_write_only;
+		return pafcore::e_property_is_not_writable;
 	}
 	pafcore::Variant value;
 	pafcore::ErrorCode errorCode = (*property->m_getter)(that, &value);
@@ -432,7 +432,7 @@ pafcore::ErrorCode GetInstanceProperty(PyObject*& pyObject, pafcore::Variant* th
 pafcore::ErrorCode GetInstanceArrayPropertySize(PyObject*& pyObject, pafcore::Variant* that, pafcore::InstanceArrayProperty* property)
 {
 	pafcore::Variant value;
-	pafcore::ErrorCode errorCode = (*property->m_sizer)(that, &value);
+	pafcore::ErrorCode errorCode = (*property->m_arraySizer)(that, &value);
 	if (pafcore::s_ok == errorCode)
 	{
 		pyObject = VariantToPython(&value);
@@ -444,7 +444,7 @@ pafcore::ErrorCode GetInstanceArrayProperty(PyObject*& pyObject, pafcore::Varian
 {
 	if (0 == property->m_getter)
 	{
-		return pafcore::e_property_is_write_only;
+		return pafcore::e_property_is_not_writable;
 	}
 	pafcore::Variant value;
 	pafcore::ErrorCode errorCode = (*property->m_getter)(that, index, &value);
@@ -459,7 +459,7 @@ pafcore::ErrorCode SetInstanceProperty(pafcore::Variant* that, pafcore::Instance
 {
 	if(0 == property->m_setter)
 	{
-		return pafcore::e_property_is_read_only;
+		return pafcore::e_property_is_not_readable;
 	}
 	pafcore::Variant value;
 	pafcore::Variant* attr = PythonToVariant(&value, pyAttr);
@@ -470,13 +470,13 @@ pafcore::ErrorCode SetInstanceProperty(pafcore::Variant* that, pafcore::Instance
 
 pafcore::ErrorCode SetInstanceArrayPropertySize(pafcore::Variant* that, pafcore::InstanceArrayProperty* property, PyObject* pyAttr)
 {
-	if (0 == property->m_resizer)
+	if (0 == property->m_arrayResizer)
 	{
 		return pafcore::e_array_property_is_not_dynamic;
 	}
 	pafcore::Variant value;
 	pafcore::Variant* attr = PythonToVariant(&value, pyAttr);
-	pafcore::ErrorCode errorCode = (*property->m_resizer)(that, attr);
+	pafcore::ErrorCode errorCode = (*property->m_arrayResizer)(that, attr);
 	return errorCode;
 }
 
@@ -484,7 +484,7 @@ pafcore::ErrorCode SetInstanceArrayProperty(pafcore::Variant* that, pafcore::Ins
 {
 	if (0 == property->m_setter)
 	{
-		return pafcore::e_property_is_read_only;
+		return pafcore::e_property_is_not_readable;
 	}
 	pafcore::Variant value;
 	pafcore::Variant* attr = PythonToVariant(&value, pyAttr);
@@ -1193,7 +1193,7 @@ Py_ssize_t InstanceArrayPropertyWrapper_length(InstanceArrayPropertyWrapper* wra
 {
 	pafcore::ErrorCode errorCode;
 	pafcore::Variant value;
-	errorCode = (*wrapper->m_property->m_sizer)((pafcore::Variant*)wrapper->m_self->m_var, &value);
+	errorCode = (*wrapper->m_property->m_arraySizer)((pafcore::Variant*)wrapper->m_self->m_var, &value);
 	if (pafcore::s_ok == errorCode)
 	{
 		Py_ssize_t len;
@@ -1283,7 +1283,7 @@ Py_ssize_t StaticArrayPropertyWrapper_length(StaticArrayPropertyWrapper* wrapper
 {
 	pafcore::ErrorCode errorCode;
 	pafcore::Variant value;
-	errorCode = (*wrapper->m_property->m_sizer)(&value);
+	errorCode = (*wrapper->m_property->m_arraySizer)(&value);
 	if (pafcore::s_ok == errorCode)
 	{
 		Py_ssize_t len;

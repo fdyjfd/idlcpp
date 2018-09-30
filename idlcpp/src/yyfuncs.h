@@ -148,13 +148,15 @@ enum SyntaxNodeType
 	snt_attribute_list,
 };
 
-enum PropertyArrayCategory
+enum PropertyCategory
 {
-	not_array,
-	fixed_array,
-	dynamic_array
+	simple_property,
+	fixed_array_property,
+	dynamic_array_property,
+	map_property,
 };
-typedef enum PropertyArrayCategory PropertyArrayCategory;
+
+typedef enum PropertyCategory PropertyCategory;
 
 void newCodeBlock(const char* str);
 SyntaxNode* newToken(int nodeType);
@@ -189,7 +191,9 @@ SyntaxNode* newGetterSetter(SyntaxNode* keyword, SyntaxNode* constant, SyntaxNod
 void setSetterAllowNull(SyntaxNode* syntaxNode);
 void setGetterSetterNativeName(SyntaxNode* syntaxNode, SyntaxNode* nativeName);
 
-SyntaxNode* newProperty(SyntaxNode* name, PropertyArrayCategory category);
+SyntaxNode* newProperty(SyntaxNode* name, PropertyCategory category);
+void setMapPropertyKeyType(SyntaxNode* property, SyntaxNode* type, SyntaxNode* passing);
+
 void setPropertyType(SyntaxNode* property, SyntaxNode* constant, SyntaxNode* type, SyntaxNode* passing);
 void setPropertyGetter(SyntaxNode* property, SyntaxNode* getter);
 void setPropertySetter(SyntaxNode* property, SyntaxNode* setter);

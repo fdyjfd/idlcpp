@@ -27,8 +27,8 @@ public:
 	Variant();
 	~Variant();
 private:
-	Variant(const Variant& var);
-	Variant& operator = (const Variant& var);
+	Variant(const Variant& var) = delete;
+	Variant& operator = (const Variant& var) = delete;
 public:
 	Semantic getSemantic();
 	bool isNull();
