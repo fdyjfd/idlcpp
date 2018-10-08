@@ -176,8 +176,8 @@ setter					: setter_1											{$$ = $1;}
 property_0				: IDENTIFY											{$$ = newProperty($1, simple_property);}
 						| IDENTIFY '[' ']'									{$$ = newProperty($1, fixed_array_property);}
 						| IDENTIFY '[' '?' ']'								{$$ = newProperty($1, dynamic_array_property);}
-						| IDENTIFY '{' typeName '}'							{$$ = newProperty($1, map_property); setMapPropertyKeyType($$, $3, NULL);}
-						| IDENTIFY '{' typeName '*' '}'						{$$ = newProperty($1, map_property); setMapPropertyKeyType($$, $3, $4);}
+						| IDENTIFY '[' typeName ']'							{$$ = newProperty($1, map_property); setMapPropertyKeyType($$, $3, NULL);}
+						| IDENTIFY '[' typeName '*' ']'						{$$ = newProperty($1, map_property); setMapPropertyKeyType($$, $3, $4);}
 ;
 
 property_1				: typeName property_0								{$$ = $2; setPropertyType($$, NULL, $1, NULL);}

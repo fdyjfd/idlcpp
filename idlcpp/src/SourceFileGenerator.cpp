@@ -56,7 +56,7 @@ void writeInterfaceMethodImpl_CastOutputParam(ParameterNode* parameterNode, size
 
 void writeDelegateImpl_InitResult(DelegateNode* delegateNode, FILE* file, int indentation)
 {
-	char buf[512];
+	char buf[4096];
 	std::string typeName;
 	TypeCategory typeCategory = CalcTypeNativeName(typeName, delegateNode->m_resultTypeName, 0);
 	const char* sign;
@@ -86,7 +86,7 @@ void writeDelegateImpl_ReturnResult(DelegateNode* delegateNode, FILE* file, int 
 
 void writeDelegateImpl_CastResult(DelegateNode* delegateNode, FILE* file, int indentation)
 {
-	char buf[512];
+	char buf[4096];
 	std::string typeName;
 	TypeCategory typeCategory = CalcTypeNativeName(typeName, delegateNode->m_resultTypeName, 0);
 
@@ -145,7 +145,7 @@ void writeDelegateImpl_CastResult(DelegateNode* delegateNode, FILE* file, int in
 
 void writeDelegateImpl_SetResultType(DelegateNode* delegateNode, FILE* file, int indentation)
 {
-	char buf[512];
+	char buf[4096];
 	std::string typeName;
 	TypeCategory typeCategory = CalcTypeNativeName(typeName, delegateNode->m_resultTypeName, 0);
 
@@ -174,7 +174,7 @@ void SourceFileGenerator::generateCode(FILE* dstFile, SourceFile* sourceFile, co
 
 void SourceFileGenerator::generateCode_Program(FILE* file, ProgramNode* programNode, const char* fileName, const char* cppName)
 {
-	char buf[512];
+	char buf[4096];
 	std::string pafcorePath;
 	GetRelativePath(pafcorePath, fileName, g_options.m_pafcorePath.c_str());
 	FormatPathForInclude(pafcorePath);
@@ -200,7 +200,7 @@ void SourceFileGenerator::generateCode_Namespace(FILE* file, NamespaceNode* name
 		file = 0;
 	}
 
-	char buf[512];
+	char buf[4096];
 	if(!namespaceNode->isGlobalNamespace())
 	{
 		sprintf_s(buf, "namespace %s\n", namespaceNode->m_name->m_str.c_str());
@@ -347,7 +347,7 @@ void SourceFileGenerator::generateCode_Class(FILE* file, ClassNode* classNode, c
 
 void SourceFileGenerator::generateCode_Delegate(FILE* file, DelegateNode* delegateNode, ScopeNode* scopeNode, const std::string& scopeClassName, int indentation)
 {
-	char buf[512];
+	char buf[4096];
 	if (delegateNode->isNoCode())
 	{
 		file = 0;
@@ -538,7 +538,7 @@ void SourceFileGenerator::generateCode_TemplateHeader(FILE* file, ClassNode* cla
 
 void SourceFileGenerator::generateCode_AdditionalMethod(FILE* file, MethodNode* methodNode, const std::string& typeName, int indentation)
 {
-	char buf[512];
+	char buf[4096];
 
 	if (methodNode->isNoCode())
 	{

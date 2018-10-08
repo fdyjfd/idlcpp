@@ -38,7 +38,7 @@ void checkAttributeNames(std::vector<AttributeNode*>& attributeNodes)
 		auto res = items.insert(identify);
 		if (!res.second)
 		{
-			char buf[512];
+			char buf[4096];
 			sprintf_s(buf, "\'%s\' : attribute already defined at line %d, column %d", identify->m_str.c_str(),
 				(*res.first)->m_lineNo, (*res.first)->m_columnNo);
 			ErrorList_AddItem_CurrentFile(identify->m_lineNo,

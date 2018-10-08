@@ -26,7 +26,7 @@ namespace pafcore
 	
 	typedef ErrorCode(*MapInstancePropertyGetter)(InstanceProperty* instanceProperty, Variant* that, Variant* key, Variant* value);
 	typedef ErrorCode(*MapInstancePropertySetter)(InstanceProperty* instanceProperty, Variant* that, Variant* key, Variant* value);
-	typedef ErrorCode(*MapInstancePropertyGetIterator)(InstanceProperty* instanceProperty, Variant* that, Iterator*& iterator);
+	typedef ErrorCode(*MapInstancePropertyGetIterator)(InstanceProperty* instanceProperty, Variant* that, Variant* iterator);
 	typedef ErrorCode(*MapInstancePropertyGetKey)(InstanceProperty* instanceProperty, Variant* that, Iterator* iterator, Variant* key);
 	typedef ErrorCode(*MapInstancePropertyGetValue)(InstanceProperty* instanceProperty, Variant* that, Iterator* iterator, Variant* value);
 
@@ -81,13 +81,6 @@ namespace pafcore
 			MapInstancePropertyGetKey getKey,
 			MapInstancePropertyGetValue getValue);
 	public:
-		enum InstancePropertyCategory
-		{
-			simple_instance_property,
-			array_instance_property,
-			map_instance_property,
-		};
-	public:
 		ClassType * m_objectType;
 		union
 		{
@@ -118,7 +111,7 @@ namespace pafcore
 		byte_t m_setterPassing;
 		bool m_getterConstant;
 		bool m_setterConstant;
-		InstancePropertyCategory m_category;
+		PropertyCategory m_category;
 
 	};
 

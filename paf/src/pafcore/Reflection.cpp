@@ -764,7 +764,7 @@ ErrorCode Reflection::SetMapInstanceProperty(Variant* that, InstanceProperty* pr
 	}
 }
 
-ErrorCode Reflection::GetMapInstanceIterator(Iterator*& iterator, Variant* that, InstanceProperty* property)
+ErrorCode Reflection::GetMapInstanceIterator(Variant* iterator, Variant* that, InstanceProperty* property)
 {
 	if (property->get_isMap())
 	{

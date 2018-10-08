@@ -212,9 +212,6 @@
     <None Include="..\..\..\src\pafcore\StaticArrayProperty.mc">
       <Filter>Meta Files</Filter>
     </None>
-    <None Include="..\..\..\src\pafcore\Iterator.i">
-      <Filter>Interface Files</Filter>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\src\pafcore\Enumerator.cpp">
@@ -381,12 +378,6 @@
     <ClInclude Include="..\..\..\src\pafcore\Reflection.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\src\pafcore\StaticArrayProperty.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\pafcore\InstanceArrayProperty.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\src\pafcore\RefPtr.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -459,6 +450,9 @@
       <Filter>Interface Files</Filter>
     </CustomBuild>
     <CustomBuild Include="..\..\..\src\pafcore\String.i">
+      <Filter>Interface Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\..\..\src\pafcore\Iterator.i">
       <Filter>Interface Files</Filter>
     </CustomBuild>
   </ItemGroup>

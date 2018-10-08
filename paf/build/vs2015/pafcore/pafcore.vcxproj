@@ -323,7 +323,6 @@
     <ClInclude Include="..\..\..\src\pafcore\ClassType.h" />
     <ClInclude Include="..\..\..\src\pafcore\Enumerator.h" />
     <ClInclude Include="..\..\..\src\pafcore\EnumType.h" />
-    <ClInclude Include="..\..\..\src\pafcore\InstanceArrayProperty.h" />
     <ClInclude Include="..\..\..\src\pafcore\InstanceField.h" />
     <ClInclude Include="..\..\..\src\pafcore\InstanceMethod.h" />
     <ClInclude Include="..\..\..\src\pafcore\InstanceProperty.h" />
@@ -338,7 +337,6 @@
     <ClInclude Include="..\..\..\src\pafcore\Reflection.h" />
     <ClInclude Include="..\..\..\src\pafcore\RefPtr.h" />
     <ClInclude Include="..\..\..\src\pafcore\Result.h" />
-    <ClInclude Include="..\..\..\src\pafcore\StaticArrayProperty.h" />
     <ClInclude Include="..\..\..\src\pafcore\StaticField.h" />
     <ClInclude Include="..\..\..\src\pafcore\StaticMethod.h" />
     <ClInclude Include="..\..\..\src\pafcore\StaticProperty.h" />

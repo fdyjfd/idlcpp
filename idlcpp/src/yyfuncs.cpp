@@ -45,6 +45,7 @@ extern "C"
 extern int yylineno;
 extern int yycolumnno;
 extern int yytokenno;
+extern int yyHasMapProperty;
 typedef struct yy_buffer_state *YY_BUFFER_STATE;
 YY_BUFFER_STATE yy_create_buffer ( FILE *file, int size );
 void yy_switch_to_buffer( YY_BUFFER_STATE new_buffer );
@@ -314,9 +315,9 @@ void setMapPropertyKeyType(SyntaxNode* property, SyntaxNode* type, SyntaxNode* p
 {
 	assert(snt_property == property->m_nodeType);
 	assert(0 == type || snt_type_name == type->m_nodeType);
-
 	((PropertyNode*)property)->m_keyTypeName = (TypeNameNode*)type;
 	((PropertyNode*)property)->m_keyPassing = (TokenNode*)passing;
+	yyHasMapProperty = 1;
 }
 
 void setPropertyType(SyntaxNode* property, SyntaxNode* constant, SyntaxNode* type, SyntaxNode* passing)
@@ -347,7 +348,7 @@ void setPropertySetter(SyntaxNode* property, SyntaxNode* setter)
 void setPropertyModifier(SyntaxNode* syntaxNode, SyntaxNode* modifier)
 {
 	assert(snt_property == syntaxNode->m_nodeType);
-	assert(snt_keyword_abstract == modifier->m_nodeType || snt_keyword_virtual == modifier->m_nodeType || snt_keyword_static == modifier->m_nodeType);
+	assert(snt_keyword_static == modifier->m_nodeType);
 	PropertyNode* propertyNode = (PropertyNode*)syntaxNode;
 	propertyNode->m_modifier = (TokenNode*)modifier;
 }

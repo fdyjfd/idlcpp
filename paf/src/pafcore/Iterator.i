@@ -51,6 +51,15 @@ namespace pafcore
 		{
 			m_iterator = m_container->begin();
 		}
+	public:
+		ContainerType* getContainer()
+		{
+			return m_container;
+		}
+		IteratorType& getIterator()
+		{
+			return m_iterator;
+		}
 	protected:
 		ContainerType* m_container;
 		IteratorType m_iterator;

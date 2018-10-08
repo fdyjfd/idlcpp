@@ -12,14 +12,23 @@ namespace pafcore
 
 	struct Attributes;
 	class StaticProperty;
+	class Iterator;
 	class Variant;
 
 	typedef ErrorCode(*StaticPropertyGetter)(Variant* value);
 	typedef ErrorCode(*StaticPropertySetter)(Variant* value);
+
 	typedef ErrorCode(*ArrayStaticPropertyGetter)(size_t index, Variant* value);
 	typedef ErrorCode(*ArrayStaticPropertySetter)(size_t index, Variant* value);
 	typedef ErrorCode(*ArrayStaticPropertySizer)(Variant* size);
 	typedef ErrorCode(*ArrayStaticPropertyResizer)(Variant* size);
+
+	typedef ErrorCode(*MapStaticPropertyGetter)(Variant* key, Variant* value);
+	typedef ErrorCode(*MapStaticPropertySetter)(Variant* key, Variant* value);
+	typedef ErrorCode(*MapStaticPropertyGetIterator)(Variant* iterator);
+	typedef ErrorCode(*MapStaticPropertyGetKey)(Iterator* iterator, Variant* key);
+	typedef ErrorCode(*MapStaticPropertyGetValue)(Iterator* iterator, Variant* value);
+
 
 
 	class PAFCORE_EXPORT StaticProperty : public Metadata
@@ -30,6 +39,9 @@ namespace pafcore
 		virtual size_t getAddress();
 
 		bool get_isArray() const;
+		bool get_isMap() const;
+		bool get_isSimple() const;
+
 		bool get_hasGetter() const;
 		bool get_hasSetter() const;
 		bool get_hasSizer() const;
@@ -55,27 +67,46 @@ namespace pafcore
 		StaticProperty(const char* name, Attributes* attributes,
 			ArrayStaticPropertyGetter getter, Type* getterType, Passing getterPassing, bool getterConstant,
 			ArrayStaticPropertySetter setter, Type* setterType, Passing setterPassing, bool setterConstant,
-			ArrayStaticPropertySizer sizer, ArrayStaticPropertyResizer resizer);
+			ArrayStaticPropertySizer sizer, 
+			ArrayStaticPropertyResizer resizer);
+
+		StaticProperty(const char* name, Attributes* attributes,
+			MapStaticPropertyGetter getter, Type* getterType, Passing getterPassing, bool getterConstant,
+			MapStaticPropertySetter setter, Type* setterType, Passing setterPassing, bool setterConstant,
+			MapStaticPropertyGetIterator getIterator,
+			MapStaticPropertyGetKey getKey,
+			MapStaticPropertyGetValue getValue);
 	public:
 		union
 		{
-			StaticPropertyGetter m_getter;
-			ArrayStaticPropertyGetter m_arrayGetter;
+			struct
+			{
+				StaticPropertyGetter m_getter;
+				StaticPropertySetter m_setter;
+			};
+			struct
+			{
+				ArrayStaticPropertyGetter m_arrayGetter;
+				ArrayStaticPropertySetter m_arraySetter;
+				ArrayStaticPropertySizer m_arraySizer;
+				ArrayStaticPropertyResizer m_arrayResizer;
+			};
+			struct
+			{
+				MapStaticPropertyGetter m_mapGetter;
+				MapStaticPropertySetter m_mapSetter;
+				MapStaticPropertyGetIterator m_mapGetIterator;
+				MapStaticPropertyGetKey m_mapGetKey;
+				MapStaticPropertyGetValue m_mapGetValue;
+			};
 		};
-		union
-		{
-			StaticPropertySetter m_setter;
-			ArrayStaticPropertySetter m_arraySetter;
-		};
-		ArrayStaticPropertySizer m_arraySizer;
-		ArrayStaticPropertyResizer m_arrayResizer;
 		Type* m_getterType;
 		Type* m_setterType;
 		byte_t m_getterPassing;
 		byte_t m_setterPassing;
 		bool m_getterConstant;
 		bool m_setterConstant;
-		bool m_array;
+		PropertyCategory m_category;
 
 	};
 

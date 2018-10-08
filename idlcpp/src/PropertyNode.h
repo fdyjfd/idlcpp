@@ -18,13 +18,17 @@ struct PropertyNode : MemberNode
 	TokenNode* m_keyPassing;//PTR
 public:
 	PropertyNode(IdentifyNode* name, PropertyCategory category);
+	PropertyCategory getCategory();
 	bool isStatic();
-	bool isVirtual();
-	bool isAbstract();
-	bool isNotArray();
-	bool isArray();
+	bool isSimple();
 	bool isFixedArray();
 	bool isDynamicArray();
+	bool isMap();
+	bool isKeyByPtr();
+	bool isKeyByRef();
+	bool isKeyByValue();
+	bool isKeyConstant();
+	bool isKeyAllowNull();
 	bool byPtr();
 	void setGetter(GetterSetterNode* getter);
 	void setSetter(GetterSetterNode* setter);

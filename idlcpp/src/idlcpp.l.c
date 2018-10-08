@@ -732,7 +732,8 @@ char *yytext;
 YY_BUFFER_STATE createBufferState(FILE* file);
 int yytokenno = 0;
 int yycolumnno = 1;
-#line 736 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l.c"
+int yyHasMapProperty = 0;
+#line 737 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l.c"
 
 /* Macros after this point can all be overridden by user definitions in
  * section 1.
@@ -883,10 +884,10 @@ YY_DECL
 	register char *yy_cp, *yy_bp;
 	register int yy_act;
 
-#line 15 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 16 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
 
 
-#line 890 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l.c"
+#line 891 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l.c"
 
 	if ( yy_init )
 		{
@@ -979,12 +980,12 @@ do_action:	/* This label is used only to access EOF actions. */
 	{ /* beginning of action switch */
 case 1:
 YY_RULE_SETUP
-#line 17 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 18 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
 {BEGIN IFILE;}
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 18 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 19 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
 {
 						{
 							int c;
@@ -998,432 +999,432 @@ YY_RULE_SETUP
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 28 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 29 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
 {fprintf(stderr, "%d bad import line\n", yylineno); yyterminate();}
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 30 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 31 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
 {yycolumnno += 2; BEGIN CODEBLOCK;}
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 31 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 32 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
 {yycolumnno += 2; BEGIN INITIAL;}
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 32 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 33 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
 {newCodeBlock(yytext); yycolumnno += strlen(yytext); yytokenno++;}
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 33 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 34 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
 {newCodeBlock(yytext); yycolumnno = 1; yytokenno++;}
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 34 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 35 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
 {newCodeBlock(yytext); yycolumnno++; yytokenno++;}
 	YY_BREAK
 case YY_STATE_EOF(CODEBLOCK):
-#line 35 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 36 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
 {unterminatedCode();yyterminate();}
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 37 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 38 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
 {yycolumnno += 2; BEGIN COMMENT;}
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 38 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 39 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
 {yycolumnno += 2; BEGIN INITIAL;}
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 39 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 40 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
 {yycolumnno += strlen(yytext); }
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 40 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 41 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
 {newCodeBlock("\n"); yycolumnno = 1; }
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 41 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 42 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
 {yycolumnno++;}
 	YY_BREAK
 case YY_STATE_EOF(COMMENT):
-#line 42 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 43 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
 {unterminatedComment();yyterminate();}
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 46 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 47 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
 {newCodeBlock("\n"); yycolumnno = 1;}
 	YY_BREAK
 case YY_STATE_EOF(INITIAL):
 case YY_STATE_EOF(IFILE):
-#line 48 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 49 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
 {yyterminate();}
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 50 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 51 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
 {newCodeBlock(yytext + 2); yycolumnno += strlen(yytext); yytokenno++;}
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 52 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 53 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
 {newCodeBlock(yytext + 1); yycolumnno += strlen(yytext); yytokenno++;}
 	YY_BREAK
 case 17:
-#line 55 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
-case 18:
 #line 56 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
-case 19:
+case 18:
 #line 57 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
-case 20:
+case 19:
 #line 58 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
-case 21:
+case 20:
 #line 59 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
-case 22:
+case 21:
 #line 60 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
-case 23:
+case 22:
 #line 61 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
-case 24:
+case 23:
 #line 62 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
-case 25:
+case 24:
 #line 63 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
-case 26:
+case 25:
 #line 64 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
-case 27:
+case 26:
 #line 65 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
-case 28:
+case 27:
 #line 66 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
-case 29:
+case 28:
 #line 67 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
-case 30:
+case 29:
 #line 68 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
-case 31:
+case 30:
 #line 69 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
-case 32:
+case 31:
 #line 70 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
-case 33:
+case 32:
 #line 71 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
-case 34:
+case 33:
 #line 72 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
-case 35:
+case 34:
 #line 73 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
-case 36:
+case 35:
 #line 74 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
-case 37:
+case 36:
 #line 75 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
-case 38:
+case 37:
 #line 76 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
+case 38:
+#line 77 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
 case 39:
 YY_RULE_SETUP
-#line 76 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 77 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
 {yylval.sn = newToken(yytext[0]);				yycolumnno++; yytokenno++; return yytext[0];}
 	YY_BREAK
 case 40:
 YY_RULE_SETUP
-#line 78 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 79 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
 {yylval.sn = newToken(snt_operator_scope);					yycolumnno += strlen(yytext); yytokenno++; return SCOPE;}
 	YY_BREAK
 case 41:
 YY_RULE_SETUP
-#line 79 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 80 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
 {yylval.sn = newToken(snt_operator_add_assign);				yycolumnno += strlen(yytext); yytokenno++; return ADD_ASSIGN;}
 	YY_BREAK
 case 42:
 YY_RULE_SETUP
-#line 80 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 81 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
 {yylval.sn = newToken(snt_operator_sub_assign);				yycolumnno += strlen(yytext); yytokenno++; return SUB_ASSIGN;}
 	YY_BREAK
 case 43:
 YY_RULE_SETUP
-#line 81 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 82 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
 {yylval.sn = newToken(snt_operator_mul_assign);				yycolumnno += strlen(yytext); yytokenno++; return MUL_ASSIGN;}
 	YY_BREAK
 case 44:
 YY_RULE_SETUP
-#line 82 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 83 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
 {yylval.sn = newToken(snt_operator_div_assign);				yycolumnno += strlen(yytext); yytokenno++; return DIV_ASSIGN;}
 	YY_BREAK
 case 45:
 YY_RULE_SETUP
-#line 83 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 84 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
 {yylval.sn = newToken(snt_operator_mod_assign);				yycolumnno += strlen(yytext); yytokenno++; return MOD_ASSIGN;}
 	YY_BREAK
 case 46:
 YY_RULE_SETUP
-#line 84 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 85 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
 {yylval.sn = newToken(snt_operator_bit_xor_assign);			yycolumnno += strlen(yytext); yytokenno++; return BIT_XOR_ASSIGN;}
 	YY_BREAK
 case 47:
 YY_RULE_SETUP
-#line 85 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 86 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
 {yylval.sn = newToken(snt_operator_bit_and_assign);			yycolumnno += strlen(yytext); yytokenno++; return BIT_AND_ASSIGN;}
 	YY_BREAK
 case 48:
 YY_RULE_SETUP
-#line 86 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 87 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
 {yylval.sn = newToken(snt_operator_bit_or_assign);			yycolumnno += strlen(yytext); yytokenno++; return BIT_OR_ASSIGN;}
 	YY_BREAK
 case 49:
 YY_RULE_SETUP
-#line 87 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 88 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
 {yylval.sn = newToken(snt_operator_left_shift);				yycolumnno += strlen(yytext); yytokenno++; return LEFT_SHIFT;}
 	YY_BREAK
 case 50:
 YY_RULE_SETUP
-#line 88 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 89 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
 {yylval.sn = newToken(snt_operator_right_shift);			yycolumnno += strlen(yytext); yytokenno++; return RIGHT_SHIFT;}
 	YY_BREAK
 case 51:
 YY_RULE_SETUP
-#line 89 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 90 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
 {yylval.sn = newToken(snt_operator_left_shift_assign);		yycolumnno += strlen(yytext); yytokenno++; return LEFT_SHIFT_ASSIGN;}
 	YY_BREAK
 case 52:
 YY_RULE_SETUP
-#line 90 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 91 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
 {yylval.sn = newToken(snt_operator_right_shift_assign);		yycolumnno += strlen(yytext); yytokenno++; return RIGHT_SHIFT_ASSIGN;}
 	YY_BREAK
 case 53:
 YY_RULE_SETUP
-#line 91 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 92 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
 {yylval.sn = newToken(snt_operator_equal);					yycolumnno += strlen(yytext); yytokenno++; return EQUAL;}
 	YY_BREAK
 case 54:
 YY_RULE_SETUP
-#line 92 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 93 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
 {yylval.sn = newToken(snt_operator_not_equal);				yycolumnno += strlen(yytext); yytokenno++; return NOT_EQUAL;}
 	YY_BREAK
 case 55:
 YY_RULE_SETUP
-#line 93 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 94 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
 {yylval.sn = newToken(snt_operator_less_equal);				yycolumnno += strlen(yytext); yytokenno++; return LESS_EQUAL;}
 	YY_BREAK
 case 56:
 YY_RULE_SETUP
-#line 94 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 95 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
 {yylval.sn = newToken(snt_operator_greater_equal);			yycolumnno += strlen(yytext); yytokenno++; return GREATER_EQUAL;}
 	YY_BREAK
 case 57:
 YY_RULE_SETUP
-#line 95 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 96 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
 {yylval.sn = newToken(snt_operator_and);					yycolumnno += strlen(yytext); yytokenno++; return AND;}
 	YY_BREAK
 case 58:
 YY_RULE_SETUP
-#line 96 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 97 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
 {yylval.sn = newToken(snt_operator_or);						yycolumnno += strlen(yytext); yytokenno++; return OR;}
 	YY_BREAK
 case 59:
 YY_RULE_SETUP
-#line 97 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 98 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
 {yylval.sn = newToken(snt_operator_inc);					yycolumnno += strlen(yytext); yytokenno++; return INC;}
 	YY_BREAK
 case 60:
 YY_RULE_SETUP
-#line 98 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 99 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
 {yylval.sn = newToken(snt_operator_dec);					yycolumnno += strlen(yytext); yytokenno++; return DEC;}
 	YY_BREAK
 case 61:
 YY_RULE_SETUP
-#line 100 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 101 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
 {yylval.sn = newToken(snt_keyword_bool);					yycolumnno += strlen(yytext); yytokenno++; return BOOL;}
 	YY_BREAK
 case 62:
 YY_RULE_SETUP
-#line 101 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 102 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
 {yylval.sn = newToken(snt_keyword_char);					yycolumnno += strlen(yytext); yytokenno++; return CHAR;}
 	YY_BREAK
 case 63:
 YY_RULE_SETUP
-#line 102 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 103 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
 {yylval.sn = newToken(snt_keyword_wchar_t);					yycolumnno += strlen(yytext); yytokenno++; return WCHAR_T;}
 	YY_BREAK
 case 64:
 YY_RULE_SETUP
-#line 103 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 104 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
 {yylval.sn = newToken(snt_keyword_short);					yycolumnno += strlen(yytext); yytokenno++; return SHORT;}
 	YY_BREAK
 case 65:
 YY_RULE_SETUP
-#line 104 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 105 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
 {yylval.sn = newToken(snt_keyword_long);					yycolumnno += strlen(yytext); yytokenno++; return LONG;}
 	YY_BREAK
 case 66:
 YY_RULE_SETUP
-#line 105 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 106 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
 {yylval.sn = newToken(snt_keyword_int);						yycolumnno += strlen(yytext); yytokenno++; return INT;}
 	YY_BREAK
 case 67:
 YY_RULE_SETUP
-#line 106 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 107 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
 {yylval.sn = newToken(snt_keyword_signed);					yycolumnno += strlen(yytext); yytokenno++; return SIGNED;}
 	YY_BREAK
 case 68:
 YY_RULE_SETUP
-#line 107 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 108 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
 {yylval.sn = newToken(snt_keyword_unsigned);				yycolumnno += strlen(yytext); yytokenno++; return UNSIGNED;}
 	YY_BREAK
 case 69:
 YY_RULE_SETUP
-#line 108 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 109 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
 {yylval.sn = newToken(snt_keyword_float);					yycolumnno += strlen(yytext); yytokenno++; return FLOAT;}
 	YY_BREAK
 case 70:
 YY_RULE_SETUP
-#line 109 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 110 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
 {yylval.sn = newToken(snt_keyword_double);					yycolumnno += strlen(yytext); yytokenno++; return DOUBLE;}
 	YY_BREAK
 case 71:
 YY_RULE_SETUP
-#line 110 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 111 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
 {yylval.sn = newToken(snt_keyword_void);					yycolumnno += strlen(yytext); yytokenno++; return VOID;}
 	YY_BREAK
 case 72:
 YY_RULE_SETUP
-#line 111 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 112 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
 {yylval.sn = newToken(snt_keyword_string_t);				yycolumnno += strlen(yytext); yytokenno++; return STRING_T;}
 	YY_BREAK
 case 73:
 YY_RULE_SETUP
-#line 112 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 113 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
 {yylval.sn = newToken(snt_keyword_abstract);				yycolumnno += strlen(yytext); yytokenno++; return ABSTRACT;}
 	YY_BREAK
 case 74:
 YY_RULE_SETUP
-#line 113 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 114 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
 {yylval.sn = newToken(snt_keyword_namespace);				yycolumnno += strlen(yytext); yytokenno++; return NAMESPACE;}
 	YY_BREAK
 case 75:
 YY_RULE_SETUP
-#line 114 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 115 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
 {yylval.sn = newToken(snt_keyword_enum);					yycolumnno += strlen(yytext); yytokenno++; return ENUM;}
 	YY_BREAK
 case 76:
 YY_RULE_SETUP
-#line 115 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 116 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
 {yylval.sn = newToken(snt_keyword_class);					yycolumnno += strlen(yytext); yytokenno++; return CLASS;}
 	YY_BREAK
 case 77:
 YY_RULE_SETUP
-#line 116 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 117 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
 {yylval.sn = newToken(snt_keyword_struct);					yycolumnno += strlen(yytext); yytokenno++; return STRUCT;}
 	YY_BREAK
 case 78:
 YY_RULE_SETUP
-#line 117 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 118 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
 {yylval.sn = newToken(snt_keyword_virtual);					yycolumnno += strlen(yytext); yytokenno++; return VIRTUAL;}
 	YY_BREAK
 case 79:
 YY_RULE_SETUP
-#line 118 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 119 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
 {yylval.sn = newToken(snt_keyword_static);					yycolumnno += strlen(yytext); yytokenno++; return STATIC;}
 	YY_BREAK
 case 80:
 YY_RULE_SETUP
-#line 119 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 120 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
 {yylval.sn = newToken(snt_keyword_const);					yycolumnno += strlen(yytext); yytokenno++; return CONST;}
 	YY_BREAK
 case 81:
 YY_RULE_SETUP
-#line 120 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 121 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
 {yylval.sn = newToken(snt_keyword_operator);				yycolumnno += strlen(yytext); yytokenno++; return OPERATOR;}
 	YY_BREAK
 case 82:
 YY_RULE_SETUP
-#line 121 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 122 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
 {yylval.sn = newToken(snt_keyword_typedef);					yycolumnno += strlen(yytext); yytokenno++; return TYPEDEF;}
 	YY_BREAK
 case 83:
 YY_RULE_SETUP
-#line 122 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 123 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
 {yylval.sn = newToken(snt_keyword_primitive);				yycolumnno += strlen(yytext); yytokenno++; return PRIMITIVE;}
 	YY_BREAK
 case 84:
 YY_RULE_SETUP
-#line 123 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 124 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
 {yylval.sn = newToken(snt_keyword_get);						yycolumnno += strlen(yytext); yytokenno++; return GET;}
 	YY_BREAK
 case 85:
 YY_RULE_SETUP
-#line 124 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 125 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
 {yylval.sn = newToken(snt_keyword_set);						yycolumnno += strlen(yytext); yytokenno++; return SET;}
 	YY_BREAK
 case 86:
 YY_RULE_SETUP
-#line 125 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 126 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
 {yylval.sn = newToken(snt_keyword_nocode);					yycolumnno += strlen(yytext); yytokenno++; return NOCODE;}
 	YY_BREAK
 case 87:
 YY_RULE_SETUP
-#line 126 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 127 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
 {yylval.sn = newToken(snt_keyword_nometa);					yycolumnno += strlen(yytext); yytokenno++; return NOMETA;}
 	YY_BREAK
 case 88:
 YY_RULE_SETUP
-#line 127 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 128 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
 {yylval.sn = newToken(snt_keyword_export);					yycolumnno += strlen(yytext); yytokenno++; return EXPORT;}
 	YY_BREAK
 case 89:
 YY_RULE_SETUP
-#line 128 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 129 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
 {yylval.sn = newToken(snt_keyword_override);				yycolumnno += strlen(yytext); yytokenno++; return OVERRIDE;}
 	YY_BREAK
 case 90:
 YY_RULE_SETUP
-#line 129 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 130 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
 {yylval.sn = newToken(snt_keyword_template);				yycolumnno += strlen(yytext); yytokenno++; return TEMPLATE;}
 	YY_BREAK
 case 91:
 YY_RULE_SETUP
-#line 130 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 131 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
 {yylval.sn = newToken(snt_keyword_delegate);				yycolumnno += strlen(yytext); yytokenno++; return DELEGATE;}
 	YY_BREAK
 case 92:
 YY_RULE_SETUP
-#line 133 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 134 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
 {yylval.sn = newIdentify(yytext);					yycolumnno += strlen(yytext); yytokenno++; return IDENTIFY;}
 	YY_BREAK
 case 93:
 YY_RULE_SETUP
-#line 135 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 136 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
 {yylval.sn = newString(yytext + 1);					yycolumnno += strlen(yytext); yytokenno++; return STRING;}
 	YY_BREAK
 case 94:
 YY_RULE_SETUP
-#line 137 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 138 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
 {++yycolumnno;}
 	YY_BREAK
 case 95:
 YY_RULE_SETUP
-#line 138 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 139 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
 {newCodeBlock(yytext); yycolumnno = 1;}
 	YY_BREAK
 case 96:
 YY_RULE_SETUP
-#line 140 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 141 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
 {invalidString(yytext); yycolumnno += strlen(yytext);}
 	YY_BREAK
 case 97:
 YY_RULE_SETUP
-#line 141 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 142 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
 {invalidString(yytext); yycolumnno += strlen(yytext);}
 	YY_BREAK
 case 98:
 YY_RULE_SETUP
-#line 143 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 144 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
 YY_FATAL_ERROR( "flex scanner jammed" );
 	YY_BREAK
-#line 1427 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l.c"
+#line 1428 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l.c"
 
 	case YY_END_OF_BUFFER:
 		{
@@ -2305,7 +2306,7 @@ int main()
 	return 0;
 	}
 #endif
-#line 143 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 144 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.l"
 
 
 YY_BUFFER_STATE createBufferState(FILE* file)

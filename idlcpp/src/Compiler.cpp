@@ -247,7 +247,7 @@ void Compiler::useType(TypeNode* typeNode, TypeUsage usage, TypeNameNode* typeNa
 
 void Compiler::outputUsedTypes(FILE* file, SourceFile* sourceFile)
 {
-	char buf[512];
+	char buf[4096];
 	std::vector<SourceFile*> sourceFiles;
 	std::vector<TypeNode*> typeNodes;
 	auto begin = m_usedTypes.begin();
@@ -552,7 +552,7 @@ void Compiler::outputEmbededCodes(FILE* file, TokenNode* tokenNode)
 	if (m_outputLineDirective && tokenNode && m_currentLineNo < tokenNode->m_lineNo)
 	{
 		m_currentLineNo = tokenNode->m_lineNo;
-		char buf[512];
+		char buf[4096];
 		std::string fileName = m_mainSourceFile->m_fileName;
 		FormatPathForInclude(fileName);
 		sprintf_s(buf, "\n#line %d \"%s\"\n", m_currentLineNo, fileName.c_str());

@@ -122,7 +122,7 @@ T* TypeNode::TypeNodeContainer::addTypeNode(TypeNode* enclosing, const std::stri
 	}
 	else
 	{
-		char buf[512];
+		char buf[4096];
 		sprintf_s(buf, "\'%s\' : already defined in %s(%d,%d)",
 			name.c_str(), child->m_sourceFile->m_fileName.c_str(),
 			child->m_identifyNode->m_lineNo, child->m_identifyNode->m_columnNo);
@@ -486,7 +486,7 @@ NamespaceTypeNode* NamespaceTypeNode::addNamespace(NamespaceNode* node)
 	}
 	else
 	{
-		char buf[512];
+		char buf[4096];
 		sprintf_s(buf, "\'%s\' : already defined in %s(%d,%d)",
 			node->m_name->m_str.c_str(), child->m_sourceFile->m_fileName.c_str(),
 			child->m_identifyNode->m_lineNo, child->m_identifyNode->m_columnNo);
@@ -726,7 +726,7 @@ bool TypeTree::checkTypeNameNode(TypeNode*& initialTypeTreeNode, TypeNode*& fina
 		{
 			if (result)
 			{
-				char buf[512];
+				char buf[4096];
 				std::string str;
 				scopeNameListNode->getString(str);
 				sprintf_s(buf, "\'%s\' : ambiguous type name could be %s(%d, %d) or %s(%d, %d)",

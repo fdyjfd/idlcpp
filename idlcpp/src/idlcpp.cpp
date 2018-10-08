@@ -61,6 +61,7 @@ extern "C"
 {
 extern int yylineno;
 extern int yytokenno;
+extern int yyHasMapProperty;
 typedef struct yy_buffer_state *YY_BUFFER_STATE;
 YY_BUFFER_STATE createBufferState(FILE* file);
 YY_BUFFER_STATE yy_scan_string( const char *yy_str );
@@ -154,6 +155,7 @@ int _tmain(int argc, _TCHAR* argv[])
 	}
 
 	bool mainSourceFile = true;
+	bool hasMapProperty = false;
 	if (import_file_failed == g_compiler.addSourceFile(inputFileName.c_str()))
 	{
 		ErrorList_AddItem("", 0, 0, import_error_file_not_existing, inputFileName.c_str());
@@ -174,8 +176,10 @@ int _tmain(int argc, _TCHAR* argv[])
 			yyrestart(file);
 			yylineno = 1;
 			yytokenno = 0;
+			yyHasMapProperty = 0;
 			yyparse();
 			fclose(file);
+			sourceFile->m_hasMapProperty = (0 != yyHasMapProperty);
 		}
 		mainSourceFile = false;
 	}

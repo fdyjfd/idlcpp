@@ -19,7 +19,7 @@ InstanceProperty::InstanceProperty(const char* name, Attributes* attributes, Cla
 	m_setterPassing = setterPassing;
 	m_getterConstant = getterConstant;
 	m_setterConstant = setterConstant;
-	m_category = simple_instance_property;
+	m_category = simple_property;
 }
 
 InstanceProperty::InstanceProperty(const char* name, Attributes* attributes, ClassType* objectType,
@@ -39,7 +39,7 @@ InstanceProperty::InstanceProperty(const char* name, Attributes* attributes, Cla
 	m_setterConstant = setterConstant;
 	m_arraySizer = sizer;
 	m_arrayResizer = resizer;
-	m_category = array_instance_property;
+	m_category = array_property;
 }
 
 InstanceProperty::InstanceProperty(const char* name, Attributes* attributes, ClassType* objectType,
@@ -62,7 +62,7 @@ InstanceProperty::InstanceProperty(const char* name, Attributes* attributes, Cla
 	m_mapGetIterator = getIterator;
 	m_mapGetKey = getKey;
 	m_mapGetValue = getValue;
-	m_category = map_instance_property;
+	m_category = map_property;
 }
 
 ClassType* InstanceProperty::get_objectType()
@@ -72,17 +72,17 @@ ClassType* InstanceProperty::get_objectType()
 
 bool InstanceProperty::get_isArray() const
 {
-	return array_instance_property == m_category;
+	return array_property == m_category;
 }
 
 bool InstanceProperty::get_isMap() const
 {
-	return map_instance_property == m_category;
+	return map_property == m_category;
 }
 
 bool InstanceProperty::get_isSimple() const
 {
-	return simple_instance_property == m_category;
+	return simple_property == m_category;
 }
 
 bool InstanceProperty::get_hasGetter() const

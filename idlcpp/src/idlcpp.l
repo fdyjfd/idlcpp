@@ -10,6 +10,7 @@
 YY_BUFFER_STATE createBufferState(FILE* file);
 int yytokenno = 0;
 int yycolumnno = 1;
+int yyHasMapProperty = 0;
 %}
 
 %%

@@ -25,31 +25,19 @@ PropertyNode::PropertyNode(IdentifyNode* name, PropertyCategory category)
 
 }
 
+PropertyCategory PropertyNode::getCategory()
+{
+	return m_propertyCategory;
+}
+
 bool PropertyNode::isStatic()
 {
 	return (0 != m_modifier && snt_keyword_static == m_modifier->m_nodeType);
 }
 
-bool PropertyNode::isVirtual()
-{
-	return (0 != m_modifier && 
-		(snt_keyword_virtual == m_modifier->m_nodeType || 
-		snt_keyword_abstract == m_modifier->m_nodeType));
-}
-
-bool PropertyNode::isAbstract()
-{
-	return (0 != m_modifier && snt_keyword_abstract == m_modifier->m_nodeType);
-}
-
-bool PropertyNode::isNotArray()
+bool PropertyNode::isSimple()
 {
 	return simple_property == m_propertyCategory;
-}
-
-bool PropertyNode::isArray()
-{
-	return simple_property != m_propertyCategory;
 }
 
 bool PropertyNode::isFixedArray()
@@ -60,6 +48,36 @@ bool PropertyNode::isFixedArray()
 bool PropertyNode::isDynamicArray()
 {
 	return dynamic_array_property == m_propertyCategory;
+}
+
+bool PropertyNode::isMap()
+{
+	return map_property == m_propertyCategory;
+}
+
+bool PropertyNode::isKeyByPtr()
+{
+	return 0 != m_keyPassing;
+}
+
+bool PropertyNode::isKeyByRef()
+{
+	return false;
+}
+
+bool PropertyNode::isKeyByValue()
+{
+	return 0 == m_keyPassing;
+}
+
+bool PropertyNode::isKeyConstant()
+{
+	return false;
+}
+
+bool PropertyNode::isKeyAllowNull()
+{
+	return false;
 }
 
 bool PropertyNode::byPtr()
@@ -101,6 +119,10 @@ void PropertyNode::checkTypeNames(TypeNode* enclosingTypeNode, TemplateArguments
 	if (m_set && m_set->m_typeName != m_typeName)
 	{
 		m_set->m_typeName->calcTypeNodes(enclosingTypeNode, templateArguments);
+	}
+	if (m_keyTypeName)
+	{
+		m_keyTypeName->calcTypeNodes(enclosingTypeNode, templateArguments);
 	}
 }
 

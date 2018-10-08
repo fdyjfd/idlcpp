@@ -18,7 +18,7 @@ StaticProperty::StaticProperty(const char* name, Attributes* attributes,
 	m_setterPassing = setterPassing;
 	m_getterConstant = getterConstant;
 	m_setterConstant = setterConstant;
-	m_array = false;
+	m_category = simple_property;
 }
 
 StaticProperty::StaticProperty(const char* name, Attributes* attributes,
@@ -37,14 +37,46 @@ StaticProperty::StaticProperty(const char* name, Attributes* attributes,
 	m_setterConstant = setterConstant;
 	m_arraySizer = sizer;
 	m_arrayResizer = resizer;
-	m_array = true;
+	m_category = array_property;
 }
 
+StaticProperty::StaticProperty(const char* name, Attributes* attributes,
+	MapStaticPropertyGetter getter, Type* getterType, Passing getterPassing, bool getterConstant,
+	MapStaticPropertySetter setter, Type* setterType, Passing setterPassing, bool setterConstant,
+	MapStaticPropertyGetIterator getIterator,
+	MapStaticPropertyGetKey getKey,
+	MapStaticPropertyGetValue getValue)
+	: Metadata(name, attributes)
+{
+	m_mapGetter = getter;
+	m_mapSetter = setter;
+	m_getterType = getterType;
+	m_setterType = setterType;
+	m_getterPassing = getterPassing;
+	m_setterPassing = setterPassing;
+	m_getterConstant = getterConstant;
+	m_setterConstant = setterConstant;
+	m_mapGetIterator = getIterator;
+	m_mapGetKey = getKey;
+	m_mapGetValue = getValue;
+	m_category = map_property;
+}
 
 bool StaticProperty::get_isArray() const
 {
-	return m_array;
+	return array_property == m_category;
 }
+
+bool StaticProperty::get_isMap() const
+{
+	return map_property == m_category;
+}
+
+bool StaticProperty::get_isSimple() const
+{
+	return simple_property == m_category;
+}
+
 
 bool StaticProperty::get_hasGetter() const
 {

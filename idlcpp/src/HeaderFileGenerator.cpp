@@ -185,6 +185,10 @@ void HeaderFileGenerator::generateCode_Program(FILE* file, SourceFile* sourceFil
 {
 	writeStringToFile("#pragma once\n\n", file);
 	g_compiler.outputUsedTypes(file, sourceFile);
+	if (sourceFile->m_hasMapProperty)
+	{
+		writeStringToFile("namespace pafcore{ class Iterator; }\n", file);
+	}
 
 	generateCode_Namespace(file, sourceFile->m_syntaxTree, -1);
 
@@ -373,7 +377,7 @@ void HeaderFileGenerator::generateCode_Class(FILE* file, ClassNode* classNode, i
 	size_t memberCount = memberNodes.size();
 	for (size_t i = 0; i < memberCount; ++i)
 	{
-		char buf[512];
+		char buf[4096];
 		MemberNode* memberNode = memberNodes[i];
 		switch (memberNode->m_nodeType)
 		{
@@ -615,23 +619,29 @@ void HeaderFileGenerator::generateCode_Property_Get(FILE* file, PropertyNode* pr
 		generateCode_Token(file, propertyNode->m_get->m_passing, 0);
 	}
 	writeSpaceToFile(file);
-	//if (propertyNode->m_get->m_nativeName)
-	//{
-	//	generateCode_Name(file, propertyNode->m_name, propertyNode->m_get->m_nativeName, 0);
-	//}
-	//else
+	generateCode_Token(file, propertyNode->m_get->m_keyword, 0);
+	generateCode_Identify(file, propertyNode->m_name, 0, false);
+
+	writeStringToFile("(", file);
+
+	if (propertyNode->isFixedArray() || propertyNode->isDynamicArray())
 	{
-		generateCode_Token(file, propertyNode->m_get->m_keyword, 0);
-		generateCode_Identify(file, propertyNode->m_name, 0, false);
+		writeStringToFile("size_t", file);
+	}
+	else if (propertyNode->isMap())
+	{
+		generateCode_TypeName(file, propertyNode->m_keyTypeName, propertyNode->m_enclosing, true, 0);
+		if (0 != propertyNode->m_keyPassing)
+		{
+			generateCode_Token(file, propertyNode->m_keyPassing, 0);
+		}
 	}
 
-	char buf[64];
-	const char* strIndex = propertyNode->isArray() ? "size_t" : "";
 	const char* strConst =
 		(!propertyNode->isStatic() && (propertyNode->m_get->isConstant() || propertyNode->m_get->byValue())) ?
 		" const" : "";
-	const char* strPure = propertyNode->isAbstract() ? " = 0" : "";
-	sprintf_s(buf, "(%s)%s%s;", strIndex, strConst, strPure);
+	char buf[64];
+	sprintf_s(buf, ")%s;", strConst);
 	writeStringToFile(buf, file);
 
 }
@@ -667,19 +677,23 @@ void HeaderFileGenerator::generateCode_Property_Set(FILE* file, PropertyNode* pr
 		generateCode_Token(file, propertyNode->m_modifier, indentation);
 		indentation = 0;
 	}
-	//if (propertyNode->m_set->m_nativeName)
-	//{
-	//	generateCode_Name(file, propertyNode->m_name, propertyNode->m_set->m_nativeName, 0);
-	//}
-	//else
-	{
-		generateCode_Token(file, propertyNode->m_set->m_keyword, indentation);
-		generateCode_Identify(file, propertyNode->m_name, 0, false);
-	}
+	generateCode_Token(file, propertyNode->m_set->m_keyword, indentation);
+	generateCode_Identify(file, propertyNode->m_name, 0, false);
+	
 	writeStringToFile("(", file);
-	if (propertyNode->isArray())
+	
+	if (propertyNode->isFixedArray() || propertyNode->isDynamicArray())
 	{
 		writeStringToFile("size_t, ", file);
+	}
+	else if (propertyNode->isMap())
+	{
+		generateCode_TypeName(file, propertyNode->m_keyTypeName, propertyNode->m_enclosing, true, 0);
+		if (0 != propertyNode->m_keyPassing)
+		{
+			generateCode_Token(file, propertyNode->m_keyPassing, 0);
+		}
+		writeStringToFile(", ", file);
 	}
 	if(0 != propertyNode->m_set->m_constant)
 	{
@@ -690,14 +704,7 @@ void HeaderFileGenerator::generateCode_Property_Set(FILE* file, PropertyNode* pr
 	{
 		generateCode_Token(file, propertyNode->m_set->m_passing, 0);
 	}
-	if(propertyNode->isAbstract())
-	{
-		writeStringToFile(") = 0;", file);	
-	}
-	else
-	{
-		writeStringToFile(");", file);	
-	}
+	writeStringToFile(");", file);	
 }
 
 void HeaderFileGenerator::generateCode_Property_Size(FILE* file, PropertyNode* propertyNode, int indentation)
@@ -731,6 +738,57 @@ void HeaderFileGenerator::generateCode_Property_Resize(FILE* file, PropertyNode*
 	writeStringToFile("(size_t);", file);
 }
 
+void HeaderFileGenerator::generateCode_Property_GetIterator(FILE* file, PropertyNode* propertyNode, int indentation)
+{
+	if (propertyNode->isStatic())
+	{
+		writeStringToFile("static ", file, indentation);
+		indentation = 0;
+	}
+	writeStringToFile("::pafcore::Iterator* getIterator_", file, indentation);
+	writeStringToFile(propertyNode->m_name->m_str.c_str(), file);
+	writeStringToFile("();", file);
+}
+
+void HeaderFileGenerator::generateCode_Property_GetKey(FILE* file, PropertyNode* propertyNode, int indentation)
+{
+	if (propertyNode->isStatic())
+	{
+		writeStringToFile("static ", file, indentation);
+		indentation = 0;
+	}
+	generateCode_TypeName(file, propertyNode->m_keyTypeName, propertyNode->m_enclosing, true, indentation);
+	if (0 != propertyNode->m_keyPassing)
+	{
+		generateCode_Token(file, propertyNode->m_keyPassing, 0);
+	}
+	writeStringToFile(" getKey_", file);
+	writeStringToFile(propertyNode->m_name->m_str.c_str(), file);
+	writeStringToFile("(::pafcore::Iterator* iterator);", file);
+}
+
+void HeaderFileGenerator::generateCode_Property_GetValue(FILE* file, PropertyNode* propertyNode, int indentation)
+{
+	if (propertyNode->isStatic())
+	{
+		writeStringToFile("static ", file, indentation);
+		indentation = 0;
+	}
+	if (0 != propertyNode->m_get->m_constant)
+	{
+		generateCode_Token(file, propertyNode->m_get->m_constant, indentation);
+		indentation = 0;
+	}
+	generateCode_TypeName(file, propertyNode->m_get->m_typeName, propertyNode->m_enclosing, true, indentation);
+	if (0 != propertyNode->m_get->m_passing)
+	{
+		generateCode_Token(file, propertyNode->m_get->m_passing, 0);
+	}
+	writeStringToFile(" getValue_", file);
+	writeStringToFile(propertyNode->m_name->m_str.c_str(), file);
+	writeStringToFile("(::pafcore::Iterator* iterator);", file);
+}
+
 void HeaderFileGenerator::generateCode_Property(FILE* file, PropertyNode* propertyNode, int indentation)
 {
 	if (propertyNode->isNoCode())
@@ -759,7 +817,7 @@ void HeaderFileGenerator::generateCode_Property(FILE* file, PropertyNode* proper
 			generateCode_Property_Set(file, propertyNode, indentation);
 		}
 	}
-	if (propertyNode->isArray())
+	if (propertyNode->isFixedArray() || propertyNode->isDynamicArray())
 	{
 		writeStringToFile("\n", file);
 		generateCode_Property_Size(file, propertyNode, indentation);
@@ -768,6 +826,15 @@ void HeaderFileGenerator::generateCode_Property(FILE* file, PropertyNode* proper
 			writeStringToFile("\n", file);
 			generateCode_Property_Resize(file, propertyNode, indentation);
 		}
+	}
+	else if(propertyNode->isMap())
+	{
+		writeStringToFile("\n", file);
+		generateCode_Property_GetIterator(file, propertyNode, indentation);
+		writeStringToFile("\n", file);
+		generateCode_Property_GetKey(file, propertyNode, indentation);
+		writeStringToFile("\n", file);
+		generateCode_Property_GetValue(file, propertyNode, indentation);
 	}
 };
 

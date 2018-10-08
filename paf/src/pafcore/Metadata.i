@@ -18,6 +18,9 @@ namespace pafcore
 		e_property_is_not_readable,
 		e_property_is_not_writable,
 		e_array_property_is_not_dynamic,
+		e_is_not_map_property,
+		e_property_is_not_iterable,
+		e_property_is_not_dereferenceable,
 		e_item_is_constant,
 		e_field_is_an_array,
 		e_field_is_constant,
@@ -144,6 +147,12 @@ namespace pafcore
 			tc_none,
 			tc_pointer,
 			tc_array,
+		};
+		enum PropertyCategory
+		{
+			simple_property,
+			array_property,
+			map_property,
 		};
 	public:
 		Metadata(const char* name, Attributes* attributes = 0);
