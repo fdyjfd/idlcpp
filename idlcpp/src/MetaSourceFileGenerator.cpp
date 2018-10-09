@@ -645,7 +645,7 @@ void writeMetaGetPropertyImpl_Key(ClassNode* classNode, TemplateArguments* templ
 		{
 			sprintf_s(buf, "%s index;\n", typeName.c_str());
 			writeStringToFile(buf, file, indentation);
-			sprintf_s(buf, "if(!value->castToPrimitive(RuntimeTypeOf<%s>::RuntimeType::GetSingleton(), &index))\n", typeName.c_str());
+			sprintf_s(buf, "if(!key->castToPrimitive(RuntimeTypeOf<%s>::RuntimeType::GetSingleton(), &index))\n", typeName.c_str());
 			writeStringToFile(buf, file, indentation);
 		}
 		else
@@ -662,7 +662,7 @@ void writeMetaGetPropertyImpl_Key(ClassNode* classNode, TemplateArguments* templ
 		{
 			sprintf_s(buf, "%s index;\n", typeName.c_str());
 			writeStringToFile(buf, file, indentation);
-			sprintf_s(buf, "if(!value->castToEnum(RuntimeTypeOf<%s>::RuntimeType::GetSingleton(), &index))\n", typeName.c_str());
+			sprintf_s(buf, "if(!key->castToEnum(RuntimeTypeOf<%s>::RuntimeType::GetSingleton(), &index))\n", typeName.c_str());
 			writeStringToFile(buf, file, indentation);
 		}
 		else
@@ -2652,24 +2652,47 @@ void writeMetaConstructor_Properties(ClassNode* classNode, TemplateArguments* te
 			char getIteratorFunc[256];
 			char getKeyFunc[256];
 			char getValueFunc[256];
+			char keyType[256];
+			char keyPassing[64];
+			bool keyConstant;
+
 			sprintf_s(getIteratorFunc, "%s_getIterator_%s", classNode->m_name->m_str.c_str(), propertyNode->m_name->m_str.c_str());
 			sprintf_s(getKeyFunc, "%s_getKey_%s", classNode->m_name->m_str.c_str(), propertyNode->m_name->m_str.c_str());
 			sprintf_s(getValueFunc, "%s_getValue_%s", classNode->m_name->m_str.c_str(), propertyNode->m_name->m_str.c_str());
-			if (isStatic)
+			std::string keyTypeName;
+			TypeCategory keyTypeCategory = CalcTypeNativeName(keyTypeName, propertyNode->m_keyTypeName, templateArguments);
+			sprintf_s(keyType, "RuntimeTypeOf<%s>::RuntimeType::GetSingleton()", keyTypeName.c_str());
+
+			if (propertyNode->isKeyByPtr())
 			{
-				sprintf_s(buf, "::pafcore::StaticProperty(\"%s\", %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s),\n",
-					propertyNode->m_name->m_str.c_str(), strAttributes,
-					getterFunc, getterType, getterPassing, getterConstant ? "true" : "false",
-					setterFunc, setterType, setterPassing, setterConstant ? "true" : "false",
-					getIteratorFunc, getKeyFunc, getValueFunc);
+				sprintf_s(keyPassing, "::pafcore::Metadata::by_ptr");
+			}
+			else if (propertyNode->isKeyByRef())
+			{
+				sprintf_s(keyPassing, "::pafcore::Metadata::by_ref");
 			}
 			else
 			{
-				sprintf_s(buf, "::pafcore::InstanceProperty(\"%s\", %s, GetSingleton(), %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s),\n",
+				sprintf_s(keyPassing, "::pafcore::Metadata::by_value");
+			}
+			keyConstant = propertyNode->isKeyConstant();
+			if (isStatic)
+			{
+				sprintf_s(buf, "::pafcore::StaticProperty(\"%s\", %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s),\n",
 					propertyNode->m_name->m_str.c_str(), strAttributes,
 					getterFunc, getterType, getterPassing, getterConstant ? "true" : "false",
 					setterFunc, setterType, setterPassing, setterConstant ? "true" : "false",
-					getIteratorFunc, getKeyFunc, getValueFunc);
+					getIteratorFunc, getKeyFunc, getValueFunc,
+					keyType, keyPassing, keyConstant ? "true" : "false");
+			}
+			else
+			{
+				sprintf_s(buf, "::pafcore::InstanceProperty(\"%s\", %s, GetSingleton(), %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s),\n",
+					propertyNode->m_name->m_str.c_str(), strAttributes,
+					getterFunc, getterType, getterPassing, getterConstant ? "true" : "false",
+					setterFunc, setterType, setterPassing, setterConstant ? "true" : "false",
+					getIteratorFunc, getKeyFunc, getValueFunc,
+					keyType, keyPassing, keyConstant ? "true" : "false");
 			}
 		}
 		else

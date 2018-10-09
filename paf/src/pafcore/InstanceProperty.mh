@@ -34,6 +34,11 @@ namespace idlcpp
 		static ::pafcore::ErrorCode InstanceProperty_get_isArray(::pafcore::InstanceProperty* instanceProperty, ::pafcore::Variant* that, ::pafcore::Variant* value);
 		static ::pafcore::ErrorCode InstanceProperty_get_isMap(::pafcore::InstanceProperty* instanceProperty, ::pafcore::Variant* that, ::pafcore::Variant* value);
 		static ::pafcore::ErrorCode InstanceProperty_get_isSimple(::pafcore::InstanceProperty* instanceProperty, ::pafcore::Variant* that, ::pafcore::Variant* value);
+		static ::pafcore::ErrorCode InstanceProperty_get_keyByPtr(::pafcore::InstanceProperty* instanceProperty, ::pafcore::Variant* that, ::pafcore::Variant* value);
+		static ::pafcore::ErrorCode InstanceProperty_get_keyByRef(::pafcore::InstanceProperty* instanceProperty, ::pafcore::Variant* that, ::pafcore::Variant* value);
+		static ::pafcore::ErrorCode InstanceProperty_get_keyByValue(::pafcore::InstanceProperty* instanceProperty, ::pafcore::Variant* that, ::pafcore::Variant* value);
+		static ::pafcore::ErrorCode InstanceProperty_get_keyConstant(::pafcore::InstanceProperty* instanceProperty, ::pafcore::Variant* that, ::pafcore::Variant* value);
+		static ::pafcore::ErrorCode InstanceProperty_get_keyType(::pafcore::InstanceProperty* instanceProperty, ::pafcore::Variant* that, ::pafcore::Variant* value);
 		static ::pafcore::ErrorCode InstanceProperty_get_objectType(::pafcore::InstanceProperty* instanceProperty, ::pafcore::Variant* that, ::pafcore::Variant* value);
 		static ::pafcore::ErrorCode InstanceProperty_get_setterByPtr(::pafcore::InstanceProperty* instanceProperty, ::pafcore::Variant* that, ::pafcore::Variant* value);
 		static ::pafcore::ErrorCode InstanceProperty_get_setterByRef(::pafcore::InstanceProperty* instanceProperty, ::pafcore::Variant* that, ::pafcore::Variant* value);

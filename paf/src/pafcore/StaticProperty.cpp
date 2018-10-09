@@ -6,18 +6,21 @@
 BEGIN_PAFCORE
 
 StaticProperty::StaticProperty(const char* name, Attributes* attributes,
-	StaticPropertyGetter getter, Type* getterType, Passing getterPassing, bool getterConstant, 
+	StaticPropertyGetter getter, Type* getterType, Passing getterPassing, bool getterConstant,
 	StaticPropertySetter setter, Type* setterType, Passing setterPassing, bool setterConstant)
-: Metadata(name, attributes)
+	: Metadata(name, attributes)
 {
 	m_getter = getter;
 	m_setter = setter;
 	m_getterType = getterType;
 	m_setterType = setterType;
+	m_keyType = 0;
 	m_getterPassing = getterPassing;
 	m_setterPassing = setterPassing;
+	m_keyPassing = by_value;
 	m_getterConstant = getterConstant;
 	m_setterConstant = setterConstant;
+	m_keyConstant = false;
 	m_category = simple_property;
 }
 
@@ -31,10 +34,13 @@ StaticProperty::StaticProperty(const char* name, Attributes* attributes,
 	m_arraySetter = setter;
 	m_getterType = getterType;
 	m_setterType = setterType;
+	m_keyType = 0;
 	m_getterPassing = getterPassing;
 	m_setterPassing = setterPassing;
+	m_keyPassing = by_value;
 	m_getterConstant = getterConstant;
 	m_setterConstant = setterConstant;
+	m_keyConstant = false;
 	m_arraySizer = sizer;
 	m_arrayResizer = resizer;
 	m_category = array_property;
@@ -45,17 +51,21 @@ StaticProperty::StaticProperty(const char* name, Attributes* attributes,
 	MapStaticPropertySetter setter, Type* setterType, Passing setterPassing, bool setterConstant,
 	MapStaticPropertyGetIterator getIterator,
 	MapStaticPropertyGetKey getKey,
-	MapStaticPropertyGetValue getValue)
+	MapStaticPropertyGetValue getValue,
+	Type* keyType, Passing keyPassing, bool keyConstant)
 	: Metadata(name, attributes)
 {
 	m_mapGetter = getter;
 	m_mapSetter = setter;
 	m_getterType = getterType;
 	m_setterType = setterType;
+	m_keyType = keyType;
 	m_getterPassing = getterPassing;
 	m_setterPassing = setterPassing;
+	m_keyPassing = keyPassing;
 	m_getterConstant = getterConstant;
 	m_setterConstant = setterConstant;
+	m_keyConstant = keyConstant;
 	m_mapGetIterator = getIterator;
 	m_mapGetKey = getKey;
 	m_mapGetValue = getValue;
@@ -148,6 +158,30 @@ bool StaticProperty::get_setterConstant() const
 	return m_setterConstant;
 }
 
+Type* StaticProperty::get_keyType()
+{
+	return m_keyType;
+}
+
+bool StaticProperty::get_keyByValue() const
+{
+	return (by_value == m_keyPassing);
+}
+
+bool StaticProperty::get_keyByRef() const
+{
+	return (by_ref == m_keyPassing);
+}
+
+bool StaticProperty::get_keyByPtr() const
+{
+	return (by_ptr == m_keyPassing);
+}
+
+bool StaticProperty::get_keyConstant() const
+{
+	return m_keyConstant;
+}
 
 
 END_PAFCORE

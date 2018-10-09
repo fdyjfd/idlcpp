@@ -62,6 +62,12 @@ namespace pafcore
 		bool get_setterByPtr() const;
 		bool get_setterConstant() const;
 
+		Type* get_keyType();
+		bool get_keyByValue() const;
+		bool get_keyByRef() const;
+		bool get_keyByPtr() const;
+		bool get_keyConstant() const;
+
 
 	public:
 		InstanceProperty(const char* name, Attributes* attributes, ClassType* objectType,
@@ -79,7 +85,8 @@ namespace pafcore
 			MapInstancePropertySetter setter, Type* setterType, Passing setterPassing, bool setterConstant,
 			MapInstancePropertyGetIterator getIterator, 
 			MapInstancePropertyGetKey getKey,
-			MapInstancePropertyGetValue getValue);
+			MapInstancePropertyGetValue getValue,
+			Type* keyType, Passing keyPassing, bool keyConstant);
 	public:
 		ClassType * m_objectType;
 		union
@@ -107,10 +114,13 @@ namespace pafcore
 		};
 		Type* m_getterType;
 		Type* m_setterType;
+		Type* m_keyType;
 		byte_t m_getterPassing;
 		byte_t m_setterPassing;
+		byte_t m_keyPassing;
 		bool m_getterConstant;
 		bool m_setterConstant;
+		bool m_keyConstant;
 		PropertyCategory m_category;
 
 	};

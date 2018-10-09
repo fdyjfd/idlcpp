@@ -29,7 +29,6 @@ long_t Iterator::release()
 	if (0 == refCount)
 	{
 		delete this;
-
 	}
 	return refCount;
 }

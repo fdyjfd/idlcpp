@@ -6,6 +6,7 @@
 #include "TypeAlias.h"
 #include "NameSpace.h"
 #include "String.mh"
+#include "Iterator.mh"
 #include <string>
 
 BEGIN_PAFCORE
@@ -616,10 +617,15 @@ ErrorCode Reflection::GetArrayInstancePropertySize(Variant& value, Variant* that
 	}
 	else
 	{
-		size_t size = 1;	
-		value.assignPrimitive(RuntimeTypeOf<size_t>::RuntimeType::GetSingleton(), &size);
-		return s_ok;
+		return e_is_not_array_property;
 	}
+
+	//else
+	//{
+	//	size_t size = 1;	
+	//	value.assignPrimitive(RuntimeTypeOf<size_t>::RuntimeType::GetSingleton(), &size);
+	//	return s_ok;
+	//}
 }
 
 ErrorCode Reflection::GetArrayInstancePropertySize(size_t& size, Variant* that, InstanceProperty* property)
@@ -632,17 +638,22 @@ ErrorCode Reflection::GetArrayInstancePropertySize(size_t& size, Variant* that, 
 		{
 			value.castToPrimitive(RuntimeTypeOf<size_t>::RuntimeType::GetSingleton(), &size);
 		}
-		else
-		{
-			size = 0;
-		}
+		//else
+		//{
+		//	size = 0;
+		//}
 		return errorCode;
 	}
 	else
 	{
-		size = 1;
-		return s_ok;
+		return e_is_not_array_property;
 	}
+
+	//else
+	//{
+	//	size = 1;
+	//	return s_ok;
+	//}
 }
 
 ErrorCode Reflection::ResizeArrayInstanceProperty(Variant* that, InstanceProperty* property, size_t size)
@@ -780,6 +791,28 @@ ErrorCode Reflection::GetMapInstanceIterator(Variant* iterator, Variant* that, I
 		return e_is_not_map_property;
 	}
 }
+
+//ErrorCode Reflection::GetMapInstanceIterator(Iterator*& iterator, Variant* that, InstanceProperty* property)
+//{
+//	if (property->get_isMap())
+//	{
+//		if (0 == property->m_mapGetIterator)
+//		{
+//			return e_property_is_not_iterable;
+//		}
+//		Variant value;
+//		ErrorCode errorCode = (*property->m_mapGetIterator)(property, that, &value);
+//		if (s_ok == errorCode)
+//		{
+//			value.castToReferencePtr(RuntimeTypeOf<Iterator>::RuntimeType::GetSingleton(), (void**)&iterator);
+//		}
+//		return errorCode;
+//	}
+//	else
+//	{
+//		return e_is_not_map_property;
+//	}
+//}
 
 ErrorCode Reflection::GetMapInstanceKey(Variant& key, Variant* that, InstanceProperty* property, Iterator* iterator)
 {

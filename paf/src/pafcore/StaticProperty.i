@@ -48,6 +48,12 @@ namespace pafcore
 		bool setterByRef get;
 		bool setterByPtr get;
 		bool setterConstant get;
+
+		Type* keyType get;
+		bool keyByValue get;
+		bool keyByRef get;
+		bool keyByPtr get;
+		bool keyConstant get;
 #{
 	public:
 		StaticProperty(const char* name, Attributes* attributes,
@@ -65,7 +71,8 @@ namespace pafcore
 			MapStaticPropertySetter setter, Type* setterType, Passing setterPassing, bool setterConstant,
 			MapStaticPropertyGetIterator getIterator,
 			MapStaticPropertyGetKey getKey,
-			MapStaticPropertyGetValue getValue);
+			MapStaticPropertyGetValue getValue,
+			Type* keyType, Passing keyPassing, bool keyConstant);
 	public:
 		union
 		{
@@ -92,10 +99,13 @@ namespace pafcore
 		};
 		Type* m_getterType;
 		Type* m_setterType;
+		Type* m_keyType;
 		byte_t m_getterPassing;
 		byte_t m_setterPassing;
+		byte_t m_keyPassing;
 		bool m_getterConstant;
 		bool m_setterConstant;
+		bool m_keyConstant;
 		PropertyCategory m_category;
 #}
 	};
