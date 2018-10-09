@@ -10,6 +10,7 @@ namespace tutorial
 	{
 		//int fap[ ] get set;
 		//int dap[?] get set;
+		nocode Test();
 		int mp[string_t] get set;
 #{
 		std::map<std::string, int> m_test;

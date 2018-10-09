@@ -16,6 +16,12 @@ void init_paf(lua_State *L)
 	luaL_newmetatable(L, paflua::staticArrayProperty_metatable_name);
 	luaL_setfuncs(L, paflua::g_staticArrayPropertyInstance_reg, 0);
 
+	luaL_newmetatable(L, paflua::instanceMapProperty_metatable_name);
+	luaL_setfuncs(L, paflua::g_instanceMapPropertyInstance_reg, 0);
+
+	luaL_newmetatable(L, paflua::staticMapProperty_metatable_name);
+	luaL_setfuncs(L, paflua::g_staticMapPropertyInstance_reg, 0);
+
 	luaL_newmetatable(L, paflua::variant_metatable_name);
 	luaL_setfuncs(L, paflua::g_variant_reg, 0);
 
