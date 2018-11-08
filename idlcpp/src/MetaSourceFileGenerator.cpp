@@ -319,11 +319,7 @@ void writeOverrideFunction(ClassNode* classNode, TemplateArguments* templateArgu
 		sprintf_s(buf, "bool %s::assign(void* dst, const void* src)\n", metaClassName.c_str());
 		writeStringToFile(buf, file, indentation);
 		writeStringToFile("{\n", file, indentation);
-		if (classNode->m_noncopyable)
-		{
-			writeStringToFile("return false;\n", file, indentation + 1);
-		}
-		else
+		if (classNode->isCopyableClass(templateArguments))
 		{
 			if (assignName.empty())
 			{
@@ -336,6 +332,10 @@ void writeOverrideFunction(ClassNode* classNode, TemplateArguments* templateArgu
 			}
 			writeStringToFile(buf, file, indentation + 1);
 			writeStringToFile("return true;\n", file, indentation + 1);
+		}
+		else
+		{
+			writeStringToFile("return false;\n", file, indentation + 1);
 		}
 		writeStringToFile("}\n\n", file, indentation);
 

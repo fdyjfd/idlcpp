@@ -36,8 +36,8 @@ struct ClassNode : ScopeNode
 	std::vector<MethodNode*> m_additionalMethods;//New NewARC NewArray
 	bool m_isValueType;
 	bool m_override;
-	bool m_noncopyable;
 	LazyBool m_abstractFlag;
+	LazyBool m_copyableFlag;
 public:
 	ClassNode(TokenNode* keyword, IdentifyListNode* conceptList, IdentifyNode* name);
 	void setTemplateParameters(TemplateParametersNode* templateParametersNode);
@@ -45,6 +45,7 @@ public:
 	void buildAdditionalMethods();
 	void extendInternalCode(TypeNode* enclosingTypeNode, TemplateArguments* templateArguments);
 	bool isAbstractClass();
+	bool isCopyableClass(TemplateArguments* templateArguments);
 	bool needSubclassProxy(TemplateArguments* templateArguments);
 	bool isValueType();
 	bool hasOverrideMethod(TemplateArguments* templateArguments);

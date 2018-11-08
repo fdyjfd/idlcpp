@@ -284,7 +284,7 @@ void checkMemberNames(ClassNode* classNode, std::vector<MemberNode*>& memberNode
 
 static void ParseConceptList(
 	IdentifyNode*& categoryNode,
-	bool& noncopyable,
+	ClassNode::LazyBool& copyableFlag,
 	IdentifyListNode* conceptList)
 {
 	const char* s_categorys[] =
@@ -316,14 +316,15 @@ static void ParseConceptList(
 	conceptList->collectIdentifyNodes(identifyNodes);
 	for (IdentifyNode* identifyNode : identifyNodes)
 	{
-		if (!noncopyable)
+		if (identifyNode->m_str == "copyable")
 		{
-			if (identifyNode->m_str == "noncopyable")
-			{
-				noncopyable = true;
-			}
+			copyableFlag = ClassNode::lb_true;
 		}
-		if (0 == categoryNode)
+		else if (identifyNode->m_str == "noncopyable")
+		{
+			copyableFlag = ClassNode::lb_false;
+		}
+		else if (0 == categoryNode)
 		{
 			for (int i = 0; i < sizeof(s_categorys) / sizeof(s_categorys[0]); ++i)
 			{
@@ -358,9 +359,9 @@ ClassNode::ClassNode(TokenNode* keyword, IdentifyListNode* conceptList, Identify
 	m_templateParametersNode = 0;
 	m_typeNode = 0;
 	m_category = 0;
-	m_noncopyable = false;
+	m_copyableFlag = lb_unknown;
 
-	ParseConceptList(m_category, m_noncopyable, conceptList);
+	ParseConceptList(m_category, m_copyableFlag, conceptList);
 	if(0 == m_category)
 	{
 		m_isValueType = (snt_keyword_struct == keyword->m_nodeType || snt_keyword_delegate == keyword->m_nodeType);
@@ -565,6 +566,43 @@ bool ClassNode::isAbstractClass()
 		m_abstractFlag = lb_false;
 	}
 	return (lb_true == m_abstractFlag);
+}
+
+bool ClassNode::isCopyableClass(TemplateArguments* templateArguments)
+{
+	if (lb_unknown == m_copyableFlag)
+	{
+		bool baseClassCopyable = true;
+		std::vector<TypeNameNode*> baseTypeNameNodes;
+		m_baseList->collectTypeNameNodes(baseTypeNameNodes);
+		size_t count = baseTypeNameNodes.size();
+		for (size_t i = 0; i < count; ++i)
+		{
+			TypeNameNode* typeNameNode = baseTypeNameNodes[i];
+			TypeNode* typeNode = typeNameNode->getActualTypeNode(templateArguments);
+			if (typeNode->isTemplateClassInstance())
+			{
+				TemplateClassInstanceTypeNode* templateClassInstanceTypeNode = static_cast<TemplateClassInstanceTypeNode*>(typeNode);
+				if (!templateClassInstanceTypeNode->m_classNode->isCopyableClass(&templateClassInstanceTypeNode->m_templateClassInstanceNode->m_templateArguments))
+				{
+					baseClassCopyable = false;
+					break;
+				}
+			}
+			else
+			{
+				assert(typeNode->isClass() && !typeNode->isTemplateClass());
+				ClassTypeNode* classTypeNode = static_cast<ClassTypeNode*>(typeNode);
+				if (!classTypeNode->m_classNode->isCopyableClass(0))
+				{
+					baseClassCopyable = false;
+					break;
+				}
+			}
+		}
+		m_copyableFlag = baseClassCopyable ? lb_true : lb_false;
+	}
+	return (lb_true == m_copyableFlag);
 }
 
 void ClassNode::collectOverrideMethods(std::vector<MethodNode*>& methodNodes, TemplateArguments* templateArguments)
