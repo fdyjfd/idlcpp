@@ -531,7 +531,7 @@ void MetaHeaderFileGenerator::generateCode_Class(FILE* file, ClassNode* classNod
 	writeStringToFile("public:\n", file, indentation);
 	writeStringToFile("virtual void destroyInstance(void* address);\n", file, indentation + 1);
 	writeStringToFile("virtual void destroyArray(void* address);\n", file, indentation + 1);
-	writeStringToFile("virtual void assign(void* dst, const void* src);\n", file, indentation + 1);
+	writeStringToFile("virtual bool assign(void* dst, const void* src);\n", file, indentation + 1);
 	
 	if(classNode->needSubclassProxy(templateArguments))
 	{

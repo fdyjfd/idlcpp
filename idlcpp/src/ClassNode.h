@@ -4,6 +4,7 @@
 #include <vector>
 
 struct TokenNode;
+struct IdentifyListNode;
 struct TypeNameListNode;
 struct MemberListNode;
 struct MethodNode;
@@ -22,6 +23,7 @@ struct ClassNode : ScopeNode
 	};
 	TokenNode* m_modifier;
 	TokenNode* m_keyword;
+	//IdentifyListNode* m_conceptList;
 	IdentifyNode* m_category;
 	TokenNode* m_colon;
 	TypeNameListNode* m_baseList;
@@ -34,9 +36,10 @@ struct ClassNode : ScopeNode
 	std::vector<MethodNode*> m_additionalMethods;//New NewARC NewArray
 	bool m_isValueType;
 	bool m_override;
+	bool m_noncopyable;
 	LazyBool m_abstractFlag;
 public:
-	ClassNode(TokenNode* keyword, IdentifyNode* category, IdentifyNode* name);
+	ClassNode(TokenNode* keyword, IdentifyListNode* conceptList, IdentifyNode* name);
 	void setTemplateParameters(TemplateParametersNode* templateParametersNode);
 	void setMemberList(TokenNode* leftBrace, MemberListNode* memberList, TokenNode* rightBrace);
 	void buildAdditionalMethods();

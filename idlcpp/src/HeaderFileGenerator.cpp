@@ -462,7 +462,7 @@ void HeaderFileGenerator::generateCode_Delegate(FILE* file, DelegateNode* delega
 	generateCode_Token(file, delegateNode->m_keyword, indentation);
 	generateCode_Identify(file, delegateNode->m_name, 0);
 	
-	writeStringToFile(" : public pafcore::Delegate\n", file);
+	writeStringToFile(" : public ::pafcore::Delegate\n", file);
 	writeStringToFile("{\n", file, indentation);
 	writeStringToFile("public:\n", file, indentation);
 	
@@ -507,7 +507,7 @@ void HeaderFileGenerator::generateCode_Delegate(FILE* file, DelegateNode* delega
 	writeStringToFile("(*CallBackFunction)(void* userData, ", file, 0);
 	generateCode_ParameterList(file, delegateNode->m_parameterList, delegateNode->m_enclosing);
 	writeStringToFile(");\n", file);
-	writeStringToFile("FunctionCallBack* addFunction(CallBackFunction function, void* userData)\n", file, indentation + 1);
+	writeStringToFile("::pafcore::FunctionCallBack* addFunction(CallBackFunction function, void* userData)\n", file, indentation + 1);
 	writeStringToFile("{return Delegate::addFunction(function, userData);}\n", file, indentation + 1);
 	writeStringToFile("};\n", file, indentation);
 }

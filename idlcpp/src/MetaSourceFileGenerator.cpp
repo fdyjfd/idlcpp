@@ -316,19 +316,27 @@ void writeOverrideFunction(ClassNode* classNode, TemplateArguments* templateArgu
 		writeStringToFile(buf, file, indentation + 1);
 		writeStringToFile("}\n\n", file, indentation);
 
-		sprintf_s(buf, "void %s::assign(void* dst, const void* src)\n", metaClassName.c_str());
+		sprintf_s(buf, "bool %s::assign(void* dst, const void* src)\n", metaClassName.c_str());
 		writeStringToFile(buf, file, indentation);
 		writeStringToFile("{\n", file, indentation);
-		if (assignName.empty())
+		if (classNode->m_noncopyable)
 		{
-			sprintf_s(buf, "*(%s*)dst = *(const %s*)src;\n", className.c_str(), className.c_str());
+			writeStringToFile("return false;\n", file, indentation + 1);
 		}
 		else
 		{
-			sprintf_s(buf, "%s((%s*)dst, (const %s*)(src));\n",
-				assignName.c_str(), className.c_str(), className.c_str());
+			if (assignName.empty())
+			{
+				sprintf_s(buf, "*(%s*)dst = *(const %s*)src;\n", className.c_str(), className.c_str());
+			}
+			else
+			{
+				sprintf_s(buf, "%s((%s*)dst, (const %s*)(src));\n",
+					assignName.c_str(), className.c_str(), className.c_str());
+			}
+			writeStringToFile(buf, file, indentation + 1);
+			writeStringToFile("return true;\n", file, indentation + 1);
 		}
-		writeStringToFile(buf, file, indentation + 1);
 		writeStringToFile("}\n\n", file, indentation);
 
 	}

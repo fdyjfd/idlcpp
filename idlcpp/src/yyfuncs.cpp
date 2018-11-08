@@ -11,6 +11,7 @@
 
 #include "TokenNode.h"
 #include "IdentifyNode.h"
+#include "IdentifyListNode.h"
 #include "AttributeNode.h"
 #include "AttributeListNode.h"
 #include "ScopeNameNode.h"
@@ -89,6 +90,18 @@ SyntaxNode* newPrimitiveType(SyntaxNode* keyword, PredefinedType type)
 	return res;
 }
 
+SyntaxNode* newIdentifyList(SyntaxNode* identifyList, SyntaxNode* delimiter, SyntaxNode* identify)
+{
+	assert(0 == identifyList || snt_identify_list == identifyList->m_nodeType);
+	assert(0 == delimiter || ',' == delimiter->m_nodeType);
+	assert((0 == delimiter && 0 == identifyList) || (0 != delimiter && 0 != identifyList));
+	assert(snt_identify == identify->m_nodeType);
+	IdentifyListNode* res = new IdentifyListNode((IdentifyListNode*)identifyList, (TokenNode*)delimiter, (IdentifyNode*)identify);
+	g_syntaxNodes.push_back(res);
+	return res;
+}
+
+
 SyntaxNode* newAttribute(SyntaxNode* name, SyntaxNode* content)
 {
 	assert(0 != name && snt_identify == name->m_nodeType);
@@ -133,6 +146,7 @@ SyntaxNode* newEnumerator(SyntaxNode* attributeList, SyntaxNode* identify)
 	g_syntaxNodes.push_back(res);
 	return res;
 }
+
 
 SyntaxNode* newEnumeratorList(SyntaxNode* enumeratorList, SyntaxNode* delimiter, SyntaxNode* enumerator)
 {
@@ -511,8 +525,8 @@ SyntaxNode* newClass(SyntaxNode* keyword, SyntaxNode* category, SyntaxNode* name
 {
 	assert(snt_keyword_class == keyword->m_nodeType || snt_keyword_struct == keyword->m_nodeType || snt_keyword_delegate == keyword->m_nodeType);
 	assert(snt_identify == name->m_nodeType);
-	assert(0 == category || snt_identify == category->m_nodeType);
-	ClassNode* res = new ClassNode((TokenNode*)keyword, (IdentifyNode*)category, (IdentifyNode*)name);
+	assert(0 == category || snt_identify_list == category->m_nodeType);
+	ClassNode* res = new ClassNode((TokenNode*)keyword, (IdentifyListNode*)category, (IdentifyNode*)name);
 	g_syntaxNodes.push_back(res);
 	return res;	
 }

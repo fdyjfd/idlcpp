@@ -158,6 +158,7 @@
     <ClCompile Include="..\..\src\FieldNode.cpp" />
     <ClCompile Include="..\..\src\GetterSetterNode.cpp" />
     <ClCompile Include="..\..\src\HeaderFileGenerator.cpp" />
+    <ClCompile Include="..\..\src\IdentifyListNode.cpp" />
     <ClCompile Include="..\..\src\IdentifyNode.cpp" />
     <ClCompile Include="..\..\src\idlcpp.cpp" />
     <ClCompile Include="..\..\src\idlcpp.l.c" />
@@ -210,6 +211,7 @@
     <ClInclude Include="..\..\src\FieldNode.h" />
     <ClInclude Include="..\..\src\GetterSetterNode.h" />
     <ClInclude Include="..\..\src\HeaderFileGenerator.h" />
+    <ClInclude Include="..\..\src\IdentifyListNode.h" />
     <ClInclude Include="..\..\src\IdentifyNode.h" />
     <ClInclude Include="..\..\src\idlcpp.h" />
     <ClInclude Include="..\..\src\idlcpp.y.h" />

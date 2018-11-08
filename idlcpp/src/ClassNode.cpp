@@ -3,6 +3,7 @@
 #include "ScopeNameNode.h"
 #include "ScopeNameListNode.h"
 #include "IdentifyNode.h"
+#include "IdentifyListNode.h"
 #include "TypeNameListNode.h"
 
 #include "TemplateParametersNode.h"
@@ -281,7 +282,63 @@ void checkMemberNames(ClassNode* classNode, std::vector<MemberNode*>& memberNode
 	}
 }
 
-ClassNode::ClassNode(TokenNode* keyword, IdentifyNode* category, IdentifyNode* name)
+static void ParseConceptList(
+	IdentifyNode*& categoryNode,
+	bool& noncopyable,
+	IdentifyListNode* conceptList)
+{
+	const char* s_categorys[] =
+	{
+		"void_object",
+		"primitive_object",
+		"enum_object",
+		"value_object",
+		"reference_object",
+		"atomic_reference_object",
+		"enumerator",
+		"instance_field",
+		"static_field",
+		"instance_property",
+		"static_property",
+		"instance_method",
+		"static_method",
+		"function_argument",
+		"function_result",
+		"void_type",
+		"primitive_type",
+		"enum_type",
+		"class_type",
+		"type_alias",
+		"name_space",
+	};
+
+	std::vector<IdentifyNode*> identifyNodes;
+	conceptList->collectIdentifyNodes(identifyNodes);
+	for (IdentifyNode* identifyNode : identifyNodes)
+	{
+		if (!noncopyable)
+		{
+			if (identifyNode->m_str == "noncopyable")
+			{
+				noncopyable = true;
+			}
+		}
+		if (0 == categoryNode)
+		{
+			for (int i = 0; i < sizeof(s_categorys) / sizeof(s_categorys[0]); ++i)
+			{
+				if (identifyNode->m_str == s_categorys[i])
+				{
+					categoryNode = identifyNode;
+					break;
+				}
+			}
+		}
+	}
+}
+
+
+ClassNode::ClassNode(TokenNode* keyword, IdentifyListNode* conceptList, IdentifyNode* name)
 {
 	assert(snt_keyword_struct == keyword->m_nodeType 
 		|| snt_keyword_class == keyword->m_nodeType 
@@ -289,7 +346,7 @@ ClassNode::ClassNode(TokenNode* keyword, IdentifyNode* category, IdentifyNode* n
 
 	m_nodeType = snt_class;
 	m_keyword = keyword;
-	m_category = category;
+	//m_conceptList = conceptList;
 	m_name = name;
 	m_modifier = 0;
 	m_colon = 0;
@@ -300,13 +357,17 @@ ClassNode::ClassNode(TokenNode* keyword, IdentifyNode* category, IdentifyNode* n
 	m_semicolon = 0;
 	m_templateParametersNode = 0;
 	m_typeNode = 0;
-	if(0 == category)
+	m_category = 0;
+	m_noncopyable = false;
+
+	ParseConceptList(m_category, m_noncopyable, conceptList);
+	if(0 == m_category)
 	{
 		m_isValueType = (snt_keyword_struct == keyword->m_nodeType || snt_keyword_delegate == keyword->m_nodeType);
 	}
 	else
 	{
-		m_isValueType = (category->m_str == "value_object");
+		m_isValueType = (m_category->m_str == "value_object");
 	}
 	m_override = false;
 	m_abstractFlag = lb_unknown;

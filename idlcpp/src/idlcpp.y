@@ -13,7 +13,7 @@
 %token <sn> BOOL CHAR WCHAR_T SHORT LONG INT FLOAT DOUBLE SIGNED UNSIGNED STRING_T
 %token <sn> NAMESPACE ENUM CLASS STRUCT STATIC VIRTUAL VOID CONST OPERATOR TYPEDEF PRIMITIVE
 %token <sn> ABSTRACT GET SET NOMETA NOCODE EXPORT OVERRIDE SCOPE IDENTIFY STRING TEMPLATE DELEGATE
-%type <sn> enumerator enumeratorList enum_0 enum 
+%type <sn> identifyList enumerator enumeratorList enum_0 enum 
 %type <sn> field_0 field_1 field_2 field getter_0 getter setter_0 setter_1 setter property_0 property_1 property_2 property
 %type <sn> parameter_0 parameter_1 parameter parameterList method_0 method_1 method_2 method_3 method_4 method
 %type <sn> operatorSign operator_0 operator_1 operator_2 operator_3 operator classMember_0 classMember
@@ -72,6 +72,10 @@ attributeList			: attribute											{$$ = newAttributeList(NULL, $1);}
 attributes				: '[' attributeList ']'								{$$ = $2;}
 						| '[' attributeList ',' ']'							{$$ = $2;}
 						| '[' ']'											{$$ = NULL;}
+;
+
+identifyList			: IDENTIFY											{$$ = newIdentifyList(NULL, NULL, $1);}
+						| identifyList ',' IDENTIFY							{$$ = newIdentifyList($1, $2, $3);}
 ;
 
 enumerator				: IDENTIFY											{$$ = newEnumerator(NULL, $1);}
@@ -367,9 +371,9 @@ templateParameters		: TEMPLATE '<' templateParameterList '>'				{$$ = newTemplat
 ;
 
 class_0					: CLASS IDENTIFY										{$$ = newClass($1, NULL, $2);}
-						| CLASS '(' IDENTIFY ')' IDENTIFY 						{$$ = newClass($1, $3, $5);}
+						| CLASS '(' identifyList ')' IDENTIFY 					{$$ = newClass($1, $3, $5);}
 						| STRUCT IDENTIFY										{$$ = newClass($1, NULL, $2);}
-						| STRUCT '(' IDENTIFY ')' IDENTIFY 						{$$ = newClass($1, $3, $5);}
+						| STRUCT '(' identifyList ')' IDENTIFY 					{$$ = newClass($1, $3, $5);}
 ;
 
 class_1					: class_0												{$$ = $1;}

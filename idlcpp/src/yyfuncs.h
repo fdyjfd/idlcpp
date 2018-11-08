@@ -119,6 +119,7 @@ enum SyntaxNodeType
 	snt_keyword_override,
 
 	snt_identify,
+	snt_identify_list,
 	snt_enumerator,
 	snt_enumerator_list,
 	snt_enum,
@@ -164,6 +165,8 @@ SyntaxNode* newIdentify(const char* str);
 SyntaxNode* newString(const char* str);
 
 SyntaxNode* newPrimitiveType(SyntaxNode* keyword, PredefinedType type);
+
+SyntaxNode* newIdentifyList(SyntaxNode* identifyList, SyntaxNode* delimiter, SyntaxNode* identify);
 
 SyntaxNode* newAttribute(SyntaxNode* name, SyntaxNode* content);
 SyntaxNode* newAttributeList(SyntaxNode* attributeList, SyntaxNode* attribute);
