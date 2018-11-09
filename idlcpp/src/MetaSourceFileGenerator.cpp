@@ -473,10 +473,6 @@ void MetaSourceFileGenerator::generateCode_Class(FILE* file, ClassNode* classNod
 							|| methodNode->m_name->m_str == "__assign__")
 						{
 							typeMethodNodes.push_back(methodNode);
-							//if (0 == methodNode->m_nativeName)
-							//{
-							//	staticMethodNodes.push_back(methodNode);
-							//}
 						}
 						else
 						{
@@ -707,6 +703,7 @@ void writeMetaGetPropertyImpl_Key(ClassNode* classNode, TemplateArguments* templ
 void writeMetaGetPropertyImpl(ClassNode* classNode, TemplateArguments* templateArguments, PropertyNode* propertyNode, FILE* file, int indentation)
 {
 	char buf[4096];
+	char strCall[1024];
 	std::string typeName;
 	std::string className;
 	std::string metaClassName;
@@ -761,32 +758,58 @@ void writeMetaGetPropertyImpl(ClassNode* classNode, TemplateArguments* templateA
 	const char* strIndex = propertyNode->isSimple() ? "" : "index";
 	if(propertyNode->isStatic())
 	{
+		if (propertyNode->m_get->m_nativeName)
+		{
+			sprintf_s(strCall, "%s(", propertyNode->m_get->m_nativeName->m_str.c_str());
+		}
+		else
+		{
+			sprintf_s(strCall, "%s::get_%s(", className.c_str(), propertyNode->m_name->m_str.c_str());
+		}
+
 		if(0 == propertyNode->m_get->m_passing)
 		{
 			if(primitive_type == typeCategory || enum_type == typeCategory)
 			{
-				sprintf_s(buf, "%s res = %s::get_%s(%s);\n", typeName.c_str(), className.c_str(), propertyNode->m_name->m_str.c_str(), strIndex);
+				sprintf_s(buf, "%s res = %s%s);\n", typeName.c_str(), strCall, strIndex);
 			}
 			else
 			{
-				sprintf_s(buf, "%s* res = paf_new %s(%s::get_%s(%s));\n", typeName.c_str(), typeName.c_str(), className.c_str(), propertyNode->m_name->m_str.c_str(), strIndex);
+				sprintf_s(buf, "%s* res = paf_new %s(%s%s));\n", typeName.c_str(), typeName.c_str(), strCall, strIndex);
 			}
 		}
 		else if('*' == propertyNode->m_get->m_passing->m_nodeType)
 		{
-			sprintf_s(buf, "%s%s* res = %s::get_%s(%s);\n", propertyNode->m_get->isConstant() ? "const " : "",
-				typeName.c_str(), className.c_str(), propertyNode->m_name->m_str.c_str(), strIndex);
+			sprintf_s(buf, "%s%s* res = %s%s);\n", propertyNode->m_get->isConstant() ? "const " : "",
+				typeName.c_str(), strCall, strIndex);
 		}
 		else
 		{
 			assert('&' == propertyNode->m_get->m_passing->m_nodeType);
-			sprintf_s(buf, "%s%s* res = &%s::get_%s(%s);\n",  propertyNode->m_get->isConstant() ? "const " : "",
-				typeName.c_str(), className.c_str(), propertyNode->m_name->m_str.c_str(), strIndex);
+			sprintf_s(buf, "%s%s* res = &%s%s);\n",  propertyNode->m_get->isConstant() ? "const " : "",
+				typeName.c_str(), strCall, strIndex);
 		}
 		writeStringToFile(buf, file, indentation + 1);
 	}
 	else
 	{
+		if (propertyNode->m_get->m_nativeName)
+		{
+			if (propertyNode->m_get->m_nativeName->m_str.find(':') != std::string::npos)
+			{
+				sprintf_s(strCall, "%s(self%s", propertyNode->m_get->m_nativeName->m_str.c_str(),
+					propertyNode->isSimple() ? "" : ", ");
+			}
+			else
+			{
+				sprintf_s(strCall, "self->%s(", propertyNode->m_get->m_nativeName->m_str.c_str());
+			}
+		}
+		else
+		{
+			sprintf_s(strCall, "self->get_%s(", propertyNode->m_name->m_str.c_str());
+		}
+
 		sprintf_s(buf, "%s* self;\n", className.c_str());
 		writeStringToFile(buf, file, indentation + 1);
 		if(classNode->isValueType())
@@ -804,23 +827,23 @@ void writeMetaGetPropertyImpl(ClassNode* classNode, TemplateArguments* templateA
 		{
 			if(primitive_type == typeCategory || enum_type == typeCategory)
 			{
-				sprintf_s(buf, "%s res = self->get_%s(%s);\n", typeName.c_str(), propertyNode->m_name->m_str.c_str(), strIndex);
+				sprintf_s(buf, "%s res = %s%s);\n", typeName.c_str(), strCall, strIndex);
 			}
 			else
 			{
-				sprintf_s(buf, "%s* res = paf_new %s(self->get_%s(%s));\n", typeName.c_str(), typeName.c_str(), propertyNode->m_name->m_str.c_str(), strIndex);
+				sprintf_s(buf, "%s* res = paf_new %s(%s%s));\n", typeName.c_str(), typeName.c_str(), strCall, strIndex);
 			}
 		}
 		else if('*' == propertyNode->m_get->m_passing->m_nodeType)
 		{
-			sprintf_s(buf, "%s%s* res = self->get_%s(%s);\n", propertyNode->m_get->isConstant() ? "const " : "",
-				typeName.c_str(), propertyNode->m_name->m_str.c_str(), strIndex);
+			sprintf_s(buf, "%s%s* res = %s%s);\n", propertyNode->m_get->isConstant() ? "const " : "",
+				typeName.c_str(), strCall, strIndex);
 		}
 		else
 		{
 			assert('&' == propertyNode->m_get->m_passing->m_nodeType);
-			sprintf_s(buf, "%s%s* res = &self->get_%s(%s);\n",  propertyNode->m_get->isConstant() ? "const " : "",
-				typeName.c_str(), propertyNode->m_name->m_str.c_str(), strIndex);
+			sprintf_s(buf, "%s%s* res = &%s%s);\n",  propertyNode->m_get->isConstant() ? "const " : "",
+				typeName.c_str(), strCall, strIndex);
 		}
 		writeStringToFile(buf, file, indentation + 1);
 	}
@@ -1036,11 +1059,32 @@ void writeMetaSetPropertyImpl(ClassNode* classNode, TemplateArguments* templateA
 	writeStringToFile("}\n", file, indentation + 1);
 	if(propertyNode->isStatic())
 	{
-		sprintf_s(buf, "%s::set_%s(", className.c_str(), propertyNode->m_name->m_str.c_str());
+		if (propertyNode->m_set->m_nativeName)
+		{
+			sprintf_s(buf, "%s(", propertyNode->m_set->m_nativeName->m_str.c_str());
+		}
+		else
+		{
+			sprintf_s(buf, "%s::set_%s(", className.c_str(), propertyNode->m_name->m_str.c_str());
+		}
 	}
 	else
 	{
-		sprintf_s(buf, "self->set_%s(", propertyNode->m_name->m_str.c_str());
+		if (propertyNode->m_set->m_nativeName)
+		{
+			if (propertyNode->m_set->m_nativeName->m_str.find(':') != std::string::npos)
+			{
+				sprintf_s(buf, "%s(self, ", propertyNode->m_set->m_nativeName->m_str.c_str());
+			}
+			else
+			{
+				sprintf_s(buf, "self->%s(", propertyNode->m_set->m_nativeName->m_str.c_str());
+			}
+		}
+		else
+		{
+			sprintf_s(buf, "self->set_%s(", propertyNode->m_name->m_str.c_str());
+		}
 	}
 	writeStringToFile(buf, file, indentation + 1);
 
