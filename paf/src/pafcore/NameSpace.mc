@@ -88,19 +88,15 @@ namespace idlcpp
 		paf_delete_array(reinterpret_cast<::pafcore::RefCountImpl<::pafcore::NameSpace>*>(address));
 	}
 
-	void __pafcore__NameSpace_Type::assign(void* dst, const void* src)
+	bool __pafcore__NameSpace_Type::assign(void* dst, const void* src)
 	{
-		*(::pafcore::NameSpace*)dst = *(const ::pafcore::NameSpace*)src;
+		return false;
 	}
 
 	::pafcore::ErrorCode __pafcore__NameSpace_Type::NameSpace__findMember_(::pafcore::Variant* result, ::pafcore::Variant** args, int_t numArgs)
 	{
 		if(2 <= numArgs)
 		{
-			if(args[0]->isConstant())
-			{
-				return ::pafcore::e_this_is_constant;
-			}
 			::pafcore::NameSpace* self;
 			if(!args[0]->castToReferencePtr(GetSingleton(), (void**)&self))
 			{
@@ -122,10 +118,6 @@ namespace idlcpp
 	{
 		if(1 <= numArgs)
 		{
-			if(args[0]->isConstant())
-			{
-				return ::pafcore::e_this_is_constant;
-			}
 			::pafcore::NameSpace* self;
 			if(!args[0]->castToReferencePtr(GetSingleton(), (void**)&self))
 			{
@@ -142,10 +134,6 @@ namespace idlcpp
 	{
 		if(2 <= numArgs)
 		{
-			if(args[0]->isConstant())
-			{
-				return ::pafcore::e_this_is_constant;
-			}
 			::pafcore::NameSpace* self;
 			if(!args[0]->castToReferencePtr(GetSingleton(), (void**)&self))
 			{

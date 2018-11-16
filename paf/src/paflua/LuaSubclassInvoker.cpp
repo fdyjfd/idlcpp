@@ -33,16 +33,35 @@ LuaSubclassInvoker::~LuaSubclassInvoker()
 
 pafcore::ErrorCode LuaSubclassInvoker::invoke(const char* name, pafcore::Variant* result, pafcore::Variant* self, pafcore::Variant* args, size_t numArgs)
 {
-	//pafcore::Variant* luaArgs[20];
+#ifdef _DEBUG
+	int top = lua_gettop(m_luaState);
+	//stackDump(m_luaState);
+#endif
+	
 	lua_rawgetp(m_luaState, LUA_REGISTRYINDEX, this);
+
+	//stackDump(m_luaState);
+
 	lua_getfield(m_luaState, -1, name);
-	lua_pushvalue(m_luaState, -2);
+
+	//stackDump(m_luaState);
+
+	lua_insert(m_luaState, -2);
+
+	//stackDump(m_luaState);
+
 	for(size_t i = 0; i < numArgs; ++i)
 	{
 		//luaArgs[i] = VariantToLua2(m_luaState, &args[i]);
 		VariantToLua(m_luaState, &args[i]);
 	}
+
+	//stackDump(m_luaState);
+
 	int error = lua_pcall(m_luaState, numArgs + 1, 1, 0);
+
+	//stackDump(m_luaState);
+
 	if (error)
 	{
 		const char* str = lua_tostring(m_luaState, -1);
@@ -51,16 +70,33 @@ pafcore::ErrorCode LuaSubclassInvoker::invoke(const char* name, pafcore::Variant
 		OutputDebugStringA("\n");
 #endif
 		lua_pop(m_luaState, 1);
+
+		//stackDump(m_luaState);
+
 	}
-	pafcore::Variant* value = LuaToVariant(result, m_luaState, -1);
-	if(value != result)
+	else
 	{
-		result->move(*value);
+
+		pafcore::Variant* value = LuaToVariant(result, m_luaState, -1);
+		if(value != result)
+		{
+			result->move(*value);
+		}
+
+		//stackDump(m_luaState);
+
+		//for(size_t i = 0; i < numArgs; ++i)
+		//{
+		//	args[i].move(*luaArgs[i]);
+		//}
+		lua_pop(m_luaState, 1);
 	}
-	//for(size_t i = 0; i < numArgs; ++i)
-	//{
-	//	args[i].move(*luaArgs[i]);
-	//}
+
+#ifdef _DEBUG
+	PAF_ASSERT(lua_gettop(m_luaState) == top);
+	//stackDump(m_luaState);
+#endif
+
 	return (0 == error) ? pafcore::s_ok : pafcore::e_script_dose_not_override;
 }
 

@@ -25,43 +25,58 @@
 #include <new.h>
 #include <string.h>
 #include <assert.h>
+#include <Windows.h>
 
 
 BEGIN_PAFLUA
+
+static void DebugTrace(const char* format, ...)
+{
+	va_list args;
+	va_start(args, format);
+	int iBuf;
+	char szBuffer[512];
+	iBuf = vsprintf_s(szBuffer, format, args);
+	OutputDebugStringA(szBuffer);
+	va_end(args);
+}
+
 
 void stackDump (lua_State *L) 
 {
 	int i;
 	int top = lua_gettop(L);
+	DebugTrace("stackDump %d\n", top);
+
 	for (i = 1; i <= top; i++) {
 		int t = lua_type(L, i);
 		switch (t) {
 		case LUA_TSTRING:
-			printf("string: %s", lua_tostring(L, i));
+			DebugTrace("string: %s", lua_tostring(L, i));
 			break;
 		case LUA_TBOOLEAN:
-			printf(lua_toboolean(L, i) ? "true" : "false");
+			DebugTrace(lua_toboolean(L, i) ? "true" : "false");
 			break;
 		case LUA_TNUMBER:
 			if(lua_isinteger(L, i))
 			{
-				printf("integer: %lld", lua_tointeger(L, i));
+				DebugTrace("integer: %lld", lua_tointeger(L, i));
 			}
 			else
 			{
-				printf("number: %g", lua_tonumber(L, i));
+				DebugTrace("number: %g", lua_tonumber(L, i));
 			}
 			break;
 		case LUA_TUSERDATA:
-			printf("userdata: %s", lua_tostring(L, i));	
+			DebugTrace("userdata: %s", lua_tostring(L, i));
 			break;
 		default:
-			printf("other: %s", lua_typename(L, t));
+			DebugTrace("other: %s", lua_typename(L, t));
 			break;
 		}
-		printf("\n");
+		DebugTrace("\n");
 	}
-	printf("\n");
+	DebugTrace("end stackDump\n");
 }
 
 
@@ -71,6 +86,20 @@ const char* instanceArrayProperty_metatable_name = "paf.InstanceArrayProperty";
 const char* staticArrayProperty_metatable_name = "paf.StaticArrayProperty";
 const char* instanceMapProperty_metatable_name = "paf.InstanceMapProperty";
 const char* staticMapProperty_metatable_name = "paf.StaticMapProperty";
+
+enum class CompareOperation
+{
+	less_than,
+	equal_to,
+	less_equal,
+};
+
+static const char* s_compareOperationName[] =
+{
+	"op_less",
+	"op_equal",
+	"op_lessEqual",
+};
 
 struct InstancePropertyInstance
 {
@@ -150,6 +179,32 @@ pafcore::ErrorCode GetPrimitiveOrEnum(lua_State *L, pafcore::Variant* variant)
 		}
 	}
 	return pafcore::e_invalid_type;
+}
+
+bool LuaToInt(int& value, lua_State *L, int index)
+{
+	bool res = false;
+	int type = lua_type(L, index);
+	switch (type)
+	{
+	case LUA_TBOOLEAN: {
+		bool b = lua_toboolean(L, index) != 0;
+		value = b ? 1 : 0;
+		res = true;
+		break; }
+	case LUA_TNUMBER: {
+		value = lua_tointeger(L, index);
+		res = true;
+		break; }
+	case LUA_TUSERDATA: {
+		pafcore::Variant* variant = (pafcore::Variant*)luaL_checkudata(L, index, variant_metatable_name);
+		if (variant && !variant->isNull())
+		{
+			res = variant->castToPrimitive(RuntimeTypeOf<int>::RuntimeType::GetSingleton(), &value);
+		}
+		break;}
+	}
+	return res;
 }
 
 pafcore::Variant* LuaToVariant(pafcore::Variant* value, lua_State *L, int index)
@@ -298,7 +353,7 @@ int InvokeFunction(lua_State *L, pafcore::FunctionInvoker invoker, int numArgs, 
 			return 1;
 		}
 	}
-	luaL_error(L, "%s\n", ErrorCodeToString(errorCode));
+	Variant_Error(L, "", errorCode);
 	return 0;
 }
 
@@ -342,7 +397,7 @@ int InvokeFunction_ComparisonOperator(lua_State *L, pafcore::FunctionInvoker inv
 		}
 		return 1;
 	}
-	luaL_error(L, "%s\n", ErrorCodeToString(errorCode));
+	Variant_Error(L, "", errorCode);
 	return 0;
 }
 
@@ -435,7 +490,7 @@ pafcore::ErrorCode SetInstanceArrayPropertySize(lua_State *L, pafcore::Variant* 
 
 	if (0 == property->m_arrayResizer)
 	{
-		return pafcore::e_array_property_is_not_dynamic;
+		return pafcore::e_is_not_dynamic_array_property;
 	}
 	pafcore::Variant value;
 	pafcore::Variant* arg = LuaToVariant(&value, L, 3);
@@ -577,7 +632,7 @@ pafcore::ErrorCode SetStaticArrayPropertySize(lua_State *L, pafcore::StaticPrope
 
 	if (0 == property->m_arrayResizer)
 	{
-		return pafcore::e_array_property_is_not_dynamic;
+		return pafcore::e_is_not_dynamic_array_property;
 	}
 	pafcore::Variant value;
 	pafcore::Variant* arg = LuaToVariant(&value, L, 3);
@@ -830,7 +885,7 @@ int Variant_Call(lua_State *L)
 		}
 		break;
 	}
-	Variant_Error(L, "", pafcore::e_is_not_type);
+	Variant_Error(L, "call", pafcore::e_is_not_type);
 	return 0;
 }
 
@@ -911,14 +966,16 @@ int Variant_Operator(lua_State *L, const char* op)
 	}
 	else
 	{
-		luaL_error(L, "%s\n", ErrorCodeToString(pafcore::e_member_not_found));
+		Variant_Error(L, op, pafcore::e_member_not_found);
 		return 0;
 	}
 }
 
-int Variant_ComparisonOperator(lua_State *L, const char* op)
+int Variant_ComparisonOperator(lua_State *L, CompareOperation op)
 {
+	//stackDump(L);
 	pafcore::Variant* variant;
+
 	if (LUA_TUSERDATA == lua_type(L, 1))
 	{
 		variant = (pafcore::Variant*)luaL_checkudata(L, 1, variant_metatable_name);
@@ -927,31 +984,56 @@ int Variant_ComparisonOperator(lua_State *L, const char* op)
 	{
 		variant = (pafcore::Variant*)luaL_checkudata(L, 2, variant_metatable_name);
 	}
+
 	switch (variant->m_type->m_category)
 	{
-	case pafcore::primitive_object:
-	{
+	case pafcore::primitive_object: {
 		pafcore::PrimitiveType* type = (pafcore::PrimitiveType*)variant->m_type;
-		pafcore::InstanceMethod* method = type->findInstanceMethod(op);
+		pafcore::InstanceMethod* method = type->findInstanceMethod(s_compareOperationName[(int)op]);
 		if (0 != method)
 		{
 			return InvokeFunction_ComparisonOperator(L, method->m_invoker);
 		}
-	}
-	break;
+		break; }
+	case pafcore::enum_object: {
+		int lhs, rhs;
+		if(variant->castToPrimitive(RuntimeTypeOf<int>::RuntimeType::GetSingleton(), &lhs)
+			&& LuaToInt(rhs, L, 2))
+		{ 
+			bool compareResult = false;
+			switch (op)
+			{
+			case CompareOperation::less_than:
+				compareResult = lhs < rhs;
+				break;
+			case CompareOperation::less_equal:
+				compareResult = lhs <= rhs;
+				break;
+			default:
+				compareResult = lhs == rhs;
+				break;
+			}
+			lua_pushboolean(L, compareResult ? 1 : 0);
+			return 1;
+		}
+		else
+		{
+			Variant_Error(L, s_compareOperationName[(int)op], pafcore::e_invalid_type);
+			return 0;
+		}
+		break; }
 	case pafcore::value_object:
-	case pafcore::reference_object:
-	{
+	case pafcore::reference_object: {
 		pafcore::ClassType* type = (pafcore::ClassType*)variant->m_type;
-		pafcore::InstanceMethod* method = type->findInstanceMethod(op, true);
+		pafcore::InstanceMethod* method = type->findInstanceMethod(s_compareOperationName[(int)op], true);
 		if (0 != method)
 		{
 			return InvokeFunction_ComparisonOperator(L, method->m_invoker);
 		}
+		break; }
 	}
-	break;
-	}
-	luaL_error(L, "%s\n", ErrorCodeToString(pafcore::e_member_not_found));
+
+	Variant_Error(L, s_compareOperationName[(int)op], pafcore::e_member_not_found);
 	return 0;
 }
 
@@ -987,17 +1069,17 @@ int Variant_Unm(lua_State *L)
 
 int Variant_Less(lua_State *L)
 {
-	return Variant_ComparisonOperator(L, "op_less");
+	return Variant_ComparisonOperator(L, CompareOperation::less_than);
 }
 
 int Variant_LessEqual(lua_State *L)
 {
-	return Variant_ComparisonOperator(L, "op_lessEqual");
+	return Variant_ComparisonOperator(L, CompareOperation::less_equal);
 }
 
 int Variant_Equal(lua_State *L)
 {
-	return Variant_ComparisonOperator(L, "op_equal");
+	return Variant_ComparisonOperator(L, CompareOperation::equal_to);
 }
 
 int Subclassing(lua_State *L)
@@ -1031,29 +1113,47 @@ int Delegate_AddCallBack(lua_State *L)
 	const void* p = lua_topointer(L, lua_upvalueindex(1));
 	pafcore::Delegate* delegate = (pafcore::Delegate*)p;
 	int numArgs = lua_gettop(L);
-	if (numArgs != 2)
+	if (1 == numArgs)
 	{
-		Variant_Error(L, "the argument count of _delegate_ must be 2", pafcore::e_invalid_arg_num);
+		if (lua_type(L, -1) != LUA_TFUNCTION)
+		{
+			Variant_Error(L, "the second argument of _delegate_ must be a function", pafcore::e_invalid_arg_type_1);
+			return 0;
+		}		
+		LuaCallBack2* callBack = paf_new LuaCallBack2(L);
+		delegate->addCallBack(callBack);
+		pafcore::Variant impVar;
+		impVar.assignReferencePtr(RuntimeTypeOf<::paflua::LuaCallBack>::RuntimeType::GetSingleton(), callBack, false, ::pafcore::Variant::by_new_ptr);
+		impVar.setSubClassProxy();
+		VariantToLua(L, &impVar);
+		return 1;
+	}
+	else if(2 == numArgs)
+	{
+		if (lua_type(L, -2) != LUA_TTABLE)
+		{
+			Variant_Error(L, "the first argument of _delegate_ must be a table", pafcore::e_invalid_arg_type_1);
+			return 0;
+		}
+		if (!lua_isstring(L, -1))
+		{
+			Variant_Error(L, "the second argument of _delegate_ must be a string", pafcore::e_invalid_arg_type_2);
+			return 0;
+		}
+		const char* str = lua_tostring(L, -1);
+		LuaCallBack* callBack = paf_new LuaCallBack(L, str);
+		delegate->addCallBack(callBack);
+		pafcore::Variant impVar;
+		impVar.assignReferencePtr(RuntimeTypeOf<::paflua::LuaCallBack>::RuntimeType::GetSingleton(), callBack, false, ::pafcore::Variant::by_new_ptr);
+		impVar.setSubClassProxy();
+		VariantToLua(L, &impVar);
+		return 1;
+	}
+	else
+	{
+		Variant_Error(L, "the argument count of _delegate_ must be 1 or 2", pafcore::e_invalid_arg_num);
 		return 0;
 	}
-	if (lua_type(L, -2) != LUA_TTABLE)
-	{
-		Variant_Error(L, "the first argument of _delegate_ must be a table", pafcore::e_invalid_arg_type_1);
-		return 0;
-	}
-	if (!lua_isstring(L, -1))
-	{
-		Variant_Error(L, "the second argument of _delegate_ must be a string", pafcore::e_invalid_arg_type_2);
-		return 0;
-	}
-	const char* str = lua_tostring(L, -1);
-	LuaCallBack* callBack = paf_new LuaCallBack(L, str);
-	delegate->addCallBack(callBack);
-	pafcore::Variant impVar;
-	impVar.assignReferencePtr(RuntimeTypeOf<::paflua::LuaCallBack>::RuntimeType::GetSingleton(), callBack, false, ::pafcore::Variant::by_new_ptr);
-	impVar.setSubClassProxy();
-	VariantToLua(L, &impVar);
-	return 1;
 }
 
 //int Delegate_RemoveCallBack(lua_State *L)
@@ -1598,10 +1698,28 @@ int Variant_Index(lua_State *L)
 		{
 			errorCode = Variant_Index_Identify(L, variant, str);
 		}
+		else
+		{
+			errorCode = pafcore::e_invalid_subscript_type;
+		}
 	}
 	if(pafcore::s_ok != errorCode)
 	{
-		Variant_Error(L, "", errorCode);
+		char buf[256];
+		if (sc_integer == sc)
+		{
+			sprintf_s(buf, "__index[%d]", num);
+			Variant_Error(L, buf, errorCode);
+		}
+		else if (sc_string == sc)
+		{
+			sprintf_s(buf, "__index[\"%s\"]", str);
+			Variant_Error(L, buf, errorCode);
+		}
+		else
+		{
+			Variant_Error(L, "__index", errorCode);
+		}
 		return 0;
 	}
 	return 1;
@@ -1633,7 +1751,7 @@ int Variant_NewIndex(lua_State *L)
 	pafcore::Variant* variant = (pafcore::Variant*)lua_touserdata(L, 1);
 	if(variant->isNull())
 	{
-		Variant_Error(L, "", pafcore::e_void_variant);
+		Variant_Error(L, "__newindex", pafcore::e_void_variant);
 		return 0;
 	}
 	size_t num;
@@ -1649,9 +1767,27 @@ int Variant_NewIndex(lua_State *L)
 	{
 		errorCode = Variant_NewIndex_Identify(L, variant, str);
 	}
+	else
+	{
+		errorCode = pafcore::e_invalid_subscript_type;
+	}
 	if(pafcore::s_ok != errorCode)
 	{
-		Variant_Error(L, "", errorCode);
+		char buf[256];
+		if (sc_integer == sc)
+		{
+			sprintf_s(buf, "__newindex[%d]", num);
+			Variant_Error(L, buf, errorCode);
+		}
+		else if (sc_string == sc)
+		{
+			sprintf_s(buf, "__newindex[\"%s\"]", str);
+			Variant_Error(L, buf, errorCode);
+		}
+		else
+		{
+			Variant_Error(L, "__newindex", errorCode);
+		}
 		return 0;
 	}
 	return 1;
@@ -1682,7 +1818,7 @@ int InstanceArrayProperty_Index(lua_State *L)
 	InstancePropertyInstance* instance = (InstancePropertyInstance*)lua_touserdata(L, 1);
 	if (0 == instance->object)
 	{
-		Variant_Error(L, "", pafcore::e_void_variant);
+		Variant_Error(L, "__index for instanceArrayProperty ", pafcore::e_void_variant);
 		return 0;
 	}
 	size_t num;
@@ -1709,7 +1845,7 @@ int InstanceArrayProperty_Index(lua_State *L)
 	}
 	if (pafcore::s_ok != errorCode)
 	{
-		Variant_Error(L, "", errorCode);
+		Variant_Error(L, "__index for instanceArrayProperty ", errorCode);
 		return 0;
 	}
 	return 1;
@@ -1721,7 +1857,7 @@ int InstanceArrayProperty_NewIndex(lua_State *L)
 	InstancePropertyInstance* instance = (InstancePropertyInstance*)lua_touserdata(L, 1);
 	if (0 == instance->object)
 	{
-		Variant_Error(L, "", pafcore::e_void_variant);
+		Variant_Error(L, "__newindex for instanceArrayProperty ", pafcore::e_void_variant);
 		return 0;
 	}
 	size_t num;
@@ -1748,7 +1884,7 @@ int InstanceArrayProperty_NewIndex(lua_State *L)
 	}
 	if (pafcore::s_ok != errorCode)
 	{
-		Variant_Error(L, "", errorCode);
+		Variant_Error(L, "__newindex for instanceArrayProperty ", errorCode);
 		return 0;
 	}
 	return 1;
@@ -1761,7 +1897,7 @@ int InstanceArrayProperty_Len(lua_State *L)
 	InstancePropertyInstance* instance = (InstancePropertyInstance*)lua_touserdata(L, 1);
 	if (0 == instance->object)
 	{
-		Variant_Error(L, "", pafcore::e_void_variant);
+		Variant_Error(L, "# for instanceArrayProperty", pafcore::e_void_variant);
 		return 0;
 	}
 	pafcore::InstanceProperty* property = instance->property;
@@ -1777,7 +1913,7 @@ int InstanceArrayProperty_Len(lua_State *L)
 	}
 	else
 	{
-		Variant_Error(L, "#", errorCode);
+		Variant_Error(L, "# for instanceArrayProperty", errorCode);
 		return 0;
 	}
 }
@@ -1819,7 +1955,7 @@ int StaticArrayProperty_Index(lua_State *L)
 	}
 	if (pafcore::s_ok != errorCode)
 	{
-		Variant_Error(L, "", errorCode);
+		Variant_Error(L, "__index for staticArrayProperty", errorCode);
 		return 0;
 	}
 	return 1;
@@ -1853,7 +1989,7 @@ int StaticArrayProperty_NewIndex(lua_State *L)
 	}
 	if (pafcore::s_ok != errorCode)
 	{
-		Variant_Error(L, "", errorCode);
+		Variant_Error(L, "__newindex for staticArrayProperty", errorCode);
 		return 0;
 	}
 	return 1;
@@ -1876,7 +2012,7 @@ int StaticArrayProperty_Len(lua_State *L)
 	}
 	else
 	{
-		Variant_Error(L, "#", errorCode);
+		Variant_Error(L, "# for staticArrayProperty", errorCode);
 		return 0;
 	}
 }
@@ -1896,7 +2032,7 @@ int InstanceMapProperty_Index(lua_State *L)
 	InstancePropertyInstance* instance = (InstancePropertyInstance*)lua_touserdata(L, 1);
 	if (0 == instance->object)
 	{
-		Variant_Error(L, "", pafcore::e_void_variant);
+		Variant_Error(L, "__index for instanceMapProperty", pafcore::e_void_variant);
 		return 0;
 	}
 	pafcore::Variant variant;
@@ -1917,7 +2053,7 @@ int InstanceMapProperty_Index(lua_State *L)
 	errorCode = GetInstanceMapProperty(L, instance->object, instance->property, var);
 	if (pafcore::s_ok != errorCode)
 	{
-		Variant_Error(L, "", errorCode);
+		Variant_Error(L, "__index for instanceMapProperty", errorCode);
 		return 0;
 	}
 	return 1;
@@ -1929,7 +2065,7 @@ int InstanceMapProperty_NewIndex(lua_State *L)
 	InstancePropertyInstance* instance = (InstancePropertyInstance*)lua_touserdata(L, 1);
 	if (0 == instance->object)
 	{
-		Variant_Error(L, "", pafcore::e_void_variant);
+		Variant_Error(L, "__newindex for instanceMapProperty", pafcore::e_void_variant);
 		return 0;
 	}
 	pafcore::Variant variant;
@@ -1937,7 +2073,7 @@ int InstanceMapProperty_NewIndex(lua_State *L)
 	errorCode = SetInstanceMapProperty(L, instance->object, instance->property, var);
 	if (pafcore::s_ok != errorCode)
 	{
-		Variant_Error(L, "", errorCode);
+		Variant_Error(L, "__newindex for instanceMapProperty", errorCode);
 		return 0;
 	}
 	return 1;
@@ -1961,7 +2097,7 @@ int StaticMapProperty_Index(lua_State *L)
 	errorCode = GetStaticMapProperty(L, instance->property, var);
 	if (pafcore::s_ok != errorCode)
 	{
-		Variant_Error(L, "", errorCode);
+		Variant_Error(L, "__index for staticMapProperty", errorCode);
 		return 0;
 	}
 	return 1;
@@ -1976,7 +2112,7 @@ int StaticMapProperty_NewIndex(lua_State *L)
 	errorCode = SetStaticMapProperty(L, instance->property, var);
 	if (pafcore::s_ok != errorCode)
 	{
-		Variant_Error(L, "", errorCode);
+		Variant_Error(L, "__newindex for staticMapProperty", errorCode);
 		return 0;
 	}
 	return 1;

@@ -1,2 +1,0 @@
-
-paf.tutorial.Test.Run();

@@ -128,12 +128,12 @@ namespace pafcore
 	};
 
 
-	struct PAFCORE_EXPORT EventHandler : public pafcore::Delegate
+	struct PAFCORE_EXPORT EventHandler : public ::pafcore::Delegate
 	{
 	public:
 		void invoke(Reference* sender);
 		typedef void (*CallBackFunction)(void* userData, Reference* sender);
-		FunctionCallBack* addFunction(CallBackFunction function, void* userData)
+		::pafcore::FunctionCallBack* addFunction(CallBackFunction function, void* userData)
 		{return Delegate::addFunction(function, userData);}
 	};
 

@@ -46,7 +46,9 @@ extern "C"
 extern int yylineno;
 extern int yycolumnno;
 extern int yytokenno;
+extern int yyHasListProperty;
 extern int yyHasMapProperty;
+extern int yyHasDelegate;
 typedef struct yy_buffer_state *YY_BUFFER_STATE;
 YY_BUFFER_STATE yy_create_buffer ( FILE *file, int size );
 void yy_switch_to_buffer( YY_BUFFER_STATE new_buffer );
@@ -322,6 +324,15 @@ SyntaxNode* newProperty(SyntaxNode* name, PropertyCategory category)
 	assert(snt_identify == name->m_nodeType);
 	PropertyNode* res = new PropertyNode((IdentifyNode*)name, category);
 	g_syntaxNodes.push_back(res);
+
+	if (list_property == category)
+	{
+		yyHasListProperty = 1;
+	}
+	if (map_property == category)
+	{
+		yyHasMapProperty = 1;
+	}
 	return res;
 }
 
@@ -331,7 +342,6 @@ void setMapPropertyKeyType(SyntaxNode* property, SyntaxNode* type, SyntaxNode* p
 	assert(0 == type || snt_type_name == type->m_nodeType);
 	((PropertyNode*)property)->m_keyTypeName = (TypeNameNode*)type;
 	((PropertyNode*)property)->m_keyPassing = (TokenNode*)passing;
-	yyHasMapProperty = 1;
 }
 
 void setPropertyType(SyntaxNode* property, SyntaxNode* constant, SyntaxNode* type, SyntaxNode* passing)
@@ -585,6 +595,9 @@ SyntaxNode* newDelegate(SyntaxNode* name, SyntaxNode* leftParenthesis, SyntaxNod
 	DelegateNode* res = new DelegateNode((IdentifyNode*)name, (TokenNode*)leftParenthesis, (ParameterListNode*)parameterList,
 		(TokenNode*)rightParenthesis, (TokenNode*)semicolon);
 	g_syntaxNodes.push_back(res);
+	
+	yyHasDelegate = 1;
+	
 	return res;
 }
 

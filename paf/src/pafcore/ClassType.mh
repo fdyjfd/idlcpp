@@ -20,7 +20,7 @@ namespace idlcpp
 	public:
 		virtual void destroyInstance(void* address);
 		virtual void destroyArray(void* address);
-		virtual void assign(void* dst, const void* src);
+		virtual bool assign(void* dst, const void* src);
 	public:
 		static ::pafcore::ErrorCode ClassTypeIterator_deref(::pafcore::Variant* result, ::pafcore::Variant** args, int numArgs);
 		static ::pafcore::ErrorCode ClassTypeIterator_next(::pafcore::Variant* result, ::pafcore::Variant** args, int numArgs);
@@ -35,7 +35,7 @@ namespace idlcpp
 	public:
 		virtual void destroyInstance(void* address);
 		virtual void destroyArray(void* address);
-		virtual void assign(void* dst, const void* src);
+		virtual bool assign(void* dst, const void* src);
 	public:
 		static ::pafcore::ErrorCode ClassType__findMember_(::pafcore::Variant* result, ::pafcore::Variant** args, int numArgs);
 		static ::pafcore::ErrorCode ClassType__getBaseClassCount_(::pafcore::Variant* result, ::pafcore::Variant** args, int numArgs);

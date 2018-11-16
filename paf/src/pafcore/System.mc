@@ -31,24 +31,29 @@ namespace idlcpp
 		static ::pafcore::Result s_staticResults[] = 
 		{
 			::pafcore::Result(RuntimeTypeOf<void>::RuntimeType::GetSingleton(), false, ::pafcore::Result::by_value),
+			::pafcore::Result(RuntimeTypeOf<void>::RuntimeType::GetSingleton(), false, ::pafcore::Result::by_value),
 		};
 		static ::pafcore::Argument s_staticArguments[] = 
 		{
 			::pafcore::Argument("fileName", RuntimeTypeOf<string_t>::RuntimeType::GetSingleton(), ::pafcore::Argument::by_value, false),
+			::pafcore::Argument("str", RuntimeTypeOf<string_t>::RuntimeType::GetSingleton(), ::pafcore::Argument::by_value, false),
 		};
 		static ::pafcore::Overload s_staticOverloads[] = 
 		{
 			::pafcore::Overload(&s_staticResults[0], &s_staticArguments[0], 1, true, false),
+			::pafcore::Overload(&s_staticResults[1], &s_staticArguments[1], 1, true, false),
 		};
 		static ::pafcore::StaticMethod s_staticMethods[] = 
 		{
 			::pafcore::StaticMethod("LoadDLL", 0, System_LoadDLL, &s_staticOverloads[0], 1),
+			::pafcore::StaticMethod("OutputDebug", 0, System_OutputDebug, &s_staticOverloads[1], 1),
 		};
 		m_staticMethods = s_staticMethods;
 		m_staticMethodCount = paf_array_size_of(s_staticMethods);
 		static Metadata* s_members[] = 
 		{
 			&s_staticMethods[0],
+			&s_staticMethods[1],
 		};
 		m_members = s_members;
 		m_memberCount = paf_array_size_of(s_members);
@@ -65,9 +70,10 @@ namespace idlcpp
 		paf_delete_array(reinterpret_cast<::pafcore::System*>(address));
 	}
 
-	void __pafcore__System_Type::assign(void* dst, const void* src)
+	bool __pafcore__System_Type::assign(void* dst, const void* src)
 	{
 		*(::pafcore::System*)dst = *(const ::pafcore::System*)src;
+		return true;
 	}
 
 	::pafcore::ErrorCode __pafcore__System_Type::System_LoadDLL(::pafcore::Variant* result, ::pafcore::Variant** args, int_t numArgs)
@@ -80,6 +86,21 @@ namespace idlcpp
 				return ::pafcore::e_invalid_arg_type_1;
 			}
 			::pafcore::System::LoadDLL(a0);
+			return ::pafcore::s_ok;
+		}
+		return ::pafcore::e_invalid_arg_num;
+	}
+
+	::pafcore::ErrorCode __pafcore__System_Type::System_OutputDebug(::pafcore::Variant* result, ::pafcore::Variant** args, int_t numArgs)
+	{
+		if(1 <= numArgs)
+		{
+			string_t a0;
+			if(!args[0]->castToPrimitive(RuntimeTypeOf<string_t>::RuntimeType::GetSingleton(), &a0))
+			{
+				return ::pafcore::e_invalid_arg_type_1;
+			}
+			::pafcore::System::OutputDebug(a0);
 			return ::pafcore::s_ok;
 		}
 		return ::pafcore::e_invalid_arg_num;

@@ -69,9 +69,9 @@ namespace idlcpp
 		paf_delete_array(reinterpret_cast<::pafcore::RefCountImpl<::pafcore::Enumerator>*>(address));
 	}
 
-	void __pafcore__Enumerator_Type::assign(void* dst, const void* src)
+	bool __pafcore__Enumerator_Type::assign(void* dst, const void* src)
 	{
-		*(::pafcore::Enumerator*)dst = *(const ::pafcore::Enumerator*)src;
+		return false;
 	}
 
 	::pafcore::ErrorCode __pafcore__Enumerator_Type::Enumerator_get__type_(::pafcore::InstanceProperty* instanceProperty, ::pafcore::Variant* that, ::pafcore::Variant* value)

@@ -228,7 +228,7 @@ namespace idlcpp
 	public:
 		virtual void destroyInstance(void* address);
 		virtual void destroyArray(void* address);
-		virtual void assign(void* dst, const void* src);
+		virtual bool assign(void* dst, const void* src);
 	public:
 		PAFCORE_EXPORT static __pafcore__Buffer_Type* GetSingleton();
 	};

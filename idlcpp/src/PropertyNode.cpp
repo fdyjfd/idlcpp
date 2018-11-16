@@ -50,6 +50,11 @@ bool PropertyNode::isDynamicArray()
 	return dynamic_array_property == m_propertyCategory;
 }
 
+bool PropertyNode::isList()
+{
+	return list_property == m_propertyCategory;
+}
+
 bool PropertyNode::isMap()
 {
 	return map_property == m_propertyCategory;
@@ -80,9 +85,24 @@ bool PropertyNode::isKeyAllowNull()
 	return false;
 }
 
+bool PropertyNode::isConstant()
+{
+	return (0 != m_constant);
+}
+
+bool PropertyNode::byValue()
+{
+	return 0 == m_passing;
+}
+
 bool PropertyNode::byPtr()
 {
 	return (0 != m_passing && '*' == m_passing->m_nodeType);
+}
+
+bool PropertyNode::byRef()
+{
+	return (0 != m_passing && '&' == m_passing->m_nodeType);
 }
 
 void PropertyNode::setGetter(GetterSetterNode* getter)

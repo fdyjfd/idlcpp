@@ -409,8 +409,7 @@ bool Variant::castToValue(Type* dstType, void* dst) const
 	void* ptr;
 	if(castToValuePtr(dstType, &ptr) && ptr)
 	{
-		dstType->assign(dst, ptr);
-		return true;
+		return dstType->assign(dst, ptr);
 	}
 	return false;
 }
@@ -421,8 +420,7 @@ bool Variant::castToReference(Type* dstType, void* dst) const
 	void* ptr;
 	if(castToReferencePtr(dstType, &ptr) && ptr)
 	{
-		dstType->assign(dst, ptr);
-		return true;
+		return dstType->assign(dst, ptr);
 	}
 	return false;
 }
@@ -531,11 +529,14 @@ bool Variant::castToValuePtrAllowNull(Type* dstType, void** dst) const
 		*dst = 0;
 		return true;
 	}
-	size_t offset;
-	if (static_cast<ClassType*>(m_type)->getClassOffset(offset, static_cast<ClassType*>(dstType)))
+	if (m_type->isValue())
 	{
-		*dst = (void*)((size_t)m_pointer + offset);
-		return true;
+		size_t offset;
+		if (static_cast<ClassType*>(m_type)->getClassOffset(offset, static_cast<ClassType*>(dstType)))
+		{
+			*dst = (void*)((size_t)m_pointer + offset);
+			return true;
+		}
 	}
 	return false;
 }

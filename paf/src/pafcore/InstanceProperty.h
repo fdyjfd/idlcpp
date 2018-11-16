@@ -24,6 +24,12 @@ namespace pafcore
 	typedef ErrorCode(*ArrayInstancePropertySizer)(InstanceProperty* instanceProperty, Variant* that, Variant* size);
 	typedef ErrorCode(*ArrayInstancePropertyResizer)(InstanceProperty* instanceProperty, Variant* that, Variant* size);
 	
+	typedef ErrorCode(*ListInstancePropertyGetter)(InstanceProperty* instanceProperty, Variant* that, size_t index, Variant* value);
+	typedef ErrorCode(*ListInstancePropertySetter)(InstanceProperty* instanceProperty, Variant* that, size_t index, Variant* value);
+ 	typedef ErrorCode(*ListInstancePropertyPushBack)(InstanceProperty* instanceProperty, Variant* that, Variant* value);
+	typedef ErrorCode(*ListInstancePropertyGetIterator)(InstanceProperty* instanceProperty, Variant* that, Variant* iterator);
+	typedef ErrorCode(*ListInstancePropertyGetValue)(InstanceProperty* instanceProperty, Variant* that, Iterator* iterator, Variant* value);
+
 	typedef ErrorCode(*MapInstancePropertyGetter)(InstanceProperty* instanceProperty, Variant* that, Variant* key, Variant* value);
 	typedef ErrorCode(*MapInstancePropertySetter)(InstanceProperty* instanceProperty, Variant* that, Variant* key, Variant* value);
 	typedef ErrorCode(*MapInstancePropertyGetIterator)(InstanceProperty* instanceProperty, Variant* that, Variant* iterator);
@@ -42,6 +48,7 @@ namespace pafcore
 		ClassType* get_objectType();
 
 		bool get_isArray() const;
+		bool get_isList() const;
 		bool get_isMap() const;
 		bool get_isSimple() const;
 
@@ -81,9 +88,16 @@ namespace pafcore
 			ArrayInstancePropertyResizer resizer);
 
 		InstanceProperty(const char* name, Attributes* attributes, ClassType* objectType,
+			ListInstancePropertyGetter getter, Type* getterType, Passing getterPassing, bool getterConstant,
+			ListInstancePropertySetter setter, Type* setterType, Passing setterPassing, bool setterConstant,
+			ListInstancePropertyPushBack pushBack,
+			ListInstancePropertyGetIterator getIterator,
+			ListInstancePropertyGetValue getValue);
+
+		InstanceProperty(const char* name, Attributes* attributes, ClassType* objectType,
 			MapInstancePropertyGetter getter, Type* getterType, Passing getterPassing, bool getterConstant,
 			MapInstancePropertySetter setter, Type* setterType, Passing setterPassing, bool setterConstant,
-			MapInstancePropertyGetIterator getIterator, 
+			MapInstancePropertyGetIterator getIterator,
 			MapInstancePropertyGetKey getKey,
 			MapInstancePropertyGetValue getValue,
 			Type* keyType, Passing keyPassing, bool keyConstant);
@@ -102,6 +116,14 @@ namespace pafcore
 				ArrayInstancePropertySetter m_arraySetter;
 				ArrayInstancePropertySizer m_arraySizer;
 				ArrayInstancePropertyResizer m_arrayResizer;
+			};
+			struct
+			{
+				ListInstancePropertyGetter m_listGetter;
+				ListInstancePropertySetter m_listSetter;
+				ListInstancePropertyPushBack m_listPushBack;
+				ListInstancePropertyGetIterator m_listGetIterator;
+				ListInstancePropertyGetValue m_listGetValue;
 			};
 			struct
 			{

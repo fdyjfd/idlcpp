@@ -11,6 +11,14 @@ public:
 	{
 	}
 
+	RefPtr(T* p, bool addRef = true) : m_ptr(p)
+	{
+		if (0 != m_ptr && addRef)
+		{
+			m_ptr->addRef();
+		}
+	}
+
 	RefPtr(const RefPtr<T>& arg)
 		: m_ptr(arg.m_ptr)
 	{
@@ -48,6 +56,15 @@ public:
 			}
 			m_ptr = p;
 		}
+	}
+
+	void assignNoRef(T* p)
+	{
+		if (m_ptr)
+		{
+			m_ptr->release();
+		}
+		m_ptr = p;
 	}
 
 	T* getPointer()

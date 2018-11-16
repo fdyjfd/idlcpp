@@ -143,9 +143,9 @@ namespace idlcpp
 		paf_delete_array(reinterpret_cast<::pafcore::RefCountImpl<::pafcore::Metadata>*>(address));
 	}
 
-	void __pafcore__Metadata_Type::assign(void* dst, const void* src)
+	bool __pafcore__Metadata_Type::assign(void* dst, const void* src)
 	{
-		*(::pafcore::Metadata*)dst = *(const ::pafcore::Metadata*)src;
+		return false;
 	}
 
 	::pafcore::ErrorCode __pafcore__Metadata_Type::Metadata_get__attributeCount_(::pafcore::InstanceProperty* instanceProperty, ::pafcore::Variant* that, ::pafcore::Variant* value)
@@ -188,10 +188,6 @@ namespace idlcpp
 	{
 		if(2 <= numArgs)
 		{
-			if(args[0]->isConstant())
-			{
-				return ::pafcore::e_this_is_constant;
-			}
 			::pafcore::Metadata* self;
 			if(!args[0]->castToReferencePtr(GetSingleton(), (void**)&self))
 			{
@@ -213,10 +209,6 @@ namespace idlcpp
 	{
 		if(2 <= numArgs)
 		{
-			if(args[0]->isConstant())
-			{
-				return ::pafcore::e_this_is_constant;
-			}
 			::pafcore::Metadata* self;
 			if(!args[0]->castToReferencePtr(GetSingleton(), (void**)&self))
 			{
@@ -238,10 +230,6 @@ namespace idlcpp
 	{
 		if(2 <= numArgs)
 		{
-			if(args[0]->isConstant())
-			{
-				return ::pafcore::e_this_is_constant;
-			}
 			::pafcore::Metadata* self;
 			if(!args[0]->castToReferencePtr(GetSingleton(), (void**)&self))
 			{

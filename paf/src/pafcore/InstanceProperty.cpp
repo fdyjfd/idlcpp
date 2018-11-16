@@ -28,7 +28,7 @@ InstanceProperty::InstanceProperty(const char* name, Attributes* attributes, Cla
 InstanceProperty::InstanceProperty(const char* name, Attributes* attributes, ClassType* objectType,
 	ArrayInstancePropertyGetter getter, Type* getterType, Passing getterPassing, bool getterConstant,
 	ArrayInstancePropertySetter setter, Type* setterType, Passing setterPassing, bool setterConstant,
-	ArrayInstancePropertySizer sizer, ArrayInstancePropertyResizer resizer) 
+	ArrayInstancePropertySizer sizer, ArrayInstancePropertyResizer resizer)
 	:Metadata(name, attributes)
 {
 	m_objectType = objectType;
@@ -46,6 +46,32 @@ InstanceProperty::InstanceProperty(const char* name, Attributes* attributes, Cla
 	m_arraySizer = sizer;
 	m_arrayResizer = resizer;
 	m_category = array_property;
+}
+
+InstanceProperty::InstanceProperty(const char* name, Attributes* attributes, ClassType* objectType,
+	ListInstancePropertyGetter getter, Type* getterType, Passing getterPassing, bool getterConstant,
+	ListInstancePropertySetter setter, Type* setterType, Passing setterPassing, bool setterConstant,
+	ListInstancePropertyPushBack pushBack,
+	ListInstancePropertyGetIterator getIterator,
+	ListInstancePropertyGetValue getValue)
+	:Metadata(name, attributes)
+{
+	m_objectType = objectType;
+	m_listGetter = getter;
+	m_listSetter = setter;
+	m_getterType = getterType;
+	m_setterType = setterType;
+	m_keyType = 0;
+	m_getterPassing = getterPassing;
+	m_setterPassing = setterPassing;
+	m_keyPassing = by_value;
+	m_getterConstant = getterConstant;
+	m_setterConstant = setterConstant;
+	m_keyConstant = false;
+	m_listPushBack = pushBack;
+	m_listGetIterator = getIterator;
+	m_listGetValue = getValue;
+	m_category = list_property;
 }
 
 InstanceProperty::InstanceProperty(const char* name, Attributes* attributes, ClassType* objectType,
@@ -80,19 +106,24 @@ ClassType* InstanceProperty::get_objectType()
 	return m_objectType;
 }
 
+bool InstanceProperty::get_isSimple() const
+{
+	return simple_property == m_category;
+}
+
 bool InstanceProperty::get_isArray() const
 {
 	return array_property == m_category;
 }
 
+bool InstanceProperty::get_isList() const
+{
+	return list_property == m_category;
+}
+
 bool InstanceProperty::get_isMap() const
 {
 	return map_property == m_category;
-}
-
-bool InstanceProperty::get_isSimple() const
-{
-	return simple_property == m_category;
 }
 
 bool InstanceProperty::get_hasGetter() const

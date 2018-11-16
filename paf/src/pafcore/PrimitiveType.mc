@@ -96,19 +96,15 @@ namespace idlcpp
 		paf_delete_array(reinterpret_cast<::pafcore::RefCountImpl<::pafcore::PrimitiveType>*>(address));
 	}
 
-	void __pafcore__PrimitiveType_Type::assign(void* dst, const void* src)
+	bool __pafcore__PrimitiveType_Type::assign(void* dst, const void* src)
 	{
-		*(::pafcore::PrimitiveType*)dst = *(const ::pafcore::PrimitiveType*)src;
+		return false;
 	}
 
 	::pafcore::ErrorCode __pafcore__PrimitiveType_Type::PrimitiveType__findMember_(::pafcore::Variant* result, ::pafcore::Variant** args, int_t numArgs)
 	{
 		if(2 <= numArgs)
 		{
-			if(args[0]->isConstant())
-			{
-				return ::pafcore::e_this_is_constant;
-			}
 			::pafcore::PrimitiveType* self;
 			if(!args[0]->castToReferencePtr(GetSingleton(), (void**)&self))
 			{
@@ -134,10 +130,6 @@ namespace idlcpp
 	{
 		if(1 <= numArgs)
 		{
-			if(args[0]->isConstant())
-			{
-				return ::pafcore::e_this_is_constant;
-			}
 			::pafcore::PrimitiveType* self;
 			if(!args[0]->castToReferencePtr(GetSingleton(), (void**)&self))
 			{
@@ -154,10 +146,6 @@ namespace idlcpp
 	{
 		if(2 <= numArgs)
 		{
-			if(args[0]->isConstant())
-			{
-				return ::pafcore::e_this_is_constant;
-			}
 			::pafcore::PrimitiveType* self;
 			if(!args[0]->castToReferencePtr(GetSingleton(), (void**)&self))
 			{

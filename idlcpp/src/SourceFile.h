@@ -17,7 +17,9 @@ public:
 	{
 		m_syntaxTree = 0;
 		m_currentEmbededCode = 0;
+		m_hasListProperty = false;
 		m_hasMapProperty = false;
+		m_hasDelegate = false;
 	}
 	~SourceFile();
 public:
@@ -29,6 +31,8 @@ public:
 	std::vector<EmbededCode*> m_embededCodes;
 	size_t m_currentEmbededCode;
 	std::vector<SourceFile*> m_importSourceFiles;
+	bool m_hasListProperty;
 	bool m_hasMapProperty;
+	bool m_hasDelegate;
 };
 

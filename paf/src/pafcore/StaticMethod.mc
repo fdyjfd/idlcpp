@@ -99,9 +99,9 @@ namespace idlcpp
 		paf_delete_array(reinterpret_cast<::pafcore::RefCountImpl<::pafcore::StaticMethod>*>(address));
 	}
 
-	void __pafcore__StaticMethod_Type::assign(void* dst, const void* src)
+	bool __pafcore__StaticMethod_Type::assign(void* dst, const void* src)
 	{
-		*(::pafcore::StaticMethod*)dst = *(const ::pafcore::StaticMethod*)src;
+		return false;
 	}
 
 	::pafcore::ErrorCode __pafcore__StaticMethod_Type::StaticMethod_get_overloadCount(::pafcore::InstanceProperty* instanceProperty, ::pafcore::Variant* that, ::pafcore::Variant* value)
@@ -120,10 +120,6 @@ namespace idlcpp
 	{
 		if(3 <= numArgs)
 		{
-			if(args[0]->isConstant())
-			{
-				return ::pafcore::e_this_is_constant;
-			}
 			::pafcore::StaticMethod* self;
 			if(!args[0]->castToReferencePtr(GetSingleton(), (void**)&self))
 			{
@@ -150,10 +146,6 @@ namespace idlcpp
 	{
 		if(2 <= numArgs)
 		{
-			if(args[0]->isConstant())
-			{
-				return ::pafcore::e_this_is_constant;
-			}
 			::pafcore::StaticMethod* self;
 			if(!args[0]->castToReferencePtr(GetSingleton(), (void**)&self))
 			{
@@ -175,10 +167,6 @@ namespace idlcpp
 	{
 		if(2 <= numArgs)
 		{
-			if(args[0]->isConstant())
-			{
-				return ::pafcore::e_this_is_constant;
-			}
 			::pafcore::StaticMethod* self;
 			if(!args[0]->castToReferencePtr(GetSingleton(), (void**)&self))
 			{

@@ -17,6 +17,12 @@ namespace pafcore
 	typedef ErrorCode(*ArrayInstancePropertySizer)(InstanceProperty* instanceProperty, Variant* that, Variant* size);
 	typedef ErrorCode(*ArrayInstancePropertyResizer)(InstanceProperty* instanceProperty, Variant* that, Variant* size);
 	
+	typedef ErrorCode(*ListInstancePropertyGetter)(InstanceProperty* instanceProperty, Variant* that, size_t index, Variant* value);
+	typedef ErrorCode(*ListInstancePropertySetter)(InstanceProperty* instanceProperty, Variant* that, size_t index, Variant* value);
+ 	typedef ErrorCode(*ListInstancePropertyPushBack)(InstanceProperty* instanceProperty, Variant* that, Variant* value);
+	typedef ErrorCode(*ListInstancePropertyGetIterator)(InstanceProperty* instanceProperty, Variant* that, Variant* iterator);
+	typedef ErrorCode(*ListInstancePropertyGetValue)(InstanceProperty* instanceProperty, Variant* that, Iterator* iterator, Variant* value);
+
 	typedef ErrorCode(*MapInstancePropertyGetter)(InstanceProperty* instanceProperty, Variant* that, Variant* key, Variant* value);
 	typedef ErrorCode(*MapInstancePropertySetter)(InstanceProperty* instanceProperty, Variant* that, Variant* key, Variant* value);
 	typedef ErrorCode(*MapInstancePropertyGetIterator)(InstanceProperty* instanceProperty, Variant* that, Variant* iterator);
@@ -27,34 +33,35 @@ namespace pafcore
 
 	abstract class(instance_property)#PAFCORE_EXPORT InstanceProperty : Metadata
 	{
-		ClassType* objectType get;
+		ClassType* objectType { get };
 		
-		bool isArray get;
-		bool isMap get;
-		bool isSimple get;
+		bool isArray { get };
+		bool isList { get };
+		bool isMap { get };
+		bool isSimple { get };
 
-		bool hasGetter get;
-		bool hasSetter get;
-		bool hasSizer get;
-		bool hasResizer get;
+		bool hasGetter { get };
+		bool hasSetter { get };
+		bool hasSizer { get };
+		bool hasResizer { get };
 
-		Type* getterType get;
-		bool getterByValue get;
-		bool getterByRef get;
-		bool getterByPtr get;
-		bool getterConstant get;
+		Type* getterType { get };
+		bool getterByValue { get };
+		bool getterByRef { get };
+		bool getterByPtr { get };
+		bool getterConstant { get };
 
-		Type* setterType get;
-		bool setterByValue get;
-		bool setterByRef get;
-		bool setterByPtr get;
-		bool setterConstant get;
+		Type* setterType { get };
+		bool setterByValue { get };
+		bool setterByRef { get };
+		bool setterByPtr { get };
+		bool setterConstant { get };
 
-		Type* keyType get;
-		bool keyByValue get;
-		bool keyByRef get;
-		bool keyByPtr get;
-		bool keyConstant get;
+		Type* keyType { get };
+		bool keyByValue { get };
+		bool keyByRef { get };
+		bool keyByPtr { get };
+		bool keyConstant { get };
 
 #{
 	public:
@@ -69,9 +76,16 @@ namespace pafcore
 			ArrayInstancePropertyResizer resizer);
 
 		InstanceProperty(const char* name, Attributes* attributes, ClassType* objectType,
+			ListInstancePropertyGetter getter, Type* getterType, Passing getterPassing, bool getterConstant,
+			ListInstancePropertySetter setter, Type* setterType, Passing setterPassing, bool setterConstant,
+			ListInstancePropertyPushBack pushBack,
+			ListInstancePropertyGetIterator getIterator,
+			ListInstancePropertyGetValue getValue);
+
+		InstanceProperty(const char* name, Attributes* attributes, ClassType* objectType,
 			MapInstancePropertyGetter getter, Type* getterType, Passing getterPassing, bool getterConstant,
 			MapInstancePropertySetter setter, Type* setterType, Passing setterPassing, bool setterConstant,
-			MapInstancePropertyGetIterator getIterator, 
+			MapInstancePropertyGetIterator getIterator,
 			MapInstancePropertyGetKey getKey,
 			MapInstancePropertyGetValue getValue,
 			Type* keyType, Passing keyPassing, bool keyConstant);
@@ -90,6 +104,14 @@ namespace pafcore
 				ArrayInstancePropertySetter m_arraySetter;
 				ArrayInstancePropertySizer m_arraySizer;
 				ArrayInstancePropertyResizer m_arrayResizer;
+			};
+			struct
+			{
+				ListInstancePropertyGetter m_listGetter;
+				ListInstancePropertySetter m_listSetter;
+				ListInstancePropertyPushBack m_listPushBack;
+				ListInstancePropertyGetIterator m_listGetIterator;
+				ListInstancePropertyGetValue m_listGetValue;
 			};
 			struct
 			{

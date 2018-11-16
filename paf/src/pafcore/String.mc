@@ -130,9 +130,10 @@ namespace idlcpp
 		paf_delete_array(reinterpret_cast<::pafcore::String*>(address));
 	}
 
-	void __pafcore__String_Type::assign(void* dst, const void* src)
+	bool __pafcore__String_Type::assign(void* dst, const void* src)
 	{
 		*(::pafcore::String*)dst = *(const ::pafcore::String*)src;
+		return true;
 	}
 
 	::pafcore::ErrorCode __pafcore__String_Type::String_append(::pafcore::Variant* result, ::pafcore::Variant** args, int_t numArgs)
@@ -146,10 +147,6 @@ namespace idlcpp
 			{
 			case 0:
 			{
-				if(args[0]->isConstant())
-				{
-					return ::pafcore::e_this_is_constant;
-				}
 				::pafcore::String* self;
 				if(!args[0]->castToValuePtr(GetSingleton(), (void**)&self))
 				{
@@ -165,10 +162,6 @@ namespace idlcpp
 			}
 			case 1:
 			{
-				if(args[0]->isConstant())
-				{
-					return ::pafcore::e_this_is_constant;
-				}
 				::pafcore::String* self;
 				if(!args[0]->castToValuePtr(GetSingleton(), (void**)&self))
 				{
@@ -202,10 +195,6 @@ namespace idlcpp
 			{
 			case 0:
 			{
-				if(args[0]->isConstant())
-				{
-					return ::pafcore::e_this_is_constant;
-				}
 				::pafcore::String* self;
 				if(!args[0]->castToValuePtr(GetSingleton(), (void**)&self))
 				{
@@ -221,10 +210,6 @@ namespace idlcpp
 			}
 			case 1:
 			{
-				if(args[0]->isConstant())
-				{
-					return ::pafcore::e_this_is_constant;
-				}
 				::pafcore::String* self;
 				if(!args[0]->castToValuePtr(GetSingleton(), (void**)&self))
 				{
@@ -349,10 +334,6 @@ namespace idlcpp
 	{
 		if(1 <= numArgs)
 		{
-			if(args[0]->isConstant())
-			{
-				return ::pafcore::e_this_is_constant;
-			}
 			::pafcore::String* self;
 			if(!args[0]->castToValuePtr(GetSingleton(), (void**)&self))
 			{

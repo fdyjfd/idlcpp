@@ -129,13 +129,13 @@ void DelegateNode::checkSemantic(TemplateArguments* templateArguments)
 		parameterNodes[i]->checkSemantic(templateArguments);
 	}
 
-	//m_classNode->checkSemantic(templateArguments);
+	m_classNode->checkSemantic(templateArguments);
 }
 
 void DelegateNode::extendInternalCode(TypeNode* enclosingTypeNode, TemplateArguments* templateArguments)
 {
 	ClassNode* classNode = (ClassNode*)newClass(m_keyword, 0, m_name);
-	//TokenNode* colonTokenNode = newToken(':');
+
 	IdentifyNode* nsIdentifyNode = (IdentifyNode*)newIdentify("pafcore");
 	ScopeNameNode* nsScopeNameNode = (ScopeNameNode*)newScopeName(nsIdentifyNode, 0, 0, 0);
 
@@ -157,8 +157,6 @@ void DelegateNode::extendInternalCode(TypeNode* enclosingTypeNode, TemplateArgum
 	}
 	MemberListNode* classMemberListNode  = (MemberListNode*)newClassMemberList(0, invokeMethodNode);
 	classNode->setMemberList(0, classMemberListNode, 0);
-
-	//baseTypeNameNode->calcTypeNodes(enclosingTypeNode, templateArguments);
 
 	invokeMethodNode->m_enclosing = classNode;
 	classNode->m_enclosing = m_enclosing;

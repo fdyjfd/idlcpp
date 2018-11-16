@@ -154,6 +154,7 @@ enum PropertyCategory
 	simple_property,
 	fixed_array_property,
 	dynamic_array_property,
+	list_property,
 	map_property,
 };
 

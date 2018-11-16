@@ -12,7 +12,7 @@ namespace pafcore
 
 	abstract class(instance_method)#PAFCORE_EXPORT InstanceMethod : Metadata
 	{
-		size_t overloadCount get;
+		size_t overloadCount { get };
 		Result* getResult(size_t overloadIndex);
 		size_t getArgumentCount(size_t overloadIndex);
 		Argument* getArgument(size_t overloadIndex, size_t index);

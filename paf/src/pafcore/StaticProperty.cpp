@@ -47,6 +47,31 @@ StaticProperty::StaticProperty(const char* name, Attributes* attributes,
 }
 
 StaticProperty::StaticProperty(const char* name, Attributes* attributes,
+	ListStaticPropertyGetter getter, Type* getterType, Passing getterPassing, bool getterConstant,
+	ListStaticPropertySetter setter, Type* setterType, Passing setterPassing, bool setterConstant,
+	ListStaticPropertyPushBack pushBack,
+	ListStaticPropertyGetIterator getIterator,
+	ListStaticPropertyGetValue getValue)
+	: Metadata(name, attributes)
+{
+	m_listGetter = getter;
+	m_listSetter = setter;
+	m_getterType = getterType;
+	m_setterType = setterType;
+	m_keyType = 0;
+	m_getterPassing = getterPassing;
+	m_setterPassing = setterPassing;
+	m_keyPassing = by_value;
+	m_getterConstant = getterConstant;
+	m_setterConstant = setterConstant;
+	m_keyConstant = false;
+	m_listPushBack = pushBack;
+	m_listGetIterator = getIterator;
+	m_listGetValue = getValue;
+	m_category = list_property;
+}
+
+StaticProperty::StaticProperty(const char* name, Attributes* attributes,
 	MapStaticPropertyGetter getter, Type* getterType, Passing getterPassing, bool getterConstant,
 	MapStaticPropertySetter setter, Type* setterType, Passing setterPassing, bool setterConstant,
 	MapStaticPropertyGetIterator getIterator,
@@ -72,21 +97,25 @@ StaticProperty::StaticProperty(const char* name, Attributes* attributes,
 	m_category = map_property;
 }
 
+bool StaticProperty::get_isSimple() const
+{
+	return simple_property == m_category;
+}
+
 bool StaticProperty::get_isArray() const
 {
 	return array_property == m_category;
+}
+
+bool StaticProperty::get_isList() const
+{
+	return list_property == m_category;
 }
 
 bool StaticProperty::get_isMap() const
 {
 	return map_property == m_category;
 }
-
-bool StaticProperty::get_isSimple() const
-{
-	return simple_property == m_category;
-}
-
 
 bool StaticProperty::get_hasGetter() const
 {

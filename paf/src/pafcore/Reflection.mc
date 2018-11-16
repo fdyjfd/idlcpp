@@ -78,9 +78,10 @@ namespace idlcpp
 		paf_delete_array(reinterpret_cast<::pafcore::Reflection*>(address));
 	}
 
-	void __pafcore__Reflection_Type::assign(void* dst, const void* src)
+	bool __pafcore__Reflection_Type::assign(void* dst, const void* src)
 	{
 		*(::pafcore::Reflection*)dst = *(const ::pafcore::Reflection*)src;
+		return true;
 	}
 
 	::pafcore::ErrorCode __pafcore__Reflection_Type::Reflection_GetTypeAliasFullName(::pafcore::Variant* result, ::pafcore::Variant** args, int_t numArgs)

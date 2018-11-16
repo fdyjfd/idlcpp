@@ -149,11 +149,8 @@ field					: field_2 ';'										{$$ = $1; setFieldSemicolon($$, $2);}
 
 
 getter_0				: GET												{$$ = newGetterSetter($1, NULL, NULL, NULL);}
-						| GET '(' typeName ')'								{$$ = newGetterSetter($1, NULL, $3, NULL);}
-						| GET '(' typeName '*' ')'							{$$ = newGetterSetter($1, NULL, $3, $4);}
-						| GET '(' typeName '&' ')'							{$$ = newGetterSetter($1, NULL, $3, $4);}
-						| GET '(' CONST typeName '*' ')'					{$$ = newGetterSetter($1, $3, $4, $5);}
-						| GET '(' CONST typeName '&' ')'					{$$ = newGetterSetter($1, $3, $4, $5);}
+						| GET '(' '&' ')'									{$$ = newGetterSetter($1, NULL, $3, $4);}
+						| GET '(' CONST '&' ')'								{$$ = newGetterSetter($1, $3, $4, $5);}
 ;
 
 
@@ -162,11 +159,8 @@ getter					: getter_0											{$$ = $1;}
 ;
 
 setter_0				: SET												{$$ = newGetterSetter($1, NULL, NULL, NULL);}
-						| SET '(' typeName ')'								{$$ = newGetterSetter($1, NULL, $3, NULL);}
-						| SET '(' typeName '*' ')'							{$$ = newGetterSetter($1, NULL, $3, $4);}
-						| SET '(' typeName '&' ')'							{$$ = newGetterSetter($1, NULL, $3, $4);}
-						| SET '(' CONST typeName '*' ')'					{$$ = newGetterSetter($1, $3, $4, $5);}
-						| SET '(' CONST typeName '&' ')'					{$$ = newGetterSetter($1, $3, $4, $5);}
+						| SET '(' '&' ')'									{$$ = newGetterSetter($1, NULL, $3, $4);}
+						| SET '(' CONST '&' ')'								{$$ = newGetterSetter($1, $3, $4, $5);}
 ;
 
 setter_1				: setter_0											{$$ = $1;}
@@ -180,21 +174,20 @@ setter					: setter_1											{$$ = $1;}
 property_0				: IDENTIFY											{$$ = newProperty($1, simple_property);}
 						| IDENTIFY '[' ']'									{$$ = newProperty($1, fixed_array_property);}
 						| IDENTIFY '[' '?' ']'								{$$ = newProperty($1, dynamic_array_property);}
+						| IDENTIFY '[' '*' ']'								{$$ = newProperty($1, list_property);}
 						| IDENTIFY '[' typeName ']'							{$$ = newProperty($1, map_property); setMapPropertyKeyType($$, $3, NULL);}
 						| IDENTIFY '[' typeName '*' ']'						{$$ = newProperty($1, map_property); setMapPropertyKeyType($$, $3, $4);}
 ;
 
 property_1				: typeName property_0								{$$ = $2; setPropertyType($$, NULL, $1, NULL);}
 						| typeName '*' property_0							{$$ = $3; setPropertyType($$, NULL, $1, $2);}
-						| typeName '&' property_0 							{$$ = $3; setPropertyType($$, NULL, $1, $2);}
-						| CONST typeName '*' property_0						{$$ = $4; setPropertyType($$, $1, $2, $3);}
-						| CONST typeName '&' property_0						{$$ = $4; setPropertyType($$, $1, $2, $3);}
 ;
 
-property_2				: property_1 getter ';'								{$$ = $1; setPropertyGetter($$, $2);}
-						| property_1 setter ';'								{$$ = $1; setPropertySetter($$, $2);}
-						| property_1 getter setter ';'						{$$ = $1; setPropertyGetter($$, $2); setPropertySetter($1, $3);}
-						| property_1 setter getter ';'						{$$ = $1; setPropertyGetter($$, $3); setPropertySetter($1, $2);}
+property_2				: property_1 '{' '}' ';'							{$$ = $1;}
+						| property_1 '{' getter '}' ';'						{$$ = $1; setPropertyGetter($$, $3);}
+						| property_1 '{' setter '}' ';'						{$$ = $1; setPropertySetter($$, $3);}
+						| property_1 '{' getter setter '}' ';'				{$$ = $1; setPropertyGetter($$, $3); setPropertySetter($1, $4);}
+						| property_1 '{' setter getter '}' ';'				{$$ = $1; setPropertyGetter($$, $4); setPropertySetter($1, $3);}
 ;
 
 property				: property_2										{$$ = $1;}

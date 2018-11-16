@@ -9,12 +9,12 @@ namespace pafcore
 
 	abstract class(instance_field)#PAFCORE_EXPORT InstanceField : Metadata
 	{
-		Type* type get;
-		ClassType* objectType get;
-		size_t offset get;
-		bool isArray get;
-		bool isPointer get;
-		bool isConstant get;
+		Type* type { get };
+		ClassType* objectType { get };
+		size_t offset { get };
+		bool isArray { get };
+		bool isPointer { get };
+		bool isConstant { get };
 #{
 	public:
 		InstanceField(const char* name, Attributes* attributes, ClassType* objectType, Type* type, size_t offset, size_t arraySize, bool constant, TypeCompound tc);

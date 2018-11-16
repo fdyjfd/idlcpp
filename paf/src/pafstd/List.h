@@ -165,12 +165,14 @@ protected:
 
 //侵入式双向链表
 
-template<typename T> class DoublyLinkedList;
+template<typename T, int t_id > class DoublyLinkedList;
+template<typename T, int t_id > class DoublyLinkedListIterator;
 
-template<typename T>
+template<typename T, int t_id = 0>
 struct PAFSTD_TEMPLATE DoublyLinkBase
 {
-	friend class DoublyLinkedList<T>;
+	friend class DoublyLinkedList<T, t_id>;
+	friend class DoublyLinkedListIterator<T, t_id>;
 public:
 	DoublyLinkBase()
 	{
@@ -187,11 +189,11 @@ public:
 		unlink();
 	}
 public:
-	DoublyLinkBase<T>* getNext() const
+	DoublyLinkBase<T, t_id>* getNext() const
 	{
 		return m_next;
 	}
-	DoublyLinkBase<T>* getPrev() const
+	DoublyLinkBase<T, t_id>* getPrev() const
 	{
 		return m_prev;
 	}
@@ -207,67 +209,122 @@ public:
 		m_prev = this;
 	}
 protected:
-	DoublyLinkBase<T>* m_next;
-	DoublyLinkBase<T>* m_prev;
+	DoublyLinkBase<T, t_id>* m_next;
+	DoublyLinkBase<T, t_id>* m_prev;
+};
+
+template<typename T, int t_id = 0>
+class PAFSTD_TEMPLATE DoublyLinkedListIterator
+{
+public:
+	DoublyLinkedListIterator(DoublyLinkBase<T, t_id>* ptr) : m_ptr(ptr)
+	{}
+public:
+	DoublyLinkedListIterator& operator++()
+	{
+		m_ptr = m_ptr->m_next;
+		return *this;
+	}
+	DoublyLinkedListIterator operator++(int)
+	{
+		DoublyLinkedListIterator it = *this;
+		m_ptr = m_ptr->m_next;
+		return it;
+	}
+	DoublyLinkedListIterator& operator--()
+	{
+		m_ptr = m_ptr->m_prev;
+		return *this;
+	}
+	DoublyLinkedListIterator operator--(int)
+	{
+		DoublyLinkedListIterator it = *this;
+		m_ptr = m_ptr->m_prev;
+		return it;
+	}
+	bool operator == (const DoublyLinkedListIterator& arg) const
+	{
+		return arg.m_ptr == m_ptr;
+	}
+	bool operator != (const DoublyLinkedListIterator& arg) const
+	{
+		return arg.m_ptr != m_ptr;
+	}
+	T* operator*()
+	{
+		return static_cast<T*>(m_ptr);
+	}
+protected:
+	DoublyLinkBase<T, t_id>* m_ptr;
 };
 
 
-template<typename T>
-class PAFSTD_TEMPLATE DoublyLinkedList : public DoublyLinkBase<T>
+template<typename T, int t_id = 0>
+class PAFSTD_TEMPLATE DoublyLinkedList : public DoublyLinkBase<T, t_id>
 {
 public:
-	DoublyLinkBase<T>* getHead();
-	DoublyLinkBase<T>* getTail();
-	DoublyLinkBase<T>* getNil();
+	typedef DoublyLinkedListIterator<T, t_id> iterator;
+public:
+	iterator begin()
+	{
+		return iterator(getHead());
+	}
+	iterator end()
+	{
+		return iterator(getNil());
+	}
+	DoublyLinkBase<T, t_id>* getHead();
+	DoublyLinkBase<T, t_id>* getTail();
+	DoublyLinkBase<T, t_id>* getNil();
 	bool empty();
 	size_t length();
-	bool find(DoublyLinkBase<T>* node);
-	bool findInverse(DoublyLinkBase<T>* node);
-	void addHead(DoublyLinkBase<T>* node);
-	void addTail(DoublyLinkBase<T>* node);
-	void insert(DoublyLinkBase<T>* node, DoublyLinkBase<T>* right);
-	void insertAfter(DoublyLinkBase<T>* node, DoublyLinkBase<T>* left);
+	bool find(DoublyLinkBase<T, t_id>* node);
+	bool findInverse(DoublyLinkBase<T, t_id>* node);
+	void addHead(DoublyLinkBase<T, t_id>* node);
+	void addTail(DoublyLinkBase<T, t_id>* node);
+	void insert(DoublyLinkBase<T, t_id>* node, DoublyLinkBase<T, t_id>* right);
+	void insertAfter(DoublyLinkBase<T, t_id>* node, DoublyLinkBase<T, t_id>* left);
 	void removeHead();
 	void removeTail();
-	void spliceTail(DoublyLinkedList<T>& list);
-	void spliceHead(DoublyLinkedList<T>& list);
-	void splice(DoublyLinkBase<T>* right, DoublyLinkedList<T>& list);
-	void splice(DoublyLinkBase<T>* right, DoublyLinkedList<T>& list, DoublyLinkBase<T>* first);
-	void splice(DoublyLinkBase<T>* right, DoublyLinkedList<T>& list, DoublyLinkBase<T>* first, DoublyLinkBase<T>* last);
-	void swap(DoublyLinkedList<T>& list);
+	void spliceTail(DoublyLinkedList<T, t_id>& list);
+	void spliceHead(DoublyLinkedList<T, t_id>& list);
+	void splice(DoublyLinkBase<T, t_id>* right, DoublyLinkedList<T, t_id>& list);
+	void splice(DoublyLinkBase<T, t_id>* right, DoublyLinkedList<T, t_id>& list, DoublyLinkBase<T, t_id>* first);
+	void splice(DoublyLinkBase<T, t_id>* right, DoublyLinkedList<T, t_id>& list, DoublyLinkBase<T, t_id>* first, DoublyLinkBase<T, t_id>* last);
+	void swap(DoublyLinkedList<T, t_id>& list);
 };
 
 //------------------------------------------------------------------------------
 
-template<typename T>
-inline DoublyLinkBase<T>* DoublyLinkedList<T>::getHead()
+template<typename T, int t_id>
+inline DoublyLinkBase<T, t_id>* DoublyLinkedList<T, t_id>::getHead()
 {
 	return this->m_next;
 }
 
-template<typename T>
-inline DoublyLinkBase<T>* DoublyLinkedList<T>::getTail()
+template<typename T, int t_id>
+inline DoublyLinkBase<T, t_id>* DoublyLinkedList<T, t_id>::getTail()
 {
 	return this->m_prev;
 }
 
-template<typename T>
-inline DoublyLinkBase<T>* DoublyLinkedList<T>::getNil()
+template<typename T, int t_id>
+inline DoublyLinkBase<T, t_id>* DoublyLinkedList<T, t_id>::getNil()
 {
 	return this;
 }
 
-template<typename T>
-inline bool DoublyLinkedList<T>::empty()
+template<typename T, int t_id>
+inline bool DoublyLinkedList<T, t_id>::empty()
 {
 	return (this == this->m_next);
 }
 
-template<typename T>
-inline size_t DoublyLinkedList<T>::length()
+template<typename T, int t_id>
+inline size_t DoublyLinkedList<T, t_id>::length()
 {
 	size_t length = 0;
-	DoublyLinkBase<T>* current = this->m_next;
+	DoublyLinkBase<T, t_id>* current = this->m_next;
 	while(this != current)
 	{
 		++length;
@@ -276,10 +333,10 @@ inline size_t DoublyLinkedList<T>::length()
 	return length;
 }
 
-template<typename T>
-inline bool DoublyLinkedList<T>::find(DoublyLinkBase<T>* node)
+template<typename T, int t_id>
+inline bool DoublyLinkedList<T, t_id>::find(DoublyLinkBase<T, t_id>* node)
 {
-	DoublyLinkBase<T>* current = this->m_next;
+	DoublyLinkBase<T, t_id>* current = this->m_next;
 	while(this != current)
 	{
 		if(node == current)
@@ -291,10 +348,10 @@ inline bool DoublyLinkedList<T>::find(DoublyLinkBase<T>* node)
 	return false;
 }
 
-template<typename T>
-inline bool DoublyLinkedList<T>::findInverse(DoublyLinkBase<T>* node)
+template<typename T, int t_id>
+inline bool DoublyLinkedList<T, t_id>::findInverse(DoublyLinkBase<T, t_id>* node)
 {
-	DoublyLinkBase<T>* current = this->m_prev;
+	DoublyLinkBase<T, t_id>* current = this->m_prev;
 	while(this != current)
 	{
 		if(node == current)
@@ -306,8 +363,8 @@ inline bool DoublyLinkedList<T>::findInverse(DoublyLinkBase<T>* node)
 	return false;
 }
 
-template<typename T>
-inline void DoublyLinkedList<T>::addHead(DoublyLinkBase<T>* node)
+template<typename T, int t_id>
+inline void DoublyLinkedList<T, t_id>::addHead(DoublyLinkBase<T, t_id>* node)
 {
 	PAF_ASSERT(node->isFree());
 	node->m_prev = this;
@@ -316,8 +373,8 @@ inline void DoublyLinkedList<T>::addHead(DoublyLinkBase<T>* node)
 	this->m_next = node;
 }
 
-template<typename T>
-inline void DoublyLinkedList<T>::addTail(DoublyLinkBase<T>* node)
+template<typename T, int t_id>
+inline void DoublyLinkedList<T, t_id>::addTail(DoublyLinkBase<T, t_id>* node)
 {
 	PAF_ASSERT(node->isFree());
 	node->m_prev = this->m_prev;
@@ -326,42 +383,42 @@ inline void DoublyLinkedList<T>::addTail(DoublyLinkBase<T>* node)
 	this->m_prev = node;
 }
 
-template<typename T>
-inline void DoublyLinkedList<T>::insert(DoublyLinkBase<T>* node, DoublyLinkBase<T>* right)
+template<typename T, int t_id>
+inline void DoublyLinkedList<T, t_id>::insert(DoublyLinkBase<T, t_id>* node, DoublyLinkBase<T, t_id>* right)
 {
 	PAF_ASSERT(node->isFree());
-	DoublyLinkBase<T>* left = right->m_prev;
+	DoublyLinkBase<T, t_id>* left = right->m_prev;
 	node->m_prev = left;
 	node->m_next = right;
 	left->m_next = node;
 	right->m_prev = node;
 }
 
-template<typename T>
-inline void DoublyLinkedList<T>::insertAfter(DoublyLinkBase<T>* node, DoublyLinkBase<T>* left)
+template<typename T, int t_id>
+inline void DoublyLinkedList<T, t_id>::insertAfter(DoublyLinkBase<T, t_id>* node, DoublyLinkBase<T, t_id>* left)
 {
 	PAF_ASSERT(node->isFree());
-	DoublyLinkBase<T>* right = left->m_next;
+	DoublyLinkBase<T, t_id>* right = left->m_next;
 	node->m_prev = left;
 	node->m_next = right;
 	left->m_next = node;
 	right->m_prev = node;
 }
 
-template<typename T>
-inline void DoublyLinkedList<T>::removeHead()
+template<typename T, int t_id>
+inline void DoublyLinkedList<T, t_id>::removeHead()
 {
 	this->m_next->Remove();
 }
 
-template<typename T>
-inline void DoublyLinkedList<T>::removeTail()
+template<typename T, int t_id>
+inline void DoublyLinkedList<T, t_id>::removeTail()
 {
 	this->m_prev->Remove();
 }
 
-template<typename T>
-inline void DoublyLinkedList<T>::spliceTail(DoublyLinkedList<T>& list)
+template<typename T, int t_id>
+inline void DoublyLinkedList<T, t_id>::spliceTail(DoublyLinkedList<T, t_id>& list)
 {
 	if(!list.Empty())
 	{
@@ -374,8 +431,8 @@ inline void DoublyLinkedList<T>::spliceTail(DoublyLinkedList<T>& list)
 	}
 }
 
-template<typename T>
-inline void DoublyLinkedList<T>::spliceHead(DoublyLinkedList<T>& list)
+template<typename T, int t_id>
+inline void DoublyLinkedList<T, t_id>::spliceHead(DoublyLinkedList<T, t_id>& list)
 {
 	if(!list.Empty())
 	{
@@ -388,12 +445,12 @@ inline void DoublyLinkedList<T>::spliceHead(DoublyLinkedList<T>& list)
 	}
 }
 
-template<typename T>
-inline void DoublyLinkedList<T>::splice(DoublyLinkBase<T>* right, DoublyLinkedList<T>& list)
+template<typename T, int t_id>
+inline void DoublyLinkedList<T, t_id>::splice(DoublyLinkBase<T, t_id>* right, DoublyLinkedList<T, t_id>& list)
 {
 	if(!list.Empty())
 	{
-		DoublyLinkBase<T>* left = right->m_prev;
+		DoublyLinkBase<T, t_id>* left = right->m_prev;
 		list.m_next->m_prev = left;
 		list.m_prev->m_next = right;
 		left->m_next = list.m_next;
@@ -403,13 +460,13 @@ inline void DoublyLinkedList<T>::splice(DoublyLinkBase<T>* right, DoublyLinkedLi
 	}
 }
 
-template<typename T>
-inline void DoublyLinkedList<T>::splice(DoublyLinkBase<T>* right, DoublyLinkedList<T>& list, DoublyLinkBase<T>* first)
+template<typename T, int t_id>
+inline void DoublyLinkedList<T, t_id>::splice(DoublyLinkBase<T, t_id>* right, DoublyLinkedList<T, t_id>& list, DoublyLinkBase<T, t_id>* first)
 {
 	if(first != &list)
 	{
-		DoublyLinkBase<T>* left = right->m_prev;
-		DoublyLinkBase<T>* prevFirst = first->m_prev;
+		DoublyLinkBase<T, t_id>* left = right->m_prev;
+		DoublyLinkBase<T, t_id>* prevFirst = first->m_prev;
 		
 		first->m_prev = left;
 		list.m_prev->m_next = right;
@@ -421,14 +478,14 @@ inline void DoublyLinkedList<T>::splice(DoublyLinkBase<T>* right, DoublyLinkedLi
 	}
 }
 
-template<typename T>
-inline void DoublyLinkedList<T>::splice(DoublyLinkBase<T>* right, DoublyLinkedList<T>& list, DoublyLinkBase<T>* first, DoublyLinkBase<T>* last)
+template<typename T, int t_id>
+inline void DoublyLinkedList<T, t_id>::splice(DoublyLinkBase<T, t_id>* right, DoublyLinkedList<T, t_id>& list, DoublyLinkBase<T, t_id>* first, DoublyLinkBase<T, t_id>* last)
 {
 	if(first != &list && first != last)
 	{
-		DoublyLinkBase<T>* left = right->m_prev;
-		DoublyLinkBase<T>* prevLast = last->m_prev;
-		DoublyLinkBase<T>* prevFirst = first->m_prev;
+		DoublyLinkBase<T, t_id>* left = right->m_prev;
+		DoublyLinkBase<T, t_id>* prevLast = last->m_prev;
+		DoublyLinkBase<T, t_id>* prevFirst = first->m_prev;
 		
 		first->m_prev = left;
 		prevLast->m_next = right;
@@ -440,8 +497,8 @@ inline void DoublyLinkedList<T>::splice(DoublyLinkBase<T>* right, DoublyLinkedLi
 	}
 }
 
-template<typename T>
-inline void DoublyLinkedList<T>::swap(DoublyLinkedList<T>& list)
+template<typename T, int t_id>
+inline void DoublyLinkedList<T, t_id>::swap(DoublyLinkedList<T, t_id>& list)
 {
 	bool b1 = empty();
 	bool b2 = list.empty();
@@ -474,7 +531,7 @@ inline void DoublyLinkedList<T>::swap(DoublyLinkedList<T>& list)
 			list.m_prev->m_next = this;
 			this->m_next->m_prev = &list;
 			this->m_prev->m_next = &list;
-			DoublyLinkBase<T>* tmp;
+			DoublyLinkBase<T, t_id>* tmp;
 			tmp = this->m_next;
 			this->m_next = list.m_next;
 			list.m_next = tmp;

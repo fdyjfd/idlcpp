@@ -54,14 +54,17 @@ void ShowHelpInfo()
 		"-em<macro>\t\t set vc dllexport macro\n"
 		"-I<dir>\t\t\t add to import search path\n"
 		"-sac\t\t\t strict arguments count\n"
-		);
+		"-cc\t\t\t check constant\n"
+	);
 }
 
 extern "C"
 {
 extern int yylineno;
 extern int yytokenno;
+extern int yyHasListProperty;
 extern int yyHasMapProperty;
+extern int yyHasDelegate;
 typedef struct yy_buffer_state *YY_BUFFER_STATE;
 YY_BUFFER_STATE createBufferState(FILE* file);
 YY_BUFFER_STATE yy_scan_string( const char *yy_str );
@@ -116,7 +119,11 @@ void ParseOption(const char* arg)
 	else if (strncmp(arg + 1, "sac", 3) == 0)
 	{
 		g_options.m_strictArgumentsCount = true;
-	}	
+	}
+	else if (strncmp(arg + 1, "cc", 2) == 0)
+	{
+		g_options.m_checkConstant = true;
+	}
 }
 
 int _tmain(int argc, _TCHAR* argv[])
@@ -155,7 +162,7 @@ int _tmain(int argc, _TCHAR* argv[])
 	}
 
 	bool mainSourceFile = true;
-	bool hasMapProperty = false;
+
 	if (import_file_failed == g_compiler.addSourceFile(inputFileName.c_str()))
 	{
 		ErrorList_AddItem("", 0, 0, import_error_file_not_existing, inputFileName.c_str());
@@ -176,10 +183,14 @@ int _tmain(int argc, _TCHAR* argv[])
 			yyrestart(file);
 			yylineno = 1;
 			yytokenno = 0;
+			yyHasListProperty = 0;
 			yyHasMapProperty = 0;
+			yyHasDelegate = 0;
 			yyparse();
 			fclose(file);
+			sourceFile->m_hasListProperty = (0 != yyHasListProperty);
 			sourceFile->m_hasMapProperty = (0 != yyHasMapProperty);
+			sourceFile->m_hasDelegate = (0 != yyHasDelegate);
 		}
 		mainSourceFile = false;
 	}

@@ -30,8 +30,9 @@ void Type::destroyArray(void* address)
 {
 }
 
-void Type::assign(void* dst, const void* src)
+bool Type::assign(void* dst, const void* src)
 {
+	return false;
 }
 
 //Metadata* Type::findMember(const char* name)

@@ -10,7 +10,7 @@ namespace pafcore
 	class ClassType;
 	class InstanceProperty;
 #}
-	class #PAFCORE_EXPORT Reference ## : public RefCount
+	class(noncopyable) #PAFCORE_EXPORT Reference ## : public RefCount
 	{
 #{
 #ifdef _DEBUG

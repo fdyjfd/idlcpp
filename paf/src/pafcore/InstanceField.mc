@@ -79,9 +79,9 @@ namespace idlcpp
 		paf_delete_array(reinterpret_cast<::pafcore::RefCountImpl<::pafcore::InstanceField>*>(address));
 	}
 
-	void __pafcore__InstanceField_Type::assign(void* dst, const void* src)
+	bool __pafcore__InstanceField_Type::assign(void* dst, const void* src)
 	{
-		*(::pafcore::InstanceField*)dst = *(const ::pafcore::InstanceField*)src;
+		return false;
 	}
 
 	::pafcore::ErrorCode __pafcore__InstanceField_Type::InstanceField_get_isArray(::pafcore::InstanceProperty* instanceProperty, ::pafcore::Variant* that, ::pafcore::Variant* value)

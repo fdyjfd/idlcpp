@@ -20,7 +20,7 @@ namespace idlcpp
 	public:
 		virtual void destroyInstance(void* address);
 		virtual void destroyArray(void* address);
-		virtual void assign(void* dst, const void* src);
+		virtual bool assign(void* dst, const void* src);
 	public:
 		static ::pafcore::ErrorCode StaticField_get_address(::pafcore::InstanceProperty* instanceProperty, ::pafcore::Variant* that, ::pafcore::Variant* value);
 		static ::pafcore::ErrorCode StaticField_get_isArray(::pafcore::InstanceProperty* instanceProperty, ::pafcore::Variant* that, ::pafcore::Variant* value);

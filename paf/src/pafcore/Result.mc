@@ -79,9 +79,9 @@ namespace idlcpp
 		paf_delete_array(reinterpret_cast<::pafcore::RefCountImpl<::pafcore::Result>*>(address));
 	}
 
-	void __pafcore__Result_Type::assign(void* dst, const void* src)
+	bool __pafcore__Result_Type::assign(void* dst, const void* src)
 	{
-		*(::pafcore::Result*)dst = *(const ::pafcore::Result*)src;
+		return false;
 	}
 
 	::pafcore::ErrorCode __pafcore__Result_Type::Result_get_byNew(::pafcore::InstanceProperty* instanceProperty, ::pafcore::Variant* that, ::pafcore::Variant* value)

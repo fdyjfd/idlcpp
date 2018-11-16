@@ -6,13 +6,13 @@ namespace pafcore
 
 	abstract class(function_result)#PAFCORE_EXPORT Result : Metadata
 	{
-		Type* type get;
-		bool byValue get;
-		bool byRef get;
-		bool byPtr get;
-		bool byNew get;
-		bool byNewArray get;
-		bool isConstant get;
+		Type* type { get };
+		bool byValue { get };
+		bool byRef { get };
+		bool byPtr { get };
+		bool byNew { get };
+		bool byNewArray { get };
+		bool isConstant { get };
 #{
 	public:
 		Result(Type* type, bool constant, Passing passing);

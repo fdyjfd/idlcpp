@@ -94,19 +94,15 @@ namespace idlcpp
 		paf_delete_array(reinterpret_cast<::pafcore::RefCountImpl<::pafcore::EnumType>*>(address));
 	}
 
-	void __pafcore__EnumType_Type::assign(void* dst, const void* src)
+	bool __pafcore__EnumType_Type::assign(void* dst, const void* src)
 	{
-		*(::pafcore::EnumType*)dst = *(const ::pafcore::EnumType*)src;
+		return false;
 	}
 
 	::pafcore::ErrorCode __pafcore__EnumType_Type::EnumType__getEnumeratorByName_(::pafcore::Variant* result, ::pafcore::Variant** args, int_t numArgs)
 	{
 		if(2 <= numArgs)
 		{
-			if(args[0]->isConstant())
-			{
-				return ::pafcore::e_this_is_constant;
-			}
 			::pafcore::EnumType* self;
 			if(!args[0]->castToReferencePtr(GetSingleton(), (void**)&self))
 			{
@@ -128,10 +124,6 @@ namespace idlcpp
 	{
 		if(2 <= numArgs)
 		{
-			if(args[0]->isConstant())
-			{
-				return ::pafcore::e_this_is_constant;
-			}
 			::pafcore::EnumType* self;
 			if(!args[0]->castToReferencePtr(GetSingleton(), (void**)&self))
 			{
@@ -153,10 +145,6 @@ namespace idlcpp
 	{
 		if(1 <= numArgs)
 		{
-			if(args[0]->isConstant())
-			{
-				return ::pafcore::e_this_is_constant;
-			}
 			::pafcore::EnumType* self;
 			if(!args[0]->castToReferencePtr(GetSingleton(), (void**)&self))
 			{
@@ -173,10 +161,6 @@ namespace idlcpp
 	{
 		if(2 <= numArgs)
 		{
-			if(args[0]->isConstant())
-			{
-				return ::pafcore::e_this_is_constant;
-			}
 			::pafcore::EnumType* self;
 			if(!args[0]->castToReferencePtr(GetSingleton(), (void**)&self))
 			{

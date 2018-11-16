@@ -41,9 +41,9 @@ namespace idlcpp
 		paf_delete_array(reinterpret_cast<::pafcore::RefCountImpl<::pafcore::Reference>*>(address));
 	}
 
-	void __pafcore__Reference_Type::assign(void* dst, const void* src)
+	bool __pafcore__Reference_Type::assign(void* dst, const void* src)
 	{
-		*(::pafcore::Reference*)dst = *(const ::pafcore::Reference*)src;
+		return false;
 	}
 
 	__pafcore__Reference_Type* __pafcore__Reference_Type::GetSingleton()

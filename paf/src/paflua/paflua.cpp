@@ -30,7 +30,7 @@ void init_paf(lua_State *L)
 	variant->assignReferencePtr(RuntimeTypeOf<pafcore::NameSpace>::RuntimeType::GetSingleton(), pafcore::NameSpace::GetGlobalNameSpace(), false, ::pafcore::Variant::by_ptr);
 	luaL_getmetatable(L, paflua::variant_metatable_name);
 	lua_setmetatable(L, -2);
-	lua_setglobal(L, "paf");
+	lua_setglobal(L, "resafety");
 }
 
 void init_paf2(lua_State *L)
@@ -49,7 +49,7 @@ void init_paf2(lua_State *L)
 	variant->assignReferencePtr(RuntimeTypeOf<pafcore::NameSpace>::RuntimeType::GetSingleton(), pafcore::NameSpace::GetGlobalNameSpace(), false, ::pafcore::Variant::by_ptr);
 	luaL_getmetatable(L, paflua2::variant_metatable_name);
 	lua_setmetatable(L, -2);
-	lua_setglobal(L, "paf2");
+	lua_setglobal(L, "resafety2");
 }
 
 int luaopen_paflua(lua_State *L)

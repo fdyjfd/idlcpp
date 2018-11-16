@@ -14,16 +14,17 @@ namespace pafcore
 		e_invalid_namespace,
 		e_name_conflict,
 		e_void_variant,
-		e_is_not_array_property,
 		e_is_not_type,
 		e_is_not_class,
 		e_invalid_subscript_type,
 		e_member_not_found,
 		e_index_out_of_range,
+		e_is_not_array_property,
+		e_is_not_dynamic_array_property,
+		e_is_not_list_property,
+		e_is_not_map_property,
 		e_property_is_not_readable,
 		e_property_is_not_writable,
-		e_array_property_is_not_dynamic,
-		e_is_not_map_property,
 		e_property_is_not_iterable,
 		e_property_is_not_dereferenceable,
 		e_item_is_constant,
@@ -162,6 +163,7 @@ namespace pafcore
 		{
 			simple_property,
 			array_property,
+			list_property,
 			map_property,
 		};
 	public:

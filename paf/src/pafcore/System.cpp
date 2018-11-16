@@ -9,9 +9,14 @@
 
 namespace pafcore
 {
-	inline void System::LoadDLL(string_t fileName)
+	void System::LoadDLL(string_t fileName)
 	{
 		LoadLibraryA(fileName);
+	}
+
+	void System::OutputDebug(string_t str)
+	{
+		::OutputDebugStringA(str);
 	}
 }
 

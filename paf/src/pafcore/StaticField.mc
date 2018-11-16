@@ -76,9 +76,9 @@ namespace idlcpp
 		paf_delete_array(reinterpret_cast<::pafcore::RefCountImpl<::pafcore::StaticField>*>(address));
 	}
 
-	void __pafcore__StaticField_Type::assign(void* dst, const void* src)
+	bool __pafcore__StaticField_Type::assign(void* dst, const void* src)
 	{
-		*(::pafcore::StaticField*)dst = *(const ::pafcore::StaticField*)src;
+		return false;
 	}
 
 	::pafcore::ErrorCode __pafcore__StaticField_Type::StaticField_get_address(::pafcore::InstanceProperty* instanceProperty, ::pafcore::Variant* that, ::pafcore::Variant* value)

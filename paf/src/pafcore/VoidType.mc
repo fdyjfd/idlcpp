@@ -86,9 +86,9 @@ namespace idlcpp
 		paf_delete_array(reinterpret_cast<::pafcore::RefCountImpl<::pafcore::VoidType>*>(address));
 	}
 
-	void __pafcore__VoidType_Type::assign(void* dst, const void* src)
+	bool __pafcore__VoidType_Type::assign(void* dst, const void* src)
 	{
-		*(::pafcore::VoidType*)dst = *(const ::pafcore::VoidType*)src;
+		return false;
 	}
 
 	::pafcore::ErrorCode __pafcore__VoidType_Type::VoidType_get_NullPtr(::pafcore::Variant* value)

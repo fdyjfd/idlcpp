@@ -103,14 +103,14 @@ typedef union YYSTYPE
 {
 
 /* Line 1676 of yacc.c  */
-#line 6 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 6 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
 
 	struct SyntaxNode* sn;
 
 
 
 /* Line 1676 of yacc.c  */
-#line 114 "D:\\GitHub\\idlcpp\\idlcpp\\src\\idlcpp.y.h"
+#line 114 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.h"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */

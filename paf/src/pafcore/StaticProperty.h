@@ -23,6 +23,12 @@ namespace pafcore
 	typedef ErrorCode(*ArrayStaticPropertySizer)(Variant* size);
 	typedef ErrorCode(*ArrayStaticPropertyResizer)(Variant* size);
 
+	typedef ErrorCode(*ListStaticPropertyGetter)(size_t index, Variant* value);
+	typedef ErrorCode(*ListStaticPropertySetter)(size_t index, Variant* value);
+	typedef ErrorCode(*ListStaticPropertyPushBack)(Variant* value);
+	typedef ErrorCode(*ListStaticPropertyGetIterator)(Variant* iterator);
+	typedef ErrorCode(*ListStaticPropertyGetValue)(Iterator* iterator, Variant* value);
+
 	typedef ErrorCode(*MapStaticPropertyGetter)(Variant* key, Variant* value);
 	typedef ErrorCode(*MapStaticPropertySetter)(Variant* key, Variant* value);
 	typedef ErrorCode(*MapStaticPropertyGetIterator)(Variant* iterator);
@@ -38,9 +44,10 @@ namespace pafcore
 		virtual ::pafcore::ClassType* getType();
 		virtual size_t getAddress();
 
-		bool get_isArray() const;
-		bool get_isMap() const;
 		bool get_isSimple() const;
+		bool get_isArray() const;
+		bool get_isList() const;
+		bool get_isMap() const;
 
 		bool get_hasGetter() const;
 		bool get_hasSetter() const;
@@ -73,8 +80,15 @@ namespace pafcore
 		StaticProperty(const char* name, Attributes* attributes,
 			ArrayStaticPropertyGetter getter, Type* getterType, Passing getterPassing, bool getterConstant,
 			ArrayStaticPropertySetter setter, Type* setterType, Passing setterPassing, bool setterConstant,
-			ArrayStaticPropertySizer sizer, 
+			ArrayStaticPropertySizer sizer,
 			ArrayStaticPropertyResizer resizer);
+
+		StaticProperty(const char* name, Attributes* attributes,
+			ListStaticPropertyGetter getter, Type* getterType, Passing getterPassing, bool getterConstant,
+			ListStaticPropertySetter setter, Type* setterType, Passing setterPassing, bool setterConstant,
+			ListStaticPropertyPushBack pushBack,
+			ListStaticPropertyGetIterator getIterator,
+			ListStaticPropertyGetValue getValue);
 
 		StaticProperty(const char* name, Attributes* attributes,
 			MapStaticPropertyGetter getter, Type* getterType, Passing getterPassing, bool getterConstant,
@@ -97,6 +111,14 @@ namespace pafcore
 				ArrayStaticPropertySetter m_arraySetter;
 				ArrayStaticPropertySizer m_arraySizer;
 				ArrayStaticPropertyResizer m_arrayResizer;
+			};
+			struct
+			{
+				ListStaticPropertyGetter m_listGetter;
+				ListStaticPropertySetter m_listSetter;
+				ListStaticPropertyPushBack m_listPushBack;
+				ListStaticPropertyGetIterator m_listGetIterator;
+				ListStaticPropertyGetValue m_listGetValue;
 			};
 			struct
 			{

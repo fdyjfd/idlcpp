@@ -82,19 +82,15 @@ namespace idlcpp
 		paf_delete_array(reinterpret_cast<::pafcore::RefCountImpl<::pafcore::Iterator>*>(address));
 	}
 
-	void __pafcore__Iterator_Type::assign(void* dst, const void* src)
+	bool __pafcore__Iterator_Type::assign(void* dst, const void* src)
 	{
-		*(::pafcore::Iterator*)dst = *(const ::pafcore::Iterator*)src;
+		return false;
 	}
 
 	::pafcore::ErrorCode __pafcore__Iterator_Type::Iterator_isEnd(::pafcore::Variant* result, ::pafcore::Variant** args, int_t numArgs)
 	{
 		if(1 <= numArgs)
 		{
-			if(args[0]->isConstant())
-			{
-				return ::pafcore::e_this_is_constant;
-			}
 			::pafcore::Iterator* self;
 			if(!args[0]->castToReferencePtr(GetSingleton(), (void**)&self))
 			{
@@ -111,10 +107,6 @@ namespace idlcpp
 	{
 		if(1 <= numArgs)
 		{
-			if(args[0]->isConstant())
-			{
-				return ::pafcore::e_this_is_constant;
-			}
 			::pafcore::Iterator* self;
 			if(!args[0]->castToReferencePtr(GetSingleton(), (void**)&self))
 			{
@@ -130,10 +122,6 @@ namespace idlcpp
 	{
 		if(1 <= numArgs)
 		{
-			if(args[0]->isConstant())
-			{
-				return ::pafcore::e_this_is_constant;
-			}
 			::pafcore::Iterator* self;
 			if(!args[0]->castToReferencePtr(GetSingleton(), (void**)&self))
 			{

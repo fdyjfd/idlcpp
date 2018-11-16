@@ -4,7 +4,7 @@ namespace pafcore
 {
 	abstract class #PAFCORE_EXPORT Type : Metadata
 	{
-		size_t _size_ get;
+		size_t _size_ { get };
 #{
 	public:
 		Type(const char* name, Category category);
@@ -12,7 +12,7 @@ namespace pafcore
 	public:
 		virtual void destroyInstance(void* address);
 		virtual void destroyArray(void* address);
-		virtual void assign(void* dst, const void* src);
+		virtual bool assign(void* dst, const void* src);
 		virtual Metadata* findMember(const char* name) = 0;
 	public:
 		bool isPrimitive() const;

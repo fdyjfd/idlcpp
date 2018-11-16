@@ -20,7 +20,7 @@ namespace idlcpp
 	public:
 		virtual void destroyInstance(void* address);
 		virtual void destroyArray(void* address);
-		virtual void assign(void* dst, const void* src);
+		virtual bool assign(void* dst, const void* src);
 	public:
 		PAFCORE_EXPORT static __pafcore__CallBack_Type* GetSingleton();
 	};
@@ -32,7 +32,7 @@ namespace idlcpp
 	public:
 		virtual void destroyInstance(void* address);
 		virtual void destroyArray(void* address);
-		virtual void assign(void* dst, const void* src);
+		virtual bool assign(void* dst, const void* src);
 	public:
 		PAFCORE_EXPORT static __pafcore__FunctionCallBack_Type* GetSingleton();
 	};
@@ -44,7 +44,7 @@ namespace idlcpp
 	public:
 		virtual void destroyInstance(void* address);
 		virtual void destroyArray(void* address);
-		virtual void assign(void* dst, const void* src);
+		virtual bool assign(void* dst, const void* src);
 	public:
 		PAFCORE_EXPORT static __pafcore__InstanceMethodCallBack_Type* GetSingleton();
 	};
@@ -56,7 +56,7 @@ namespace idlcpp
 	public:
 		virtual void destroyInstance(void* address);
 		virtual void destroyArray(void* address);
-		virtual void assign(void* dst, const void* src);
+		virtual bool assign(void* dst, const void* src);
 	public:
 		PAFCORE_EXPORT static __pafcore__StaticMethodCallBack_Type* GetSingleton();
 	};
@@ -68,7 +68,7 @@ namespace idlcpp
 	public:
 		virtual void destroyInstance(void* address);
 		virtual void destroyArray(void* address);
-		virtual void assign(void* dst, const void* src);
+		virtual bool assign(void* dst, const void* src);
 	public:
 		static ::pafcore::ErrorCode Delegate_addCallBack(::pafcore::Variant* result, ::pafcore::Variant** args, int numArgs);
 		static ::pafcore::ErrorCode Delegate_addInstanceMethod(::pafcore::Variant* result, ::pafcore::Variant** args, int numArgs);
@@ -87,7 +87,7 @@ namespace idlcpp
 	public:
 		virtual void destroyInstance(void* address);
 		virtual void destroyArray(void* address);
-		virtual void assign(void* dst, const void* src);
+		virtual bool assign(void* dst, const void* src);
 	public:
 		static ::pafcore::ErrorCode EventHandler_invoke(::pafcore::Variant* result, ::pafcore::Variant** args, int numArgs);
 	public:

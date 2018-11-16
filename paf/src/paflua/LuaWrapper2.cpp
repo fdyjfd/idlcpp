@@ -322,7 +322,7 @@ pafcore::ErrorCode SetInstanceArrayPropertySize(lua_State *L, pafcore::Variant* 
 	assert(property->get_isArray());
 	if (0 == property->m_arrayResizer)
 	{
-		return pafcore::e_array_property_is_not_dynamic;
+		return pafcore::e_is_not_dynamic_array_property;
 	}
 	pafcore::Variant value;
 	pafcore::Variant* arg = LuaToVariant(&value, L, 3);
@@ -418,7 +418,7 @@ pafcore::ErrorCode SetStaticArrayPropertySize(lua_State *L, pafcore::StaticPrope
 	assert(property->get_isArray());
 	if (0 == property->m_arrayResizer)
 	{
-		return pafcore::e_array_property_is_not_dynamic;
+		return pafcore::e_is_not_dynamic_array_property;
 	}
 	pafcore::Variant value;
 	pafcore::Variant* arg = LuaToVariant(&value, L, 3);

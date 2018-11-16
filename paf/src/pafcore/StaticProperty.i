@@ -18,6 +18,12 @@ namespace pafcore
 	typedef ErrorCode(*ArrayStaticPropertySizer)(Variant* size);
 	typedef ErrorCode(*ArrayStaticPropertyResizer)(Variant* size);
 
+	typedef ErrorCode(*ListStaticPropertyGetter)(size_t index, Variant* value);
+	typedef ErrorCode(*ListStaticPropertySetter)(size_t index, Variant* value);
+	typedef ErrorCode(*ListStaticPropertyPushBack)(Variant* value);
+	typedef ErrorCode(*ListStaticPropertyGetIterator)(Variant* iterator);
+	typedef ErrorCode(*ListStaticPropertyGetValue)(Iterator* iterator, Variant* value);
+
 	typedef ErrorCode(*MapStaticPropertyGetter)(Variant* key, Variant* value);
 	typedef ErrorCode(*MapStaticPropertySetter)(Variant* key, Variant* value);
 	typedef ErrorCode(*MapStaticPropertyGetIterator)(Variant* iterator);
@@ -28,32 +34,33 @@ namespace pafcore
 
 	abstract class(static_property)#PAFCORE_EXPORT StaticProperty : Metadata
 	{
-		bool isArray get;
-		bool isMap get;
-		bool isSimple get;
+		bool isSimple { get };
+		bool isArray { get };
+		bool isList { get };
+		bool isMap { get };
 
-		bool hasGetter get;
-		bool hasSetter get;
-		bool hasSizer get;
-		bool hasResizer get;
+		bool hasGetter { get };
+		bool hasSetter { get };
+		bool hasSizer { get };
+		bool hasResizer { get };
 
-		Type* getterType get;
-		bool getterByValue get;
-		bool getterByRef get;
-		bool getterByPtr get;
-		bool getterConstant get;
+		Type* getterType { get };
+		bool getterByValue { get };
+		bool getterByRef { get };
+		bool getterByPtr { get };
+		bool getterConstant { get };
 
-		Type* setterType get;
-		bool setterByValue get;
-		bool setterByRef get;
-		bool setterByPtr get;
-		bool setterConstant get;
+		Type* setterType { get };
+		bool setterByValue { get };
+		bool setterByRef { get };
+		bool setterByPtr { get };
+		bool setterConstant { get };
 
-		Type* keyType get;
-		bool keyByValue get;
-		bool keyByRef get;
-		bool keyByPtr get;
-		bool keyConstant get;
+		Type* keyType { get };
+		bool keyByValue { get };
+		bool keyByRef { get };
+		bool keyByPtr { get };
+		bool keyConstant { get };
 #{
 	public:
 		StaticProperty(const char* name, Attributes* attributes,
@@ -63,8 +70,15 @@ namespace pafcore
 		StaticProperty(const char* name, Attributes* attributes,
 			ArrayStaticPropertyGetter getter, Type* getterType, Passing getterPassing, bool getterConstant,
 			ArrayStaticPropertySetter setter, Type* setterType, Passing setterPassing, bool setterConstant,
-			ArrayStaticPropertySizer sizer, 
+			ArrayStaticPropertySizer sizer,
 			ArrayStaticPropertyResizer resizer);
+
+		StaticProperty(const char* name, Attributes* attributes,
+			ListStaticPropertyGetter getter, Type* getterType, Passing getterPassing, bool getterConstant,
+			ListStaticPropertySetter setter, Type* setterType, Passing setterPassing, bool setterConstant,
+			ListStaticPropertyPushBack pushBack,
+			ListStaticPropertyGetIterator getIterator,
+			ListStaticPropertyGetValue getValue);
 
 		StaticProperty(const char* name, Attributes* attributes,
 			MapStaticPropertyGetter getter, Type* getterType, Passing getterPassing, bool getterConstant,
@@ -87,6 +101,14 @@ namespace pafcore
 				ArrayStaticPropertySetter m_arraySetter;
 				ArrayStaticPropertySizer m_arraySizer;
 				ArrayStaticPropertyResizer m_arrayResizer;
+			};
+			struct
+			{
+				ListStaticPropertyGetter m_listGetter;
+				ListStaticPropertySetter m_listSetter;
+				ListStaticPropertyPushBack m_listPushBack;
+				ListStaticPropertyGetIterator m_listGetIterator;
+				ListStaticPropertyGetValue m_listGetValue;
 			};
 			struct
 			{

@@ -10,6 +10,7 @@ Options::Options()
 	m_metaSourceFilePostfix = ".mc";
 	m_outputLineDirective = false;
 	m_strictArgumentsCount = false;
+	m_checkConstant = false;
 }
 
 

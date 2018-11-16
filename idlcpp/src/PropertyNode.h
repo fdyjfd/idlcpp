@@ -23,13 +23,19 @@ public:
 	bool isSimple();
 	bool isFixedArray();
 	bool isDynamicArray();
+	bool isList();
 	bool isMap();
 	bool isKeyByPtr();
 	bool isKeyByRef();
 	bool isKeyByValue();
 	bool isKeyConstant();
 	bool isKeyAllowNull();
+
+	bool isConstant();
+	bool byValue();
 	bool byPtr();
+	bool byRef();
+
 	void setGetter(GetterSetterNode* getter);
 	void setSetter(GetterSetterNode* setter);
 	virtual void checkTypeNames(TypeNode* enclosingTypeNode, TemplateArguments* templateArguments);

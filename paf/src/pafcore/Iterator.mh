@@ -20,7 +20,7 @@ namespace idlcpp
 	public:
 		virtual void destroyInstance(void* address);
 		virtual void destroyArray(void* address);
-		virtual void assign(void* dst, const void* src);
+		virtual bool assign(void* dst, const void* src);
 	public:
 		static ::pafcore::ErrorCode Iterator_isEnd(::pafcore::Variant* result, ::pafcore::Variant** args, int numArgs);
 		static ::pafcore::ErrorCode Iterator_moveNext(::pafcore::Variant* result, ::pafcore::Variant** args, int numArgs);

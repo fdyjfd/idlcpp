@@ -87,9 +87,9 @@ namespace idlcpp
 		paf_delete_array(reinterpret_cast<::pafcore::RefCountImpl<::pafcore::Argument>*>(address));
 	}
 
-	void __pafcore__Argument_Type::assign(void* dst, const void* src)
+	bool __pafcore__Argument_Type::assign(void* dst, const void* src)
 	{
-		*(::pafcore::Argument*)dst = *(const ::pafcore::Argument*)src;
+		return false;
 	}
 
 	::pafcore::ErrorCode __pafcore__Argument_Type::Argument_get_byNewArrayPtr(::pafcore::InstanceProperty* instanceProperty, ::pafcore::Variant* that, ::pafcore::Variant* value)

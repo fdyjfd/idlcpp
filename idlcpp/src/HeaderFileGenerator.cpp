@@ -185,7 +185,7 @@ void HeaderFileGenerator::generateCode_Program(FILE* file, SourceFile* sourceFil
 {
 	writeStringToFile("#pragma once\n\n", file);
 	g_compiler.outputUsedTypes(file, sourceFile);
-	if (sourceFile->m_hasMapProperty)
+	if (sourceFile->m_hasMapProperty || sourceFile->m_hasListProperty)
 	{
 		writeStringToFile("namespace pafcore{ class Iterator; }\n", file);
 	}
@@ -624,7 +624,7 @@ void HeaderFileGenerator::generateCode_Property_Get(FILE* file, PropertyNode* pr
 
 	writeStringToFile("(", file);
 
-	if (propertyNode->isFixedArray() || propertyNode->isDynamicArray())
+	if (propertyNode->isFixedArray() || propertyNode->isDynamicArray() || propertyNode->isList())
 	{
 		writeStringToFile("size_t", file);
 	}
@@ -682,7 +682,7 @@ void HeaderFileGenerator::generateCode_Property_Set(FILE* file, PropertyNode* pr
 	
 	writeStringToFile("(", file);
 	
-	if (propertyNode->isFixedArray() || propertyNode->isDynamicArray())
+	if (propertyNode->isFixedArray() || propertyNode->isDynamicArray() || propertyNode->isList())
 	{
 		writeStringToFile("size_t, ", file);
 	}
@@ -738,6 +738,32 @@ void HeaderFileGenerator::generateCode_Property_Resize(FILE* file, PropertyNode*
 	writeStringToFile("(size_t);", file);
 }
 
+void HeaderFileGenerator::generateCode_Property_PushBack(FILE* file, PropertyNode* propertyNode, int indentation)
+{
+	if (propertyNode->isStatic())
+	{
+		writeStringToFile("static ", file, indentation);
+		indentation = 0;
+	}
+	TokenNode* constant = propertyNode->m_set ? propertyNode->m_set->m_constant : propertyNode->m_constant;
+	TokenNode* passing = propertyNode->m_set ? propertyNode->m_set->m_passing : propertyNode->m_passing;
+	TypeNameNode* typeName = propertyNode->m_set ? propertyNode->m_set->m_typeName : propertyNode->m_typeName;
+
+	writeStringToFile("void pushBack_", file, indentation);
+	writeStringToFile(propertyNode->m_name->m_str.c_str(), file);
+	writeStringToFile("(", file);
+	if (0 != constant)
+	{
+		generateCode_Token(file, constant, 0);
+	}
+	generateCode_TypeName(file, typeName, propertyNode->m_enclosing, true, 0);
+	if (0 != passing)
+	{
+		generateCode_Token(file, passing, 0);
+	}
+	writeStringToFile(");", file);
+}
+
 void HeaderFileGenerator::generateCode_Property_GetIterator(FILE* file, PropertyNode* propertyNode, int indentation)
 {
 	if (propertyNode->isStatic())
@@ -774,15 +800,19 @@ void HeaderFileGenerator::generateCode_Property_GetValue(FILE* file, PropertyNod
 		writeStringToFile("static ", file, indentation);
 		indentation = 0;
 	}
-	if (0 != propertyNode->m_get->m_constant)
+	TokenNode* constant = propertyNode->m_get ? propertyNode->m_get->m_constant : propertyNode->m_constant;
+	TokenNode* passing = propertyNode->m_get ? propertyNode->m_get->m_passing : propertyNode->m_passing;
+	TypeNameNode* typeName = propertyNode->m_get ? propertyNode->m_get->m_typeName : propertyNode->m_typeName;
+
+	if (0 != constant)
 	{
-		generateCode_Token(file, propertyNode->m_get->m_constant, indentation);
+		generateCode_Token(file, constant, indentation);
 		indentation = 0;
 	}
-	generateCode_TypeName(file, propertyNode->m_get->m_typeName, propertyNode->m_enclosing, true, indentation);
-	if (0 != propertyNode->m_get->m_passing)
+	generateCode_TypeName(file, typeName, propertyNode->m_enclosing, true, indentation);
+	if (0 != passing)
 	{
-		generateCode_Token(file, propertyNode->m_get->m_passing, 0);
+		generateCode_Token(file, passing, 0);
 	}
 	writeStringToFile(" getValue_", file);
 	writeStringToFile(propertyNode->m_name->m_str.c_str(), file);
@@ -816,6 +846,8 @@ void HeaderFileGenerator::generateCode_Property(FILE* file, PropertyNode* proper
 		{
 			generateCode_Property_Set(file, propertyNode, indentation);
 		}
+		g_compiler.outputEmbededCodes(file, propertyNode->m_name); //¸ñÊ½
+
 	}
 	if (propertyNode->isFixedArray() || propertyNode->isDynamicArray())
 	{
@@ -826,6 +858,15 @@ void HeaderFileGenerator::generateCode_Property(FILE* file, PropertyNode* proper
 			writeStringToFile("\n", file);
 			generateCode_Property_Resize(file, propertyNode, indentation);
 		}
+	}
+	else if (propertyNode->isList())
+	{
+		writeStringToFile("\n", file);
+		generateCode_Property_PushBack(file, propertyNode, indentation);
+		writeStringToFile("\n", file);
+		generateCode_Property_GetIterator(file, propertyNode, indentation);
+		writeStringToFile("\n", file);
+		generateCode_Property_GetValue(file, propertyNode, indentation);
 	}
 	else if(propertyNode->isMap())
 	{

@@ -483,9 +483,10 @@ namespace idlcpp
 		paf_delete_array(reinterpret_cast<::pafcore::Buffer*>(address));
 	}
 
-	void __pafcore__Buffer_Type::assign(void* dst, const void* src)
+	bool __pafcore__Buffer_Type::assign(void* dst, const void* src)
 	{
 		*(::pafcore::Buffer*)dst = *(const ::pafcore::Buffer*)src;
+		return true;
 	}
 
 	__pafcore__Buffer_Type* __pafcore__Buffer_Type::GetSingleton()

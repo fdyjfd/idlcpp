@@ -14,6 +14,7 @@ namespace pafcore
 	public:
 
 		static void LoadDLL(string_t fileName);
+		static void OutputDebug(string_t str);
 	};
 }
 

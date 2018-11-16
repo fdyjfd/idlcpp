@@ -31,10 +31,10 @@ namespace pafcore
 		typedef C ContainerType;
 		typedef I IteratorType;
 	public:
-		IteratorImpl(C* container) : m_container(container)
-		{
-			m_iterator = m_container->begin();
-		}
+		IteratorImpl(C* container) : 
+			m_container(container),
+			m_iterator(m_container->begin())
+		{}
 	public:
 		virtual bool isEnd()
 		{

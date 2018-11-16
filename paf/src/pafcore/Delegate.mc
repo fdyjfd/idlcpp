@@ -55,9 +55,9 @@ namespace idlcpp
 		paf_delete_array(reinterpret_cast<::pafcore::RefCountImpl<::pafcore::CallBack>*>(address));
 	}
 
-	void __pafcore__CallBack_Type::assign(void* dst, const void* src)
+	bool __pafcore__CallBack_Type::assign(void* dst, const void* src)
 	{
-		*(::pafcore::CallBack*)dst = *(const ::pafcore::CallBack*)src;
+		return false;
 	}
 
 	__pafcore__CallBack_Type* __pafcore__CallBack_Type::GetSingleton()
@@ -100,9 +100,9 @@ namespace idlcpp
 		paf_delete_array(reinterpret_cast<::pafcore::RefCountImpl<::pafcore::FunctionCallBack>*>(address));
 	}
 
-	void __pafcore__FunctionCallBack_Type::assign(void* dst, const void* src)
+	bool __pafcore__FunctionCallBack_Type::assign(void* dst, const void* src)
 	{
-		*(::pafcore::FunctionCallBack*)dst = *(const ::pafcore::FunctionCallBack*)src;
+		return false;
 	}
 
 	__pafcore__FunctionCallBack_Type* __pafcore__FunctionCallBack_Type::GetSingleton()
@@ -145,9 +145,9 @@ namespace idlcpp
 		paf_delete_array(reinterpret_cast<::pafcore::RefCountImpl<::pafcore::InstanceMethodCallBack>*>(address));
 	}
 
-	void __pafcore__InstanceMethodCallBack_Type::assign(void* dst, const void* src)
+	bool __pafcore__InstanceMethodCallBack_Type::assign(void* dst, const void* src)
 	{
-		*(::pafcore::InstanceMethodCallBack*)dst = *(const ::pafcore::InstanceMethodCallBack*)src;
+		return false;
 	}
 
 	__pafcore__InstanceMethodCallBack_Type* __pafcore__InstanceMethodCallBack_Type::GetSingleton()
@@ -190,9 +190,9 @@ namespace idlcpp
 		paf_delete_array(reinterpret_cast<::pafcore::RefCountImpl<::pafcore::StaticMethodCallBack>*>(address));
 	}
 
-	void __pafcore__StaticMethodCallBack_Type::assign(void* dst, const void* src)
+	bool __pafcore__StaticMethodCallBack_Type::assign(void* dst, const void* src)
 	{
-		*(::pafcore::StaticMethodCallBack*)dst = *(const ::pafcore::StaticMethodCallBack*)src;
+		return false;
 	}
 
 	__pafcore__StaticMethodCallBack_Type* __pafcore__StaticMethodCallBack_Type::GetSingleton()
@@ -276,19 +276,16 @@ namespace idlcpp
 		paf_delete_array(reinterpret_cast<::pafcore::Delegate*>(address));
 	}
 
-	void __pafcore__Delegate_Type::assign(void* dst, const void* src)
+	bool __pafcore__Delegate_Type::assign(void* dst, const void* src)
 	{
 		*(::pafcore::Delegate*)dst = *(const ::pafcore::Delegate*)src;
+		return true;
 	}
 
 	::pafcore::ErrorCode __pafcore__Delegate_Type::Delegate_addCallBack(::pafcore::Variant* result, ::pafcore::Variant** args, int_t numArgs)
 	{
 		if(2 <= numArgs)
 		{
-			if(args[0]->isConstant())
-			{
-				return ::pafcore::e_this_is_constant;
-			}
 			::pafcore::Delegate* self;
 			if(!args[0]->castToValuePtr(GetSingleton(), (void**)&self))
 			{
@@ -309,10 +306,6 @@ namespace idlcpp
 	{
 		if(3 <= numArgs)
 		{
-			if(args[0]->isConstant())
-			{
-				return ::pafcore::e_this_is_constant;
-			}
 			::pafcore::Delegate* self;
 			if(!args[0]->castToValuePtr(GetSingleton(), (void**)&self))
 			{
@@ -343,10 +336,6 @@ namespace idlcpp
 	{
 		if(3 <= numArgs)
 		{
-			if(args[0]->isConstant())
-			{
-				return ::pafcore::e_this_is_constant;
-			}
 			::pafcore::Delegate* self;
 			if(!args[0]->castToValuePtr(GetSingleton(), (void**)&self))
 			{
@@ -377,10 +366,6 @@ namespace idlcpp
 	{
 		if(2 <= numArgs)
 		{
-			if(args[0]->isConstant())
-			{
-				return ::pafcore::e_this_is_constant;
-			}
 			::pafcore::Delegate* self;
 			if(!args[0]->castToValuePtr(GetSingleton(), (void**)&self))
 			{
@@ -401,10 +386,6 @@ namespace idlcpp
 	{
 		if(3 <= numArgs)
 		{
-			if(args[0]->isConstant())
-			{
-				return ::pafcore::e_this_is_constant;
-			}
 			::pafcore::Delegate* self;
 			if(!args[0]->castToValuePtr(GetSingleton(), (void**)&self))
 			{
@@ -434,10 +415,6 @@ namespace idlcpp
 	{
 		if(3 <= numArgs)
 		{
-			if(args[0]->isConstant())
-			{
-				return ::pafcore::e_this_is_constant;
-			}
 			::pafcore::Delegate* self;
 			if(!args[0]->castToValuePtr(GetSingleton(), (void**)&self))
 			{
@@ -527,19 +504,16 @@ namespace idlcpp
 		paf_delete_array(reinterpret_cast<::pafcore::EventHandler*>(address));
 	}
 
-	void __pafcore__EventHandler_Type::assign(void* dst, const void* src)
+	bool __pafcore__EventHandler_Type::assign(void* dst, const void* src)
 	{
 		*(::pafcore::EventHandler*)dst = *(const ::pafcore::EventHandler*)src;
+		return true;
 	}
 
 	::pafcore::ErrorCode __pafcore__EventHandler_Type::EventHandler_invoke(::pafcore::Variant* result, ::pafcore::Variant** args, int_t numArgs)
 	{
 		if(2 <= numArgs)
 		{
-			if(args[0]->isConstant())
-			{
-				return ::pafcore::e_this_is_constant;
-			}
 			::pafcore::EventHandler* self;
 			if(!args[0]->castToValuePtr(GetSingleton(), (void**)&self))
 			{

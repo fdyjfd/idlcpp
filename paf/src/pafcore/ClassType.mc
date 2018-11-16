@@ -70,19 +70,16 @@ namespace idlcpp
 		paf_delete_array(reinterpret_cast<::pafcore::ClassTypeIterator*>(address));
 	}
 
-	void __pafcore__ClassTypeIterator_Type::assign(void* dst, const void* src)
+	bool __pafcore__ClassTypeIterator_Type::assign(void* dst, const void* src)
 	{
 		*(::pafcore::ClassTypeIterator*)dst = *(const ::pafcore::ClassTypeIterator*)src;
+		return true;
 	}
 
 	::pafcore::ErrorCode __pafcore__ClassTypeIterator_Type::ClassTypeIterator_deref(::pafcore::Variant* result, ::pafcore::Variant** args, int_t numArgs)
 	{
 		if(1 <= numArgs)
 		{
-			if(args[0]->isConstant())
-			{
-				return ::pafcore::e_this_is_constant;
-			}
 			::pafcore::ClassTypeIterator* self;
 			if(!args[0]->castToValuePtr(GetSingleton(), (void**)&self))
 			{
@@ -99,10 +96,6 @@ namespace idlcpp
 	{
 		if(1 <= numArgs)
 		{
-			if(args[0]->isConstant())
-			{
-				return ::pafcore::e_this_is_constant;
-			}
 			::pafcore::ClassTypeIterator* self;
 			if(!args[0]->castToValuePtr(GetSingleton(), (void**)&self))
 			{
@@ -226,19 +219,15 @@ namespace idlcpp
 		paf_delete_array(reinterpret_cast<::pafcore::RefCountImpl<::pafcore::ClassType>*>(address));
 	}
 
-	void __pafcore__ClassType_Type::assign(void* dst, const void* src)
+	bool __pafcore__ClassType_Type::assign(void* dst, const void* src)
 	{
-		*(::pafcore::ClassType*)dst = *(const ::pafcore::ClassType*)src;
+		return false;
 	}
 
 	::pafcore::ErrorCode __pafcore__ClassType_Type::ClassType__findMember_(::pafcore::Variant* result, ::pafcore::Variant** args, int_t numArgs)
 	{
 		if(3 <= numArgs)
 		{
-			if(args[0]->isConstant())
-			{
-				return ::pafcore::e_this_is_constant;
-			}
 			::pafcore::ClassType* self;
 			if(!args[0]->castToReferencePtr(GetSingleton(), (void**)&self))
 			{
@@ -269,10 +258,6 @@ namespace idlcpp
 	{
 		if(1 <= numArgs)
 		{
-			if(args[0]->isConstant())
-			{
-				return ::pafcore::e_this_is_constant;
-			}
 			::pafcore::ClassType* self;
 			if(!args[0]->castToReferencePtr(GetSingleton(), (void**)&self))
 			{
@@ -289,10 +274,6 @@ namespace idlcpp
 	{
 		if(2 <= numArgs)
 		{
-			if(args[0]->isConstant())
-			{
-				return ::pafcore::e_this_is_constant;
-			}
 			::pafcore::ClassType* self;
 			if(!args[0]->castToReferencePtr(GetSingleton(), (void**)&self))
 			{
@@ -314,10 +295,6 @@ namespace idlcpp
 	{
 		if(1 <= numArgs)
 		{
-			if(args[0]->isConstant())
-			{
-				return ::pafcore::e_this_is_constant;
-			}
 			::pafcore::ClassType* self;
 			if(!args[0]->castToReferencePtr(GetSingleton(), (void**)&self))
 			{
@@ -334,10 +311,6 @@ namespace idlcpp
 	{
 		if(2 <= numArgs)
 		{
-			if(args[0]->isConstant())
-			{
-				return ::pafcore::e_this_is_constant;
-			}
 			::pafcore::ClassType* self;
 			if(!args[0]->castToReferencePtr(GetSingleton(), (void**)&self))
 			{
@@ -359,10 +332,6 @@ namespace idlcpp
 	{
 		if(3 <= numArgs)
 		{
-			if(args[0]->isConstant())
-			{
-				return ::pafcore::e_this_is_constant;
-			}
 			::pafcore::ClassType* self;
 			if(!args[0]->castToReferencePtr(GetSingleton(), (void**)&self))
 			{
@@ -389,10 +358,6 @@ namespace idlcpp
 	{
 		if(2 <= numArgs)
 		{
-			if(args[0]->isConstant())
-			{
-				return ::pafcore::e_this_is_constant;
-			}
 			::pafcore::ClassType* self;
 			if(!args[0]->castToReferencePtr(GetSingleton(), (void**)&self))
 			{
@@ -414,10 +379,6 @@ namespace idlcpp
 	{
 		if(3 <= numArgs)
 		{
-			if(args[0]->isConstant())
-			{
-				return ::pafcore::e_this_is_constant;
-			}
 			::pafcore::ClassType* self;
 			if(!args[0]->castToReferencePtr(GetSingleton(), (void**)&self))
 			{
@@ -444,10 +405,6 @@ namespace idlcpp
 	{
 		if(2 <= numArgs)
 		{
-			if(args[0]->isConstant())
-			{
-				return ::pafcore::e_this_is_constant;
-			}
 			::pafcore::ClassType* self;
 			if(!args[0]->castToReferencePtr(GetSingleton(), (void**)&self))
 			{
@@ -469,10 +426,6 @@ namespace idlcpp
 	{
 		if(3 <= numArgs)
 		{
-			if(args[0]->isConstant())
-			{
-				return ::pafcore::e_this_is_constant;
-			}
 			::pafcore::ClassType* self;
 			if(!args[0]->castToReferencePtr(GetSingleton(), (void**)&self))
 			{

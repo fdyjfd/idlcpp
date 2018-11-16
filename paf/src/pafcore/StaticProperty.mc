@@ -44,9 +44,10 @@ namespace idlcpp
 		m_classTypeIterators = s_classTypeIterators;
 		static ::pafcore::InstanceProperty s_instanceProperties[] = 
 		{
-			::pafcore::InstanceProperty("isArray", 0, GetSingleton(), StaticProperty_get_isArray, RuntimeTypeOf<bool>::RuntimeType::GetSingleton(), ::pafcore::Metadata::by_value, false, 0, 0, ::pafcore::Metadata::by_value, false),
-			::pafcore::InstanceProperty("isMap", 0, GetSingleton(), StaticProperty_get_isMap, RuntimeTypeOf<bool>::RuntimeType::GetSingleton(), ::pafcore::Metadata::by_value, false, 0, 0, ::pafcore::Metadata::by_value, false),
 			::pafcore::InstanceProperty("isSimple", 0, GetSingleton(), StaticProperty_get_isSimple, RuntimeTypeOf<bool>::RuntimeType::GetSingleton(), ::pafcore::Metadata::by_value, false, 0, 0, ::pafcore::Metadata::by_value, false),
+			::pafcore::InstanceProperty("isArray", 0, GetSingleton(), StaticProperty_get_isArray, RuntimeTypeOf<bool>::RuntimeType::GetSingleton(), ::pafcore::Metadata::by_value, false, 0, 0, ::pafcore::Metadata::by_value, false),
+			::pafcore::InstanceProperty("isList", 0, GetSingleton(), StaticProperty_get_isList, RuntimeTypeOf<bool>::RuntimeType::GetSingleton(), ::pafcore::Metadata::by_value, false, 0, 0, ::pafcore::Metadata::by_value, false),
+			::pafcore::InstanceProperty("isMap", 0, GetSingleton(), StaticProperty_get_isMap, RuntimeTypeOf<bool>::RuntimeType::GetSingleton(), ::pafcore::Metadata::by_value, false, 0, 0, ::pafcore::Metadata::by_value, false),
 			::pafcore::InstanceProperty("hasGetter", 0, GetSingleton(), StaticProperty_get_hasGetter, RuntimeTypeOf<bool>::RuntimeType::GetSingleton(), ::pafcore::Metadata::by_value, false, 0, 0, ::pafcore::Metadata::by_value, false),
 			::pafcore::InstanceProperty("hasSetter", 0, GetSingleton(), StaticProperty_get_hasSetter, RuntimeTypeOf<bool>::RuntimeType::GetSingleton(), ::pafcore::Metadata::by_value, false, 0, 0, ::pafcore::Metadata::by_value, false),
 			::pafcore::InstanceProperty("hasSizer", 0, GetSingleton(), StaticProperty_get_hasSizer, RuntimeTypeOf<bool>::RuntimeType::GetSingleton(), ::pafcore::Metadata::by_value, false, 0, 0, ::pafcore::Metadata::by_value, false),
@@ -71,28 +72,29 @@ namespace idlcpp
 		m_instancePropertyCount = paf_array_size_of(s_instanceProperties);
 		static Metadata* s_members[] = 
 		{
+			&s_instanceProperties[11],
 			&s_instanceProperties[10],
 			&s_instanceProperties[9],
+			&s_instanceProperties[12],
 			&s_instanceProperties[8],
-			&s_instanceProperties[11],
-			&s_instanceProperties[7],
-			&s_instanceProperties[3],
-			&s_instanceProperties[6],
 			&s_instanceProperties[4],
+			&s_instanceProperties[7],
 			&s_instanceProperties[5],
-			&s_instanceProperties[0],
+			&s_instanceProperties[6],
 			&s_instanceProperties[1],
 			&s_instanceProperties[2],
+			&s_instanceProperties[3],
+			&s_instanceProperties[0],
+			&s_instanceProperties[21],
 			&s_instanceProperties[20],
 			&s_instanceProperties[19],
+			&s_instanceProperties[22],
 			&s_instanceProperties[18],
-			&s_instanceProperties[21],
-			&s_instanceProperties[17],
+			&s_instanceProperties[16],
 			&s_instanceProperties[15],
 			&s_instanceProperties[14],
+			&s_instanceProperties[17],
 			&s_instanceProperties[13],
-			&s_instanceProperties[16],
-			&s_instanceProperties[12],
 		};
 		m_members = s_members;
 		m_memberCount = paf_array_size_of(s_members);
@@ -109,9 +111,9 @@ namespace idlcpp
 		paf_delete_array(reinterpret_cast<::pafcore::RefCountImpl<::pafcore::StaticProperty>*>(address));
 	}
 
-	void __pafcore__StaticProperty_Type::assign(void* dst, const void* src)
+	bool __pafcore__StaticProperty_Type::assign(void* dst, const void* src)
 	{
-		*(::pafcore::StaticProperty*)dst = *(const ::pafcore::StaticProperty*)src;
+		return false;
 	}
 
 	::pafcore::ErrorCode __pafcore__StaticProperty_Type::StaticProperty_get_getterByPtr(::pafcore::InstanceProperty* instanceProperty, ::pafcore::Variant* that, ::pafcore::Variant* value)
@@ -230,6 +232,18 @@ namespace idlcpp
 			return ::pafcore::e_invalid_this_type;
 		}
 		bool res = self->get_isArray();
+		value->assignPrimitive(RuntimeTypeOf<bool>::RuntimeType::GetSingleton(), &res);
+		return ::pafcore::s_ok;
+	}
+
+	::pafcore::ErrorCode __pafcore__StaticProperty_Type::StaticProperty_get_isList(::pafcore::InstanceProperty* instanceProperty, ::pafcore::Variant* that, ::pafcore::Variant* value)
+	{
+		::pafcore::StaticProperty* self;
+		if(!that->castToReferencePtr(GetSingleton(), (void**)&self))
+		{
+			return ::pafcore::e_invalid_this_type;
+		}
+		bool res = self->get_isList();
 		value->assignPrimitive(RuntimeTypeOf<bool>::RuntimeType::GetSingleton(), &res);
 		return ::pafcore::s_ok;
 	}

@@ -638,22 +638,12 @@ ErrorCode Reflection::GetArrayInstancePropertySize(size_t& size, Variant* that, 
 		{
 			value.castToPrimitive(RuntimeTypeOf<size_t>::RuntimeType::GetSingleton(), &size);
 		}
-		//else
-		//{
-		//	size = 0;
-		//}
 		return errorCode;
 	}
 	else
 	{
 		return e_is_not_array_property;
 	}
-
-	//else
-	//{
-	//	size = 1;
-	//	return s_ok;
-	//}
 }
 
 ErrorCode Reflection::ResizeArrayInstanceProperty(Variant* that, InstanceProperty* property, size_t size)
@@ -669,12 +659,12 @@ ErrorCode Reflection::ResizeArrayInstanceProperty(Variant* that, InstancePropert
 		}
 		else
 		{
-			return e_array_property_is_not_dynamic;
+			return e_is_not_dynamic_array_property;
 		}
 	}
 	else
 	{
-		return e_is_not_array_property;
+		return e_is_not_dynamic_array_property;
 	}
 }
 
@@ -691,16 +681,7 @@ ErrorCode Reflection::GetArrayInstanceProperty(Variant& value, Variant* that, In
 	}
 	else
 	{
-		if (0 == property->m_getter)
-		{
-			return e_property_is_not_writable;
-		}
-		if (0 != index)
-		{
-			return e_is_not_array_property;
-		}
-		ErrorCode errorCode = (*property->m_getter)(property, that, &value);
-		return errorCode;
+		return e_is_not_array_property;
 	}
 }
 
@@ -717,16 +698,7 @@ ErrorCode Reflection::SetArrayInstanceProperty(Variant* that, InstanceProperty* 
 	}
 	else
 	{
-		if (0 == property->m_setter)
-		{
-			return e_property_is_not_readable;
-		}
-		if (0 != index)
-		{
-			return e_is_not_array_property;
-		}
-		ErrorCode errorCode = (*property->m_setter)(property, that, &value);
-		return errorCode;
+		return e_is_not_array_property;
 	}
 }
 
@@ -865,5 +837,92 @@ ErrorCode Reflection::CallInstanceMethod(Variant& result, Variant* that, Instanc
 	ErrorCode errorCode = (*method->m_invoker)(&result, args, numArgs + 1);
 	return errorCode;
 }
+
+
+ErrorCode Reflection::ListInstanceProperty_Get(Variant& value, Variant* that, InstanceProperty* property, size_t index)
+{
+	if (property->get_isList())
+	{
+		if (0 == property->m_listGetter)
+		{
+			return e_property_is_not_writable;
+		}
+		ErrorCode errorCode = (*property->m_listGetter)(property, that, index, &value);
+		return errorCode;
+	}
+	else
+	{
+		return e_is_not_list_property;
+	}
+}
+
+ErrorCode Reflection::ListInstanceProperty_Set(Variant* that, InstanceProperty* property, size_t index, Variant& value)
+{
+	if (property->get_isList())
+	{
+		if (0 == property->m_listGetter)
+		{
+			return e_property_is_not_readable;
+		}
+		ErrorCode errorCode = (*property->m_listGetter)(property, that, index, &value);
+		return errorCode;
+	}
+	else
+	{
+		return e_is_not_list_property;
+	}
+}
+
+ErrorCode Reflection::ListInstanceProperty_PushBack(Variant* that, InstanceProperty* property, Variant& value)
+{
+	if (property->get_isList())
+	{
+		if (0 == property->m_listPushBack)
+		{
+			return e_is_not_list_property;
+		}
+		ErrorCode errorCode = (*property->m_listPushBack)(property, that, &value);
+		return errorCode;
+	}
+	else
+	{
+		return e_is_not_list_property;
+	}
+}
+
+ErrorCode Reflection::ListInstanceProperty_GetIterator(Variant* iterator, Variant* that, InstanceProperty* property)
+{
+	if (property->get_isList())
+	{
+		if (0 == property->m_listGetIterator)
+		{
+			return e_property_is_not_iterable;
+		}
+		ErrorCode errorCode = (*property->m_listGetIterator)(property, that, iterator);
+		return errorCode;
+	}
+	else
+	{
+		return e_is_not_list_property;
+	}
+}
+
+ErrorCode Reflection::ListInstanceProperty_GetValue(Variant& value, Variant* that, InstanceProperty* property, Iterator* iterator)
+{
+	if (property->get_isList())
+	{
+		if (0 == property->m_listGetValue)
+		{
+			return e_property_is_not_dereferenceable;
+		}
+		ErrorCode errorCode = (*property->m_listGetValue)(property, that, iterator, &value);
+		return errorCode;
+	}
+	else
+	{
+		return e_is_not_map_property;
+	}
+}
+
 
 END_PAFCORE

@@ -9,11 +9,11 @@ namespace pafcore
 
 	abstract class(static_field)#PAFCORE_EXPORT StaticField : Metadata
 	{
-		Type* type get;
-		size_t address get;
-		bool isConstant get;
-		bool isArray get;
-		bool isPointer get;
+		Type* type { get };
+		size_t address { get };
+		bool isConstant { get };
+		bool isArray { get };
+		bool isPointer { get };
 #{
 	public:
 		StaticField(const char* name, Attributes* attributes, Type* type, size_t address, size_t arraySize, bool constant, TypeCompound tc);
