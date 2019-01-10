@@ -191,14 +191,14 @@ void setFieldConstant(SyntaxNode* syntaxNode, SyntaxNode* constant);
 void setFieldStatic(SyntaxNode* syntaxNode, SyntaxNode* stat);
 void setFieldSemicolon(SyntaxNode* syntaxNode, SyntaxNode* semicolon);
 
-SyntaxNode* newGetterSetter(SyntaxNode* keyword, SyntaxNode* constant, SyntaxNode* type, SyntaxNode* passing);
+SyntaxNode* newGetterSetter(SyntaxNode* keyword);
 void setSetterAllowNull(SyntaxNode* syntaxNode);
 void setGetterSetterNativeName(SyntaxNode* syntaxNode, SyntaxNode* nativeName);
 
 SyntaxNode* newProperty(SyntaxNode* name, PropertyCategory category);
 void setMapPropertyKeyType(SyntaxNode* property, SyntaxNode* type, SyntaxNode* passing);
 
-void setPropertyType(SyntaxNode* property, SyntaxNode* constant, SyntaxNode* type, SyntaxNode* passing);
+void setPropertyType(SyntaxNode* property, SyntaxNode* type, SyntaxNode* passing);
 void setPropertyGetter(SyntaxNode* property, SyntaxNode* getter);
 void setPropertySetter(SyntaxNode* property, SyntaxNode* setter);
 void setPropertyModifier(SyntaxNode* syntaxNode, SyntaxNode* modifier);

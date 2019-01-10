@@ -7,7 +7,7 @@ struct TokenNode;
 struct ParameterNode;
 struct MethodNode;
 struct OperatorNode;
-struct GetterSetterNode;
+struct PropertyNode;
 struct FieldNode;
 struct DelegateNode;
 
@@ -20,7 +20,7 @@ void RaiseError_InvalidResultType(MethodNode* node);
 void RaiseError_InvalidResultType(OperatorNode* node);
 void RaiseError_InvalidResultType(DelegateNode* node);
 void RaiseError_InvalidFieldType(FieldNode* node);
-void RaiseError_InvalidPropertyType(GetterSetterNode* node, bool getter);
+void RaiseError_InvalidPropertyType(PropertyNode* node);
 void RaiseError_InvalidClassTemplateName(IdentifyNode* node);
 void RaiseError_InvalidClassTemplateName(TypeNameNode* node);
 void RaiseError_TooManyTemplateArguments(IdentifyNode* node);

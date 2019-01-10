@@ -63,6 +63,7 @@ primitive				: VOID												{$$ = newPrimitiveType($1, pt_void);}
 ;
 
 attribute				: IDENTIFY '=' STRING								{$$ = newAttribute($1, $3);}
+						| IDENTIFY											{$$ = newAttribute($1, NULL);}
 ;
 
 attributeList			: attribute											{$$ = newAttributeList(NULL, $1);}
@@ -148,9 +149,7 @@ field					: field_2 ';'										{$$ = $1; setFieldSemicolon($$, $2);}
 ;
 
 
-getter_0				: GET												{$$ = newGetterSetter($1, NULL, NULL, NULL);}
-						| GET '(' '&' ')'									{$$ = newGetterSetter($1, NULL, $3, $4);}
-						| GET '(' CONST '&' ')'								{$$ = newGetterSetter($1, $3, $4, $5);}
+getter_0				: GET												{$$ = newGetterSetter($1);}
 ;
 
 
@@ -158,9 +157,7 @@ getter					: getter_0											{$$ = $1;}
 						| getter_0 '=' STRING								{$$ = $1; setGetterSetterNativeName($$, $3);}
 ;
 
-setter_0				: SET												{$$ = newGetterSetter($1, NULL, NULL, NULL);}
-						| SET '(' '&' ')'									{$$ = newGetterSetter($1, NULL, $3, $4);}
-						| SET '(' CONST '&' ')'								{$$ = newGetterSetter($1, $3, $4, $5);}
+setter_0				: SET												{$$ = newGetterSetter($1);}
 ;
 
 setter_1				: setter_0											{$$ = $1;}
@@ -179,8 +176,8 @@ property_0				: IDENTIFY											{$$ = newProperty($1, simple_property);}
 						| IDENTIFY '[' typeName '*' ']'						{$$ = newProperty($1, map_property); setMapPropertyKeyType($$, $3, $4);}
 ;
 
-property_1				: typeName property_0								{$$ = $2; setPropertyType($$, NULL, $1, NULL);}
-						| typeName '*' property_0							{$$ = $3; setPropertyType($$, NULL, $1, $2);}
+property_1				: typeName property_0								{$$ = $2; setPropertyType($$, $1, NULL);}
+						| typeName '*' property_0							{$$ = $3; setPropertyType($$, $1, $2);}
 ;
 
 property_2				: property_1 '{' '}' ';'							{$$ = $1;}

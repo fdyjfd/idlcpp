@@ -292,14 +292,10 @@ void setFieldSemicolon(SyntaxNode* syntaxNode, SyntaxNode* semicolon)
 	fieldNode->m_semicolon = (TokenNode*)semicolon;
 }
 
-SyntaxNode* newGetterSetter(SyntaxNode* keyword, SyntaxNode* constant, SyntaxNode* type, SyntaxNode* passing)
+SyntaxNode* newGetterSetter(SyntaxNode* keyword)
 {
 	assert(snt_keyword_get == keyword->m_nodeType || snt_keyword_set == keyword->m_nodeType);
-	assert(0 == constant || snt_keyword_const == constant->m_nodeType);
-	assert(0 == type || snt_type_name == type->m_nodeType);
-	assert(0 == passing || '*' == passing->m_nodeType || '&' == passing->m_nodeType);
-	GetterSetterNode* res = new GetterSetterNode((TokenNode*)keyword, 
-		(TokenNode*)constant, (TypeNameNode*)type, (TokenNode*)passing); 
+	GetterSetterNode* res = new GetterSetterNode((TokenNode*)keyword); 
 	g_syntaxNodes.push_back(res);
 	return res;
 }
@@ -344,13 +340,11 @@ void setMapPropertyKeyType(SyntaxNode* property, SyntaxNode* type, SyntaxNode* p
 	((PropertyNode*)property)->m_keyPassing = (TokenNode*)passing;
 }
 
-void setPropertyType(SyntaxNode* property, SyntaxNode* constant, SyntaxNode* type, SyntaxNode* passing)
+void setPropertyType(SyntaxNode* property, SyntaxNode* type, SyntaxNode* passing)
 {
 	assert(snt_property == property->m_nodeType);
-	assert(0 == constant || snt_keyword_const == constant->m_nodeType);
 	assert(0 == type || snt_type_name == type->m_nodeType);
-	assert(0 == passing || '*' == passing->m_nodeType || '&' == passing->m_nodeType);
-	((PropertyNode*)property)->m_constant = (TokenNode*)constant;
+	assert(0 == passing || '*' == passing->m_nodeType);// || '&' == passing->m_nodeType);
 	((PropertyNode*)property)->m_typeName = (TypeNameNode*)type;
 	((PropertyNode*)property)->m_passing = (TokenNode*)passing;
 }

@@ -263,28 +263,27 @@ void SourceFileGenerator::generateCode_Class(FILE* file, ClassNode* classNode, c
 	std::string typeName;
 	GetClassName(typeName, classNode);
 	typeName = scopeClassName + typeName;
+
+	bool isInline = 0 != classNode->m_templateParametersNode;
+	generateCode_TemplateHeader(file, classNode, indentation);
+	if (isInline)
+	{
+		writeStringToFile("inline ::pafcore::ClassType* ", file, indentation);
+	}
+	else
+	{
+		writeStringToFile("::pafcore::ClassType* ", file, indentation);
+	}
+	writeStringToFile(typeName.c_str(), file);
+	writeStringToFile("::GetType()\n", file);
+	writeStringToFile("{\n", file, indentation);
+	writeStringToFile("return ::RuntimeTypeOf<", file, indentation + 1);
+	writeStringToFile(typeName.c_str(), file);
+	writeStringToFile(">::RuntimeType::GetSingleton();\n", file);
+	writeStringToFile("}\n\n", file, indentation);
+
 	if (!classNode->isValueType())
 	{
-
-		bool isInline = 0 != classNode->m_templateParametersNode;
-
-		generateCode_TemplateHeader(file, classNode, indentation);
-		if (isInline)
-		{
-			writeStringToFile("inline ::pafcore::ClassType* ", file, indentation);
-		}
-		else
-		{
-			writeStringToFile("::pafcore::ClassType* ", file, indentation);
-		}
-		writeStringToFile(typeName.c_str(), file);
-		writeStringToFile("::GetType()\n", file);
-		writeStringToFile("{\n", file, indentation);
-		writeStringToFile("return ::RuntimeTypeOf<", file, indentation + 1);
-		writeStringToFile(typeName.c_str(), file);
-		writeStringToFile(">::RuntimeType::GetSingleton();\n", file);
-		writeStringToFile("}\n\n", file, indentation);
-
 		generateCode_TemplateHeader(file, classNode, indentation);
 		if (isInline)
 		{

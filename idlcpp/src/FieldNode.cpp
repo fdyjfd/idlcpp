@@ -58,6 +58,6 @@ void FieldNode::checkSemantic(TemplateArguments* templateArguments)
 	{
 		RaiseError_InvalidFieldType(this);
 	}
-	g_compiler.useType(typeNode, templateArguments, tu_use_definition, m_typeName);
+	g_compiler.useType(typeNode, templateArguments, isPointer() ? tu_use_declaration : tu_use_definition, m_typeName);
 }
 

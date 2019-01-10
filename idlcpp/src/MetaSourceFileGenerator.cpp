@@ -643,11 +643,11 @@ void writeMetaGetPropertyImpl_Key(ClassNode* classNode, TemplateArguments* templ
 	case void_type:
 		sprintf_s(buf, "%s* index;\n", typeName.c_str());
 		writeStringToFile(buf, file, indentation);
-		sprintf_s(buf, "if(!key->%s((void**)&index))\n", propertyNode->isKeyAllowNull() ? "castToVoidPtrAllowNull" : "castToVoidPtr");
+		sprintf_s(buf, "if(!key->%s((void**)&index))\n", /*propertyNode->isKeyAllowNull() ? "castToVoidPtrAllowNull" : */"castToVoidPtr");
 		writeStringToFile(buf, file, indentation);
 		break;
 	case primitive_type:
-		if (propertyNode->isKeyByValue() || (propertyNode->isKeyConstant() && propertyNode->isKeyByRef()))
+		if (propertyNode->isKeyByValue()/* || (propertyNode->isKeyConstant() && propertyNode->isKeyByRef())*/)
 		{
 			sprintf_s(buf, "%s index;\n", typeName.c_str());
 			writeStringToFile(buf, file, indentation);
@@ -659,12 +659,12 @@ void writeMetaGetPropertyImpl_Key(ClassNode* classNode, TemplateArguments* templ
 			sprintf_s(buf, "%s* index;\n", typeName.c_str());
 			writeStringToFile(buf, file, indentation);
 			sprintf_s(buf, "if(!key->%s(RuntimeTypeOf<%s>::RuntimeType::GetSingleton(), (void**)&index))\n",
-				propertyNode->isKeyAllowNull() ? "castToPrimitivePtrAllowNull" : "castToPrimitivePtr", typeName.c_str());
+				/*propertyNode->isKeyAllowNull() ? "castToPrimitivePtrAllowNull" : */"castToPrimitivePtr", typeName.c_str());
 			writeStringToFile(buf, file, indentation);
 		}
 		break;
 	case enum_type:
-		if (propertyNode->isKeyByValue() || (propertyNode->isKeyConstant() && propertyNode->isKeyByRef()))
+		if (propertyNode->isKeyByValue()/* || (propertyNode->isKeyConstant() && propertyNode->isKeyByRef())*/)
 		{
 			sprintf_s(buf, "%s index;\n", typeName.c_str());
 			writeStringToFile(buf, file, indentation);
@@ -676,7 +676,7 @@ void writeMetaGetPropertyImpl_Key(ClassNode* classNode, TemplateArguments* templ
 			sprintf_s(buf, "%s* index;\n", typeName.c_str());
 			writeStringToFile(buf, file, indentation);
 			sprintf_s(buf, "if(!key->%s(RuntimeTypeOf<%s>::RuntimeType::GetSingleton(), (void**)&index))\n",
-				propertyNode->isKeyAllowNull() ? "castToEnumPtrAllowNull" : "castToEnumPtr", typeName.c_str());
+				/*propertyNode->isKeyAllowNull() ? "castToEnumPtrAllowNull" :*/ "castToEnumPtr", typeName.c_str());
 			writeStringToFile(buf, file, indentation);
 		}
 		break;
@@ -684,14 +684,14 @@ void writeMetaGetPropertyImpl_Key(ClassNode* classNode, TemplateArguments* templ
 		sprintf_s(buf, "%s* index;\n", typeName.c_str());
 		writeStringToFile(buf, file, indentation);
 		sprintf_s(buf, "if(!key->%s(RuntimeTypeOf<%s>::RuntimeType::GetSingleton(), (void**)&index))\n",
-			propertyNode->isKeyAllowNull() ? "castToValuePtrAllowNull" : "castToValuePtr", typeName.c_str());
+			/*propertyNode->isKeyAllowNull() ? "castToValuePtrAllowNull" : */"castToValuePtr", typeName.c_str());
 		writeStringToFile(buf, file, indentation);
 		break;
 	case reference_type:
 		sprintf_s(buf, "%s* index;\n", typeName.c_str());
 		writeStringToFile(buf, file, indentation);
 		sprintf_s(buf, "if(!key->%s(RuntimeTypeOf<%s>::RuntimeType::GetSingleton(), (void**)&index))\n",
-			propertyNode->isKeyAllowNull() ? "castToReferencePtrAllowNull" : "castToReferencePtr", typeName.c_str());
+			/*propertyNode->isKeyAllowNull() ? "castToReferencePtrAllowNull" :*/ "castToReferencePtr", typeName.c_str());
 		writeStringToFile(buf, file, indentation);
 		break;
 	default:
@@ -772,7 +772,7 @@ void writeMetaGetPropertyImpl(ClassNode* classNode, TemplateArguments* templateA
 			sprintf_s(strCall, "%s::get_%s(", className.c_str(), propertyNode->m_name->m_str.c_str());
 		}
 
-		if(0 == propertyNode->m_get->m_passing)
+		if(0 == propertyNode->m_passing)
 		{
 			if(primitive_type == typeCategory || enum_type == typeCategory)
 			{
@@ -783,17 +783,16 @@ void writeMetaGetPropertyImpl(ClassNode* classNode, TemplateArguments* templateA
 				sprintf_s(buf, "%s* res = paf_new %s(%s%s));\n", typeName.c_str(), typeName.c_str(), strCall, strIndex);
 			}
 		}
-		else if('*' == propertyNode->m_get->m_passing->m_nodeType)
+		else if('*' == propertyNode->m_passing->m_nodeType)
 		{
-			sprintf_s(buf, "%s%s* res = %s%s);\n", propertyNode->m_get->isConstant() ? "const " : "",
-				typeName.c_str(), strCall, strIndex);
+			sprintf_s(buf, "%s* res = %s%s);\n", typeName.c_str(), strCall, strIndex);
 		}
-		else
-		{
-			assert('&' == propertyNode->m_get->m_passing->m_nodeType);
-			sprintf_s(buf, "%s%s* res = &%s%s);\n",  propertyNode->m_get->isConstant() ? "const " : "",
-				typeName.c_str(), strCall, strIndex);
-		}
+		//else
+		//{
+		//	assert('&' == propertyNode->m_get->m_passing->m_nodeType);
+		//	sprintf_s(buf, "%s%s* res = &%s%s);\n",  propertyNode->m_get->isConstant() ? "const " : "",
+		//		typeName.c_str(), strCall, strIndex);
+		//}
 		writeStringToFile(buf, file, indentation + 1);
 	}
 	else
@@ -828,7 +827,7 @@ void writeMetaGetPropertyImpl(ClassNode* classNode, TemplateArguments* templateA
 		writeStringToFile("{\n", file, indentation + 1);
 		writeStringToFile("return ::pafcore::e_invalid_this_type;\n", file, indentation + 2);
 		writeStringToFile("}\n", file, indentation + 1);
-		if(0 == propertyNode->m_get->m_passing)
+		if(0 == propertyNode->m_passing)
 		{
 			if(primitive_type == typeCategory || enum_type == typeCategory)
 			{
@@ -839,36 +838,35 @@ void writeMetaGetPropertyImpl(ClassNode* classNode, TemplateArguments* templateA
 				sprintf_s(buf, "%s* res = paf_new %s(%s%s));\n", typeName.c_str(), typeName.c_str(), strCall, strIndex);
 			}
 		}
-		else if('*' == propertyNode->m_get->m_passing->m_nodeType)
+		else if('*' == propertyNode->m_passing->m_nodeType)
 		{
-			sprintf_s(buf, "%s%s* res = %s%s);\n", propertyNode->m_get->isConstant() ? "const " : "",
-				typeName.c_str(), strCall, strIndex);
+			sprintf_s(buf, "%s* res = %s%s);\n", typeName.c_str(), strCall, strIndex);
 		}
-		else
-		{
-			assert('&' == propertyNode->m_get->m_passing->m_nodeType);
-			sprintf_s(buf, "%s%s* res = &%s%s);\n",  propertyNode->m_get->isConstant() ? "const " : "",
-				typeName.c_str(), strCall, strIndex);
-		}
+		//else
+		//{
+		//	assert('&' == propertyNode->m_get->m_passing->m_nodeType);
+		//	sprintf_s(buf, "%s%s* res = &%s%s);\n",  propertyNode->m_get->isConstant() ? "const " : "",
+		//		typeName.c_str(), strCall, strIndex);
+		//}
 		writeStringToFile(buf, file, indentation + 1);
 	}
 
 	const char* varSemantic;
-	if(propertyNode->m_get->byPtr())
+	if(propertyNode->isByPtr())
 	{
 		varSemantic = s_variantSemantic_ByPtr;
 	}
-	else if(propertyNode->m_get->byRef())
-	{
-		varSemantic = s_variantSemantic_ByRef;
-	}
+	//else if(propertyNode->m_get->byRef())
+	//{
+	//	varSemantic = s_variantSemantic_ByRef;
+	//}
 	else
 	{
-		assert(propertyNode->m_get->byValue());
+		assert(propertyNode->isByValue());
 		varSemantic = s_variantSemantic_ByValue;
 	}
 
-	if(0 == propertyNode->m_get->m_passing)
+	if(0 == propertyNode->m_passing)
 	{
 		switch(typeCategory)
 		{
@@ -894,23 +892,23 @@ void writeMetaGetPropertyImpl(ClassNode* classNode, TemplateArguments* templateA
 		switch(typeCategory)
 		{
 		case void_type:
-			sprintf_s(buf, "value->assignVoidPtr(res, %s);\n", propertyNode->m_get->isConstant() ? "true" : "false");
+			sprintf_s(buf, "value->assignVoidPtr(res, %s);\n", false ? "true" : "false");
 			break;
 		case primitive_type:
 			sprintf_s(buf, "value->assignPrimitivePtr(RuntimeTypeOf<%s>::RuntimeType::GetSingleton(), res, %s, %s);\n",
-				typeName.c_str(), propertyNode->m_get->isConstant() ? "true" : "false", varSemantic);
+				typeName.c_str(), false ? "true" : "false", varSemantic);
 			break;
 		case enum_type:
 			sprintf_s(buf, "value->assignEnumPtr(RuntimeTypeOf<%s>::RuntimeType::GetSingleton(), res, %s, %s);\n", 
-				typeName.c_str(), propertyNode->m_get->isConstant() ? "true" : "false", varSemantic);
+				typeName.c_str(), false ? "true" : "false", varSemantic);
 			break;
 		case value_type:
 			sprintf_s(buf, "value->assignValuePtr(RuntimeTypeOf<%s>::RuntimeType::GetSingleton(), res, %s, %s);\n",
-				typeName.c_str(), propertyNode->m_get->isConstant() ? "true" : "false", varSemantic);
+				typeName.c_str(), false ? "true" : "false", varSemantic);
 			break;
 		case reference_type:
 			sprintf_s(buf, "value->assignReferencePtr(RuntimeTypeOf<%s>::RuntimeType::GetSingleton(), res, %s, %s);\n",
-				typeName.c_str(), propertyNode->m_get->isConstant() ? "true" : "false", varSemantic);
+				typeName.c_str(), false ? "true" : "false", varSemantic);
 			break;
 		default:
 			assert(false);
@@ -1013,7 +1011,7 @@ void writeMetaSetPropertyImpl(ClassNode* classNode, TemplateArguments* templateA
 		writeStringToFile(buf, file, indentation + 1);
 		break;
 	case primitive_type:
-		if(propertyNode->m_set->byValue() || (propertyNode->m_set->isConstant() && propertyNode->m_set->byRef()))
+		if(propertyNode->isByValue())
 		{
 			sprintf_s(buf, "%s arg;\n", typeName.c_str());
 			writeStringToFile(buf, file, indentation + 1);
@@ -1030,7 +1028,7 @@ void writeMetaSetPropertyImpl(ClassNode* classNode, TemplateArguments* templateA
 		}
 		break;
 	case enum_type:
-		if (propertyNode->m_set->byValue() || (propertyNode->m_set->isConstant() && propertyNode->m_set->byRef()))
+		if (propertyNode->isByValue())
 		{
 			sprintf_s(buf, "%s arg;\n", typeName.c_str());
 			writeStringToFile(buf, file, indentation + 1);
@@ -1105,18 +1103,18 @@ void writeMetaSetPropertyImpl(ClassNode* classNode, TemplateArguments* templateA
 
 	if(primitive_type == typeCategory || enum_type == typeCategory)
 	{
-		if(propertyNode->m_set->byRef() && !propertyNode->m_set->isConstant())
-		{
-			strcpy_s(buf, "*arg);\n");
-		}
-		else
+		//if(propertyNode->m_set->byRef() && !propertyNode->m_set->isConstant())
+		//{
+		//	strcpy_s(buf, "*arg);\n");
+		//}
+		//else
 		{
 			strcpy_s(buf, "arg);\n");
 		}
 	}
 	else
 	{
-		if(propertyNode->m_set->byPtr())
+		if(propertyNode->isByPtr())
 		{
 			strcpy_s(buf, "arg);\n");
 		}
@@ -1253,23 +1251,17 @@ void writeMetaPropertyPushBackImpl(ClassNode* classNode, TemplateArguments* temp
 	std::string className;
 	std::string metaClassName;
 
-	bool isAllowNull, isByValue, isByRef, isByPtr, isConstant;
+	bool isAllowNull, isByValue, isByPtr;
 	if (propertyNode->m_set)
 	{
 		isAllowNull = propertyNode->m_set->isAllowNull();
-		isByValue = propertyNode->m_set->byValue();
-		isByRef = propertyNode->m_set->byRef();
-		isByPtr = propertyNode->m_set->byPtr();
-		isConstant = propertyNode->m_set->isConstant();
 	}
 	else
 	{
 		isAllowNull = false;
-		isByValue = propertyNode->byValue();
-		isByRef = propertyNode->byRef();
-		isByPtr = propertyNode->byPtr();
-		isConstant = propertyNode->isConstant();
 	}
+	isByValue = propertyNode->isByValue();
+	isByPtr = propertyNode->isByPtr();
 
 	classNode->getNativeName(className, templateArguments);
 	GetMetaTypeFullName(metaClassName, classNode, templateArguments);
@@ -1323,7 +1315,7 @@ void writeMetaPropertyPushBackImpl(ClassNode* classNode, TemplateArguments* temp
 		writeStringToFile(buf, file, indentation + 1);
 		break;
 	case primitive_type:
-		if (isByValue || (isConstant && isByRef))
+		if (isByValue)
 		{
 			sprintf_s(buf, "%s arg;\n", typeName.c_str());
 			writeStringToFile(buf, file, indentation + 1);
@@ -1340,7 +1332,7 @@ void writeMetaPropertyPushBackImpl(ClassNode* classNode, TemplateArguments* temp
 		}
 		break;
 	case enum_type:
-		if (isByValue || (isConstant && isByRef))
+		if (isByValue)
 		{
 			sprintf_s(buf, "%s arg;\n", typeName.c_str());
 			writeStringToFile(buf, file, indentation + 1);
@@ -1389,11 +1381,11 @@ void writeMetaPropertyPushBackImpl(ClassNode* classNode, TemplateArguments* temp
 
 	if (primitive_type == typeCategory || enum_type == typeCategory)
 	{
-		if (isByRef && !isConstant)
-		{
-			strcpy_s(buf, "*arg);\n");
-		}
-		else
+		//if (isByRef && !isConstant)
+		//{
+		//	strcpy_s(buf, "*arg);\n");
+		//}
+		//else
 		{
 			strcpy_s(buf, "arg);\n");
 		}
@@ -1509,13 +1501,13 @@ void writeMetaPropertyGetKeyImpl(ClassNode* classNode, TemplateArguments* templa
 		}
 		else if ('*' == propertyNode->m_keyPassing->m_nodeType)
 		{
-			sprintf_s(buf, "%s%s* res = %s::getKey_%s(iterator);\n", propertyNode->isKeyConstant() ? "const " : "",
+			sprintf_s(buf, "%s%s* res = %s::getKey_%s(iterator);\n",/* propertyNode->isKeyConstant() ? "const " : */"",
 				typeName.c_str(), className.c_str(), propertyNode->m_name->m_str.c_str());
 		}
 		else
 		{
 			assert('&' == propertyNode->m_keyPassing->m_nodeType);
-			sprintf_s(buf, "%s%s* res = &%s::getKey_%s(iterator);\n", propertyNode->isKeyConstant() ? "const " : "",
+			sprintf_s(buf, "%s%s* res = &%s::getKey_%s(iterator);\n", /*propertyNode->isKeyConstant() ? "const " :*/ "",
 				typeName.c_str(), className.c_str(), propertyNode->m_name->m_str.c_str());
 		}
 		writeStringToFile(buf, file, indentation + 1);
@@ -1548,13 +1540,13 @@ void writeMetaPropertyGetKeyImpl(ClassNode* classNode, TemplateArguments* templa
 		}
 		else if ('*' == propertyNode->m_keyPassing->m_nodeType)
 		{
-			sprintf_s(buf, "%s%s* res = self->getKey_%s(iterator);\n", propertyNode->isKeyConstant() ? "const " : "",
+			sprintf_s(buf, "%s%s* res = self->getKey_%s(iterator);\n", /*propertyNode->isKeyConstant() ? "const " :*/ "",
 				typeName.c_str(), propertyNode->m_name->m_str.c_str());
 		}
 		else
 		{
 			assert('&' == propertyNode->m_keyPassing->m_nodeType);
-			sprintf_s(buf, "%s%s* res = &self->getKey_%s(iterator);\n", propertyNode->isKeyConstant() ? "const " : "",
+			sprintf_s(buf, "%s%s* res = &self->getKey_%s(iterator);\n", /*propertyNode->isKeyConstant() ? "const " :*/ "",
 				typeName.c_str(), propertyNode->m_name->m_str.c_str());
 		}
 		writeStringToFile(buf, file, indentation + 1);
@@ -1565,10 +1557,10 @@ void writeMetaPropertyGetKeyImpl(ClassNode* classNode, TemplateArguments* templa
 	{
 		varSemantic = s_variantSemantic_ByPtr;
 	}
-	else if (propertyNode->isKeyByRef())
-	{
-		varSemantic = s_variantSemantic_ByRef;
-	}
+	//else if (propertyNode->isKeyByRef())
+	//{
+	//	varSemantic = s_variantSemantic_ByRef;
+	//}
 	else
 	{
 		assert(propertyNode->isKeyByValue());
@@ -1601,23 +1593,23 @@ void writeMetaPropertyGetKeyImpl(ClassNode* classNode, TemplateArguments* templa
 		switch (typeCategory)
 		{
 		case void_type:
-			sprintf_s(buf, "value->assignVoidPtr(res, %s);\n", propertyNode->isKeyConstant() ? "true" : "false");
+			sprintf_s(buf, "value->assignVoidPtr(res, %s);\n", /*propertyNode->isKeyConstant() ? "true" : */"false");
 			break;
 		case primitive_type:
 			sprintf_s(buf, "value->assignPrimitivePtr(RuntimeTypeOf<%s>::RuntimeType::GetSingleton(), res, %s, %s);\n",
-				typeName.c_str(), propertyNode->isKeyConstant() ? "true" : "false", varSemantic);
+				typeName.c_str(), /*propertyNode->isKeyConstant() ? "true" : */"false", varSemantic);
 			break;
 		case enum_type:
 			sprintf_s(buf, "value->assignEnumPtr(RuntimeTypeOf<%s>::RuntimeType::GetSingleton(), res, %s, %s);\n",
-				typeName.c_str(), propertyNode->isKeyConstant() ? "true" : "false", varSemantic);
+				typeName.c_str(), /*propertyNode->isKeyConstant() ? "true" : */"false", varSemantic);
 			break;
 		case value_type:
 			sprintf_s(buf, "value->assignValuePtr(RuntimeTypeOf<%s>::RuntimeType::GetSingleton(), res, %s, %s);\n",
-				typeName.c_str(), propertyNode->isKeyConstant() ? "true" : "false", varSemantic);
+				typeName.c_str(), /*propertyNode->isKeyConstant() ? "true" : */"false", varSemantic);
 			break;
 		case reference_type:
 			sprintf_s(buf, "value->assignReferencePtr(RuntimeTypeOf<%s>::RuntimeType::GetSingleton(), res, %s, %s);\n",
-				typeName.c_str(), propertyNode->isKeyConstant() ? "true" : "false", varSemantic);
+				typeName.c_str(), /*propertyNode->isKeyConstant() ? "true" : */"false", varSemantic);
 			break;
 		default:
 			assert(false);
@@ -1635,21 +1627,9 @@ void writeMetaPropertyGetValueImpl(ClassNode* classNode, TemplateArguments* temp
 	std::string className;
 	std::string metaClassName;
 
-	bool isByValue, isByRef, isByPtr, isConstant;
-	if (propertyNode->m_set)
-	{
-		isByValue = propertyNode->m_set->byValue();
-		isByRef = propertyNode->m_set->byRef();
-		isByPtr = propertyNode->m_set->byPtr();
-		isConstant = propertyNode->m_set->isConstant();
-	}
-	else
-	{
-		isByValue = propertyNode->byValue();
-		isByRef = propertyNode->byRef();
-		isByPtr = propertyNode->byPtr();
-		isConstant = propertyNode->isConstant();
-	}
+	bool isByValue, isByPtr;
+	isByValue = propertyNode->isByValue();
+	isByPtr = propertyNode->isByPtr();
 
 	classNode->getNativeName(className, templateArguments);
 	GetMetaTypeFullName(metaClassName, classNode, templateArguments);
@@ -1670,7 +1650,7 @@ void writeMetaPropertyGetValueImpl(ClassNode* classNode, TemplateArguments* temp
 
 	TypeCategory typeCategory = CalcTypeNativeName(typeName, propertyNode->m_typeName, templateArguments);
 
-	TokenNode* passing = propertyNode->m_get ? propertyNode->m_get->m_passing : propertyNode->m_passing;
+	TokenNode* passing = propertyNode->m_passing;
 
 	if (propertyNode->isStatic())
 	{
@@ -1687,14 +1667,12 @@ void writeMetaPropertyGetValueImpl(ClassNode* classNode, TemplateArguments* temp
 		}
 		else if ('*' == passing->m_nodeType)
 		{
-			sprintf_s(buf, "%s%s* res = %s::getValue_%s(iterator);\n", isConstant ? "const " : "",
-				typeName.c_str(), className.c_str(), propertyNode->m_name->m_str.c_str());
+			sprintf_s(buf, "%s* res = %s::getValue_%s(iterator);\n", typeName.c_str(), className.c_str(), propertyNode->m_name->m_str.c_str());
 		}
 		else
 		{
 			assert('&' == passing->m_nodeType);
-			sprintf_s(buf, "%s%s* res = &%s::getValue_%s(iterator);\n", isConstant ? "const " : "",
-				typeName.c_str(), className.c_str(), propertyNode->m_name->m_str.c_str());
+			sprintf_s(buf, "%s* res = &%s::getValue_%s(iterator);\n", typeName.c_str(), className.c_str(), propertyNode->m_name->m_str.c_str());
 		}
 		writeStringToFile(buf, file, indentation + 1);
 	}
@@ -1726,14 +1704,12 @@ void writeMetaPropertyGetValueImpl(ClassNode* classNode, TemplateArguments* temp
 		}
 		else if ('*' == passing->m_nodeType)
 		{
-			sprintf_s(buf, "%s%s* res = self->getValue_%s(iterator);\n", isConstant ? "const " : "",
-				typeName.c_str(), propertyNode->m_name->m_str.c_str());
+			sprintf_s(buf, "%s* res = self->getValue_%s(iterator);\n", typeName.c_str(), propertyNode->m_name->m_str.c_str());
 		}
 		else
 		{
 			assert('&' == passing->m_nodeType);
-			sprintf_s(buf, "%s%s* res = &self->getValue_%s(iterator);\n", isConstant ? "const " : "",
-				typeName.c_str(), propertyNode->m_name->m_str.c_str());
+			sprintf_s(buf, "%s* res = &self->getValue_%s(iterator);\n", typeName.c_str(), propertyNode->m_name->m_str.c_str());
 		}
 		writeStringToFile(buf, file, indentation + 1);
 	}
@@ -1743,10 +1719,10 @@ void writeMetaPropertyGetValueImpl(ClassNode* classNode, TemplateArguments* temp
 	{
 		varSemantic = s_variantSemantic_ByPtr;
 	}
-	else if (isByRef)
-	{
-		varSemantic = s_variantSemantic_ByRef;
-	}
+	//else if (isByRef)
+	//{
+	//	varSemantic = s_variantSemantic_ByRef;
+	//}
 	else
 	{
 		assert(isByValue);
@@ -1779,23 +1755,23 @@ void writeMetaPropertyGetValueImpl(ClassNode* classNode, TemplateArguments* temp
 		switch (typeCategory)
 		{
 		case void_type:
-			sprintf_s(buf, "value->assignVoidPtr(res, %s);\n", isConstant ? "true" : "false");
+			sprintf_s(buf, "value->assignVoidPtr(res, %s);\n", false ? "true" : "false");
 			break;
 		case primitive_type:
 			sprintf_s(buf, "value->assignPrimitivePtr(RuntimeTypeOf<%s>::RuntimeType::GetSingleton(), res, %s, %s);\n",
-				typeName.c_str(), isConstant ? "true" : "false", varSemantic);
+				typeName.c_str(), false ? "true" : "false", varSemantic);
 			break;
 		case enum_type:
 			sprintf_s(buf, "value->assignEnumPtr(RuntimeTypeOf<%s>::RuntimeType::GetSingleton(), res, %s, %s);\n",
-				typeName.c_str(), isConstant ? "true" : "false", varSemantic);
+				typeName.c_str(), false ? "true" : "false", varSemantic);
 			break;
 		case value_type:
 			sprintf_s(buf, "value->assignValuePtr(RuntimeTypeOf<%s>::RuntimeType::GetSingleton(), res, %s, %s);\n",
-				typeName.c_str(), isConstant ? "true" : "false", varSemantic);
+				typeName.c_str(), false ? "true" : "false", varSemantic);
 			break;
 		case reference_type:
 			sprintf_s(buf, "value->assignReferencePtr(RuntimeTypeOf<%s>::RuntimeType::GetSingleton(), res, %s, %s);\n",
-				typeName.c_str(), isConstant ? "true" : "false", varSemantic);
+				typeName.c_str(), false ? "true" : "false", varSemantic);
 			break;
 		default:
 			assert(false);
@@ -2492,7 +2468,10 @@ void writeMetaConstructor_Attributes_Member(std::vector<AttributeOffsetAndCount>
 			writeStringToFile("{ \"", file, indentation);
 			writeStringToFile(attributeNode->m_name->m_str.c_str(), file);
 			writeStringToFile("\", \"", file);
-			writeStringToFile(attributeNode->m_content->m_str.c_str(), file);
+			if (attributeNode->m_content)
+			{
+				writeStringToFile(attributeNode->m_content->m_str.c_str(), file);
+			}
 			writeStringToFile("\" },\n", file);
 		}
 		AttributeOffsetAndCount aoac;
@@ -2527,7 +2506,10 @@ void writeMetaConstructor_Attributes_Method(std::vector<AttributeOffsetAndCount>
 			writeStringToFile("{ \"", file, indentation);
 			writeStringToFile(attributeNode->m_name->m_str.c_str(), file);
 			writeStringToFile("\", \"", file);
-			writeStringToFile(attributeNode->m_content->m_str.c_str(), file);
+			if (attributeNode->m_content)
+			{
+				writeStringToFile(attributeNode->m_content->m_str.c_str(), file);
+			}
 			writeStringToFile("\" },\n", file);
 		}
 		AttributeOffsetAndCount aoac;
@@ -2792,12 +2774,8 @@ void writeMetaConstructor_Properties(ClassNode* classNode, TemplateArguments* te
 	char strAttributes[256];
 	char getterFunc[256];
 	char setterFunc[256];
-	char getterType[256];
-	char setterType[256];
-	char getterPassing[64];
-	char setterPassing[64];
-	bool getterConstant;
-	bool setterConstant;
+	char valueType[256];
+
 	if(propertyNodes.empty())
 	{
 		return;
@@ -2829,51 +2807,25 @@ void writeMetaConstructor_Properties(ClassNode* classNode, TemplateArguments* te
 			strcpy_s(strAttributes, "0");
 		}
 
-		sprintf_s(getterPassing, "::pafcore::Metadata::by_value");
-		sprintf_s(setterPassing, "::pafcore::Metadata::by_value");
-		getterConstant = false;
-		setterConstant = false;
+		bool isPtr = propertyNode->isByPtr();
+		std::string typeName;
+		TypeCategory typeCategory = CalcTypeNativeName(typeName, propertyNode->m_typeName, templateArguments);
+		sprintf_s(valueType, "RuntimeTypeOf<%s>::RuntimeType::GetSingleton()", typeName.c_str());
 
 		if(propertyNode->m_get)
 		{
-			std::string typeName;
-			TypeCategory typeCategory = CalcTypeNativeName(typeName, propertyNode->m_get->m_typeName, templateArguments);
-			sprintf_s(getterType, "RuntimeTypeOf<%s>::RuntimeType::GetSingleton()", typeName.c_str());
 			sprintf_s(getterFunc, "%s_get_%s", classNode->m_name->m_str.c_str(), propertyNode->m_name->m_str.c_str());
-			if(propertyNode->m_get->byPtr())
-			{
-				sprintf_s(getterPassing, "::pafcore::Metadata::by_ptr");
-			}
-			else if(propertyNode->m_get->byRef())
-			{
-				sprintf_s(getterPassing, "::pafcore::Metadata::by_ref");
-			}
-			getterConstant = propertyNode->m_get->isConstant();
 		}
 		else
 		{
-			strcpy_s(getterType, "0");
 			strcpy_s(getterFunc, "0");
 		}
 		if(propertyNode->m_set)
 		{
-			std::string typeName;
-			TypeCategory typeCategory = CalcTypeNativeName(typeName, propertyNode->m_set->m_typeName, templateArguments);
-			sprintf_s(setterType, "RuntimeTypeOf<%s>::RuntimeType::GetSingleton()", typeName.c_str());
 			sprintf_s(setterFunc, "%s_set_%s", classNode->m_name->m_str.c_str(), propertyNode->m_name->m_str.c_str());
-			if(propertyNode->m_set->byPtr())
-			{
-				sprintf_s(setterPassing, "::pafcore::Metadata::by_ptr");
-			}
-			else if(propertyNode->m_set->byRef())
-			{
-				sprintf_s(setterPassing, "::pafcore::Metadata::by_ref");
-			}
-			setterConstant = propertyNode->m_set->isConstant();
 		}
 		else
 		{
-			strcpy_s(setterType, "0");
 			strcpy_s(setterFunc, "0");
 		}
 
@@ -2892,19 +2844,17 @@ void writeMetaConstructor_Properties(ClassNode* classNode, TemplateArguments* te
 			}
 			if (isStatic)
 			{
-				sprintf_s(buf, "::pafcore::StaticProperty(\"%s\", %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s),\n",
+				sprintf_s(buf, "::pafcore::StaticProperty(\"%s\", %s, %s, %s, %s, %s, %s, %s),\n",
 					propertyNode->m_name->m_str.c_str(), strAttributes,
-					getterFunc, getterType, getterPassing, getterConstant ? "true" : "false",
-					setterFunc, setterType, setterPassing, setterConstant ? "true" : "false",
-					sizerFunc, resizerFunc);
+					valueType, isPtr ? "true" : "false",
+					getterFunc, setterFunc, sizerFunc, resizerFunc);
 			}
 			else
 			{
-				sprintf_s(buf, "::pafcore::InstanceProperty(\"%s\", %s, GetSingleton(), %s, %s, %s, %s, %s, %s, %s, %s, %s, %s),\n",
+				sprintf_s(buf, "::pafcore::InstanceProperty(\"%s\", %s, GetSingleton(), %s, %s, %s, %s, %s, %s),\n",
 					propertyNode->m_name->m_str.c_str(), strAttributes,
-					getterFunc, getterType, getterPassing, getterConstant ? "true" : "false",
-					setterFunc, setterType, setterPassing, setterConstant ? "true" : "false",
-					sizerFunc, resizerFunc);
+					valueType, isPtr ? "true" : "false",
+					getterFunc, setterFunc, sizerFunc, resizerFunc);
 			}
 		}
 		else if (propertyNode->isList())
@@ -2919,19 +2869,17 @@ void writeMetaConstructor_Properties(ClassNode* classNode, TemplateArguments* te
 			
 			if (isStatic)
 			{
-				sprintf_s(buf, "::pafcore::StaticProperty(\"%s\", %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s),\n",
+				sprintf_s(buf, "::pafcore::StaticProperty(\"%s\", %s, %s, %s, %s, %s, %s, %s, %s),\n",
 					propertyNode->m_name->m_str.c_str(), strAttributes,
-					getterFunc, getterType, getterPassing, getterConstant ? "true" : "false",
-					setterFunc, setterType, setterPassing, setterConstant ? "true" : "false",
-					pushBackFunc, getIteratorFunc, getValueFunc);
+					valueType, isPtr ? "true" : "false",
+					getterFunc, setterFunc, pushBackFunc, getIteratorFunc, getValueFunc);
 			}
 			else
 			{
-				sprintf_s(buf, "::pafcore::InstanceProperty(\"%s\", %s, GetSingleton(), %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s),\n",
+				sprintf_s(buf, "::pafcore::InstanceProperty(\"%s\", %s, GetSingleton(), %s, %s, %s, %s, %s, %s, %s),\n",
 					propertyNode->m_name->m_str.c_str(), strAttributes,
-					getterFunc, getterType, getterPassing, getterConstant ? "true" : "false",
-					setterFunc, setterType, setterPassing, setterConstant ? "true" : "false",
-					pushBackFunc, getIteratorFunc, getValueFunc);
+					valueType, isPtr ? "true" : "false",
+					getterFunc, setterFunc, pushBackFunc, getIteratorFunc, getValueFunc);
 			}
 		}
 		else if (propertyNode->isMap())
@@ -2940,8 +2888,7 @@ void writeMetaConstructor_Properties(ClassNode* classNode, TemplateArguments* te
 			char getKeyFunc[256];
 			char getValueFunc[256];
 			char keyType[256];
-			char keyPassing[64];
-			bool keyConstant;
+			bool isKeyPtr;
 
 			sprintf_s(getIteratorFunc, "%s_getIterator_%s", classNode->m_name->m_str.c_str(), propertyNode->m_name->m_str.c_str());
 			sprintf_s(getKeyFunc, "%s_getKey_%s", classNode->m_name->m_str.c_str(), propertyNode->m_name->m_str.c_str());
@@ -2949,37 +2896,20 @@ void writeMetaConstructor_Properties(ClassNode* classNode, TemplateArguments* te
 			std::string keyTypeName;
 			TypeCategory keyTypeCategory = CalcTypeNativeName(keyTypeName, propertyNode->m_keyTypeName, templateArguments);
 			sprintf_s(keyType, "RuntimeTypeOf<%s>::RuntimeType::GetSingleton()", keyTypeName.c_str());
-
-			if (propertyNode->isKeyByPtr())
-			{
-				sprintf_s(keyPassing, "::pafcore::Metadata::by_ptr");
-			}
-			else if (propertyNode->isKeyByRef())
-			{
-				sprintf_s(keyPassing, "::pafcore::Metadata::by_ref");
-			}
-			else
-			{
-				sprintf_s(keyPassing, "::pafcore::Metadata::by_value");
-			}
-			keyConstant = propertyNode->isKeyConstant();
+			isKeyPtr = propertyNode->isKeyByPtr();
 			if (isStatic)
 			{
-				sprintf_s(buf, "::pafcore::StaticProperty(\"%s\", %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s),\n",
+				sprintf_s(buf, "::pafcore::StaticProperty(\"%s\", %s, %s, %s, %s, %s, %s, %s, %s, %s, %s),\n",
 					propertyNode->m_name->m_str.c_str(), strAttributes,
-					getterFunc, getterType, getterPassing, getterConstant ? "true" : "false",
-					setterFunc, setterType, setterPassing, setterConstant ? "true" : "false",
-					getIteratorFunc, getKeyFunc, getValueFunc,
-					keyType, keyPassing, keyConstant ? "true" : "false");
+					valueType, isPtr ? "true" : "false", keyType, isKeyPtr ? "true" : "false",
+					getterFunc, setterFunc, getIteratorFunc, getKeyFunc, getValueFunc);
 			}
 			else
 			{
-				sprintf_s(buf, "::pafcore::InstanceProperty(\"%s\", %s, GetSingleton(), %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s),\n",
+				sprintf_s(buf, "::pafcore::InstanceProperty(\"%s\", %s, GetSingleton(), %s, %s, %s, %s, %s, %s, %s, %s, %s),\n",
 					propertyNode->m_name->m_str.c_str(), strAttributes,
-					getterFunc, getterType, getterPassing, getterConstant ? "true" : "false",
-					setterFunc, setterType, setterPassing, setterConstant ? "true" : "false",
-					getIteratorFunc, getKeyFunc, getValueFunc,
-					keyType, keyPassing, keyConstant ? "true" : "false");
+					valueType, isPtr ? "true" : "false", keyType, isKeyPtr ? "true" : "false",
+					getterFunc, setterFunc, getIteratorFunc, getKeyFunc, getValueFunc);
 			}
 		}
 		else
@@ -2987,17 +2917,17 @@ void writeMetaConstructor_Properties(ClassNode* classNode, TemplateArguments* te
 			assert(propertyNode->isSimple());
 			if (isStatic)
 			{
-				sprintf_s(buf, "::pafcore::StaticProperty(\"%s\", %s, %s, %s, %s, %s, %s, %s, %s, %s),\n",
+				sprintf_s(buf, "::pafcore::StaticProperty(\"%s\", %s, %s, %s, %s, %s),\n",
 					propertyNode->m_name->m_str.c_str(), strAttributes,
-					getterFunc, getterType, getterPassing, getterConstant ? "true" : "false",
-					setterFunc, setterType, setterPassing, setterConstant ? "true" : "false");
+					valueType, isPtr ? "true" : "false",
+					getterFunc, setterFunc);
 			}
 			else
 			{
-				sprintf_s(buf, "::pafcore::InstanceProperty(\"%s\", %s, GetSingleton(), %s, %s, %s, %s, %s, %s, %s, %s),\n",
+				sprintf_s(buf, "::pafcore::InstanceProperty(\"%s\", %s, GetSingleton(), %s, %s, %s, %s),\n",
 					propertyNode->m_name->m_str.c_str(), strAttributes,
-					getterFunc, getterType, getterPassing, getterConstant ? "true" : "false",
-					setterFunc, setterType, setterPassing, setterConstant ? "true" : "false");
+					valueType, isPtr ? "true" : "false",
+					getterFunc, setterFunc);
 			}
 		}
 		writeStringToFile(buf, file, indentation + 1);
@@ -3516,7 +3446,9 @@ void writeMetaConstructor_ClassTypeIterators(ClassNode* classNode, TemplateArgum
 	writeStringToFile("};\n", file, indentation);
 	for (size_t i = 0; i < count; ++i)
 	{
-		sprintf_s(buf, "RuntimeTypeOf<%s>::RuntimeType::GetSingleton()->m_firstDerivedClass = &s_classTypeIterators[%d];\n", 
+		TypeNameNode* typeNameNode = typeNameNodes[i].second;
+		TypeCategory typeCategory = CalcTypeNativeName(typeName, typeNameNode, templateArguments);
+		sprintf_s(buf, "RuntimeTypeOf<%s>::RuntimeType::GetSingleton()->m_firstDerivedClass = &s_classTypeIterators[%d];\n",
 			typeName.c_str(), i);
 		writeStringToFile(buf, file, indentation);
 	}

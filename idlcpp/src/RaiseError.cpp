@@ -6,7 +6,7 @@
 #include "MethodNode.h"
 #include "DelegateNode.h"
 #include "OperatorNode.h"
-#include "GetterSetterNode.h"
+#include "PropertyNode.h"
 #include "FieldNode.h"
 #include "ScopeNameListNode.h"
 #include "ScopeNameNode.h"
@@ -154,7 +154,7 @@ void RaiseError_InvalidFieldType(FieldNode* node)
 		tokenNode->m_columnNo, semantic_error_invalid_field, buf);
 }
 
-void RaiseError_InvalidPropertyType(GetterSetterNode* node, bool getter)
+void RaiseError_InvalidPropertyType(PropertyNode* node)
 {
 	TokenNode* passing = node->m_passing;
 	char buf[error_info_buffer_size];
@@ -175,7 +175,7 @@ void RaiseError_InvalidPropertyType(GetterSetterNode* node, bool getter)
 		}
 	}
 	TokenNode* tokenNode = node->m_typeName->m_scopeNameList ? node->m_typeName->m_scopeNameList->m_scopeName->m_name : node->m_typeName->m_keyword;
-	sprintf_s(buf, "\'%s %s\' : can not be a property %s type", str.c_str(), strPassing, getter ? "getter" : "setter");
+	sprintf_s(buf, "\'%s %s\' : can not be a property type", str.c_str(), strPassing);
 	ErrorList_AddItem_CurrentFile(tokenNode->m_lineNo,
 		tokenNode->m_columnNo, semantic_error_invalid_property, buf);
 }
