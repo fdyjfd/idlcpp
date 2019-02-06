@@ -186,7 +186,7 @@ void HeaderFileGenerator::generateCode_Program(FILE* file, SourceFile* sourceFil
 	writeStringToFile("#pragma once\n\n", file);
 	g_compiler.outputUsedTypes(file, sourceFile);
 	writeStringToFile("namespace pafcore{ class ClassType; }\n", file);
-	if (sourceFile->m_hasMapProperty || sourceFile->m_hasListProperty)
+	if (sourceFile->m_hasArrayProperty || sourceFile->m_hasListProperty || sourceFile->m_hasMapProperty)
 	{
 		writeStringToFile("namespace pafcore{ class Iterator; }\n", file);
 	}
@@ -836,6 +836,10 @@ void HeaderFileGenerator::generateCode_Property(FILE* file, PropertyNode* proper
 			writeStringToFile("\n", file);
 			generateCode_Property_Resize(file, propertyNode, indentation);
 		}
+		writeStringToFile("\n", file);
+		generateCode_Property_GetIterator(file, propertyNode, indentation);
+		writeStringToFile("\n", file);
+		generateCode_Property_GetValue(file, propertyNode, indentation);
 	}
 	else if (propertyNode->isList())
 	{

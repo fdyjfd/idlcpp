@@ -169,6 +169,30 @@ void writeMetaPropertyDecl(ClassNode* classNode, PropertyNode* propertyNode, FIL
 				writeStringToFile(g_metaArrayPropertyDeclResizePostfix, sizeof(g_metaArrayPropertyDeclResizePostfix) - 1, file);
 			}
 		}
+		if (propertyNode->isStatic())
+		{
+			sprintf_s(funcName, "%s_getIterator_%s", classNode->m_name->m_str.c_str(), propertyNode->m_name->m_str.c_str());
+			writeStringToFile(g_metaPropertyDeclPrefix, sizeof(g_metaPropertyDeclPrefix) - 1, file, indentation + 1);
+			writeStringToFile(funcName, file);
+			writeStringToFile(g_metaStaticPropertyDeclGetIteratorPostfix, sizeof(g_metaStaticPropertyDeclGetIteratorPostfix) - 1, file);
+
+			sprintf_s(funcName, "%s_getValue_%s", classNode->m_name->m_str.c_str(), propertyNode->m_name->m_str.c_str());
+			writeStringToFile(g_metaPropertyDeclPrefix, sizeof(g_metaPropertyDeclPrefix) - 1, file, indentation + 1);
+			writeStringToFile(funcName, file);
+			writeStringToFile(g_metaStaticPropertyDeclGetValuePostfix, sizeof(g_metaStaticPropertyDeclGetValuePostfix) - 1, file);
+		}
+		else
+		{
+			sprintf_s(funcName, "%s_getIterator_%s", classNode->m_name->m_str.c_str(), propertyNode->m_name->m_str.c_str());
+			writeStringToFile(g_metaPropertyDeclPrefix, sizeof(g_metaPropertyDeclPrefix) - 1, file, indentation + 1);
+			writeStringToFile(funcName, file);
+			writeStringToFile(g_metaPropertyDeclGetIteratorPostfix, sizeof(g_metaPropertyDeclGetIteratorPostfix) - 1, file);
+
+			sprintf_s(funcName, "%s_getValue_%s", classNode->m_name->m_str.c_str(), propertyNode->m_name->m_str.c_str());
+			writeStringToFile(g_metaPropertyDeclPrefix, sizeof(g_metaPropertyDeclPrefix) - 1, file, indentation + 1);
+			writeStringToFile(funcName, file);
+			writeStringToFile(g_metaPropertyDeclGetValuePostfix, sizeof(g_metaPropertyDeclGetValuePostfix) - 1, file);
+		}
 	}
 	else if (propertyNode->isList())
 	{

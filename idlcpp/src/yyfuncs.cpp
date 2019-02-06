@@ -46,6 +46,7 @@ extern "C"
 extern int yylineno;
 extern int yycolumnno;
 extern int yytokenno;
+extern int yyHasArrayProperty;
 extern int yyHasListProperty;
 extern int yyHasMapProperty;
 extern int yyHasDelegate;
@@ -321,11 +322,15 @@ SyntaxNode* newProperty(SyntaxNode* name, PropertyCategory category)
 	PropertyNode* res = new PropertyNode((IdentifyNode*)name, category);
 	g_syntaxNodes.push_back(res);
 
-	if (list_property == category)
+	if (fixed_array_property == category || dynamic_array_property == category)
+	{
+		yyHasArrayProperty = 1;
+	}
+	else if (list_property == category)
 	{
 		yyHasListProperty = 1;
 	}
-	if (map_property == category)
+	else if (map_property == category)
 	{
 		yyHasMapProperty = 1;
 	}
