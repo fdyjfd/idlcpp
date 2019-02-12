@@ -1806,6 +1806,8 @@ void writeMetaPropertyImpls(ClassNode* classNode, TemplateArguments* templateArg
 				{
 					writeMetaPropertyResizeImpl(classNode, templateArguments, propertyNodes[i], file, indentation);
 				}
+				writeMetaPropertyGetIteratorImpl(classNode, templateArguments, propertyNodes[i], file, indentation);
+				writeMetaPropertyGetValueImpl(classNode, templateArguments, propertyNodes[i], file, indentation);
 			}
 			else if (propertyNode->isList())
 			{
@@ -2833,7 +2835,12 @@ void writeMetaConstructor_Properties(ClassNode* classNode, TemplateArguments* te
 		{
 			char sizerFunc[256];
 			char resizerFunc[256];
+			char getIteratorFunc[256];
+			char getValueFunc[256];
 			sprintf_s(sizerFunc, "%s_size_%s", classNode->m_name->m_str.c_str(), propertyNode->m_name->m_str.c_str());
+			sprintf_s(getIteratorFunc, "%s_getIterator_%s", classNode->m_name->m_str.c_str(), propertyNode->m_name->m_str.c_str());
+			sprintf_s(getValueFunc, "%s_getValue_%s", classNode->m_name->m_str.c_str(), propertyNode->m_name->m_str.c_str());
+
 			if(propertyNode->isDynamicArray())
 			{ 
 				sprintf_s(resizerFunc, "%s_resize_%s", classNode->m_name->m_str.c_str(), propertyNode->m_name->m_str.c_str());
@@ -2844,17 +2851,17 @@ void writeMetaConstructor_Properties(ClassNode* classNode, TemplateArguments* te
 			}
 			if (isStatic)
 			{
-				sprintf_s(buf, "::pafcore::StaticProperty(\"%s\", %s, %s, %s, %s, %s, %s, %s),\n",
+				sprintf_s(buf, "::pafcore::StaticProperty(\"%s\", %s, %s, %s, %s, %s, %s, %s, %s, %s),\n",
 					propertyNode->m_name->m_str.c_str(), strAttributes,
 					valueType, isPtr ? "true" : "false",
-					getterFunc, setterFunc, sizerFunc, resizerFunc);
+					getterFunc, setterFunc, sizerFunc, resizerFunc, getIteratorFunc, getValueFunc);
 			}
 			else
 			{
-				sprintf_s(buf, "::pafcore::InstanceProperty(\"%s\", %s, GetSingleton(), %s, %s, %s, %s, %s, %s),\n",
+				sprintf_s(buf, "::pafcore::InstanceProperty(\"%s\", %s, GetSingleton(), %s, %s, %s, %s, %s, %s, %s, %s),\n",
 					propertyNode->m_name->m_str.c_str(), strAttributes,
 					valueType, isPtr ? "true" : "false",
-					getterFunc, setterFunc, sizerFunc, resizerFunc);
+					getterFunc, setterFunc, sizerFunc, resizerFunc, getIteratorFunc, getValueFunc);
 			}
 		}
 		else if (propertyNode->isList())

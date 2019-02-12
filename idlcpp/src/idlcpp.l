@@ -10,6 +10,7 @@
 YY_BUFFER_STATE createBufferState(FILE* file);
 int yytokenno = 0;
 int yycolumnno = 1;
+int yyHasArrayProperty = 0;
 int yyHasListProperty = 0;
 int yyHasMapProperty = 0;
 int yyHasDelegate = 0;
