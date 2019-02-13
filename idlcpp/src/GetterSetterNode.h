@@ -10,8 +10,12 @@ struct GetterSetterNode : SyntaxNodeImpl
 {
 	TokenNode* m_keyword;
 	IdentifyNode* m_nativeName;
-	bool m_allowNull;
+	bool m_getterIncRef;
+	bool m_setterDecRef;
+	bool m_setterAllowNull;
 public:
 	GetterSetterNode(TokenNode* keyword);
-	bool isAllowNull();
+	bool isGetterIncRef();
+	bool isSetterDecRef();
+	bool isSetterAllowNull();
 };

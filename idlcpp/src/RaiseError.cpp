@@ -68,8 +68,8 @@ void RaiseError_InvalidParameterType(ParameterNode* node)
 	{
 		switch (out->m_nodeType)
 		{
-		case '^':
-			strOut = node->m_array ? "^[]" : "^";
+		case '+':
+			strOut = node->m_array ? "+[]" : "+";
 			break;
 		case '*':
 			strOut = "*";
@@ -108,8 +108,8 @@ void RaiseError_InvalidResultType(TypeNameNode* result, TokenNode* passing, bool
 	{
 		switch (passing->m_nodeType)
 		{
-		case '^':
-			strPassing = resultArray ? "^[]" : "^";
+		case '+':
+			strPassing = resultArray ? "+[]" : "+";
 			break;
 		case '*':
 			strPassing = "*";

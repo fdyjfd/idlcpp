@@ -661,18 +661,24 @@ void writeOverrideMethodParameter(MethodNode* methodNode, ParameterNode* paramet
 	parameterNode->m_typeName->getRelativeName(typeName, methodNode->getProgramNode());
 	writeStringToFile(typeName.c_str(), file);
 
-	if (parameterNode->isOutput())
+	if (parameterNode->isByPtr())
 	{
 		writeStringToFile("*", file);
 	}
-	if (parameterNode->byPtr())
-	{
-		writeStringToFile("*", file);
-	}
-	else if(parameterNode->byRef())
+	else if(parameterNode->isByRef())
 	{
 		writeStringToFile("&", file);
 	}
+
+	if (parameterNode->isOutputPtr())
+	{
+		writeStringToFile("*", file);
+	}
+	else if (parameterNode->isOutputRef())
+	{
+		writeStringToFile("&", file);
+	}
+
 	writeSpaceToFile(file);
 	writeStringToFile(parameterNode->m_name->m_str.c_str(), file);
 };

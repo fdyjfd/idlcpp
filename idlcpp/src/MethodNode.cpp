@@ -71,7 +71,7 @@ bool MethodNode::byPtr()
 
 bool MethodNode::byNew()
 {
-	return (0 != m_passing && '^' == m_passing->m_nodeType);
+	return (0 != m_passing && '+' == m_passing->m_nodeType);
 }
 
 size_t MethodNode::getParameterCount() const
@@ -121,7 +121,7 @@ void MethodNode::calcManglingName(std::string& name, TemplateArguments* template
 		}
 		if (parameterNode->isInput())
 		{
-			if (parameterNode->isConstant()/* && !parameterNode->byValue()*/)
+			if (parameterNode->isConstant())
 			{
 				name += "const ";
 			}
@@ -167,7 +167,7 @@ void MethodNode::checkSemantic(TemplateArguments* templateArguments)
 		}
 		if (void_type == typeNode->getTypeCategory(templateArguments))
 		{
-			if (0 != m_passing && ('^' == m_passing->m_nodeType || '&' == m_passing->m_nodeType))
+			if (0 != m_passing && ('+' == m_passing->m_nodeType || '&' == m_passing->m_nodeType))
 			{
 				RaiseError_InvalidResultType(this);
 			}

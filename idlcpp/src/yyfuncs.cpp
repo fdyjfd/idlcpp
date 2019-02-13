@@ -301,11 +301,25 @@ SyntaxNode* newGetterSetter(SyntaxNode* keyword)
 	return res;
 }
 
+void setGetterIncRef(SyntaxNode* syntaxNode)
+{
+	assert(snt_getter_setter == syntaxNode->m_nodeType);
+	GetterSetterNode* getterSetterNode = (GetterSetterNode*)syntaxNode;
+	getterSetterNode->m_getterIncRef = true;
+}
+
+void setSetterDecRef(SyntaxNode* syntaxNode)
+{
+	assert(snt_getter_setter == syntaxNode->m_nodeType);
+	GetterSetterNode* getterSetterNode = (GetterSetterNode*)syntaxNode;
+	getterSetterNode->m_setterDecRef = true;
+}
+
 void setSetterAllowNull(SyntaxNode* syntaxNode)
 {
 	assert(snt_getter_setter == syntaxNode->m_nodeType);
 	GetterSetterNode* getterSetterNode = (GetterSetterNode*)syntaxNode;
-	getterSetterNode->m_allowNull = true;
+	getterSetterNode->m_setterAllowNull = true;
 }
 
 void setGetterSetterNativeName(SyntaxNode* syntaxNode, SyntaxNode* nativeName)
@@ -376,11 +390,11 @@ void setPropertyModifier(SyntaxNode* syntaxNode, SyntaxNode* modifier)
 	propertyNode->m_modifier = (TokenNode*)modifier;
 }
 
-SyntaxNode* newParameter(SyntaxNode* type, SyntaxNode* out, SyntaxNode* passing, SyntaxNode* name)
+SyntaxNode* newParameter(SyntaxNode* type, SyntaxNode* passing, SyntaxNode* out, SyntaxNode* name)
 {
 	assert(snt_type_name == type->m_nodeType && snt_identify == name->m_nodeType);
-	assert(0 == out || '*' == out->m_nodeType|| '^' == out->m_nodeType);
-	assert(0 == passing || '*' == passing->m_nodeType|| '&' == passing->m_nodeType);
+	assert(0 == passing || '&' == passing->m_nodeType || '*' == passing->m_nodeType || '-' == passing->m_nodeType || '+' == passing->m_nodeType);
+	assert(0 == out || '&' == out->m_nodeType || '*' == out->m_nodeType);
 	ParameterNode* res = new ParameterNode((TypeNameNode*) type, (TokenNode*)out, (TokenNode*)passing, (IdentifyNode*) name);
 	g_syntaxNodes.push_back(res);
 	return res;
@@ -429,7 +443,7 @@ SyntaxNode* newMethod(SyntaxNode* name, SyntaxNode* leftParenthesis, SyntaxNode*
 void setMethodResult(SyntaxNode* method, SyntaxNode* result, SyntaxNode* passing)
 {
 	assert(snt_method == method->m_nodeType && snt_type_name == result->m_nodeType);
-	assert(0 == passing || '&' == passing->m_nodeType || '*' == passing->m_nodeType || '^' == passing->m_nodeType);
+	assert(0 == passing || '&' == passing->m_nodeType || '*' == passing->m_nodeType || '+' == passing->m_nodeType);
 	((MethodNode*)method)->m_resultTypeName = (TypeNameNode*)result;
 	((MethodNode*)method)->m_passing = (TokenNode*)passing;
 }
@@ -481,7 +495,7 @@ SyntaxNode* newOperator(SyntaxNode* keyword, SyntaxNode* sign, SyntaxNode* leftP
 void setOperatorResult(SyntaxNode* opt, SyntaxNode* result, SyntaxNode* passing)
 {
 	assert(snt_operator == opt->m_nodeType && snt_type_name == result->m_nodeType);
-	assert(0 == passing || '&' == passing->m_nodeType || '*' == passing->m_nodeType || '^' == passing->m_nodeType);
+	assert(0 == passing || '&' == passing->m_nodeType || '*' == passing->m_nodeType || '+' == passing->m_nodeType);
 	((OperatorNode*)opt)->m_resultTypeName = (TypeNameNode*)result;
 	((OperatorNode*)opt)->m_passing = (TokenNode*)passing;
 }
@@ -603,7 +617,7 @@ SyntaxNode* newDelegate(SyntaxNode* name, SyntaxNode* leftParenthesis, SyntaxNod
 void setDelegateResult(SyntaxNode* delegate, SyntaxNode* result, SyntaxNode* passing)
 {
 	assert(snt_delegate == delegate->m_nodeType && snt_type_name == result->m_nodeType);
-	assert(0 == passing || '&' == passing->m_nodeType || '*' == passing->m_nodeType || '^' == passing->m_nodeType);
+	assert(0 == passing || '&' == passing->m_nodeType || '*' == passing->m_nodeType || '+' == passing->m_nodeType);
 	((DelegateNode*)delegate)->m_resultTypeName = (TypeNameNode*)result;
 	((DelegateNode*)delegate)->m_passing = (TokenNode*)passing;
 }

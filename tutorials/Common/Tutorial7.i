@@ -6,13 +6,24 @@
 
 namespace tutorial
 {
+	struct AA
+	{
+		int a;
+	};
+
 	class Test : Reference
 	{
-		//int fap[ ] get set;
-		//int dap[?] get set;
-		nocode Test();
-		int mp[string_t]{ get set };
-		int list[*]{};
+		static AA* abc{ get+ set - };
+		//void test0(AA a);
+		void test1(AA& a);
+		void test2(AA* a);
+		void test3(AA- a);
+		void test4(AA** a);
+		void test5(AA*& a);
+		void test6(AA + *a);
+		void test7(AA + &a);
+		void test8(AA + [] *a);
+		void test9(AA + [] &a);
 #{
 		std::map<std::string, int> m_test;
 #}

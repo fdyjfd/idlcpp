@@ -39,7 +39,7 @@ void generateCode_Token(FILE* file, TokenNode* tokenNode, int indentation)
 	if(tokenNode->m_nodeType < 256)
 	{
 		char ch = tokenNode->m_nodeType;
-		if ('^' == ch)
+		if ('+' == ch || '-' == ch)
 		{
 			ch = '*';
 		}
@@ -147,13 +147,13 @@ void generateCode_Parameter(FILE* file, ParameterNode* parameterNode, ScopeNode*
 		generateCode_Token(file, parameterNode->m_constant, 0);
 	}
 	generateCode_TypeName(file, parameterNode->m_typeName, scopeNode, true, 0);
-	if(0 != parameterNode->m_out)
-	{
-		generateCode_Token(file, parameterNode->m_out, 0);
-	}
 	if(0 != parameterNode->m_passing)
 	{
 		generateCode_Token(file, parameterNode->m_passing, 0);
+	}
+	if(0 != parameterNode->m_out)
+	{
+		generateCode_Token(file, parameterNode->m_out, 0);
 	}
 	writeSpaceToFile(file);
 	generateCode_Identify(file, parameterNode->m_name, 0);

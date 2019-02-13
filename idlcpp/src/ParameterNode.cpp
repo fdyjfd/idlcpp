@@ -25,24 +25,34 @@ bool ParameterNode::isConstant()
 	return (0 != m_constant && snt_keyword_const == m_constant->m_nodeType);
 }
 
-bool ParameterNode::byValue()
+bool ParameterNode::isByValue()
 {
 	return 0 == m_passing;
 }
 
-bool ParameterNode::byPtr()
-{
-	return (0 != m_passing && '*' == m_passing->m_nodeType);
-}
-
-bool ParameterNode::byRef()
+bool ParameterNode::isByRef()
 {
 	return (0 != m_passing && '&' == m_passing->m_nodeType);
 }
 
-bool ParameterNode::outNew()
+bool ParameterNode::isByPtr()
 {
-	return (0 != m_out && '^' == m_out->m_nodeType);
+	return (0 != m_passing && '&' != m_passing->m_nodeType);
+}
+
+bool ParameterNode::isByNonRefPtr()
+{
+	return (0 != m_passing && '*' == m_passing->m_nodeType);
+}
+
+bool ParameterNode::isByDecRefPtr()
+{
+	return (0 != m_passing && '-' == m_passing->m_nodeType);
+}
+
+bool ParameterNode::isByIncRefPtr()
+{
+	return (0 != m_passing && '+' == m_passing->m_nodeType);
 }
 
 bool ParameterNode::isArray()
@@ -60,6 +70,16 @@ bool ParameterNode::isOutput()
 	return 0 != m_out;
 }
 
+bool ParameterNode::isOutputPtr()
+{
+	return (0 != m_out && '*' == m_out->m_nodeType);
+}
+
+bool ParameterNode::isOutputRef()
+{
+	return (0 != m_out && '&' == m_out->m_nodeType);
+}
+
 bool ParameterNode::isAllowNull()
 {
 	return m_allowNull;
@@ -74,18 +94,18 @@ void ParameterNode::checkSemantic(TemplateArguments* templateArguments)
 	}
 	if(void_type == typeNode->getTypeCategory(templateArguments))
 	{ 
-		if ((isInput() && !byPtr()) || (isOutput() && outNew()))
+		if ((isInput() && !isByNonRefPtr()) || (isOutput() && isByIncRefPtr()))
 		{
 			RaiseError_InvalidParameterType(this);
 		}
 	}
-	else if (primitive_type == typeNode->getTypeCategory(templateArguments))
-	{
-		if (byRef() && !isConstant())
-		{
-			RaiseError_InvalidParameterType(this);
-		}
-	}
+	//else if (primitive_type == typeNode->getTypeCategory(templateArguments))
+	//{
+	//	if (isByRef() && !isConstant())
+	//	{
+	//		RaiseError_InvalidParameterType(this);
+	//	}
+	//}
 
-	g_compiler.useType(typeNode, templateArguments, byValue() ? tu_use_definition : tu_use_declaration, m_typeName);
+	g_compiler.useType(typeNode, templateArguments, isByValue() ? tu_use_definition : tu_use_declaration, m_typeName);
 }

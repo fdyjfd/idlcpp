@@ -7,14 +7,14 @@
 	struct SyntaxNode* sn;
 }
 
-%token <sn> ',' '.' ':' ';' '(' ')' '[' ']' '{' '}' '<' '>' '*' '&' '^' '+' '-' '/' '%' '|' '~' '!' '='
+%token <sn> ',' '.' ':' ';' '(' ')' '[' ']' '{' '}' '<' '>' '*' '&' '+' '^' '-' '/' '%' '|' '~' '!' '='
 %token <sn> ADD_ASSIGN SUB_ASSIGN MUL_ASSIGN DIV_ASSIGN MOD_ASSIGN BIT_XOR_ASSIGN BIT_AND_ASSIGN BIT_OR_ASSIGN LEFT_SHIFT_ASSIGN RIGHT_SHIFT_ASSIGN
 %token <sn> LEFT_SHIFT RIGHT_SHIFT EQUAL NOT_EQUAL LESS_EQUAL GREATER_EQUAL AND OR INC DEC
 %token <sn> BOOL CHAR WCHAR_T SHORT LONG INT FLOAT DOUBLE SIGNED UNSIGNED STRING_T
 %token <sn> NAMESPACE ENUM CLASS STRUCT STATIC VIRTUAL VOID CONST OPERATOR TYPEDEF PRIMITIVE
 %token <sn> ABSTRACT GET SET NOMETA NOCODE EXPORT OVERRIDE SCOPE IDENTIFY STRING TEMPLATE DELEGATE
 %type <sn> identifyList enumerator enumeratorList enum_0 enum 
-%type <sn> field_0 field_1 field_2 field getter_0 getter setter_0 setter_1 setter property_0 property_1 property_2 property
+%type <sn> field_0 field_1 field_2 field getter_0 getter_1 getter setter_0 setter_1 setter_2 setter property_0 property_1 property_2 property
 %type <sn> parameter_0 parameter_1 parameter parameterList method_0 method_1 method_2 method_3 method_4 method
 %type <sn> operatorSign operator_0 operator_1 operator_2 operator_3 operator classMember_0 classMember
 %type <sn> delegate_0 delegate_1 delegate
@@ -152,20 +152,27 @@ field					: field_2 ';'										{$$ = $1; setFieldSemicolon($$, $2);}
 getter_0				: GET												{$$ = newGetterSetter($1);}
 ;
 
+getter_1				: getter_0											{$$ = $1;}
+						| getter_0 '+'										{$$ = $1; setGetterIncRef($$);}
+;
 
-getter					: getter_0											{$$ = $1;}
-						| getter_0 '=' STRING								{$$ = $1; setGetterSetterNativeName($$, $3);}
+getter					: getter_1											{$$ = $1;}
+						| getter_1 '=' STRING								{$$ = $1; setGetterSetterNativeName($$, $3);}
 ;
 
 setter_0				: SET												{$$ = newGetterSetter($1);}
 ;
 
 setter_1				: setter_0											{$$ = $1;}
-						| setter_0 '?'										{$$ = $1; setSetterAllowNull($$);}
+						| setter_0 '-'										{$$ = $1; setSetterDecRef($$);}
 ;
 
-setter					: setter_1											{$$ = $1;}
-						| setter_1 '=' STRING								{$$ = $1; setGetterSetterNativeName($$, $3);}
+setter_2				: setter_1											{$$ = $1;}
+						| setter_1 '?'										{$$ = $1; setSetterAllowNull($$);}
+;
+
+setter					: setter_2											{$$ = $1;}
+						| setter_2 '=' STRING								{$$ = $1; setGetterSetterNativeName($$, $3);}
 ;
 
 property_0				: IDENTIFY											{$$ = newProperty($1, simple_property);}
@@ -193,14 +200,15 @@ property				: property_2										{$$ = $1;}
 
 
 parameter_0				: typeName IDENTIFY									{$$ = newParameter($1, NULL, NULL, $2);}
-						| typeName '*' IDENTIFY								{$$ = newParameter($1, NULL, $2, $3);}
-						| typeName '&' IDENTIFY								{$$ = newParameter($1, NULL, $2, $3);}
-						| typeName '*' '*' IDENTIFY							{$$ = newParameter($1, $2, $3, $4);}
-						| typeName '^' '*' IDENTIFY							{$$ = newParameter($1, $2, $3, $4);}
-						| typeName '^' '[' ']' '*' IDENTIFY					{$$ = newParameter($1, $2, $5, $6); setParameterArray($$);}
+						| typeName '&' IDENTIFY								{$$ = newParameter($1, $2, NULL, $3);}
+						| typeName '*' IDENTIFY								{$$ = newParameter($1, $2, NULL, $3);}
+						| typeName '-' IDENTIFY								{$$ = newParameter($1, $2, NULL, $3);}
 						| typeName '*' '&' IDENTIFY							{$$ = newParameter($1, $2, $3, $4);}
-						| typeName '^' '&' IDENTIFY							{$$ = newParameter($1, $2, $3, $4);}
-						| typeName '^' '[' ']' '&' IDENTIFY					{$$ = newParameter($1, $2, $5, $6); setParameterArray($$);}
+						| typeName '*' '*' IDENTIFY							{$$ = newParameter($1, $2, $3, $4);}
+						| typeName '+' '&' IDENTIFY							{$$ = newParameter($1, $2, $3, $4);}
+						| typeName '+' '*' IDENTIFY							{$$ = newParameter($1, $2, $3, $4);}
+						| typeName '+' '[' ']' '&' IDENTIFY					{$$ = newParameter($1, $2, $5, $6); setParameterArray($$);}
+						| typeName '+' '[' ']' '*' IDENTIFY					{$$ = newParameter($1, $2, $5, $6); setParameterArray($$);}
 ;
 
 parameter_1				: parameter_0										{$$ = $1;}
@@ -227,8 +235,8 @@ method_1				: method_0											{$$ = $1;}
 						| typeName method_0									{$$ = $2; setMethodResult($$, $1, NULL);}
 						| typeName '&' method_0								{$$ = $3; setMethodResult($$, $1, $2);}
 						| typeName '*' method_0								{$$ = $3; setMethodResult($$, $1, $2);}
-						| typeName '^' method_0								{$$ = $3; setMethodResult($$, $1, $2);}
-						| typeName '^' '[' ']' method_0						{$$ = $5; setMethodResult($$, $1, $2); setMethodResultArray($$);}
+						| typeName '+' method_0								{$$ = $3; setMethodResult($$, $1, $2);}
+						| typeName '+' '[' ']' method_0						{$$ = $5; setMethodResult($$, $1, $2); setMethodResultArray($$);}
 ;
 
 method_2				: method_1											{$$ = $1;}
@@ -298,8 +306,8 @@ operator_0				: OPERATOR operatorSign '(' ')' ';'						{$$ = newOperator($1, $2,
 operator_1				: typeName operator_0									{$$ = $2; setOperatorResult($$, $1, NULL);}
 						| typeName '&' operator_0								{$$ = $3; setOperatorResult($$, $1, $2);}
 						| typeName '*' operator_0								{$$ = $3; setOperatorResult($$, $1, $2);}
-						| typeName '^' operator_0								{$$ = $3; setOperatorResult($$, $1, $2);}
-						| typeName '^' '[' ']' operator_0						{$$ = $5; setOperatorResult($$, $1, $2); setOperatorResultArray($$);}
+						| typeName '+' operator_0								{$$ = $3; setOperatorResult($$, $1, $2);}
+						| typeName '+' '[' ']' operator_0						{$$ = $5; setOperatorResult($$, $1, $2); setOperatorResultArray($$);}
 ;
 
 operator_2				: operator_1											{$$ = $1;}
@@ -323,8 +331,8 @@ delegate_0				: IDENTIFY '(' ')' ';'									{$$ = newDelegate($1, $2, NULL, $3,
 delegate_1				: typeName delegate_0									{$$ = $2; setDelegateResult($$, $1, NULL);}
 						| typeName '&' delegate_0								{$$ = $3; setDelegateResult($$, $1, $2);}
 						| typeName '*' delegate_0								{$$ = $3; setDelegateResult($$, $1, $2);}
-						| typeName '^' delegate_0								{$$ = $3; setDelegateResult($$, $1, $2);}
-						| typeName '^' '[' ']' delegate_0						{$$ = $5; setDelegateResult($$, $1, $2); setDelegateResultArray($$);}
+						| typeName '+' delegate_0								{$$ = $3; setDelegateResult($$, $1, $2);}
+						| typeName '+' '[' ']' delegate_0						{$$ = $5; setDelegateResult($$, $1, $2); setDelegateResultArray($$);}
 ;
 
 delegate				: DELEGATE delegate_1									{$$ = $2; setDelegateKeyword($$, $1)}

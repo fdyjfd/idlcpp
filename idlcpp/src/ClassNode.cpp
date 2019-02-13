@@ -444,7 +444,7 @@ void ClassNode::GenerateCreateInstanceMethod(const char* methodName, MethodNode*
 	ScopeNameNode* scopeName = (ScopeNameNode*)newScopeName(m_name, 0, 0, 0);
 	ScopeNameListNode* scopeNameList = (ScopeNameListNode*)newScopeNameList(0, scopeName);
 	TypeNameNode* typeName = (TypeNameNode*)newTypeName(scopeNameList);
-	TokenNode* passing = (TokenNode*)newToken('^');
+	TokenNode* passing = (TokenNode*)newToken('+');
 	setMethodResult(method, typeName, passing);
 	TokenNode* modifier = (TokenNode*)newToken(snt_keyword_static);
 	setMethodModifier(method, modifier);
@@ -469,7 +469,7 @@ void ClassNode::GenerateCreateArrayMethod(const char* methodName, MethodNode* co
 	ScopeNameNode* scopeName = (ScopeNameNode*)newScopeName(m_name, 0, 0, 0);
 	ScopeNameListNode* scopeNameList = (ScopeNameListNode*)newScopeNameList(0, scopeName);
 	TypeNameNode* typeName = (TypeNameNode*)newTypeName(scopeNameList);
-	TokenNode* passing = (TokenNode*)newToken('^');
+	TokenNode* passing = (TokenNode*)newToken('+');
 	setMethodResult(method, typeName, passing);
 	setMethodResultArray(method);
 	TokenNode* modifier = (TokenNode*)newToken(snt_keyword_static);

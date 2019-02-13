@@ -54,7 +54,7 @@ bool DelegateNode::byPtr()
 
 bool DelegateNode::byNew()
 {
-	return (0 != m_passing && '^' == m_passing->m_nodeType);
+	return (0 != m_passing && '+' == m_passing->m_nodeType);
 }
 
 size_t DelegateNode::getParameterCount() const
@@ -111,7 +111,7 @@ void DelegateNode::checkSemantic(TemplateArguments* templateArguments)
 		}
 		if (void_type == typeNode->getTypeCategory(templateArguments))
 		{
-			if (0 != m_passing && ('^' == m_passing->m_nodeType || '&' == m_passing->m_nodeType))
+			if (0 != m_passing && ('+' == m_passing->m_nodeType || '&' == m_passing->m_nodeType))
 			{
 				RaiseError_InvalidResultType(this);
 			}
