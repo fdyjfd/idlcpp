@@ -407,12 +407,14 @@ void HeaderFileGenerator::generateCode_Class(FILE* file, ClassNode* classNode, i
 		break;
 		}
 	}
-
-	writeStringToFile("static ::pafcore::ClassType* GetType();\n", file, indentation + 1);
-	if (!classNode->isValueType())
+	if (!classNode->isNoMeta())
 	{
-		writeStringToFile("virtual ::pafcore::ClassType* getType();\n", file, indentation + 1);
-		writeStringToFile("virtual size_t getAddress();\n", file, indentation + 1);
+		writeStringToFile("static ::pafcore::ClassType* GetType();\n", file, indentation + 1);
+		if (!classNode->isValueType())
+		{
+			writeStringToFile("virtual ::pafcore::ClassType* getType();\n", file, indentation + 1);
+			writeStringToFile("virtual size_t getAddress();\n", file, indentation + 1);
+		}
 	}
 	for(size_t i = 0; i < memberCount; ++i)
 	{
@@ -774,7 +776,7 @@ void HeaderFileGenerator::generateCode_Property_GetKey(FILE* file, PropertyNode*
 	}
 	writeStringToFile(" getKey_", file);
 	writeStringToFile(propertyNode->m_name->m_str.c_str(), file);
-	writeStringToFile("(::pafcore::Iterator* iterator);", file);
+	writeStringToFile("(::pafcore::Iterator*);", file);
 }
 
 void HeaderFileGenerator::generateCode_Property_GetValue(FILE* file, PropertyNode* propertyNode, int indentation)
@@ -794,7 +796,45 @@ void HeaderFileGenerator::generateCode_Property_GetValue(FILE* file, PropertyNod
 	}
 	writeStringToFile(" getValue_", file);
 	writeStringToFile(propertyNode->m_name->m_str.c_str(), file);
-	writeStringToFile("(::pafcore::Iterator* iterator);", file);
+	writeStringToFile("(::pafcore::Iterator*);", file);
+}
+
+
+void HeaderFileGenerator::generateCode_Property_Insert(FILE* file, PropertyNode* propertyNode, int indentation)
+{
+	if (propertyNode->isStatic())
+	{
+		writeStringToFile("static ", file, indentation);
+		indentation = 0;
+	}
+	TokenNode* passing = propertyNode->m_passing;
+	TypeNameNode* typeName = propertyNode->m_typeName;
+
+	writeStringToFile("void insert_", file, indentation);
+	writeStringToFile(propertyNode->m_name->m_str.c_str(), file);
+	writeStringToFile("(::pafcore::Iterator*, ", file);
+	generateCode_TypeName(file, typeName, propertyNode->m_enclosing, true, 0);
+	if (0 != passing)
+	{
+		generateCode_Token(file, passing, 0);
+	}
+	writeStringToFile(");", file);
+}
+
+
+void HeaderFileGenerator::generateCode_Property_Erase(FILE* file, PropertyNode* propertyNode, int indentation)
+{
+	if (propertyNode->isStatic())
+	{
+		writeStringToFile("static ", file, indentation);
+		indentation = 0;
+	}
+	TokenNode* passing = propertyNode->m_passing;
+	TypeNameNode* typeName = propertyNode->m_typeName;
+
+	writeStringToFile("void erase_", file, indentation);
+	writeStringToFile(propertyNode->m_name->m_str.c_str(), file);
+	writeStringToFile("(::pafcore::Iterator*);", file);
 }
 
 void HeaderFileGenerator::generateCode_Property(FILE* file, PropertyNode* propertyNode, int indentation)
@@ -849,6 +889,10 @@ void HeaderFileGenerator::generateCode_Property(FILE* file, PropertyNode* proper
 		generateCode_Property_GetIterator(file, propertyNode, indentation);
 		writeStringToFile("\n", file);
 		generateCode_Property_GetValue(file, propertyNode, indentation);
+		writeStringToFile("\n", file);
+		generateCode_Property_Insert(file, propertyNode, indentation);
+		writeStringToFile("\n", file);
+		generateCode_Property_Erase(file, propertyNode, indentation);
 	}
 	else if(propertyNode->isMap())
 	{

@@ -42,6 +42,8 @@ public:
 	static void generateCode_Property_GetIterator(FILE* file, PropertyNode* propertyNode, int indentation);
 	static void generateCode_Property_GetKey(FILE* file, PropertyNode* propertyNode, int indentation);
 	static void generateCode_Property_GetValue(FILE* file, PropertyNode* propertyNode, int indentation);
+	static void generateCode_Property_Insert(FILE* file, PropertyNode* propertyNode, int indentation);
+	static void generateCode_Property_Erase(FILE* file, PropertyNode* propertyNode, int indentation);
 	static void generateCode_Method(FILE* file, MethodNode* methodNode, int indentation);
 	static void generateCode_Operator(FILE* file, OperatorNode* methodNode, int indentation);
 };

@@ -11,6 +11,24 @@ namespace tutorial
 		int a;
 	};
 
+	class Test
+	{
+		int* m_a;
+	public:
+		void useIntPtr(int* p)
+		{
+			*m_a = *p;
+		}
+		void setIntPtr(int* p)
+		{
+			m_a = p;
+		}
+		void deleteIntPtr(int* p)
+		{
+			delete p;
+		}
+	};
+
 	class Test : Reference
 	{
 		static AA* abc{ get+ set - };

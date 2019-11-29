@@ -74,6 +74,8 @@ const char g_metaPropertyDeclPushBackPostfix[] = "(::pafcore::InstanceProperty* 
 const char g_metaPropertyDeclGetIteratorPostfix[] = "(::pafcore::InstanceProperty* instanceProperty, ::pafcore::Variant* that, ::pafcore::Variant* iterator);\n";
 const char g_metaPropertyDeclGetKeyPostfix[] = "(::pafcore::InstanceProperty* instanceProperty, ::pafcore::Variant* that, ::pafcore::Iterator* iterator, ::pafcore::Variant* key);\n";
 const char g_metaPropertyDeclGetValuePostfix[] = "(::pafcore::InstanceProperty* instanceProperty, ::pafcore::Variant* that, ::pafcore::Iterator* iterator, ::pafcore::Variant* value);\n";
+const char g_metaPropertyDeclInsertPostfix[] = "(::pafcore::InstanceProperty* instanceProperty, ::pafcore::Variant* that, ::pafcore::Iterator* iterator, ::pafcore::Variant* value);\n";
+const char g_metaPropertyDeclErasePostfix[] = "(::pafcore::InstanceProperty* instanceProperty, ::pafcore::Variant* that, ::pafcore::Iterator* iterator);\n";
 
 const char g_metaStaticPropertyDeclPostfix[] = "(::pafcore::Variant* value);\n";
 const char g_metaStaticArrayPropertyDeclPostfix[] = "(size_t index, ::pafcore::Variant* value);\n";
@@ -86,6 +88,8 @@ const char g_metaStaticPropertyDeclPushBackPostfix[] = "(::pafcore::Variant* val
 const char g_metaStaticPropertyDeclGetIteratorPostfix[] = "(::pafcore::Variant* iterator);\n";
 const char g_metaStaticPropertyDeclGetKeyPostfix[] = "(::pafcore::Iterator* iterator, ::pafcore::Variant* key);\n";
 const char g_metaStaticPropertyDeclGetValuePostfix[] = "(::pafcore::Iterator* iterator, ::pafcore::Variant* value);\n";
+const char g_metaStaticPropertyDeclInsertPostfix[] = "(::pafcore::Iterator* iterator, ::pafcore::Variant* value);\n";
+const char g_metaStaticPropertyDeclErasePostfix[] = "(::pafcore::Iterator* iterator);\n";
 
 
 
@@ -212,6 +216,16 @@ void writeMetaPropertyDecl(ClassNode* classNode, PropertyNode* propertyNode, FIL
 			writeStringToFile(g_metaPropertyDeclPrefix, sizeof(g_metaPropertyDeclPrefix) - 1, file, indentation + 1);
 			writeStringToFile(funcName, file);
 			writeStringToFile(g_metaStaticPropertyDeclGetValuePostfix, sizeof(g_metaStaticPropertyDeclGetValuePostfix) - 1, file);
+
+			sprintf_s(funcName, "%s_insert_%s", classNode->m_name->m_str.c_str(), propertyNode->m_name->m_str.c_str());
+			writeStringToFile(g_metaPropertyDeclPrefix, sizeof(g_metaPropertyDeclPrefix) - 1, file, indentation + 1);
+			writeStringToFile(funcName, file);
+			writeStringToFile(g_metaStaticPropertyDeclInsertPostfix, sizeof(g_metaStaticPropertyDeclInsertPostfix) - 1, file);
+
+			sprintf_s(funcName, "%s_erase_%s", classNode->m_name->m_str.c_str(), propertyNode->m_name->m_str.c_str());
+			writeStringToFile(g_metaPropertyDeclPrefix, sizeof(g_metaPropertyDeclPrefix) - 1, file, indentation + 1);
+			writeStringToFile(funcName, file);
+			writeStringToFile(g_metaStaticPropertyDeclErasePostfix, sizeof(g_metaStaticPropertyDeclErasePostfix) - 1, file);
 		}
 		else
 		{
@@ -229,6 +243,16 @@ void writeMetaPropertyDecl(ClassNode* classNode, PropertyNode* propertyNode, FIL
 			writeStringToFile(g_metaPropertyDeclPrefix, sizeof(g_metaPropertyDeclPrefix) - 1, file, indentation + 1);
 			writeStringToFile(funcName, file);
 			writeStringToFile(g_metaPropertyDeclGetValuePostfix, sizeof(g_metaPropertyDeclGetValuePostfix) - 1, file);
+
+			sprintf_s(funcName, "%s_insert_%s", classNode->m_name->m_str.c_str(), propertyNode->m_name->m_str.c_str());
+			writeStringToFile(g_metaPropertyDeclPrefix, sizeof(g_metaPropertyDeclPrefix) - 1, file, indentation + 1);
+			writeStringToFile(funcName, file);
+			writeStringToFile(g_metaPropertyDeclInsertPostfix, sizeof(g_metaPropertyDeclInsertPostfix) - 1, file);
+
+			sprintf_s(funcName, "%s_erase_%s", classNode->m_name->m_str.c_str(), propertyNode->m_name->m_str.c_str());
+			writeStringToFile(g_metaPropertyDeclPrefix, sizeof(g_metaPropertyDeclPrefix) - 1, file, indentation + 1);
+			writeStringToFile(funcName, file);
+			writeStringToFile(g_metaPropertyDeclErasePostfix, sizeof(g_metaPropertyDeclErasePostfix) - 1, file);
 		}
 	}
 	else if (propertyNode->isMap())

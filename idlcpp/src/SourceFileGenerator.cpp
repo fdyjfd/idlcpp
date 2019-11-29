@@ -195,10 +195,10 @@ void SourceFileGenerator::generateCode_Program(FILE* file, ProgramNode* programN
 
 void SourceFileGenerator::generateCode_Namespace(FILE* file, NamespaceNode* namespaceNode, int indentation)
 {
-	if (namespaceNode->isNoCode())
-	{
-		file = 0;
-	}
+	//if (namespaceNode->isNoCode())
+	//{
+	//	file = 0;
+	//}
 
 	char buf[4096];
 	if(!namespaceNode->isGlobalNamespace())
@@ -256,33 +256,17 @@ void GetClassName(std::string& className, ClassNode* classNode)
 
 void SourceFileGenerator::generateCode_Class(FILE* file, ClassNode* classNode, const std::string& scopeClassName, int indentation)
 {
-	if (classNode->isNoCode())
-	{
-		file = 0;
-	}
+	//if (classNode->isNoCode())
+	//{
+	//	file = 0;
+	//}
 	std::string typeName;
 	GetClassName(typeName, classNode);
 	typeName = scopeClassName + typeName;
 
 	bool isInline = 0 != classNode->m_templateParametersNode;
-	generateCode_TemplateHeader(file, classNode, indentation);
-	if (isInline)
-	{
-		writeStringToFile("inline ::pafcore::ClassType* ", file, indentation);
-	}
-	else
-	{
-		writeStringToFile("::pafcore::ClassType* ", file, indentation);
-	}
-	writeStringToFile(typeName.c_str(), file);
-	writeStringToFile("::GetType()\n", file);
-	writeStringToFile("{\n", file, indentation);
-	writeStringToFile("return ::RuntimeTypeOf<", file, indentation + 1);
-	writeStringToFile(typeName.c_str(), file);
-	writeStringToFile(">::RuntimeType::GetSingleton();\n", file);
-	writeStringToFile("}\n\n", file, indentation);
 
-	if (!classNode->isValueType())
+	if (!(classNode->isNoCode() || classNode->isNoMeta()))
 	{
 		generateCode_TemplateHeader(file, classNode, indentation);
 		if (isInline)
@@ -294,36 +278,61 @@ void SourceFileGenerator::generateCode_Class(FILE* file, ClassNode* classNode, c
 			writeStringToFile("::pafcore::ClassType* ", file, indentation);
 		}
 		writeStringToFile(typeName.c_str(), file);
-		writeStringToFile("::getType()\n", file);
+		writeStringToFile("::GetType()\n", file);
 		writeStringToFile("{\n", file, indentation);
 		writeStringToFile("return ::RuntimeTypeOf<", file, indentation + 1);
 		writeStringToFile(typeName.c_str(), file);
 		writeStringToFile(">::RuntimeType::GetSingleton();\n", file);
 		writeStringToFile("}\n\n", file, indentation);
 
-		generateCode_TemplateHeader(file, classNode, indentation);
-		if (isInline)
+		if (!classNode->isValueType())
 		{
-			writeStringToFile("inline size_t ", file, indentation);
+			generateCode_TemplateHeader(file, classNode, indentation);
+			if (isInline)
+			{
+				writeStringToFile("inline ::pafcore::ClassType* ", file, indentation);
+			}
+			else
+			{
+				writeStringToFile("::pafcore::ClassType* ", file, indentation);
+			}
+			writeStringToFile(typeName.c_str(), file);
+			writeStringToFile("::getType()\n", file);
+			writeStringToFile("{\n", file, indentation);
+			writeStringToFile("return ::RuntimeTypeOf<", file, indentation + 1);
+			writeStringToFile(typeName.c_str(), file);
+			writeStringToFile(">::RuntimeType::GetSingleton();\n", file);
+			writeStringToFile("}\n\n", file, indentation);
+
+			generateCode_TemplateHeader(file, classNode, indentation);
+			if (isInline)
+			{
+				writeStringToFile("inline size_t ", file, indentation);
+			}
+			else
+			{
+				writeStringToFile("size_t ", file, indentation);
+			}
+			writeStringToFile(typeName.c_str(), file);
+			writeStringToFile("::getAddress()\n", file);
+			writeStringToFile("{\n", file, indentation);
+			writeStringToFile("return (size_t)this;\n", file, indentation + 1);
+			writeStringToFile("}\n\n", file, indentation);
 		}
-		else
-		{
-			writeStringToFile("size_t ", file, indentation);
-		}
-		writeStringToFile(typeName.c_str(), file);
-		writeStringToFile("::getAddress()\n", file);
-		writeStringToFile("{\n", file, indentation);
-		writeStringToFile("return (size_t)this;\n", file, indentation + 1);
-		writeStringToFile("}\n\n", file, indentation);
 	}
-	if (!classNode->m_additionalMethods.empty())
+
+	if (!classNode->isNoCode())
 	{
-		size_t count = classNode->m_additionalMethods.size();
-		for (size_t i = 0; i < count; ++i)
+		if (!classNode->m_additionalMethods.empty())
 		{
-			generateCode_AdditionalMethod(file, classNode->m_additionalMethods[i], typeName, indentation);
+			size_t count = classNode->m_additionalMethods.size();
+			for (size_t i = 0; i < count; ++i)
+			{
+				generateCode_AdditionalMethod(file, classNode->m_additionalMethods[i], typeName, indentation);
+			}
 		}
 	}
+
 
 	typeName += "::";
 	std::vector<MemberNode*> memberNodes;
