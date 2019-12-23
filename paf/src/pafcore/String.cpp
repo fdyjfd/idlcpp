@@ -131,6 +131,16 @@ String& String::operator+=(const String& arg)
 	return *this;
 }
 
+bool String::operator == (const String& arg) const
+{
+	return strcmp(m_str, arg.m_str) == 0;
+}
+
+bool String::operator != (const String& arg) const
+{
+	return strcmp(m_str, arg.m_str) != 0;
+}
+
 bool String::operator < (const String& arg) const
 {
 	return strcmp(m_str, arg.m_str) < 0;

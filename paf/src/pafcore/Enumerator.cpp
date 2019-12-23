@@ -12,7 +12,7 @@ Enumerator::Enumerator(const char* name, Attributes* attributes, Type* type, int
 	m_value = value;
 }
 
-Type* Enumerator::get__type_()
+Type* Enumerator::get__type_() const
 {
 	return m_type;
 }

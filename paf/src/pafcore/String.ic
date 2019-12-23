@@ -10,6 +10,11 @@
 namespace pafcore
 {
 
+	::pafcore::ClassType* String::GetType()
+	{
+		return ::RuntimeTypeOf<String>::RuntimeType::GetSingleton();
+	}
+
 	String* String::New()
 	{
 		return paf_new String();

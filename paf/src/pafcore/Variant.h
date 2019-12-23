@@ -37,7 +37,7 @@ public:
 	//bool isArray();
 	bool isConstant();
 	void clear();
-	void unhold();
+	bool unhold();
 	void move(Variant& var);
 	bool subscript(Variant& var, size_t index);
 
@@ -54,7 +54,7 @@ public:
 
 	void assignNullPrimitive(Type* type);
 	void assignNullEnum(Type* type);
-	void assignNullPtr(Type* type);
+	void assignNullPtr();
 	
 	void assignPtr(Type* type, const void* pointer, bool constant, Semantic semantic);
 	void assignArray(Type* type, const void* pointer, size_t arraySize, bool constant, Semantic semantic);

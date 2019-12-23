@@ -44,20 +44,27 @@ namespace idlcpp
 		static ::pafcore::Result s_instanceResults[] = 
 		{
 			::pafcore::Result(RuntimeTypeOf<bool>::RuntimeType::GetSingleton(), false, ::pafcore::Result::by_value),
+			::pafcore::Result(RuntimeTypeOf<bool>::RuntimeType::GetSingleton(), false, ::pafcore::Result::by_value),
 			::pafcore::Result(RuntimeTypeOf<void>::RuntimeType::GetSingleton(), false, ::pafcore::Result::by_value),
 			::pafcore::Result(RuntimeTypeOf<void>::RuntimeType::GetSingleton(), false, ::pafcore::Result::by_value),
+		};
+		static ::pafcore::Argument s_instanceArguments[] = 
+		{
+			::pafcore::Argument("other", RuntimeTypeOf<::pafcore::Iterator>::RuntimeType::GetSingleton(), ::pafcore::Argument::by_ptr, false),
 		};
 		static ::pafcore::Overload s_instanceOverloads[] = 
 		{
-			::pafcore::Overload(&s_instanceResults[0], 0, 0, false, false),
-			::pafcore::Overload(&s_instanceResults[1], 0, 0, false, false),
+			::pafcore::Overload(&s_instanceResults[0], &s_instanceArguments[0], 1, false, true),
+			::pafcore::Overload(&s_instanceResults[1], 0, 0, false, true),
 			::pafcore::Overload(&s_instanceResults[2], 0, 0, false, false),
+			::pafcore::Overload(&s_instanceResults[3], 0, 0, false, false),
 		};
 		static ::pafcore::InstanceMethod s_instanceMethods[] = 
 		{
-			::pafcore::InstanceMethod("isEnd", 0, Iterator_isEnd, &s_instanceOverloads[0], 1),
-			::pafcore::InstanceMethod("moveNext", 0, Iterator_moveNext, &s_instanceOverloads[1], 1),
-			::pafcore::InstanceMethod("reset", 0, Iterator_reset, &s_instanceOverloads[2], 1),
+			::pafcore::InstanceMethod("equal", 0, Iterator_equal, &s_instanceOverloads[0], 1),
+			::pafcore::InstanceMethod("isEnd", 0, Iterator_isEnd, &s_instanceOverloads[1], 1),
+			::pafcore::InstanceMethod("moveNext", 0, Iterator_moveNext, &s_instanceOverloads[2], 1),
+			::pafcore::InstanceMethod("reset", 0, Iterator_reset, &s_instanceOverloads[3], 1),
 		};
 		m_instanceMethods = s_instanceMethods;
 		m_instanceMethodCount = paf_array_size_of(s_instanceMethods);
@@ -66,6 +73,7 @@ namespace idlcpp
 			&s_instanceMethods[0],
 			&s_instanceMethods[1],
 			&s_instanceMethods[2],
+			&s_instanceMethods[3],
 		};
 		m_members = s_members;
 		m_memberCount = paf_array_size_of(s_members);
@@ -87,11 +95,32 @@ namespace idlcpp
 		return false;
 	}
 
+	::pafcore::ErrorCode __pafcore__Iterator_Type::Iterator_equal(::pafcore::Variant* result, ::pafcore::Variant** args, int_t numArgs)
+	{
+		if(2 <= numArgs)
+		{
+			const ::pafcore::Iterator* self;
+			if(!args[0]->castToReferencePtr(GetSingleton(), (void**)&self))
+			{
+				return ::pafcore::e_invalid_this_type;
+			}
+			::pafcore::Iterator* a0;
+			if(!args[1]->castToReferencePtr(RuntimeTypeOf<::pafcore::Iterator>::RuntimeType::GetSingleton(), (void**)&a0))
+			{
+				return ::pafcore::e_invalid_arg_type_1;
+			}
+			bool res = self->equal(a0);
+			result->assignPrimitive(RuntimeTypeOf<bool>::RuntimeType::GetSingleton(), &res);
+			return ::pafcore::s_ok;
+		}
+		return ::pafcore::e_invalid_arg_num;
+	}
+
 	::pafcore::ErrorCode __pafcore__Iterator_Type::Iterator_isEnd(::pafcore::Variant* result, ::pafcore::Variant** args, int_t numArgs)
 	{
 		if(1 <= numArgs)
 		{
-			::pafcore::Iterator* self;
+			const ::pafcore::Iterator* self;
 			if(!args[0]->castToReferencePtr(GetSingleton(), (void**)&self))
 			{
 				return ::pafcore::e_invalid_this_type;

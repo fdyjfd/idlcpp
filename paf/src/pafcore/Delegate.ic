@@ -70,6 +70,11 @@ namespace pafcore
 		return (size_t)this;
 	}
 
+	::pafcore::ClassType* Delegate::GetType()
+	{
+		return ::RuntimeTypeOf<Delegate>::RuntimeType::GetSingleton();
+	}
+
 	void EventHandler::invoke(Reference* sender)
 	{
 		bool __arguments_init__ = false;

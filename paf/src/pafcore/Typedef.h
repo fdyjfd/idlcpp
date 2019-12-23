@@ -3,6 +3,7 @@
 
 #pragma once
 
+namespace pafcore{ class ClassType; }
 
 
 typedef bool					bool_t;
@@ -100,11 +101,20 @@ struct RuntimeTypeOf
 
 
 
+struct Nil
+{
+public:
+	static ::pafcore::ClassType* GetType();
+
+};
+
 namespace pafcore
 {
+
 	struct Buffer
 	{
 	public:
+		static ::pafcore::ClassType* GetType();
 
 
 		void* pointer;
@@ -115,4 +125,27 @@ namespace pafcore
 		{}
 
 	};
+
+
+
+
+	struct MethodAsProperty
+	{
+	public:
+		static ::pafcore::ClassType* GetType();
+
+
+		enum Status : uint8_t
+		{
+			ready,
+			running,
+			running_allow_cancel,
+		};
+		Status status;
+		float progress;
+		MethodAsProperty() : status(ready), progress(0)
+		{}
+
+	};
+
 }

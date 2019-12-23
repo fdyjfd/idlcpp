@@ -36,31 +36,18 @@ public:
 //	long_t a::release(){delete this; return 0;}
 
 
-struct AutoRelease
-{
-	AutoRelease(RefCount* refCount)
-	{
-		m_refCount = refCount;
-	}
-	~AutoRelease()
-	{
-		SafeRelease(m_refCount);
-	}
-	RefCount* m_refCount;
-};
-
-struct AutoReleaseByAddress
-{
-	AutoReleaseByAddress(RefCount** refCount)
-	{
-		PAF_ASSERT(0 != refCount);
-		m_refCount = refCount;
-	}
-	~AutoReleaseByAddress()
-	{
-		SafeRelease(*m_refCount);
-	}
-	RefCount** m_refCount;
-};
+//struct AutoReleaseByAddress
+//{
+//	AutoReleaseByAddress(RefCount** refCount)
+//	{
+//		PAF_ASSERT(0 != refCount);
+//		m_refCount = refCount;
+//	}
+//	~AutoReleaseByAddress()
+//	{
+//		SafeRelease(*m_refCount);
+//	}
+//	RefCount** m_refCount;
+//};
 
 END_PAFCORE

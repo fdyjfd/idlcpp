@@ -45,11 +45,11 @@ namespace idlcpp
 		m_classTypeIterators = s_classTypeIterators;
 		static ::pafcore::InstanceProperty s_instanceProperties[] = 
 		{
-			::pafcore::InstanceProperty("type", 0, GetSingleton(), StaticField_get_type, RuntimeTypeOf<::pafcore::Type>::RuntimeType::GetSingleton(), ::pafcore::Metadata::by_ptr, false, 0, 0, ::pafcore::Metadata::by_value, false),
-			::pafcore::InstanceProperty("address", 0, GetSingleton(), StaticField_get_address, RuntimeTypeOf<::size_t>::RuntimeType::GetSingleton(), ::pafcore::Metadata::by_value, false, 0, 0, ::pafcore::Metadata::by_value, false),
-			::pafcore::InstanceProperty("isConstant", 0, GetSingleton(), StaticField_get_isConstant, RuntimeTypeOf<bool>::RuntimeType::GetSingleton(), ::pafcore::Metadata::by_value, false, 0, 0, ::pafcore::Metadata::by_value, false),
-			::pafcore::InstanceProperty("isArray", 0, GetSingleton(), StaticField_get_isArray, RuntimeTypeOf<bool>::RuntimeType::GetSingleton(), ::pafcore::Metadata::by_value, false, 0, 0, ::pafcore::Metadata::by_value, false),
-			::pafcore::InstanceProperty("isPointer", 0, GetSingleton(), StaticField_get_isPointer, RuntimeTypeOf<bool>::RuntimeType::GetSingleton(), ::pafcore::Metadata::by_value, false, 0, 0, ::pafcore::Metadata::by_value, false),
+			::pafcore::InstanceProperty("type", 0, GetSingleton(), RuntimeTypeOf<::pafcore::Type>::RuntimeType::GetSingleton(), true, StaticField_get_type, 0, 0, 0),
+			::pafcore::InstanceProperty("address", 0, GetSingleton(), RuntimeTypeOf<::size_t>::RuntimeType::GetSingleton(), false, StaticField_get_address, 0, 0, 0),
+			::pafcore::InstanceProperty("isConstant", 0, GetSingleton(), RuntimeTypeOf<bool>::RuntimeType::GetSingleton(), false, StaticField_get_isConstant, 0, 0, 0),
+			::pafcore::InstanceProperty("isArray", 0, GetSingleton(), RuntimeTypeOf<bool>::RuntimeType::GetSingleton(), false, StaticField_get_isArray, 0, 0, 0),
+			::pafcore::InstanceProperty("isPointer", 0, GetSingleton(), RuntimeTypeOf<bool>::RuntimeType::GetSingleton(), false, StaticField_get_isPointer, 0, 0, 0),
 		};
 		m_instanceProperties = s_instanceProperties;
 		m_instancePropertyCount = paf_array_size_of(s_instanceProperties);

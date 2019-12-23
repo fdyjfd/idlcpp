@@ -15,7 +15,7 @@ StaticField::StaticField(const char* name, Attributes* attributes, Type* type, s
 	m_typeCompound = tc;
 }
 
-Type* StaticField::get_type()
+Type* StaticField::get_type() const
 {
 	return m_type;
 }

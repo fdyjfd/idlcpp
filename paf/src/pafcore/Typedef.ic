@@ -7,8 +7,23 @@
 #include "Typedef.mh"
 #include "RefCountImpl.h"
 
+::pafcore::ClassType* Nil::GetType()
+{
+	return ::RuntimeTypeOf<Nil>::RuntimeType::GetSingleton();
+}
+
 namespace pafcore
 {
+
+	::pafcore::ClassType* Buffer::GetType()
+	{
+		return ::RuntimeTypeOf<Buffer>::RuntimeType::GetSingleton();
+	}
+
+	::pafcore::ClassType* MethodAsProperty::GetType()
+	{
+		return ::RuntimeTypeOf<MethodAsProperty>::RuntimeType::GetSingleton();
+	}
 
 }
 

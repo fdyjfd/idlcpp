@@ -5,6 +5,7 @@
 
 #include "./Metadata.h"
 namespace pafcore{ class Type; }
+namespace pafcore{ class ClassType; }
 
 namespace pafcore
 {
@@ -16,7 +17,7 @@ namespace pafcore
 		virtual ::pafcore::ClassType* getType();
 		virtual size_t getAddress();
 
-		Type* get__type_();
+		Type* get__type_() const;
 		int get__value_() const;
 
 	public:

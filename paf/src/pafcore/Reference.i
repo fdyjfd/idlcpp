@@ -45,7 +45,7 @@ namespace pafcore
 		void* castTo(ClassType* classType);
 
 		template<typename T>
-		void* castTo()
+		T* castTo()
 		{
 			return reinterpret_cast<T*>(castTo(T::GetType()));
 		}
@@ -55,14 +55,19 @@ namespace pafcore
 			delete this;
 		}
 
-		virtual uint32_t dynamicInstancePropertyCount()
+		virtual uint32_t dynamicInstancePropertyCount() const
 		{
 			return 0;
 		}
 
-		virtual InstanceProperty* dynamicInstanceProperty(uint32_t index)
+		virtual InstanceProperty* dynamicInstanceProperty(uint32_t index) const
 		{
 			return 0;
+		}
+
+		virtual bool serializable() const
+		{
+			return true;
 		}
 
 #}

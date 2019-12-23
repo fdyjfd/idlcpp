@@ -44,13 +44,13 @@ namespace idlcpp
 		m_classTypeIterators = s_classTypeIterators;
 		static ::pafcore::InstanceProperty s_instanceProperties[] = 
 		{
-			::pafcore::InstanceProperty("type", 0, GetSingleton(), Result_get_type, RuntimeTypeOf<::pafcore::Type>::RuntimeType::GetSingleton(), ::pafcore::Metadata::by_ptr, false, 0, 0, ::pafcore::Metadata::by_value, false),
-			::pafcore::InstanceProperty("byValue", 0, GetSingleton(), Result_get_byValue, RuntimeTypeOf<bool>::RuntimeType::GetSingleton(), ::pafcore::Metadata::by_value, false, 0, 0, ::pafcore::Metadata::by_value, false),
-			::pafcore::InstanceProperty("byRef", 0, GetSingleton(), Result_get_byRef, RuntimeTypeOf<bool>::RuntimeType::GetSingleton(), ::pafcore::Metadata::by_value, false, 0, 0, ::pafcore::Metadata::by_value, false),
-			::pafcore::InstanceProperty("byPtr", 0, GetSingleton(), Result_get_byPtr, RuntimeTypeOf<bool>::RuntimeType::GetSingleton(), ::pafcore::Metadata::by_value, false, 0, 0, ::pafcore::Metadata::by_value, false),
-			::pafcore::InstanceProperty("byNew", 0, GetSingleton(), Result_get_byNew, RuntimeTypeOf<bool>::RuntimeType::GetSingleton(), ::pafcore::Metadata::by_value, false, 0, 0, ::pafcore::Metadata::by_value, false),
-			::pafcore::InstanceProperty("byNewArray", 0, GetSingleton(), Result_get_byNewArray, RuntimeTypeOf<bool>::RuntimeType::GetSingleton(), ::pafcore::Metadata::by_value, false, 0, 0, ::pafcore::Metadata::by_value, false),
-			::pafcore::InstanceProperty("isConstant", 0, GetSingleton(), Result_get_isConstant, RuntimeTypeOf<bool>::RuntimeType::GetSingleton(), ::pafcore::Metadata::by_value, false, 0, 0, ::pafcore::Metadata::by_value, false),
+			::pafcore::InstanceProperty("type", 0, GetSingleton(), RuntimeTypeOf<::pafcore::Type>::RuntimeType::GetSingleton(), true, Result_get_type, 0, 0, 0),
+			::pafcore::InstanceProperty("byValue", 0, GetSingleton(), RuntimeTypeOf<bool>::RuntimeType::GetSingleton(), false, Result_get_byValue, 0, 0, 0),
+			::pafcore::InstanceProperty("byRef", 0, GetSingleton(), RuntimeTypeOf<bool>::RuntimeType::GetSingleton(), false, Result_get_byRef, 0, 0, 0),
+			::pafcore::InstanceProperty("byPtr", 0, GetSingleton(), RuntimeTypeOf<bool>::RuntimeType::GetSingleton(), false, Result_get_byPtr, 0, 0, 0),
+			::pafcore::InstanceProperty("byNew", 0, GetSingleton(), RuntimeTypeOf<bool>::RuntimeType::GetSingleton(), false, Result_get_byNew, 0, 0, 0),
+			::pafcore::InstanceProperty("byNewArray", 0, GetSingleton(), RuntimeTypeOf<bool>::RuntimeType::GetSingleton(), false, Result_get_byNewArray, 0, 0, 0),
+			::pafcore::InstanceProperty("isConstant", 0, GetSingleton(), RuntimeTypeOf<bool>::RuntimeType::GetSingleton(), false, Result_get_isConstant, 0, 0, 0),
 		};
 		m_instanceProperties = s_instanceProperties;
 		m_instancePropertyCount = paf_array_size_of(s_instanceProperties);

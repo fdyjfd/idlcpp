@@ -92,8 +92,26 @@ TypeAlias* ClassType::findNestedTypeAlias(const char* name, bool includeBaseClas
 	return 0;
 }
 
+
+InstanceField* ClassType::findInstanceField(const char* name, bool includeBaseClasses)
+{
+	Metadata* member = _findMember_(name, includeBaseClasses);
+	if (member && instance_field == member->get__category_())
+	{
+		return static_cast<InstanceField*>(member);
+	}
+	return 0;
+}
+
 StaticField* ClassType::findStaticField(const char* name, bool includeBaseClasses)
 {
+	Metadata* member = _findMember_(name, includeBaseClasses);
+	if (member && static_field == member->get__category_())
+	{
+		return static_cast<StaticField*>(member);
+	}
+	return 0;
+	/*
 	Metadata dummy(name);
 	StaticField* res = std::lower_bound(m_staticFields, m_staticFields + m_staticFieldCount, dummy);
 	if (m_staticFields + m_staticFieldCount != res && strcmp(name, res->m_name) == 0)
@@ -112,10 +130,18 @@ StaticField* ClassType::findStaticField(const char* name, bool includeBaseClasse
 		}
 	}
 	return 0;
+	*/
 }
 
 InstanceProperty* ClassType::findInstanceProperty(const char* name, bool includeBaseClasses)
 {
+	Metadata* member = _findMember_(name, includeBaseClasses);
+	if (member && instance_property == member->get__category_())
+	{
+		return static_cast<InstanceProperty*>(member);
+	}
+	return 0;
+	/*
 	Metadata dummy(name);
 	InstanceProperty* res = std::lower_bound(m_instanceProperties, m_instanceProperties + m_instancePropertyCount, dummy);
 	if (m_instanceProperties + m_instancePropertyCount != res && strcmp(name, res->m_name) == 0)
@@ -134,10 +160,18 @@ InstanceProperty* ClassType::findInstanceProperty(const char* name, bool include
 		}
 	}
 	return 0;
+	*/
 }
 
 StaticProperty* ClassType::findStaticProperty(const char* name, bool includeBaseClasses)
 {
+	Metadata* member = _findMember_(name, includeBaseClasses);
+	if (member && static_property == member->get__category_())
+	{
+		return static_cast<StaticProperty*>(member);
+	}
+	return 0;
+	/*
 	Metadata dummy(name);
 	StaticProperty* res = std::lower_bound(m_staticProperties, m_staticProperties + m_staticPropertyCount, dummy);
 	if (m_staticProperties + m_staticPropertyCount != res && strcmp(name, res->m_name) == 0)
@@ -156,6 +190,7 @@ StaticProperty* ClassType::findStaticProperty(const char* name, bool includeBase
 		}
 	}
 	return 0;
+	*/
 }
 
 InstanceMethod* ClassType::findInstanceMethod(const char* name, bool includeBaseClasses)
@@ -408,24 +443,8 @@ InstanceProperty* ClassType::_getInstanceProperty_(size_t index, bool includeBas
 {
 	if (includeBaseClasses)
 	{
-		if (index < m_instancePropertyCount)
-		{
-			return &m_instanceProperties[index];
-		}
-		else
-		{
-			index -= m_instancePropertyCount;
-			for (size_t i = 0; i < m_baseClassCount; ++i)
-			{
-				size_t baseMemberCount = m_baseClasses[i].m_type->_getInstancePropertyCount_(includeBaseClasses);
-				if (index < baseMemberCount)
-				{
-					return m_baseClasses[i].m_type->_getInstanceProperty_(index, includeBaseClasses);
-				}
-				index -= baseMemberCount;
-			}
-			return 0;
-		}
+		InstanceProperty* res = getInstanceProperty_(index);
+		return res;
 	}
 	else
 	{
@@ -435,6 +454,42 @@ InstanceProperty* ClassType::_getInstanceProperty_(size_t index, bool includeBas
 		}
 		return 0;
 	}
+}
+
+InstanceProperty* ClassType::getInstanceProperty_(size_t& index)//派生property在前
+{
+	if (index < m_instancePropertyCount)
+	{
+		return &m_instanceProperties[index];
+	}
+	index -= m_instancePropertyCount;
+	for (size_t i = 0; i < m_baseClassCount; ++i)
+	{
+		InstanceProperty* res = m_baseClasses[i].m_type->getInstanceProperty_(index);
+		if (res)
+		{
+			return res;
+		}
+	}
+	return 0;
+}
+
+InstanceProperty* ClassType::getInstancePropertyBaseClassFirst_(size_t& index)//基类property在前
+{
+	for (size_t i = 0; i < m_baseClassCount; ++i)
+	{
+		InstanceProperty* res = m_baseClasses[i].m_type->getInstancePropertyBaseClassFirst_(index);
+		if (res)
+		{
+			return res;
+		}
+	}
+	if (index < m_instancePropertyCount)
+	{
+		return &m_instanceProperties[index];
+	}
+	index -= m_instancePropertyCount;
+	return 0;
 }
 
 size_t ClassType::_getInstanceFieldCount_(bool includeBaseClasses)
@@ -454,24 +509,8 @@ InstanceField* ClassType::_getInstanceField_(size_t index, bool includeBaseClass
 {
 	if (includeBaseClasses)
 	{
-		if (index < m_instanceFieldCount)
-		{
-			return &m_instanceFields[index];
-		}
-		else
-		{
-			index -= m_instanceFieldCount;
-			for (size_t i = 0; i < m_baseClassCount; ++i)
-			{
-				size_t baseMemberCount = m_baseClasses[i].m_type->_getInstanceFieldCount_(includeBaseClasses);
-				if (index < baseMemberCount)
-				{
-					return m_baseClasses[i].m_type->_getInstanceField_(index, includeBaseClasses);
-				}
-				index -= baseMemberCount;
-			}
-			return 0;
-		}
+		InstanceField* res = getInstanceField_(index);
+		return res;
 	}
 	else
 	{
@@ -481,6 +520,42 @@ InstanceField* ClassType::_getInstanceField_(size_t index, bool includeBaseClass
 		}
 		return 0;
 	}
+}
+
+InstanceField* ClassType::getInstanceField_(size_t& index)//派生property在前
+{
+	if (index < m_instanceFieldCount)
+	{
+		return &m_instanceFields[index];
+	}
+	index -= m_instanceFieldCount;
+	for (size_t i = 0; i < m_baseClassCount; ++i)
+	{
+		InstanceField* res = m_baseClasses[i].m_type->getInstanceField_(index);
+		if (res)
+		{
+			return res;
+		}
+	}
+	return 0;
+}
+
+InstanceField* ClassType::getInstanceFieldBaseClassFirst_(size_t& index)
+{
+	for (size_t i = 0; i < m_baseClassCount; ++i)
+	{
+		InstanceField* res = m_baseClasses[i].m_type->getInstanceFieldBaseClassFirst_(index);
+		if (res)
+		{
+			return res;
+		}
+	}
+	if (index < m_instanceFieldCount)
+	{
+		return &m_instanceFields[index];
+	}
+	index -= m_instanceFieldCount;
+	return 0;
 }
 
 bool ClassType::isType(ClassType* otherType)

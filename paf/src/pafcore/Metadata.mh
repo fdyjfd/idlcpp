@@ -37,6 +37,7 @@ namespace idlcpp
 		static ::pafcore::ErrorCode Metadata__getAttributeContentByName_(::pafcore::Variant* result, ::pafcore::Variant** args, int numArgs);
 		static ::pafcore::ErrorCode Metadata__getAttributeContent_(::pafcore::Variant* result, ::pafcore::Variant** args, int numArgs);
 		static ::pafcore::ErrorCode Metadata__getAttributeName_(::pafcore::Variant* result, ::pafcore::Variant** args, int numArgs);
+		static ::pafcore::ErrorCode Metadata__hasAttribute_(::pafcore::Variant* result, ::pafcore::Variant** args, int numArgs);
 	public:
 		PAFCORE_EXPORT static __pafcore__Metadata_Type* GetSingleton();
 	};

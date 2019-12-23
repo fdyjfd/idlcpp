@@ -74,6 +74,23 @@ string_t Metadata::_getAttributeContentByName_(string_t attributeName)
 	return "";
 }
 
+bool Metadata::_hasAttribute_(string_t attributeName)
+{
+	if (0 != m_attributes)
+	{
+		Attribute* begin = &m_attributes->attributes[0];
+		Attribute* end = begin + m_attributes->count;
+		Attribute dummy;
+		dummy.name = attributeName;
+		Attribute* it = std::lower_bound(begin, end, dummy, CompareAttributeByName());
+		if (end != it && strcmp(attributeName, it->name) == 0)
+		{
+			return true;
+		}
+	}
+	return false;
+}
+
 bool Metadata::operator < (const Metadata& arg) const
 {
 	return strcmp(m_name, arg.m_name) < 0;

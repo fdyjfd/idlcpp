@@ -123,16 +123,19 @@ void Variant::clear()
 	m_constant = false;
 }
 
-void Variant::unhold()
+bool Variant::unhold()
 {
 	if(by_new_ptr == m_semantic)
 	{
 		m_semantic = by_ptr;
+		return true;
 	}
 	else if(by_new_array == m_semantic)
 	{
 		m_semantic = by_array;
+		return true;
 	}
+	return false;
 }
 
 void Variant::move(Variant& var)
@@ -274,10 +277,9 @@ void Variant::assignNullEnum(Type* type)
 	memset(m_pointer, 0, sizeof(m_primitiveValue));
 }
 
-void Variant::assignNullPtr(Type* type)
+void Variant::assignNullPtr()
 {
 	clear();
-	m_type = type;
 	m_semantic = by_ptr;
 }
 
@@ -501,8 +503,13 @@ bool Variant::castToVoidPtrAllowNull(void** dst) const
 
 bool Variant::castToPrimitivePtrAllowNull(Type* dstType, void** dst) const
 {
+	if (0 == m_pointer)
+	{
+		*dst = 0;
+		return true;
+	}
 	assert(dstType->isPrimitive());
-	if (m_type == dstType || 0 == m_pointer)
+	if (m_type == dstType)
 	{
 		*dst = m_pointer;
 		return true;
@@ -512,8 +519,13 @@ bool Variant::castToPrimitivePtrAllowNull(Type* dstType, void** dst) const
 
 bool Variant::castToEnumPtrAllowNull(Type* dstType, void** dst) const
 {
+	if (0 == m_pointer)
+	{
+		*dst = 0;
+		return true;
+	}
 	assert(dstType->isEnum());
-	if (m_type == dstType || 0 == m_pointer)
+	if (m_type == dstType)
 	{
 		*dst = m_pointer;
 		return true;
@@ -523,12 +535,12 @@ bool Variant::castToEnumPtrAllowNull(Type* dstType, void** dst) const
 
 bool Variant::castToValuePtrAllowNull(Type* dstType, void** dst) const
 {
-	assert(dstType->isValue());
 	if (0 == m_pointer)
 	{
 		*dst = 0;
 		return true;
 	}
+	assert(dstType->isValue());
 	if (m_type->isValue())
 	{
 		size_t offset;
@@ -543,12 +555,12 @@ bool Variant::castToValuePtrAllowNull(Type* dstType, void** dst) const
 
 bool Variant::castToReferencePtrAllowNull(Type* dstType, void** dst) const
 {
-	assert(dstType->isReference());
 	if (0 == m_pointer)
 	{
 		*dst = 0;
 		return true;
 	}
+	assert(dstType->isReference());
 	if (m_type->isReference())
 	{
 		size_t offset;

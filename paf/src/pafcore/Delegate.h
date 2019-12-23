@@ -5,6 +5,8 @@
 
 #include "./Reference.h"
 namespace pafcore{ class ClassType; }
+namespace pafcore{ struct Delegate; }
+namespace pafcore{ class ClassType; }
 
 
 #include "Utility.h"
@@ -104,6 +106,7 @@ namespace pafcore
 	struct PAFCORE_EXPORT Delegate
 	{
 	public:
+		static ::pafcore::ClassType* GetType();
 
 		InstanceMethodCallBack* addInstanceMethod(Reference* object,const char* instanceMethodName);
 		void removeInstanceMethod(Reference* object,const char* instanceMethodName);

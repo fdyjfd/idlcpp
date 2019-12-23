@@ -24,6 +24,7 @@ namespace pafcore
 	{
 		return (void*)address;
 	}
+
 	inline void* VoidType::get_NullPtr()
 	{
 		return 0;

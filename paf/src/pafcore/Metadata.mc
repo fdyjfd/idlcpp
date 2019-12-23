@@ -87,9 +87,9 @@ namespace idlcpp
 		m_classTypeIterators = s_classTypeIterators;
 		static ::pafcore::InstanceProperty s_instanceProperties[] = 
 		{
-			::pafcore::InstanceProperty("_name_", 0, GetSingleton(), Metadata_get__name_, RuntimeTypeOf<string_t>::RuntimeType::GetSingleton(), ::pafcore::Metadata::by_value, false, 0, 0, ::pafcore::Metadata::by_value, false),
-			::pafcore::InstanceProperty("_category_", 0, GetSingleton(), Metadata_get__category_, RuntimeTypeOf<::pafcore::Category>::RuntimeType::GetSingleton(), ::pafcore::Metadata::by_value, false, 0, 0, ::pafcore::Metadata::by_value, false),
-			::pafcore::InstanceProperty("_attributeCount_", 0, GetSingleton(), Metadata_get__attributeCount_, RuntimeTypeOf<::size_t>::RuntimeType::GetSingleton(), ::pafcore::Metadata::by_value, false, 0, 0, ::pafcore::Metadata::by_value, false),
+			::pafcore::InstanceProperty("_name_", 0, GetSingleton(), RuntimeTypeOf<string_t>::RuntimeType::GetSingleton(), false, Metadata_get__name_, 0, 0, 0),
+			::pafcore::InstanceProperty("_category_", 0, GetSingleton(), RuntimeTypeOf<::pafcore::Category>::RuntimeType::GetSingleton(), false, Metadata_get__category_, 0, 0, 0),
+			::pafcore::InstanceProperty("_attributeCount_", 0, GetSingleton(), RuntimeTypeOf<::size_t>::RuntimeType::GetSingleton(), false, Metadata_get__attributeCount_, 0, 0, 0),
 		};
 		m_instanceProperties = s_instanceProperties;
 		m_instancePropertyCount = paf_array_size_of(s_instanceProperties);
@@ -98,24 +98,28 @@ namespace idlcpp
 			::pafcore::Result(RuntimeTypeOf<string_t>::RuntimeType::GetSingleton(), false, ::pafcore::Result::by_value),
 			::pafcore::Result(RuntimeTypeOf<string_t>::RuntimeType::GetSingleton(), false, ::pafcore::Result::by_value),
 			::pafcore::Result(RuntimeTypeOf<string_t>::RuntimeType::GetSingleton(), false, ::pafcore::Result::by_value),
+			::pafcore::Result(RuntimeTypeOf<bool>::RuntimeType::GetSingleton(), false, ::pafcore::Result::by_value),
 		};
 		static ::pafcore::Argument s_instanceArguments[] = 
 		{
 			::pafcore::Argument("attributeName", RuntimeTypeOf<string_t>::RuntimeType::GetSingleton(), ::pafcore::Argument::by_value, false),
 			::pafcore::Argument("index", RuntimeTypeOf<::size_t>::RuntimeType::GetSingleton(), ::pafcore::Argument::by_value, false),
 			::pafcore::Argument("index", RuntimeTypeOf<::size_t>::RuntimeType::GetSingleton(), ::pafcore::Argument::by_value, false),
+			::pafcore::Argument("attributeName", RuntimeTypeOf<string_t>::RuntimeType::GetSingleton(), ::pafcore::Argument::by_value, false),
 		};
 		static ::pafcore::Overload s_instanceOverloads[] = 
 		{
 			::pafcore::Overload(&s_instanceResults[0], &s_instanceArguments[0], 1, false, false),
 			::pafcore::Overload(&s_instanceResults[1], &s_instanceArguments[1], 1, false, false),
 			::pafcore::Overload(&s_instanceResults[2], &s_instanceArguments[2], 1, false, false),
+			::pafcore::Overload(&s_instanceResults[3], &s_instanceArguments[3], 1, false, false),
 		};
 		static ::pafcore::InstanceMethod s_instanceMethods[] = 
 		{
 			::pafcore::InstanceMethod("_getAttributeContentByName_", 0, Metadata__getAttributeContentByName_, &s_instanceOverloads[0], 1),
 			::pafcore::InstanceMethod("_getAttributeContent_", 0, Metadata__getAttributeContent_, &s_instanceOverloads[1], 1),
 			::pafcore::InstanceMethod("_getAttributeName_", 0, Metadata__getAttributeName_, &s_instanceOverloads[2], 1),
+			::pafcore::InstanceMethod("_hasAttribute_", 0, Metadata__hasAttribute_, &s_instanceOverloads[3], 1),
 		};
 		m_instanceMethods = s_instanceMethods;
 		m_instanceMethodCount = paf_array_size_of(s_instanceMethods);
@@ -126,6 +130,7 @@ namespace idlcpp
 			&s_instanceMethods[0],
 			&s_instanceMethods[1],
 			&s_instanceMethods[2],
+			&s_instanceMethods[3],
 			&s_instanceProperties[0],
 		};
 		m_members = s_members;
@@ -242,6 +247,27 @@ namespace idlcpp
 			}
 			string_t res = self->_getAttributeName_(a0);
 			result->assignPrimitive(RuntimeTypeOf<string_t>::RuntimeType::GetSingleton(), &res);
+			return ::pafcore::s_ok;
+		}
+		return ::pafcore::e_invalid_arg_num;
+	}
+
+	::pafcore::ErrorCode __pafcore__Metadata_Type::Metadata__hasAttribute_(::pafcore::Variant* result, ::pafcore::Variant** args, int_t numArgs)
+	{
+		if(2 <= numArgs)
+		{
+			::pafcore::Metadata* self;
+			if(!args[0]->castToReferencePtr(GetSingleton(), (void**)&self))
+			{
+				return ::pafcore::e_invalid_this_type;
+			}
+			string_t a0;
+			if(!args[1]->castToPrimitive(RuntimeTypeOf<string_t>::RuntimeType::GetSingleton(), &a0))
+			{
+				return ::pafcore::e_invalid_arg_type_1;
+			}
+			bool res = self->_hasAttribute_(a0);
+			result->assignPrimitive(RuntimeTypeOf<bool>::RuntimeType::GetSingleton(), &res);
 			return ::pafcore::s_ok;
 		}
 		return ::pafcore::e_invalid_arg_num;

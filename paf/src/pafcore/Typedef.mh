@@ -221,6 +221,18 @@ namespace idlcpp
 		PAFCORE_EXPORT static __ptrdiff_t_Type* GetSingleton();
 	};
 
+	class __Nil_Type : public ::pafcore::ClassType
+	{
+	public:
+		__Nil_Type();
+	public:
+		virtual void destroyInstance(void* address);
+		virtual void destroyArray(void* address);
+		virtual bool assign(void* dst, const void* src);
+	public:
+		PAFCORE_EXPORT static __Nil_Type* GetSingleton();
+	};
+
 	class __pafcore__Buffer_Type : public ::pafcore::ClassType
 	{
 	public:
@@ -233,12 +245,38 @@ namespace idlcpp
 		PAFCORE_EXPORT static __pafcore__Buffer_Type* GetSingleton();
 	};
 
+	class __pafcore__MethodAsProperty_Type : public ::pafcore::ClassType
+	{
+	public:
+		__pafcore__MethodAsProperty_Type();
+	public:
+		virtual void destroyInstance(void* address);
+		virtual void destroyArray(void* address);
+		virtual bool assign(void* dst, const void* src);
+	public:
+		PAFCORE_EXPORT static __pafcore__MethodAsProperty_Type* GetSingleton();
+	};
+
 }
+
+template<>
+struct RuntimeTypeOf<::Nil>
+{
+	typedef ::idlcpp::__Nil_Type RuntimeType;
+	enum {type_category = ::pafcore::value_object};
+};
 
 template<>
 struct RuntimeTypeOf<::pafcore::Buffer>
 {
 	typedef ::idlcpp::__pafcore__Buffer_Type RuntimeType;
+	enum {type_category = ::pafcore::value_object};
+};
+
+template<>
+struct RuntimeTypeOf<::pafcore::MethodAsProperty>
+{
+	typedef ::idlcpp::__pafcore__MethodAsProperty_Type RuntimeType;
 	enum {type_category = ::pafcore::value_object};
 };
 

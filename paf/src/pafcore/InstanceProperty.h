@@ -6,6 +6,7 @@
 #include "./Metadata.h"
 namespace pafcore{ class ClassType; }
 namespace pafcore{ class Type; }
+namespace pafcore{ class ClassType; }
 
 namespace pafcore
 {
@@ -18,17 +19,21 @@ namespace pafcore
 	
 	typedef ErrorCode(*InstancePropertyGetter)(InstanceProperty* instanceProperty, Variant* that, Variant* value);
 	typedef ErrorCode(*InstancePropertySetter)(InstanceProperty* instanceProperty, Variant* that, Variant* value);
+	typedef ErrorCode(*InstancePropertyCandidateCount)(InstanceProperty* instanceProperty, Variant* that, Variant* size);
+	typedef ErrorCode(*InstancePropertyGetCandidate)(InstanceProperty* instanceProperty, Variant* that, size_t index, Variant* value);
 
 	typedef ErrorCode(*ArrayInstancePropertyGetter)(InstanceProperty* instanceProperty, Variant* that, size_t index, Variant* value);
 	typedef ErrorCode(*ArrayInstancePropertySetter)(InstanceProperty* instanceProperty, Variant* that, size_t index, Variant* value);
 	typedef ErrorCode(*ArrayInstancePropertySizer)(InstanceProperty* instanceProperty, Variant* that, Variant* size);
 	typedef ErrorCode(*ArrayInstancePropertyResizer)(InstanceProperty* instanceProperty, Variant* that, Variant* size);
-	
-	typedef ErrorCode(*ListInstancePropertyGetter)(InstanceProperty* instanceProperty, Variant* that, size_t index, Variant* value);
-	typedef ErrorCode(*ListInstancePropertySetter)(InstanceProperty* instanceProperty, Variant* that, size_t index, Variant* value);
- 	typedef ErrorCode(*ListInstancePropertyPushBack)(InstanceProperty* instanceProperty, Variant* that, Variant* value);
+	typedef ErrorCode(*ArrayInstancePropertyGetIterator)(InstanceProperty* instanceProperty, Variant* that, Variant* iterator);
+	typedef ErrorCode(*ArrayInstancePropertyGetValue)(InstanceProperty* instanceProperty, Variant* that, Iterator* iterator, Variant* value);
+
+	typedef ErrorCode(*ListInstancePropertyPushBack)(InstanceProperty* instanceProperty, Variant* that, Variant* value);
 	typedef ErrorCode(*ListInstancePropertyGetIterator)(InstanceProperty* instanceProperty, Variant* that, Variant* iterator);
 	typedef ErrorCode(*ListInstancePropertyGetValue)(InstanceProperty* instanceProperty, Variant* that, Iterator* iterator, Variant* value);
+	typedef ErrorCode(*ListInstancePropertyInsert)(InstanceProperty* instanceProperty, Variant* that, Iterator* iterator, Variant* value); 
+	typedef ErrorCode(*ListInstancePropertyErase)(InstanceProperty* instanceProperty, Variant* that, Iterator* iterator);//移除后 iterator 指向下一个
 
 	typedef ErrorCode(*MapInstancePropertyGetter)(InstanceProperty* instanceProperty, Variant* that, Variant* key, Variant* value);
 	typedef ErrorCode(*MapInstancePropertySetter)(InstanceProperty* instanceProperty, Variant* that, Variant* key, Variant* value);
@@ -45,7 +50,7 @@ namespace pafcore
 		virtual ::pafcore::ClassType* getType();
 		virtual size_t getAddress();
 
-		ClassType* get_objectType();
+		ClassType* get_objectType() const;
 
 		bool get_isArray() const;
 		bool get_isList() const;
@@ -56,51 +61,66 @@ namespace pafcore
 		bool get_hasSetter() const;
 		bool get_hasSizer() const;
 		bool get_hasResizer() const;
+		bool get_hasCandidate() const;
+		bool get_serializable() const;
 
-		Type* get_getterType();
-		bool get_getterByValue() const;
-		bool get_getterByRef() const;
-		bool get_getterByPtr() const;
-		bool get_getterConstant() const;
-
-		Type* get_setterType();
-		bool get_setterByValue() const;
-		bool get_setterByRef() const;
-		bool get_setterByPtr() const;
-		bool get_setterConstant() const;
-
-		Type* get_keyType();
-		bool get_keyByValue() const;
-		bool get_keyByRef() const;
-		bool get_keyByPtr() const;
-		bool get_keyConstant() const;
-
+		Type* get_type() const;
+		bool get_isPtr() const;
+		Type* get_keyType() const;
+		bool get_isKeyPtr() const;
 
 	public:
-		InstanceProperty(const char* name, Attributes* attributes, ClassType* objectType,
-			InstancePropertyGetter getter, Type* getterType, Passing getterPassing, bool getterConstant,
-			InstancePropertySetter setter, Type* setterType, Passing setterPassing, bool setterConstant);
+		InstanceProperty(
+			const char* name, 
+			Attributes* attributes, 
+			ClassType* objectType,
+			Type* type, 
+			bool isPtr,
+			InstancePropertyGetter getter,
+			InstancePropertySetter setter,
+			InstancePropertyCandidateCount candidateCount = 0,
+			InstancePropertyGetCandidate getCandidate = 0);
 
-		InstanceProperty(const char* name, Attributes* attributes, ClassType* objectType,
-			ArrayInstancePropertyGetter getter, Type* getterType, Passing getterPassing, bool getterConstant,
-			ArrayInstancePropertySetter setter, Type* setterType, Passing setterPassing, bool setterConstant,
+		InstanceProperty(
+			const char* name, 
+			Attributes* attributes, 
+			ClassType* objectType,
+			Type* type,
+			bool isPtr,
+			ArrayInstancePropertyGetter getter,
+			ArrayInstancePropertySetter setter,
 			ArrayInstancePropertySizer sizer, 
-			ArrayInstancePropertyResizer resizer);
+			ArrayInstancePropertyResizer resizer,
+			ArrayInstancePropertyGetIterator getIterator,
+			ArrayInstancePropertyGetValue getValue);
 
-		InstanceProperty(const char* name, Attributes* attributes, ClassType* objectType,
-			ListInstancePropertyGetter getter, Type* getterType, Passing getterPassing, bool getterConstant,
-			ListInstancePropertySetter setter, Type* setterType, Passing setterPassing, bool setterConstant,
+
+		InstanceProperty(
+			const char* name,
+			Attributes* attributes,
+			ClassType* objectType,
+			Type* type,
+			bool isPtr,
 			ListInstancePropertyPushBack pushBack,
 			ListInstancePropertyGetIterator getIterator,
-			ListInstancePropertyGetValue getValue);
+			ListInstancePropertyGetValue getValue,
+			ListInstancePropertyInsert insert,
+			ListInstancePropertyErase erase);
 
-		InstanceProperty(const char* name, Attributes* attributes, ClassType* objectType,
-			MapInstancePropertyGetter getter, Type* getterType, Passing getterPassing, bool getterConstant,
-			MapInstancePropertySetter setter, Type* setterType, Passing setterPassing, bool setterConstant,
+		InstanceProperty(
+			const char* name,
+			Attributes* attributes,
+			ClassType* objectType,
+			Type* type,
+			bool isPtr,
+			Type* keyType, 
+			bool isKeyPtr,
+			MapInstancePropertyGetter getter,
+			MapInstancePropertySetter setter,
 			MapInstancePropertyGetIterator getIterator,
 			MapInstancePropertyGetKey getKey,
-			MapInstancePropertyGetValue getValue,
-			Type* keyType, Passing keyPassing, bool keyConstant);
+			MapInstancePropertyGetValue getValue);
+
 	public:
 		ClassType * m_objectType;
 		union
@@ -109,6 +129,8 @@ namespace pafcore
 			{
 				InstancePropertyGetter m_getter;
 				InstancePropertySetter m_setter;
+				InstancePropertyCandidateCount m_candidateCount;
+				InstancePropertyGetCandidate m_getCandidate;
 			};
 			struct
 			{
@@ -116,14 +138,16 @@ namespace pafcore
 				ArrayInstancePropertySetter m_arraySetter;
 				ArrayInstancePropertySizer m_arraySizer;
 				ArrayInstancePropertyResizer m_arrayResizer;
+				ArrayInstancePropertyGetIterator m_arrayGetIterator;
+				ArrayInstancePropertyGetValue m_arrayGetValue;
 			};
 			struct
 			{
-				ListInstancePropertyGetter m_listGetter;
-				ListInstancePropertySetter m_listSetter;
 				ListInstancePropertyPushBack m_listPushBack;
 				ListInstancePropertyGetIterator m_listGetIterator;
 				ListInstancePropertyGetValue m_listGetValue;
+				ListInstancePropertyInsert m_listInsert;
+				ListInstancePropertyErase m_listErase;
 			};
 			struct
 			{
@@ -134,17 +158,90 @@ namespace pafcore
 				MapInstancePropertyGetValue m_mapGetValue;
 			};
 		};
-		Type* m_getterType;
-		Type* m_setterType;
+		Type* m_type;
 		Type* m_keyType;
-		byte_t m_getterPassing;
-		byte_t m_setterPassing;
-		byte_t m_keyPassing;
-		bool m_getterConstant;
-		bool m_setterConstant;
-		bool m_keyConstant;
-		PropertyCategory m_category;
+		byte_t m_category;
+		bool m_isPtr;
+		bool m_isKeyPtr;
+		bool m_serializable;
 
 	};
+
+	inline ClassType* InstanceProperty::get_objectType() const
+	{
+		return m_objectType;
+	}
+
+	inline bool InstanceProperty::get_isSimple() const
+	{
+		return simple_property == m_category;
+	}
+
+	inline bool InstanceProperty::get_isArray() const
+	{
+		return array_property == m_category;
+	}
+
+	inline bool InstanceProperty::get_isList() const
+	{
+		return list_property == m_category;
+	}
+
+	inline bool InstanceProperty::get_isMap() const
+	{
+		return map_property == m_category;
+	}
+
+	inline bool InstanceProperty::get_hasGetter() const
+	{
+		return (0 != m_getter);
+	}
+
+	inline bool InstanceProperty::get_hasSetter() const
+	{
+		return (0 != m_setter);
+	}
+
+	inline bool InstanceProperty::get_hasSizer() const
+	{
+		return (0 != m_arraySizer);
+	}
+
+	inline bool InstanceProperty::get_hasResizer() const
+	{
+		return (0 != m_arrayResizer);
+	}
+
+	inline bool InstanceProperty::get_hasCandidate() const
+	{
+		return get_isSimple() && m_candidateCount && m_getCandidate;
+	}
+
+	inline Type* InstanceProperty::get_type() const
+	{
+		return m_type;
+	}
+
+	inline bool InstanceProperty::get_isPtr() const
+	{
+		return m_isPtr;
+	}
+
+	inline Type* InstanceProperty::get_keyType() const
+	{
+		return m_keyType;
+	}
+
+	inline bool InstanceProperty::get_isKeyPtr() const
+	{
+		return m_isKeyPtr;
+	}
+
+	inline bool InstanceProperty::get_serializable() const
+	{
+		return m_serializable;
+	}
+
+
 
 }

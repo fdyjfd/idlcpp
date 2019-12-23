@@ -4,6 +4,7 @@
 #pragma once
 
 #include "./Type.h"
+namespace pafcore{ class ClassType; }
 
 namespace pafcore
 {
@@ -34,6 +35,7 @@ namespace pafcore
 	{
 		return (void*)address;
 	}
+
 	inline void* VoidType::get_NullPtr()
 	{
 		return 0;

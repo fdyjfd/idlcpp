@@ -5,6 +5,7 @@
 
 #include "./Type.h"
 namespace pafcore{ class Metadata; }
+namespace pafcore{ class ClassType; }
 
 
 #include "Variant.h"

@@ -67,15 +67,15 @@ public:
 		m_ptr = p;
 	}
 
-	T* getPointer()
+	T* getPointer() const
 	{
 		return m_ptr;
 	}
 
-	const T* getPointer() const
-	{
-		return m_ptr;
-	}
+	//const T* getPointer() const
+	//{
+	//	return m_ptr;
+	//}
 
 	bool isNull() const
 	{
@@ -174,6 +174,38 @@ public:
 		return 0 == m_ptr;
 	}
 
+protected:
+	T* m_ptr;
+};
+
+template<typename T>
+class WeakRefPtr
+{
+public:
+	operator T*()
+	{
+		return m_ptr;
+	}
+	operator const T*() const
+	{
+		return m_ptr;
+	}
+protected:
+	T* m_ptr;
+};
+
+template<typename T>
+class StrongRefPtr
+{
+public:
+	operator T*()
+	{
+		return m_ptr;
+	}
+	operator const T*() const
+	{
+		return m_ptr;
+	}
 protected:
 	T* m_ptr;
 };

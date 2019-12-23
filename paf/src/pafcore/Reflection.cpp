@@ -404,18 +404,18 @@ ErrorCode Reflection::StringToInstanceProperty(Variant& that, InstanceProperty* 
 		return e_property_is_not_readable;
 	}
 	Variant value;
-	if (instanceProperty->m_setterType->isPrimitive())
+	if (instanceProperty->m_type->isPrimitive())
 	{
-		Reflection::StringToPrimitive(value, static_cast<PrimitiveType*>(instanceProperty->m_setterType), str);
+		Reflection::StringToPrimitive(value, static_cast<PrimitiveType*>(instanceProperty->m_type), str);
 	}
-	else if (instanceProperty->m_setterType->isEnum())
+	else if (instanceProperty->m_type->isEnum())
 	{
-		Reflection::StringToEnum(value, static_cast<EnumType*>(instanceProperty->m_setterType), str);
+		Reflection::StringToEnum(value, static_cast<EnumType*>(instanceProperty->m_type), str);
 	}
 	else
 	{
-		PAF_ASSERT(instanceProperty->m_setterType->isValue() || instanceProperty->m_setterType->isReference());
-		Reflection::StringToObject(value, static_cast<ClassType*>(instanceProperty->m_setterType), str);
+		PAF_ASSERT(instanceProperty->m_type->isValue() || instanceProperty->m_type->isReference());
+		Reflection::StringToObject(value, static_cast<ClassType*>(instanceProperty->m_type), str);
 	}
 	ErrorCode errorCode = (*instanceProperty->m_setter)(instanceProperty, &that, &value);
 	return errorCode;
@@ -438,6 +438,7 @@ ErrorCode Reflection::StringToInstanceProperty(Variant& that, const char* proper
 
 ErrorCode Reflection::NewPrimitive(Variant& result, PrimitiveType* type)
 {
+	PAF_ASSERT(0 != type);
 	StaticMethod* staticMethod = type->findStaticMethod("New");
 	if (staticMethod)
 	{
@@ -447,15 +448,44 @@ ErrorCode Reflection::NewPrimitive(Variant& result, PrimitiveType* type)
 	return e_member_not_found;
 }
 
+ErrorCode Reflection::NewPrimitive(Variant& result, PrimitiveType* type, Variant* argument)
+{
+	PAF_ASSERT(0 != type && 0 != argument);
+	StaticMethod* staticMethod = type->findStaticMethod("New");
+	if (staticMethod)
+	{
+		ErrorCode errorCode = (*staticMethod->m_invoker)(&result, &argument, 1);
+		return errorCode;
+	}
+	return e_member_not_found;
+}
+
 ErrorCode Reflection::NewEnum(Variant& result, EnumType* type)
 {
+	PAF_ASSERT(0 != type);
 	size_t value = 0;
 	result.assignEnum(type, &value);
 	return s_ok;
 }
 
+ErrorCode Reflection::NewEnum(Variant& result, EnumType* type, Variant* argument)
+{
+	PAF_ASSERT(0 != type && 0 != argument);
+	size_t value;
+	if (argument->castToPrimitive(RuntimeTypeOf<size_t>::RuntimeType::GetSingleton(), &value))
+	{
+		result.assignEnum(type, &value);
+		return s_ok;
+	}
+	else
+	{
+		return e_invalid_arg_type_1;
+	}
+}
+
 ErrorCode Reflection::NewClass(Variant& result, ClassType* type)
 {
+	PAF_ASSERT(0 != type);
 	StaticMethod* staticMethod = type->findStaticMethod("New", false);
 	if (staticMethod)
 	{
@@ -465,24 +495,56 @@ ErrorCode Reflection::NewClass(Variant& result, ClassType* type)
 	return e_member_not_found;
 }
 
+ErrorCode Reflection::NewClass(Variant& result, ClassType* type, Variant* argument)
+{
+	PAF_ASSERT(0 != type && 0 != argument);
+	StaticMethod* staticMethod = type->findStaticMethod("New", false);
+	if (staticMethod)
+	{
+		ErrorCode errorCode = (*staticMethod->m_invoker)(&result, &argument, 1);
+		return errorCode;
+	}
+	return e_member_not_found;
+}
+
 ErrorCode Reflection::NewObject(Variant& result, Type* type)
 {
-	if (type->isPrimitive())
+	if (type)
 	{
-		return NewPrimitive(result, static_cast<PrimitiveType*>(type));
+		if (type->isPrimitive())
+		{
+			return NewPrimitive(result, static_cast<PrimitiveType*>(type));
+		}
+		else if (type->isEnum())
+		{
+			return NewEnum(result, static_cast<EnumType*>(type));
+		}
+		else if (type->isClass())
+		{
+			return NewClass(result, static_cast<ClassType*>(type));
+		}
 	}
-	else if (type->isEnum())
+	return e_invalid_type;
+}
+
+ErrorCode Reflection::NewObject(Variant& result, Type* type, Variant* argument)
+{
+	if (type)
 	{
-		return NewEnum(result, static_cast<EnumType*>(type));
+		if (type->isPrimitive())
+		{
+			return NewPrimitive(result, static_cast<PrimitiveType*>(type), argument);
+		}
+		else if (type->isEnum())
+		{
+			return NewEnum(result, static_cast<EnumType*>(type), argument);
+		}
+		else if (type->isClass())
+		{
+			return NewClass(result, static_cast<ClassType*>(type), argument);
+		}
 	}
-	else if (type->isClass())
-	{
-		return NewClass(result, static_cast<ClassType*>(type));
-	}
-	else
-	{
-		return e_invalid_type;
-	}
+	return e_invalid_type;
 }
 
 //
@@ -702,6 +764,40 @@ ErrorCode Reflection::SetArrayInstanceProperty(Variant* that, InstanceProperty* 
 	}
 }
 
+ErrorCode Reflection::ArrayInstanceProperty_GetIterator(Variant* iterator, Variant* that, InstanceProperty* property)
+{
+	if (property->get_isArray())
+	{
+		if (0 == property->m_arrayGetIterator)
+		{
+			return e_property_is_not_iterable;
+		}
+		ErrorCode errorCode = (*property->m_arrayGetIterator)(property, that, iterator);
+		return errorCode;
+	}
+	else
+	{
+		return e_is_not_array_property;
+	}
+}
+
+ErrorCode Reflection::ArrayInstanceProperty_GetValue(Variant& value, Variant* that, InstanceProperty* property, Iterator* iterator)
+{
+	if (property->get_isArray())
+	{
+		if (0 == property->m_arrayGetValue)
+		{
+			return e_property_is_not_dereferenceable;
+		}
+		ErrorCode errorCode = (*property->m_arrayGetValue)(property, that, iterator, &value);
+		return errorCode;
+	}
+	else
+	{
+		return e_is_not_array_property;
+	}
+}
+
 
 //ErrorCode Reflection::GetInstanceArrayProperty(Variant& value, Variant* that, InstanceArrayProperty* property, size_t index)
 //{
@@ -838,40 +934,22 @@ ErrorCode Reflection::CallInstanceMethod(Variant& result, Variant* that, Instanc
 	return errorCode;
 }
 
-
-ErrorCode Reflection::ListInstanceProperty_Get(Variant& value, Variant* that, InstanceProperty* property, size_t index)
+ErrorCode Reflection::CallStaticMethod(Variant& result, StaticMethod* method, Variant* arguments, int_t numArgs)
 {
-	if (property->get_isList())
+	const size_t max_param_count = 20;
+	Variant* args[max_param_count];
+	if (numArgs > max_param_count)
 	{
-		if (0 == property->m_listGetter)
-		{
-			return e_property_is_not_writable;
-		}
-		ErrorCode errorCode = (*property->m_listGetter)(property, that, index, &value);
-		return errorCode;
+		numArgs = max_param_count;
 	}
-	else
+	for (int_t i = 0; i < numArgs; ++i)
 	{
-		return e_is_not_list_property;
+		args[i] = &arguments[i];
 	}
+	ErrorCode errorCode = (*method->m_invoker)(&result, args, numArgs);
+	return errorCode;
 }
 
-ErrorCode Reflection::ListInstanceProperty_Set(Variant* that, InstanceProperty* property, size_t index, Variant& value)
-{
-	if (property->get_isList())
-	{
-		if (0 == property->m_listGetter)
-		{
-			return e_property_is_not_readable;
-		}
-		ErrorCode errorCode = (*property->m_listGetter)(property, that, index, &value);
-		return errorCode;
-	}
-	else
-	{
-		return e_is_not_list_property;
-	}
-}
 
 ErrorCode Reflection::ListInstanceProperty_PushBack(Variant* that, InstanceProperty* property, Variant& value)
 {
@@ -920,9 +998,45 @@ ErrorCode Reflection::ListInstanceProperty_GetValue(Variant& value, Variant* tha
 	}
 	else
 	{
-		return e_is_not_map_property;
+		return e_is_not_array_property;
 	}
 }
+
+ErrorCode Reflection::ListInstanceProperty_Insert(Variant* that, InstanceProperty* property, Iterator* iterator, Variant& value)
+{
+	if (property->get_isList())
+	{
+		if (0 == property->m_listInsert)
+		{
+			return e_property_is_not_writable;
+		}
+		ErrorCode errorCode = (*property->m_listInsert)(property, that, iterator, &value);
+		return errorCode;
+	}
+	else
+	{
+		return e_is_not_list_property;
+	}
+}
+
+
+ErrorCode Reflection::ListInstanceProperty_Erase(Variant* that, InstanceProperty* property, Iterator* iterator)
+{
+	if (property->get_isList())
+	{
+		if (0 == property->m_listErase)
+		{
+			return e_property_is_not_writable;
+		}
+		ErrorCode errorCode = (*property->m_listErase)(property, that, iterator);
+		return errorCode;
+	}
+	else
+	{
+		return e_is_not_list_property;
+	}
+}
+
 
 
 END_PAFCORE

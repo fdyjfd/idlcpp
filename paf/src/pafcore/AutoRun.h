@@ -31,3 +31,14 @@ public:
 };
 
 #define AUTO_REGISTER_TYPEALIAS(T) AutoRegisterTypeAlias<T> g_auto_register_##T;
+
+#define BEGIN_AUTO_RUN(T)		\
+struct AutoRun_##T				\
+{								\
+	AutoRun_##T()				\
+	{
+
+#define END_AUTO_RUN(T)			\
+	}							\
+};								\
+static AutoRun_##T s_autoRun_##T;

@@ -4,12 +4,12 @@
 
 BEGIN_PAFCORE
 
-inline long_t Atomic_Increment(long_t * lpAddend)
+inline long_t Atomic_Increment(volatile long_t * lpAddend)
 {
 	return _InterlockedIncrement(lpAddend);
 }
 
-inline long_t Atomic_Decrement(long_t * lpAddend)
+inline long_t Atomic_Decrement(volatile long_t * lpAddend)
 {
 	return _InterlockedDecrement(lpAddend);
 }
@@ -55,7 +55,7 @@ public:
 		return res;
 	}
 private:
-	long_t m_refCount;
+	volatile long_t m_refCount;
 };
 
 class DebugRefCountObject : public VirtualDestructor
@@ -77,7 +77,7 @@ public:
 		return res;
 	}
 private:
-	long_t m_refCount;
+	volatile long_t m_refCount;
 };
 
 template<typename T>
@@ -235,7 +235,7 @@ public:
 		return res;
 	}
 private:
-	long_t m_refCount;
+	volatile long_t m_refCount;
 };
 
 
@@ -362,7 +362,7 @@ public:
 		return res;
 	}
 private:
-	long_t m_refCount;
+	volatile long_t m_refCount;
 };
 
 END_PAFCORE

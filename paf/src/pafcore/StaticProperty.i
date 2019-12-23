@@ -12,17 +12,21 @@ namespace pafcore
 
 	typedef ErrorCode(*StaticPropertyGetter)(Variant* value);
 	typedef ErrorCode(*StaticPropertySetter)(Variant* value);
+	typedef ErrorCode(*StaticPropertyCandidateCount)(Variant* size);
+	typedef ErrorCode(*StaticPropertyGetCandidate)(size_t index, Variant* value);
 
 	typedef ErrorCode(*ArrayStaticPropertyGetter)(size_t index, Variant* value);
 	typedef ErrorCode(*ArrayStaticPropertySetter)(size_t index, Variant* value);
 	typedef ErrorCode(*ArrayStaticPropertySizer)(Variant* size);
 	typedef ErrorCode(*ArrayStaticPropertyResizer)(Variant* size);
+	typedef ErrorCode(*ArrayStaticPropertyGetIterator)(Variant* iterator);
+	typedef ErrorCode(*ArrayStaticPropertyGetValue)(Iterator* iterator, Variant* value);
 
-	typedef ErrorCode(*ListStaticPropertyGetter)(size_t index, Variant* value);
-	typedef ErrorCode(*ListStaticPropertySetter)(size_t index, Variant* value);
 	typedef ErrorCode(*ListStaticPropertyPushBack)(Variant* value);
 	typedef ErrorCode(*ListStaticPropertyGetIterator)(Variant* iterator);
 	typedef ErrorCode(*ListStaticPropertyGetValue)(Iterator* iterator, Variant* value);
+	typedef ErrorCode(*ListStaticPropertyInsert)(Iterator* iterator, Variant* value);
+	typedef ErrorCode(*ListStaticPropertyErase)(Iterator* iterator);
 
 	typedef ErrorCode(*MapStaticPropertyGetter)(Variant* key, Variant* value);
 	typedef ErrorCode(*MapStaticPropertySetter)(Variant* key, Variant* value);
@@ -43,50 +47,60 @@ namespace pafcore
 		bool hasSetter { get };
 		bool hasSizer { get };
 		bool hasResizer { get };
+		bool hasCandidate{ get };
 
-		Type* getterType { get };
-		bool getterByValue { get };
-		bool getterByRef { get };
-		bool getterByPtr { get };
-		bool getterConstant { get };
-
-		Type* setterType { get };
-		bool setterByValue { get };
-		bool setterByRef { get };
-		bool setterByPtr { get };
-		bool setterConstant { get };
+		Type* type { get };
+		bool isPtr { get };
 
 		Type* keyType { get };
-		bool keyByValue { get };
-		bool keyByRef { get };
-		bool keyByPtr { get };
-		bool keyConstant { get };
+		bool isKeyPtr { get };
 #{
 	public:
-		StaticProperty(const char* name, Attributes* attributes,
-			StaticPropertyGetter getter, Type* getterType, Passing getterPassing, bool getterConstant,
-			StaticPropertySetter setter, Type* setterType, Passing setterPassing, bool setterConstant);
+		StaticProperty(
+			const char* name, 
+			Attributes* attributes,
+			Type* type,
+			bool isPtr,
+			StaticPropertyGetter getter,
+			StaticPropertySetter setter,
+			StaticPropertyCandidateCount candidateCount = 0,
+			StaticPropertyGetCandidate getCandidate = 0);
 
-		StaticProperty(const char* name, Attributes* attributes,
-			ArrayStaticPropertyGetter getter, Type* getterType, Passing getterPassing, bool getterConstant,
-			ArrayStaticPropertySetter setter, Type* setterType, Passing setterPassing, bool setterConstant,
+		StaticProperty(
+			const char* name,
+			Attributes* attributes,
+			Type* type,
+			bool isPtr,
+			ArrayStaticPropertyGetter getter,
+			ArrayStaticPropertySetter setter,
 			ArrayStaticPropertySizer sizer,
-			ArrayStaticPropertyResizer resizer);
+			ArrayStaticPropertyResizer resizer,
+			ArrayStaticPropertyGetIterator getIterator,
+			ArrayStaticPropertyGetValue getValue);
 
-		StaticProperty(const char* name, Attributes* attributes,
-			ListStaticPropertyGetter getter, Type* getterType, Passing getterPassing, bool getterConstant,
-			ListStaticPropertySetter setter, Type* setterType, Passing setterPassing, bool setterConstant,
+		StaticProperty(
+			const char* name,
+			Attributes* attributes,
+			Type* type,
+			bool isPtr,
 			ListStaticPropertyPushBack pushBack,
 			ListStaticPropertyGetIterator getIterator,
-			ListStaticPropertyGetValue getValue);
+			ListStaticPropertyGetValue getValue,
+			ListStaticPropertyInsert insert,
+			ListStaticPropertyErase erase);
 
-		StaticProperty(const char* name, Attributes* attributes,
-			MapStaticPropertyGetter getter, Type* getterType, Passing getterPassing, bool getterConstant,
-			MapStaticPropertySetter setter, Type* setterType, Passing setterPassing, bool setterConstant,
+		StaticProperty(
+			const char* name,
+			Attributes* attributes,
+			Type* type,
+			bool isPtr,
+			Type* keyType,
+			bool isKeyPtr,
+			MapStaticPropertyGetter getter,
+			MapStaticPropertySetter setter,
 			MapStaticPropertyGetIterator getIterator,
 			MapStaticPropertyGetKey getKey,
-			MapStaticPropertyGetValue getValue,
-			Type* keyType, Passing keyPassing, bool keyConstant);
+			MapStaticPropertyGetValue getValue);
 	public:
 		union
 		{
@@ -94,6 +108,8 @@ namespace pafcore
 			{
 				StaticPropertyGetter m_getter;
 				StaticPropertySetter m_setter;
+				StaticPropertyCandidateCount m_candidateCount;
+				StaticPropertyGetCandidate m_getCandidate;
 			};
 			struct
 			{
@@ -101,14 +117,16 @@ namespace pafcore
 				ArrayStaticPropertySetter m_arraySetter;
 				ArrayStaticPropertySizer m_arraySizer;
 				ArrayStaticPropertyResizer m_arrayResizer;
+				ArrayStaticPropertyGetIterator m_arrayGetIterator;
+				ArrayStaticPropertyGetValue m_arrayGetValue;
 			};
 			struct
 			{
-				ListStaticPropertyGetter m_listGetter;
-				ListStaticPropertySetter m_listSetter;
 				ListStaticPropertyPushBack m_listPushBack;
 				ListStaticPropertyGetIterator m_listGetIterator;
 				ListStaticPropertyGetValue m_listGetValue;
+				ListStaticPropertyInsert m_listInsert;
+				ListStaticPropertyErase m_listErase;
 			};
 			struct
 			{
@@ -119,16 +137,11 @@ namespace pafcore
 				MapStaticPropertyGetValue m_mapGetValue;
 			};
 		};
-		Type* m_getterType;
-		Type* m_setterType;
+		Type* m_type;
 		Type* m_keyType;
-		byte_t m_getterPassing;
-		byte_t m_setterPassing;
-		byte_t m_keyPassing;
-		bool m_getterConstant;
-		bool m_setterConstant;
-		bool m_keyConstant;
-		PropertyCategory m_category;
+		bool m_isPtr;
+		bool m_isKeyPtr;
+		byte_t m_category;
 #}
 	};
 

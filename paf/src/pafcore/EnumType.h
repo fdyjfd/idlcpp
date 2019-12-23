@@ -5,6 +5,7 @@
 
 #include "./Type.h"
 namespace pafcore{ class Enumerator; }
+namespace pafcore{ class ClassType; }
 
 
 namespace pafcore

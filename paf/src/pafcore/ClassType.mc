@@ -35,8 +35,8 @@ namespace idlcpp
 		m_size = sizeof(::pafcore::ClassTypeIterator);
 		static ::pafcore::Result s_instanceResults[] = 
 		{
-			::pafcore::Result(RuntimeTypeOf<::pafcore::ClassType>::RuntimeType::GetSingleton(), false, ::pafcore::Result::by_ptr),
 			::pafcore::Result(RuntimeTypeOf<::pafcore::ClassTypeIterator>::RuntimeType::GetSingleton(), false, ::pafcore::Result::by_ptr),
+			::pafcore::Result(RuntimeTypeOf<::pafcore::ClassType>::RuntimeType::GetSingleton(), false, ::pafcore::Result::by_ptr),
 		};
 		static ::pafcore::Overload s_instanceOverloads[] = 
 		{
@@ -45,8 +45,8 @@ namespace idlcpp
 		};
 		static ::pafcore::InstanceMethod s_instanceMethods[] = 
 		{
-			::pafcore::InstanceMethod("deref", 0, ClassTypeIterator_deref, &s_instanceOverloads[0], 1),
-			::pafcore::InstanceMethod("next", 0, ClassTypeIterator_next, &s_instanceOverloads[1], 1),
+			::pafcore::InstanceMethod("next", 0, ClassTypeIterator_next, &s_instanceOverloads[0], 1),
+			::pafcore::InstanceMethod("value", 0, ClassTypeIterator_value, &s_instanceOverloads[1], 1),
 		};
 		m_instanceMethods = s_instanceMethods;
 		m_instanceMethodCount = paf_array_size_of(s_instanceMethods);
@@ -76,22 +76,6 @@ namespace idlcpp
 		return true;
 	}
 
-	::pafcore::ErrorCode __pafcore__ClassTypeIterator_Type::ClassTypeIterator_deref(::pafcore::Variant* result, ::pafcore::Variant** args, int_t numArgs)
-	{
-		if(1 <= numArgs)
-		{
-			::pafcore::ClassTypeIterator* self;
-			if(!args[0]->castToValuePtr(GetSingleton(), (void**)&self))
-			{
-				return ::pafcore::e_invalid_this_type;
-			}
-			::pafcore::ClassType* res = self->deref();
-			result->assignReferencePtr(RuntimeTypeOf<::pafcore::ClassType>::RuntimeType::GetSingleton(), res, false, ::pafcore::Variant::by_ptr);
-			return ::pafcore::s_ok;
-		}
-		return ::pafcore::e_invalid_arg_num;
-	}
-
 	::pafcore::ErrorCode __pafcore__ClassTypeIterator_Type::ClassTypeIterator_next(::pafcore::Variant* result, ::pafcore::Variant** args, int_t numArgs)
 	{
 		if(1 <= numArgs)
@@ -103,6 +87,22 @@ namespace idlcpp
 			}
 			::pafcore::ClassTypeIterator* res = self->next();
 			result->assignValuePtr(RuntimeTypeOf<::pafcore::ClassTypeIterator>::RuntimeType::GetSingleton(), res, false, ::pafcore::Variant::by_ptr);
+			return ::pafcore::s_ok;
+		}
+		return ::pafcore::e_invalid_arg_num;
+	}
+
+	::pafcore::ErrorCode __pafcore__ClassTypeIterator_Type::ClassTypeIterator_value(::pafcore::Variant* result, ::pafcore::Variant** args, int_t numArgs)
+	{
+		if(1 <= numArgs)
+		{
+			::pafcore::ClassTypeIterator* self;
+			if(!args[0]->castToValuePtr(GetSingleton(), (void**)&self))
+			{
+				return ::pafcore::e_invalid_this_type;
+			}
+			::pafcore::ClassType* res = self->value();
+			result->assignReferencePtr(RuntimeTypeOf<::pafcore::ClassType>::RuntimeType::GetSingleton(), res, false, ::pafcore::Variant::by_ptr);
 			return ::pafcore::s_ok;
 		}
 		return ::pafcore::e_invalid_arg_num;

@@ -6,6 +6,7 @@
 #include "./Metadata.h"
 namespace pafcore{ class Type; }
 namespace pafcore{ class ClassType; }
+namespace pafcore{ class ClassType; }
 
 namespace pafcore
 {
@@ -21,8 +22,8 @@ namespace pafcore
 		virtual ::pafcore::ClassType* getType();
 		virtual size_t getAddress();
 
-		Type* get_type();
-		ClassType* get_objectType();
+		Type* get_type() const;
+		ClassType* get_objectType() const;
 		size_t get_offset() const;
 		bool get_isArray() const;
 		bool get_isPointer() const;

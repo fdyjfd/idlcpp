@@ -406,7 +406,7 @@ namespace idlcpp
 				return ::pafcore::e_invalid_arg_type_1;
 			}
 			::pafcore::String* res = ::pafcore::String::NewArray(a0);
-			result->assignArray(RuntimeTypeOf<::pafcore::String>::RuntimeType::GetSingleton(), res, paf_new_array_size_of(res), false, ::pafcore::Variant::by_new_array);
+			result->assignArray(RuntimeTypeOf<::pafcore::String>::RuntimeType::GetSingleton(), res, paf_new_array_size_of<::pafcore::String>(res), false, ::pafcore::Variant::by_new_array);
 			return ::pafcore::s_ok;
 		}
 		return ::pafcore::e_invalid_arg_num;

@@ -14,7 +14,7 @@ EnumType::EnumType(const char* name)
 	m_enumeratorCount = 0;
 	static pafcore::InstanceProperty s_properties[] = 
 	{
-		::pafcore::InstanceProperty("_name_", 0, 0, Enum_get__name_, RuntimeTypeOf<string_t>::RuntimeType::GetSingleton(), Metadata::by_value, false, 0, 0, Metadata::by_value, false),
+		::pafcore::InstanceProperty("_name_", 0, 0, RuntimeTypeOf<string_t>::RuntimeType::GetSingleton(), false, Enum_get__name_, 0, 0, 0),
 	};
 	m_instanceProperties = s_properties;
 	m_instancePropertyCount = paf_array_size_of(s_properties);

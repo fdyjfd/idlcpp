@@ -18,7 +18,7 @@ bool Result::get_isConstant() const
 	return m_constant;
 }
 
-Type* Result::get_type()
+Type* Result::get_type() const
 {
 	return m_type;
 }

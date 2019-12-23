@@ -127,6 +127,7 @@ namespace pafcore
 		string_t _getAttributeName_(size_t index);
 		string_t _getAttributeContent_(size_t index);
 		string_t _getAttributeContentByName_(string_t attributeName);
+		bool _hasAttribute_(string_t attributeName);
 #{
 	public:
 		enum Passing

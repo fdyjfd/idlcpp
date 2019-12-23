@@ -31,6 +31,8 @@ namespace pafcore
 		String& operator=(const String& arg);
 		String& operator+=(const char* str);
 		String& operator+=(const String& arg);
+		bool operator == (const String& arg) const;
+		bool operator != (const String& arg) const;
 		bool operator < (const String& arg) const;
 	public:
 		char* m_str;

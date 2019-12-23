@@ -467,6 +467,40 @@ namespace idlcpp
 		return s_instance;
 	}
 
+	__Nil_Type::__Nil_Type() : ::pafcore::ClassType("Nil", ::pafcore::value_object)
+	{
+		m_size = sizeof(::Nil);
+		::pafcore::NameSpace::GetGlobalNameSpace()->registerMember(this);
+	}
+
+	void __Nil_Type::destroyInstance(void* address)
+	{
+		delete reinterpret_cast<::Nil*>(address);
+	}
+
+	void __Nil_Type::destroyArray(void* address)
+	{
+		paf_delete_array(reinterpret_cast<::Nil*>(address));
+	}
+
+	bool __Nil_Type::assign(void* dst, const void* src)
+	{
+		*(::Nil*)dst = *(const ::Nil*)src;
+		return true;
+	}
+
+	__Nil_Type* __Nil_Type::GetSingleton()
+	{
+		static __Nil_Type* s_instance = 0;
+		static char s_buffer[sizeof(__Nil_Type)];
+		if(0 == s_instance)
+		{
+			s_instance = (__Nil_Type*)s_buffer;
+			new (s_buffer)__Nil_Type;
+		}
+		return s_instance;
+	}
+
 	__pafcore__Buffer_Type::__pafcore__Buffer_Type() : ::pafcore::ClassType("Buffer", ::pafcore::value_object)
 	{
 		m_size = sizeof(::pafcore::Buffer);
@@ -497,6 +531,40 @@ namespace idlcpp
 		{
 			s_instance = (__pafcore__Buffer_Type*)s_buffer;
 			new (s_buffer)__pafcore__Buffer_Type;
+		}
+		return s_instance;
+	}
+
+	__pafcore__MethodAsProperty_Type::__pafcore__MethodAsProperty_Type() : ::pafcore::ClassType("MethodAsProperty", ::pafcore::value_object)
+	{
+		m_size = sizeof(::pafcore::MethodAsProperty);
+		::pafcore::NameSpace::GetGlobalNameSpace()->getNameSpace("pafcore")->registerMember(this);
+	}
+
+	void __pafcore__MethodAsProperty_Type::destroyInstance(void* address)
+	{
+		delete reinterpret_cast<::pafcore::MethodAsProperty*>(address);
+	}
+
+	void __pafcore__MethodAsProperty_Type::destroyArray(void* address)
+	{
+		paf_delete_array(reinterpret_cast<::pafcore::MethodAsProperty*>(address));
+	}
+
+	bool __pafcore__MethodAsProperty_Type::assign(void* dst, const void* src)
+	{
+		*(::pafcore::MethodAsProperty*)dst = *(const ::pafcore::MethodAsProperty*)src;
+		return true;
+	}
+
+	__pafcore__MethodAsProperty_Type* __pafcore__MethodAsProperty_Type::GetSingleton()
+	{
+		static __pafcore__MethodAsProperty_Type* s_instance = 0;
+		static char s_buffer[sizeof(__pafcore__MethodAsProperty_Type)];
+		if(0 == s_instance)
+		{
+			s_instance = (__pafcore__MethodAsProperty_Type*)s_buffer;
+			new (s_buffer)__pafcore__MethodAsProperty_Type;
 		}
 		return s_instance;
 	}
@@ -555,4 +623,6 @@ AUTO_REGISTER_TYPE(::idlcpp::__size_t_Type)
 static_assert(RuntimeTypeOf<::size_t>::type_category == ::pafcore::primitive_object, "type category error");
 AUTO_REGISTER_TYPE(::idlcpp::__ptrdiff_t_Type)
 static_assert(RuntimeTypeOf<::ptrdiff_t>::type_category == ::pafcore::primitive_object, "type category error");
+AUTO_REGISTER_TYPE(::idlcpp::__Nil_Type)
 AUTO_REGISTER_TYPE(::idlcpp::__pafcore__Buffer_Type)
+AUTO_REGISTER_TYPE(::idlcpp::__pafcore__MethodAsProperty_Type)

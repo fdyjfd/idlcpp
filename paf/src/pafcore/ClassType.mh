@@ -22,8 +22,8 @@ namespace idlcpp
 		virtual void destroyArray(void* address);
 		virtual bool assign(void* dst, const void* src);
 	public:
-		static ::pafcore::ErrorCode ClassTypeIterator_deref(::pafcore::Variant* result, ::pafcore::Variant** args, int numArgs);
 		static ::pafcore::ErrorCode ClassTypeIterator_next(::pafcore::Variant* result, ::pafcore::Variant** args, int numArgs);
+		static ::pafcore::ErrorCode ClassTypeIterator_value(::pafcore::Variant* result, ::pafcore::Variant** args, int numArgs);
 	public:
 		PAFCORE_EXPORT static __pafcore__ClassTypeIterator_Type* GetSingleton();
 	};

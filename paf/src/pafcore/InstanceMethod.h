@@ -6,6 +6,7 @@
 #include "./Metadata.h"
 namespace pafcore{ class Result; }
 namespace pafcore{ class Argument; }
+namespace pafcore{ class ClassType; }
 
 #include "Overload.h"
 

@@ -16,12 +16,12 @@ InstanceField::InstanceField(const char* name, Attributes* attributes, ClassType
 	m_typeCompound = tc;
 }
 
-Type* InstanceField::get_type()
+Type* InstanceField::get_type() const
 {
 	return m_type;
 }
 
-ClassType* InstanceField::get_objectType()
+ClassType* InstanceField::get_objectType() const
 {
 	return m_objectType;
 }

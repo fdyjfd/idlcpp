@@ -13,7 +13,7 @@ Argument::Argument(const char* name, Type* type, Passing passing, bool constant)
 	m_constant = constant;
 }
 
-Type* Argument::get_type()
+Type* Argument::get_type() const
 {
 	return m_type;
 }

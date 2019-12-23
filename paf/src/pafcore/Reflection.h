@@ -6,6 +6,7 @@
 #include "./String.h"
 namespace pafcore{ class Type; }
 namespace pafcore{ class TypeAlias; }
+namespace pafcore{ class ClassType; }
 
 
 
@@ -15,6 +16,8 @@ namespace pafcore{ class TypeAlias; }
 #include "EnumType.h"
 #include "InstanceField.h"
 #include "InstanceProperty.h"
+#include "InstanceMethod.h"
+#include "StaticMethod.h"
 
 
 namespace pafcore
@@ -22,6 +25,7 @@ namespace pafcore
 	class PAFCORE_EXPORT Reflection
 	{
 	public:
+		static ::pafcore::ClassType* GetType();
 
 		static String GetTypeFullName(Type* type);
 		static String GetTypeAliasFullName(TypeAlias* typeAlias);
@@ -42,9 +46,13 @@ namespace pafcore
 		static ErrorCode StringToInstanceProperty(Variant& that, const char* propertyName, const char* str);
 
 		static ErrorCode NewPrimitive(Variant& result, PrimitiveType* primitiveType);
+		static ErrorCode NewPrimitive(Variant& result, PrimitiveType* primitiveType, Variant* argument);
 		static ErrorCode NewEnum(Variant& result, EnumType* type);
+		static ErrorCode NewEnum(Variant& result, EnumType* type, Variant* argument);
 		static ErrorCode NewClass(Variant& result, ClassType* type);
+		static ErrorCode NewClass(Variant& result, ClassType* type, Variant* argument);
 		static ErrorCode NewObject(Variant& result, Type* type);
+		static ErrorCode NewObject(Variant& result, Type* type, Variant* argument);
 
 		static ErrorCode GetInstanceFieldRef(Variant& value, Variant* that, InstanceField* field);
 		static ErrorCode SetInstanceField(Variant* that, InstanceField* field, Variant& value);
@@ -58,6 +66,9 @@ namespace pafcore
 		static ErrorCode GetArrayInstancePropertySize(Variant& value, Variant* that, InstanceProperty* property);
 		static ErrorCode GetArrayInstancePropertySize(size_t& size, Variant* that, InstanceProperty* property);
 		static ErrorCode ResizeArrayInstanceProperty(Variant* that, InstanceProperty* property, size_t size);
+		static ErrorCode ArrayInstanceProperty_GetIterator(Variant* iterator, Variant* that, InstanceProperty* property);
+		static ErrorCode ArrayInstanceProperty_GetValue(Variant& value, Variant* that, InstanceProperty* property, Iterator* iterator);
+
 
 		static ErrorCode GetMapInstanceProperty(Variant& value, Variant* that, InstanceProperty* property, Variant* key);
 		static ErrorCode SetMapInstanceProperty(Variant* that, InstanceProperty* property, Variant* key, Variant& value);
@@ -65,15 +76,16 @@ namespace pafcore
 		static ErrorCode GetMapInstanceKey(Variant& key, Variant* that, InstanceProperty* property, Iterator* iterator);
 		static ErrorCode GetMapInstanceValue(Variant& value, Variant* that, InstanceProperty* property, Iterator* iterator);
 
-		static ErrorCode ListInstanceProperty_Get(Variant& value, Variant* that, InstanceProperty* property, size_t index);
-		static ErrorCode ListInstanceProperty_Set(Variant* that, InstanceProperty* property, size_t index, Variant& value);
 		static ErrorCode ListInstanceProperty_PushBack(Variant* that, InstanceProperty* property, Variant& value);
 		static ErrorCode ListInstanceProperty_GetIterator(Variant* iterator, Variant* that, InstanceProperty* property);
 		static ErrorCode ListInstanceProperty_GetValue(Variant& value, Variant* that, InstanceProperty* property, Iterator* iterator);
+		static ErrorCode ListInstanceProperty_Insert(Variant* that, InstanceProperty* property, Iterator* iterator, Variant& value);
+		static ErrorCode ListInstanceProperty_Erase(Variant* that, InstanceProperty* property, Iterator* iterator);
 
 		//static ErrorCode GetInstanceArrayProperty(Variant& value, Variant* that, InstanceArrayProperty* property, size_t index);
 		//static ErrorCode CallInstanceMethod(Variant& result, Reference* that, const char* methodName, Variant** args, int_t numArgs);
 		static ErrorCode CallInstanceMethod(Variant& result, Variant* that, InstanceMethod* method, Variant* arguments, int_t numArgs);
+		static ErrorCode CallStaticMethod(Variant& result, StaticMethod* method, Variant* arguments, int_t numArgs);
 
 	};
 }

@@ -31,6 +31,8 @@ namespace idlcpp
 		static ::pafcore::Result s_staticResults[] = 
 		{
 			::pafcore::Result(RuntimeTypeOf<void>::RuntimeType::GetSingleton(), false, ::pafcore::Result::by_value),
+			::pafcore::Result(RuntimeTypeOf<string_t>::RuntimeType::GetSingleton(), false, ::pafcore::Result::by_value),
+			::pafcore::Result(RuntimeTypeOf<void>::RuntimeType::GetSingleton(), false, ::pafcore::Result::by_value),
 			::pafcore::Result(RuntimeTypeOf<void>::RuntimeType::GetSingleton(), false, ::pafcore::Result::by_value),
 		};
 		static ::pafcore::Argument s_staticArguments[] = 
@@ -40,13 +42,17 @@ namespace idlcpp
 		};
 		static ::pafcore::Overload s_staticOverloads[] = 
 		{
-			::pafcore::Overload(&s_staticResults[0], &s_staticArguments[0], 1, true, false),
-			::pafcore::Overload(&s_staticResults[1], &s_staticArguments[1], 1, true, false),
+			::pafcore::Overload(&s_staticResults[0], 0, 0, true, false),
+			::pafcore::Overload(&s_staticResults[1], 0, 0, true, false),
+			::pafcore::Overload(&s_staticResults[2], &s_staticArguments[0], 1, true, false),
+			::pafcore::Overload(&s_staticResults[3], &s_staticArguments[1], 1, true, false),
 		};
 		static ::pafcore::StaticMethod s_staticMethods[] = 
 		{
-			::pafcore::StaticMethod("LoadDLL", 0, System_LoadDLL, &s_staticOverloads[0], 1),
-			::pafcore::StaticMethod("OutputDebug", 0, System_OutputDebug, &s_staticOverloads[1], 1),
+			::pafcore::StaticMethod("DebugBreak", 0, System_DebugBreak, &s_staticOverloads[0], 1),
+			::pafcore::StaticMethod("GetProgramPath", 0, System_GetProgramPath, &s_staticOverloads[1], 1),
+			::pafcore::StaticMethod("LoadDLL", 0, System_LoadDLL, &s_staticOverloads[2], 1),
+			::pafcore::StaticMethod("OutputDebug", 0, System_OutputDebug, &s_staticOverloads[3], 1),
 		};
 		m_staticMethods = s_staticMethods;
 		m_staticMethodCount = paf_array_size_of(s_staticMethods);
@@ -54,6 +60,8 @@ namespace idlcpp
 		{
 			&s_staticMethods[0],
 			&s_staticMethods[1],
+			&s_staticMethods[2],
+			&s_staticMethods[3],
 		};
 		m_members = s_members;
 		m_memberCount = paf_array_size_of(s_members);
@@ -74,6 +82,27 @@ namespace idlcpp
 	{
 		*(::pafcore::System*)dst = *(const ::pafcore::System*)src;
 		return true;
+	}
+
+	::pafcore::ErrorCode __pafcore__System_Type::System_DebugBreak(::pafcore::Variant* result, ::pafcore::Variant** args, int_t numArgs)
+	{
+		if(0 <= numArgs)
+		{
+			::pafcore::System::DebugBreak();
+			return ::pafcore::s_ok;
+		}
+		return ::pafcore::e_invalid_arg_num;
+	}
+
+	::pafcore::ErrorCode __pafcore__System_Type::System_GetProgramPath(::pafcore::Variant* result, ::pafcore::Variant** args, int_t numArgs)
+	{
+		if(0 <= numArgs)
+		{
+			string_t res = ::pafcore::System::GetProgramPath();
+			result->assignPrimitive(RuntimeTypeOf<string_t>::RuntimeType::GetSingleton(), &res);
+			return ::pafcore::s_ok;
+		}
+		return ::pafcore::e_invalid_arg_num;
 	}
 
 	::pafcore::ErrorCode __pafcore__System_Type::System_LoadDLL(::pafcore::Variant* result, ::pafcore::Variant** args, int_t numArgs)

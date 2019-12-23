@@ -10,5 +10,10 @@
 namespace pafcore
 {
 
+	::pafcore::ClassType* System::GetType()
+	{
+		return ::RuntimeTypeOf<System>::RuntimeType::GetSingleton();
+	}
+
 }
 

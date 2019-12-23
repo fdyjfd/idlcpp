@@ -95,8 +95,13 @@ primitive uint64_t;
 primitive size_t;
 primitive ptrdiff_t;
 
+struct Nil
+{
+};
+
 namespace pafcore
 {
+	//在 Xml 序列化时用 Base64 存储
 	struct Buffer
 	{
 #{
@@ -108,4 +113,24 @@ namespace pafcore
 		{}
 #}
 	};
+
+	//用于界面执行方法，其中成员用于不能立即完成的操作,调用者收到属性变更通知时调用 get 方法时返回
+	//立即完成的操作,get方法保持返回 Status::ready 即可
+	//属性的 set 方法忽略其中成员
+	struct MethodAsProperty
+	{
+#{
+		enum Status : uint8_t
+		{
+			ready,
+			running,
+			running_allow_cancel,
+		};
+		Status status;
+		float progress;
+		MethodAsProperty() : status(ready), progress(0)
+		{}
+#}
+	};
+
 }

@@ -22,7 +22,7 @@ TypeAlias::~TypeAlias()
 }
 
 
-Type* TypeAlias::get_type()
+Type* TypeAlias::get_type() const
 {
 	return m_type;
 }
