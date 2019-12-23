@@ -36,6 +36,8 @@ public:
 	static void generateCode_Property(FILE* file, PropertyNode* propertyNode, int indentation);
 	static void generateCode_Property_Get(FILE* file, PropertyNode* propertyNode, int indentation);
 	static void generateCode_Property_Set(FILE* file, PropertyNode* propertyNode, int indentation);
+	static void generateCode_Property_CandidateCount(FILE* file, PropertyNode* propertyNode, int indentation);
+	static void generateCode_Property_GetCandidate(FILE* file, PropertyNode* propertyNode, int indentation);
 	static void generateCode_Property_Size(FILE* file, PropertyNode* propertyNode, int indentation);
 	static void generateCode_Property_Resize(FILE* file, PropertyNode* propertyNode, int indentation);
 	static void generateCode_Property_PushBack(FILE* file, PropertyNode* propertyNode, int indentation);

@@ -698,6 +698,52 @@ void HeaderFileGenerator::generateCode_Property_Set(FILE* file, PropertyNode* pr
 	writeStringToFile(");", file);	
 }
 
+void HeaderFileGenerator::generateCode_Property_CandidateCount(FILE* file, PropertyNode* propertyNode, int indentation)
+{
+	if (propertyNode->isStatic())
+	{
+		writeStringToFile("static ", file, indentation);
+		indentation = 0;
+	}
+	writeStringToFile("size_t candidateCount_", file, indentation);
+	writeStringToFile(propertyNode->m_name->m_str.c_str(), file);
+	if (propertyNode->isStatic())
+	{
+		writeStringToFile("();", file);
+	}
+	else
+	{
+		writeStringToFile("() const;", file);
+	}
+}
+
+void HeaderFileGenerator::generateCode_Property_GetCandidate(FILE* file, PropertyNode* propertyNode, int indentation)
+{
+	if (propertyNode->isStatic())
+	{
+		writeStringToFile("static ", file, indentation);
+		indentation = 0;
+	}
+	TokenNode* passing = propertyNode->m_passing;
+	TypeNameNode* typeName = propertyNode->m_typeName;
+
+	generateCode_TypeName(file, typeName, propertyNode->m_enclosing, true, indentation);
+	if (0 != passing)
+	{
+		generateCode_Token(file, passing, 0);
+	}
+	writeStringToFile(" getCandidate_", file, 0);
+	writeStringToFile(propertyNode->m_name->m_str.c_str(), file);
+	if (propertyNode->isStatic())
+	{
+		writeStringToFile("(size_t);", file);
+	}
+	else
+	{
+		writeStringToFile("(size_t) const;", file);
+	}
+}
+
 void HeaderFileGenerator::generateCode_Property_Size(FILE* file, PropertyNode* propertyNode, int indentation)
 {
 	if (propertyNode->isStatic())
@@ -867,7 +913,17 @@ void HeaderFileGenerator::generateCode_Property(FILE* file, PropertyNode* proper
 		g_compiler.outputEmbededCodes(file, propertyNode->m_name); //¸ñÊ½
 
 	}
-	if (propertyNode->isFixedArray() || propertyNode->isDynamicArray())
+	if (propertyNode->isSimple())
+	{
+		if (propertyNode->hasCandidate())
+		{
+			writeStringToFile("\n", file);
+			generateCode_Property_CandidateCount(file, propertyNode, indentation);
+			writeStringToFile("\n", file);
+			generateCode_Property_GetCandidate(file, propertyNode, indentation);
+		}
+	}
+	else if (propertyNode->isFixedArray() || propertyNode->isDynamicArray())
 	{
 		writeStringToFile("\n", file);
 		generateCode_Property_Size(file, propertyNode, indentation);

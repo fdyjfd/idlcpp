@@ -67,6 +67,9 @@ const char g_metaPropertyDeclPostfix[] = "(::pafcore::InstanceProperty* instance
 const char g_metaArrayPropertyDeclPostfix[] = "(::pafcore::InstanceProperty* instanceProperty, ::pafcore::Variant* that, size_t index, ::pafcore::Variant* value);\n";
 const char g_metaMapPropertyDeclPostfix[] = "(::pafcore::InstanceProperty* instanceProperty, ::pafcore::Variant* that, ::pafcore::Variant* key, ::pafcore::Variant* value);\n";
 
+const char g_metaPropertyDeclCandidateCountPostfix[] = "(::pafcore::InstanceProperty* instanceProperty, ::pafcore::Variant* that, ::pafcore::Variant* value);\n";
+const char g_metaPropertyDeclGetCandidatePostfix[] = "(::pafcore::InstanceProperty* instanceProperty, ::pafcore::Variant* that, size_t index, ::pafcore::Variant* value);\n";
+
 const char g_metaArrayPropertyDeclSizePostfix[] = "(::pafcore::InstanceProperty* instanceProperty, ::pafcore::Variant* that, ::pafcore::Variant* value);\n";
 const char g_metaArrayPropertyDeclResizePostfix[] = "(::pafcore::InstanceProperty* instanceProperty, ::pafcore::Variant* that, ::pafcore::Variant* value);\n";
 
@@ -80,6 +83,9 @@ const char g_metaPropertyDeclErasePostfix[] = "(::pafcore::InstanceProperty* ins
 const char g_metaStaticPropertyDeclPostfix[] = "(::pafcore::Variant* value);\n";
 const char g_metaStaticArrayPropertyDeclPostfix[] = "(size_t index, ::pafcore::Variant* value);\n";
 const char g_metaStaticMapPropertyDeclPostfix[] = "(::pafcore::Variant* key, ::pafcore::Variant* value);\n";
+
+const char g_metaStaticPropertyDeclCandidateCountPostfix[] = "(::pafcore::Variant* value);\n";
+const char g_metaStaticPropertyDeclGetCandidatePostfix[] = "(size_t index, ::pafcore::Variant* value);\n";
 
 const char g_metaStaticArrayPropertyDeclSizePostfix[] = "(::pafcore::Variant* value);\n";
 const char g_metaStaticArrayPropertyDeclResizePostfix[] = "(::pafcore::Variant* value);\n";
@@ -146,7 +152,37 @@ void writeMetaPropertyDecl(ClassNode* classNode, PropertyNode* propertyNode, FIL
 		sprintf_s(funcName, "%s_set_%s", classNode->m_name->m_str.c_str(), propertyNode->m_name->m_str.c_str());
 		writeMetaPropertyDeclGetSet(funcName, propertyNode->isStatic(), propertyNode->getCategory(), file, indentation + 1);
 	}
-	if(propertyNode->isFixedArray() || propertyNode->isDynamicArray())
+	if (propertyNode->isSimple())
+	{
+		if (propertyNode->hasCandidate())
+		{
+			if (propertyNode->isStatic())
+			{
+				sprintf_s(funcName, "%s_candidateCount_%s", classNode->m_name->m_str.c_str(), propertyNode->m_name->m_str.c_str());
+				writeStringToFile(g_metaPropertyDeclPrefix, sizeof(g_metaPropertyDeclPrefix) - 1, file, indentation + 1);
+				writeStringToFile(funcName, file);
+				writeStringToFile(g_metaStaticPropertyDeclCandidateCountPostfix, sizeof(g_metaStaticPropertyDeclCandidateCountPostfix) - 1, file);
+
+				sprintf_s(funcName, "%s_getCandidate_%s", classNode->m_name->m_str.c_str(), propertyNode->m_name->m_str.c_str());
+				writeStringToFile(g_metaPropertyDeclPrefix, sizeof(g_metaPropertyDeclPrefix) - 1, file, indentation + 1);
+				writeStringToFile(funcName, file);
+				writeStringToFile(g_metaStaticPropertyDeclGetCandidatePostfix, sizeof(g_metaStaticPropertyDeclGetCandidatePostfix) - 1, file);
+			}
+			else
+			{
+				sprintf_s(funcName, "%s_candidateCount_%s", classNode->m_name->m_str.c_str(), propertyNode->m_name->m_str.c_str());
+				writeStringToFile(g_metaPropertyDeclPrefix, sizeof(g_metaPropertyDeclPrefix) - 1, file, indentation + 1);
+				writeStringToFile(funcName, file);
+				writeStringToFile(g_metaPropertyDeclCandidateCountPostfix, sizeof(g_metaPropertyDeclCandidateCountPostfix) - 1, file);
+
+				sprintf_s(funcName, "%s_getCandidate_%s", classNode->m_name->m_str.c_str(), propertyNode->m_name->m_str.c_str());
+				writeStringToFile(g_metaPropertyDeclPrefix, sizeof(g_metaPropertyDeclPrefix) - 1, file, indentation + 1);
+				writeStringToFile(funcName, file);
+				writeStringToFile(g_metaPropertyDeclGetCandidatePostfix, sizeof(g_metaPropertyDeclGetCandidatePostfix) - 1, file);
+			}
+		}
+	}
+	else if(propertyNode->isFixedArray() || propertyNode->isDynamicArray())
 	{
 		sprintf_s(funcName, "%s_size_%s", classNode->m_name->m_str.c_str(), propertyNode->m_name->m_str.c_str());
 		writeStringToFile(g_metaPropertyDeclPrefix, sizeof(g_metaPropertyDeclPrefix) - 1, file, indentation + 1);

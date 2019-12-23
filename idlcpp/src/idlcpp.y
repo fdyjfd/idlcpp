@@ -12,9 +12,9 @@
 %token <sn> LEFT_SHIFT RIGHT_SHIFT EQUAL NOT_EQUAL LESS_EQUAL GREATER_EQUAL AND OR INC DEC
 %token <sn> BOOL CHAR WCHAR_T SHORT LONG INT FLOAT DOUBLE SIGNED UNSIGNED STRING_T
 %token <sn> NAMESPACE ENUM CLASS STRUCT STATIC VIRTUAL VOID CONST OPERATOR TYPEDEF PRIMITIVE
-%token <sn> ABSTRACT GET SET NOMETA NOCODE EXPORT OVERRIDE SCOPE IDENTIFY STRING TEMPLATE DELEGATE
+%token <sn> ABSTRACT GET SET CANDIDATE NOMETA NOCODE EXPORT OVERRIDE SCOPE IDENTIFY STRING TEMPLATE DELEGATE
 %type <sn> identifyList enumerator enumeratorList enum_0 enum 
-%type <sn> field_0 field_1 field_2 field getter_0 getter_1 getter setter_0 setter_1 setter_2 setter property_0 property_1 property_2 property
+%type <sn> field_0 field_1 field_2 field getter_0 getter_1 getter setter_0 setter_1 setter_2 setter candidate property_0 property_1 property_2 property
 %type <sn> parameter_0 parameter_1 parameter parameterList method_0 method_1 method_2 method_3 method_4 method
 %type <sn> operatorSign operator_0 operator_1 operator_2 operator_3 operator classMember_0 classMember
 %type <sn> delegate_0 delegate_1 delegate
@@ -175,6 +175,9 @@ setter					: setter_2											{$$ = $1;}
 						| setter_2 '=' STRING								{$$ = $1; setGetterSetterNativeName($$, $3);}
 ;
 
+candidate				: CANDIDATE											{$$ = $1;}
+;
+
 property_0				: IDENTIFY											{$$ = newProperty($1, simple_property);}
 						| IDENTIFY '[' ']'									{$$ = newProperty($1, fixed_array_property);}
 						| IDENTIFY '[' '?' ']'								{$$ = newProperty($1, dynamic_array_property);}
@@ -192,6 +195,10 @@ property_2				: property_1 '{' '}' ';'							{$$ = $1;}
 						| property_1 '{' setter '}' ';'						{$$ = $1; setPropertySetter($$, $3);}
 						| property_1 '{' getter setter '}' ';'				{$$ = $1; setPropertyGetter($$, $3); setPropertySetter($1, $4);}
 						| property_1 '{' setter getter '}' ';'				{$$ = $1; setPropertyGetter($$, $4); setPropertySetter($1, $3);}
+						| property_1 '{' getter candidate '}' ';'			{$$ = $1; setPropertyGetter($$, $3); setPropertyCandidate($$);}
+						| property_1 '{' setter candidate '}' ';'			{$$ = $1; setPropertySetter($$, $3); setPropertyCandidate($$);}
+						| property_1 '{' getter setter candidate '}' ';'	{$$ = $1; setPropertyGetter($$, $3); setPropertySetter($1, $4); setPropertyCandidate($$);}
+						| property_1 '{' setter getter candidate '}' ';'	{$$ = $1; setPropertyGetter($$, $4); setPropertySetter($1, $3); setPropertyCandidate($$);}
 ;
 
 property				: property_2										{$$ = $1;}

@@ -19,6 +19,7 @@ PropertyNode::PropertyNode(IdentifyNode* name, PropertyCategory category)
 	m_get = 0;
 	m_set = 0;
 	m_propertyCategory = category;
+	m_candidate = false;
 	m_keyTypeName = 0;
 	m_keyPassing = 0;
 
@@ -59,6 +60,11 @@ bool PropertyNode::isMap()
 	return map_property == m_propertyCategory;
 }
 
+bool PropertyNode::hasCandidate()
+{
+	return m_candidate;
+}
+
 bool PropertyNode::isKeyByPtr()
 {
 	return (0 != m_keyPassing && '*' == m_keyPassing->m_nodeType);
@@ -89,6 +95,11 @@ void PropertyNode::setSetter(GetterSetterNode* setter)
 {
 	assert(snt_keyword_set == setter->m_keyword->m_nodeType);
 	m_set = setter;
+}
+
+void PropertyNode::setCandidate()
+{
+	m_candidate = true;
 }
 
 void PropertyNode::checkTypeNames(TypeNode* enclosingTypeNode, TemplateArguments* templateArguments)

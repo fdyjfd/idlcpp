@@ -382,6 +382,12 @@ void setPropertySetter(SyntaxNode* property, SyntaxNode* setter)
 	((PropertyNode*)property)->setSetter((GetterSetterNode*)setter);
 }
 
+void setPropertyCandidate(SyntaxNode* property)
+{
+	assert(snt_property == property->m_nodeType);
+	((PropertyNode*)property)->setCandidate();
+}
+
 void setPropertyModifier(SyntaxNode* syntaxNode, SyntaxNode* modifier)
 {
 	assert(snt_property == syntaxNode->m_nodeType);

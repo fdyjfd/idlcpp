@@ -13,6 +13,7 @@ struct PropertyNode : MemberNode
 	GetterSetterNode* m_get;
 	GetterSetterNode* m_set;
 	PropertyCategory m_propertyCategory;
+	bool m_candidate;
 	TypeNameNode* m_keyTypeName;
 	TokenNode* m_keyPassing;//*
 public:
@@ -24,7 +25,7 @@ public:
 	bool isDynamicArray();
 	bool isList();
 	bool isMap();
-
+	bool hasCandidate();
 	bool isKeyByPtr();
 	bool isKeyByValue();
 
@@ -33,6 +34,8 @@ public:
 
 	void setGetter(GetterSetterNode* getter);
 	void setSetter(GetterSetterNode* setter);
+	void setCandidate();
+
 	virtual void checkTypeNames(TypeNode* enclosingTypeNode, TemplateArguments* templateArguments);
 	virtual void checkSemantic(TemplateArguments* templateArguments);
 };

@@ -117,6 +117,7 @@ enum SyntaxNodeType
 	snt_keyword_primitive,
 	snt_keyword_export,
 	snt_keyword_override,
+	snt_keyword_candidate,
 
 	snt_identify,
 	snt_identify_list,
@@ -203,6 +204,7 @@ void setMapPropertyKeyType(SyntaxNode* property, SyntaxNode* type, SyntaxNode* p
 void setPropertyType(SyntaxNode* property, SyntaxNode* type, SyntaxNode* passing);
 void setPropertyGetter(SyntaxNode* property, SyntaxNode* getter);
 void setPropertySetter(SyntaxNode* property, SyntaxNode* setter);
+void setPropertyCandidate(SyntaxNode* property);
 void setPropertyModifier(SyntaxNode* syntaxNode, SyntaxNode* modifier);
 
 SyntaxNode* newParameter(SyntaxNode* type, SyntaxNode* passing, SyntaxNode* out, SyntaxNode* name);

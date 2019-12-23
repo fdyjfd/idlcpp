@@ -613,6 +613,8 @@ const char g_metaPropertyImplPostfix[] = "(::pafcore::InstanceProperty* instance
 const char g_metaArrayPropertyImplPostfix[] = "(::pafcore::InstanceProperty* instanceProperty, ::pafcore::Variant* that, size_t index, ::pafcore::Variant* value)\n";
 const char g_metaMapPropertyImplPostfix[] = "(::pafcore::InstanceProperty* instanceProperty, ::pafcore::Variant* that, ::pafcore::Variant* key, ::pafcore::Variant* value)\n";
 
+const char g_metaPropertyImplGetCandidatePostfix[] = "(::pafcore::InstanceProperty* instanceProperty, ::pafcore::Variant* that, size_t index, ::pafcore::Variant* value)\n";
+
 const char g_metaArrayPropertyImplSizePostfix[] = "(::pafcore::InstanceProperty* instanceProperty, ::pafcore::Variant* that, ::pafcore::Variant* value)\n";
 const char g_metaArrayPropertyImplResizePostfix[] = "(::pafcore::InstanceProperty* instanceProperty, ::pafcore::Variant* that, ::pafcore::Variant* value)\n";
 
@@ -626,6 +628,8 @@ const char g_metaPropertyImplErasePostfix[] = "(::pafcore::InstanceProperty* ins
 const char g_metaStaticPropertyImplPostfix[] = "(::pafcore::Variant* value)\n";
 const char g_metaStaticArrayPropertyImplPostfix[] = "(size_t index, ::pafcore::Variant* value)\n";
 const char g_metaStaticMapPropertyImplPostfix[] = "(::pafcore::Variant* key, ::pafcore::Variant* value)\n";
+
+const char g_metaStaticPropertyImplGetCandidatePostfix[] = "(size_t index, ::pafcore::Variant* value)\n";
 
 const char g_metaStaticArrayPropertyImplSizePostfix[] = "(::pafcore::Variant* value)\n";
 const char g_metaStaticArrayPropertyImplResizePostfix[] = "(::pafcore::Variant* value)\n";
@@ -1156,33 +1160,61 @@ void writeMetaSetPropertyImpl(ClassNode* classNode, TemplateArguments* templateA
 	writeStringToFile("}\n\n", file, indentation);
 }
 
-void writeMetaPropertySizeImpl(ClassNode* classNode, TemplateArguments* templateArguments, PropertyNode* propertyNode, FILE* file, int indentation)
+
+void writeMetaProperty_GetCandidate_Impl(ClassNode* classNode, TemplateArguments* templateArguments, PropertyNode* propertyNode, const char* funcPrefix, FILE* file, int indentation)
 {
 	char buf[4096];
 	std::string typeName;
 	std::string className;
 	std::string metaClassName;
 
+	bool isByValue, isByPtr;
+	isByValue = propertyNode->isByValue();
+	isByPtr = propertyNode->isByPtr();
+
 	classNode->getNativeName(className, templateArguments);
 	GetMetaTypeFullName(metaClassName, classNode, templateArguments);
 
 	writeStringToFile(g_metaPropertyImplPrefix, sizeof(g_metaPropertyImplPrefix) - 1, file, indentation);
-	sprintf_s(buf, "%s::%s_size_%s", metaClassName.c_str(),
-		classNode->m_name->m_str.c_str(), propertyNode->m_name->m_str.c_str());
+	sprintf_s(buf, "%s::%s_%s_%s", metaClassName.c_str(),
+		classNode->m_name->m_str.c_str(), funcPrefix, propertyNode->m_name->m_str.c_str());
 	writeStringToFile(buf, file);
 	if (propertyNode->isStatic())
 	{
-		writeStringToFile(g_metaStaticArrayPropertyImplSizePostfix, sizeof(g_metaStaticArrayPropertyImplSizePostfix) - 1, file);
+		writeStringToFile(g_metaStaticPropertyImplGetCandidatePostfix, sizeof(g_metaStaticPropertyImplGetCandidatePostfix) - 1, file);
 	}
 	else
 	{
-		writeStringToFile(g_metaArrayPropertyImplSizePostfix, sizeof(g_metaArrayPropertyImplSizePostfix) - 1, file);
+		writeStringToFile(g_metaPropertyImplGetCandidatePostfix, sizeof(g_metaPropertyImplGetCandidatePostfix) - 1, file);
 	}
 	writeStringToFile("{\n", file, indentation);
 
+	TypeCategory typeCategory = CalcTypeNativeName(typeName, propertyNode->m_typeName, templateArguments);
+
+	TokenNode* passing = propertyNode->m_passing;
+
 	if (propertyNode->isStatic())
 	{
-		sprintf_s(buf, "size_t res = %s::size_%s();\n", className.c_str(), propertyNode->m_name->m_str.c_str());
+		if (0 == passing)
+		{
+			if (primitive_type == typeCategory || enum_type == typeCategory)
+			{
+				sprintf_s(buf, "%s res = %s::%s_%s(index);\n", typeName.c_str(), className.c_str(), funcPrefix, propertyNode->m_name->m_str.c_str());
+			}
+			else
+			{
+				sprintf_s(buf, "%s* res = paf_new %s(%s::%s_%s(index));\n", typeName.c_str(), typeName.c_str(), className.c_str(), funcPrefix, propertyNode->m_name->m_str.c_str());
+			}
+		}
+		else if ('*' == passing->m_nodeType)
+		{
+			sprintf_s(buf, "%s* res = %s::%s_%s(index);\n", typeName.c_str(), className.c_str(), funcPrefix, propertyNode->m_name->m_str.c_str());
+		}
+		else
+		{
+			assert('&' == passing->m_nodeType);
+			sprintf_s(buf, "%s* res = &%s::%s_%s(index);\n", typeName.c_str(), className.c_str(), funcPrefix, propertyNode->m_name->m_str.c_str());
+		}
 		writeStringToFile(buf, file, indentation + 1);
 	}
 	else
@@ -1200,13 +1232,150 @@ void writeMetaPropertySizeImpl(ClassNode* classNode, TemplateArguments* template
 		writeStringToFile("{\n", file, indentation + 1);
 		writeStringToFile("return ::pafcore::e_invalid_this_type;\n", file, indentation + 2);
 		writeStringToFile("}\n", file, indentation + 1);
-		sprintf_s(buf, "size_t res = self->size_%s();\n", propertyNode->m_name->m_str.c_str());
+		if (0 == passing)
+		{
+			if (primitive_type == typeCategory || enum_type == typeCategory)
+			{
+				sprintf_s(buf, "%s res = self->%s_%s(index);\n", typeName.c_str(), funcPrefix, propertyNode->m_name->m_str.c_str());
+			}
+			else
+			{
+				sprintf_s(buf, "%s* res = paf_new %s(self->%s_%s(index));\n", typeName.c_str(), typeName.c_str(), funcPrefix, propertyNode->m_name->m_str.c_str());
+			}
+		}
+		else if ('*' == passing->m_nodeType)
+		{
+			sprintf_s(buf, "%s* res = self->%s_%s(index);\n", typeName.c_str(), funcPrefix, propertyNode->m_name->m_str.c_str());
+		}
+		else
+		{
+			assert('&' == passing->m_nodeType);
+			sprintf_s(buf, "%s* res = &self->%s_%s(index);\n", typeName.c_str(), funcPrefix, propertyNode->m_name->m_str.c_str());
+		}
+		writeStringToFile(buf, file, indentation + 1);
+	}
+
+	const char* varSemantic;
+	if (isByPtr)
+	{
+		varSemantic = s_variantSemantic_ByPtr;
+	}
+	//else if (isByRef)
+	//{
+	//	varSemantic = s_variantSemantic_ByRef;
+	//}
+	else
+	{
+		assert(isByValue);
+		varSemantic = s_variantSemantic_ByValue;
+	}
+
+	if (0 == passing)
+	{
+		switch (typeCategory)
+		{
+			//case void_type: impossible
+		case primitive_type:
+			sprintf_s(buf, "value->assignPrimitive(RuntimeTypeOf<%s>::RuntimeType::GetSingleton(), &res);\n", typeName.c_str());
+			break;
+		case enum_type:
+			sprintf_s(buf, "value->assignEnum(RuntimeTypeOf<%s>::RuntimeType::GetSingleton(), &res);\n", typeName.c_str());
+			break;
+		case value_type:
+			sprintf_s(buf, "value->assignValuePtr(RuntimeTypeOf<%s>::RuntimeType::GetSingleton(), res, false, %s);\n", typeName.c_str(), varSemantic);
+			break;
+		case reference_type:
+			sprintf_s(buf, "value->assignReferencePtr(RuntimeTypeOf<%s>::RuntimeType::GetSingleton(), res, false, %s);\n", typeName.c_str(), varSemantic);
+			break;
+		default:
+			assert(false);
+		}
+	}
+	else
+	{
+		switch (typeCategory)
+		{
+		case void_type:
+			sprintf_s(buf, "value->assignVoidPtr(res, %s);\n", false ? "true" : "false");
+			break;
+		case primitive_type:
+			sprintf_s(buf, "value->assignPrimitivePtr(RuntimeTypeOf<%s>::RuntimeType::GetSingleton(), res, %s, %s);\n",
+				typeName.c_str(), false ? "true" : "false", varSemantic);
+			break;
+		case enum_type:
+			sprintf_s(buf, "value->assignEnumPtr(RuntimeTypeOf<%s>::RuntimeType::GetSingleton(), res, %s, %s);\n",
+				typeName.c_str(), false ? "true" : "false", varSemantic);
+			break;
+		case value_type:
+			sprintf_s(buf, "value->assignValuePtr(RuntimeTypeOf<%s>::RuntimeType::GetSingleton(), res, %s, %s);\n",
+				typeName.c_str(), false ? "true" : "false", varSemantic);
+			break;
+		case reference_type:
+			sprintf_s(buf, "value->assignReferencePtr(RuntimeTypeOf<%s>::RuntimeType::GetSingleton(), res, %s, %s);\n",
+				typeName.c_str(), false ? "true" : "false", varSemantic);
+			break;
+		default:
+			assert(false);
+		}
+	}
+	writeStringToFile(buf, file, indentation + 1);
+	writeStringToFile("return ::pafcore::s_ok;\n", file, indentation + 1);
+	writeStringToFile("}\n\n", file, indentation);
+}
+
+
+void writeMetaProperty_Size_CandidateCount_Impl(ClassNode* classNode, TemplateArguments* templateArguments, PropertyNode* propertyNode, const char* funcPrefix, FILE* file, int indentation)
+{
+	char buf[4096];
+	std::string typeName;
+	std::string className;
+	std::string metaClassName;
+
+	classNode->getNativeName(className, templateArguments);
+	GetMetaTypeFullName(metaClassName, classNode, templateArguments);
+
+	writeStringToFile(g_metaPropertyImplPrefix, sizeof(g_metaPropertyImplPrefix) - 1, file, indentation);
+	sprintf_s(buf, "%s::%s_%s_%s", metaClassName.c_str(),
+		classNode->m_name->m_str.c_str(), funcPrefix, propertyNode->m_name->m_str.c_str());
+	writeStringToFile(buf, file);
+	if (propertyNode->isStatic())
+	{
+		writeStringToFile(g_metaStaticArrayPropertyImplSizePostfix, sizeof(g_metaStaticArrayPropertyImplSizePostfix) - 1, file);
+	}
+	else
+	{
+		writeStringToFile(g_metaArrayPropertyImplSizePostfix, sizeof(g_metaArrayPropertyImplSizePostfix) - 1, file);
+	}
+	writeStringToFile("{\n", file, indentation);
+
+	if (propertyNode->isStatic())
+	{
+		sprintf_s(buf, "size_t res = %s::%s_%s();\n", className.c_str(), funcPrefix, propertyNode->m_name->m_str.c_str());
+		writeStringToFile(buf, file, indentation + 1);
+	}
+	else
+	{
+		sprintf_s(buf, "%s* self;\n", className.c_str());
+		writeStringToFile(buf, file, indentation + 1);
+		if (classNode->isValueType())
+		{
+			writeStringToFile("if(!that->castToValuePtr(GetSingleton(), (void**)&self))\n", file, indentation + 1);
+		}
+		else
+		{
+			writeStringToFile("if(!that->castToReferencePtr(GetSingleton(), (void**)&self))\n", file, indentation + 1);
+		}
+		writeStringToFile("{\n", file, indentation + 1);
+		writeStringToFile("return ::pafcore::e_invalid_this_type;\n", file, indentation + 2);
+		writeStringToFile("}\n", file, indentation + 1);
+		sprintf_s(buf, "size_t res = self->%s_%s();\n", funcPrefix, propertyNode->m_name->m_str.c_str());
 		writeStringToFile(buf, file, indentation + 1);
 	}
 	writeStringToFile("value->assignPrimitive(RuntimeTypeOf<size_t>::RuntimeType::GetSingleton(), &res);\n", file, indentation + 1);
 	writeStringToFile("return ::pafcore::s_ok;\n", file, indentation + 1);
 	writeStringToFile("}\n\n", file, indentation);
 }
+
 
 void writeMetaPropertyResizeImpl(ClassNode* classNode, TemplateArguments* templateArguments, PropertyNode* propertyNode, FILE* file, int indentation)
 {
@@ -2063,9 +2232,17 @@ void writeMetaPropertyImpls(ClassNode* classNode, TemplateArguments* templateArg
 			{
 				writeMetaSetPropertyImpl(classNode, templateArguments, propertyNodes[i], file, indentation);
 			}
-			if (propertyNode->isFixedArray() || propertyNode->isDynamicArray())
+			if (propertyNode->isSimple())
 			{
-				writeMetaPropertySizeImpl(classNode, templateArguments, propertyNodes[i], file, indentation);
+				if (propertyNode->hasCandidate())
+				{
+					writeMetaProperty_Size_CandidateCount_Impl(classNode, templateArguments, propertyNodes[i], "candidateCount", file, indentation);
+					writeMetaProperty_GetCandidate_Impl(classNode, templateArguments, propertyNodes[i], "getCandidate", file, indentation);
+				}
+			}
+			else if (propertyNode->isFixedArray() || propertyNode->isDynamicArray())
+			{
+				writeMetaProperty_Size_CandidateCount_Impl(classNode, templateArguments, propertyNodes[i], "size", file, indentation);
 				if (propertyNode->isDynamicArray())
 				{
 					writeMetaPropertyResizeImpl(classNode, templateArguments, propertyNodes[i], file, indentation);
@@ -3207,19 +3384,32 @@ void writeMetaConstructor_Properties(ClassNode* classNode, TemplateArguments* te
 		else
 		{
 			assert(propertyNode->isSimple());
-			if (isStatic)
+
+			char candidateCountFunc[256];
+			char getCandidateFunc[256];
+			if (propertyNode->hasCandidate())
 			{
-				sprintf_s(buf, "::pafcore::StaticProperty(\"%s\", %s, %s, %s, %s, %s),\n",
-					propertyNode->m_name->m_str.c_str(), strAttributes,
-					valueType, isPtr ? "true" : "false",
-					getterFunc, setterFunc);
+				sprintf_s(candidateCountFunc, "%s_candidateCount_%s", classNode->m_name->m_str.c_str(), propertyNode->m_name->m_str.c_str());
+				sprintf_s(getCandidateFunc, "%s_getCandidate_%s", classNode->m_name->m_str.c_str(), propertyNode->m_name->m_str.c_str());
 			}
 			else
 			{
-				sprintf_s(buf, "::pafcore::InstanceProperty(\"%s\", %s, GetSingleton(), %s, %s, %s, %s),\n",
+				strcpy_s(candidateCountFunc, "0");
+				strcpy_s(getCandidateFunc, "0");
+			}
+			if (isStatic)
+			{
+				sprintf_s(buf, "::pafcore::StaticProperty(\"%s\", %s, %s, %s, %s, %s, %s, %s),\n",
 					propertyNode->m_name->m_str.c_str(), strAttributes,
 					valueType, isPtr ? "true" : "false",
-					getterFunc, setterFunc);
+					getterFunc, setterFunc, candidateCountFunc, getCandidateFunc);
+			}
+			else
+			{
+				sprintf_s(buf, "::pafcore::InstanceProperty(\"%s\", %s, GetSingleton(), %s, %s, %s, %s, %s, %s),\n",
+					propertyNode->m_name->m_str.c_str(), strAttributes,
+					valueType, isPtr ? "true" : "false",
+					getterFunc, setterFunc, candidateCountFunc, getCandidateFunc);
 			}
 		}
 		writeStringToFile(buf, file, indentation + 1);

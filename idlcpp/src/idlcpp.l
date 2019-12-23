@@ -126,6 +126,7 @@ int yyHasDelegate = 0;
 "primitive"		{yylval.sn = newToken(snt_keyword_primitive);				yycolumnno += strlen(yytext); yytokenno++; return PRIMITIVE;}
 "get"			{yylval.sn = newToken(snt_keyword_get);						yycolumnno += strlen(yytext); yytokenno++; return GET;}
 "set"			{yylval.sn = newToken(snt_keyword_set);						yycolumnno += strlen(yytext); yytokenno++; return SET;}
+"candidate"		{yylval.sn = newToken(snt_keyword_candidate);				yycolumnno += strlen(yytext); yytokenno++; return CANDIDATE;}
 "nocode"		{yylval.sn = newToken(snt_keyword_nocode);					yycolumnno += strlen(yytext); yytokenno++; return NOCODE;}
 "nometa"		{yylval.sn = newToken(snt_keyword_nometa);					yycolumnno += strlen(yytext); yytokenno++; return NOMETA;}
 "export"		{yylval.sn = newToken(snt_keyword_export);					yycolumnno += strlen(yytext); yytokenno++; return EXPORT;}
