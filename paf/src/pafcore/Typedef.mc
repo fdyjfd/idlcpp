@@ -25,7 +25,7 @@
 namespace idlcpp
 {
 
-	__bool_t_Type::__bool_t_Type() : TypeAlias("bool_t", RuntimeTypeOf<::bool_t>::RuntimeType::GetSingleton())
+	__bool_t_Type::__bool_t_Type() : TypeAlias("bool_t", RuntimeTypeOf<::bool_t>::RuntimeType::GetSingleton(), "D:/DeepEye2018/deepeye/src/paf/pafcore/Typedef.i")
 	{
 		::pafcore::NameSpace::GetGlobalNameSpace()->registerMember(this);
 	}
@@ -42,7 +42,7 @@ namespace idlcpp
 		return s_instance;
 	}
 
-	__char_t_Type::__char_t_Type() : TypeAlias("char_t", RuntimeTypeOf<::char_t>::RuntimeType::GetSingleton())
+	__char_t_Type::__char_t_Type() : TypeAlias("char_t", RuntimeTypeOf<::char_t>::RuntimeType::GetSingleton(), "D:/DeepEye2018/deepeye/src/paf/pafcore/Typedef.i")
 	{
 		::pafcore::NameSpace::GetGlobalNameSpace()->registerMember(this);
 	}
@@ -59,7 +59,7 @@ namespace idlcpp
 		return s_instance;
 	}
 
-	__schar_t_Type::__schar_t_Type() : TypeAlias("schar_t", RuntimeTypeOf<::schar_t>::RuntimeType::GetSingleton())
+	__schar_t_Type::__schar_t_Type() : TypeAlias("schar_t", RuntimeTypeOf<::schar_t>::RuntimeType::GetSingleton(), "D:/DeepEye2018/deepeye/src/paf/pafcore/Typedef.i")
 	{
 		::pafcore::NameSpace::GetGlobalNameSpace()->registerMember(this);
 	}
@@ -76,7 +76,7 @@ namespace idlcpp
 		return s_instance;
 	}
 
-	__uchar_t_Type::__uchar_t_Type() : TypeAlias("uchar_t", RuntimeTypeOf<::uchar_t>::RuntimeType::GetSingleton())
+	__uchar_t_Type::__uchar_t_Type() : TypeAlias("uchar_t", RuntimeTypeOf<::uchar_t>::RuntimeType::GetSingleton(), "D:/DeepEye2018/deepeye/src/paf/pafcore/Typedef.i")
 	{
 		::pafcore::NameSpace::GetGlobalNameSpace()->registerMember(this);
 	}
@@ -93,7 +93,7 @@ namespace idlcpp
 		return s_instance;
 	}
 
-	__short_t_Type::__short_t_Type() : TypeAlias("short_t", RuntimeTypeOf<::short_t>::RuntimeType::GetSingleton())
+	__short_t_Type::__short_t_Type() : TypeAlias("short_t", RuntimeTypeOf<::short_t>::RuntimeType::GetSingleton(), "D:/DeepEye2018/deepeye/src/paf/pafcore/Typedef.i")
 	{
 		::pafcore::NameSpace::GetGlobalNameSpace()->registerMember(this);
 	}
@@ -110,7 +110,7 @@ namespace idlcpp
 		return s_instance;
 	}
 
-	__ushort_t_Type::__ushort_t_Type() : TypeAlias("ushort_t", RuntimeTypeOf<::ushort_t>::RuntimeType::GetSingleton())
+	__ushort_t_Type::__ushort_t_Type() : TypeAlias("ushort_t", RuntimeTypeOf<::ushort_t>::RuntimeType::GetSingleton(), "D:/DeepEye2018/deepeye/src/paf/pafcore/Typedef.i")
 	{
 		::pafcore::NameSpace::GetGlobalNameSpace()->registerMember(this);
 	}
@@ -127,7 +127,7 @@ namespace idlcpp
 		return s_instance;
 	}
 
-	__long_t_Type::__long_t_Type() : TypeAlias("long_t", RuntimeTypeOf<::long_t>::RuntimeType::GetSingleton())
+	__long_t_Type::__long_t_Type() : TypeAlias("long_t", RuntimeTypeOf<::long_t>::RuntimeType::GetSingleton(), "D:/DeepEye2018/deepeye/src/paf/pafcore/Typedef.i")
 	{
 		::pafcore::NameSpace::GetGlobalNameSpace()->registerMember(this);
 	}
@@ -144,7 +144,7 @@ namespace idlcpp
 		return s_instance;
 	}
 
-	__ulong_t_Type::__ulong_t_Type() : TypeAlias("ulong_t", RuntimeTypeOf<::ulong_t>::RuntimeType::GetSingleton())
+	__ulong_t_Type::__ulong_t_Type() : TypeAlias("ulong_t", RuntimeTypeOf<::ulong_t>::RuntimeType::GetSingleton(), "D:/DeepEye2018/deepeye/src/paf/pafcore/Typedef.i")
 	{
 		::pafcore::NameSpace::GetGlobalNameSpace()->registerMember(this);
 	}
@@ -161,7 +161,7 @@ namespace idlcpp
 		return s_instance;
 	}
 
-	__longlong_t_Type::__longlong_t_Type() : TypeAlias("longlong_t", RuntimeTypeOf<::longlong_t>::RuntimeType::GetSingleton())
+	__longlong_t_Type::__longlong_t_Type() : TypeAlias("longlong_t", RuntimeTypeOf<::longlong_t>::RuntimeType::GetSingleton(), "D:/DeepEye2018/deepeye/src/paf/pafcore/Typedef.i")
 	{
 		::pafcore::NameSpace::GetGlobalNameSpace()->registerMember(this);
 	}
@@ -178,7 +178,7 @@ namespace idlcpp
 		return s_instance;
 	}
 
-	__ulonglong_t_Type::__ulonglong_t_Type() : TypeAlias("ulonglong_t", RuntimeTypeOf<::ulonglong_t>::RuntimeType::GetSingleton())
+	__ulonglong_t_Type::__ulonglong_t_Type() : TypeAlias("ulonglong_t", RuntimeTypeOf<::ulonglong_t>::RuntimeType::GetSingleton(), "D:/DeepEye2018/deepeye/src/paf/pafcore/Typedef.i")
 	{
 		::pafcore::NameSpace::GetGlobalNameSpace()->registerMember(this);
 	}
@@ -195,7 +195,7 @@ namespace idlcpp
 		return s_instance;
 	}
 
-	__int_t_Type::__int_t_Type() : TypeAlias("int_t", RuntimeTypeOf<::int_t>::RuntimeType::GetSingleton())
+	__int_t_Type::__int_t_Type() : TypeAlias("int_t", RuntimeTypeOf<::int_t>::RuntimeType::GetSingleton(), "D:/DeepEye2018/deepeye/src/paf/pafcore/Typedef.i")
 	{
 		::pafcore::NameSpace::GetGlobalNameSpace()->registerMember(this);
 	}
@@ -212,7 +212,7 @@ namespace idlcpp
 		return s_instance;
 	}
 
-	__uint_t_Type::__uint_t_Type() : TypeAlias("uint_t", RuntimeTypeOf<::uint_t>::RuntimeType::GetSingleton())
+	__uint_t_Type::__uint_t_Type() : TypeAlias("uint_t", RuntimeTypeOf<::uint_t>::RuntimeType::GetSingleton(), "D:/DeepEye2018/deepeye/src/paf/pafcore/Typedef.i")
 	{
 		::pafcore::NameSpace::GetGlobalNameSpace()->registerMember(this);
 	}
@@ -229,7 +229,7 @@ namespace idlcpp
 		return s_instance;
 	}
 
-	__float_t_Type::__float_t_Type() : TypeAlias("float_t", RuntimeTypeOf<::float_t>::RuntimeType::GetSingleton())
+	__float_t_Type::__float_t_Type() : TypeAlias("float_t", RuntimeTypeOf<::float_t>::RuntimeType::GetSingleton(), "D:/DeepEye2018/deepeye/src/paf/pafcore/Typedef.i")
 	{
 		::pafcore::NameSpace::GetGlobalNameSpace()->registerMember(this);
 	}
@@ -246,7 +246,7 @@ namespace idlcpp
 		return s_instance;
 	}
 
-	__double_t_Type::__double_t_Type() : TypeAlias("double_t", RuntimeTypeOf<::double_t>::RuntimeType::GetSingleton())
+	__double_t_Type::__double_t_Type() : TypeAlias("double_t", RuntimeTypeOf<::double_t>::RuntimeType::GetSingleton(), "D:/DeepEye2018/deepeye/src/paf/pafcore/Typedef.i")
 	{
 		::pafcore::NameSpace::GetGlobalNameSpace()->registerMember(this);
 	}
@@ -263,7 +263,7 @@ namespace idlcpp
 		return s_instance;
 	}
 
-	__longdouble_t_Type::__longdouble_t_Type() : TypeAlias("longdouble_t", RuntimeTypeOf<::longdouble_t>::RuntimeType::GetSingleton())
+	__longdouble_t_Type::__longdouble_t_Type() : TypeAlias("longdouble_t", RuntimeTypeOf<::longdouble_t>::RuntimeType::GetSingleton(), "D:/DeepEye2018/deepeye/src/paf/pafcore/Typedef.i")
 	{
 		::pafcore::NameSpace::GetGlobalNameSpace()->registerMember(this);
 	}
@@ -280,7 +280,7 @@ namespace idlcpp
 		return s_instance;
 	}
 
-	__byte_t_Type::__byte_t_Type() : TypeAlias("byte_t", RuntimeTypeOf<::byte_t>::RuntimeType::GetSingleton())
+	__byte_t_Type::__byte_t_Type() : TypeAlias("byte_t", RuntimeTypeOf<::byte_t>::RuntimeType::GetSingleton(), "D:/DeepEye2018/deepeye/src/paf/pafcore/Typedef.i")
 	{
 		::pafcore::NameSpace::GetGlobalNameSpace()->registerMember(this);
 	}
@@ -297,7 +297,7 @@ namespace idlcpp
 		return s_instance;
 	}
 
-	__int8_t_Type::__int8_t_Type() : TypeAlias("int8_t", RuntimeTypeOf<::int8_t>::RuntimeType::GetSingleton())
+	__int8_t_Type::__int8_t_Type() : TypeAlias("int8_t", RuntimeTypeOf<::int8_t>::RuntimeType::GetSingleton(), "D:/DeepEye2018/deepeye/src/paf/pafcore/Typedef.i")
 	{
 		::pafcore::NameSpace::GetGlobalNameSpace()->registerMember(this);
 	}
@@ -314,7 +314,7 @@ namespace idlcpp
 		return s_instance;
 	}
 
-	__uint8_t_Type::__uint8_t_Type() : TypeAlias("uint8_t", RuntimeTypeOf<::uint8_t>::RuntimeType::GetSingleton())
+	__uint8_t_Type::__uint8_t_Type() : TypeAlias("uint8_t", RuntimeTypeOf<::uint8_t>::RuntimeType::GetSingleton(), "D:/DeepEye2018/deepeye/src/paf/pafcore/Typedef.i")
 	{
 		::pafcore::NameSpace::GetGlobalNameSpace()->registerMember(this);
 	}
@@ -331,7 +331,7 @@ namespace idlcpp
 		return s_instance;
 	}
 
-	__int16_t_Type::__int16_t_Type() : TypeAlias("int16_t", RuntimeTypeOf<::int16_t>::RuntimeType::GetSingleton())
+	__int16_t_Type::__int16_t_Type() : TypeAlias("int16_t", RuntimeTypeOf<::int16_t>::RuntimeType::GetSingleton(), "D:/DeepEye2018/deepeye/src/paf/pafcore/Typedef.i")
 	{
 		::pafcore::NameSpace::GetGlobalNameSpace()->registerMember(this);
 	}
@@ -348,7 +348,7 @@ namespace idlcpp
 		return s_instance;
 	}
 
-	__uint16_t_Type::__uint16_t_Type() : TypeAlias("uint16_t", RuntimeTypeOf<::uint16_t>::RuntimeType::GetSingleton())
+	__uint16_t_Type::__uint16_t_Type() : TypeAlias("uint16_t", RuntimeTypeOf<::uint16_t>::RuntimeType::GetSingleton(), "D:/DeepEye2018/deepeye/src/paf/pafcore/Typedef.i")
 	{
 		::pafcore::NameSpace::GetGlobalNameSpace()->registerMember(this);
 	}
@@ -365,7 +365,7 @@ namespace idlcpp
 		return s_instance;
 	}
 
-	__int32_t_Type::__int32_t_Type() : TypeAlias("int32_t", RuntimeTypeOf<::int32_t>::RuntimeType::GetSingleton())
+	__int32_t_Type::__int32_t_Type() : TypeAlias("int32_t", RuntimeTypeOf<::int32_t>::RuntimeType::GetSingleton(), "D:/DeepEye2018/deepeye/src/paf/pafcore/Typedef.i")
 	{
 		::pafcore::NameSpace::GetGlobalNameSpace()->registerMember(this);
 	}
@@ -382,7 +382,7 @@ namespace idlcpp
 		return s_instance;
 	}
 
-	__uint32_t_Type::__uint32_t_Type() : TypeAlias("uint32_t", RuntimeTypeOf<::uint32_t>::RuntimeType::GetSingleton())
+	__uint32_t_Type::__uint32_t_Type() : TypeAlias("uint32_t", RuntimeTypeOf<::uint32_t>::RuntimeType::GetSingleton(), "D:/DeepEye2018/deepeye/src/paf/pafcore/Typedef.i")
 	{
 		::pafcore::NameSpace::GetGlobalNameSpace()->registerMember(this);
 	}
@@ -399,7 +399,7 @@ namespace idlcpp
 		return s_instance;
 	}
 
-	__int64_t_Type::__int64_t_Type() : TypeAlias("int64_t", RuntimeTypeOf<::int64_t>::RuntimeType::GetSingleton())
+	__int64_t_Type::__int64_t_Type() : TypeAlias("int64_t", RuntimeTypeOf<::int64_t>::RuntimeType::GetSingleton(), "D:/DeepEye2018/deepeye/src/paf/pafcore/Typedef.i")
 	{
 		::pafcore::NameSpace::GetGlobalNameSpace()->registerMember(this);
 	}
@@ -416,7 +416,7 @@ namespace idlcpp
 		return s_instance;
 	}
 
-	__uint64_t_Type::__uint64_t_Type() : TypeAlias("uint64_t", RuntimeTypeOf<::uint64_t>::RuntimeType::GetSingleton())
+	__uint64_t_Type::__uint64_t_Type() : TypeAlias("uint64_t", RuntimeTypeOf<::uint64_t>::RuntimeType::GetSingleton(), "D:/DeepEye2018/deepeye/src/paf/pafcore/Typedef.i")
 	{
 		::pafcore::NameSpace::GetGlobalNameSpace()->registerMember(this);
 	}
@@ -433,7 +433,7 @@ namespace idlcpp
 		return s_instance;
 	}
 
-	__size_t_Type::__size_t_Type() : TypeAlias("size_t", RuntimeTypeOf<::size_t>::RuntimeType::GetSingleton())
+	__size_t_Type::__size_t_Type() : TypeAlias("size_t", RuntimeTypeOf<::size_t>::RuntimeType::GetSingleton(), "D:/DeepEye2018/deepeye/src/paf/pafcore/Typedef.i")
 	{
 		::pafcore::NameSpace::GetGlobalNameSpace()->registerMember(this);
 	}
@@ -450,7 +450,7 @@ namespace idlcpp
 		return s_instance;
 	}
 
-	__ptrdiff_t_Type::__ptrdiff_t_Type() : TypeAlias("ptrdiff_t", RuntimeTypeOf<::ptrdiff_t>::RuntimeType::GetSingleton())
+	__ptrdiff_t_Type::__ptrdiff_t_Type() : TypeAlias("ptrdiff_t", RuntimeTypeOf<::ptrdiff_t>::RuntimeType::GetSingleton(), "D:/DeepEye2018/deepeye/src/paf/pafcore/Typedef.i")
 	{
 		::pafcore::NameSpace::GetGlobalNameSpace()->registerMember(this);
 	}
@@ -467,7 +467,7 @@ namespace idlcpp
 		return s_instance;
 	}
 
-	__Nil_Type::__Nil_Type() : ::pafcore::ClassType("Nil", ::pafcore::value_object)
+	__Nil_Type::__Nil_Type() : ::pafcore::ClassType("Nil", ::pafcore::value_object, "D:/DeepEye2018/deepeye/src/paf/pafcore/Typedef.i")
 	{
 		m_size = sizeof(::Nil);
 		::pafcore::NameSpace::GetGlobalNameSpace()->registerMember(this);
@@ -501,7 +501,7 @@ namespace idlcpp
 		return s_instance;
 	}
 
-	__pafcore__Buffer_Type::__pafcore__Buffer_Type() : ::pafcore::ClassType("Buffer", ::pafcore::value_object)
+	__pafcore__Buffer_Type::__pafcore__Buffer_Type() : ::pafcore::ClassType("Buffer", ::pafcore::value_object, "D:/DeepEye2018/deepeye/src/paf/pafcore/Typedef.i")
 	{
 		m_size = sizeof(::pafcore::Buffer);
 		::pafcore::NameSpace::GetGlobalNameSpace()->getNameSpace("pafcore")->registerMember(this);
@@ -535,7 +535,7 @@ namespace idlcpp
 		return s_instance;
 	}
 
-	__pafcore__MethodAsProperty_Type::__pafcore__MethodAsProperty_Type() : ::pafcore::ClassType("MethodAsProperty", ::pafcore::value_object)
+	__pafcore__MethodAsProperty_Type::__pafcore__MethodAsProperty_Type() : ::pafcore::ClassType("MethodAsProperty", ::pafcore::value_object, "D:/DeepEye2018/deepeye/src/paf/pafcore/Typedef.i")
 	{
 		m_size = sizeof(::pafcore::MethodAsProperty);
 		::pafcore::NameSpace::GetGlobalNameSpace()->getNameSpace("pafcore")->registerMember(this);

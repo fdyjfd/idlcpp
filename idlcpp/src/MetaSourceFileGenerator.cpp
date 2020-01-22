@@ -4082,11 +4082,12 @@ void writeMetaConstructor(ClassNode* classNode,
 	//std::sort(staticPropertyNodes.begin(), staticPropertyNodes.end(), CompareMemberNodeByName());
 	std::sort(staticMethodNodes.begin(), staticMethodNodes.end(), CompareMethodNode());
 
-	sprintf_s(buf, "%s::%s() : ::pafcore::ClassType(\"%s\", ::pafcore::%s)\n",
+	sprintf_s(buf, "%s::%s() : ::pafcore::ClassType(\"%s\", ::pafcore::%s, \"%s\")\n",
 		metaClassName.c_str(), metaClassName.c_str(),
 		localClassName.c_str(),
 		classNode->m_category ? classNode->m_category->m_str.c_str() :
-		classNode->isValueType() ? "value_object" : "reference_object");
+		classNode->isValueType() ? "value_object" : "reference_object",
+		classNode->getSourceFilePath().c_str());
 
 	writeStringToFile(buf, file, indentation);
 	writeStringToFile("{\n", file, indentation);
@@ -4184,10 +4185,11 @@ void writeEnumMetaConstructor(EnumNode* enumNode, TemplateArguments* templateArg
 	enumNode->getNativeName(typeName, 0);
 	GetMetaTypeFullName(metaTypeName, enumNode, templateArguments);
 
-	sprintf_s(buf, "%s::%s() : ::pafcore::EnumType(\"%s\")\n",
+	sprintf_s(buf, "%s::%s() : ::pafcore::EnumType(\"%s\", \"%s\")\n",
 		metaTypeName.c_str(),
 		metaTypeName.c_str(),
-		enumNode->m_name->m_str.c_str());
+		enumNode->m_name->m_str.c_str(),
+		enumNode->getSourceFilePath().c_str());
 
 	writeStringToFile(buf, file, indentation);
 	writeStringToFile("{\n", file, indentation);
@@ -4241,8 +4243,8 @@ void MetaSourceFileGenerator::generateCode_Typedef(FILE* file, TypedefNode* type
 	typedefNode->getNativeName(typeName, templateArguments);
 	GetMetaTypeFullName(metaTypeName, typedefNode, templateArguments);
 
-	sprintf_s(buf, "%s::%s() : TypeAlias(\"%s\", RuntimeTypeOf<%s>::RuntimeType::GetSingleton())\n",
-		metaTypeName.c_str(), metaTypeName.c_str(), typedefNode->m_name->m_str.c_str(), typeName.c_str());
+	sprintf_s(buf, "%s::%s() : TypeAlias(\"%s\", RuntimeTypeOf<%s>::RuntimeType::GetSingleton(), \"%s\")\n",
+		metaTypeName.c_str(), metaTypeName.c_str(), typedefNode->m_name->m_str.c_str(), typeName.c_str(), typedefNode->getSourceFilePath().c_str());
 	writeStringToFile(buf, file, indentation);
 	writeStringToFile("{\n", file, indentation);
 
@@ -4268,8 +4270,8 @@ void MetaSourceFileGenerator::generateCode_TypeDeclaration(FILE* file, TypeDecla
 	typeDeclarationNode->getNativeName(typeName, templateArguments);
 	GetMetaTypeFullName(metaTypeName, typeDeclarationNode, templateArguments);
 
-	sprintf_s(buf, "%s::%s() : TypeAlias(\"%s\", RuntimeTypeOf<%s>::RuntimeType::GetSingleton())\n",
-		metaTypeName.c_str(), metaTypeName.c_str(), typeDeclarationNode->m_name->m_str.c_str(), typeName.c_str());
+	sprintf_s(buf, "%s::%s() : TypeAlias(\"%s\", RuntimeTypeOf<%s>::RuntimeType::GetSingleton(), \"%s\")\n",
+		metaTypeName.c_str(), metaTypeName.c_str(), typeDeclarationNode->m_name->m_str.c_str(), typeName.c_str(), typeDeclarationNode->getSourceFilePath().c_str());
 	writeStringToFile(buf, file, indentation);
 	writeStringToFile("{\n", file, indentation);
 	std::map<SyntaxNodeImpl*, size_t> attributesOffsets;

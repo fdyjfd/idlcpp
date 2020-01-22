@@ -7,8 +7,8 @@
 
 BEGIN_PAFCORE
 
-EnumType::EnumType(const char* name) 
-: Type(name, enum_object)
+EnumType::EnumType(const char* name, const char* declarationFile)
+: Type(name, enum_object, declarationFile)
 {
 	m_enumerators = 0;
 	m_enumeratorCount = 0;

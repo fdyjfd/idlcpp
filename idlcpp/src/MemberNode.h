@@ -49,6 +49,7 @@ public:
 	void getNativeName(std::string& nativeName, TemplateArguments* templateArguments);
 	ProgramNode* getProgramNode();
 	SourceFile* getSourceFile();
+	std::string getSourceFilePath();
 	virtual TypeNode* getTypeNode();
 	virtual void getLocalName(std::string& name, TemplateArguments* templateArguments);
 	virtual void collectTypes(TypeNode* enclosingTypeNode, TemplateArguments* templateArguments);

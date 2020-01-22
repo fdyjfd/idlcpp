@@ -151,7 +151,7 @@ const size_t sizeof_fixed_bml_attribute = sizeof(int32_t)*2;
 const size_t sizeof_fixed_bml_element = sizeof(int32_t)*5;
 
 
-void CollectBmlInfo(size_t& totalNumElements, size_t& totalNumAttributes, StringContainer& allStrings, BinaryXmlElement* bmlElement)
+static void CollectBmlInfo(size_t& totalNumElements, size_t& totalNumAttributes, StringContainer& allStrings, BinaryXmlElement* bmlElement)
 {
 	if(0 != bmlElement)
 	{
@@ -173,7 +173,7 @@ void CollectBmlInfo(size_t& totalNumElements, size_t& totalNumAttributes, String
 	}
 }
 
-size_t CalcStringBufferSize(StringContainer& allStrings)
+static size_t CalcStringBufferSize(StringContainer& allStrings)
 {
 	size_t res = 0;
 	StringContainer::iterator it = allStrings.begin();
@@ -186,7 +186,7 @@ size_t CalcStringBufferSize(StringContainer& allStrings)
 	return res;
 }
 
-void WriteBmlInfo(BinaryXmlElement* bmlElement, char* buffer, size_t elementOffset, size_t& childrenOffset, size_t& attributesOffset, size_t stringOffset, StringContainer& allStrings)
+static void WriteBmlInfo(BinaryXmlElement* bmlElement, char* buffer, size_t elementOffset, size_t& childrenOffset, size_t& attributesOffset, size_t stringOffset, StringContainer& allStrings)
 {
 	if(0 != bmlElement)
 	{
@@ -215,7 +215,7 @@ void WriteBmlInfo(BinaryXmlElement* bmlElement, char* buffer, size_t elementOffs
 	}
 }
 
-void WriteStringBuffer(char* buffer, StringContainer& allStrings)
+static void WriteStringBuffer(char* buffer, StringContainer& allStrings)
 {
 	StringContainer::iterator it = allStrings.begin();
 	StringContainer::iterator end = allStrings.end();

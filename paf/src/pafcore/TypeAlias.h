@@ -19,12 +19,22 @@ namespace pafcore
 		Type* get_type() const;
 
 	public:
-		TypeAlias(const char* name, Type* type);
+		TypeAlias(const char* name, Type* type, const char* declarationFile);
 		~TypeAlias();
+	public:
+		const char* getDeclarationFile() const;
 	public:
 		Type* m_type;
 		Metadata* m_enclosing;
+		const char* m_declarationFile;//类型声明所在文件路径
 
 	};
+
+
+	inline const char* TypeAlias::getDeclarationFile() const
+	{
+		return m_declarationFile;
+	}
+
 
 }

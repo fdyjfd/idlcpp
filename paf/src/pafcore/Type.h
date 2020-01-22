@@ -18,7 +18,7 @@ namespace pafcore
 		size_t get__size_() const;
 
 	public:
-		Type(const char* name, Category category);
+		Type(const char* name, Category category, const char* declarationFile);
 		~Type();
 	public:
 		virtual void destroyInstance(void* address);
@@ -31,10 +31,12 @@ namespace pafcore
 		bool isValue() const;
 		bool isReference() const;
 		bool isClass() const;
+		const char* getDeclarationFile() const;
 	public:
 		Category m_category;
 		size_t m_size;
 		Metadata* m_enclosing;
+		const char* m_declarationFile;//类型声明所在文件路径
 
 	};
 
@@ -44,26 +46,37 @@ namespace pafcore
 	{
 		return m_size;
 	}
+
 	inline bool Type::isPrimitive() const
 	{
 		return primitive_object == m_category;
 	}
+	
 	inline bool Type::isEnum() const
 	{
 		return enum_object == m_category;
 	}
+	
 	inline bool Type::isValue() const
 	{
 		return value_object == m_category;
 	}
+	
 	inline bool Type::isReference() const
 	{
 		return reference_object <= m_category;
 	}
+
 	inline bool Type::isClass() const
 	{
 		return value_object <= m_category;
 	}
+	
+	inline const char* Type::getDeclarationFile() const
+	{
+		return m_declarationFile;
+	}
+
 
 
 }

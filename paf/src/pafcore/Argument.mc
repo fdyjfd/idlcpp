@@ -27,7 +27,7 @@
 namespace idlcpp
 {
 
-	__pafcore__Argument_Type::__pafcore__Argument_Type() : ::pafcore::ClassType("Argument", ::pafcore::function_argument)
+	__pafcore__Argument_Type::__pafcore__Argument_Type() : ::pafcore::ClassType("Argument", ::pafcore::function_argument, "D:/DeepEye2018/deepeye/src/paf/pafcore/Argument.i")
 	{
 		m_size = sizeof(::pafcore::Argument);
 		static BaseClass s_baseClasses[] =

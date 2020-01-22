@@ -46,6 +46,13 @@ pafcore::ErrorCode LuaSubclassInvoker::invoke(const char* name, pafcore::Variant
 
 	//stackDump(m_luaState);
 
+	if (!(lua_isfunction(m_luaState, -1) || lua_iscfunction(m_luaState, -1)))
+	{
+		lua_pop(m_luaState, 2);
+
+		return pafcore::e_script_dose_not_override;
+	}
+
 	lua_insert(m_luaState, -2);
 
 	//stackDump(m_luaState);
@@ -58,7 +65,7 @@ pafcore::ErrorCode LuaSubclassInvoker::invoke(const char* name, pafcore::Variant
 
 	//stackDump(m_luaState);
 
-	int error = lua_pcall(m_luaState, numArgs + 1, 1, 0);
+	int error = lua_pcall(m_luaState, int(numArgs + 1), 1, 0);
 
 	//stackDump(m_luaState);
 

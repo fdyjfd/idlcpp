@@ -28,7 +28,7 @@
 namespace idlcpp
 {
 
-	__pafcore__StaticField_Type::__pafcore__StaticField_Type() : ::pafcore::ClassType("StaticField", ::pafcore::static_field)
+	__pafcore__StaticField_Type::__pafcore__StaticField_Type() : ::pafcore::ClassType("StaticField", ::pafcore::static_field, "D:/DeepEye2018/deepeye/src/paf/pafcore/StaticField.i")
 	{
 		m_size = sizeof(::pafcore::StaticField);
 		static BaseClass s_baseClasses[] =

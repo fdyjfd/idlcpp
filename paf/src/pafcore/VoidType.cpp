@@ -7,7 +7,7 @@
 
 BEGIN_PAFCORE
 
-VoidType::VoidType() : Type("void", void_object)
+VoidType::VoidType() : Type("void", void_object, "")
 {
 	m_size = 1;
 	NameSpace::GetGlobalNameSpace()->registerMember(this);

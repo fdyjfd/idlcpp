@@ -3,14 +3,15 @@
 #include "XmlSerializer.ic"
 #include "XmlSerializer.mc"
 #include "../pafcore/Reference.h"
+#include "../pafcore/Object.h"
+#include "../pafcore/FlexiblePropertySource.h"
 #include "../pafcore/ClassType.h"
 #include "../pafcore/Reflection.h"
 #include "../pafcore/InstanceField.mh"
 #include "../pafcore/Typedef.mh"
 #include "../pafcore/String.mh"
 #include "../pafcore/Iterator.mh"
-#include "../../../../thirdparty/rapidxml-1.13/rapidxml.hpp"
-#include "../../../../thirdparty/rapidxml-1.13/rapidxml_print.hpp"
+#include "Xml.h"
 #include "Base64.h"
 #include <vector>
 #include <iterator>
@@ -102,7 +103,7 @@ static xml_node* BufferToXml(const char* name, pafcore::Variant* variant, rapidx
 	size_t base64Len = Base64::Encode(&code[0], buffer->pointer, buffer->size);
 	rapidxml::xml_node<char>* node = doc.allocate_node(rapidxml::node_element);
 	node->name(doc.allocate_string(name));
-	node->value(doc.allocate_string(&code[0], base64Len));
+	node->value(doc.allocate_string(&code[0], base64Len), base64Len);
 	return node;
 }
 
@@ -116,25 +117,28 @@ static xml_node* InstancePropertyToXml(const char* name, pafcore::Variant* that,
 			char buf[64];
 			rapidxml::xml_node<char>* node = doc.allocate_node(rapidxml::node_element);
 			node->name(doc.allocate_string(name));
-			rapidxml::xml_attribute<char>* attribute = doc.allocate_attribute();
-			attribute->name("arraySize");
-			sprintf_s(buf, "%u", (uint32_t)propertySize);
-			attribute->value(doc.allocate_string(buf));
-			node->append_attribute(attribute);
 
+			uint32_t validCount = 0;
 			for (size_t i = 0; i < propertySize; ++i)
 			{
 				pafcore::Variant subProperty;
 				if (pafcore::s_ok == pafcore::Reflection::GetArrayInstanceProperty(subProperty, that, instanceProperty, i))
 				{
-					sprintf_s(buf, "_%u", (uint32_t)i);
+					sprintf_s(buf, "_%u", (uint32_t)validCount);
 					xml_node* childNode = VariantToXml(buf, &subProperty, doc, xmlCdata);
 					if (childNode)
 					{
 						node->append_node(childNode);
+						++validCount;
 					}
 				}
 			}
+			rapidxml::xml_attribute<char>* attribute = doc.allocate_attribute();
+			attribute->name("arraySize");
+			sprintf_s(buf, "%u", (uint32_t)validCount);
+			attribute->value(doc.allocate_string(buf));
+			node->append_attribute(attribute);
+
 			return node;
 		}
 	}
@@ -159,9 +163,9 @@ static xml_node* InstancePropertyToXml(const char* name, pafcore::Variant* that,
 				if (valueNode)
 				{
 					node->append_node(valueNode);
+					++propertySize;
 				}
 				iterator->moveNext();
-				++propertySize;
 			}
 			rapidxml::xml_attribute<char>* attribute = doc.allocate_attribute();
 			attribute->name("listSize");
@@ -201,6 +205,7 @@ static xml_node* InstancePropertyToXml(const char* name, pafcore::Variant* that,
 				{
 					node->append_node(valueNode);
 				}
+				PAF_ASSERT(keyNode && valueNode);
 				iterator->moveNext();
 				++propertySize;
 			}
@@ -270,9 +275,18 @@ static xml_node* ClassToXml(const char* name, pafcore::Variant* that, rapidxml::
 	{
 		return 0;
 	}
+	pafcore::ClassType* classType = static_cast<pafcore::ClassType*>(that->m_type);
+	if (classType->isReference())
+	{
+		pafcore::Reference* reference = (pafcore::Reference*)that->m_pointer;
+		pafcore::Object* object = reference->castTo<pafcore::Object>();
+		if (object && !object->serializable())
+		{
+			return 0;
+		}
+	}
 	rapidxml::xml_node<char>* node = doc.allocate_node(rapidxml::node_element);
 	node->name(doc.allocate_string(name));
-	pafcore::ClassType* classType = static_cast<pafcore::ClassType*>(that->m_type);
 	if (classType->isReference())
 	{
 		pafcore::Reference* reference = (pafcore::Reference*)that->m_pointer;
@@ -298,11 +312,14 @@ static xml_node* ClassToXml(const char* name, pafcore::Variant* that, rapidxml::
 	for (size_t i = 0; i < propertyCount; ++i)
 	{
 		pafcore::InstanceProperty* instanceProperty = classType->_getInstanceProperty_(i, true);
-		bool xmlCdata = IsXmlCdata(instanceProperty);
-		xml_node* childNode = InstancePropertyToXml(instanceProperty->get__name_(), that, instanceProperty, doc, xmlCdata);
-		if (childNode)
+		if (instanceProperty->get_serializable())
 		{
-			node->append_node(childNode);
+			bool xmlCdata = IsXmlCdata(instanceProperty);
+			xml_node* childNode = InstancePropertyToXml(instanceProperty->get__name_(), that, instanceProperty, doc, xmlCdata);
+			if (childNode)
+			{
+				node->append_node(childNode);
+			}
 		}
 	}
 
@@ -337,15 +354,22 @@ static xml_node* ClassToXml(const char* name, pafcore::Variant* that, rapidxml::
 	if (classType->isReference())
 	{
 		pafcore::Reference* reference = (pafcore::Reference*)that->m_pointer;
-		uint32_t count = reference->dynamicInstancePropertyCount();
-		for (uint32_t i = 0; i < count; ++i)
+		pafcore::FlexiblePropertySource* flexiblePropertySource = reference->castTo<pafcore::FlexiblePropertySource>();
+		if (flexiblePropertySource)
 		{
-			pafcore::InstanceProperty* instanceProperty = reference->dynamicInstanceProperty(i);
-			bool xmlCdata = IsXmlCdata(instanceProperty);
-			xml_node* childNode = InstancePropertyToXml(instanceProperty->get__name_(), that, instanceProperty, doc, xmlCdata);
-			if (childNode)
+			uint32_t count = flexiblePropertySource->dynamicInstancePropertyCount();
+			for (uint32_t i = 0; i < count; ++i)
 			{
-				node->append_node(childNode);
+				pafcore::InstanceProperty* instanceProperty = flexiblePropertySource->dynamicInstanceProperty(i);
+				if (instanceProperty->get_serializable())
+				{
+					bool xmlCdata = IsXmlCdata(instanceProperty);
+					xml_node* childNode = InstancePropertyToXml(instanceProperty->get__name_(), that, instanceProperty, doc, xmlCdata);
+					if (childNode)
+					{
+						node->append_node(childNode);
+					}
+				}
 			}
 		}
 	}
@@ -483,6 +507,7 @@ static void XmlToInstanceProperty(pafcore::Variant& that, pafcore::InstancePrope
 		bool xmlCdata = IsXmlCdata(instanceProperty);
 		if (instanceProperty->get_isArray())
 		{
+			PAF_ASSERT(instanceProperty->get_hasSetter());
 			xml_attribute* arraySizeAttr = childNode->first_attribute("arraySize");
 			if (0 == arraySizeAttr)
 			{
@@ -500,7 +525,7 @@ static void XmlToInstanceProperty(pafcore::Variant& that, pafcore::InstancePrope
 					if (itemNode)
 					{
 						pafcore::Variant propertyValue;
-						pafcore::Type* type = instanceProperty->get_setterType();
+						pafcore::Type* type = instanceProperty->get_type();
 						if (type->isReference())
 						{
 							xml_attribute* typeAttr = itemNode->first_attribute("type");
@@ -509,13 +534,11 @@ static void XmlToInstanceProperty(pafcore::Variant& that, pafcore::InstancePrope
 								type = pafcore::Reflection::GetTypeFromFullName(typeAttr->value());
 							}
 						}
-						pafcore::Reflection::NewObject(propertyValue, type);
-						XmlToVariant(propertyValue, itemNode, xmlCdata);
-						pafcore::Reflection::SetArrayInstanceProperty(&that, instanceProperty, i, propertyValue);
-						//if (!propertyValue.m_type->isReference())
-						//{
-						//	propertyValue.unhold();
-						//}
+						if (pafcore::s_ok == pafcore::Reflection::NewObject(propertyValue, type))
+						{
+							XmlToVariant(propertyValue, itemNode, xmlCdata);
+							pafcore::Reflection::SetArrayInstanceProperty(&that, instanceProperty, i, propertyValue);
+						}
 					}
 				}
 			}
@@ -536,7 +559,7 @@ static void XmlToInstanceProperty(pafcore::Variant& that, pafcore::InstancePrope
 					continue;
 				}
 				pafcore::Variant propertyValue;
-				pafcore::Type* valueType = instanceProperty->get_setterType();
+				pafcore::Type* valueType = instanceProperty->get_type();
 				if (valueType->isReference())
 				{
 					xml_attribute* typeAttr = valueNode->first_attribute("type");
@@ -545,17 +568,16 @@ static void XmlToInstanceProperty(pafcore::Variant& that, pafcore::InstancePrope
 						valueType = pafcore::Reflection::GetTypeFromFullName(typeAttr->value());
 					}
 				}
-				pafcore::Reflection::NewObject(propertyValue, valueType);
-				XmlToVariant(propertyValue, valueNode, xmlCdata);
-				pafcore::Reflection::ListInstanceProperty_PushBack(&that, instanceProperty, propertyValue);
-				//if (!propertyValue.m_type->isReference())
-				//{
-				//	propertyValue.unhold();
-				//}
+				if (pafcore::s_ok == pafcore::Reflection::NewObject(propertyValue, valueType))
+				{
+					XmlToVariant(propertyValue, valueNode, xmlCdata);
+					pafcore::Reflection::ListInstanceProperty_PushBack(&that, instanceProperty, propertyValue);
+				}
 			}
 		}
 		else if (instanceProperty->get_isMap())
 		{
+			PAF_ASSERT(instanceProperty->get_hasSetter());
 			xml_attribute* mapSizeAttr = childNode->first_attribute("mapSize");
 			if (0 == mapSizeAttr)
 			{
@@ -585,30 +607,24 @@ static void XmlToInstanceProperty(pafcore::Variant& that, pafcore::InstancePrope
 								keyType = pafcore::Reflection::GetTypeFromFullName(typeAttr->value());
 							}
 						}
-						pafcore::Reflection::NewObject(propertyKey, keyType);
-						XmlToVariant(propertyKey, keyNode, xmlCdata);
-
-						pafcore::Type* valueType = instanceProperty->get_setterType();
-						if (valueType->isReference())
-						{
-							xml_attribute* typeAttr = valueNode->first_attribute("type");
-							if (typeAttr)
+						if (pafcore::s_ok == pafcore::Reflection::NewObject(propertyKey, keyType))
+						{ 
+							XmlToVariant(propertyKey, keyNode, xmlCdata);
+							pafcore::Type* valueType = instanceProperty->get_type();
+							if (valueType->isReference())
 							{
-								valueType = pafcore::Reflection::GetTypeFromFullName(typeAttr->value());
+								xml_attribute* typeAttr = valueNode->first_attribute("type");
+								if (typeAttr)
+								{
+									valueType = pafcore::Reflection::GetTypeFromFullName(typeAttr->value());
+								}
+							}
+							if (pafcore::s_ok == pafcore::Reflection::NewObject(propertyValue, valueType))
+							{
+								XmlToVariant(propertyValue, valueNode, xmlCdata);
+								pafcore::Reflection::SetMapInstanceProperty(&that, instanceProperty, &propertyKey, propertyValue);
 							}
 						}
-						pafcore::Reflection::NewObject(propertyValue, valueType);
-						XmlToVariant(propertyValue, valueNode, xmlCdata);
-						pafcore::Reflection::SetMapInstanceProperty(&that, instanceProperty, &propertyKey, propertyValue);
-
-						//if (!propertyKey.m_type->isReference())
-						//{
-						//	propertyKey.unhold();
-						//}
-						//if (!propertyValue.m_type->isReference())
-						//{
-						//	propertyValue.unhold();
-						//}
 					}
 				}
 			}
@@ -616,7 +632,7 @@ static void XmlToInstanceProperty(pafcore::Variant& that, pafcore::InstancePrope
 		else
 		{
 			pafcore::Variant propertyValue;
-			pafcore::Type* type = instanceProperty->get_setterType();
+			pafcore::Type* type = instanceProperty->get_type();
 			if (type)
 			{
 				if (type->isReference())
@@ -627,13 +643,21 @@ static void XmlToInstanceProperty(pafcore::Variant& that, pafcore::InstancePrope
 						type = pafcore::Reflection::GetTypeFromFullName(typeAttr->value());
 					}
 				}
-				pafcore::Reflection::NewObject(propertyValue, instanceProperty->get_setterType());
-				XmlToVariant(propertyValue, childNode, xmlCdata);
-				pafcore::Reflection::SetInstanceProperty(&that, instanceProperty, propertyValue);
-				//if (!propertyValue.m_type->isReference())
-				//{
-				//	propertyValue.unhold();
-				//}
+				if (instanceProperty->get_hasSetter())
+				{
+					if (pafcore::s_ok == pafcore::Reflection::NewObject(propertyValue, type))
+					{
+						XmlToVariant(propertyValue, childNode, xmlCdata);
+						pafcore::Reflection::SetInstanceProperty(&that, instanceProperty, propertyValue);
+					}
+				}
+				else
+				{
+					if (pafcore::s_ok == pafcore::Reflection::GetInstanceProperty(propertyValue, &that, instanceProperty))
+					{
+						XmlToVariant(propertyValue, childNode, xmlCdata);
+					}
+				}
 			}
 		}
 	}
@@ -686,11 +710,15 @@ static void XmlToClass(pafcore::Variant& that, xml_node* node)
 	if (classType->isReference())
 	{
 		pafcore::Reference* reference = (pafcore::Reference*)that.m_pointer;
-		uint32_t count = reference->dynamicInstancePropertyCount();
-		for (uint32_t i = 0; i < count; ++i)
+		pafcore::FlexiblePropertySource* flexiblePropertySource = reference->castTo<pafcore::FlexiblePropertySource>();
+		if (flexiblePropertySource)
 		{
-			pafcore::InstanceProperty* instanceProperty = reference->dynamicInstanceProperty(i);
-			XmlToInstanceProperty(that, instanceProperty, node);
+			uint32_t count = flexiblePropertySource->dynamicInstancePropertyCount();
+			for (uint32_t i = 0; i < count; ++i)
+			{
+				pafcore::InstanceProperty* instanceProperty = flexiblePropertySource->dynamicInstanceProperty(i);
+				XmlToInstanceProperty(that, instanceProperty, node);
+			}
 		}
 	}
 }
@@ -777,6 +805,10 @@ void XmlSerializer::Unserialize(pafcore::Reference* reference, xml_node* node)
 void XmlSerializer::Unserialize(pafcore::Variant& object, xml_node* node, pafcore::Type* type)
 {
 	object.clear();
+	if (0 == node)
+	{
+		return;
+	}
 	if (0 == type || type->isReference())
 	{
 		xml_attribute* typeAttr = node->first_attribute("type");
@@ -789,9 +821,10 @@ void XmlSerializer::Unserialize(pafcore::Variant& object, xml_node* node, pafcor
 	{
 		return;
 	}
-	pafcore::Reflection::NewObject(object, type);
-	//object.unhold();
-	Unserialize(object.m_pointer, type, node);
+	if (pafcore::s_ok == pafcore::Reflection::NewObject(object, type))
+	{
+		Unserialize(object.m_pointer, type, node);
+	}
 }
 
 END_PAFSTD

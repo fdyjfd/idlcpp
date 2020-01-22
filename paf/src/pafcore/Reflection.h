@@ -60,6 +60,9 @@ namespace pafcore
 
 		static ErrorCode GetInstanceProperty(Variant& value, Variant* that, InstanceProperty* property);
 		static ErrorCode SetInstanceProperty(Variant* that, InstanceProperty* property, Variant& value);
+		static ErrorCode SimpleInstanceProperty_CandidateCount(Variant& value, Variant* that, InstanceProperty* property);
+		static ErrorCode SimpleInstanceProperty_CandidateCount(size_t& size, Variant* that, InstanceProperty* property);
+		static ErrorCode SimpleInstanceProperty_GetCandidate(Variant& value, Variant* that, InstanceProperty* property, size_t index);
 
 		static ErrorCode GetArrayInstanceProperty(Variant& value, Variant* that, InstanceProperty* property, size_t index);
 		static ErrorCode SetArrayInstanceProperty(Variant* that, InstanceProperty* property, size_t index, Variant& value);

@@ -55,21 +55,6 @@ namespace pafcore
 			delete this;
 		}
 
-		virtual uint32_t dynamicInstancePropertyCount() const
-		{
-			return 0;
-		}
-
-		virtual InstanceProperty* dynamicInstanceProperty(uint32_t index) const
-		{
-			return 0;
-		}
-
-		virtual bool serializable() const
-		{
-			return true;
-		}
-
 #}
 	};
 }

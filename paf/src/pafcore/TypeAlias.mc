@@ -27,7 +27,7 @@
 namespace idlcpp
 {
 
-	__pafcore__TypeAlias_Type::__pafcore__TypeAlias_Type() : ::pafcore::ClassType("TypeAlias", ::pafcore::type_alias)
+	__pafcore__TypeAlias_Type::__pafcore__TypeAlias_Type() : ::pafcore::ClassType("TypeAlias", ::pafcore::type_alias, "D:/DeepEye2018/deepeye/src/paf/pafcore/TypeAlias.i")
 	{
 		m_size = sizeof(::pafcore::TypeAlias);
 		static BaseClass s_baseClasses[] =

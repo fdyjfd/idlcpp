@@ -27,7 +27,7 @@
 namespace idlcpp
 {
 
-	__pafcore__Type_Type::__pafcore__Type_Type() : ::pafcore::ClassType("Type", ::pafcore::reference_object)
+	__pafcore__Type_Type::__pafcore__Type_Type() : ::pafcore::ClassType("Type", ::pafcore::reference_object, "D:/DeepEye2018/deepeye/src/paf/pafcore/Type.i")
 	{
 		m_size = sizeof(::pafcore::Type);
 		static BaseClass s_baseClasses[] =

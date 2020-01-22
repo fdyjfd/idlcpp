@@ -13,8 +13,8 @@
 
 BEGIN_PAFCORE
 
-ClassType::ClassType(const char* name, Category category)
-: Type(name, category)
+ClassType::ClassType(const char* name, Category category, const char* declarationFile)
+: Type(name, category, declarationFile)
 {
 	m_baseClasses = 0;
 	m_baseClassCount = 0;

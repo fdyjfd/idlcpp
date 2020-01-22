@@ -27,7 +27,7 @@
 namespace idlcpp
 {
 
-	__pafcore__Category_Type::__pafcore__Category_Type() : ::pafcore::EnumType("Category")
+	__pafcore__Category_Type::__pafcore__Category_Type() : ::pafcore::EnumType("Category", "D:/DeepEye2018/deepeye/src/paf/pafcore/Metadata.i")
 	{
 		m_size = sizeof(::pafcore::Category);
 		static ::pafcore::Enumerator s_enumerators[] = 
@@ -70,7 +70,7 @@ namespace idlcpp
 		return s_instance;
 	}
 
-	__pafcore__Metadata_Type::__pafcore__Metadata_Type() : ::pafcore::ClassType("Metadata", ::pafcore::reference_object)
+	__pafcore__Metadata_Type::__pafcore__Metadata_Type() : ::pafcore::ClassType("Metadata", ::pafcore::reference_object, "D:/DeepEye2018/deepeye/src/paf/pafcore/Metadata.i")
 	{
 		m_size = sizeof(::pafcore::Metadata);
 		static BaseClass s_baseClasses[] =

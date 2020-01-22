@@ -28,7 +28,7 @@ namespace pafcore
 		Enumerator* _getEnumeratorByName_(string_t name);
 
 	public:
-		EnumType(const char* name);
+		EnumType(const char* name, const char* declarationFile);
 	public:
 		Enumerator* findEnumerator(const char* name);
 		Metadata* findMember(const char* name);

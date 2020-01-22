@@ -27,7 +27,7 @@
 namespace idlcpp
 {
 
-	__pafcore__Enumerator_Type::__pafcore__Enumerator_Type() : ::pafcore::ClassType("Enumerator", ::pafcore::enumerator)
+	__pafcore__Enumerator_Type::__pafcore__Enumerator_Type() : ::pafcore::ClassType("Enumerator", ::pafcore::enumerator, "D:/DeepEye2018/deepeye/src/paf/pafcore/Enumerator.i")
 	{
 		m_size = sizeof(::pafcore::Enumerator);
 		static BaseClass s_baseClasses[] =

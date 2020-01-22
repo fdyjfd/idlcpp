@@ -27,7 +27,7 @@
 namespace idlcpp
 {
 
-	__pafcore__StaticProperty_Type::__pafcore__StaticProperty_Type() : ::pafcore::ClassType("StaticProperty", ::pafcore::static_property)
+	__pafcore__StaticProperty_Type::__pafcore__StaticProperty_Type() : ::pafcore::ClassType("StaticProperty", ::pafcore::static_property, "D:/DeepEye2018/deepeye/src/paf/pafcore/StaticProperty.i")
 	{
 		m_size = sizeof(::pafcore::StaticProperty);
 		static BaseClass s_baseClasses[] =

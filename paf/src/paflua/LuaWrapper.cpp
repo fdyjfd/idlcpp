@@ -193,7 +193,7 @@ bool LuaToInt(int& value, lua_State *L, int index)
 		res = true;
 		break; }
 	case LUA_TNUMBER: {
-		value = lua_tointeger(L, index);
+		value = (int)lua_tointeger(L, index);
 		res = true;
 		break; }
 	case LUA_TUSERDATA: {
@@ -213,6 +213,9 @@ pafcore::Variant* LuaToVariant(pafcore::Variant* value, lua_State *L, int index)
 	int type = lua_type(L, index);
 	switch (type)
 	{
+	case LUA_TNIL:
+		value->assignNullPtr();
+		break;
 	case LUA_TSTRING:
 		{
 			size_t len;
@@ -973,17 +976,18 @@ int Variant_Operator(lua_State *L, const char* op)
 
 int Variant_ComparisonOperator(lua_State *L, CompareOperation op)
 {
-	//stackDump(L);
-	pafcore::Variant* variant;
+	pafcore::Variant* variant = (pafcore::Variant*)luaL_checkudata(L, 1, variant_metatable_name);
+	PAF_ASSERT(0 != variant);
 
-	if (LUA_TUSERDATA == lua_type(L, 1))
-	{
-		variant = (pafcore::Variant*)luaL_checkudata(L, 1, variant_metatable_name);
-	}
-	else
-	{
-		variant = (pafcore::Variant*)luaL_checkudata(L, 2, variant_metatable_name);
-	}
+	//bool firstIsVar = (LUA_TUSERDATA == lua_type(L, 1));
+	//if (firstIsVar)
+	//{
+	//	variant = (pafcore::Variant*)luaL_checkudata(L, 1, variant_metatable_name);
+	//}
+	//else
+	//{
+	//	variant = (pafcore::Variant*)luaL_checkudata(L, 2, variant_metatable_name);
+	//}
 
 	switch (variant->m_type->m_category)
 	{
@@ -1029,6 +1033,12 @@ int Variant_ComparisonOperator(lua_State *L, CompareOperation op)
 		if (0 != method)
 		{
 			return InvokeFunction_ComparisonOperator(L, method->m_invoker);
+		}
+		else if (CompareOperation::equal_to == op)
+		{
+			pafcore::Variant* other = (pafcore::Variant*)luaL_checkudata(L, 2, variant_metatable_name);
+			lua_pushboolean(L, variant->m_pointer == other->m_pointer ? 1 : 0);
+			return 1;
 		}
 		break; }
 	}
@@ -1708,7 +1718,7 @@ int Variant_Index(lua_State *L)
 		char buf[256];
 		if (sc_integer == sc)
 		{
-			sprintf_s(buf, "__index[%d]", num);
+			sprintf_s(buf, "__index[%zd]", num);
 			Variant_Error(L, buf, errorCode);
 		}
 		else if (sc_string == sc)
@@ -1776,7 +1786,7 @@ int Variant_NewIndex(lua_State *L)
 		char buf[256];
 		if (sc_integer == sc)
 		{
-			sprintf_s(buf, "__newindex[%d]", num);
+			sprintf_s(buf, "__newindex[%zd]", num);
 			Variant_Error(L, buf, errorCode);
 		}
 		else if (sc_string == sc)

@@ -28,7 +28,7 @@
 namespace idlcpp
 {
 
-	__pafcore__EnumType_Type::__pafcore__EnumType_Type() : ::pafcore::ClassType("EnumType", ::pafcore::enum_type)
+	__pafcore__EnumType_Type::__pafcore__EnumType_Type() : ::pafcore::ClassType("EnumType", ::pafcore::enum_type, "D:/DeepEye2018/deepeye/src/paf/pafcore/EnumType.i")
 	{
 		m_size = sizeof(::pafcore::EnumType);
 		static BaseClass s_baseClasses[] =

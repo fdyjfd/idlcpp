@@ -3,6 +3,8 @@
 
 BEGIN_PAFSTD
 
+static char* s_emptyString = "";
+
 StringPool::StringPool()
 {
 }
@@ -21,9 +23,9 @@ StringPool::~StringPool()
 
 const char* StringPool::getString(const char* str)
 {
-	if (0 == str)
+	if (0 == str || 0 == *str)
 	{
-		str = "";
+		return s_emptyString;
 	}
 	auto it = m_strings.find(str);
 	if (it != m_strings.end())
@@ -42,9 +44,9 @@ const char* StringPool::getString(const char* str)
 
 const char* StringPool::findString(const char* str)
 {
-	if (0 == str)
+	if (0 == str || 0 == *str)
 	{
-		str = "";
+		return s_emptyString;
 	}
 	auto it = m_strings.find(str);
 	if (it != m_strings.end())

@@ -77,7 +77,7 @@ namespace pafcore
 			ptrdiff_t m_offset;
 		};
 	public:
-		ClassType(const char* name, Category category);
+		ClassType(const char* name, Category category, const char* declarationFile);
 	public:
 		virtual Metadata* findMember(const char* name);
 		virtual void* createSubclassProxy(SubclassInvoker* subclassInvoker);

@@ -29,7 +29,7 @@
 namespace idlcpp
 {
 
-	__pafcore__InstanceField_Type::__pafcore__InstanceField_Type() : ::pafcore::ClassType("InstanceField", ::pafcore::instance_field)
+	__pafcore__InstanceField_Type::__pafcore__InstanceField_Type() : ::pafcore::ClassType("InstanceField", ::pafcore::instance_field, "D:/DeepEye2018/deepeye/src/paf/pafcore/InstanceField.i")
 	{
 		m_size = sizeof(::pafcore::InstanceField);
 		static BaseClass s_baseClasses[] =

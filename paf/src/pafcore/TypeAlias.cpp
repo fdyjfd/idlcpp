@@ -6,10 +6,11 @@
 
 BEGIN_PAFCORE
 
-TypeAlias::TypeAlias(const char* name, Type* type) : 
+TypeAlias::TypeAlias(const char* name, Type* type, const char* declarationFile) :
 	Metadata(name),
 	m_type(type),
-	m_enclosing(0)
+	m_enclosing(0),
+	m_declarationFile(declarationFile)
 {
 }
 

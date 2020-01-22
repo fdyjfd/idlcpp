@@ -6,11 +6,12 @@
 
 BEGIN_PAFCORE
 
-Type::Type(const char* name, Category category) : 
+Type::Type(const char* name, Category category, const char* declarationFile) :
 	Metadata(name),
 	m_category(category),
 	m_size(0),
-	m_enclosing(0)
+	m_enclosing(0),
+	m_declarationFile(declarationFile)
 {
 }
 

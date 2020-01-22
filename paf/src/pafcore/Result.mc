@@ -27,7 +27,7 @@
 namespace idlcpp
 {
 
-	__pafcore__Result_Type::__pafcore__Result_Type() : ::pafcore::ClassType("Result", ::pafcore::function_result)
+	__pafcore__Result_Type::__pafcore__Result_Type() : ::pafcore::ClassType("Result", ::pafcore::function_result, "D:/DeepEye2018/deepeye/src/paf/pafcore/Result.i")
 	{
 		m_size = sizeof(::pafcore::Result);
 		static BaseClass s_baseClasses[] =

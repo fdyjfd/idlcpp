@@ -26,7 +26,7 @@
 namespace idlcpp
 {
 
-	__pafcore__String_Type::__pafcore__String_Type() : ::pafcore::ClassType("String", ::pafcore::value_object)
+	__pafcore__String_Type::__pafcore__String_Type() : ::pafcore::ClassType("String", ::pafcore::value_object, "D:/DeepEye2018/deepeye/src/paf/pafcore/String.i")
 	{
 		m_size = sizeof(::pafcore::String);
 		static ::pafcore::Result s_staticResults[] = 

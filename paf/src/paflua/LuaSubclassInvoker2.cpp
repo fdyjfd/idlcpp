@@ -30,7 +30,7 @@ pafcore::ErrorCode LuaSubclassInvoker::invoke(const char* name, pafcore::Variant
 	{
 		luaArgs[i] = VariantToLua(m_luaState, &args[i]);
 	}
-	int error = lua_pcall(m_luaState, numArgs + 1, 1, 0);
+	int error = lua_pcall(m_luaState, int(numArgs + 1), 1, 0);
 	if (error)
 	{
 		const char* str = lua_tostring(m_luaState, -1);

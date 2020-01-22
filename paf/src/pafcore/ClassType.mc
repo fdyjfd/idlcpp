@@ -30,7 +30,7 @@
 namespace idlcpp
 {
 
-	__pafcore__ClassTypeIterator_Type::__pafcore__ClassTypeIterator_Type() : ::pafcore::ClassType("ClassTypeIterator", ::pafcore::value_object)
+	__pafcore__ClassTypeIterator_Type::__pafcore__ClassTypeIterator_Type() : ::pafcore::ClassType("ClassTypeIterator", ::pafcore::value_object, "D:/DeepEye2018/deepeye/src/paf/pafcore/ClassType.i")
 	{
 		m_size = sizeof(::pafcore::ClassTypeIterator);
 		static ::pafcore::Result s_instanceResults[] = 
@@ -120,7 +120,7 @@ namespace idlcpp
 		return s_instance;
 	}
 
-	__pafcore__ClassType_Type::__pafcore__ClassType_Type() : ::pafcore::ClassType("ClassType", ::pafcore::class_type)
+	__pafcore__ClassType_Type::__pafcore__ClassType_Type() : ::pafcore::ClassType("ClassType", ::pafcore::class_type, "D:/DeepEye2018/deepeye/src/paf/pafcore/ClassType.i")
 	{
 		m_size = sizeof(::pafcore::ClassType);
 		static BaseClass s_baseClasses[] =

@@ -47,7 +47,7 @@ namespace pafcore
 		Metadata* _findMember_(const char* name);
 #{
 	public:
-		PrimitiveType(const char* name) : Type(name, primitive_object)
+		PrimitiveType(const char* name) : Type(name, primitive_object, "")
 		{}
 	public:
 		virtual bool castTo(void* dst, Type* dstType, const void* src) = 0;

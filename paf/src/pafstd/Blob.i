@@ -10,10 +10,11 @@ namespace pafstd
 	{
 		void* getData();
 		uint32_t getLength() const;
-		static Blob^ New(uint32_t length);
-		static Blob^ PointerToBlob_(void* pointer, uint32_t length);
-		static Blob^ SubBlob_(Blob* blob, uint32_t offset, uint32_t length);
+		static Blob+ New(uint32_t length);
 #{
+	public:
+		static Blob* SubBlob_(Blob* blob, uint32_t offset, uint32_t length);
+		static Blob* PointerToBlob_(void* pointer, uint32_t length);
 	public:
 		Blob(void* data, uint32_t length);
 	public:

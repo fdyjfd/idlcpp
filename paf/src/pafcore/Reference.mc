@@ -25,7 +25,7 @@
 namespace idlcpp
 {
 
-	__pafcore__Reference_Type::__pafcore__Reference_Type() : ::pafcore::ClassType("Reference", ::pafcore::reference_object)
+	__pafcore__Reference_Type::__pafcore__Reference_Type() : ::pafcore::ClassType("Reference", ::pafcore::reference_object, "D:/DeepEye2018/deepeye/src/paf/pafcore/Reference.i")
 	{
 		m_size = sizeof(::pafcore::Reference);
 		::pafcore::NameSpace::GetGlobalNameSpace()->getNameSpace("pafcore")->registerMember(this);

@@ -8,7 +8,9 @@
 #include "TypedefNode.h"
 #include "TypeTree.h"
 #include "Options.h"
+#include "SourceFile.h"
 #include <assert.h>
+#include <algorithm>
 
 MemberNode::MemberNode()
 {
@@ -148,15 +150,24 @@ ProgramNode* MemberNode::getProgramNode()
 
 SourceFile* MemberNode::getSourceFile()
 {
-	MemberNode* memberNode = this;
-	ScopeNode* enclosing = m_enclosing;
-	while (enclosing)
-	{
-		memberNode = enclosing;
-		enclosing = enclosing->m_enclosing;
-	}
-	assert(snt_namespace == memberNode->m_nodeType);
-	return static_cast<ProgramNode*>(memberNode)->m_sourceFile;
+	//MemberNode* memberNode = this;
+	//ScopeNode* enclosing = m_enclosing;
+	//while (enclosing)
+	//{
+	//	memberNode = enclosing;
+	//	enclosing = enclosing->m_enclosing;
+	//}
+	//assert(snt_namespace == memberNode->m_nodeType);
+	//return static_cast<ProgramNode*>(memberNode)->m_sourceFile;
+	return getProgramNode()->m_sourceFile;
+}
+
+std::string MemberNode::getSourceFilePath()
+{
+	std::string str;
+	str = getSourceFile()->m_fileName;
+	std::replace(str.begin(), str.end(), '\\', '/');
+	return str;
 }
 
 void MemberNode::collectTypes(TypeNode* enclosingTypeNode, TemplateArguments* templateArguments)

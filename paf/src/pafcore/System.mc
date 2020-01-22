@@ -25,7 +25,7 @@
 namespace idlcpp
 {
 
-	__pafcore__System_Type::__pafcore__System_Type() : ::pafcore::ClassType("System", ::pafcore::value_object)
+	__pafcore__System_Type::__pafcore__System_Type() : ::pafcore::ClassType("System", ::pafcore::value_object, "D:/DeepEye2018/deepeye/src/paf/pafcore/System.i")
 	{
 		m_size = sizeof(::pafcore::System);
 		static ::pafcore::Result s_staticResults[] = 

@@ -28,7 +28,7 @@
 namespace idlcpp
 {
 
-	__pafcore__PrimitiveType_Type::__pafcore__PrimitiveType_Type() : ::pafcore::ClassType("PrimitiveType", ::pafcore::primitive_type)
+	__pafcore__PrimitiveType_Type::__pafcore__PrimitiveType_Type() : ::pafcore::ClassType("PrimitiveType", ::pafcore::primitive_type, "D:/DeepEye2018/deepeye/src/paf/pafcore/PrimitiveType.i")
 	{
 		m_size = sizeof(::pafcore::PrimitiveType);
 		static BaseClass s_baseClasses[] =

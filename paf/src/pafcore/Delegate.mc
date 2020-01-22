@@ -27,7 +27,7 @@
 namespace idlcpp
 {
 
-	__pafcore__CallBack_Type::__pafcore__CallBack_Type() : ::pafcore::ClassType("CallBack", ::pafcore::reference_object)
+	__pafcore__CallBack_Type::__pafcore__CallBack_Type() : ::pafcore::ClassType("CallBack", ::pafcore::reference_object, "D:/DeepEye2018/deepeye/src/paf/pafcore/Delegate.i")
 	{
 		m_size = sizeof(::pafcore::CallBack);
 		static BaseClass s_baseClasses[] =
@@ -72,7 +72,7 @@ namespace idlcpp
 		return s_instance;
 	}
 
-	__pafcore__FunctionCallBack_Type::__pafcore__FunctionCallBack_Type() : ::pafcore::ClassType("FunctionCallBack", ::pafcore::reference_object)
+	__pafcore__FunctionCallBack_Type::__pafcore__FunctionCallBack_Type() : ::pafcore::ClassType("FunctionCallBack", ::pafcore::reference_object, "D:/DeepEye2018/deepeye/src/paf/pafcore/Delegate.i")
 	{
 		m_size = sizeof(::pafcore::FunctionCallBack);
 		static BaseClass s_baseClasses[] =
@@ -117,7 +117,7 @@ namespace idlcpp
 		return s_instance;
 	}
 
-	__pafcore__InstanceMethodCallBack_Type::__pafcore__InstanceMethodCallBack_Type() : ::pafcore::ClassType("InstanceMethodCallBack", ::pafcore::reference_object)
+	__pafcore__InstanceMethodCallBack_Type::__pafcore__InstanceMethodCallBack_Type() : ::pafcore::ClassType("InstanceMethodCallBack", ::pafcore::reference_object, "D:/DeepEye2018/deepeye/src/paf/pafcore/Delegate.i")
 	{
 		m_size = sizeof(::pafcore::InstanceMethodCallBack);
 		static BaseClass s_baseClasses[] =
@@ -162,7 +162,7 @@ namespace idlcpp
 		return s_instance;
 	}
 
-	__pafcore__StaticMethodCallBack_Type::__pafcore__StaticMethodCallBack_Type() : ::pafcore::ClassType("StaticMethodCallBack", ::pafcore::reference_object)
+	__pafcore__StaticMethodCallBack_Type::__pafcore__StaticMethodCallBack_Type() : ::pafcore::ClassType("StaticMethodCallBack", ::pafcore::reference_object, "D:/DeepEye2018/deepeye/src/paf/pafcore/Delegate.i")
 	{
 		m_size = sizeof(::pafcore::StaticMethodCallBack);
 		static BaseClass s_baseClasses[] =
@@ -207,7 +207,7 @@ namespace idlcpp
 		return s_instance;
 	}
 
-	__pafcore__Delegate_Type::__pafcore__Delegate_Type() : ::pafcore::ClassType("Delegate", ::pafcore::value_object)
+	__pafcore__Delegate_Type::__pafcore__Delegate_Type() : ::pafcore::ClassType("Delegate", ::pafcore::value_object, "D:/DeepEye2018/deepeye/src/paf/pafcore/Delegate.i")
 	{
 		m_size = sizeof(::pafcore::Delegate);
 		static ::pafcore::Result s_instanceResults[] = 
@@ -452,7 +452,7 @@ namespace idlcpp
 		return s_instance;
 	}
 
-	__pafcore__EventHandler_Type::__pafcore__EventHandler_Type() : ::pafcore::ClassType("EventHandler", ::pafcore::value_object)
+	__pafcore__EventHandler_Type::__pafcore__EventHandler_Type() : ::pafcore::ClassType("EventHandler", ::pafcore::value_object, "D:/DeepEye2018/deepeye/src/paf/pafcore/Delegate.i")
 	{
 		m_size = sizeof(::pafcore::EventHandler);
 		static BaseClass s_baseClasses[] =

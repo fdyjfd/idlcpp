@@ -670,6 +670,53 @@ ErrorCode Reflection::SetInstanceProperty(Variant* that, InstanceProperty* prope
 	}
 }
 
+ErrorCode Reflection::SimpleInstanceProperty_CandidateCount(Variant& value, Variant* that, InstanceProperty* property)
+{
+	if (!property->get_isSimple())
+	{
+		return e_is_not_simple_property;
+	}
+	if (0 == property->m_candidateCount)
+	{
+		return e_property_has_no_candidate;
+	}
+	ErrorCode errorCode = (*property->m_candidateCount)(property, that, &value);
+	return errorCode;
+}
+
+ErrorCode Reflection::SimpleInstanceProperty_CandidateCount(size_t& size, Variant* that, InstanceProperty* property)
+{
+	if (!property->get_isSimple())
+	{
+		return e_is_not_simple_property;
+	}
+	if (0 == property->m_candidateCount)
+	{
+		return e_property_has_no_candidate;
+	}
+	Variant value;
+	ErrorCode errorCode = (*property->m_candidateCount)(property, that, &value);
+	if (s_ok == errorCode)
+	{
+		value.castToPrimitive(RuntimeTypeOf<size_t>::RuntimeType::GetSingleton(), &size);
+	}
+	return errorCode;
+}
+
+ErrorCode Reflection::SimpleInstanceProperty_GetCandidate(Variant& value, Variant* that, InstanceProperty* property, size_t index)
+{
+	if (!property->get_isSimple())
+	{
+		return e_is_not_simple_property;
+	}
+	if (0 == property->m_getCandidate)
+	{
+		return e_property_has_no_candidate;
+	}
+	ErrorCode errorCode = (*property->m_getCandidate)(property, that, index, &value);
+	return errorCode;
+}
+
 ErrorCode Reflection::GetArrayInstancePropertySize(Variant& value, Variant* that, InstanceProperty* property)
 {
 	if (property->get_isArray())
@@ -681,13 +728,6 @@ ErrorCode Reflection::GetArrayInstancePropertySize(Variant& value, Variant* that
 	{
 		return e_is_not_array_property;
 	}
-
-	//else
-	//{
-	//	size_t size = 1;	
-	//	value.assignPrimitive(RuntimeTypeOf<size_t>::RuntimeType::GetSingleton(), &size);
-	//	return s_ok;
-	//}
 }
 
 ErrorCode Reflection::GetArrayInstancePropertySize(size_t& size, Variant* that, InstanceProperty* property)

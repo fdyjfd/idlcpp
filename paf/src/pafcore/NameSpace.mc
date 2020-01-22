@@ -27,7 +27,7 @@
 namespace idlcpp
 {
 
-	__pafcore__NameSpace_Type::__pafcore__NameSpace_Type() : ::pafcore::ClassType("NameSpace", ::pafcore::name_space)
+	__pafcore__NameSpace_Type::__pafcore__NameSpace_Type() : ::pafcore::ClassType("NameSpace", ::pafcore::name_space, "D:/DeepEye2018/deepeye/src/paf/pafcore/NameSpace.i")
 	{
 		m_size = sizeof(::pafcore::NameSpace);
 		static BaseClass s_baseClasses[] =

@@ -27,7 +27,7 @@
 namespace idlcpp
 {
 
-	__pafcore__VoidType_Type::__pafcore__VoidType_Type() : ::pafcore::ClassType("VoidType", ::pafcore::void_type)
+	__pafcore__VoidType_Type::__pafcore__VoidType_Type() : ::pafcore::ClassType("VoidType", ::pafcore::void_type, "D:/DeepEye2018/deepeye/src/paf/pafcore/VoidType.i")
 	{
 		m_size = sizeof(::pafcore::VoidType);
 		static BaseClass s_baseClasses[] =

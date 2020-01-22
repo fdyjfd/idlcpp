@@ -26,7 +26,7 @@
 namespace idlcpp
 {
 
-	__pafcore__Iterator_Type::__pafcore__Iterator_Type() : ::pafcore::ClassType("Iterator", ::pafcore::reference_object)
+	__pafcore__Iterator_Type::__pafcore__Iterator_Type() : ::pafcore::ClassType("Iterator", ::pafcore::reference_object, "D:/DeepEye2018/deepeye/src/paf/pafcore/Iterator.i")
 	{
 		m_size = sizeof(::pafcore::Iterator);
 		static BaseClass s_baseClasses[] =

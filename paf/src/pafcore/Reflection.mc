@@ -28,7 +28,7 @@
 namespace idlcpp
 {
 
-	__pafcore__Reflection_Type::__pafcore__Reflection_Type() : ::pafcore::ClassType("Reflection", ::pafcore::value_object)
+	__pafcore__Reflection_Type::__pafcore__Reflection_Type() : ::pafcore::ClassType("Reflection", ::pafcore::value_object, "D:/DeepEye2018/deepeye/src/paf/pafcore/Reflection.i")
 	{
 		m_size = sizeof(::pafcore::Reflection);
 		static ::pafcore::Result s_staticResults[] = 

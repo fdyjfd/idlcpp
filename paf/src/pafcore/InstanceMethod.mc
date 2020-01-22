@@ -29,7 +29,7 @@
 namespace idlcpp
 {
 
-	__pafcore__InstanceMethod_Type::__pafcore__InstanceMethod_Type() : ::pafcore::ClassType("InstanceMethod", ::pafcore::instance_method)
+	__pafcore__InstanceMethod_Type::__pafcore__InstanceMethod_Type() : ::pafcore::ClassType("InstanceMethod", ::pafcore::instance_method, "D:/DeepEye2018/deepeye/src/paf/pafcore/InstanceMethod.i")
 	{
 		m_size = sizeof(::pafcore::InstanceMethod);
 		static BaseClass s_baseClasses[] =
