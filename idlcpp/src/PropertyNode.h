@@ -31,6 +31,7 @@ public:
 
 	bool isByValue();
 	bool isByPtr();
+	bool isByRef();
 
 	void setGetter(GetterSetterNode* getter);
 	void setSetter(GetterSetterNode* setter);

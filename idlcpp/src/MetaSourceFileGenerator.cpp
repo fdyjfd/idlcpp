@@ -795,12 +795,11 @@ void writeMetaGetPropertyImpl(ClassNode* classNode, TemplateArguments* templateA
 		{
 			sprintf_s(buf, "%s* res = %s%s);\n", typeName.c_str(), strCall, strIndex);
 		}
-		//else
-		//{
-		//	assert('&' == propertyNode->m_get->m_passing->m_nodeType);
-		//	sprintf_s(buf, "%s%s* res = &%s%s);\n",  propertyNode->m_get->isConstant() ? "const " : "",
-		//		typeName.c_str(), strCall, strIndex);
-		//}
+		else
+		{
+			assert('&' == propertyNode->m_passing->m_nodeType);
+			sprintf_s(buf, "%s* res = &%s%s);\n",  typeName.c_str(), strCall, strIndex);
+		}
 		writeStringToFile(buf, file, indentation + 1);
 	}
 	else
@@ -850,12 +849,11 @@ void writeMetaGetPropertyImpl(ClassNode* classNode, TemplateArguments* templateA
 		{
 			sprintf_s(buf, "%s* res = %s%s);\n", typeName.c_str(), strCall, strIndex);
 		}
-		//else
-		//{
-		//	assert('&' == propertyNode->m_get->m_passing->m_nodeType);
-		//	sprintf_s(buf, "%s%s* res = &%s%s);\n",  propertyNode->m_get->isConstant() ? "const " : "",
-		//		typeName.c_str(), strCall, strIndex);
-		//}
+		else
+		{
+			assert('&' == propertyNode->m_passing->m_nodeType);
+			sprintf_s(buf, "%s* res = &%s%s);\n",  typeName.c_str(), strCall, strIndex);
+		}
 		writeStringToFile(buf, file, indentation + 1);
 	}
 
@@ -871,10 +869,10 @@ void writeMetaGetPropertyImpl(ClassNode* classNode, TemplateArguments* templateA
 			varSemantic = s_variantSemantic_ByPtr;
 		}
 	}
-	//else if(propertyNode->m_get->byRef())
-	//{
-	//	varSemantic = s_variantSemantic_ByRef;
-	//}
+	else if(propertyNode->isByRef())
+	{
+		varSemantic = s_variantSemantic_ByRef;
+	}
 	else
 	{
 		assert(propertyNode->isByValue());
@@ -1168,9 +1166,10 @@ void writeMetaProperty_GetCandidate_Impl(ClassNode* classNode, TemplateArguments
 	std::string className;
 	std::string metaClassName;
 
-	bool isByValue, isByPtr;
+	bool isByValue, isByPtr, isByRef;
 	isByValue = propertyNode->isByValue();
 	isByPtr = propertyNode->isByPtr();
+	isByRef = propertyNode->isByRef();
 
 	classNode->getNativeName(className, templateArguments);
 	GetMetaTypeFullName(metaClassName, classNode, templateArguments);
@@ -1260,10 +1259,10 @@ void writeMetaProperty_GetCandidate_Impl(ClassNode* classNode, TemplateArguments
 	{
 		varSemantic = s_variantSemantic_ByPtr;
 	}
-	//else if (isByRef)
-	//{
-	//	varSemantic = s_variantSemantic_ByRef;
-	//}
+	else if (isByRef)
+	{
+		varSemantic = s_variantSemantic_ByRef;
+	}
 	else
 	{
 		assert(isByValue);
@@ -1824,9 +1823,10 @@ void writeMetaProperty_GetValue_Impl(ClassNode* classNode, TemplateArguments* te
 	std::string className;
 	std::string metaClassName;
 
-	bool isByValue, isByPtr;
+	bool isByValue, isByPtr, isByRef;
 	isByValue = propertyNode->isByValue();
 	isByPtr = propertyNode->isByPtr();
+	isByRef = propertyNode->isByRef();
 
 	classNode->getNativeName(className, templateArguments);
 	GetMetaTypeFullName(metaClassName, classNode, templateArguments);
@@ -1916,10 +1916,10 @@ void writeMetaProperty_GetValue_Impl(ClassNode* classNode, TemplateArguments* te
 	{
 		varSemantic = s_variantSemantic_ByPtr;
 	}
-	//else if (isByRef)
-	//{
-	//	varSemantic = s_variantSemantic_ByRef;
-	//}
+	else if (isByRef)
+	{
+		varSemantic = s_variantSemantic_ByRef;
+	}
 	else
 	{
 		assert(isByValue);
@@ -3875,7 +3875,7 @@ void writeMetaConstructor_BaseClasses(ClassNode* classNode, TemplateArguments* t
 	char buf[4096];
 	std::string typeName;
 	std::vector<std::pair<TokenNode*, TypeNameNode*>> tempNodes;
-	classNode->m_baseList->collectTypeNameNodes(tempNodes);
+	classNode->m_baseList->collectTypeNameNodesNotNoMeta(tempNodes);
 	std::vector<TypeNameNode*> typeNameNodes;
 	size_t count = tempNodes.size();
 	for (size_t i = 0; i < count; ++i)
@@ -3918,7 +3918,7 @@ void writeMetaConstructor_ClassTypeIterators(ClassNode* classNode, TemplateArgum
 	char buf[4096];
 	std::string typeName;
 	std::vector<std::pair<TokenNode*, TypeNameNode*>> tempNodes;
-	classNode->m_baseList->collectTypeNameNodes(tempNodes);
+	classNode->m_baseList->collectTypeNameNodesNotNoMeta(tempNodes);
 	std::vector<TypeNameNode*> typeNameNodes;
 	size_t count = tempNodes.size();
 	for (size_t i = 0; i < count; ++i)

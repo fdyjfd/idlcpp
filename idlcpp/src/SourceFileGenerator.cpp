@@ -436,7 +436,7 @@ void SourceFileGenerator::generateCode_Delegate(FILE* file, DelegateNode* delega
 
 	writeStringToFile("if(!__arguments_init__)\n", file, indentation + 3);
 	writeStringToFile("{\n", file, indentation + 3);
-	writeStringToFile("__arguments_init__ = false;\n", file, indentation + 4);
+	writeStringToFile("__arguments_init__ = true;\n", file, indentation + 4);
 	//if (!isVoid)
 	//{
 	//	writeDelegateImpl_SetResultType(delegateNode, file, indentation + 4);

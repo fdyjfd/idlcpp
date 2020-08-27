@@ -185,7 +185,8 @@ void setScopeNameListGlobal(SyntaxNode* scopeNameList);
 SyntaxNode* newTypeName(SyntaxNode* scopeNameList);
 SyntaxNode* newTypeNameList(SyntaxNode* typeNameList, SyntaxNode* delimiter, SyntaxNode* typeName);
 
-void setFilter(SyntaxNode* syntaxNode, SyntaxNode* filterNode);
+void setTypeNameFilter(SyntaxNode* syntaxNode, SyntaxNode* filterNode);
+void setMemberFilter(SyntaxNode* syntaxNode, SyntaxNode* filterNode);
 void setNativeName(SyntaxNode* syntaxNode, SyntaxNode* nativeName);
 SyntaxNode* newField(SyntaxNode* type, SyntaxNode* pointer, SyntaxNode* name, SyntaxNode* leftBracket, SyntaxNode* rightBracket);
 void setFieldConstant(SyntaxNode* syntaxNode, SyntaxNode* constant);

@@ -337,23 +337,28 @@ void HeaderFileGenerator::generateCode_Class(FILE* file, ClassNode* classNode, i
 
 	generateCode_Token(file, classNode->m_keyword, indentation);
 	generateCode_Identify(file, classNode->m_name, 0);
+
+
 	if(classNode->m_baseList)
 	{
-		assert(0 != classNode->m_colon);
-		writeSpaceToFile(file);
-		generateCode_Token(file, classNode->m_colon, 0);
-		writeSpaceToFile(file);
 		std::vector<std::pair<TokenNode*, TypeNameNode*>> typeNameNodes;
-		classNode->m_baseList->collectTypeNameNodes(typeNameNodes);
+		classNode->m_baseList->collectTypeNameNodesNotNoCode(typeNameNodes);
 		size_t baseCount = typeNameNodes.size();
-		for(size_t i = 0; i < baseCount; ++i)
+		if (baseCount)
 		{
-			if(typeNameNodes[i].first)
+			assert(0 != classNode->m_colon);
+			writeSpaceToFile(file);
+			generateCode_Token(file, classNode->m_colon, 0);
+			writeSpaceToFile(file);
+			for(size_t i = 0; i < baseCount; ++i)
 			{
-				generateCode_Token(file, typeNameNodes[i].first, 0);
+				if(typeNameNodes[i].first && 0 != i)
+				{
+					generateCode_Token(file, typeNameNodes[i].first, 0);
+				}
+				writeStringToFile("public ", file);
+				generateCode_TypeName(file, typeNameNodes[i].second, classNode->m_enclosing, false, 0);
 			}
-			writeStringToFile("public ", file);
-			generateCode_TypeName(file, typeNameNodes[i].second, classNode->m_enclosing, false, 0);
 		}
 	}
 
@@ -471,6 +476,14 @@ void HeaderFileGenerator::generateCode_Delegate(FILE* file, DelegateNode* delega
 	writeStringToFile("public:\n", file, indentation);
 	
 	int methodIndentation = indentation + 1;
+
+	generateCode_Identify(file, delegateNode->m_name, methodIndentation);
+	writeStringToFile("() = default;\n", file, 0);
+	generateCode_Identify(file, delegateNode->m_name, methodIndentation);
+	writeStringToFile("(const ", file, 0);
+	generateCode_Identify(file, delegateNode->m_name, 0);
+	writeStringToFile("&) = delete;\n", file, 0);
+
 	if (0 != delegateNode->m_resultConst)
 	{
 		generateCode_Token(file, delegateNode->m_resultConst, methodIndentation);

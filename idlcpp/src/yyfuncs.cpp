@@ -228,7 +228,16 @@ SyntaxNode* newTypeNameList(SyntaxNode* typeNameList, SyntaxNode* delimiter, Syn
 	return res;
 }
 
-void setFilter(SyntaxNode* syntaxNode, SyntaxNode* filterNode)
+void setTypeNameFilter(SyntaxNode* syntaxNode, SyntaxNode* filterNode)
+{
+	assert(snt_type_name == syntaxNode->m_nodeType);
+	assert(snt_keyword_nocode == filterNode->m_nodeType
+		|| snt_keyword_nometa == filterNode->m_nodeType);
+
+	((TypeNameNode*)syntaxNode)->m_filterNode = (TokenNode*)filterNode;
+}
+
+void setMemberFilter(SyntaxNode* syntaxNode, SyntaxNode* filterNode)
 {
 	assert(snt_field == syntaxNode->m_nodeType
 		|| snt_property == syntaxNode->m_nodeType
@@ -363,7 +372,7 @@ void setPropertyType(SyntaxNode* property, SyntaxNode* type, SyntaxNode* passing
 {
 	assert(snt_property == property->m_nodeType);
 	assert(0 == type || snt_type_name == type->m_nodeType);
-	assert(0 == passing || '*' == passing->m_nodeType);// || '&' == passing->m_nodeType);
+	assert(0 == passing || '*' == passing->m_nodeType || '&' == passing->m_nodeType);
 	((PropertyNode*)property)->m_typeName = (TypeNameNode*)type;
 	((PropertyNode*)property)->m_passing = (TokenNode*)passing;
 }

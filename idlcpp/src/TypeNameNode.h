@@ -22,11 +22,14 @@ struct TypeNameNode : SyntaxNodeImpl
 {
 	TokenNode* m_keyword;
 	ScopeNameListNode* m_scopeNameList;
+	TokenNode* m_filterNode;
 	TypeNode* m_startTypeNode;
 	TypeNode* m_typeNode;
 public:
 	TypeNameNode(TokenNode* keyword, PredefinedType primitiveType);
 	TypeNameNode(ScopeNameListNode* scopeNameList);
+	bool isNoCode();
+	bool isNoMeta();
 	bool calcTypeNodes(TypeNode* enclosingTypeTreeNode, TemplateArguments* templateArguments);
 	TypeNode* getTypeNode(TemplateArguments* templateArguments);
 	TypeNode* getActualTypeNode(TemplateArguments* templateArguments);

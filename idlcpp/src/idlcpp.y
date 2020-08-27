@@ -18,7 +18,7 @@
 %type <sn> parameter_0 parameter_1 parameter parameterList method_0 method_1 method_2 method_3 method_4 method
 %type <sn> operatorSign operator_0 operator_1 operator_2 operator_3 operator classMember_0 classMember
 %type <sn> delegate_0 delegate_1 delegate
-%type <sn> primitive scopeName scopeNameList_0 scopeNameList typeName typeNameList classMemberList tokenList
+%type <sn> primitive scopeName scopeNameList_0 scopeNameList typeName_0 typeName typeNameList classMemberList tokenList
 %type <sn> templateParameterList templateParameters templateClassInstance_0 templateClassInstance
 %type <sn> class_0 class_1 class_2 class_3 class_4 class_5 class namespaceMember_0 namespaceMember namespaceMemberList namespace program
 %type <sn> typeAlias attribute attributeList attributes
@@ -112,8 +112,13 @@ scopeNameList			: scopeNameList_0									{$$ = $1;}
 						| SCOPE scopeNameList_0								{$$ = $2; setScopeNameListGlobal($$);}
 ;
 
-typeName				: primitive											{$$ = $1;}
+typeName_0				: primitive											{$$ = $1;}
 						| scopeNameList										{$$ = newTypeName($1);}
+;
+
+typeName				: typeName_0										{$$ = $1;}
+						| NOCODE typeName_0									{$$ = $2; setTypeNameFilter($$, $1);}
+						| NOMETA typeName_0									{$$ = $2; setTypeNameFilter($$, $1);}
 ;
 
 typeNameList			: typeName											{$$ = newTypeNameList(NULL, NULL, $1);}
@@ -188,6 +193,7 @@ property_0				: IDENTIFY											{$$ = newProperty($1, simple_property);}
 
 property_1				: typeName property_0								{$$ = $2; setPropertyType($$, $1, NULL);}
 						| typeName '*' property_0							{$$ = $3; setPropertyType($$, $1, $2);}
+						| typeName '&' property_0							{$$ = $3; setPropertyType($$, $1, $2);}
 ;
 
 property_2				: property_1 '{' '}' ';'							{$$ = $1;}
@@ -354,8 +360,8 @@ classMember_0			: field													{$$ = $1;}
 						| delegate												{$$ = $1;}
 						| enum													{$$ = $1;}
 						| typeAlias												{$$ = $1;}
-						| NOCODE classMember_0									{$$ = $2; setFilter($$, $1);}
-						| NOMETA classMember_0									{$$ = $2; setFilter($$, $1);}
+						| NOCODE classMember_0									{$$ = $2; setMemberFilter($$, $1);}
+						| NOMETA classMember_0									{$$ = $2; setMemberFilter($$, $1);}
 ;
 			
 classMember				: classMember_0											{$$ = $1;}
@@ -428,8 +434,8 @@ namespaceMember_0		: class													{$$ = $1;}
 						| templateClassInstance									{$$ = $1;}
 						| typeAlias												{$$ = $1;}
 						| namespace												{$$ = $1;}
-						| NOCODE namespaceMember_0								{$$ = $2; setFilter($$, $1);}
-						| NOMETA namespaceMember_0								{$$ = $2; setFilter($$, $1);}
+						| NOCODE namespaceMember_0								{$$ = $2; setMemberFilter($$, $1);}
+						| NOMETA namespaceMember_0								{$$ = $2; setMemberFilter($$, $1);}
 ;
 
 namespaceMember			: namespaceMember_0										{$$ = $1;}

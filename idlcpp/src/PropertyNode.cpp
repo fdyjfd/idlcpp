@@ -85,6 +85,11 @@ bool PropertyNode::isByPtr()
 	return (0 != m_passing && '*' == m_passing->m_nodeType);
 }
 
+bool PropertyNode::isByRef()
+{
+	return (0 != m_passing && '&' == m_passing->m_nodeType);
+}
+
 void PropertyNode::setGetter(GetterSetterNode* getter)
 {
 	assert(snt_keyword_get == getter->m_keyword->m_nodeType);
