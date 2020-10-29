@@ -3868,6 +3868,38 @@ void writeMetaConstructor_Member(
 	writeStringToFile("};\n", file, indentation);
 	writeStringToFile("m_members = s_members;\n", file, indentation);
 	writeStringToFile("m_memberCount = paf_array_size_of(s_members);\n", file, indentation);
+
+	bool findDynamicInstanceField = false;
+	bool findDynamicInstanceFieldCount = false;
+	bool findToString = false;
+	bool findFromString = false;
+	for (MethodNode* methodNode : methodNodes)
+	{
+		if (methodNode->m_name->m_str == "dynamicInstanceField__")
+		{
+			findDynamicInstanceField = true;
+		}
+		else if (methodNode->m_name->m_str == "dynamicInstanceFieldCount__")
+		{
+			findDynamicInstanceFieldCount = true;
+		}
+		else if (methodNode->m_name->m_str == "toString__")
+		{
+			findToString = true;
+		}
+		else if (methodNode->m_name->m_str == "fromString__")
+		{
+			findFromString = true;
+		}
+	}
+	if (findDynamicInstanceField && findDynamicInstanceFieldCount)
+	{
+		writeStringToFile("m_hasDynamicInstanceField = true;\n", file, indentation);
+	}
+	if (findToString && findFromString)
+	{
+		writeStringToFile("m_specialClass = string_class;\n", file, indentation);
+	}
 }
 
 void writeMetaConstructor_BaseClasses(ClassNode* classNode, TemplateArguments* templateArguments, FILE* file, int indentation)
