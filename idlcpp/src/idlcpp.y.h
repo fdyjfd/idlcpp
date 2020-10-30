@@ -92,8 +92,9 @@
      SCOPE = 308,
      IDENTIFY = 309,
      STRING = 310,
-     TEMPLATE = 311,
-     DELEGATE = 312
+     U8STRING = 311,
+     TEMPLATE = 312,
+     DELEGATE = 313
    };
 #endif
 
@@ -104,14 +105,14 @@ typedef union YYSTYPE
 {
 
 /* Line 1676 of yacc.c  */
-#line 6 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 6 "G:\\idlcpp\\idlcpp\\src\\idlcpp.y"
 
 	struct SyntaxNode* sn;
 
 
 
 /* Line 1676 of yacc.c  */
-#line 115 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.h"
+#line 116 "G:\\idlcpp\\idlcpp\\src\\idlcpp.y.h"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */

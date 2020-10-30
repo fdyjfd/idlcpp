@@ -170,7 +170,7 @@ SyntaxNode* newPrimitiveType(SyntaxNode* keyword, PredefinedType type);
 
 SyntaxNode* newIdentifyList(SyntaxNode* identifyList, SyntaxNode* delimiter, SyntaxNode* identify);
 
-SyntaxNode* newAttribute(SyntaxNode* name, SyntaxNode* content);
+SyntaxNode* newAttribute(SyntaxNode* name, SyntaxNode* content, int u8content);
 SyntaxNode* newAttributeList(SyntaxNode* attributeList, SyntaxNode* attribute);
 void setAttributeList(SyntaxNode* member, SyntaxNode* attributeList);
 

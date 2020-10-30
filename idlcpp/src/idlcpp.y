@@ -12,7 +12,7 @@
 %token <sn> LEFT_SHIFT RIGHT_SHIFT EQUAL NOT_EQUAL LESS_EQUAL GREATER_EQUAL AND OR INC DEC
 %token <sn> BOOL CHAR WCHAR_T SHORT LONG INT FLOAT DOUBLE SIGNED UNSIGNED STRING_T
 %token <sn> NAMESPACE ENUM CLASS STRUCT STATIC VIRTUAL VOID CONST OPERATOR TYPEDEF PRIMITIVE
-%token <sn> ABSTRACT GET SET CANDIDATE NOMETA NOCODE EXPORT OVERRIDE SCOPE IDENTIFY STRING TEMPLATE DELEGATE
+%token <sn> ABSTRACT GET SET CANDIDATE NOMETA NOCODE EXPORT OVERRIDE SCOPE IDENTIFY STRING U8STRING TEMPLATE DELEGATE
 %type <sn> identifyList enumerator enumeratorList enum_0 enum 
 %type <sn> field_0 field_1 field_2 field getter_0 getter_1 getter setter_0 setter_1 setter_2 setter candidate property_0 property_1 property_2 property
 %type <sn> parameter_0 parameter_1 parameter parameterList method_0 method_1 method_2 method_3 method_4 method
@@ -62,8 +62,9 @@ primitive				: VOID												{$$ = newPrimitiveType($1, pt_void);}
 						| STRING_T											{$$ = newPrimitiveType($1, pt_string_t);}
 ;
 
-attribute				: IDENTIFY '=' STRING								{$$ = newAttribute($1, $3);}
-						| IDENTIFY											{$$ = newAttribute($1, NULL);}
+attribute				: IDENTIFY											{$$ = newAttribute($1, NULL, 0);}
+						| IDENTIFY '=' STRING								{$$ = newAttribute($1, $3, 0);}
+						| IDENTIFY '=' U8STRING								{$$ = newAttribute($1, $3, 1);}
 ;
 
 attributeList			: attribute											{$$ = newAttributeList(NULL, $1);}

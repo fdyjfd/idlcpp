@@ -138,6 +138,7 @@ int yyHasDelegate = 0;
 [a-zA-Z_][a-zA-Z_0-9]*	{yylval.sn = newIdentify(yytext);					yycolumnno += strlen(yytext); yytokenno++; return IDENTIFY;}
 
 \"[^\"]*\"				{yylval.sn = newString(yytext + 1);					yycolumnno += strlen(yytext); yytokenno++; return STRING;}
+u8\"[^\"]*\"			{yylval.sn = newString(yytext + 3);					yycolumnno += strlen(yytext); yytokenno++; return U8STRING;}
 
 [ \t]							{++yycolumnno;}
 "\n"							{newCodeBlock(yytext); yycolumnno = 1;}
