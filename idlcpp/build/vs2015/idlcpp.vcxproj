@@ -254,17 +254,25 @@
   <ItemGroup>
     <CustomBuild Include="..\..\src\idlcpp.l">
       <FileType>Document</FileType>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">flex -o%(FullPath).c %(FullPath)</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">"../../../winflexbison/bin/Release/flex.exe" -o%(FullPath).c %(FullPath)</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(FullPath).c</Outputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">flex -o%(FullPath).c %(FullPath)</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">"../../../winflexbison/bin/Release/flex.exe" -o%(FullPath).c %(FullPath)</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(FullPath).c</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">"../../../winflexbison/bin/Release/flex.exe" -o%(FullPath).c %(FullPath)</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">"../../../winflexbison/bin/Release/flex.exe" -o%(FullPath).c %(FullPath)</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">%(FullPath).c</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(FullPath).c</Outputs>
     </CustomBuild>
     <CustomBuild Include="..\..\src\idlcpp.y">
       <FileType>Document</FileType>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">bison -o%(FullPath).c -d %(FullPath)</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">"../../../winflexbison/bin/Release/bison.exe"  -o%(FullPath).c -d %(FullPath)</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(FullPath).c</Outputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">bison -o%(FullPath).c -d %(FullPath)</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">"../../../winflexbison/bin/Release/bison.exe"  -o%(FullPath).c -d %(FullPath)</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(FullPath).c</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">"../../../winflexbison/bin/Release/bison.exe"  -o%(FullPath).c -d %(FullPath)</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">"../../../winflexbison/bin/Release/bison.exe"  -o%(FullPath).c -d %(FullPath)</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">%(FullPath).c</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(FullPath).c</Outputs>
     </CustomBuild>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
