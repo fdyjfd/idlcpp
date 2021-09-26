@@ -1,4 +1,4 @@
-%option noyywrap nodefault yylineno
+%option noyywrap nodefault yylineno nounistd never-interactive
 %x IFILE CODEBLOCK COMMENT
 
 %{

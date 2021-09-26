@@ -1,21 +1,20 @@
+/* A Bison parser, made by GNU Bison 3.7.4.  */
 
-/* A Bison parser, made by GNU Bison 2.4.1.  */
+/* Bison implementation for Yacc-like parsers in C
 
-/* Skeleton implementation for Bison's Yacc-like parsers in C
-   
-      Copyright (C) 1984, 1989, 1990, 2000, 2001, 2002, 2003, 2004, 2005, 2006
-   Free Software Foundation, Inc.
-   
+   Copyright (C) 1984, 1989-1990, 2000-2015, 2018-2020 Free Software Foundation,
+   Inc.
+
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
    the Free Software Foundation, either version 3 of the License, or
    (at your option) any later version.
-   
+
    This program is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
    GNU General Public License for more details.
-   
+
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <http://www.gnu.org/licenses/>.  */
 
@@ -28,12 +27,16 @@
    special exception, which will cause the skeleton and the resulting
    Bison output files to be licensed under the GNU General Public
    License without this special exception.
-   
+
    This special exception was added by the Free Software Foundation in
    version 2.2 of Bison.  */
 
 /* C LALR(1) parser skeleton written by Richard Stallman, by
    simplifying the original so-called "semantic" parser.  */
+
+/* DO NOT RELY ON FEATURES THAT ARE NOT DOCUMENTED in the manual,
+   especially those whose name start with YY_ or yy_.  They are
+   private implementation details that can be changed or removed.  */
 
 /* All symbols defined below should begin with yy or YY, to avoid
    infringing on user name space.  This should be done even for local
@@ -42,11 +45,11 @@
    define necessary library symbols; they are noted "INFRINGES ON
    USER NAME SPACE" below.  */
 
-/* Identify Bison output.  */
-#define YYBISON 1
+/* Identify Bison output, and Bison version.  */
+#define YYBISON 30704
 
-/* Bison version.  */
-#define YYBISON_VERSION "2.4.1"
+/* Bison version string.  */
+#define YYBISON_VERSION "3.7.4"
 
 /* Skeleton name.  */
 #define YYSKELETON_NAME "yacc.c"
@@ -60,163 +63,276 @@
 /* Pull parsers.  */
 #define YYPULL 1
 
-/* Using locations.  */
-#define YYLSP_NEEDED 0
 
 
 
-/* Copy the first part of user declarations.  */
-
-/* Line 189 of yacc.c  */
+/* First part of user prologue.  */
 #line 1 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
 
 #include "yyfuncs.h"
 
+#line 75 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
 
-/* Line 189 of yacc.c  */
-#line 78 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+# ifndef YY_CAST
+#  ifdef __cplusplus
+#   define YY_CAST(Type, Val) static_cast<Type> (Val)
+#   define YY_REINTERPRET_CAST(Type, Val) reinterpret_cast<Type> (Val)
+#  else
+#   define YY_CAST(Type, Val) ((Type) (Val))
+#   define YY_REINTERPRET_CAST(Type, Val) ((Type) (Val))
+#  endif
+# endif
+# ifndef YY_NULLPTR
+#  if defined __cplusplus
+#   if 201103L <= __cplusplus
+#    define YY_NULLPTR nullptr
+#   else
+#    define YY_NULLPTR 0
+#   endif
+#  else
+#   define YY_NULLPTR ((void*)0)
+#  endif
+# endif
 
-/* Enabling traces.  */
-#ifndef YYDEBUG
-# define YYDEBUG 0
-#endif
-
-/* Enabling verbose error messages.  */
-#ifdef YYERROR_VERBOSE
-# undef YYERROR_VERBOSE
-# define YYERROR_VERBOSE 1
-#else
-# define YYERROR_VERBOSE 0
-#endif
-
-/* Enabling the token table.  */
-#ifndef YYTOKEN_TABLE
-# define YYTOKEN_TABLE 0
-#endif
-
-
-/* Tokens.  */
-#ifndef YYTOKENTYPE
-# define YYTOKENTYPE
-   /* Put the tokens into the symbol table, so that GDB and other debuggers
-      know about them.  */
-   enum yytokentype {
-     ADD_ASSIGN = 258,
-     SUB_ASSIGN = 259,
-     MUL_ASSIGN = 260,
-     DIV_ASSIGN = 261,
-     MOD_ASSIGN = 262,
-     BIT_XOR_ASSIGN = 263,
-     BIT_AND_ASSIGN = 264,
-     BIT_OR_ASSIGN = 265,
-     LEFT_SHIFT_ASSIGN = 266,
-     RIGHT_SHIFT_ASSIGN = 267,
-     LEFT_SHIFT = 268,
-     RIGHT_SHIFT = 269,
-     EQUAL = 270,
-     NOT_EQUAL = 271,
-     LESS_EQUAL = 272,
-     GREATER_EQUAL = 273,
-     AND = 274,
-     OR = 275,
-     INC = 276,
-     DEC = 277,
-     BOOL = 278,
-     CHAR = 279,
-     WCHAR_T = 280,
-     SHORT = 281,
-     LONG = 282,
-     INT = 283,
-     FLOAT = 284,
-     DOUBLE = 285,
-     SIGNED = 286,
-     UNSIGNED = 287,
-     STRING_T = 288,
-     NAMESPACE = 289,
-     ENUM = 290,
-     CLASS = 291,
-     STRUCT = 292,
-     STATIC = 293,
-     VIRTUAL = 294,
-     VOID = 295,
-     CONST = 296,
-     OPERATOR = 297,
-     TYPEDEF = 298,
-     TYPENAME = 299,
-     ABSTRACT = 300,
-     GET = 301,
-     SET = 302,
-     CANDIDATE = 303,
-     NOMETA = 304,
-     NOCODE = 305,
-     EXPORT = 306,
-     OVERRIDE = 307,
-     SCOPE = 308,
-     IDENTIFY = 309,
-     STRING = 310,
-     U8STRING = 311,
-     TEMPLATE = 312,
-     DELEGATE = 313
-   };
-#endif
-
-
-
-#if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
-typedef union YYSTYPE
+#include "idlcpp.y.h"
+/* Symbol kind.  */
+enum yysymbol_kind_t
 {
+  YYSYMBOL_YYEMPTY = -2,
+  YYSYMBOL_YYEOF = 0,                      /* "end of file"  */
+  YYSYMBOL_YYerror = 1,                    /* error  */
+  YYSYMBOL_YYUNDEF = 2,                    /* "invalid token"  */
+  YYSYMBOL_3_ = 3,                         /* ','  */
+  YYSYMBOL_4_ = 4,                         /* '.'  */
+  YYSYMBOL_5_ = 5,                         /* ':'  */
+  YYSYMBOL_6_ = 6,                         /* ';'  */
+  YYSYMBOL_7_ = 7,                         /* '('  */
+  YYSYMBOL_8_ = 8,                         /* ')'  */
+  YYSYMBOL_9_ = 9,                         /* '['  */
+  YYSYMBOL_10_ = 10,                       /* ']'  */
+  YYSYMBOL_11_ = 11,                       /* '{'  */
+  YYSYMBOL_12_ = 12,                       /* '}'  */
+  YYSYMBOL_13_ = 13,                       /* '<'  */
+  YYSYMBOL_14_ = 14,                       /* '>'  */
+  YYSYMBOL_15_ = 15,                       /* '*'  */
+  YYSYMBOL_16_ = 16,                       /* '&'  */
+  YYSYMBOL_17_ = 17,                       /* '+'  */
+  YYSYMBOL_18_ = 18,                       /* '^'  */
+  YYSYMBOL_19_ = 19,                       /* '-'  */
+  YYSYMBOL_20_ = 20,                       /* '/'  */
+  YYSYMBOL_21_ = 21,                       /* '%'  */
+  YYSYMBOL_22_ = 22,                       /* '|'  */
+  YYSYMBOL_23_ = 23,                       /* '~'  */
+  YYSYMBOL_24_ = 24,                       /* '!'  */
+  YYSYMBOL_25_ = 25,                       /* '='  */
+  YYSYMBOL_ADD_ASSIGN = 26,                /* ADD_ASSIGN  */
+  YYSYMBOL_SUB_ASSIGN = 27,                /* SUB_ASSIGN  */
+  YYSYMBOL_MUL_ASSIGN = 28,                /* MUL_ASSIGN  */
+  YYSYMBOL_DIV_ASSIGN = 29,                /* DIV_ASSIGN  */
+  YYSYMBOL_MOD_ASSIGN = 30,                /* MOD_ASSIGN  */
+  YYSYMBOL_BIT_XOR_ASSIGN = 31,            /* BIT_XOR_ASSIGN  */
+  YYSYMBOL_BIT_AND_ASSIGN = 32,            /* BIT_AND_ASSIGN  */
+  YYSYMBOL_BIT_OR_ASSIGN = 33,             /* BIT_OR_ASSIGN  */
+  YYSYMBOL_LEFT_SHIFT_ASSIGN = 34,         /* LEFT_SHIFT_ASSIGN  */
+  YYSYMBOL_RIGHT_SHIFT_ASSIGN = 35,        /* RIGHT_SHIFT_ASSIGN  */
+  YYSYMBOL_LEFT_SHIFT = 36,                /* LEFT_SHIFT  */
+  YYSYMBOL_RIGHT_SHIFT = 37,               /* RIGHT_SHIFT  */
+  YYSYMBOL_EQUAL = 38,                     /* EQUAL  */
+  YYSYMBOL_NOT_EQUAL = 39,                 /* NOT_EQUAL  */
+  YYSYMBOL_LESS_EQUAL = 40,                /* LESS_EQUAL  */
+  YYSYMBOL_GREATER_EQUAL = 41,             /* GREATER_EQUAL  */
+  YYSYMBOL_AND = 42,                       /* AND  */
+  YYSYMBOL_OR = 43,                        /* OR  */
+  YYSYMBOL_INC = 44,                       /* INC  */
+  YYSYMBOL_DEC = 45,                       /* DEC  */
+  YYSYMBOL_BOOL = 46,                      /* BOOL  */
+  YYSYMBOL_CHAR = 47,                      /* CHAR  */
+  YYSYMBOL_WCHAR_T = 48,                   /* WCHAR_T  */
+  YYSYMBOL_SHORT = 49,                     /* SHORT  */
+  YYSYMBOL_LONG = 50,                      /* LONG  */
+  YYSYMBOL_INT = 51,                       /* INT  */
+  YYSYMBOL_FLOAT = 52,                     /* FLOAT  */
+  YYSYMBOL_DOUBLE = 53,                    /* DOUBLE  */
+  YYSYMBOL_SIGNED = 54,                    /* SIGNED  */
+  YYSYMBOL_UNSIGNED = 55,                  /* UNSIGNED  */
+  YYSYMBOL_STRING_T = 56,                  /* STRING_T  */
+  YYSYMBOL_NAMESPACE = 57,                 /* NAMESPACE  */
+  YYSYMBOL_ENUM = 58,                      /* ENUM  */
+  YYSYMBOL_CLASS = 59,                     /* CLASS  */
+  YYSYMBOL_STRUCT = 60,                    /* STRUCT  */
+  YYSYMBOL_STATIC = 61,                    /* STATIC  */
+  YYSYMBOL_VIRTUAL = 62,                   /* VIRTUAL  */
+  YYSYMBOL_VOID = 63,                      /* VOID  */
+  YYSYMBOL_CONST = 64,                     /* CONST  */
+  YYSYMBOL_OPERATOR = 65,                  /* OPERATOR  */
+  YYSYMBOL_TYPEDEF = 66,                   /* TYPEDEF  */
+  YYSYMBOL_TYPENAME = 67,                  /* TYPENAME  */
+  YYSYMBOL_ABSTRACT = 68,                  /* ABSTRACT  */
+  YYSYMBOL_GET = 69,                       /* GET  */
+  YYSYMBOL_SET = 70,                       /* SET  */
+  YYSYMBOL_CANDIDATE = 71,                 /* CANDIDATE  */
+  YYSYMBOL_NOMETA = 72,                    /* NOMETA  */
+  YYSYMBOL_NOCODE = 73,                    /* NOCODE  */
+  YYSYMBOL_EXPORT = 74,                    /* EXPORT  */
+  YYSYMBOL_OVERRIDE = 75,                  /* OVERRIDE  */
+  YYSYMBOL_SCOPE = 76,                     /* SCOPE  */
+  YYSYMBOL_IDENTIFY = 77,                  /* IDENTIFY  */
+  YYSYMBOL_STRING = 78,                    /* STRING  */
+  YYSYMBOL_U8STRING = 79,                  /* U8STRING  */
+  YYSYMBOL_TEMPLATE = 80,                  /* TEMPLATE  */
+  YYSYMBOL_DELEGATE = 81,                  /* DELEGATE  */
+  YYSYMBOL_82_ = 82,                       /* '?'  */
+  YYSYMBOL_YYACCEPT = 83,                  /* $accept  */
+  YYSYMBOL_primitive = 84,                 /* primitive  */
+  YYSYMBOL_attribute = 85,                 /* attribute  */
+  YYSYMBOL_attributeList = 86,             /* attributeList  */
+  YYSYMBOL_attributes = 87,                /* attributes  */
+  YYSYMBOL_identifyList = 88,              /* identifyList  */
+  YYSYMBOL_enumerator = 89,                /* enumerator  */
+  YYSYMBOL_enumeratorList = 90,            /* enumeratorList  */
+  YYSYMBOL_enum_0 = 91,                    /* enum_0  */
+  YYSYMBOL_enum = 92,                      /* enum  */
+  YYSYMBOL_scopeName = 93,                 /* scopeName  */
+  YYSYMBOL_scopeNameList_0 = 94,           /* scopeNameList_0  */
+  YYSYMBOL_scopeNameList = 95,             /* scopeNameList  */
+  YYSYMBOL_typeName_0 = 96,                /* typeName_0  */
+  YYSYMBOL_typeName = 97,                  /* typeName  */
+  YYSYMBOL_typeNameList = 98,              /* typeNameList  */
+  YYSYMBOL_typeAlias = 99,                 /* typeAlias  */
+  YYSYMBOL_field_0 = 100,                  /* field_0  */
+  YYSYMBOL_field_1 = 101,                  /* field_1  */
+  YYSYMBOL_field_2 = 102,                  /* field_2  */
+  YYSYMBOL_field = 103,                    /* field  */
+  YYSYMBOL_getter_0 = 104,                 /* getter_0  */
+  YYSYMBOL_getter_1 = 105,                 /* getter_1  */
+  YYSYMBOL_getter = 106,                   /* getter  */
+  YYSYMBOL_setter_0 = 107,                 /* setter_0  */
+  YYSYMBOL_setter_1 = 108,                 /* setter_1  */
+  YYSYMBOL_setter_2 = 109,                 /* setter_2  */
+  YYSYMBOL_setter = 110,                   /* setter  */
+  YYSYMBOL_candidate = 111,                /* candidate  */
+  YYSYMBOL_property_0 = 112,               /* property_0  */
+  YYSYMBOL_property_1 = 113,               /* property_1  */
+  YYSYMBOL_property_2 = 114,               /* property_2  */
+  YYSYMBOL_property = 115,                 /* property  */
+  YYSYMBOL_parameter_0 = 116,              /* parameter_0  */
+  YYSYMBOL_parameter_1 = 117,              /* parameter_1  */
+  YYSYMBOL_parameter = 118,                /* parameter  */
+  YYSYMBOL_parameterList = 119,            /* parameterList  */
+  YYSYMBOL_method_0 = 120,                 /* method_0  */
+  YYSYMBOL_method_1 = 121,                 /* method_1  */
+  YYSYMBOL_method_2 = 122,                 /* method_2  */
+  YYSYMBOL_method_3 = 123,                 /* method_3  */
+  YYSYMBOL_method_4 = 124,                 /* method_4  */
+  YYSYMBOL_method = 125,                   /* method  */
+  YYSYMBOL_operatorSign = 126,             /* operatorSign  */
+  YYSYMBOL_operator_0 = 127,               /* operator_0  */
+  YYSYMBOL_operator_1 = 128,               /* operator_1  */
+  YYSYMBOL_operator_2 = 129,               /* operator_2  */
+  YYSYMBOL_operator_3 = 130,               /* operator_3  */
+  YYSYMBOL_operator = 131,                 /* operator  */
+  YYSYMBOL_delegate_0 = 132,               /* delegate_0  */
+  YYSYMBOL_delegate_1 = 133,               /* delegate_1  */
+  YYSYMBOL_delegate = 134,                 /* delegate  */
+  YYSYMBOL_classMember_0 = 135,            /* classMember_0  */
+  YYSYMBOL_classMember = 136,              /* classMember  */
+  YYSYMBOL_classMemberList = 137,          /* classMemberList  */
+  YYSYMBOL_templateParameterList = 138,    /* templateParameterList  */
+  YYSYMBOL_templateParameters = 139,       /* templateParameters  */
+  YYSYMBOL_class_0 = 140,                  /* class_0  */
+  YYSYMBOL_class_1 = 141,                  /* class_1  */
+  YYSYMBOL_class_2 = 142,                  /* class_2  */
+  YYSYMBOL_class_3 = 143,                  /* class_3  */
+  YYSYMBOL_class_4 = 144,                  /* class_4  */
+  YYSYMBOL_class_5 = 145,                  /* class_5  */
+  YYSYMBOL_class = 146,                    /* class  */
+  YYSYMBOL_tokenList = 147,                /* tokenList  */
+  YYSYMBOL_templateClassInstance_0 = 148,  /* templateClassInstance_0  */
+  YYSYMBOL_templateClassInstance = 149,    /* templateClassInstance  */
+  YYSYMBOL_namespaceMember_0 = 150,        /* namespaceMember_0  */
+  YYSYMBOL_namespaceMember = 151,          /* namespaceMember  */
+  YYSYMBOL_namespaceMemberList = 152,      /* namespaceMemberList  */
+  YYSYMBOL_namespace = 153,                /* namespace  */
+  YYSYMBOL_program = 154                   /* program  */
+};
+typedef enum yysymbol_kind_t yysymbol_kind_t;
 
-/* Line 214 of yacc.c  */
-#line 6 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-
-	struct SyntaxNode* sn;
 
 
-
-/* Line 214 of yacc.c  */
-#line 178 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
-} YYSTYPE;
-# define YYSTYPE_IS_TRIVIAL 1
-# define yystype YYSTYPE /* obsolescent; will be withdrawn */
-# define YYSTYPE_IS_DECLARED 1
-#endif
-
-
-/* Copy the second part of user declarations.  */
-
-
-/* Line 264 of yacc.c  */
-#line 190 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
 
 #ifdef short
 # undef short
 #endif
 
-#ifdef YYTYPE_UINT8
-typedef YYTYPE_UINT8 yytype_uint8;
-#else
-typedef unsigned char yytype_uint8;
+/* On compilers that do not define __PTRDIFF_MAX__ etc., make sure
+   <limits.h> and (if available) <stdint.h> are included
+   so that the code can choose integer types of a good width.  */
+
+#ifndef __PTRDIFF_MAX__
+# include <limits.h> /* INFRINGES ON USER NAME SPACE */
+# if defined __STDC_VERSION__ && 199901 <= __STDC_VERSION__
+#  include <stdint.h> /* INFRINGES ON USER NAME SPACE */
+#  define YY_STDINT_H
+# endif
 #endif
 
-#ifdef YYTYPE_INT8
-typedef YYTYPE_INT8 yytype_int8;
-#elif (defined __STDC__ || defined __C99__FUNC__ \
-     || defined __cplusplus || defined _MSC_VER)
+/* Narrow types that promote to a signed type and that can represent a
+   signed or unsigned integer of at least N bits.  In tables they can
+   save space and decrease cache pressure.  Promoting to a signed type
+   helps avoid bugs in integer arithmetic.  */
+
+#ifdef __INT_LEAST8_MAX__
+typedef __INT_LEAST8_TYPE__ yytype_int8;
+#elif defined YY_STDINT_H
+typedef int_least8_t yytype_int8;
+#else
 typedef signed char yytype_int8;
-#else
-typedef short int yytype_int8;
 #endif
 
-#ifdef YYTYPE_UINT16
-typedef YYTYPE_UINT16 yytype_uint16;
+#ifdef __INT_LEAST16_MAX__
+typedef __INT_LEAST16_TYPE__ yytype_int16;
+#elif defined YY_STDINT_H
+typedef int_least16_t yytype_int16;
 #else
-typedef unsigned short int yytype_uint16;
+typedef short yytype_int16;
 #endif
 
-#ifdef YYTYPE_INT16
-typedef YYTYPE_INT16 yytype_int16;
+#if defined __UINT_LEAST8_MAX__ && __UINT_LEAST8_MAX__ <= __INT_MAX__
+typedef __UINT_LEAST8_TYPE__ yytype_uint8;
+#elif (!defined __UINT_LEAST8_MAX__ && defined YY_STDINT_H \
+       && UINT_LEAST8_MAX <= INT_MAX)
+typedef uint_least8_t yytype_uint8;
+#elif !defined __UINT_LEAST8_MAX__ && UCHAR_MAX <= INT_MAX
+typedef unsigned char yytype_uint8;
 #else
-typedef short int yytype_int16;
+typedef short yytype_uint8;
+#endif
+
+#if defined __UINT_LEAST16_MAX__ && __UINT_LEAST16_MAX__ <= __INT_MAX__
+typedef __UINT_LEAST16_TYPE__ yytype_uint16;
+#elif (!defined __UINT_LEAST16_MAX__ && defined YY_STDINT_H \
+       && UINT_LEAST16_MAX <= INT_MAX)
+typedef uint_least16_t yytype_uint16;
+#elif !defined __UINT_LEAST16_MAX__ && USHRT_MAX <= INT_MAX
+typedef unsigned short yytype_uint16;
+#else
+typedef int yytype_uint16;
+#endif
+
+#ifndef YYPTRDIFF_T
+# if defined __PTRDIFF_TYPE__ && defined __PTRDIFF_MAX__
+#  define YYPTRDIFF_T __PTRDIFF_TYPE__
+#  define YYPTRDIFF_MAXIMUM __PTRDIFF_MAX__
+# elif defined PTRDIFF_MAX
+#  ifndef ptrdiff_t
+#   include <stddef.h> /* INFRINGES ON USER NAME SPACE */
+#  endif
+#  define YYPTRDIFF_T ptrdiff_t
+#  define YYPTRDIFF_MAXIMUM PTRDIFF_MAX
+# else
+#  define YYPTRDIFF_T long
+#  define YYPTRDIFF_MAXIMUM LONG_MAX
+# endif
 #endif
 
 #ifndef YYSIZE_T
@@ -224,55 +340,100 @@ typedef short int yytype_int16;
 #  define YYSIZE_T __SIZE_TYPE__
 # elif defined size_t
 #  define YYSIZE_T size_t
-# elif ! defined YYSIZE_T && (defined __STDC__ || defined __C99__FUNC__ \
-     || defined __cplusplus || defined _MSC_VER)
+# elif defined __STDC_VERSION__ && 199901 <= __STDC_VERSION__
 #  include <stddef.h> /* INFRINGES ON USER NAME SPACE */
 #  define YYSIZE_T size_t
 # else
-#  define YYSIZE_T unsigned int
+#  define YYSIZE_T unsigned
 # endif
 #endif
 
-#define YYSIZE_MAXIMUM ((YYSIZE_T) -1)
+#define YYSIZE_MAXIMUM                                  \
+  YY_CAST (YYPTRDIFF_T,                                 \
+           (YYPTRDIFF_MAXIMUM < YY_CAST (YYSIZE_T, -1)  \
+            ? YYPTRDIFF_MAXIMUM                         \
+            : YY_CAST (YYSIZE_T, -1)))
+
+#define YYSIZEOF(X) YY_CAST (YYPTRDIFF_T, sizeof (X))
+
+
+/* Stored state numbers (used for stacks). */
+typedef yytype_int16 yy_state_t;
+
+/* State numbers in computations.  */
+typedef int yy_state_fast_t;
 
 #ifndef YY_
-# if YYENABLE_NLS
+# if defined YYENABLE_NLS && YYENABLE_NLS
 #  if ENABLE_NLS
 #   include <libintl.h> /* INFRINGES ON USER NAME SPACE */
-#   define YY_(msgid) dgettext ("bison-runtime", msgid)
+#   define YY_(Msgid) dgettext ("bison-runtime", Msgid)
 #  endif
 # endif
 # ifndef YY_
-#  define YY_(msgid) msgid
+#  define YY_(Msgid) Msgid
+# endif
+#endif
+
+
+#ifndef YY_ATTRIBUTE_PURE
+# if defined __GNUC__ && 2 < __GNUC__ + (96 <= __GNUC_MINOR__)
+#  define YY_ATTRIBUTE_PURE __attribute__ ((__pure__))
+# else
+#  define YY_ATTRIBUTE_PURE
+# endif
+#endif
+
+#ifndef YY_ATTRIBUTE_UNUSED
+# if defined __GNUC__ && 2 < __GNUC__ + (7 <= __GNUC_MINOR__)
+#  define YY_ATTRIBUTE_UNUSED __attribute__ ((__unused__))
+# else
+#  define YY_ATTRIBUTE_UNUSED
 # endif
 #endif
 
 /* Suppress unused-variable warnings by "using" E.  */
 #if ! defined lint || defined __GNUC__
-# define YYUSE(e) ((void) (e))
+# define YYUSE(E) ((void) (E))
 #else
-# define YYUSE(e) /* empty */
+# define YYUSE(E) /* empty */
 #endif
 
-/* Identity function, used to suppress warnings about constant conditions.  */
-#ifndef lint
-# define YYID(n) (n)
+#if defined __GNUC__ && ! defined __ICC && 407 <= __GNUC__ * 100 + __GNUC_MINOR__
+/* Suppress an incorrect diagnostic about yylval being uninitialized.  */
+# define YY_IGNORE_MAYBE_UNINITIALIZED_BEGIN                            \
+    _Pragma ("GCC diagnostic push")                                     \
+    _Pragma ("GCC diagnostic ignored \"-Wuninitialized\"")              \
+    _Pragma ("GCC diagnostic ignored \"-Wmaybe-uninitialized\"")
+# define YY_IGNORE_MAYBE_UNINITIALIZED_END      \
+    _Pragma ("GCC diagnostic pop")
 #else
-#if (defined __STDC__ || defined __C99__FUNC__ \
-     || defined __cplusplus || defined _MSC_VER)
-static int
-YYID (int yyi)
-#else
-static int
-YYID (yyi)
-    int yyi;
+# define YY_INITIAL_VALUE(Value) Value
 #endif
-{
-  return yyi;
-}
+#ifndef YY_IGNORE_MAYBE_UNINITIALIZED_BEGIN
+# define YY_IGNORE_MAYBE_UNINITIALIZED_BEGIN
+# define YY_IGNORE_MAYBE_UNINITIALIZED_END
+#endif
+#ifndef YY_INITIAL_VALUE
+# define YY_INITIAL_VALUE(Value) /* Nothing. */
 #endif
 
-#if ! defined yyoverflow || YYERROR_VERBOSE
+#if defined __cplusplus && defined __GNUC__ && ! defined __ICC && 6 <= __GNUC__
+# define YY_IGNORE_USELESS_CAST_BEGIN                          \
+    _Pragma ("GCC diagnostic push")                            \
+    _Pragma ("GCC diagnostic ignored \"-Wuseless-cast\"")
+# define YY_IGNORE_USELESS_CAST_END            \
+    _Pragma ("GCC diagnostic pop")
+#endif
+#ifndef YY_IGNORE_USELESS_CAST_BEGIN
+# define YY_IGNORE_USELESS_CAST_BEGIN
+# define YY_IGNORE_USELESS_CAST_END
+#endif
+
+
+#define YY_ASSERT(E) ((void) (0 && (E)))
+
+#if !defined yyoverflow
 
 /* The parser invokes alloca or malloc; define the necessary symbols.  */
 
@@ -289,11 +450,11 @@ YYID (yyi)
 #    define alloca _alloca
 #   else
 #    define YYSTACK_ALLOC alloca
-#    if ! defined _ALLOCA_H && ! defined _STDLIB_H && (defined __STDC__ || defined __C99__FUNC__ \
-     || defined __cplusplus || defined _MSC_VER)
+#    if ! defined _ALLOCA_H && ! defined EXIT_SUCCESS
 #     include <stdlib.h> /* INFRINGES ON USER NAME SPACE */
-#     ifndef _STDLIB_H
-#      define _STDLIB_H 1
+      /* Use EXIT_SUCCESS as a witness for stdlib.h.  */
+#     ifndef EXIT_SUCCESS
+#      define EXIT_SUCCESS 0
 #     endif
 #    endif
 #   endif
@@ -301,8 +462,8 @@ YYID (yyi)
 # endif
 
 # ifdef YYSTACK_ALLOC
-   /* Pacify GCC's `empty if-body' warning.  */
-#  define YYSTACK_FREE(Ptr) do { /* empty */; } while (YYID (0))
+   /* Pacify GCC's 'empty if-body' warning.  */
+#  define YYSTACK_FREE(Ptr) do { /* empty */; } while (0)
 #  ifndef YYSTACK_ALLOC_MAXIMUM
     /* The OS might guarantee only one guard page at the bottom of the stack,
        and a page size can be as small as 4096 bytes.  So we cannot safely
@@ -316,87 +477,88 @@ YYID (yyi)
 #  ifndef YYSTACK_ALLOC_MAXIMUM
 #   define YYSTACK_ALLOC_MAXIMUM YYSIZE_MAXIMUM
 #  endif
-#  if (defined __cplusplus && ! defined _STDLIB_H \
+#  if (defined __cplusplus && ! defined EXIT_SUCCESS \
        && ! ((defined YYMALLOC || defined malloc) \
-	     && (defined YYFREE || defined free)))
+             && (defined YYFREE || defined free)))
 #   include <stdlib.h> /* INFRINGES ON USER NAME SPACE */
-#   ifndef _STDLIB_H
-#    define _STDLIB_H 1
+#   ifndef EXIT_SUCCESS
+#    define EXIT_SUCCESS 0
 #   endif
 #  endif
 #  ifndef YYMALLOC
 #   define YYMALLOC malloc
-#   if ! defined malloc && ! defined _STDLIB_H && (defined __STDC__ || defined __C99__FUNC__ \
-     || defined __cplusplus || defined _MSC_VER)
+#   if ! defined malloc && ! defined EXIT_SUCCESS
 void *malloc (YYSIZE_T); /* INFRINGES ON USER NAME SPACE */
 #   endif
 #  endif
 #  ifndef YYFREE
 #   define YYFREE free
-#   if ! defined free && ! defined _STDLIB_H && (defined __STDC__ || defined __C99__FUNC__ \
-     || defined __cplusplus || defined _MSC_VER)
+#   if ! defined free && ! defined EXIT_SUCCESS
 void free (void *); /* INFRINGES ON USER NAME SPACE */
 #   endif
 #  endif
 # endif
-#endif /* ! defined yyoverflow || YYERROR_VERBOSE */
-
+#endif /* !defined yyoverflow */
 
 #if (! defined yyoverflow \
      && (! defined __cplusplus \
-	 || (defined YYSTYPE_IS_TRIVIAL && YYSTYPE_IS_TRIVIAL)))
+         || (defined YYSTYPE_IS_TRIVIAL && YYSTYPE_IS_TRIVIAL)))
 
 /* A type that is properly aligned for any stack member.  */
 union yyalloc
 {
-  yytype_int16 yyss_alloc;
+  yy_state_t yyss_alloc;
   YYSTYPE yyvs_alloc;
 };
 
 /* The size of the maximum gap between one aligned stack and the next.  */
-# define YYSTACK_GAP_MAXIMUM (sizeof (union yyalloc) - 1)
+# define YYSTACK_GAP_MAXIMUM (YYSIZEOF (union yyalloc) - 1)
 
 /* The size of an array large to enough to hold all stacks, each with
    N elements.  */
 # define YYSTACK_BYTES(N) \
-     ((N) * (sizeof (yytype_int16) + sizeof (YYSTYPE)) \
+     ((N) * (YYSIZEOF (yy_state_t) + YYSIZEOF (YYSTYPE)) \
       + YYSTACK_GAP_MAXIMUM)
 
-/* Copy COUNT objects from FROM to TO.  The source and destination do
-   not overlap.  */
-# ifndef YYCOPY
-#  if defined __GNUC__ && 1 < __GNUC__
-#   define YYCOPY(To, From, Count) \
-      __builtin_memcpy (To, From, (Count) * sizeof (*(From)))
-#  else
-#   define YYCOPY(To, From, Count)		\
-      do					\
-	{					\
-	  YYSIZE_T yyi;				\
-	  for (yyi = 0; yyi < (Count); yyi++)	\
-	    (To)[yyi] = (From)[yyi];		\
-	}					\
-      while (YYID (0))
-#  endif
-# endif
+# define YYCOPY_NEEDED 1
 
 /* Relocate STACK from its old location to the new one.  The
    local variables YYSIZE and YYSTACKSIZE give the old and new number of
    elements in the stack, and YYPTR gives the new location of the
    stack.  Advance YYPTR to a properly aligned location for the next
    stack.  */
-# define YYSTACK_RELOCATE(Stack_alloc, Stack)				\
-    do									\
-      {									\
-	YYSIZE_T yynewbytes;						\
-	YYCOPY (&yyptr->Stack_alloc, Stack, yysize);			\
-	Stack = &yyptr->Stack_alloc;					\
-	yynewbytes = yystacksize * sizeof (*Stack) + YYSTACK_GAP_MAXIMUM; \
-	yyptr += yynewbytes / sizeof (*yyptr);				\
-      }									\
-    while (YYID (0))
+# define YYSTACK_RELOCATE(Stack_alloc, Stack)                           \
+    do                                                                  \
+      {                                                                 \
+        YYPTRDIFF_T yynewbytes;                                         \
+        YYCOPY (&yyptr->Stack_alloc, Stack, yysize);                    \
+        Stack = &yyptr->Stack_alloc;                                    \
+        yynewbytes = yystacksize * YYSIZEOF (*Stack) + YYSTACK_GAP_MAXIMUM; \
+        yyptr += yynewbytes / YYSIZEOF (*yyptr);                        \
+      }                                                                 \
+    while (0)
 
 #endif
+
+#if defined YYCOPY_NEEDED && YYCOPY_NEEDED
+/* Copy COUNT objects from SRC to DST.  The source and destination do
+   not overlap.  */
+# ifndef YYCOPY
+#  if defined __GNUC__ && 1 < __GNUC__
+#   define YYCOPY(Dst, Src, Count) \
+      __builtin_memcpy (Dst, Src, YY_CAST (YYSIZE_T, (Count)) * sizeof (*(Src)))
+#  else
+#   define YYCOPY(Dst, Src, Count)              \
+      do                                        \
+        {                                       \
+          YYPTRDIFF_T yyi;                      \
+          for (yyi = 0; yyi < (Count); yyi++)   \
+            (Dst)[yyi] = (Src)[yyi];            \
+        }                                       \
+      while (0)
+#  endif
+# endif
+#endif /* !YYCOPY_NEEDED */
 
 /* YYFINAL -- State number of the termination state.  */
 #define YYFINAL  93
@@ -409,18 +571,23 @@ union yyalloc
 #define YYNNTS  72
 /* YYNRULES -- Number of rules.  */
 #define YYNRULES  282
-/* YYNRULES -- Number of states.  */
+/* YYNSTATES -- Number of states.  */
 #define YYNSTATES  484
 
-/* YYTRANSLATE(YYLEX) -- Bison symbol number corresponding to YYLEX.  */
-#define YYUNDEFTOK  2
+/* YYMAXUTOK -- Last valid token kind.  */
 #define YYMAXUTOK   313
 
-#define YYTRANSLATE(YYX)						\
-  ((unsigned int) (YYX) <= YYMAXUTOK ? yytranslate[YYX] : YYUNDEFTOK)
 
-/* YYTRANSLATE[YYLEX] -- Bison symbol number corresponding to YYLEX.  */
-static const yytype_uint8 yytranslate[] =
+/* YYTRANSLATE(TOKEN-NUM) -- Symbol number corresponding to TOKEN-NUM
+   as returned by yylex, with out-of-bounds checking.  */
+#define YYTRANSLATE(YYX)                                \
+  (0 <= (YYX) && (YYX) <= YYMAXUTOK                     \
+   ? YY_CAST (yysymbol_kind_t, yytranslate[YYX])        \
+   : YYSYMBOL_YYUNDEF)
+
+/* YYTRANSLATE[TOKEN-NUM] -- Symbol number corresponding to TOKEN-NUM
+   as returned by yylex.  */
+static const yytype_int8 yytranslate[] =
 {
        0,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
@@ -457,145 +624,8 @@ static const yytype_uint8 yytranslate[] =
 };
 
 #if YYDEBUG
-/* YYPRHS[YYN] -- Index of the first RHS symbol of rule number YYN in
-   YYRHS.  */
-static const yytype_uint16 yyprhs[] =
-{
-       0,     0,     3,     5,     7,     9,    12,    15,    17,    19,
-      22,    25,    29,    32,    36,    38,    41,    44,    48,    51,
-      55,    58,    62,    66,    71,    75,    80,    82,    85,    87,
-      90,    92,    94,    96,    99,   101,   103,   107,   111,   113,
-     117,   121,   126,   129,   131,   135,   137,   140,   142,   146,
-     152,   159,   164,   171,   179,   185,   188,   193,   195,   200,
-     202,   206,   208,   211,   213,   215,   217,   220,   223,   225,
-     229,   234,   238,   242,   246,   250,   256,   262,   268,   274,
-     277,   282,   286,   288,   291,   293,   296,   299,   304,   306,
-     308,   311,   313,   317,   319,   321,   324,   326,   329,   331,
-     335,   337,   339,   343,   348,   353,   358,   364,   367,   371,
-     375,   380,   386,   392,   399,   406,   413,   420,   428,   436,
-     438,   441,   444,   448,   452,   456,   461,   466,   471,   476,
-     483,   490,   492,   495,   497,   500,   502,   506,   510,   515,
-     520,   525,   531,   537,   539,   542,   546,   550,   554,   560,
-     562,   565,   567,   570,   573,   576,   578,   581,   584,   589,
-     591,   593,   595,   597,   599,   601,   603,   605,   607,   609,
-     611,   613,   615,   617,   620,   623,   625,   627,   629,   631,
-     633,   635,   637,   639,   641,   643,   645,   647,   649,   651,
-     653,   655,   657,   659,   661,   663,   669,   676,   683,   691,
-     694,   698,   702,   706,   712,   714,   717,   719,   722,   725,
-     727,   730,   735,   741,   747,   750,   754,   758,   762,   768,
-     771,   775,   777,   779,   781,   783,   785,   787,   789,   791,
-     794,   797,   799,   802,   804,   806,   809,   812,   814,   818,
-     823,   826,   832,   835,   841,   843,   847,   851,   856,   859,
-     864,   866,   869,   871,   874,   876,   879,   881,   883,   887,
-     891,   897,   900,   905,   911,   918,   920,   922,   924,   926,
-     928,   930,   933,   936,   938,   941,   943,   945,   948,   951,
-     956,   962,   963
-};
-
-/* YYRHS -- A `-1'-separated list of the rules' RHS.  */
-static const yytype_int16 yyrhs[] =
-{
-     154,     0,    -1,    63,    -1,    46,    -1,    47,    -1,    54,
-      47,    -1,    55,    47,    -1,    48,    -1,    49,    -1,    49,
-      51,    -1,    54,    49,    -1,    54,    49,    51,    -1,    55,
-      49,    -1,    55,    49,    51,    -1,    50,    -1,    50,    51,
-      -1,    54,    50,    -1,    54,    50,    51,    -1,    55,    50,
-      -1,    55,    50,    51,    -1,    50,    50,    -1,    50,    50,
-      51,    -1,    54,    50,    50,    -1,    54,    50,    50,    51,
-      -1,    55,    50,    50,    -1,    55,    50,    50,    51,    -1,
-      51,    -1,    54,    51,    -1,    54,    -1,    55,    51,    -1,
-      55,    -1,    52,    -1,    53,    -1,    50,    53,    -1,    56,
-      -1,    77,    -1,    77,    25,    78,    -1,    77,    25,    79,
-      -1,    85,    -1,    86,     3,    85,    -1,     9,    86,    10,
-      -1,     9,    86,     3,    10,    -1,     9,    10,    -1,    77,
-      -1,    88,     3,    77,    -1,    77,    -1,    87,    77,    -1,
-      89,    -1,    90,     3,    89,    -1,    58,    77,    11,    90,
-      12,    -1,    58,    77,    11,    90,     3,    12,    -1,    58,
-      77,    11,    12,    -1,    58,    59,    77,    11,    90,    12,
-      -1,    58,    59,    77,    11,    90,     3,    12,    -1,    58,
-      59,    77,    11,    12,    -1,    91,     6,    -1,    91,    25,
-      78,     6,    -1,    77,    -1,    77,    13,    98,    14,    -1,
-      93,    -1,    94,    76,    93,    -1,    94,    -1,    76,    94,
-      -1,    84,    -1,    95,    -1,    96,    -1,    73,    96,    -1,
-      72,    96,    -1,    97,    -1,    98,     3,    97,    -1,    66,
-      97,    77,     6,    -1,    67,    77,     6,    -1,    58,    77,
-       6,    -1,    60,    77,     6,    -1,    59,    77,     6,    -1,
-      67,    77,    25,    78,     6,    -1,    58,    77,    25,    78,
-       6,    -1,    60,    77,    25,    78,     6,    -1,    59,    77,
-      25,    78,     6,    -1,    97,    77,    -1,    97,    77,     9,
-      10,    -1,    97,    15,    77,    -1,   100,    -1,    64,   100,
-      -1,   101,    -1,    61,   101,    -1,   102,     6,    -1,   102,
-      25,    78,     6,    -1,    69,    -1,   104,    -1,   104,    17,
-      -1,   105,    -1,   105,    25,    78,    -1,    70,    -1,   107,
-      -1,   107,    19,    -1,   108,    -1,   108,    82,    -1,   109,
-      -1,   109,    25,    78,    -1,    71,    -1,    77,    -1,    77,
-       9,    10,    -1,    77,     9,    82,    10,    -1,    77,     9,
-      15,    10,    -1,    77,     9,    97,    10,    -1,    77,     9,
-      97,    15,    10,    -1,    97,   112,    -1,    97,    15,   112,
-      -1,    97,    16,   112,    -1,   113,    11,    12,     6,    -1,
-     113,    11,   106,    12,     6,    -1,   113,    11,   110,    12,
-       6,    -1,   113,    11,   106,   110,    12,     6,    -1,   113,
-      11,   110,   106,    12,     6,    -1,   113,    11,   106,   111,
-      12,     6,    -1,   113,    11,   110,   111,    12,     6,    -1,
-     113,    11,   106,   110,   111,    12,     6,    -1,   113,    11,
-     110,   106,   111,    12,     6,    -1,   114,    -1,    61,   114,
-      -1,    97,    77,    -1,    97,    16,    77,    -1,    97,    15,
-      77,    -1,    97,    19,    77,    -1,    97,    15,    16,    77,
-      -1,    97,    15,    15,    77,    -1,    97,    17,    16,    77,
-      -1,    97,    17,    15,    77,    -1,    97,    17,     9,    10,
-      16,    77,    -1,    97,    17,     9,    10,    15,    77,    -1,
-     116,    -1,    64,   116,    -1,   117,    -1,   117,    82,    -1,
-     118,    -1,   119,     3,   118,    -1,    77,     7,     8,    -1,
-      77,     7,    63,     8,    -1,    77,     7,   119,     8,    -1,
-      77,     7,     8,    64,    -1,    77,     7,    63,     8,    64,
-      -1,    77,     7,   119,     8,    64,    -1,   120,    -1,    97,
-     120,    -1,    97,    16,   120,    -1,    97,    15,   120,    -1,
-      97,    17,   120,    -1,    97,    17,     9,    10,   120,    -1,
-     121,    -1,    64,   121,    -1,   122,    -1,    68,   122,    -1,
-      62,   122,    -1,    61,   122,    -1,   123,    -1,    75,   123,
-      -1,   124,     6,    -1,   124,    25,    78,     6,    -1,    17,
-      -1,    19,    -1,    15,    -1,    20,    -1,    21,    -1,    18,
-      -1,    16,    -1,    22,    -1,    23,    -1,    24,    -1,    25,
-      -1,    13,    -1,    14,    -1,     3,    -1,     9,    10,    -1,
-       7,     8,    -1,    26,    -1,    27,    -1,    28,    -1,    29,
-      -1,    30,    -1,    31,    -1,    32,    -1,    33,    -1,    36,
-      -1,    37,    -1,    34,    -1,    35,    -1,    38,    -1,    39,
-      -1,    40,    -1,    41,    -1,    42,    -1,    43,    -1,    44,
-      -1,    45,    -1,    65,   126,     7,     8,     6,    -1,    65,
-     126,     7,   119,     8,     6,    -1,    65,   126,     7,     8,
-      64,     6,    -1,    65,   126,     7,   119,     8,    64,     6,
-      -1,    97,   127,    -1,    97,    16,   127,    -1,    97,    15,
-     127,    -1,    97,    17,   127,    -1,    97,    17,     9,    10,
-     127,    -1,   128,    -1,    64,   128,    -1,   129,    -1,    68,
-     129,    -1,    62,   129,    -1,   130,    -1,    75,   130,    -1,
-      77,     7,     8,     6,    -1,    77,     7,    63,     8,     6,
-      -1,    77,     7,   119,     8,     6,    -1,    97,   132,    -1,
-      97,    16,   132,    -1,    97,    15,   132,    -1,    97,    17,
-     132,    -1,    97,    17,     9,    10,   132,    -1,    81,   133,
-      -1,    81,    64,   133,    -1,   103,    -1,   115,    -1,   125,
-      -1,   131,    -1,   146,    -1,   134,    -1,    92,    -1,    99,
-      -1,    73,   135,    -1,    72,   135,    -1,   135,    -1,    87,
-     135,    -1,   136,    -1,     6,    -1,   137,   136,    -1,   137,
-       6,    -1,    77,    -1,   138,     3,    77,    -1,    80,    13,
-     138,    14,    -1,    59,    77,    -1,    59,     7,    88,     8,
-      77,    -1,    60,    77,    -1,    60,     7,    88,     8,    77,
-      -1,   140,    -1,   140,     5,    98,    -1,   141,    11,    12,
-      -1,   141,    11,   137,    12,    -1,   142,     6,    -1,   142,
-      25,    78,     6,    -1,   143,    -1,    68,   143,    -1,   144,
-      -1,    75,   144,    -1,   145,    -1,   139,   145,    -1,    77,
-      -1,   126,    -1,   147,     3,    77,    -1,   147,     3,   126,
-      -1,    74,    77,    13,    98,    14,    -1,   148,     6,    -1,
-     148,    11,    12,     6,    -1,   148,    11,   147,    12,     6,
-      -1,   148,    11,   147,     3,    12,     6,    -1,   146,    -1,
-     134,    -1,    92,    -1,   149,    -1,    99,    -1,   153,    -1,
-      73,   150,    -1,    72,   150,    -1,   150,    -1,    87,   150,
-      -1,   151,    -1,     6,    -1,   152,   151,    -1,   152,     6,
-      -1,    57,    77,    11,    12,    -1,    57,    77,    11,   152,
-      12,    -1,    -1,   152,    -1
-};
-
-/* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
-static const yytype_uint16 yyrline[] =
+  /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
+static const yytype_int16 yyrline[] =
 {
        0,    30,    30,    31,    32,    33,    34,    35,    36,    37,
       38,    39,    40,    41,    42,    43,    44,    45,    46,    47,
@@ -629,16 +659,23 @@ static const yytype_uint16 yyrline[] =
 };
 #endif
 
-#if YYDEBUG || YYERROR_VERBOSE || YYTOKEN_TABLE
+/** Accessing symbol of state STATE.  */
+#define YY_ACCESSING_SYMBOL(State) YY_CAST (yysymbol_kind_t, yystos[State])
+
+#if YYDEBUG || 0
+/* The user-facing name of the symbol whose (internal) number is
+   YYSYMBOL.  No bounds checking.  */
+static const char *yysymbol_name (yysymbol_kind_t yysymbol) YY_ATTRIBUTE_UNUSED;
+
 /* YYTNAME[SYMBOL-NUM] -- String name of the symbol SYMBOL-NUM.
    First, the terminals, then, starting at YYNTOKENS, nonterminals.  */
 static const char *const yytname[] =
 {
-  "$end", "error", "$undefined", "','", "'.'", "':'", "';'", "'('", "')'",
-  "'['", "']'", "'{'", "'}'", "'<'", "'>'", "'*'", "'&'", "'+'", "'^'",
-  "'-'", "'/'", "'%'", "'|'", "'~'", "'!'", "'='", "ADD_ASSIGN",
-  "SUB_ASSIGN", "MUL_ASSIGN", "DIV_ASSIGN", "MOD_ASSIGN", "BIT_XOR_ASSIGN",
-  "BIT_AND_ASSIGN", "BIT_OR_ASSIGN", "LEFT_SHIFT_ASSIGN",
+  "\"end of file\"", "error", "\"invalid token\"", "','", "'.'", "':'",
+  "';'", "'('", "')'", "'['", "']'", "'{'", "'}'", "'<'", "'>'", "'*'",
+  "'&'", "'+'", "'^'", "'-'", "'/'", "'%'", "'|'", "'~'", "'!'", "'='",
+  "ADD_ASSIGN", "SUB_ASSIGN", "MUL_ASSIGN", "DIV_ASSIGN", "MOD_ASSIGN",
+  "BIT_XOR_ASSIGN", "BIT_AND_ASSIGN", "BIT_OR_ASSIGN", "LEFT_SHIFT_ASSIGN",
   "RIGHT_SHIFT_ASSIGN", "LEFT_SHIFT", "RIGHT_SHIFT", "EQUAL", "NOT_EQUAL",
   "LESS_EQUAL", "GREATER_EQUAL", "AND", "OR", "INC", "DEC", "BOOL", "CHAR",
   "WCHAR_T", "SHORT", "LONG", "INT", "FLOAT", "DOUBLE", "SIGNED",
@@ -660,14 +697,20 @@ static const char *const yytname[] =
   "templateParameterList", "templateParameters", "class_0", "class_1",
   "class_2", "class_3", "class_4", "class_5", "class", "tokenList",
   "templateClassInstance_0", "templateClassInstance", "namespaceMember_0",
-  "namespaceMember", "namespaceMemberList", "namespace", "program", 0
+  "namespaceMember", "namespaceMemberList", "namespace", "program", YY_NULLPTR
 };
+
+static const char *
+yysymbol_name (yysymbol_kind_t yysymbol)
+{
+  return yytname[yysymbol];
+}
 #endif
 
-# ifdef YYPRINT
-/* YYTOKNUM[YYLEX-NUM] -- Internal token number corresponding to
-   token YYLEX-NUM.  */
-static const yytype_uint16 yytoknum[] =
+#ifdef YYPRINT
+/* YYTOKNUM[NUM] -- (External) token number corresponding to the
+   (internal) symbol number NUM (which must be that of a token).  */
+static const yytype_int16 yytoknum[] =
 {
        0,   256,   257,    44,    46,    58,    59,    40,    41,    91,
       93,   123,   125,    60,    62,    42,    38,    43,    94,    45,
@@ -679,148 +722,20 @@ static const yytype_uint16 yytoknum[] =
      302,   303,   304,   305,   306,   307,   308,   309,   310,   311,
      312,   313,    63
 };
-# endif
+#endif
 
-/* YYR1[YYN] -- Symbol number of symbol that rule YYN derives.  */
-static const yytype_uint8 yyr1[] =
-{
-       0,    83,    84,    84,    84,    84,    84,    84,    84,    84,
-      84,    84,    84,    84,    84,    84,    84,    84,    84,    84,
-      84,    84,    84,    84,    84,    84,    84,    84,    84,    84,
-      84,    84,    84,    84,    84,    85,    85,    85,    86,    86,
-      87,    87,    87,    88,    88,    89,    89,    90,    90,    91,
-      91,    91,    91,    91,    91,    92,    92,    93,    93,    94,
-      94,    95,    95,    96,    96,    97,    97,    97,    98,    98,
-      99,    99,    99,    99,    99,    99,    99,    99,    99,   100,
-     100,   100,   101,   101,   102,   102,   103,   103,   104,   105,
-     105,   106,   106,   107,   108,   108,   109,   109,   110,   110,
-     111,   112,   112,   112,   112,   112,   112,   113,   113,   113,
-     114,   114,   114,   114,   114,   114,   114,   114,   114,   115,
-     115,   116,   116,   116,   116,   116,   116,   116,   116,   116,
-     116,   117,   117,   118,   118,   119,   119,   120,   120,   120,
-     120,   120,   120,   121,   121,   121,   121,   121,   121,   122,
-     122,   123,   123,   123,   123,   124,   124,   125,   125,   126,
-     126,   126,   126,   126,   126,   126,   126,   126,   126,   126,
-     126,   126,   126,   126,   126,   126,   126,   126,   126,   126,
-     126,   126,   126,   126,   126,   126,   126,   126,   126,   126,
-     126,   126,   126,   126,   126,   127,   127,   127,   127,   128,
-     128,   128,   128,   128,   129,   129,   130,   130,   130,   131,
-     131,   132,   132,   132,   133,   133,   133,   133,   133,   134,
-     134,   135,   135,   135,   135,   135,   135,   135,   135,   135,
-     135,   136,   136,   137,   137,   137,   137,   138,   138,   139,
-     140,   140,   140,   140,   141,   141,   142,   142,   143,   143,
-     144,   144,   145,   145,   146,   146,   147,   147,   147,   147,
-     148,   149,   149,   149,   149,   150,   150,   150,   150,   150,
-     150,   150,   150,   151,   151,   152,   152,   152,   152,   153,
-     153,   154,   154
-};
+#define YYPACT_NINF (-272)
 
-/* YYR2[YYN] -- Number of symbols composing right hand side of rule YYN.  */
-static const yytype_uint8 yyr2[] =
-{
-       0,     2,     1,     1,     1,     2,     2,     1,     1,     2,
-       2,     3,     2,     3,     1,     2,     2,     3,     2,     3,
-       2,     3,     3,     4,     3,     4,     1,     2,     1,     2,
-       1,     1,     1,     2,     1,     1,     3,     3,     1,     3,
-       3,     4,     2,     1,     3,     1,     2,     1,     3,     5,
-       6,     4,     6,     7,     5,     2,     4,     1,     4,     1,
-       3,     1,     2,     1,     1,     1,     2,     2,     1,     3,
-       4,     3,     3,     3,     3,     5,     5,     5,     5,     2,
-       4,     3,     1,     2,     1,     2,     2,     4,     1,     1,
-       2,     1,     3,     1,     1,     2,     1,     2,     1,     3,
-       1,     1,     3,     4,     4,     4,     5,     2,     3,     3,
-       4,     5,     5,     6,     6,     6,     6,     7,     7,     1,
-       2,     2,     3,     3,     3,     4,     4,     4,     4,     6,
-       6,     1,     2,     1,     2,     1,     3,     3,     4,     4,
-       4,     5,     5,     1,     2,     3,     3,     3,     5,     1,
-       2,     1,     2,     2,     2,     1,     2,     2,     4,     1,
-       1,     1,     1,     1,     1,     1,     1,     1,     1,     1,
-       1,     1,     1,     2,     2,     1,     1,     1,     1,     1,
-       1,     1,     1,     1,     1,     1,     1,     1,     1,     1,
-       1,     1,     1,     1,     1,     5,     6,     6,     7,     2,
-       3,     3,     3,     5,     1,     2,     1,     2,     2,     1,
-       2,     4,     5,     5,     2,     3,     3,     3,     5,     2,
-       3,     1,     1,     1,     1,     1,     1,     1,     1,     2,
-       2,     1,     2,     1,     1,     2,     2,     1,     3,     4,
-       2,     5,     2,     5,     1,     3,     3,     4,     2,     4,
-       1,     2,     1,     2,     1,     2,     1,     1,     3,     3,
-       5,     2,     4,     5,     6,     1,     1,     1,     1,     1,
-       1,     2,     2,     1,     2,     1,     1,     2,     2,     4,
-       5,     0,     1
-};
+#define yypact_value_is_default(Yyn) \
+  ((Yyn) == YYPACT_NINF)
 
-/* YYDEFACT[STATE-NAME] -- Default rule to reduce with in state
-   STATE-NUM when YYTABLE doesn't specify something else to do.  Zero
-   means the default is an error.  */
-static const yytype_uint16 yydefact[] =
-{
-     281,   276,     0,     0,     0,     0,     0,     0,     0,     0,
-       0,     0,     0,     0,     0,     0,     0,     0,   267,   269,
-     266,     0,   244,     0,     0,   250,   252,   254,   265,     0,
-     268,   273,   275,   282,   270,     0,    42,    35,    38,     0,
-       0,     0,     0,     0,   240,     0,   242,     3,     4,     7,
-       8,    14,    26,    31,    32,    28,    30,    34,     2,     0,
-       0,     0,    57,    63,    59,    61,    64,    65,     0,     0,
-       0,     0,   251,   272,   271,     0,   253,     0,     0,     0,
-     219,   274,    55,     0,   255,     0,     0,   248,     0,   261,
-       0,   278,   277,     1,     0,     0,    40,     0,     0,    72,
-       0,     0,    43,     0,    74,     0,     0,    73,     0,     9,
-      20,    15,    33,     5,    10,    16,    27,     6,    12,    18,
-      29,    67,    66,    62,     0,     0,     0,    71,     0,   240,
-     242,     0,   237,     0,   220,     0,     0,     0,     0,   214,
-       0,    68,   245,   234,   246,     0,     0,     0,     0,     0,
-       0,     0,    57,     0,   227,     0,   228,    82,    84,     0,
-     221,     0,   119,   222,   143,   149,   151,   155,     0,   223,
-     204,   206,   209,   224,   226,   231,   233,     0,   225,     0,
-     172,     0,     0,     0,   170,   171,   161,   165,   159,   164,
-     160,   162,   163,   166,   167,   168,   169,   175,   176,   177,
-     178,   179,   180,   181,   182,   185,   186,   183,   184,   187,
-     188,   189,   190,   191,   192,   193,   194,   256,   257,     0,
-      36,    37,    41,    39,   279,     0,     0,    51,    45,     0,
-      47,     0,     0,     0,     0,     0,     0,     0,    21,    11,
-      22,    17,    13,    24,    19,     0,    60,    70,     0,     0,
-       0,   239,   216,   215,     0,   217,     0,    56,     0,     0,
-       0,    85,   120,   154,     0,     0,   153,   208,     0,    83,
-     150,   205,   152,   207,    65,   230,    65,   229,     0,   156,
-     210,     0,   232,     0,     0,     0,     0,    79,   107,   144,
-     199,    86,     0,     0,   157,     0,   236,   247,   235,   249,
-     174,   173,   262,     0,     0,   280,    54,     0,    46,     0,
-      49,    76,    44,   241,    78,   243,    77,    23,    25,    58,
-      75,   260,   238,     0,     0,     2,     0,     0,   131,   133,
-     135,     0,    69,     0,     0,     0,     0,     0,     0,     0,
-       0,    79,     0,     0,   137,     2,     0,    81,   108,   146,
-     201,   101,   109,   145,   200,     0,   147,   202,     0,     0,
-       0,     0,    88,    93,    89,    91,     0,    94,    96,    98,
-       0,     0,     0,   258,   259,   263,     0,    52,    50,    48,
-     218,   211,     0,   132,     0,     0,     0,     0,   121,   134,
-       0,     0,     0,     0,     0,    81,     0,     0,   140,   138,
-     139,     0,     0,     0,    80,     0,     0,     0,    87,   110,
-      90,     0,     0,   100,     0,     0,    95,    97,     0,     0,
-       0,     0,   158,   264,    53,   212,     0,     0,   123,   122,
-       0,     0,     0,   124,   136,   213,     0,    80,   141,   142,
-     102,   148,   203,     0,     0,   104,   103,   105,     0,    92,
-     111,     0,     0,     0,    99,   112,     0,     0,     0,   126,
-     125,     0,   128,   127,   195,     0,     0,   106,   113,     0,
-     115,   114,     0,   116,     0,     0,   197,   196,     0,   117,
-     118,   130,   129,   198
-};
+#define YYTABLE_NINF (-103)
 
-/* YYDEFGOTO[NTERM-NUM].  */
-static const yytype_int16 yydefgoto[] =
-{
-      -1,    63,    38,    39,    16,   103,   230,   231,    17,    18,
-      64,    65,    66,    67,   155,   142,    19,   157,   158,   159,
-     160,   364,   365,   366,   367,   368,   369,   370,   415,   288,
-     161,   162,   163,   328,   329,   330,   331,   164,   165,   166,
-     167,   168,   169,   218,   290,   170,   171,   172,   173,   139,
-      80,    20,   175,   176,   177,   133,    21,    22,    23,    24,
-      25,    26,    27,    28,   219,    29,    30,    31,    32,    33,
-      34,    35
-};
+#define yytable_value_is_error(Yyn) \
+  0
 
-/* YYPACT[STATE-NUM] -- Index in YYTABLE of the portion describing
-   STATE-NUM.  */
-#define YYPACT_NINF -272
+  /* YYPACT[STATE-NUM] -- Index in YYTABLE of the portion describing
+     STATE-NUM.  */
 static const yytype_int16 yypact[] =
 {
      363,  -272,    28,   -25,   -13,    21,    23,  1041,   -21,   348,
@@ -874,7 +789,63 @@ static const yytype_int16 yypact[] =
     -272,  -272,  -272,  -272
 };
 
-/* YYPGOTO[NTERM-NUM].  */
+  /* YYDEFACT[STATE-NUM] -- Default reduction number in state STATE-NUM.
+     Performed when YYTABLE does not specify something else to do.  Zero
+     means the default is an error.  */
+static const yytype_int16 yydefact[] =
+{
+     281,   276,     0,     0,     0,     0,     0,     0,     0,     0,
+       0,     0,     0,     0,     0,     0,     0,     0,   267,   269,
+     266,     0,   244,     0,     0,   250,   252,   254,   265,     0,
+     268,   273,   275,   282,   270,     0,    42,    35,    38,     0,
+       0,     0,     0,     0,   240,     0,   242,     3,     4,     7,
+       8,    14,    26,    31,    32,    28,    30,    34,     2,     0,
+       0,     0,    57,    63,    59,    61,    64,    65,     0,     0,
+       0,     0,   251,   272,   271,     0,   253,     0,     0,     0,
+     219,   274,    55,     0,   255,     0,     0,   248,     0,   261,
+       0,   278,   277,     1,     0,     0,    40,     0,     0,    72,
+       0,     0,    43,     0,    74,     0,     0,    73,     0,     9,
+      20,    15,    33,     5,    10,    16,    27,     6,    12,    18,
+      29,    67,    66,    62,     0,     0,     0,    71,     0,   240,
+     242,     0,   237,     0,   220,     0,     0,     0,     0,   214,
+       0,    68,   245,   234,   246,     0,     0,     0,     0,     0,
+       0,     0,    57,     0,   227,     0,   228,    82,    84,     0,
+     221,     0,   119,   222,   143,   149,   151,   155,     0,   223,
+     204,   206,   209,   224,   226,   231,   233,     0,   225,     0,
+     172,     0,     0,     0,   170,   171,   161,   165,   159,   164,
+     160,   162,   163,   166,   167,   168,   169,   175,   176,   177,
+     178,   179,   180,   181,   182,   185,   186,   183,   184,   187,
+     188,   189,   190,   191,   192,   193,   194,   256,   257,     0,
+      36,    37,    41,    39,   279,     0,     0,    51,    45,     0,
+      47,     0,     0,     0,     0,     0,     0,     0,    21,    11,
+      22,    17,    13,    24,    19,     0,    60,    70,     0,     0,
+       0,   239,   216,   215,     0,   217,     0,    56,     0,     0,
+       0,    85,   120,   154,     0,     0,   153,   208,     0,    83,
+     150,   205,   152,   207,    65,   230,    65,   229,     0,   156,
+     210,     0,   232,     0,     0,     0,     0,    79,   107,   144,
+     199,    86,     0,     0,   157,     0,   236,   247,   235,   249,
+     174,   173,   262,     0,     0,   280,    54,     0,    46,     0,
+      49,    76,    44,   241,    78,   243,    77,    23,    25,    58,
+      75,   260,   238,     0,     0,     2,     0,     0,   131,   133,
+     135,     0,    69,     0,     0,     0,     0,     0,     0,     0,
+       0,    79,     0,     0,   137,     2,     0,    81,   108,   146,
+     201,   101,   109,   145,   200,     0,   147,   202,     0,     0,
+       0,     0,    88,    93,    89,    91,     0,    94,    96,    98,
+       0,     0,     0,   258,   259,   263,     0,    52,    50,    48,
+     218,   211,     0,   132,     0,     0,     0,     0,   121,   134,
+       0,     0,     0,     0,     0,    81,     0,     0,   140,   138,
+     139,     0,     0,     0,    80,     0,     0,     0,    87,   110,
+      90,     0,     0,   100,     0,     0,    95,    97,     0,     0,
+       0,     0,   158,   264,    53,   212,     0,     0,   123,   122,
+       0,     0,     0,   124,   136,   213,     0,    80,   141,   142,
+     102,   148,   203,     0,     0,   104,   103,   105,     0,    92,
+     111,     0,     0,     0,    99,   112,     0,     0,     0,   126,
+     125,     0,   128,   127,   195,     0,     0,   106,   113,     0,
+     115,   114,     0,   116,     0,     0,   197,   196,     0,   117,
+     118,   130,   129,   198
+};
+
+  /* YYPGOTO[NTERM-NUM].  */
 static const yytype_int16 yypgoto[] =
 {
     -272,  -272,   590,  -272,   -84,   642,  -264,   460,  -272,   -69,
@@ -887,11 +858,22 @@ static const yytype_int16 yypgoto[] =
     -272,  -272
 };
 
-/* YYTABLE[YYPACT[STATE-NUM]].  What to do in state STATE-NUM.  If
-   positive, shift that token.  If negative, reduce the rule which
-   number is the opposite.  If zero, do what YYDEFACT says.
-   If YYTABLE_NINF, syntax error.  */
-#define YYTABLE_NINF -103
+  /* YYDEFGOTO[NTERM-NUM].  */
+static const yytype_int16 yydefgoto[] =
+{
+      -1,    63,    38,    39,    16,   103,   230,   231,    17,    18,
+      64,    65,    66,    67,   155,   142,    19,   157,   158,   159,
+     160,   364,   365,   366,   367,   368,   369,   370,   415,   288,
+     161,   162,   163,   328,   329,   330,   331,   164,   165,   166,
+     167,   168,   169,   218,   290,   170,   171,   172,   173,   139,
+      80,    20,   175,   176,   177,   133,    21,    22,    23,    24,
+      25,    26,    27,    28,   219,    29,    30,    31,    32,    33,
+      34,    35
+};
+
+  /* YYTABLE[YYPACT[STATE-NUM]] -- What to do in state STATE-NUM.  If
+     positive, shift that token.  If negative, reduce the rule whose
+     number is the opposite.  If YYTABLE_NINF, syntax error.  */
 static const yytype_int16 yytable[] =
 {
       68,   289,   153,   270,    92,   252,   253,   255,    79,    72,
@@ -1132,8 +1114,8 @@ static const yytype_int16 yycheck[] =
       77
 };
 
-/* YYSTOS[STATE-NUM] -- The (internal number of the) accessing
-   symbol of state STATE-NUM.  */
+  /* YYSTOS[STATE-NUM] -- The (internal number of the) accessing
+     symbol of state STATE-NUM.  */
 static const yytype_uint8 yystos[] =
 {
        0,     6,     9,    57,    58,    59,    60,    66,    67,    68,
@@ -1187,95 +1169,108 @@ static const yytype_uint8 yystos[] =
        6,    77,    77,     6
 };
 
-#define yyerrok		(yyerrstatus = 0)
-#define yyclearin	(yychar = YYEMPTY)
-#define YYEMPTY		(-2)
-#define YYEOF		0
+  /* YYR1[YYN] -- Symbol number of symbol that rule YYN derives.  */
+static const yytype_uint8 yyr1[] =
+{
+       0,    83,    84,    84,    84,    84,    84,    84,    84,    84,
+      84,    84,    84,    84,    84,    84,    84,    84,    84,    84,
+      84,    84,    84,    84,    84,    84,    84,    84,    84,    84,
+      84,    84,    84,    84,    84,    85,    85,    85,    86,    86,
+      87,    87,    87,    88,    88,    89,    89,    90,    90,    91,
+      91,    91,    91,    91,    91,    92,    92,    93,    93,    94,
+      94,    95,    95,    96,    96,    97,    97,    97,    98,    98,
+      99,    99,    99,    99,    99,    99,    99,    99,    99,   100,
+     100,   100,   101,   101,   102,   102,   103,   103,   104,   105,
+     105,   106,   106,   107,   108,   108,   109,   109,   110,   110,
+     111,   112,   112,   112,   112,   112,   112,   113,   113,   113,
+     114,   114,   114,   114,   114,   114,   114,   114,   114,   115,
+     115,   116,   116,   116,   116,   116,   116,   116,   116,   116,
+     116,   117,   117,   118,   118,   119,   119,   120,   120,   120,
+     120,   120,   120,   121,   121,   121,   121,   121,   121,   122,
+     122,   123,   123,   123,   123,   124,   124,   125,   125,   126,
+     126,   126,   126,   126,   126,   126,   126,   126,   126,   126,
+     126,   126,   126,   126,   126,   126,   126,   126,   126,   126,
+     126,   126,   126,   126,   126,   126,   126,   126,   126,   126,
+     126,   126,   126,   126,   126,   127,   127,   127,   127,   128,
+     128,   128,   128,   128,   129,   129,   130,   130,   130,   131,
+     131,   132,   132,   132,   133,   133,   133,   133,   133,   134,
+     134,   135,   135,   135,   135,   135,   135,   135,   135,   135,
+     135,   136,   136,   137,   137,   137,   137,   138,   138,   139,
+     140,   140,   140,   140,   141,   141,   142,   142,   143,   143,
+     144,   144,   145,   145,   146,   146,   147,   147,   147,   147,
+     148,   149,   149,   149,   149,   150,   150,   150,   150,   150,
+     150,   150,   150,   151,   151,   152,   152,   152,   152,   153,
+     153,   154,   154
+};
 
-#define YYACCEPT	goto yyacceptlab
-#define YYABORT		goto yyabortlab
-#define YYERROR		goto yyerrorlab
+  /* YYR2[YYN] -- Number of symbols on the right hand side of rule YYN.  */
+static const yytype_int8 yyr2[] =
+{
+       0,     2,     1,     1,     1,     2,     2,     1,     1,     2,
+       2,     3,     2,     3,     1,     2,     2,     3,     2,     3,
+       2,     3,     3,     4,     3,     4,     1,     2,     1,     2,
+       1,     1,     1,     2,     1,     1,     3,     3,     1,     3,
+       3,     4,     2,     1,     3,     1,     2,     1,     3,     5,
+       6,     4,     6,     7,     5,     2,     4,     1,     4,     1,
+       3,     1,     2,     1,     1,     1,     2,     2,     1,     3,
+       4,     3,     3,     3,     3,     5,     5,     5,     5,     2,
+       4,     3,     1,     2,     1,     2,     2,     4,     1,     1,
+       2,     1,     3,     1,     1,     2,     1,     2,     1,     3,
+       1,     1,     3,     4,     4,     4,     5,     2,     3,     3,
+       4,     5,     5,     6,     6,     6,     6,     7,     7,     1,
+       2,     2,     3,     3,     3,     4,     4,     4,     4,     6,
+       6,     1,     2,     1,     2,     1,     3,     3,     4,     4,
+       4,     5,     5,     1,     2,     3,     3,     3,     5,     1,
+       2,     1,     2,     2,     2,     1,     2,     2,     4,     1,
+       1,     1,     1,     1,     1,     1,     1,     1,     1,     1,
+       1,     1,     1,     2,     2,     1,     1,     1,     1,     1,
+       1,     1,     1,     1,     1,     1,     1,     1,     1,     1,
+       1,     1,     1,     1,     1,     5,     6,     6,     7,     2,
+       3,     3,     3,     5,     1,     2,     1,     2,     2,     1,
+       2,     4,     5,     5,     2,     3,     3,     3,     5,     2,
+       3,     1,     1,     1,     1,     1,     1,     1,     1,     2,
+       2,     1,     2,     1,     1,     2,     2,     1,     3,     4,
+       2,     5,     2,     5,     1,     3,     3,     4,     2,     4,
+       1,     2,     1,     2,     1,     2,     1,     1,     3,     3,
+       5,     2,     4,     5,     6,     1,     1,     1,     1,     1,
+       1,     2,     2,     1,     2,     1,     1,     2,     2,     4,
+       5,     0,     1
+};
 
 
-/* Like YYERROR except do call yyerror.  This remains here temporarily
-   to ease the transition to the new meaning of YYERROR, for GCC.
-   Once GCC version 2 has supplanted version 1, this can go.  */
+enum { YYENOMEM = -2 };
 
-#define YYFAIL		goto yyerrlab
+#define yyerrok         (yyerrstatus = 0)
+#define yyclearin       (yychar = YYEMPTY)
+
+#define YYACCEPT        goto yyacceptlab
+#define YYABORT         goto yyabortlab
+#define YYERROR         goto yyerrorlab
+
 
 #define YYRECOVERING()  (!!yyerrstatus)
 
-#define YYBACKUP(Token, Value)					\
-do								\
-  if (yychar == YYEMPTY && yylen == 1)				\
-    {								\
-      yychar = (Token);						\
-      yylval = (Value);						\
-      yytoken = YYTRANSLATE (yychar);				\
-      YYPOPSTACK (1);						\
-      goto yybackup;						\
-    }								\
-  else								\
-    {								\
-      yyerror (YY_("syntax error: cannot back up")); \
-      YYERROR;							\
-    }								\
-while (YYID (0))
+#define YYBACKUP(Token, Value)                                    \
+  do                                                              \
+    if (yychar == YYEMPTY)                                        \
+      {                                                           \
+        yychar = (Token);                                         \
+        yylval = (Value);                                         \
+        YYPOPSTACK (yylen);                                       \
+        yystate = *yyssp;                                         \
+        goto yybackup;                                            \
+      }                                                           \
+    else                                                          \
+      {                                                           \
+        yyerror (YY_("syntax error: cannot back up")); \
+        YYERROR;                                                  \
+      }                                                           \
+  while (0)
 
+/* Backward compatibility with an undocumented macro.
+   Use YYerror or YYUNDEF. */
+#define YYERRCODE YYUNDEF
 
-#define YYTERROR	1
-#define YYERRCODE	256
-
-
-/* YYLLOC_DEFAULT -- Set CURRENT to span from RHS[1] to RHS[N].
-   If N is 0, then set CURRENT to the empty location which ends
-   the previous symbol: RHS[0] (always defined).  */
-
-#define YYRHSLOC(Rhs, K) ((Rhs)[K])
-#ifndef YYLLOC_DEFAULT
-# define YYLLOC_DEFAULT(Current, Rhs, N)				\
-    do									\
-      if (YYID (N))                                                    \
-	{								\
-	  (Current).first_line   = YYRHSLOC (Rhs, 1).first_line;	\
-	  (Current).first_column = YYRHSLOC (Rhs, 1).first_column;	\
-	  (Current).last_line    = YYRHSLOC (Rhs, N).last_line;		\
-	  (Current).last_column  = YYRHSLOC (Rhs, N).last_column;	\
-	}								\
-      else								\
-	{								\
-	  (Current).first_line   = (Current).last_line   =		\
-	    YYRHSLOC (Rhs, 0).last_line;				\
-	  (Current).first_column = (Current).last_column =		\
-	    YYRHSLOC (Rhs, 0).last_column;				\
-	}								\
-    while (YYID (0))
-#endif
-
-
-/* YY_LOCATION_PRINT -- Print the location on the stream.
-   This macro was not mandated originally: define only if we know
-   we won't break user code: when these are the locations we know.  */
-
-#ifndef YY_LOCATION_PRINT
-# if YYLTYPE_IS_TRIVIAL
-#  define YY_LOCATION_PRINT(File, Loc)			\
-     fprintf (File, "%d.%d-%d.%d",			\
-	      (Loc).first_line, (Loc).first_column,	\
-	      (Loc).last_line,  (Loc).last_column)
-# else
-#  define YY_LOCATION_PRINT(File, Loc) ((void) 0)
-# endif
-#endif
-
-
-/* YYLEX -- calling `yylex' with the right arguments.  */
-
-#ifdef YYLEX_PARAM
-# define YYLEX yylex (YYLEX_PARAM)
-#else
-# define YYLEX yylex ()
-#endif
 
 /* Enable debugging if requested.  */
 #if YYDEBUG
@@ -1285,80 +1280,65 @@ while (YYID (0))
 #  define YYFPRINTF fprintf
 # endif
 
-# define YYDPRINTF(Args)			\
-do {						\
-  if (yydebug)					\
-    YYFPRINTF Args;				\
-} while (YYID (0))
+# define YYDPRINTF(Args)                        \
+do {                                            \
+  if (yydebug)                                  \
+    YYFPRINTF Args;                             \
+} while (0)
 
-# define YY_SYMBOL_PRINT(Title, Type, Value, Location)			  \
-do {									  \
-  if (yydebug)								  \
-    {									  \
-      YYFPRINTF (stderr, "%s ", Title);					  \
-      yy_symbol_print (stderr,						  \
-		  Type, Value); \
-      YYFPRINTF (stderr, "\n");						  \
-    }									  \
-} while (YYID (0))
+/* This macro is provided for backward compatibility. */
+# ifndef YY_LOCATION_PRINT
+#  define YY_LOCATION_PRINT(File, Loc) ((void) 0)
+# endif
 
 
-/*--------------------------------.
-| Print this symbol on YYOUTPUT.  |
-`--------------------------------*/
+# define YY_SYMBOL_PRINT(Title, Kind, Value, Location)                    \
+do {                                                                      \
+  if (yydebug)                                                            \
+    {                                                                     \
+      YYFPRINTF (stderr, "%s ", Title);                                   \
+      yy_symbol_print (stderr,                                            \
+                  Kind, Value); \
+      YYFPRINTF (stderr, "\n");                                           \
+    }                                                                     \
+} while (0)
 
-/*ARGSUSED*/
-#if (defined __STDC__ || defined __C99__FUNC__ \
-     || defined __cplusplus || defined _MSC_VER)
+
+/*-----------------------------------.
+| Print this symbol's value on YYO.  |
+`-----------------------------------*/
+
 static void
-yy_symbol_value_print (FILE *yyoutput, int yytype, YYSTYPE const * const yyvaluep)
-#else
-static void
-yy_symbol_value_print (yyoutput, yytype, yyvaluep)
-    FILE *yyoutput;
-    int yytype;
-    YYSTYPE const * const yyvaluep;
-#endif
+yy_symbol_value_print (FILE *yyo,
+                       yysymbol_kind_t yykind, YYSTYPE const * const yyvaluep)
 {
+  FILE *yyoutput = yyo;
+  YYUSE (yyoutput);
   if (!yyvaluep)
     return;
 # ifdef YYPRINT
-  if (yytype < YYNTOKENS)
-    YYPRINT (yyoutput, yytoknum[yytype], *yyvaluep);
-# else
-  YYUSE (yyoutput);
+  if (yykind < YYNTOKENS)
+    YYPRINT (yyo, yytoknum[yykind], *yyvaluep);
 # endif
-  switch (yytype)
-    {
-      default:
-	break;
-    }
+  YY_IGNORE_MAYBE_UNINITIALIZED_BEGIN
+  YYUSE (yykind);
+  YY_IGNORE_MAYBE_UNINITIALIZED_END
 }
 
 
-/*--------------------------------.
-| Print this symbol on YYOUTPUT.  |
-`--------------------------------*/
+/*---------------------------.
+| Print this symbol on YYO.  |
+`---------------------------*/
 
-#if (defined __STDC__ || defined __C99__FUNC__ \
-     || defined __cplusplus || defined _MSC_VER)
 static void
-yy_symbol_print (FILE *yyoutput, int yytype, YYSTYPE const * const yyvaluep)
-#else
-static void
-yy_symbol_print (yyoutput, yytype, yyvaluep)
-    FILE *yyoutput;
-    int yytype;
-    YYSTYPE const * const yyvaluep;
-#endif
+yy_symbol_print (FILE *yyo,
+                 yysymbol_kind_t yykind, YYSTYPE const * const yyvaluep)
 {
-  if (yytype < YYNTOKENS)
-    YYFPRINTF (yyoutput, "token %s (", yytname[yytype]);
-  else
-    YYFPRINTF (yyoutput, "nterm %s (", yytname[yytype]);
+  YYFPRINTF (yyo, "%s %s (",
+             yykind < YYNTOKENS ? "token" : "nterm", yysymbol_name (yykind));
 
-  yy_symbol_value_print (yyoutput, yytype, yyvaluep);
-  YYFPRINTF (yyoutput, ")");
+  yy_symbol_value_print (yyo, yykind, yyvaluep);
+  YYFPRINTF (yyo, ")");
 }
 
 /*------------------------------------------------------------------.
@@ -1366,16 +1346,8 @@ yy_symbol_print (yyoutput, yytype, yyvaluep)
 | TOP (included).                                                   |
 `------------------------------------------------------------------*/
 
-#if (defined __STDC__ || defined __C99__FUNC__ \
-     || defined __cplusplus || defined _MSC_VER)
 static void
-yy_stack_print (yytype_int16 *yybottom, yytype_int16 *yytop)
-#else
-static void
-yy_stack_print (yybottom, yytop)
-    yytype_int16 *yybottom;
-    yytype_int16 *yytop;
-#endif
+yy_stack_print (yy_state_t *yybottom, yy_state_t *yytop)
 {
   YYFPRINTF (stderr, "Stack now");
   for (; yybottom <= yytop; yybottom++)
@@ -1386,63 +1358,56 @@ yy_stack_print (yybottom, yytop)
   YYFPRINTF (stderr, "\n");
 }
 
-# define YY_STACK_PRINT(Bottom, Top)				\
-do {								\
-  if (yydebug)							\
-    yy_stack_print ((Bottom), (Top));				\
-} while (YYID (0))
+# define YY_STACK_PRINT(Bottom, Top)                            \
+do {                                                            \
+  if (yydebug)                                                  \
+    yy_stack_print ((Bottom), (Top));                           \
+} while (0)
 
 
 /*------------------------------------------------.
 | Report that the YYRULE is going to be reduced.  |
 `------------------------------------------------*/
 
-#if (defined __STDC__ || defined __C99__FUNC__ \
-     || defined __cplusplus || defined _MSC_VER)
 static void
-yy_reduce_print (YYSTYPE *yyvsp, int yyrule)
-#else
-static void
-yy_reduce_print (yyvsp, yyrule)
-    YYSTYPE *yyvsp;
-    int yyrule;
-#endif
+yy_reduce_print (yy_state_t *yyssp, YYSTYPE *yyvsp,
+                 int yyrule)
 {
+  int yylno = yyrline[yyrule];
   int yynrhs = yyr2[yyrule];
   int yyi;
-  unsigned long int yylno = yyrline[yyrule];
-  YYFPRINTF (stderr, "Reducing stack by rule %d (line %lu):\n",
-	     yyrule - 1, yylno);
+  YYFPRINTF (stderr, "Reducing stack by rule %d (line %d):\n",
+             yyrule - 1, yylno);
   /* The symbols being reduced.  */
   for (yyi = 0; yyi < yynrhs; yyi++)
     {
       YYFPRINTF (stderr, "   $%d = ", yyi + 1);
-      yy_symbol_print (stderr, yyrhs[yyprhs[yyrule] + yyi],
-		       &(yyvsp[(yyi + 1) - (yynrhs)])
-		       		       );
+      yy_symbol_print (stderr,
+                       YY_ACCESSING_SYMBOL (+yyssp[yyi + 1 - yynrhs]),
+                       &yyvsp[(yyi + 1) - (yynrhs)]);
       YYFPRINTF (stderr, "\n");
     }
 }
 
-# define YY_REDUCE_PRINT(Rule)		\
-do {					\
-  if (yydebug)				\
-    yy_reduce_print (yyvsp, Rule); \
-} while (YYID (0))
+# define YY_REDUCE_PRINT(Rule)          \
+do {                                    \
+  if (yydebug)                          \
+    yy_reduce_print (yyssp, yyvsp, Rule); \
+} while (0)
 
 /* Nonzero means print parse trace.  It is left uninitialized so that
    multiple parsers can coexist.  */
 int yydebug;
 #else /* !YYDEBUG */
-# define YYDPRINTF(Args)
-# define YY_SYMBOL_PRINT(Title, Type, Value, Location)
+# define YYDPRINTF(Args) ((void) 0)
+# define YY_SYMBOL_PRINT(Title, Kind, Value, Location)
 # define YY_STACK_PRINT(Bottom, Top)
 # define YY_REDUCE_PRINT(Rule)
 #endif /* !YYDEBUG */
 
 
 /* YYINITDEPTH -- initial size of the parser's stacks.  */
-#ifndef	YYINITDEPTH
+#ifndef YYINITDEPTH
 # define YYINITDEPTH 200
 #endif
 
@@ -1457,342 +1422,78 @@ int yydebug;
 # define YYMAXDEPTH 10000
 #endif
 
-
 
-#if YYERROR_VERBOSE
 
-# ifndef yystrlen
-#  if defined __GLIBC__ && defined _STRING_H
-#   define yystrlen strlen
-#  else
-/* Return the length of YYSTR.  */
-#if (defined __STDC__ || defined __C99__FUNC__ \
-     || defined __cplusplus || defined _MSC_VER)
-static YYSIZE_T
-yystrlen (const char *yystr)
-#else
-static YYSIZE_T
-yystrlen (yystr)
-    const char *yystr;
-#endif
-{
-  YYSIZE_T yylen;
-  for (yylen = 0; yystr[yylen]; yylen++)
-    continue;
-  return yylen;
-}
-#  endif
-# endif
 
-# ifndef yystpcpy
-#  if defined __GLIBC__ && defined _STRING_H && defined _GNU_SOURCE
-#   define yystpcpy stpcpy
-#  else
-/* Copy YYSRC to YYDEST, returning the address of the terminating '\0' in
-   YYDEST.  */
-#if (defined __STDC__ || defined __C99__FUNC__ \
-     || defined __cplusplus || defined _MSC_VER)
-static char *
-yystpcpy (char *yydest, const char *yysrc)
-#else
-static char *
-yystpcpy (yydest, yysrc)
-    char *yydest;
-    const char *yysrc;
-#endif
-{
-  char *yyd = yydest;
-  const char *yys = yysrc;
 
-  while ((*yyd++ = *yys++) != '\0')
-    continue;
-
-  return yyd - 1;
-}
-#  endif
-# endif
-
-# ifndef yytnamerr
-/* Copy to YYRES the contents of YYSTR after stripping away unnecessary
-   quotes and backslashes, so that it's suitable for yyerror.  The
-   heuristic is that double-quoting is unnecessary unless the string
-   contains an apostrophe, a comma, or backslash (other than
-   backslash-backslash).  YYSTR is taken from yytname.  If YYRES is
-   null, do not copy; instead, return the length of what the result
-   would have been.  */
-static YYSIZE_T
-yytnamerr (char *yyres, const char *yystr)
-{
-  if (*yystr == '"')
-    {
-      YYSIZE_T yyn = 0;
-      char const *yyp = yystr;
-
-      for (;;)
-	switch (*++yyp)
-	  {
-	  case '\'':
-	  case ',':
-	    goto do_not_strip_quotes;
-
-	  case '\\':
-	    if (*++yyp != '\\')
-	      goto do_not_strip_quotes;
-	    /* Fall through.  */
-	  default:
-	    if (yyres)
-	      yyres[yyn] = *yyp;
-	    yyn++;
-	    break;
-
-	  case '"':
-	    if (yyres)
-	      yyres[yyn] = '\0';
-	    return yyn;
-	  }
-    do_not_strip_quotes: ;
-    }
-
-  if (! yyres)
-    return yystrlen (yystr);
-
-  return yystpcpy (yyres, yystr) - yyres;
-}
-# endif
-
-/* Copy into YYRESULT an error message about the unexpected token
-   YYCHAR while in state YYSTATE.  Return the number of bytes copied,
-   including the terminating null byte.  If YYRESULT is null, do not
-   copy anything; just return the number of bytes that would be
-   copied.  As a special case, return 0 if an ordinary "syntax error"
-   message will do.  Return YYSIZE_MAXIMUM if overflow occurs during
-   size calculation.  */
-static YYSIZE_T
-yysyntax_error (char *yyresult, int yystate, int yychar)
-{
-  int yyn = yypact[yystate];
-
-  if (! (YYPACT_NINF < yyn && yyn <= YYLAST))
-    return 0;
-  else
-    {
-      int yytype = YYTRANSLATE (yychar);
-      YYSIZE_T yysize0 = yytnamerr (0, yytname[yytype]);
-      YYSIZE_T yysize = yysize0;
-      YYSIZE_T yysize1;
-      int yysize_overflow = 0;
-      enum { YYERROR_VERBOSE_ARGS_MAXIMUM = 5 };
-      char const *yyarg[YYERROR_VERBOSE_ARGS_MAXIMUM];
-      int yyx;
-
-# if 0
-      /* This is so xgettext sees the translatable formats that are
-	 constructed on the fly.  */
-      YY_("syntax error, unexpected %s");
-      YY_("syntax error, unexpected %s, expecting %s");
-      YY_("syntax error, unexpected %s, expecting %s or %s");
-      YY_("syntax error, unexpected %s, expecting %s or %s or %s");
-      YY_("syntax error, unexpected %s, expecting %s or %s or %s or %s");
-# endif
-      char *yyfmt;
-      char const *yyf;
-      static char const yyunexpected[] = "syntax error, unexpected %s";
-      static char const yyexpecting[] = ", expecting %s";
-      static char const yyor[] = " or %s";
-      char yyformat[sizeof yyunexpected
-		    + sizeof yyexpecting - 1
-		    + ((YYERROR_VERBOSE_ARGS_MAXIMUM - 2)
-		       * (sizeof yyor - 1))];
-      char const *yyprefix = yyexpecting;
-
-      /* Start YYX at -YYN if negative to avoid negative indexes in
-	 YYCHECK.  */
-      int yyxbegin = yyn < 0 ? -yyn : 0;
-
-      /* Stay within bounds of both yycheck and yytname.  */
-      int yychecklim = YYLAST - yyn + 1;
-      int yyxend = yychecklim < YYNTOKENS ? yychecklim : YYNTOKENS;
-      int yycount = 1;
-
-      yyarg[0] = yytname[yytype];
-      yyfmt = yystpcpy (yyformat, yyunexpected);
-
-      for (yyx = yyxbegin; yyx < yyxend; ++yyx)
-	if (yycheck[yyx + yyn] == yyx && yyx != YYTERROR)
-	  {
-	    if (yycount == YYERROR_VERBOSE_ARGS_MAXIMUM)
-	      {
-		yycount = 1;
-		yysize = yysize0;
-		yyformat[sizeof yyunexpected - 1] = '\0';
-		break;
-	      }
-	    yyarg[yycount++] = yytname[yyx];
-	    yysize1 = yysize + yytnamerr (0, yytname[yyx]);
-	    yysize_overflow |= (yysize1 < yysize);
-	    yysize = yysize1;
-	    yyfmt = yystpcpy (yyfmt, yyprefix);
-	    yyprefix = yyor;
-	  }
-
-      yyf = YY_(yyformat);
-      yysize1 = yysize + yystrlen (yyf);
-      yysize_overflow |= (yysize1 < yysize);
-      yysize = yysize1;
-
-      if (yysize_overflow)
-	return YYSIZE_MAXIMUM;
-
-      if (yyresult)
-	{
-	  /* Avoid sprintf, as that infringes on the user's name space.
-	     Don't have undefined behavior even if the translation
-	     produced a string with the wrong number of "%s"s.  */
-	  char *yyp = yyresult;
-	  int yyi = 0;
-	  while ((*yyp = *yyf) != '\0')
-	    {
-	      if (*yyp == '%' && yyf[1] == 's' && yyi < yycount)
-		{
-		  yyp += yytnamerr (yyp, yyarg[yyi++]);
-		  yyf += 2;
-		}
-	      else
-		{
-		  yyp++;
-		  yyf++;
-		}
-	    }
-	}
-      return yysize;
-    }
-}
-#endif /* YYERROR_VERBOSE */
-
 
 /*-----------------------------------------------.
 | Release the memory associated to this symbol.  |
 `-----------------------------------------------*/
 
-/*ARGSUSED*/
-#if (defined __STDC__ || defined __C99__FUNC__ \
-     || defined __cplusplus || defined _MSC_VER)
 static void
-yydestruct (const char *yymsg, int yytype, YYSTYPE *yyvaluep)
-#else
-static void
-yydestruct (yymsg, yytype, yyvaluep)
-    const char *yymsg;
-    int yytype;
-    YYSTYPE *yyvaluep;
-#endif
+yydestruct (const char *yymsg,
+            yysymbol_kind_t yykind, YYSTYPE *yyvaluep)
 {
   YYUSE (yyvaluep);
-
   if (!yymsg)
     yymsg = "Deleting";
-  YY_SYMBOL_PRINT (yymsg, yytype, yyvaluep, yylocationp);
+  YY_SYMBOL_PRINT (yymsg, yykind, yyvaluep, yylocationp);
 
-  switch (yytype)
-    {
-
-      default:
-	break;
-    }
+  YY_IGNORE_MAYBE_UNINITIALIZED_BEGIN
+  YYUSE (yykind);
+  YY_IGNORE_MAYBE_UNINITIALIZED_END
 }
 
-/* Prevent warnings from -Wmissing-prototypes.  */
-#ifdef YYPARSE_PARAM
-#if defined __STDC__ || defined __cplusplus
-int yyparse (void *YYPARSE_PARAM);
-#else
-int yyparse ();
-#endif
-#else /* ! YYPARSE_PARAM */
-#if defined __STDC__ || defined __cplusplus
-int yyparse (void);
-#else
-int yyparse ();
-#endif
-#endif /* ! YYPARSE_PARAM */
 
-
-/* The lookahead symbol.  */
+/* Lookahead token kind.  */
 int yychar;
 
 /* The semantic value of the lookahead symbol.  */
 YYSTYPE yylval;
-
 /* Number of syntax errors so far.  */
 int yynerrs;
 
 
 
-/*-------------------------.
-| yyparse or yypush_parse.  |
-`-------------------------*/
 
-#ifdef YYPARSE_PARAM
-#if (defined __STDC__ || defined __C99__FUNC__ \
-     || defined __cplusplus || defined _MSC_VER)
-int
-yyparse (void *YYPARSE_PARAM)
-#else
-int
-yyparse (YYPARSE_PARAM)
-    void *YYPARSE_PARAM;
-#endif
-#else /* ! YYPARSE_PARAM */
-#if (defined __STDC__ || defined __C99__FUNC__ \
-     || defined __cplusplus || defined _MSC_VER)
+/*----------.
+| yyparse.  |
+`----------*/
+
 int
 yyparse (void)
-#else
-int
-yyparse ()
-
-#endif
-#endif
 {
-
-
-    int yystate;
+    yy_state_fast_t yystate = 0;
     /* Number of tokens to shift before error messages enabled.  */
-    int yyerrstatus;
+    int yyerrstatus = 0;
 
-    /* The stacks and their tools:
-       `yyss': related to states.
-       `yyvs': related to semantic values.
-
-       Refer to the stacks thru separate pointers, to allow yyoverflow
+    /* Refer to the stacks through separate pointers, to allow yyoverflow
        to reallocate them elsewhere.  */
 
-    /* The state stack.  */
-    yytype_int16 yyssa[YYINITDEPTH];
-    yytype_int16 *yyss;
-    yytype_int16 *yyssp;
+    /* Their size.  */
+    YYPTRDIFF_T yystacksize = YYINITDEPTH;
 
-    /* The semantic value stack.  */
+    /* The state stack: array, bottom, top.  */
+    yy_state_t yyssa[YYINITDEPTH];
+    yy_state_t *yyss = yyssa;
+    yy_state_t *yyssp = yyss;
+
+    /* The semantic value stack: array, bottom, top.  */
     YYSTYPE yyvsa[YYINITDEPTH];
-    YYSTYPE *yyvs;
-    YYSTYPE *yyvsp;
-
-    YYSIZE_T yystacksize;
+    YYSTYPE *yyvs = yyvsa;
+    YYSTYPE *yyvsp = yyvs;
 
   int yyn;
+  /* The return value of yyparse.  */
   int yyresult;
-  /* Lookahead token as an internal (translated) token number.  */
-  int yytoken;
+  /* Lookahead symbol kind.  */
+  yysymbol_kind_t yytoken = YYSYMBOL_YYEMPTY;
   /* The variables used to return semantic value and location from the
      action routines.  */
   YYSTYPE yyval;
 
-#if YYERROR_VERBOSE
-  /* Buffer for error messages, and its allocated size.  */
-  char yymsgbuf[128];
-  char *yymsg = yymsgbuf;
-  YYSIZE_T yymsg_alloc = sizeof yymsgbuf;
-#endif
+
 
 #define YYPOPSTACK(N)   (yyvsp -= (N), yyssp -= (N))
 
@@ -1800,132 +1501,137 @@ yyparse ()
      Keep to zero when no symbol should be popped.  */
   int yylen = 0;
 
-  yytoken = 0;
-  yyss = yyssa;
-  yyvs = yyvsa;
-  yystacksize = YYINITDEPTH;
-
   YYDPRINTF ((stderr, "Starting parse\n"));
 
-  yystate = 0;
-  yyerrstatus = 0;
-  yynerrs = 0;
   yychar = YYEMPTY; /* Cause a token to be read.  */
-
-  /* Initialize stack pointers.
-     Waste one element of value and location stack
-     so that they stay on the same level as the state stack.
-     The wasted elements are never initialized.  */
-  yyssp = yyss;
-  yyvsp = yyvs;
-
   goto yysetstate;
 
+
 /*------------------------------------------------------------.
-| yynewstate -- Push a new state, which is found in yystate.  |
+| yynewstate -- push a new state, which is found in yystate.  |
 `------------------------------------------------------------*/
- yynewstate:
+yynewstate:
   /* In all cases, when you get here, the value and location stacks
      have just been pushed.  So pushing a state here evens the stacks.  */
   yyssp++;
 
- yysetstate:
-  *yyssp = yystate;
+
+/*--------------------------------------------------------------------.
+| yysetstate -- set current state (the top of the stack) to yystate.  |
+`--------------------------------------------------------------------*/
+yysetstate:
+  YYDPRINTF ((stderr, "Entering state %d\n", yystate));
+  YY_ASSERT (0 <= yystate && yystate < YYNSTATES);
+  YY_IGNORE_USELESS_CAST_BEGIN
+  *yyssp = YY_CAST (yy_state_t, yystate);
+  YY_IGNORE_USELESS_CAST_END
+  YY_STACK_PRINT (yyss, yyssp);
 
   if (yyss + yystacksize - 1 <= yyssp)
+#if !defined yyoverflow && !defined YYSTACK_RELOCATE
+    goto yyexhaustedlab;
+#else
     {
       /* Get the current used size of the three stacks, in elements.  */
-      YYSIZE_T yysize = yyssp - yyss + 1;
+      YYPTRDIFF_T yysize = yyssp - yyss + 1;
 
-#ifdef yyoverflow
+# if defined yyoverflow
       {
-	/* Give user a chance to reallocate the stack.  Use copies of
-	   these so that the &'s don't force the real ones into
-	   memory.  */
-	YYSTYPE *yyvs1 = yyvs;
-	yytype_int16 *yyss1 = yyss;
+        /* Give user a chance to reallocate the stack.  Use copies of
+           these so that the &'s don't force the real ones into
+           memory.  */
+        yy_state_t *yyss1 = yyss;
+        YYSTYPE *yyvs1 = yyvs;
 
-	/* Each stack pointer address is followed by the size of the
-	   data in use in that stack, in bytes.  This used to be a
-	   conditional around just the two extra args, but that might
-	   be undefined if yyoverflow is a macro.  */
-	yyoverflow (YY_("memory exhausted"),
-		    &yyss1, yysize * sizeof (*yyssp),
-		    &yyvs1, yysize * sizeof (*yyvsp),
-		    &yystacksize);
-
-	yyss = yyss1;
-	yyvs = yyvs1;
+        /* Each stack pointer address is followed by the size of the
+           data in use in that stack, in bytes.  This used to be a
+           conditional around just the two extra args, but that might
+           be undefined if yyoverflow is a macro.  */
+        yyoverflow (YY_("memory exhausted"),
+                    &yyss1, yysize * YYSIZEOF (*yyssp),
+                    &yyvs1, yysize * YYSIZEOF (*yyvsp),
+                    &yystacksize);
+        yyss = yyss1;
+        yyvs = yyvs1;
       }
-#else /* no yyoverflow */
-# ifndef YYSTACK_RELOCATE
-      goto yyexhaustedlab;
-# else
+# else /* defined YYSTACK_RELOCATE */
       /* Extend the stack our own way.  */
       if (YYMAXDEPTH <= yystacksize)
-	goto yyexhaustedlab;
+        goto yyexhaustedlab;
       yystacksize *= 2;
       if (YYMAXDEPTH < yystacksize)
-	yystacksize = YYMAXDEPTH;
+        yystacksize = YYMAXDEPTH;
 
       {
-	yytype_int16 *yyss1 = yyss;
-	union yyalloc *yyptr =
-	  (union yyalloc *) YYSTACK_ALLOC (YYSTACK_BYTES (yystacksize));
-	if (! yyptr)
-	  goto yyexhaustedlab;
-	YYSTACK_RELOCATE (yyss_alloc, yyss);
-	YYSTACK_RELOCATE (yyvs_alloc, yyvs);
+        yy_state_t *yyss1 = yyss;
+        union yyalloc *yyptr =
+          YY_CAST (union yyalloc *,
+                   YYSTACK_ALLOC (YY_CAST (YYSIZE_T, YYSTACK_BYTES (yystacksize))));
+        if (! yyptr)
+          goto yyexhaustedlab;
+        YYSTACK_RELOCATE (yyss_alloc, yyss);
+        YYSTACK_RELOCATE (yyvs_alloc, yyvs);
 #  undef YYSTACK_RELOCATE
-	if (yyss1 != yyssa)
-	  YYSTACK_FREE (yyss1);
+        if (yyss1 != yyssa)
+          YYSTACK_FREE (yyss1);
       }
 # endif
-#endif /* no yyoverflow */
 
       yyssp = yyss + yysize - 1;
       yyvsp = yyvs + yysize - 1;
 
-      YYDPRINTF ((stderr, "Stack size increased to %lu\n",
-		  (unsigned long int) yystacksize));
+      YY_IGNORE_USELESS_CAST_BEGIN
+      YYDPRINTF ((stderr, "Stack size increased to %ld\n",
+                  YY_CAST (long, yystacksize)));
+      YY_IGNORE_USELESS_CAST_END
 
       if (yyss + yystacksize - 1 <= yyssp)
-	YYABORT;
+        YYABORT;
     }
-
-  YYDPRINTF ((stderr, "Entering state %d\n", yystate));
+#endif /* !defined yyoverflow && !defined YYSTACK_RELOCATE */
 
   if (yystate == YYFINAL)
     YYACCEPT;
 
   goto yybackup;
 
+
 /*-----------.
 | yybackup.  |
 `-----------*/
 yybackup:
-
   /* Do appropriate processing given the current state.  Read a
      lookahead token if we need one and don't already have one.  */
 
   /* First try to decide what to do without reference to lookahead token.  */
   yyn = yypact[yystate];
-  if (yyn == YYPACT_NINF)
+  if (yypact_value_is_default (yyn))
     goto yydefault;
 
   /* Not known => get a lookahead token if don't already have one.  */
 
-  /* YYCHAR is either YYEMPTY or YYEOF or a valid lookahead symbol.  */
+  /* YYCHAR is either empty, or end-of-input, or a valid lookahead.  */
   if (yychar == YYEMPTY)
     {
-      YYDPRINTF ((stderr, "Reading a token: "));
-      yychar = YYLEX;
+      YYDPRINTF ((stderr, "Reading a token\n"));
+      yychar = yylex ();
     }
 
   if (yychar <= YYEOF)
     {
-      yychar = yytoken = YYEOF;
+      yychar = YYEOF;
+      yytoken = YYSYMBOL_YYEOF;
       YYDPRINTF ((stderr, "Now at end of input.\n"));
+    }
+  else if (yychar == YYerror)
+    {
+      /* The scanner already issued an error message, process directly
+         to error recovery.  But do not keep the error token as
+         lookahead, it is too special and may lead us to an endless
+         loop in error recovery. */
+      yychar = YYUNDEF;
+      yytoken = YYSYMBOL_YYerror;
+      goto yyerrlab1;
     }
   else
     {
@@ -1941,8 +1647,8 @@ yybackup:
   yyn = yytable[yyn];
   if (yyn <= 0)
     {
-      if (yyn == 0 || yyn == YYTABLE_NINF)
-	goto yyerrlab;
+      if (yytable_value_is_error (yyn))
+        goto yyerrlab;
       yyn = -yyn;
       goto yyreduce;
     }
@@ -1954,13 +1660,13 @@ yybackup:
 
   /* Shift the lookahead token.  */
   YY_SYMBOL_PRINT ("Shifting", yytoken, &yylval, &yylloc);
+  yystate = yyn;
+  YY_IGNORE_MAYBE_UNINITIALIZED_BEGIN
+  *++yyvsp = yylval;
+  YY_IGNORE_MAYBE_UNINITIALIZED_END
 
   /* Discard the shifted token.  */
   yychar = YYEMPTY;
-
-  yystate = yyn;
-  *++yyvsp = yylval;
-
   goto yynewstate;
 
 
@@ -1975,14 +1681,14 @@ yydefault:
 
 
 /*-----------------------------.
-| yyreduce -- Do a reduction.  |
+| yyreduce -- do a reduction.  |
 `-----------------------------*/
 yyreduce:
   /* yyn is the number of a rule to reduce with.  */
   yylen = yyr2[yyn];
 
   /* If YYLEN is nonzero, implement the default value of the action:
-     `$$ = $1'.
+     '$$ = $1'.
 
      Otherwise, the following line sets YYVAL to garbage.
      This behavior is undocumented and Bison
@@ -1995,1814 +1701,1544 @@ yyreduce:
   YY_REDUCE_PRINT (yyn);
   switch (yyn)
     {
-        case 2:
-
-/* Line 1455 of yacc.c  */
+  case 2: /* primitive: VOID  */
 #line 30 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = newPrimitiveType((yyvsp[(1) - (1)].sn), pt_void);;}
+                                                                                                                                        {(yyval.sn) = newPrimitiveType((yyvsp[0].sn), pt_void);}
+#line 1708 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 3:
-
-/* Line 1455 of yacc.c  */
+  case 3: /* primitive: BOOL  */
 #line 31 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = newPrimitiveType((yyvsp[(1) - (1)].sn), pt_bool);;}
+                                                                                                                                                {(yyval.sn) = newPrimitiveType((yyvsp[0].sn), pt_bool);}
+#line 1714 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 4:
-
-/* Line 1455 of yacc.c  */
+  case 4: /* primitive: CHAR  */
 #line 32 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = newPrimitiveType((yyvsp[(1) - (1)].sn), pt_char);;}
+                                                                                                                                                {(yyval.sn) = newPrimitiveType((yyvsp[0].sn), pt_char);}
+#line 1720 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 5:
-
-/* Line 1455 of yacc.c  */
+  case 5: /* primitive: SIGNED CHAR  */
 #line 33 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = newPrimitiveType((yyvsp[(1) - (2)].sn), pt_schar);;}
+                                                                                                                                        {(yyval.sn) = newPrimitiveType((yyvsp[-1].sn), pt_schar);}
+#line 1726 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 6:
-
-/* Line 1455 of yacc.c  */
+  case 6: /* primitive: UNSIGNED CHAR  */
 #line 34 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = newPrimitiveType((yyvsp[(1) - (2)].sn), pt_uchar);;}
+                                                                                                                                        {(yyval.sn) = newPrimitiveType((yyvsp[-1].sn), pt_uchar);}
+#line 1732 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 7:
-
-/* Line 1455 of yacc.c  */
+  case 7: /* primitive: WCHAR_T  */
 #line 35 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = newPrimitiveType((yyvsp[(1) - (1)].sn), pt_wchar_t);;}
+                                                                                                                                                {(yyval.sn) = newPrimitiveType((yyvsp[0].sn), pt_wchar_t);}
+#line 1738 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 8:
-
-/* Line 1455 of yacc.c  */
+  case 8: /* primitive: SHORT  */
 #line 36 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = newPrimitiveType((yyvsp[(1) - (1)].sn), pt_short);;}
+                                                                                                                                                {(yyval.sn) = newPrimitiveType((yyvsp[0].sn), pt_short);}
+#line 1744 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 9:
-
-/* Line 1455 of yacc.c  */
+  case 9: /* primitive: SHORT INT  */
 #line 37 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = newPrimitiveType((yyvsp[(1) - (2)].sn), pt_short);;}
+                                                                                                                                                {(yyval.sn) = newPrimitiveType((yyvsp[-1].sn), pt_short);}
+#line 1750 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 10:
-
-/* Line 1455 of yacc.c  */
+  case 10: /* primitive: SIGNED SHORT  */
 #line 38 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = newPrimitiveType((yyvsp[(1) - (2)].sn), pt_short);;}
+                                                                                                                                        {(yyval.sn) = newPrimitiveType((yyvsp[-1].sn), pt_short);}
+#line 1756 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 11:
-
-/* Line 1455 of yacc.c  */
+  case 11: /* primitive: SIGNED SHORT INT  */
 #line 39 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = newPrimitiveType((yyvsp[(1) - (3)].sn), pt_short);;}
+                                                                                                                                        {(yyval.sn) = newPrimitiveType((yyvsp[-2].sn), pt_short);}
+#line 1762 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 12:
-
-/* Line 1455 of yacc.c  */
+  case 12: /* primitive: UNSIGNED SHORT  */
 #line 40 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = newPrimitiveType((yyvsp[(1) - (2)].sn), pt_ushort);;}
+                                                                                                                                        {(yyval.sn) = newPrimitiveType((yyvsp[-1].sn), pt_ushort);}
+#line 1768 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 13:
-
-/* Line 1455 of yacc.c  */
+  case 13: /* primitive: UNSIGNED SHORT INT  */
 #line 41 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = newPrimitiveType((yyvsp[(1) - (3)].sn), pt_ushort);;}
+                                                                                                                                {(yyval.sn) = newPrimitiveType((yyvsp[-2].sn), pt_ushort);}
+#line 1774 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 14:
-
-/* Line 1455 of yacc.c  */
+  case 14: /* primitive: LONG  */
 #line 42 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = newPrimitiveType((yyvsp[(1) - (1)].sn), pt_long);;}
+                                                                                                                                                {(yyval.sn) = newPrimitiveType((yyvsp[0].sn), pt_long);}
+#line 1780 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 15:
-
-/* Line 1455 of yacc.c  */
+  case 15: /* primitive: LONG INT  */
 #line 43 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = newPrimitiveType((yyvsp[(1) - (2)].sn), pt_long);;}
+                                                                                                                                                {(yyval.sn) = newPrimitiveType((yyvsp[-1].sn), pt_long);}
+#line 1786 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 16:
-
-/* Line 1455 of yacc.c  */
+  case 16: /* primitive: SIGNED LONG  */
 #line 44 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = newPrimitiveType((yyvsp[(1) - (2)].sn), pt_long);;}
+                                                                                                                                        {(yyval.sn) = newPrimitiveType((yyvsp[-1].sn), pt_long);}
+#line 1792 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 17:
-
-/* Line 1455 of yacc.c  */
+  case 17: /* primitive: SIGNED LONG INT  */
 #line 45 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = newPrimitiveType((yyvsp[(1) - (3)].sn), pt_long);;}
+                                                                                                                                        {(yyval.sn) = newPrimitiveType((yyvsp[-2].sn), pt_long);}
+#line 1798 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 18:
-
-/* Line 1455 of yacc.c  */
+  case 18: /* primitive: UNSIGNED LONG  */
 #line 46 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = newPrimitiveType((yyvsp[(1) - (2)].sn), pt_ulong);;}
+                                                                                                                                        {(yyval.sn) = newPrimitiveType((yyvsp[-1].sn), pt_ulong);}
+#line 1804 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 19:
-
-/* Line 1455 of yacc.c  */
+  case 19: /* primitive: UNSIGNED LONG INT  */
 #line 47 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = newPrimitiveType((yyvsp[(1) - (3)].sn), pt_ulong);;}
+                                                                                                                                        {(yyval.sn) = newPrimitiveType((yyvsp[-2].sn), pt_ulong);}
+#line 1810 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 20:
-
-/* Line 1455 of yacc.c  */
+  case 20: /* primitive: LONG LONG  */
 #line 48 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = newPrimitiveType((yyvsp[(1) - (2)].sn), pt_longlong);;}
+                                                                                                                                                {(yyval.sn) = newPrimitiveType((yyvsp[-1].sn), pt_longlong);}
+#line 1816 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 21:
-
-/* Line 1455 of yacc.c  */
+  case 21: /* primitive: LONG LONG INT  */
 #line 49 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = newPrimitiveType((yyvsp[(1) - (3)].sn), pt_longlong);;}
+                                                                                                                                        {(yyval.sn) = newPrimitiveType((yyvsp[-2].sn), pt_longlong);}
+#line 1822 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 22:
-
-/* Line 1455 of yacc.c  */
+  case 22: /* primitive: SIGNED LONG LONG  */
 #line 50 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = newPrimitiveType((yyvsp[(1) - (3)].sn), pt_longlong);;}
+                                                                                                                                        {(yyval.sn) = newPrimitiveType((yyvsp[-2].sn), pt_longlong);}
+#line 1828 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 23:
-
-/* Line 1455 of yacc.c  */
+  case 23: /* primitive: SIGNED LONG LONG INT  */
 #line 51 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = newPrimitiveType((yyvsp[(1) - (4)].sn), pt_longlong);;}
+                                                                                                                                {(yyval.sn) = newPrimitiveType((yyvsp[-3].sn), pt_longlong);}
+#line 1834 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 24:
-
-/* Line 1455 of yacc.c  */
+  case 24: /* primitive: UNSIGNED LONG LONG  */
 #line 52 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = newPrimitiveType((yyvsp[(1) - (3)].sn), pt_ulonglong);;}
+                                                                                                                                {(yyval.sn) = newPrimitiveType((yyvsp[-2].sn), pt_ulonglong);}
+#line 1840 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 25:
-
-/* Line 1455 of yacc.c  */
+  case 25: /* primitive: UNSIGNED LONG LONG INT  */
 #line 53 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = newPrimitiveType((yyvsp[(1) - (4)].sn), pt_ulonglong);;}
+                                                                                                                                {(yyval.sn) = newPrimitiveType((yyvsp[-3].sn), pt_ulonglong);}
+#line 1846 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 26:
-
-/* Line 1455 of yacc.c  */
+  case 26: /* primitive: INT  */
 #line 54 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = newPrimitiveType((yyvsp[(1) - (1)].sn), pt_int);;}
+                                                                                                                                                {(yyval.sn) = newPrimitiveType((yyvsp[0].sn), pt_int);}
+#line 1852 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 27:
-
-/* Line 1455 of yacc.c  */
+  case 27: /* primitive: SIGNED INT  */
 #line 55 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = newPrimitiveType((yyvsp[(1) - (2)].sn), pt_int);;}
+                                                                                                                                        {(yyval.sn) = newPrimitiveType((yyvsp[-1].sn), pt_int);}
+#line 1858 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 28:
-
-/* Line 1455 of yacc.c  */
+  case 28: /* primitive: SIGNED  */
 #line 56 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = newPrimitiveType((yyvsp[(1) - (1)].sn), pt_int);;}
+                                                                                                                                                {(yyval.sn) = newPrimitiveType((yyvsp[0].sn), pt_int);}
+#line 1864 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 29:
-
-/* Line 1455 of yacc.c  */
+  case 29: /* primitive: UNSIGNED INT  */
 #line 57 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = newPrimitiveType((yyvsp[(1) - (2)].sn), pt_uint);;}
+                                                                                                                                        {(yyval.sn) = newPrimitiveType((yyvsp[-1].sn), pt_uint);}
+#line 1870 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 30:
-
-/* Line 1455 of yacc.c  */
+  case 30: /* primitive: UNSIGNED  */
 #line 58 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = newPrimitiveType((yyvsp[(1) - (1)].sn), pt_uint);;}
+                                                                                                                                                {(yyval.sn) = newPrimitiveType((yyvsp[0].sn), pt_uint);}
+#line 1876 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 31:
-
-/* Line 1455 of yacc.c  */
+  case 31: /* primitive: FLOAT  */
 #line 59 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = newPrimitiveType((yyvsp[(1) - (1)].sn), pt_float);;}
+                                                                                                                                                {(yyval.sn) = newPrimitiveType((yyvsp[0].sn), pt_float);}
+#line 1882 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 32:
-
-/* Line 1455 of yacc.c  */
+  case 32: /* primitive: DOUBLE  */
 #line 60 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = newPrimitiveType((yyvsp[(1) - (1)].sn), pt_double);;}
+                                                                                                                                                {(yyval.sn) = newPrimitiveType((yyvsp[0].sn), pt_double);}
+#line 1888 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 33:
-
-/* Line 1455 of yacc.c  */
+  case 33: /* primitive: LONG DOUBLE  */
 #line 61 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = newPrimitiveType((yyvsp[(1) - (2)].sn), pt_long_double);;}
+                                                                                                                                        {(yyval.sn) = newPrimitiveType((yyvsp[-1].sn), pt_long_double);}
+#line 1894 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 34:
-
-/* Line 1455 of yacc.c  */
+  case 34: /* primitive: STRING_T  */
 #line 62 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = newPrimitiveType((yyvsp[(1) - (1)].sn), pt_string_t);;}
+                                                                                                                                                {(yyval.sn) = newPrimitiveType((yyvsp[0].sn), pt_string_t);}
+#line 1900 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 35:
-
-/* Line 1455 of yacc.c  */
+  case 35: /* attribute: IDENTIFY  */
 #line 65 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = newAttribute((yyvsp[(1) - (1)].sn), NULL, 0);;}
+                                                                                                                                        {(yyval.sn) = newAttribute((yyvsp[0].sn), NULL, 0);}
+#line 1906 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 36:
-
-/* Line 1455 of yacc.c  */
+  case 36: /* attribute: IDENTIFY '=' STRING  */
 #line 66 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = newAttribute((yyvsp[(1) - (3)].sn), (yyvsp[(3) - (3)].sn), 0);;}
+                                                                                                                                {(yyval.sn) = newAttribute((yyvsp[-2].sn), (yyvsp[0].sn), 0);}
+#line 1912 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 37:
-
-/* Line 1455 of yacc.c  */
+  case 37: /* attribute: IDENTIFY '=' U8STRING  */
 #line 67 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = newAttribute((yyvsp[(1) - (3)].sn), (yyvsp[(3) - (3)].sn), 1);;}
+                                                                                                                                {(yyval.sn) = newAttribute((yyvsp[-2].sn), (yyvsp[0].sn), 1);}
+#line 1918 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 38:
-
-/* Line 1455 of yacc.c  */
+  case 38: /* attributeList: attribute  */
 #line 70 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = newAttributeList(NULL, (yyvsp[(1) - (1)].sn));;}
+                                                                                                                                {(yyval.sn) = newAttributeList(NULL, (yyvsp[0].sn));}
+#line 1924 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 39:
-
-/* Line 1455 of yacc.c  */
+  case 39: /* attributeList: attributeList ',' attribute  */
 #line 71 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = newAttributeList((yyvsp[(1) - (3)].sn), (yyvsp[(3) - (3)].sn));;}
+                                                                                                                        {(yyval.sn) = newAttributeList((yyvsp[-2].sn), (yyvsp[0].sn));}
+#line 1930 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 40:
-
-/* Line 1455 of yacc.c  */
+  case 40: /* attributes: '[' attributeList ']'  */
 #line 74 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = (yyvsp[(2) - (3)].sn);;}
+                                                                                                                        {(yyval.sn) = (yyvsp[-1].sn);}
+#line 1936 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 41:
-
-/* Line 1455 of yacc.c  */
+  case 41: /* attributes: '[' attributeList ',' ']'  */
 #line 75 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = (yyvsp[(2) - (4)].sn);;}
+                                                                                                                                {(yyval.sn) = (yyvsp[-2].sn);}
+#line 1942 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 42:
-
-/* Line 1455 of yacc.c  */
+  case 42: /* attributes: '[' ']'  */
 #line 76 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = NULL;;}
+                                                                                                                                                {(yyval.sn) = NULL;}
+#line 1948 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 43:
-
-/* Line 1455 of yacc.c  */
+  case 43: /* identifyList: IDENTIFY  */
 #line 79 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = newIdentifyList(NULL, NULL, (yyvsp[(1) - (1)].sn));;}
+                                                                                                                                {(yyval.sn) = newIdentifyList(NULL, NULL, (yyvsp[0].sn));}
+#line 1954 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 44:
-
-/* Line 1455 of yacc.c  */
+  case 44: /* identifyList: identifyList ',' IDENTIFY  */
 #line 80 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = newIdentifyList((yyvsp[(1) - (3)].sn), (yyvsp[(2) - (3)].sn), (yyvsp[(3) - (3)].sn));;}
+                                                                                                                                {(yyval.sn) = newIdentifyList((yyvsp[-2].sn), (yyvsp[-1].sn), (yyvsp[0].sn));}
+#line 1960 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 45:
-
-/* Line 1455 of yacc.c  */
+  case 45: /* enumerator: IDENTIFY  */
 #line 83 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = newEnumerator(NULL, (yyvsp[(1) - (1)].sn));;}
+                                                                                                                                        {(yyval.sn) = newEnumerator(NULL, (yyvsp[0].sn));}
+#line 1966 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 46:
-
-/* Line 1455 of yacc.c  */
+  case 46: /* enumerator: attributes IDENTIFY  */
 #line 84 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = newEnumerator((yyvsp[(1) - (2)].sn), (yyvsp[(2) - (2)].sn));;}
+                                                                                                                                {(yyval.sn) = newEnumerator((yyvsp[-1].sn), (yyvsp[0].sn));}
+#line 1972 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 47:
-
-/* Line 1455 of yacc.c  */
+  case 47: /* enumeratorList: enumerator  */
 #line 87 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = newEnumeratorList(NULL, NULL, (yyvsp[(1) - (1)].sn));;}
+                                                                                                                        {(yyval.sn) = newEnumeratorList(NULL, NULL, (yyvsp[0].sn));}
+#line 1978 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 48:
-
-/* Line 1455 of yacc.c  */
+  case 48: /* enumeratorList: enumeratorList ',' enumerator  */
 #line 88 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = newEnumeratorList((yyvsp[(1) - (3)].sn), (yyvsp[(2) - (3)].sn), (yyvsp[(3) - (3)].sn));;}
+                                                                                                                        {(yyval.sn) = newEnumeratorList((yyvsp[-2].sn), (yyvsp[-1].sn), (yyvsp[0].sn));}
+#line 1984 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 49:
-
-/* Line 1455 of yacc.c  */
+  case 49: /* enum_0: ENUM IDENTIFY '{' enumeratorList '}'  */
 #line 92 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = newEnum((yyvsp[(1) - (5)].sn), NULL, (yyvsp[(2) - (5)].sn), (yyvsp[(3) - (5)].sn), (yyvsp[(4) - (5)].sn), (yyvsp[(5) - (5)].sn));;}
+                                                                                                        {(yyval.sn) = newEnum((yyvsp[-4].sn), NULL, (yyvsp[-3].sn), (yyvsp[-2].sn), (yyvsp[-1].sn), (yyvsp[0].sn));}
+#line 1990 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 50:
-
-/* Line 1455 of yacc.c  */
+  case 50: /* enum_0: ENUM IDENTIFY '{' enumeratorList ',' '}'  */
 #line 93 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = newEnum((yyvsp[(1) - (6)].sn), NULL, (yyvsp[(2) - (6)].sn), (yyvsp[(3) - (6)].sn), (yyvsp[(4) - (6)].sn), (yyvsp[(6) - (6)].sn));;}
+                                                                                                                {(yyval.sn) = newEnum((yyvsp[-5].sn), NULL, (yyvsp[-4].sn), (yyvsp[-3].sn), (yyvsp[-2].sn), (yyvsp[0].sn));}
+#line 1996 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 51:
-
-/* Line 1455 of yacc.c  */
+  case 51: /* enum_0: ENUM IDENTIFY '{' '}'  */
 #line 94 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = newEnum((yyvsp[(1) - (4)].sn), NULL, (yyvsp[(2) - (4)].sn), (yyvsp[(3) - (4)].sn), NULL, (yyvsp[(4) - (4)].sn));;}
+                                                                                                                                {(yyval.sn) = newEnum((yyvsp[-3].sn), NULL, (yyvsp[-2].sn), (yyvsp[-1].sn), NULL, (yyvsp[0].sn));}
+#line 2002 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 52:
-
-/* Line 1455 of yacc.c  */
+  case 52: /* enum_0: ENUM CLASS IDENTIFY '{' enumeratorList '}'  */
 #line 95 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = newEnum((yyvsp[(1) - (6)].sn), (yyvsp[(2) - (6)].sn), (yyvsp[(3) - (6)].sn), (yyvsp[(4) - (6)].sn), (yyvsp[(5) - (6)].sn), (yyvsp[(6) - (6)].sn));;}
+                                                                                                        {(yyval.sn) = newEnum((yyvsp[-5].sn), (yyvsp[-4].sn), (yyvsp[-3].sn), (yyvsp[-2].sn), (yyvsp[-1].sn), (yyvsp[0].sn));}
+#line 2008 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 53:
-
-/* Line 1455 of yacc.c  */
+  case 53: /* enum_0: ENUM CLASS IDENTIFY '{' enumeratorList ',' '}'  */
 #line 96 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = newEnum((yyvsp[(1) - (7)].sn), (yyvsp[(2) - (7)].sn), (yyvsp[(3) - (7)].sn), (yyvsp[(4) - (7)].sn), (yyvsp[(5) - (7)].sn), (yyvsp[(7) - (7)].sn));;}
+                                                                                                        {(yyval.sn) = newEnum((yyvsp[-6].sn), (yyvsp[-5].sn), (yyvsp[-4].sn), (yyvsp[-3].sn), (yyvsp[-2].sn), (yyvsp[0].sn));}
+#line 2014 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 54:
-
-/* Line 1455 of yacc.c  */
+  case 54: /* enum_0: ENUM CLASS IDENTIFY '{' '}'  */
 #line 97 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = newEnum((yyvsp[(1) - (5)].sn), (yyvsp[(2) - (5)].sn), (yyvsp[(3) - (5)].sn), (yyvsp[(4) - (5)].sn), NULL, (yyvsp[(5) - (5)].sn));;}
+                                                                                                                        {(yyval.sn) = newEnum((yyvsp[-4].sn), (yyvsp[-3].sn), (yyvsp[-2].sn), (yyvsp[-1].sn), NULL, (yyvsp[0].sn));}
+#line 2020 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 55:
-
-/* Line 1455 of yacc.c  */
+  case 55: /* enum: enum_0 ';'  */
 #line 100 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = (yyvsp[(1) - (2)].sn); setEnumSemicolon((yyval.sn), (yyvsp[(2) - (2)].sn));;}
+                                                                                                                                {(yyval.sn) = (yyvsp[-1].sn); setEnumSemicolon((yyval.sn), (yyvsp[0].sn));}
+#line 2026 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 56:
-
-/* Line 1455 of yacc.c  */
+  case 56: /* enum: enum_0 '=' STRING ';'  */
 #line 101 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = (yyvsp[(1) - (4)].sn); setNativeName((yyval.sn), (yyvsp[(3) - (4)].sn)); setEnumSemicolon((yyval.sn), (yyvsp[(4) - (4)].sn));;}
+                                                                                                                                {(yyval.sn) = (yyvsp[-3].sn); setNativeName((yyval.sn), (yyvsp[-1].sn)); setEnumSemicolon((yyval.sn), (yyvsp[0].sn));}
+#line 2032 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 57:
-
-/* Line 1455 of yacc.c  */
+  case 57: /* scopeName: IDENTIFY  */
 #line 104 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = newScopeName((yyvsp[(1) - (1)].sn), NULL, NULL, NULL);;}
+                                                                                                                                        {(yyval.sn) = newScopeName((yyvsp[0].sn), NULL, NULL, NULL);}
+#line 2038 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 58:
-
-/* Line 1455 of yacc.c  */
+  case 58: /* scopeName: IDENTIFY '<' typeNameList '>'  */
 #line 105 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = newScopeName((yyvsp[(1) - (4)].sn), (yyvsp[(2) - (4)].sn), (yyvsp[(3) - (4)].sn), (yyvsp[(4) - (4)].sn));;}
+                                                                                                                        {(yyval.sn) = newScopeName((yyvsp[-3].sn), (yyvsp[-2].sn), (yyvsp[-1].sn), (yyvsp[0].sn));}
+#line 2044 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 59:
-
-/* Line 1455 of yacc.c  */
+  case 59: /* scopeNameList_0: scopeName  */
 #line 108 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = newScopeNameList(NULL, (yyvsp[(1) - (1)].sn));;}
+                                                                                                                                {(yyval.sn) = newScopeNameList(NULL, (yyvsp[0].sn));}
+#line 2050 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 60:
-
-/* Line 1455 of yacc.c  */
+  case 60: /* scopeNameList_0: scopeNameList_0 SCOPE scopeName  */
 #line 109 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = newScopeNameList((yyvsp[(1) - (3)].sn), (yyvsp[(3) - (3)].sn));;}
+                                                                                                                        {(yyval.sn) = newScopeNameList((yyvsp[-2].sn), (yyvsp[0].sn));}
+#line 2056 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 61:
-
-/* Line 1455 of yacc.c  */
+  case 61: /* scopeNameList: scopeNameList_0  */
 #line 112 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = (yyvsp[(1) - (1)].sn);;}
+                                                                                                                        {(yyval.sn) = (yyvsp[0].sn);}
+#line 2062 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 62:
-
-/* Line 1455 of yacc.c  */
+  case 62: /* scopeNameList: SCOPE scopeNameList_0  */
 #line 113 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = (yyvsp[(2) - (2)].sn); setScopeNameListGlobal((yyval.sn));;}
+                                                                                                                                {(yyval.sn) = (yyvsp[0].sn); setScopeNameListGlobal((yyval.sn));}
+#line 2068 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 63:
-
-/* Line 1455 of yacc.c  */
+  case 63: /* typeName_0: primitive  */
 #line 116 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = (yyvsp[(1) - (1)].sn);;}
+                                                                                                                                        {(yyval.sn) = (yyvsp[0].sn);}
+#line 2074 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 64:
-
-/* Line 1455 of yacc.c  */
+  case 64: /* typeName_0: scopeNameList  */
 #line 117 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = newTypeName((yyvsp[(1) - (1)].sn));;}
+                                                                                                                                        {(yyval.sn) = newTypeName((yyvsp[0].sn));}
+#line 2080 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 65:
-
-/* Line 1455 of yacc.c  */
+  case 65: /* typeName: typeName_0  */
 #line 120 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = (yyvsp[(1) - (1)].sn);;}
+                                                                                                                                {(yyval.sn) = (yyvsp[0].sn);}
+#line 2086 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 66:
-
-/* Line 1455 of yacc.c  */
+  case 66: /* typeName: NOCODE typeName_0  */
 #line 121 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = (yyvsp[(2) - (2)].sn); setTypeNameFilter((yyval.sn), (yyvsp[(1) - (2)].sn));;}
+                                                                                                                                        {(yyval.sn) = (yyvsp[0].sn); setTypeNameFilter((yyval.sn), (yyvsp[-1].sn));}
+#line 2092 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 67:
-
-/* Line 1455 of yacc.c  */
+  case 67: /* typeName: NOMETA typeName_0  */
 #line 122 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = (yyvsp[(2) - (2)].sn); setTypeNameFilter((yyval.sn), (yyvsp[(1) - (2)].sn));;}
+                                                                                                                                        {(yyval.sn) = (yyvsp[0].sn); setTypeNameFilter((yyval.sn), (yyvsp[-1].sn));}
+#line 2098 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 68:
-
-/* Line 1455 of yacc.c  */
+  case 68: /* typeNameList: typeName  */
 #line 125 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = newTypeNameList(NULL, NULL, (yyvsp[(1) - (1)].sn));;}
+                                                                                                                                {(yyval.sn) = newTypeNameList(NULL, NULL, (yyvsp[0].sn));}
+#line 2104 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 69:
-
-/* Line 1455 of yacc.c  */
+  case 69: /* typeNameList: typeNameList ',' typeName  */
 #line 126 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = newTypeNameList((yyvsp[(1) - (3)].sn), (yyvsp[(2) - (3)].sn), (yyvsp[(3) - (3)].sn));;}
+                                                                                                                                {(yyval.sn) = newTypeNameList((yyvsp[-2].sn), (yyvsp[-1].sn), (yyvsp[0].sn));}
+#line 2110 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 70:
-
-/* Line 1455 of yacc.c  */
+  case 70: /* typeAlias: TYPEDEF typeName IDENTIFY ';'  */
 #line 129 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = newTypedef((yyvsp[(1) - (4)].sn), (yyvsp[(3) - (4)].sn), (yyvsp[(2) - (4)].sn));;}
+                                                                                                                {(yyval.sn) = newTypedef((yyvsp[-3].sn), (yyvsp[-1].sn), (yyvsp[-2].sn));}
+#line 2116 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 71:
-
-/* Line 1455 of yacc.c  */
+  case 71: /* typeAlias: TYPENAME IDENTIFY ';'  */
 #line 130 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = newTypeDeclaration((yyvsp[(2) - (3)].sn), primitive_type);;}
+                                                                                                                                {(yyval.sn) = newTypeDeclaration((yyvsp[-1].sn), primitive_type);}
+#line 2122 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 72:
-
-/* Line 1455 of yacc.c  */
+  case 72: /* typeAlias: ENUM IDENTIFY ';'  */
 #line 131 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = newTypeDeclaration((yyvsp[(2) - (3)].sn), enum_type);;}
+                                                                                                                                        {(yyval.sn) = newTypeDeclaration((yyvsp[-1].sn), enum_type);}
+#line 2128 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 73:
-
-/* Line 1455 of yacc.c  */
+  case 73: /* typeAlias: STRUCT IDENTIFY ';'  */
 #line 132 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = newTypeDeclaration((yyvsp[(2) - (3)].sn), value_type);;}
+                                                                                                                                {(yyval.sn) = newTypeDeclaration((yyvsp[-1].sn), value_type);}
+#line 2134 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 74:
-
-/* Line 1455 of yacc.c  */
+  case 74: /* typeAlias: CLASS IDENTIFY ';'  */
 #line 133 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = newTypeDeclaration((yyvsp[(2) - (3)].sn), reference_type);;}
+                                                                                                                                {(yyval.sn) = newTypeDeclaration((yyvsp[-1].sn), reference_type);}
+#line 2140 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 75:
-
-/* Line 1455 of yacc.c  */
+  case 75: /* typeAlias: TYPENAME IDENTIFY '=' STRING ';'  */
 #line 134 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = newTypeDeclaration((yyvsp[(2) - (5)].sn), primitive_type); setNativeName((yyval.sn), (yyvsp[(4) - (5)].sn));;}
+                                                                                                                        {(yyval.sn) = newTypeDeclaration((yyvsp[-3].sn), primitive_type); setNativeName((yyval.sn), (yyvsp[-1].sn));}
+#line 2146 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 76:
-
-/* Line 1455 of yacc.c  */
+  case 76: /* typeAlias: ENUM IDENTIFY '=' STRING ';'  */
 #line 135 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = newTypeDeclaration((yyvsp[(2) - (5)].sn), enum_type); setNativeName((yyval.sn), (yyvsp[(4) - (5)].sn));;}
+                                                                                                                        {(yyval.sn) = newTypeDeclaration((yyvsp[-3].sn), enum_type); setNativeName((yyval.sn), (yyvsp[-1].sn));}
+#line 2152 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 77:
-
-/* Line 1455 of yacc.c  */
+  case 77: /* typeAlias: STRUCT IDENTIFY '=' STRING ';'  */
 #line 136 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = newTypeDeclaration((yyvsp[(2) - (5)].sn), value_type); setNativeName((yyval.sn), (yyvsp[(4) - (5)].sn));;}
+                                                                                                                        {(yyval.sn) = newTypeDeclaration((yyvsp[-3].sn), value_type); setNativeName((yyval.sn), (yyvsp[-1].sn));}
+#line 2158 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 78:
-
-/* Line 1455 of yacc.c  */
+  case 78: /* typeAlias: CLASS IDENTIFY '=' STRING ';'  */
 #line 137 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = newTypeDeclaration((yyvsp[(2) - (5)].sn), reference_type); setNativeName((yyval.sn), (yyvsp[(4) - (5)].sn));;}
+                                                                                                                        {(yyval.sn) = newTypeDeclaration((yyvsp[-3].sn), reference_type); setNativeName((yyval.sn), (yyvsp[-1].sn));}
+#line 2164 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 79:
-
-/* Line 1455 of yacc.c  */
+  case 79: /* field_0: typeName IDENTIFY  */
 #line 140 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = newField((yyvsp[(1) - (2)].sn), NULL, (yyvsp[(2) - (2)].sn), NULL, NULL);;}
+                                                                                                                                {(yyval.sn) = newField((yyvsp[-1].sn), NULL, (yyvsp[0].sn), NULL, NULL);}
+#line 2170 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 80:
-
-/* Line 1455 of yacc.c  */
+  case 80: /* field_0: typeName IDENTIFY '[' ']'  */
 #line 141 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = newField((yyvsp[(1) - (4)].sn), NULL, (yyvsp[(2) - (4)].sn), (yyvsp[(3) - (4)].sn), (yyvsp[(4) - (4)].sn));;}
+                                                                                                                                {(yyval.sn) = newField((yyvsp[-3].sn), NULL, (yyvsp[-2].sn), (yyvsp[-1].sn), (yyvsp[0].sn));}
+#line 2176 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 81:
-
-/* Line 1455 of yacc.c  */
+  case 81: /* field_0: typeName '*' IDENTIFY  */
 #line 142 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = newField((yyvsp[(1) - (3)].sn), (yyvsp[(2) - (3)].sn), (yyvsp[(3) - (3)].sn), NULL, NULL);;}
+                                                                                                                                {(yyval.sn) = newField((yyvsp[-2].sn), (yyvsp[-1].sn), (yyvsp[0].sn), NULL, NULL);}
+#line 2182 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 82:
-
-/* Line 1455 of yacc.c  */
+  case 82: /* field_1: field_0  */
 #line 145 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = (yyvsp[(1) - (1)].sn);;}
+                                                                                                                                        {(yyval.sn) = (yyvsp[0].sn);}
+#line 2188 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 83:
-
-/* Line 1455 of yacc.c  */
+  case 83: /* field_1: CONST field_0  */
 #line 146 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = (yyvsp[(2) - (2)].sn); setFieldConstant((yyval.sn), (yyvsp[(1) - (2)].sn));;}
+                                                                                                                                        {(yyval.sn) = (yyvsp[0].sn); setFieldConstant((yyval.sn), (yyvsp[-1].sn));}
+#line 2194 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 84:
-
-/* Line 1455 of yacc.c  */
+  case 84: /* field_2: field_1  */
 #line 149 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = (yyvsp[(1) - (1)].sn);;}
+                                                                                                                                        {(yyval.sn) = (yyvsp[0].sn);}
+#line 2200 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 85:
-
-/* Line 1455 of yacc.c  */
+  case 85: /* field_2: STATIC field_1  */
 #line 150 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = (yyvsp[(2) - (2)].sn); setFieldStatic((yyval.sn), (yyvsp[(1) - (2)].sn));;}
+                                                                                                                                        {(yyval.sn) = (yyvsp[0].sn); setFieldStatic((yyval.sn), (yyvsp[-1].sn));}
+#line 2206 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 86:
-
-/* Line 1455 of yacc.c  */
+  case 86: /* field: field_2 ';'  */
 #line 153 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = (yyvsp[(1) - (2)].sn); setFieldSemicolon((yyval.sn), (yyvsp[(2) - (2)].sn));;}
+                                                                                                                                {(yyval.sn) = (yyvsp[-1].sn); setFieldSemicolon((yyval.sn), (yyvsp[0].sn));}
+#line 2212 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 87:
-
-/* Line 1455 of yacc.c  */
+  case 87: /* field: field_2 '=' STRING ';'  */
 #line 154 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = (yyvsp[(1) - (4)].sn); setNativeName((yyval.sn), (yyvsp[(3) - (4)].sn)); setFieldSemicolon((yyval.sn), (yyvsp[(4) - (4)].sn));;}
+                                                                                                                                {(yyval.sn) = (yyvsp[-3].sn); setNativeName((yyval.sn), (yyvsp[-1].sn)); setFieldSemicolon((yyval.sn), (yyvsp[0].sn));}
+#line 2218 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 88:
-
-/* Line 1455 of yacc.c  */
+  case 88: /* getter_0: GET  */
 #line 158 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = newGetterSetter((yyvsp[(1) - (1)].sn));;}
+                                                                                                                                        {(yyval.sn) = newGetterSetter((yyvsp[0].sn));}
+#line 2224 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 89:
-
-/* Line 1455 of yacc.c  */
+  case 89: /* getter_1: getter_0  */
 #line 161 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = (yyvsp[(1) - (1)].sn);;}
+                                                                                                                                        {(yyval.sn) = (yyvsp[0].sn);}
+#line 2230 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 90:
-
-/* Line 1455 of yacc.c  */
+  case 90: /* getter_1: getter_0 '+'  */
 #line 162 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = (yyvsp[(1) - (2)].sn); setGetterIncRef((yyval.sn));;}
+                                                                                                                                        {(yyval.sn) = (yyvsp[-1].sn); setGetterIncRef((yyval.sn));}
+#line 2236 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 91:
-
-/* Line 1455 of yacc.c  */
+  case 91: /* getter: getter_1  */
 #line 165 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = (yyvsp[(1) - (1)].sn);;}
+                                                                                                                                        {(yyval.sn) = (yyvsp[0].sn);}
+#line 2242 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 92:
-
-/* Line 1455 of yacc.c  */
+  case 92: /* getter: getter_1 '=' STRING  */
 #line 166 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = (yyvsp[(1) - (3)].sn); setGetterSetterNativeName((yyval.sn), (yyvsp[(3) - (3)].sn));;}
+                                                                                                                                {(yyval.sn) = (yyvsp[-2].sn); setGetterSetterNativeName((yyval.sn), (yyvsp[0].sn));}
+#line 2248 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 93:
-
-/* Line 1455 of yacc.c  */
+  case 93: /* setter_0: SET  */
 #line 169 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = newGetterSetter((yyvsp[(1) - (1)].sn));;}
+                                                                                                                                        {(yyval.sn) = newGetterSetter((yyvsp[0].sn));}
+#line 2254 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 94:
-
-/* Line 1455 of yacc.c  */
+  case 94: /* setter_1: setter_0  */
 #line 172 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = (yyvsp[(1) - (1)].sn);;}
+                                                                                                                                        {(yyval.sn) = (yyvsp[0].sn);}
+#line 2260 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 95:
-
-/* Line 1455 of yacc.c  */
+  case 95: /* setter_1: setter_0 '-'  */
 #line 173 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = (yyvsp[(1) - (2)].sn); setSetterDecRef((yyval.sn));;}
+                                                                                                                                        {(yyval.sn) = (yyvsp[-1].sn); setSetterDecRef((yyval.sn));}
+#line 2266 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 96:
-
-/* Line 1455 of yacc.c  */
+  case 96: /* setter_2: setter_1  */
 #line 176 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = (yyvsp[(1) - (1)].sn);;}
+                                                                                                                                        {(yyval.sn) = (yyvsp[0].sn);}
+#line 2272 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 97:
-
-/* Line 1455 of yacc.c  */
+  case 97: /* setter_2: setter_1 '?'  */
 #line 177 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = (yyvsp[(1) - (2)].sn); setSetterAllowNull((yyval.sn));;}
+                                                                                                                                        {(yyval.sn) = (yyvsp[-1].sn); setSetterAllowNull((yyval.sn));}
+#line 2278 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 98:
-
-/* Line 1455 of yacc.c  */
+  case 98: /* setter: setter_2  */
 #line 180 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = (yyvsp[(1) - (1)].sn);;}
+                                                                                                                                        {(yyval.sn) = (yyvsp[0].sn);}
+#line 2284 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 99:
-
-/* Line 1455 of yacc.c  */
+  case 99: /* setter: setter_2 '=' STRING  */
 #line 181 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = (yyvsp[(1) - (3)].sn); setGetterSetterNativeName((yyval.sn), (yyvsp[(3) - (3)].sn));;}
+                                                                                                                                {(yyval.sn) = (yyvsp[-2].sn); setGetterSetterNativeName((yyval.sn), (yyvsp[0].sn));}
+#line 2290 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 100:
-
-/* Line 1455 of yacc.c  */
+  case 100: /* candidate: CANDIDATE  */
 #line 184 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = (yyvsp[(1) - (1)].sn);;}
+                                                                                                                                        {(yyval.sn) = (yyvsp[0].sn);}
+#line 2296 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 101:
-
-/* Line 1455 of yacc.c  */
+  case 101: /* property_0: IDENTIFY  */
 #line 187 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = newProperty((yyvsp[(1) - (1)].sn), simple_property);;}
+                                                                                                                                        {(yyval.sn) = newProperty((yyvsp[0].sn), simple_property);}
+#line 2302 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 102:
-
-/* Line 1455 of yacc.c  */
+  case 102: /* property_0: IDENTIFY '[' ']'  */
 #line 188 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = newProperty((yyvsp[(1) - (3)].sn), fixed_array_property);;}
+                                                                                                                                        {(yyval.sn) = newProperty((yyvsp[-2].sn), fixed_array_property);}
+#line 2308 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 103:
-
-/* Line 1455 of yacc.c  */
+  case 103: /* property_0: IDENTIFY '[' '?' ']'  */
 #line 189 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = newProperty((yyvsp[(1) - (4)].sn), dynamic_array_property);;}
+                                                                                                                                {(yyval.sn) = newProperty((yyvsp[-3].sn), dynamic_array_property);}
+#line 2314 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 104:
-
-/* Line 1455 of yacc.c  */
+  case 104: /* property_0: IDENTIFY '[' '*' ']'  */
 #line 190 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = newProperty((yyvsp[(1) - (4)].sn), list_property);;}
+                                                                                                                                {(yyval.sn) = newProperty((yyvsp[-3].sn), list_property);}
+#line 2320 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 105:
-
-/* Line 1455 of yacc.c  */
+  case 105: /* property_0: IDENTIFY '[' typeName ']'  */
 #line 191 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = newProperty((yyvsp[(1) - (4)].sn), map_property); setMapPropertyKeyType((yyval.sn), (yyvsp[(3) - (4)].sn), NULL);;}
+                                                                                                                                {(yyval.sn) = newProperty((yyvsp[-3].sn), map_property); setMapPropertyKeyType((yyval.sn), (yyvsp[-1].sn), NULL);}
+#line 2326 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 106:
-
-/* Line 1455 of yacc.c  */
+  case 106: /* property_0: IDENTIFY '[' typeName '*' ']'  */
 #line 192 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = newProperty((yyvsp[(1) - (5)].sn), map_property); setMapPropertyKeyType((yyval.sn), (yyvsp[(3) - (5)].sn), (yyvsp[(4) - (5)].sn));;}
+                                                                                                                        {(yyval.sn) = newProperty((yyvsp[-4].sn), map_property); setMapPropertyKeyType((yyval.sn), (yyvsp[-2].sn), (yyvsp[-1].sn));}
+#line 2332 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 107:
-
-/* Line 1455 of yacc.c  */
+  case 107: /* property_1: typeName property_0  */
 #line 195 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = (yyvsp[(2) - (2)].sn); setPropertyType((yyval.sn), (yyvsp[(1) - (2)].sn), NULL);;}
+                                                                                                                        {(yyval.sn) = (yyvsp[0].sn); setPropertyType((yyval.sn), (yyvsp[-1].sn), NULL);}
+#line 2338 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 108:
-
-/* Line 1455 of yacc.c  */
+  case 108: /* property_1: typeName '*' property_0  */
 #line 196 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = (yyvsp[(3) - (3)].sn); setPropertyType((yyval.sn), (yyvsp[(1) - (3)].sn), (yyvsp[(2) - (3)].sn));;}
+                                                                                                                                {(yyval.sn) = (yyvsp[0].sn); setPropertyType((yyval.sn), (yyvsp[-2].sn), (yyvsp[-1].sn));}
+#line 2344 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 109:
-
-/* Line 1455 of yacc.c  */
+  case 109: /* property_1: typeName '&' property_0  */
 #line 197 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = (yyvsp[(3) - (3)].sn); setPropertyType((yyval.sn), (yyvsp[(1) - (3)].sn), (yyvsp[(2) - (3)].sn));;}
+                                                                                                                                {(yyval.sn) = (yyvsp[0].sn); setPropertyType((yyval.sn), (yyvsp[-2].sn), (yyvsp[-1].sn));}
+#line 2350 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 110:
-
-/* Line 1455 of yacc.c  */
+  case 110: /* property_2: property_1 '{' '}' ';'  */
 #line 200 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = (yyvsp[(1) - (4)].sn);;}
+                                                                                                                        {(yyval.sn) = (yyvsp[-3].sn);}
+#line 2356 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 111:
-
-/* Line 1455 of yacc.c  */
+  case 111: /* property_2: property_1 '{' getter '}' ';'  */
 #line 201 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = (yyvsp[(1) - (5)].sn); setPropertyGetter((yyval.sn), (yyvsp[(3) - (5)].sn));;}
+                                                                                                                        {(yyval.sn) = (yyvsp[-4].sn); setPropertyGetter((yyval.sn), (yyvsp[-2].sn));}
+#line 2362 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 112:
-
-/* Line 1455 of yacc.c  */
+  case 112: /* property_2: property_1 '{' setter '}' ';'  */
 #line 202 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = (yyvsp[(1) - (5)].sn); setPropertySetter((yyval.sn), (yyvsp[(3) - (5)].sn));;}
+                                                                                                                        {(yyval.sn) = (yyvsp[-4].sn); setPropertySetter((yyval.sn), (yyvsp[-2].sn));}
+#line 2368 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 113:
-
-/* Line 1455 of yacc.c  */
+  case 113: /* property_2: property_1 '{' getter setter '}' ';'  */
 #line 203 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = (yyvsp[(1) - (6)].sn); setPropertyGetter((yyval.sn), (yyvsp[(3) - (6)].sn)); setPropertySetter((yyvsp[(1) - (6)].sn), (yyvsp[(4) - (6)].sn));;}
+                                                                                                                {(yyval.sn) = (yyvsp[-5].sn); setPropertyGetter((yyval.sn), (yyvsp[-3].sn)); setPropertySetter((yyvsp[-5].sn), (yyvsp[-2].sn));}
+#line 2374 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 114:
-
-/* Line 1455 of yacc.c  */
+  case 114: /* property_2: property_1 '{' setter getter '}' ';'  */
 #line 204 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = (yyvsp[(1) - (6)].sn); setPropertyGetter((yyval.sn), (yyvsp[(4) - (6)].sn)); setPropertySetter((yyvsp[(1) - (6)].sn), (yyvsp[(3) - (6)].sn));;}
+                                                                                                                {(yyval.sn) = (yyvsp[-5].sn); setPropertyGetter((yyval.sn), (yyvsp[-2].sn)); setPropertySetter((yyvsp[-5].sn), (yyvsp[-3].sn));}
+#line 2380 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 115:
-
-/* Line 1455 of yacc.c  */
+  case 115: /* property_2: property_1 '{' getter candidate '}' ';'  */
 #line 205 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = (yyvsp[(1) - (6)].sn); setPropertyGetter((yyval.sn), (yyvsp[(3) - (6)].sn)); setPropertyCandidate((yyval.sn));;}
+                                                                                                                {(yyval.sn) = (yyvsp[-5].sn); setPropertyGetter((yyval.sn), (yyvsp[-3].sn)); setPropertyCandidate((yyval.sn));}
+#line 2386 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 116:
-
-/* Line 1455 of yacc.c  */
+  case 116: /* property_2: property_1 '{' setter candidate '}' ';'  */
 #line 206 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = (yyvsp[(1) - (6)].sn); setPropertySetter((yyval.sn), (yyvsp[(3) - (6)].sn)); setPropertyCandidate((yyval.sn));;}
+                                                                                                                {(yyval.sn) = (yyvsp[-5].sn); setPropertySetter((yyval.sn), (yyvsp[-3].sn)); setPropertyCandidate((yyval.sn));}
+#line 2392 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 117:
-
-/* Line 1455 of yacc.c  */
+  case 117: /* property_2: property_1 '{' getter setter candidate '}' ';'  */
 #line 207 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = (yyvsp[(1) - (7)].sn); setPropertyGetter((yyval.sn), (yyvsp[(3) - (7)].sn)); setPropertySetter((yyvsp[(1) - (7)].sn), (yyvsp[(4) - (7)].sn)); setPropertyCandidate((yyval.sn));;}
+                                                                                                        {(yyval.sn) = (yyvsp[-6].sn); setPropertyGetter((yyval.sn), (yyvsp[-4].sn)); setPropertySetter((yyvsp[-6].sn), (yyvsp[-3].sn)); setPropertyCandidate((yyval.sn));}
+#line 2398 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 118:
-
-/* Line 1455 of yacc.c  */
+  case 118: /* property_2: property_1 '{' setter getter candidate '}' ';'  */
 #line 208 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = (yyvsp[(1) - (7)].sn); setPropertyGetter((yyval.sn), (yyvsp[(4) - (7)].sn)); setPropertySetter((yyvsp[(1) - (7)].sn), (yyvsp[(3) - (7)].sn)); setPropertyCandidate((yyval.sn));;}
+                                                                                                        {(yyval.sn) = (yyvsp[-6].sn); setPropertyGetter((yyval.sn), (yyvsp[-3].sn)); setPropertySetter((yyvsp[-6].sn), (yyvsp[-4].sn)); setPropertyCandidate((yyval.sn));}
+#line 2404 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 119:
-
-/* Line 1455 of yacc.c  */
+  case 119: /* property: property_2  */
 #line 211 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = (yyvsp[(1) - (1)].sn);;}
+                                                                                                                                {(yyval.sn) = (yyvsp[0].sn);}
+#line 2410 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 120:
-
-/* Line 1455 of yacc.c  */
+  case 120: /* property: STATIC property_2  */
 #line 212 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = (yyvsp[(2) - (2)].sn); setPropertyModifier((yyval.sn), (yyvsp[(1) - (2)].sn));;}
+                                                                                                                                        {(yyval.sn) = (yyvsp[0].sn); setPropertyModifier((yyval.sn), (yyvsp[-1].sn));}
+#line 2416 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 121:
-
-/* Line 1455 of yacc.c  */
+  case 121: /* parameter_0: typeName IDENTIFY  */
 #line 216 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = newParameter((yyvsp[(1) - (2)].sn), NULL, NULL, (yyvsp[(2) - (2)].sn));;}
+                                                                                                                                {(yyval.sn) = newParameter((yyvsp[-1].sn), NULL, NULL, (yyvsp[0].sn));}
+#line 2422 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 122:
-
-/* Line 1455 of yacc.c  */
+  case 122: /* parameter_0: typeName '&' IDENTIFY  */
 #line 217 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = newParameter((yyvsp[(1) - (3)].sn), (yyvsp[(2) - (3)].sn), NULL, (yyvsp[(3) - (3)].sn));;}
+                                                                                                                                {(yyval.sn) = newParameter((yyvsp[-2].sn), (yyvsp[-1].sn), NULL, (yyvsp[0].sn));}
+#line 2428 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 123:
-
-/* Line 1455 of yacc.c  */
+  case 123: /* parameter_0: typeName '*' IDENTIFY  */
 #line 218 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = newParameter((yyvsp[(1) - (3)].sn), (yyvsp[(2) - (3)].sn), NULL, (yyvsp[(3) - (3)].sn));;}
+                                                                                                                                {(yyval.sn) = newParameter((yyvsp[-2].sn), (yyvsp[-1].sn), NULL, (yyvsp[0].sn));}
+#line 2434 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 124:
-
-/* Line 1455 of yacc.c  */
+  case 124: /* parameter_0: typeName '-' IDENTIFY  */
 #line 219 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = newParameter((yyvsp[(1) - (3)].sn), (yyvsp[(2) - (3)].sn), NULL, (yyvsp[(3) - (3)].sn));;}
+                                                                                                                                {(yyval.sn) = newParameter((yyvsp[-2].sn), (yyvsp[-1].sn), NULL, (yyvsp[0].sn));}
+#line 2440 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 125:
-
-/* Line 1455 of yacc.c  */
+  case 125: /* parameter_0: typeName '*' '&' IDENTIFY  */
 #line 220 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = newParameter((yyvsp[(1) - (4)].sn), (yyvsp[(2) - (4)].sn), (yyvsp[(3) - (4)].sn), (yyvsp[(4) - (4)].sn));;}
+                                                                                                                                {(yyval.sn) = newParameter((yyvsp[-3].sn), (yyvsp[-2].sn), (yyvsp[-1].sn), (yyvsp[0].sn));}
+#line 2446 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 126:
-
-/* Line 1455 of yacc.c  */
+  case 126: /* parameter_0: typeName '*' '*' IDENTIFY  */
 #line 221 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = newParameter((yyvsp[(1) - (4)].sn), (yyvsp[(2) - (4)].sn), (yyvsp[(3) - (4)].sn), (yyvsp[(4) - (4)].sn));;}
+                                                                                                                                {(yyval.sn) = newParameter((yyvsp[-3].sn), (yyvsp[-2].sn), (yyvsp[-1].sn), (yyvsp[0].sn));}
+#line 2452 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 127:
-
-/* Line 1455 of yacc.c  */
+  case 127: /* parameter_0: typeName '+' '&' IDENTIFY  */
 #line 222 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = newParameter((yyvsp[(1) - (4)].sn), (yyvsp[(2) - (4)].sn), (yyvsp[(3) - (4)].sn), (yyvsp[(4) - (4)].sn));;}
+                                                                                                                                {(yyval.sn) = newParameter((yyvsp[-3].sn), (yyvsp[-2].sn), (yyvsp[-1].sn), (yyvsp[0].sn));}
+#line 2458 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 128:
-
-/* Line 1455 of yacc.c  */
+  case 128: /* parameter_0: typeName '+' '*' IDENTIFY  */
 #line 223 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = newParameter((yyvsp[(1) - (4)].sn), (yyvsp[(2) - (4)].sn), (yyvsp[(3) - (4)].sn), (yyvsp[(4) - (4)].sn));;}
+                                                                                                                                {(yyval.sn) = newParameter((yyvsp[-3].sn), (yyvsp[-2].sn), (yyvsp[-1].sn), (yyvsp[0].sn));}
+#line 2464 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 129:
-
-/* Line 1455 of yacc.c  */
+  case 129: /* parameter_0: typeName '+' '[' ']' '&' IDENTIFY  */
 #line 224 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = newParameter((yyvsp[(1) - (6)].sn), (yyvsp[(2) - (6)].sn), (yyvsp[(5) - (6)].sn), (yyvsp[(6) - (6)].sn)); setParameterArray((yyval.sn));;}
+                                                                                                                        {(yyval.sn) = newParameter((yyvsp[-5].sn), (yyvsp[-4].sn), (yyvsp[-1].sn), (yyvsp[0].sn)); setParameterArray((yyval.sn));}
+#line 2470 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 130:
-
-/* Line 1455 of yacc.c  */
+  case 130: /* parameter_0: typeName '+' '[' ']' '*' IDENTIFY  */
 #line 225 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = newParameter((yyvsp[(1) - (6)].sn), (yyvsp[(2) - (6)].sn), (yyvsp[(5) - (6)].sn), (yyvsp[(6) - (6)].sn)); setParameterArray((yyval.sn));;}
+                                                                                                                        {(yyval.sn) = newParameter((yyvsp[-5].sn), (yyvsp[-4].sn), (yyvsp[-1].sn), (yyvsp[0].sn)); setParameterArray((yyval.sn));}
+#line 2476 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 131:
-
-/* Line 1455 of yacc.c  */
+  case 131: /* parameter_1: parameter_0  */
 #line 228 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = (yyvsp[(1) - (1)].sn);;}
+                                                                                                                                {(yyval.sn) = (yyvsp[0].sn);}
+#line 2482 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 132:
-
-/* Line 1455 of yacc.c  */
+  case 132: /* parameter_1: CONST parameter_0  */
 #line 229 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = (yyvsp[(2) - (2)].sn); setParameterConst((yyval.sn), (yyvsp[(1) - (2)].sn));;}
+                                                                                                                                        {(yyval.sn) = (yyvsp[0].sn); setParameterConst((yyval.sn), (yyvsp[-1].sn));}
+#line 2488 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 133:
-
-/* Line 1455 of yacc.c  */
+  case 133: /* parameter: parameter_1  */
 #line 232 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = (yyvsp[(1) - (1)].sn);;}
+                                                                                                                                {(yyval.sn) = (yyvsp[0].sn);}
+#line 2494 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 134:
-
-/* Line 1455 of yacc.c  */
+  case 134: /* parameter: parameter_1 '?'  */
 #line 233 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = (yyvsp[(1) - (2)].sn); setParameterAllowNull((yyval.sn));;}
+                                                                                                                                        {(yyval.sn) = (yyvsp[-1].sn); setParameterAllowNull((yyval.sn));}
+#line 2500 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 135:
-
-/* Line 1455 of yacc.c  */
+  case 135: /* parameterList: parameter  */
 #line 236 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = newParameterList(NULL, NULL, (yyvsp[(1) - (1)].sn));;}
+                                                                                                                                {(yyval.sn) = newParameterList(NULL, NULL, (yyvsp[0].sn));}
+#line 2506 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 136:
-
-/* Line 1455 of yacc.c  */
+  case 136: /* parameterList: parameterList ',' parameter  */
 #line 237 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = newParameterList((yyvsp[(1) - (3)].sn), (yyvsp[(2) - (3)].sn), (yyvsp[(3) - (3)].sn));;}
+                                                                                                                        {(yyval.sn) = newParameterList((yyvsp[-2].sn), (yyvsp[-1].sn), (yyvsp[0].sn));}
+#line 2512 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 137:
-
-/* Line 1455 of yacc.c  */
+  case 137: /* method_0: IDENTIFY '(' ')'  */
 #line 240 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = newMethod((yyvsp[(1) - (3)].sn), (yyvsp[(2) - (3)].sn), NULL, (yyvsp[(3) - (3)].sn), NULL);;}
+                                                                                                                                {(yyval.sn) = newMethod((yyvsp[-2].sn), (yyvsp[-1].sn), NULL, (yyvsp[0].sn), NULL);}
+#line 2518 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 138:
-
-/* Line 1455 of yacc.c  */
+  case 138: /* method_0: IDENTIFY '(' VOID ')'  */
 #line 241 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = newMethod((yyvsp[(1) - (4)].sn), (yyvsp[(2) - (4)].sn), NULL, (yyvsp[(4) - (4)].sn), NULL);;}
+                                                                                                                                {(yyval.sn) = newMethod((yyvsp[-3].sn), (yyvsp[-2].sn), NULL, (yyvsp[0].sn), NULL);}
+#line 2524 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 139:
-
-/* Line 1455 of yacc.c  */
+  case 139: /* method_0: IDENTIFY '(' parameterList ')'  */
 #line 242 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = newMethod((yyvsp[(1) - (4)].sn), (yyvsp[(2) - (4)].sn), (yyvsp[(3) - (4)].sn), (yyvsp[(4) - (4)].sn), NULL);;}
+                                                                                                                        {(yyval.sn) = newMethod((yyvsp[-3].sn), (yyvsp[-2].sn), (yyvsp[-1].sn), (yyvsp[0].sn), NULL);}
+#line 2530 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 140:
-
-/* Line 1455 of yacc.c  */
+  case 140: /* method_0: IDENTIFY '(' ')' CONST  */
 #line 243 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = newMethod((yyvsp[(1) - (4)].sn), (yyvsp[(2) - (4)].sn), NULL, (yyvsp[(3) - (4)].sn), (yyvsp[(4) - (4)].sn));;}
+                                                                                                                                {(yyval.sn) = newMethod((yyvsp[-3].sn), (yyvsp[-2].sn), NULL, (yyvsp[-1].sn), (yyvsp[0].sn));}
+#line 2536 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 141:
-
-/* Line 1455 of yacc.c  */
+  case 141: /* method_0: IDENTIFY '(' VOID ')' CONST  */
 #line 244 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = newMethod((yyvsp[(1) - (5)].sn), (yyvsp[(2) - (5)].sn), NULL, (yyvsp[(4) - (5)].sn), (yyvsp[(5) - (5)].sn));;}
+                                                                                                                        {(yyval.sn) = newMethod((yyvsp[-4].sn), (yyvsp[-3].sn), NULL, (yyvsp[-1].sn), (yyvsp[0].sn));}
+#line 2542 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 142:
-
-/* Line 1455 of yacc.c  */
+  case 142: /* method_0: IDENTIFY '(' parameterList ')' CONST  */
 #line 245 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = newMethod((yyvsp[(1) - (5)].sn), (yyvsp[(2) - (5)].sn), (yyvsp[(3) - (5)].sn), (yyvsp[(4) - (5)].sn), (yyvsp[(5) - (5)].sn));;}
+                                                                                                                {(yyval.sn) = newMethod((yyvsp[-4].sn), (yyvsp[-3].sn), (yyvsp[-2].sn), (yyvsp[-1].sn), (yyvsp[0].sn));}
+#line 2548 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 143:
-
-/* Line 1455 of yacc.c  */
+  case 143: /* method_1: method_0  */
 #line 248 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = (yyvsp[(1) - (1)].sn);;}
+                                                                                                                                        {(yyval.sn) = (yyvsp[0].sn);}
+#line 2554 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 144:
-
-/* Line 1455 of yacc.c  */
+  case 144: /* method_1: typeName method_0  */
 #line 249 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = (yyvsp[(2) - (2)].sn); setMethodResult((yyval.sn), (yyvsp[(1) - (2)].sn), NULL);;}
+                                                                                                                                        {(yyval.sn) = (yyvsp[0].sn); setMethodResult((yyval.sn), (yyvsp[-1].sn), NULL);}
+#line 2560 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 145:
-
-/* Line 1455 of yacc.c  */
+  case 145: /* method_1: typeName '&' method_0  */
 #line 250 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = (yyvsp[(3) - (3)].sn); setMethodResult((yyval.sn), (yyvsp[(1) - (3)].sn), (yyvsp[(2) - (3)].sn));;}
+                                                                                                                                {(yyval.sn) = (yyvsp[0].sn); setMethodResult((yyval.sn), (yyvsp[-2].sn), (yyvsp[-1].sn));}
+#line 2566 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 146:
-
-/* Line 1455 of yacc.c  */
+  case 146: /* method_1: typeName '*' method_0  */
 #line 251 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = (yyvsp[(3) - (3)].sn); setMethodResult((yyval.sn), (yyvsp[(1) - (3)].sn), (yyvsp[(2) - (3)].sn));;}
+                                                                                                                                {(yyval.sn) = (yyvsp[0].sn); setMethodResult((yyval.sn), (yyvsp[-2].sn), (yyvsp[-1].sn));}
+#line 2572 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 147:
-
-/* Line 1455 of yacc.c  */
+  case 147: /* method_1: typeName '+' method_0  */
 #line 252 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = (yyvsp[(3) - (3)].sn); setMethodResult((yyval.sn), (yyvsp[(1) - (3)].sn), (yyvsp[(2) - (3)].sn));;}
+                                                                                                                                {(yyval.sn) = (yyvsp[0].sn); setMethodResult((yyval.sn), (yyvsp[-2].sn), (yyvsp[-1].sn));}
+#line 2578 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 148:
-
-/* Line 1455 of yacc.c  */
+  case 148: /* method_1: typeName '+' '[' ']' method_0  */
 #line 253 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = (yyvsp[(5) - (5)].sn); setMethodResult((yyval.sn), (yyvsp[(1) - (5)].sn), (yyvsp[(2) - (5)].sn)); setMethodResultArray((yyval.sn));;}
+                                                                                                                        {(yyval.sn) = (yyvsp[0].sn); setMethodResult((yyval.sn), (yyvsp[-4].sn), (yyvsp[-3].sn)); setMethodResultArray((yyval.sn));}
+#line 2584 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 149:
-
-/* Line 1455 of yacc.c  */
+  case 149: /* method_2: method_1  */
 #line 256 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = (yyvsp[(1) - (1)].sn);;}
+                                                                                                                                        {(yyval.sn) = (yyvsp[0].sn);}
+#line 2590 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 150:
-
-/* Line 1455 of yacc.c  */
+  case 150: /* method_2: CONST method_1  */
 #line 257 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = (yyvsp[(2) - (2)].sn); setMethodResultConst((yyval.sn), (yyvsp[(1) - (2)].sn));;}
+                                                                                                                                        {(yyval.sn) = (yyvsp[0].sn); setMethodResultConst((yyval.sn), (yyvsp[-1].sn));}
+#line 2596 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 151:
-
-/* Line 1455 of yacc.c  */
+  case 151: /* method_3: method_2  */
 #line 260 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = (yyvsp[(1) - (1)].sn);;}
+                                                                                                                                        {(yyval.sn) = (yyvsp[0].sn);}
+#line 2602 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 152:
-
-/* Line 1455 of yacc.c  */
+  case 152: /* method_3: ABSTRACT method_2  */
 #line 261 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = (yyvsp[(2) - (2)].sn); setMethodModifier((yyval.sn), (yyvsp[(1) - (2)].sn));;}
+                                                                                                                                        {(yyval.sn) = (yyvsp[0].sn); setMethodModifier((yyval.sn), (yyvsp[-1].sn));}
+#line 2608 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 153:
-
-/* Line 1455 of yacc.c  */
+  case 153: /* method_3: VIRTUAL method_2  */
 #line 262 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = (yyvsp[(2) - (2)].sn); setMethodModifier((yyval.sn), (yyvsp[(1) - (2)].sn));;}
+                                                                                                                                        {(yyval.sn) = (yyvsp[0].sn); setMethodModifier((yyval.sn), (yyvsp[-1].sn));}
+#line 2614 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 154:
-
-/* Line 1455 of yacc.c  */
+  case 154: /* method_3: STATIC method_2  */
 #line 263 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = (yyvsp[(2) - (2)].sn); setMethodModifier((yyval.sn), (yyvsp[(1) - (2)].sn));;}
+                                                                                                                                        {(yyval.sn) = (yyvsp[0].sn); setMethodModifier((yyval.sn), (yyvsp[-1].sn));}
+#line 2620 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 155:
-
-/* Line 1455 of yacc.c  */
+  case 155: /* method_4: method_3  */
 #line 266 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = (yyvsp[(1) - (1)].sn);;}
+                                                                                                                                        {(yyval.sn) = (yyvsp[0].sn);}
+#line 2626 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 156:
-
-/* Line 1455 of yacc.c  */
+  case 156: /* method_4: OVERRIDE method_3  */
 #line 267 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = (yyvsp[(2) - (2)].sn); setMethodOverride((yyval.sn));;}
+                                                                                                                                        {(yyval.sn) = (yyvsp[0].sn); setMethodOverride((yyval.sn));}
+#line 2632 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 157:
-
-/* Line 1455 of yacc.c  */
+  case 157: /* method: method_4 ';'  */
 #line 270 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = (yyvsp[(1) - (2)].sn); setMethodSemicolon((yyval.sn), (yyvsp[(2) - (2)].sn));;}
+                                                                                                                                {(yyval.sn) = (yyvsp[-1].sn); setMethodSemicolon((yyval.sn), (yyvsp[0].sn));}
+#line 2638 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 158:
-
-/* Line 1455 of yacc.c  */
+  case 158: /* method: method_4 '=' STRING ';'  */
 #line 271 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = (yyvsp[(1) - (4)].sn); setNativeName((yyval.sn), (yyvsp[(3) - (4)].sn)); setMethodSemicolon((yyval.sn), (yyvsp[(4) - (4)].sn));;}
+                                                                                                                                {(yyval.sn) = (yyvsp[-3].sn); setNativeName((yyval.sn), (yyvsp[-1].sn)); setMethodSemicolon((yyval.sn), (yyvsp[0].sn));}
+#line 2644 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 195:
-
-/* Line 1455 of yacc.c  */
+  case 195: /* operator_0: OPERATOR operatorSign '(' ')' ';'  */
 #line 313 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = newOperator((yyvsp[(1) - (5)].sn), (yyvsp[(2) - (5)].sn), (yyvsp[(3) - (5)].sn), NULL, (yyvsp[(4) - (5)].sn), NULL, (yyvsp[(5) - (5)].sn));;}
+                                                                                                                        {(yyval.sn) = newOperator((yyvsp[-4].sn), (yyvsp[-3].sn), (yyvsp[-2].sn), NULL, (yyvsp[-1].sn), NULL, (yyvsp[0].sn));}
+#line 2650 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 196:
-
-/* Line 1455 of yacc.c  */
+  case 196: /* operator_0: OPERATOR operatorSign '(' parameterList ')' ';'  */
 #line 314 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = newOperator((yyvsp[(1) - (6)].sn), (yyvsp[(2) - (6)].sn), (yyvsp[(3) - (6)].sn), (yyvsp[(4) - (6)].sn), (yyvsp[(5) - (6)].sn), NULL, (yyvsp[(6) - (6)].sn));;}
+                                                                                                                {(yyval.sn) = newOperator((yyvsp[-5].sn), (yyvsp[-4].sn), (yyvsp[-3].sn), (yyvsp[-2].sn), (yyvsp[-1].sn), NULL, (yyvsp[0].sn));}
+#line 2656 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 197:
-
-/* Line 1455 of yacc.c  */
+  case 197: /* operator_0: OPERATOR operatorSign '(' ')' CONST ';'  */
 #line 315 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = newOperator((yyvsp[(1) - (6)].sn), (yyvsp[(2) - (6)].sn), (yyvsp[(3) - (6)].sn), NULL, (yyvsp[(4) - (6)].sn), (yyvsp[(5) - (6)].sn), (yyvsp[(6) - (6)].sn));;}
+                                                                                                                        {(yyval.sn) = newOperator((yyvsp[-5].sn), (yyvsp[-4].sn), (yyvsp[-3].sn), NULL, (yyvsp[-2].sn), (yyvsp[-1].sn), (yyvsp[0].sn));}
+#line 2662 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 198:
-
-/* Line 1455 of yacc.c  */
+  case 198: /* operator_0: OPERATOR operatorSign '(' parameterList ')' CONST ';'  */
 #line 316 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = newOperator((yyvsp[(1) - (7)].sn), (yyvsp[(2) - (7)].sn), (yyvsp[(3) - (7)].sn), (yyvsp[(4) - (7)].sn), (yyvsp[(5) - (7)].sn), (yyvsp[(6) - (7)].sn), (yyvsp[(7) - (7)].sn));;}
+                                                                                                        {(yyval.sn) = newOperator((yyvsp[-6].sn), (yyvsp[-5].sn), (yyvsp[-4].sn), (yyvsp[-3].sn), (yyvsp[-2].sn), (yyvsp[-1].sn), (yyvsp[0].sn));}
+#line 2668 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 199:
-
-/* Line 1455 of yacc.c  */
+  case 199: /* operator_1: typeName operator_0  */
 #line 320 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = (yyvsp[(2) - (2)].sn); setOperatorResult((yyval.sn), (yyvsp[(1) - (2)].sn), NULL);;}
+                                                                                                                                {(yyval.sn) = (yyvsp[0].sn); setOperatorResult((yyval.sn), (yyvsp[-1].sn), NULL);}
+#line 2674 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 200:
-
-/* Line 1455 of yacc.c  */
+  case 200: /* operator_1: typeName '&' operator_0  */
 #line 321 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = (yyvsp[(3) - (3)].sn); setOperatorResult((yyval.sn), (yyvsp[(1) - (3)].sn), (yyvsp[(2) - (3)].sn));;}
+                                                                                                                                        {(yyval.sn) = (yyvsp[0].sn); setOperatorResult((yyval.sn), (yyvsp[-2].sn), (yyvsp[-1].sn));}
+#line 2680 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 201:
-
-/* Line 1455 of yacc.c  */
+  case 201: /* operator_1: typeName '*' operator_0  */
 #line 322 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = (yyvsp[(3) - (3)].sn); setOperatorResult((yyval.sn), (yyvsp[(1) - (3)].sn), (yyvsp[(2) - (3)].sn));;}
+                                                                                                                                        {(yyval.sn) = (yyvsp[0].sn); setOperatorResult((yyval.sn), (yyvsp[-2].sn), (yyvsp[-1].sn));}
+#line 2686 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 202:
-
-/* Line 1455 of yacc.c  */
+  case 202: /* operator_1: typeName '+' operator_0  */
 #line 323 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = (yyvsp[(3) - (3)].sn); setOperatorResult((yyval.sn), (yyvsp[(1) - (3)].sn), (yyvsp[(2) - (3)].sn));;}
+                                                                                                                                        {(yyval.sn) = (yyvsp[0].sn); setOperatorResult((yyval.sn), (yyvsp[-2].sn), (yyvsp[-1].sn));}
+#line 2692 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 203:
-
-/* Line 1455 of yacc.c  */
+  case 203: /* operator_1: typeName '+' '[' ']' operator_0  */
 #line 324 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = (yyvsp[(5) - (5)].sn); setOperatorResult((yyval.sn), (yyvsp[(1) - (5)].sn), (yyvsp[(2) - (5)].sn)); setOperatorResultArray((yyval.sn));;}
+                                                                                                                                {(yyval.sn) = (yyvsp[0].sn); setOperatorResult((yyval.sn), (yyvsp[-4].sn), (yyvsp[-3].sn)); setOperatorResultArray((yyval.sn));}
+#line 2698 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 204:
-
-/* Line 1455 of yacc.c  */
+  case 204: /* operator_2: operator_1  */
 #line 327 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = (yyvsp[(1) - (1)].sn);;}
+                                                                                                                                        {(yyval.sn) = (yyvsp[0].sn);}
+#line 2704 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 205:
-
-/* Line 1455 of yacc.c  */
+  case 205: /* operator_2: CONST operator_1  */
 #line 328 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = (yyvsp[(2) - (2)].sn); setOperatorResultConst((yyval.sn), (yyvsp[(1) - (2)].sn));;}
+                                                                                                                                                {(yyval.sn) = (yyvsp[0].sn); setOperatorResultConst((yyval.sn), (yyvsp[-1].sn));}
+#line 2710 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 206:
-
-/* Line 1455 of yacc.c  */
+  case 206: /* operator_3: operator_2  */
 #line 331 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = (yyvsp[(1) - (1)].sn);;}
+                                                                                                                                        {(yyval.sn) = (yyvsp[0].sn);}
+#line 2716 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 207:
-
-/* Line 1455 of yacc.c  */
+  case 207: /* operator_3: ABSTRACT operator_2  */
 #line 332 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = (yyvsp[(2) - (2)].sn); setOperatorModifier((yyval.sn), (yyvsp[(1) - (2)].sn));;}
+                                                                                                                                        {(yyval.sn) = (yyvsp[0].sn); setOperatorModifier((yyval.sn), (yyvsp[-1].sn));}
+#line 2722 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 208:
-
-/* Line 1455 of yacc.c  */
+  case 208: /* operator_3: VIRTUAL operator_2  */
 #line 333 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = (yyvsp[(2) - (2)].sn); setOperatorModifier((yyval.sn), (yyvsp[(1) - (2)].sn));;}
+                                                                                                                                        {(yyval.sn) = (yyvsp[0].sn); setOperatorModifier((yyval.sn), (yyvsp[-1].sn));}
+#line 2728 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 209:
-
-/* Line 1455 of yacc.c  */
+  case 209: /* operator: operator_3  */
 #line 336 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = (yyvsp[(1) - (1)].sn);;}
+                                                                                                                                        {(yyval.sn) = (yyvsp[0].sn);}
+#line 2734 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 210:
-
-/* Line 1455 of yacc.c  */
+  case 210: /* operator: OVERRIDE operator_3  */
 #line 337 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = (yyvsp[(2) - (2)].sn); setOperatorOverride((yyval.sn));;}
+                                                                                                                                        {(yyval.sn) = (yyvsp[0].sn); setOperatorOverride((yyval.sn));}
+#line 2740 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 211:
-
-/* Line 1455 of yacc.c  */
+  case 211: /* delegate_0: IDENTIFY '(' ')' ';'  */
 #line 340 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = newDelegate((yyvsp[(1) - (4)].sn), (yyvsp[(2) - (4)].sn), NULL, (yyvsp[(3) - (4)].sn), (yyvsp[(4) - (4)].sn));;}
+                                                                                                                                {(yyval.sn) = newDelegate((yyvsp[-3].sn), (yyvsp[-2].sn), NULL, (yyvsp[-1].sn), (yyvsp[0].sn));}
+#line 2746 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 212:
-
-/* Line 1455 of yacc.c  */
+  case 212: /* delegate_0: IDENTIFY '(' VOID ')' ';'  */
 #line 341 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = newDelegate((yyvsp[(1) - (5)].sn), (yyvsp[(2) - (5)].sn), NULL, (yyvsp[(4) - (5)].sn), (yyvsp[(5) - (5)].sn));;}
+                                                                                                                                        {(yyval.sn) = newDelegate((yyvsp[-4].sn), (yyvsp[-3].sn), NULL, (yyvsp[-1].sn), (yyvsp[0].sn));}
+#line 2752 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 213:
-
-/* Line 1455 of yacc.c  */
+  case 213: /* delegate_0: IDENTIFY '(' parameterList ')' ';'  */
 #line 342 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = newDelegate((yyvsp[(1) - (5)].sn), (yyvsp[(2) - (5)].sn), (yyvsp[(3) - (5)].sn), (yyvsp[(4) - (5)].sn), (yyvsp[(5) - (5)].sn));;}
+                                                                                                                        {(yyval.sn) = newDelegate((yyvsp[-4].sn), (yyvsp[-3].sn), (yyvsp[-2].sn), (yyvsp[-1].sn), (yyvsp[0].sn));}
+#line 2758 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 214:
-
-/* Line 1455 of yacc.c  */
+  case 214: /* delegate_1: typeName delegate_0  */
 #line 345 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = (yyvsp[(2) - (2)].sn); setDelegateResult((yyval.sn), (yyvsp[(1) - (2)].sn), NULL);;}
+                                                                                                                                {(yyval.sn) = (yyvsp[0].sn); setDelegateResult((yyval.sn), (yyvsp[-1].sn), NULL);}
+#line 2764 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 215:
-
-/* Line 1455 of yacc.c  */
+  case 215: /* delegate_1: typeName '&' delegate_0  */
 #line 346 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = (yyvsp[(3) - (3)].sn); setDelegateResult((yyval.sn), (yyvsp[(1) - (3)].sn), (yyvsp[(2) - (3)].sn));;}
+                                                                                                                                        {(yyval.sn) = (yyvsp[0].sn); setDelegateResult((yyval.sn), (yyvsp[-2].sn), (yyvsp[-1].sn));}
+#line 2770 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 216:
-
-/* Line 1455 of yacc.c  */
+  case 216: /* delegate_1: typeName '*' delegate_0  */
 #line 347 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = (yyvsp[(3) - (3)].sn); setDelegateResult((yyval.sn), (yyvsp[(1) - (3)].sn), (yyvsp[(2) - (3)].sn));;}
+                                                                                                                                        {(yyval.sn) = (yyvsp[0].sn); setDelegateResult((yyval.sn), (yyvsp[-2].sn), (yyvsp[-1].sn));}
+#line 2776 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 217:
-
-/* Line 1455 of yacc.c  */
+  case 217: /* delegate_1: typeName '+' delegate_0  */
 #line 348 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = (yyvsp[(3) - (3)].sn); setDelegateResult((yyval.sn), (yyvsp[(1) - (3)].sn), (yyvsp[(2) - (3)].sn));;}
+                                                                                                                                        {(yyval.sn) = (yyvsp[0].sn); setDelegateResult((yyval.sn), (yyvsp[-2].sn), (yyvsp[-1].sn));}
+#line 2782 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 218:
-
-/* Line 1455 of yacc.c  */
+  case 218: /* delegate_1: typeName '+' '[' ']' delegate_0  */
 #line 349 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = (yyvsp[(5) - (5)].sn); setDelegateResult((yyval.sn), (yyvsp[(1) - (5)].sn), (yyvsp[(2) - (5)].sn)); setDelegateResultArray((yyval.sn));;}
+                                                                                                                                {(yyval.sn) = (yyvsp[0].sn); setDelegateResult((yyval.sn), (yyvsp[-4].sn), (yyvsp[-3].sn)); setDelegateResultArray((yyval.sn));}
+#line 2788 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 219:
-
-/* Line 1455 of yacc.c  */
+  case 219: /* delegate: DELEGATE delegate_1  */
 #line 352 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = (yyvsp[(2) - (2)].sn); setDelegateKeyword((yyval.sn), (yyvsp[(1) - (2)].sn));}
+                                                                                                                                {(yyval.sn) = (yyvsp[0].sn); setDelegateKeyword((yyval.sn), (yyvsp[-1].sn));}
+#line 2794 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 220:
-
-/* Line 1455 of yacc.c  */
+  case 220: /* delegate: DELEGATE CONST delegate_1  */
 #line 353 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = (yyvsp[(3) - (3)].sn); setDelegateKeyword((yyval.sn), (yyvsp[(1) - (3)].sn)); setDelegateResultConst((yyval.sn), (yyvsp[(2) - (3)].sn));;}
+                                                                                                                                        {(yyval.sn) = (yyvsp[0].sn); setDelegateKeyword((yyval.sn), (yyvsp[-2].sn)); setDelegateResultConst((yyval.sn), (yyvsp[-1].sn));}
+#line 2800 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 221:
-
-/* Line 1455 of yacc.c  */
+  case 221: /* classMember_0: field  */
 #line 356 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = (yyvsp[(1) - (1)].sn);;}
+                                                                                                                                        {(yyval.sn) = (yyvsp[0].sn);}
+#line 2806 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 222:
-
-/* Line 1455 of yacc.c  */
+  case 222: /* classMember_0: property  */
 #line 357 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = (yyvsp[(1) - (1)].sn);;}
+                                                                                                                                                        {(yyval.sn) = (yyvsp[0].sn);}
+#line 2812 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 223:
-
-/* Line 1455 of yacc.c  */
+  case 223: /* classMember_0: method  */
 #line 358 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = (yyvsp[(1) - (1)].sn);;}
+                                                                                                                                                        {(yyval.sn) = (yyvsp[0].sn);}
+#line 2818 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 224:
-
-/* Line 1455 of yacc.c  */
+  case 224: /* classMember_0: operator  */
 #line 359 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = (yyvsp[(1) - (1)].sn);;}
+                                                                                                                                                        {(yyval.sn) = (yyvsp[0].sn);}
+#line 2824 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 225:
-
-/* Line 1455 of yacc.c  */
+  case 225: /* classMember_0: class  */
 #line 360 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = (yyvsp[(1) - (1)].sn);;}
+                                                                                                                                                        {(yyval.sn) = (yyvsp[0].sn);}
+#line 2830 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 226:
-
-/* Line 1455 of yacc.c  */
+  case 226: /* classMember_0: delegate  */
 #line 361 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = (yyvsp[(1) - (1)].sn);;}
+                                                                                                                                                        {(yyval.sn) = (yyvsp[0].sn);}
+#line 2836 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 227:
-
-/* Line 1455 of yacc.c  */
+  case 227: /* classMember_0: enum  */
 #line 362 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = (yyvsp[(1) - (1)].sn);;}
+                                                                                                                                                        {(yyval.sn) = (yyvsp[0].sn);}
+#line 2842 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 228:
-
-/* Line 1455 of yacc.c  */
+  case 228: /* classMember_0: typeAlias  */
 #line 363 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = (yyvsp[(1) - (1)].sn);;}
+                                                                                                                                                        {(yyval.sn) = (yyvsp[0].sn);}
+#line 2848 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 229:
-
-/* Line 1455 of yacc.c  */
+  case 229: /* classMember_0: NOCODE classMember_0  */
 #line 364 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = (yyvsp[(2) - (2)].sn); setMemberFilter((yyval.sn), (yyvsp[(1) - (2)].sn));;}
+                                                                                                                                        {(yyval.sn) = (yyvsp[0].sn); setMemberFilter((yyval.sn), (yyvsp[-1].sn));}
+#line 2854 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 230:
-
-/* Line 1455 of yacc.c  */
+  case 230: /* classMember_0: NOMETA classMember_0  */
 #line 365 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = (yyvsp[(2) - (2)].sn); setMemberFilter((yyval.sn), (yyvsp[(1) - (2)].sn));;}
+                                                                                                                                        {(yyval.sn) = (yyvsp[0].sn); setMemberFilter((yyval.sn), (yyvsp[-1].sn));}
+#line 2860 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 231:
-
-/* Line 1455 of yacc.c  */
+  case 231: /* classMember: classMember_0  */
 #line 368 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = (yyvsp[(1) - (1)].sn);;}
+                                                                                                                                        {(yyval.sn) = (yyvsp[0].sn);}
+#line 2866 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 232:
-
-/* Line 1455 of yacc.c  */
+  case 232: /* classMember: attributes classMember_0  */
 #line 369 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = (yyvsp[(2) - (2)].sn); setAttributeList((yyval.sn), (yyvsp[(1) - (2)].sn));;}
+                                                                                                                                        {(yyval.sn) = (yyvsp[0].sn); setAttributeList((yyval.sn), (yyvsp[-1].sn));}
+#line 2872 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 233:
-
-/* Line 1455 of yacc.c  */
+  case 233: /* classMemberList: classMember  */
 #line 372 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = newClassMemberList(NULL, (yyvsp[(1) - (1)].sn));;}
+                                                                                                                                {(yyval.sn) = newClassMemberList(NULL, (yyvsp[0].sn));}
+#line 2878 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 234:
-
-/* Line 1455 of yacc.c  */
+  case 234: /* classMemberList: ';'  */
 #line 373 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = NULL;;}
+                                                                                                                                                        {(yyval.sn) = NULL;}
+#line 2884 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 235:
-
-/* Line 1455 of yacc.c  */
+  case 235: /* classMemberList: classMemberList classMember  */
 #line 374 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = newClassMemberList((yyvsp[(1) - (2)].sn), (yyvsp[(2) - (2)].sn));;}
+                                                                                                                                {(yyval.sn) = newClassMemberList((yyvsp[-1].sn), (yyvsp[0].sn));}
+#line 2890 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 236:
-
-/* Line 1455 of yacc.c  */
+  case 236: /* classMemberList: classMemberList ';'  */
 #line 375 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = (yyvsp[(1) - (2)].sn);;}
+                                                                                                                                        {(yyval.sn) = (yyvsp[-1].sn);}
+#line 2896 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 237:
-
-/* Line 1455 of yacc.c  */
+  case 237: /* templateParameterList: IDENTIFY  */
 #line 378 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = newTemplateParameterList(NULL, NULL, (yyvsp[(1) - (1)].sn));;}
+                                                                                                                                {(yyval.sn) = newTemplateParameterList(NULL, NULL, (yyvsp[0].sn));}
+#line 2902 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 238:
-
-/* Line 1455 of yacc.c  */
+  case 238: /* templateParameterList: templateParameterList ',' IDENTIFY  */
 #line 379 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = newTemplateParameterList((yyvsp[(1) - (3)].sn), (yyvsp[(2) - (3)].sn), (yyvsp[(3) - (3)].sn));;}
+                                                                                                                        {(yyval.sn) = newTemplateParameterList((yyvsp[-2].sn), (yyvsp[-1].sn), (yyvsp[0].sn));}
+#line 2908 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 239:
-
-/* Line 1455 of yacc.c  */
+  case 239: /* templateParameters: TEMPLATE '<' templateParameterList '>'  */
 #line 382 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = newTemplateParameters((yyvsp[(1) - (4)].sn), (yyvsp[(2) - (4)].sn), (yyvsp[(3) - (4)].sn), (yyvsp[(4) - (4)].sn));;}
+                                                                                                        {(yyval.sn) = newTemplateParameters((yyvsp[-3].sn), (yyvsp[-2].sn), (yyvsp[-1].sn), (yyvsp[0].sn));}
+#line 2914 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 240:
-
-/* Line 1455 of yacc.c  */
+  case 240: /* class_0: CLASS IDENTIFY  */
 #line 385 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = newClass((yyvsp[(1) - (2)].sn), NULL, (yyvsp[(2) - (2)].sn));;}
+                                                                                                                                        {(yyval.sn) = newClass((yyvsp[-1].sn), NULL, (yyvsp[0].sn));}
+#line 2920 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 241:
-
-/* Line 1455 of yacc.c  */
+  case 241: /* class_0: CLASS '(' identifyList ')' IDENTIFY  */
 #line 386 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = newClass((yyvsp[(1) - (5)].sn), (yyvsp[(3) - (5)].sn), (yyvsp[(5) - (5)].sn));;}
+                                                                                                                        {(yyval.sn) = newClass((yyvsp[-4].sn), (yyvsp[-2].sn), (yyvsp[0].sn));}
+#line 2926 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 242:
-
-/* Line 1455 of yacc.c  */
+  case 242: /* class_0: STRUCT IDENTIFY  */
 #line 387 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = newClass((yyvsp[(1) - (2)].sn), NULL, (yyvsp[(2) - (2)].sn));;}
+                                                                                                                                                {(yyval.sn) = newClass((yyvsp[-1].sn), NULL, (yyvsp[0].sn));}
+#line 2932 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 243:
-
-/* Line 1455 of yacc.c  */
+  case 243: /* class_0: STRUCT '(' identifyList ')' IDENTIFY  */
 #line 388 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = newClass((yyvsp[(1) - (5)].sn), (yyvsp[(3) - (5)].sn), (yyvsp[(5) - (5)].sn));;}
+                                                                                                                        {(yyval.sn) = newClass((yyvsp[-4].sn), (yyvsp[-2].sn), (yyvsp[0].sn));}
+#line 2938 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 244:
-
-/* Line 1455 of yacc.c  */
+  case 244: /* class_1: class_0  */
 #line 391 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = (yyvsp[(1) - (1)].sn);;}
+                                                                                                                                                {(yyval.sn) = (yyvsp[0].sn);}
+#line 2944 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 245:
-
-/* Line 1455 of yacc.c  */
+  case 245: /* class_1: class_0 ':' typeNameList  */
 #line 392 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = (yyvsp[(1) - (3)].sn); setClassBaseList((yyval.sn), (yyvsp[(2) - (3)].sn), (yyvsp[(3) - (3)].sn));;}
+                                                                                                                                        {(yyval.sn) = (yyvsp[-2].sn); setClassBaseList((yyval.sn), (yyvsp[-1].sn), (yyvsp[0].sn));}
+#line 2950 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 246:
-
-/* Line 1455 of yacc.c  */
+  case 246: /* class_2: class_1 '{' '}'  */
 #line 395 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = (yyvsp[(1) - (3)].sn); setClassMemberList((yyval.sn), (yyvsp[(2) - (3)].sn), NULL, (yyvsp[(3) - (3)].sn));;}
+                                                                                                                                        {(yyval.sn) = (yyvsp[-2].sn); setClassMemberList((yyval.sn), (yyvsp[-1].sn), NULL, (yyvsp[0].sn));}
+#line 2956 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 247:
-
-/* Line 1455 of yacc.c  */
+  case 247: /* class_2: class_1 '{' classMemberList '}'  */
 #line 396 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = (yyvsp[(1) - (4)].sn); setClassMemberList((yyval.sn), (yyvsp[(2) - (4)].sn), (yyvsp[(3) - (4)].sn), (yyvsp[(4) - (4)].sn));;}
+                                                                                                                                {(yyval.sn) = (yyvsp[-3].sn); setClassMemberList((yyval.sn), (yyvsp[-2].sn), (yyvsp[-1].sn), (yyvsp[0].sn));}
+#line 2962 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 248:
-
-/* Line 1455 of yacc.c  */
+  case 248: /* class_3: class_2 ';'  */
 #line 399 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = (yyvsp[(1) - (2)].sn); setClassSemicolon((yyval.sn), (yyvsp[(2) - (2)].sn));;}
+                                                                                                                                        {(yyval.sn) = (yyvsp[-1].sn); setClassSemicolon((yyval.sn), (yyvsp[0].sn));}
+#line 2968 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 249:
-
-/* Line 1455 of yacc.c  */
+  case 249: /* class_3: class_2 '=' STRING ';'  */
 #line 400 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = (yyvsp[(1) - (4)].sn); setNativeName((yyval.sn), (yyvsp[(3) - (4)].sn)); setClassSemicolon((yyval.sn), (yyvsp[(4) - (4)].sn));;}
+                                                                                                                                        {(yyval.sn) = (yyvsp[-3].sn); setNativeName((yyval.sn), (yyvsp[-1].sn)); setClassSemicolon((yyval.sn), (yyvsp[0].sn));}
+#line 2974 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 250:
-
-/* Line 1455 of yacc.c  */
+  case 250: /* class_4: class_3  */
 #line 403 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = (yyvsp[(1) - (1)].sn);;}
+                                                                                                                                                {(yyval.sn) = (yyvsp[0].sn);}
+#line 2980 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 251:
-
-/* Line 1455 of yacc.c  */
+  case 251: /* class_4: ABSTRACT class_3  */
 #line 404 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = (yyvsp[(2) - (2)].sn); setClassModifier((yyval.sn), (yyvsp[(1) - (2)].sn));;}
+                                                                                                                                                {(yyval.sn) = (yyvsp[0].sn); setClassModifier((yyval.sn), (yyvsp[-1].sn));}
+#line 2986 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 252:
-
-/* Line 1455 of yacc.c  */
+  case 252: /* class_5: class_4  */
 #line 407 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = (yyvsp[(1) - (1)].sn);;}
+                                                                                                                                                {(yyval.sn) = (yyvsp[0].sn);}
+#line 2992 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 253:
-
-/* Line 1455 of yacc.c  */
+  case 253: /* class_5: OVERRIDE class_4  */
 #line 408 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = (yyvsp[(2) - (2)].sn); setClassOverride((yyval.sn));;}
+                                                                                                                                                {(yyval.sn) = (yyvsp[0].sn); setClassOverride((yyval.sn));}
+#line 2998 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 254:
-
-/* Line 1455 of yacc.c  */
+  case 254: /* class: class_5  */
 #line 411 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = (yyvsp[(1) - (1)].sn);;}
+                                                                                                                                                {(yyval.sn) = (yyvsp[0].sn);}
+#line 3004 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 255:
-
-/* Line 1455 of yacc.c  */
+  case 255: /* class: templateParameters class_5  */
 #line 412 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = (yyvsp[(2) - (2)].sn); setClassTemplateParameters((yyval.sn), (yyvsp[(1) - (2)].sn));;}
+                                                                                                                                {(yyval.sn) = (yyvsp[0].sn); setClassTemplateParameters((yyval.sn), (yyvsp[-1].sn));}
+#line 3010 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 256:
-
-/* Line 1455 of yacc.c  */
+  case 256: /* tokenList: IDENTIFY  */
 #line 416 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = newTokenList(NULL, (yyvsp[(1) - (1)].sn));;}
+                                                                                                                                                {(yyval.sn) = newTokenList(NULL, (yyvsp[0].sn));}
+#line 3016 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 257:
-
-/* Line 1455 of yacc.c  */
+  case 257: /* tokenList: operatorSign  */
 #line 417 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = newTokenList(NULL, (yyvsp[(1) - (1)].sn));;}
+                                                                                                                                                {(yyval.sn) = newTokenList(NULL, (yyvsp[0].sn));}
+#line 3022 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 258:
-
-/* Line 1455 of yacc.c  */
+  case 258: /* tokenList: tokenList ',' IDENTIFY  */
 #line 418 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = newTokenList((yyvsp[(1) - (3)].sn), (yyvsp[(3) - (3)].sn));;}
+                                                                                                                                        {(yyval.sn) = newTokenList((yyvsp[-2].sn), (yyvsp[0].sn));}
+#line 3028 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 259:
-
-/* Line 1455 of yacc.c  */
+  case 259: /* tokenList: tokenList ',' operatorSign  */
 #line 419 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = newTokenList((yyvsp[(1) - (3)].sn), (yyvsp[(3) - (3)].sn));;}
+                                                                                                                                {(yyval.sn) = newTokenList((yyvsp[-2].sn), (yyvsp[0].sn));}
+#line 3034 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 260:
-
-/* Line 1455 of yacc.c  */
+  case 260: /* templateClassInstance_0: EXPORT IDENTIFY '<' typeNameList '>'  */
 #line 422 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = newTemplateClassInstance((yyvsp[(2) - (5)].sn), (yyvsp[(4) - (5)].sn));;}
+                                                                                                {(yyval.sn) = newTemplateClassInstance((yyvsp[-3].sn), (yyvsp[-1].sn));}
+#line 3040 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 261:
-
-/* Line 1455 of yacc.c  */
+  case 261: /* templateClassInstance: templateClassInstance_0 ';'  */
 #line 425 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = (yyvsp[(1) - (2)].sn);;}
+                                                                                                        {(yyval.sn) = (yyvsp[-1].sn);}
+#line 3046 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 262:
-
-/* Line 1455 of yacc.c  */
+  case 262: /* templateClassInstance: templateClassInstance_0 '{' '}' ';'  */
 #line 426 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = (yyvsp[(1) - (4)].sn);;}
+                                                                                                                        {(yyval.sn) = (yyvsp[-3].sn);}
+#line 3052 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 263:
-
-/* Line 1455 of yacc.c  */
+  case 263: /* templateClassInstance: templateClassInstance_0 '{' tokenList '}' ';'  */
 #line 427 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = (yyvsp[(1) - (5)].sn); setTemplateClassInstanceTokenList((yyvsp[(1) - (5)].sn), (yyvsp[(3) - (5)].sn));;}
+                                                                                                                {(yyval.sn) = (yyvsp[-4].sn); setTemplateClassInstanceTokenList((yyvsp[-4].sn), (yyvsp[-2].sn));}
+#line 3058 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 264:
-
-/* Line 1455 of yacc.c  */
+  case 264: /* templateClassInstance: templateClassInstance_0 '{' tokenList ',' '}' ';'  */
 #line 428 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = (yyvsp[(1) - (6)].sn); setTemplateClassInstanceTokenList((yyvsp[(1) - (6)].sn), (yyvsp[(3) - (6)].sn));;}
+                                                                                                                {(yyval.sn) = (yyvsp[-5].sn); setTemplateClassInstanceTokenList((yyvsp[-5].sn), (yyvsp[-3].sn));}
+#line 3064 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 265:
-
-/* Line 1455 of yacc.c  */
+  case 265: /* namespaceMember_0: class  */
 #line 432 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = (yyvsp[(1) - (1)].sn);;}
+                                                                                                                                        {(yyval.sn) = (yyvsp[0].sn);}
+#line 3070 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 266:
-
-/* Line 1455 of yacc.c  */
+  case 266: /* namespaceMember_0: delegate  */
 #line 433 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = (yyvsp[(1) - (1)].sn);;}
+                                                                                                                                                        {(yyval.sn) = (yyvsp[0].sn);}
+#line 3076 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 267:
-
-/* Line 1455 of yacc.c  */
+  case 267: /* namespaceMember_0: enum  */
 #line 434 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = (yyvsp[(1) - (1)].sn);;}
+                                                                                                                                                        {(yyval.sn) = (yyvsp[0].sn);}
+#line 3082 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 268:
-
-/* Line 1455 of yacc.c  */
+  case 268: /* namespaceMember_0: templateClassInstance  */
 #line 435 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = (yyvsp[(1) - (1)].sn);;}
+                                                                                                                                        {(yyval.sn) = (yyvsp[0].sn);}
+#line 3088 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 269:
-
-/* Line 1455 of yacc.c  */
+  case 269: /* namespaceMember_0: typeAlias  */
 #line 436 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = (yyvsp[(1) - (1)].sn);;}
+                                                                                                                                                        {(yyval.sn) = (yyvsp[0].sn);}
+#line 3094 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 270:
-
-/* Line 1455 of yacc.c  */
+  case 270: /* namespaceMember_0: namespace  */
 #line 437 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = (yyvsp[(1) - (1)].sn);;}
+                                                                                                                                                        {(yyval.sn) = (yyvsp[0].sn);}
+#line 3100 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 271:
-
-/* Line 1455 of yacc.c  */
+  case 271: /* namespaceMember_0: NOCODE namespaceMember_0  */
 #line 438 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = (yyvsp[(2) - (2)].sn); setMemberFilter((yyval.sn), (yyvsp[(1) - (2)].sn));;}
+                                                                                                                                        {(yyval.sn) = (yyvsp[0].sn); setMemberFilter((yyval.sn), (yyvsp[-1].sn));}
+#line 3106 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 272:
-
-/* Line 1455 of yacc.c  */
+  case 272: /* namespaceMember_0: NOMETA namespaceMember_0  */
 #line 439 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = (yyvsp[(2) - (2)].sn); setMemberFilter((yyval.sn), (yyvsp[(1) - (2)].sn));;}
+                                                                                                                                        {(yyval.sn) = (yyvsp[0].sn); setMemberFilter((yyval.sn), (yyvsp[-1].sn));}
+#line 3112 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 273:
-
-/* Line 1455 of yacc.c  */
+  case 273: /* namespaceMember: namespaceMember_0  */
 #line 442 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = (yyvsp[(1) - (1)].sn);;}
+                                                                                                                                {(yyval.sn) = (yyvsp[0].sn);}
+#line 3118 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 274:
-
-/* Line 1455 of yacc.c  */
+  case 274: /* namespaceMember: attributes namespaceMember_0  */
 #line 443 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = (yyvsp[(2) - (2)].sn); setAttributeList((yyval.sn), (yyvsp[(1) - (2)].sn));;}
+                                                                                                                                {(yyval.sn) = (yyvsp[0].sn); setAttributeList((yyval.sn), (yyvsp[-1].sn));}
+#line 3124 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 275:
-
-/* Line 1455 of yacc.c  */
+  case 275: /* namespaceMemberList: namespaceMember  */
 #line 446 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = newNamespaceMemberList(NULL, (yyvsp[(1) - (1)].sn));;}
+                                                                                                                                {(yyval.sn) = newNamespaceMemberList(NULL, (yyvsp[0].sn));}
+#line 3130 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 276:
-
-/* Line 1455 of yacc.c  */
+  case 276: /* namespaceMemberList: ';'  */
 #line 447 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = NULL;;}
+                                                                                                                                                        {(yyval.sn) = NULL;}
+#line 3136 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 277:
-
-/* Line 1455 of yacc.c  */
+  case 277: /* namespaceMemberList: namespaceMemberList namespaceMember  */
 #line 448 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = newNamespaceMemberList((yyvsp[(1) - (2)].sn), (yyvsp[(2) - (2)].sn));;}
+                                                                                                                        {(yyval.sn) = newNamespaceMemberList((yyvsp[-1].sn), (yyvsp[0].sn));}
+#line 3142 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 278:
-
-/* Line 1455 of yacc.c  */
+  case 278: /* namespaceMemberList: namespaceMemberList ';'  */
 #line 449 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = (yyvsp[(1) - (2)].sn);;}
+                                                                                                                                        {(yyval.sn) = (yyvsp[-1].sn);}
+#line 3148 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 279:
-
-/* Line 1455 of yacc.c  */
+  case 279: /* namespace: NAMESPACE IDENTIFY '{' '}'  */
 #line 452 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = newNamespace((yyvsp[(1) - (4)].sn), (yyvsp[(2) - (4)].sn), (yyvsp[(3) - (4)].sn), NULL, (yyvsp[(4) - (4)].sn));;}
+                                                                                                                                {(yyval.sn) = newNamespace((yyvsp[-3].sn), (yyvsp[-2].sn), (yyvsp[-1].sn), NULL, (yyvsp[0].sn));}
+#line 3154 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 280:
-
-/* Line 1455 of yacc.c  */
+  case 280: /* namespace: NAMESPACE IDENTIFY '{' namespaceMemberList '}'  */
 #line 453 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = newNamespace((yyvsp[(1) - (5)].sn), (yyvsp[(2) - (5)].sn), (yyvsp[(3) - (5)].sn), (yyvsp[(4) - (5)].sn), (yyvsp[(5) - (5)].sn));;}
+                                                                                                                {(yyval.sn) = newNamespace((yyvsp[-4].sn), (yyvsp[-3].sn), (yyvsp[-2].sn), (yyvsp[-1].sn), (yyvsp[0].sn));}
+#line 3160 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 281:
-
-/* Line 1455 of yacc.c  */
+  case 281: /* program: %empty  */
 #line 456 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = newProgram(NULL); attachSyntaxTree((yyval.sn));;}
+                                                                                                                                                        {(yyval.sn) = newProgram(NULL); attachSyntaxTree((yyval.sn));}
+#line 3166 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
-  case 282:
-
-/* Line 1455 of yacc.c  */
+  case 282: /* program: namespaceMemberList  */
 #line 457 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
-    {(yyval.sn) = newProgram((yyvsp[(1) - (1)].sn)); attachSyntaxTree((yyval.sn));;}
+                                                                                                                                        {(yyval.sn) = newProgram((yyvsp[0].sn)); attachSyntaxTree((yyval.sn));}
+#line 3172 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
     break;
 
 
+#line 3176 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
 
-/* Line 1455 of yacc.c  */
-#line 3717 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
       default: break;
     }
-  YY_SYMBOL_PRINT ("-> $$ =", yyr1[yyn], &yyval, &yyloc);
+  /* User semantic actions sometimes alter yychar, and that requires
+     that yytoken be updated with the new translation.  We take the
+     approach of translating immediately before every use of yytoken.
+     One alternative is translating here after every semantic action,
+     but that translation would be missed if the semantic action invokes
+     YYABORT, YYACCEPT, or YYERROR immediately after altering yychar or
+     if it invokes YYBACKUP.  In the case of YYABORT or YYACCEPT, an
+     incorrect destructor might then be invoked immediately.  In the
+     case of YYERROR or YYBACKUP, subsequent parser actions might lead
+     to an incorrect destructor call or verbose syntax error message
+     before the lookahead is translated.  */
+  YY_SYMBOL_PRINT ("-> $$ =", YY_CAST (yysymbol_kind_t, yyr1[yyn]), &yyval, &yyloc);
 
   YYPOPSTACK (yylen);
   yylen = 0;
-  YY_STACK_PRINT (yyss, yyssp);
 
   *++yyvsp = yyval;
 
-  /* Now `shift' the result of the reduction.  Determine what state
+  /* Now 'shift' the result of the reduction.  Determine what state
      that goes to, based on the state we popped back to and the rule
      number reduced by.  */
-
-  yyn = yyr1[yyn];
-
-  yystate = yypgoto[yyn - YYNTOKENS] + *yyssp;
-  if (0 <= yystate && yystate <= YYLAST && yycheck[yystate] == *yyssp)
-    yystate = yytable[yystate];
-  else
-    yystate = yydefgoto[yyn - YYNTOKENS];
+  {
+    const int yylhs = yyr1[yyn] - YYNTOKENS;
+    const int yyi = yypgoto[yylhs] + *yyssp;
+    yystate = (0 <= yyi && yyi <= YYLAST && yycheck[yyi] == *yyssp
+               ? yytable[yyi]
+               : yydefgoto[yylhs]);
+  }
 
   goto yynewstate;
 
 
-/*------------------------------------.
-| yyerrlab -- here on detecting error |
-`------------------------------------*/
+/*--------------------------------------.
+| yyerrlab -- here on detecting error.  |
+`--------------------------------------*/
 yyerrlab:
+  /* Make sure we have latest lookahead translation.  See comments at
+     user semantic actions for why this is necessary.  */
+  yytoken = yychar == YYEMPTY ? YYSYMBOL_YYEMPTY : YYTRANSLATE (yychar);
   /* If not already recovering from an error, report this error.  */
   if (!yyerrstatus)
     {
       ++yynerrs;
-#if ! YYERROR_VERBOSE
       yyerror (YY_("syntax error"));
-#else
-      {
-	YYSIZE_T yysize = yysyntax_error (0, yystate, yychar);
-	if (yymsg_alloc < yysize && yymsg_alloc < YYSTACK_ALLOC_MAXIMUM)
-	  {
-	    YYSIZE_T yyalloc = 2 * yysize;
-	    if (! (yysize <= yyalloc && yyalloc <= YYSTACK_ALLOC_MAXIMUM))
-	      yyalloc = YYSTACK_ALLOC_MAXIMUM;
-	    if (yymsg != yymsgbuf)
-	      YYSTACK_FREE (yymsg);
-	    yymsg = (char *) YYSTACK_ALLOC (yyalloc);
-	    if (yymsg)
-	      yymsg_alloc = yyalloc;
-	    else
-	      {
-		yymsg = yymsgbuf;
-		yymsg_alloc = sizeof yymsgbuf;
-	      }
-	  }
-
-	if (0 < yysize && yysize <= yymsg_alloc)
-	  {
-	    (void) yysyntax_error (yymsg, yystate, yychar);
-	    yyerror (yymsg);
-	  }
-	else
-	  {
-	    yyerror (YY_("syntax error"));
-	    if (yysize != 0)
-	      goto yyexhaustedlab;
-	  }
-      }
-#endif
     }
-
-
 
   if (yyerrstatus == 3)
     {
       /* If just tried and failed to reuse lookahead token after an
-	 error, discard it.  */
+         error, discard it.  */
 
       if (yychar <= YYEOF)
-	{
-	  /* Return failure if at end of input.  */
-	  if (yychar == YYEOF)
-	    YYABORT;
-	}
+        {
+          /* Return failure if at end of input.  */
+          if (yychar == YYEOF)
+            YYABORT;
+        }
       else
-	{
-	  yydestruct ("Error: discarding",
-		      yytoken, &yylval);
-	  yychar = YYEMPTY;
-	}
+        {
+          yydestruct ("Error: discarding",
+                      yytoken, &yylval);
+          yychar = YYEMPTY;
+        }
     }
 
   /* Else will try to reuse lookahead token after shifting the error
@@ -3814,14 +3250,12 @@ yyerrlab:
 | yyerrorlab -- error raised explicitly by YYERROR.  |
 `---------------------------------------------------*/
 yyerrorlab:
+  /* Pacify compilers when the user code never invokes YYERROR and the
+     label yyerrorlab therefore never appears in user code.  */
+  if (0)
+    YYERROR;
 
-  /* Pacify compilers like GCC when the user code never invokes
-     YYERROR and the label yyerrorlab therefore never appears in user
-     code.  */
-  if (/*CONSTCOND*/ 0)
-     goto yyerrorlab;
-
-  /* Do not reclaim the symbols of the rule which action triggered
+  /* Do not reclaim the symbols of the rule whose action triggered
      this YYERROR.  */
   YYPOPSTACK (yylen);
   yylen = 0;
@@ -3834,39 +3268,42 @@ yyerrorlab:
 | yyerrlab1 -- common code for both syntax error and YYERROR.  |
 `-------------------------------------------------------------*/
 yyerrlab1:
-  yyerrstatus = 3;	/* Each real token shifted decrements this.  */
+  yyerrstatus = 3;      /* Each real token shifted decrements this.  */
 
+  /* Pop stack until we find a state that shifts the error token.  */
   for (;;)
     {
       yyn = yypact[yystate];
-      if (yyn != YYPACT_NINF)
-	{
-	  yyn += YYTERROR;
-	  if (0 <= yyn && yyn <= YYLAST && yycheck[yyn] == YYTERROR)
-	    {
-	      yyn = yytable[yyn];
-	      if (0 < yyn)
-		break;
-	    }
-	}
+      if (!yypact_value_is_default (yyn))
+        {
+          yyn += YYSYMBOL_YYerror;
+          if (0 <= yyn && yyn <= YYLAST && yycheck[yyn] == YYSYMBOL_YYerror)
+            {
+              yyn = yytable[yyn];
+              if (0 < yyn)
+                break;
+            }
+        }
 
       /* Pop the current state because it cannot handle the error token.  */
       if (yyssp == yyss)
-	YYABORT;
+        YYABORT;
 
 
       yydestruct ("Error: popping",
-		  yystos[yystate], yyvsp);
+                  YY_ACCESSING_SYMBOL (yystate), yyvsp);
       YYPOPSTACK (1);
       yystate = *yyssp;
       YY_STACK_PRINT (yyss, yyssp);
     }
 
+  YY_IGNORE_MAYBE_UNINITIALIZED_BEGIN
   *++yyvsp = yylval;
+  YY_IGNORE_MAYBE_UNINITIALIZED_END
 
 
   /* Shift the error token.  */
-  YY_SYMBOL_PRINT ("Shifting", yystos[yyn], yyvsp, yylsp);
+  YY_SYMBOL_PRINT ("Shifting", YY_ACCESSING_SYMBOL (yyn), yyvsp, yylsp);
 
   yystate = yyn;
   goto yynewstate;
@@ -3879,6 +3316,7 @@ yyacceptlab:
   yyresult = 0;
   goto yyreturn;
 
+
 /*-----------------------------------.
 | yyabortlab -- YYABORT comes here.  |
 `-----------------------------------*/
@@ -3886,41 +3324,45 @@ yyabortlab:
   yyresult = 1;
   goto yyreturn;
 
-#if !defined(yyoverflow) || YYERROR_VERBOSE
+
+#if !defined yyoverflow
 /*-------------------------------------------------.
 | yyexhaustedlab -- memory exhaustion comes here.  |
 `-------------------------------------------------*/
 yyexhaustedlab:
   yyerror (YY_("memory exhausted"));
   yyresult = 2;
-  /* Fall through.  */
+  goto yyreturn;
 #endif
 
+
+/*-------------------------------------------------------.
+| yyreturn -- parsing is finished, clean up and return.  |
+`-------------------------------------------------------*/
 yyreturn:
   if (yychar != YYEMPTY)
-     yydestruct ("Cleanup: discarding lookahead",
-		 yytoken, &yylval);
-  /* Do not reclaim the symbols of the rule which action triggered
+    {
+      /* Make sure we have latest lookahead translation.  See comments at
+         user semantic actions for why this is necessary.  */
+      yytoken = YYTRANSLATE (yychar);
+      yydestruct ("Cleanup: discarding lookahead",
+                  yytoken, &yylval);
+    }
+  /* Do not reclaim the symbols of the rule whose action triggered
      this YYABORT or YYACCEPT.  */
   YYPOPSTACK (yylen);
   YY_STACK_PRINT (yyss, yyssp);
   while (yyssp != yyss)
     {
       yydestruct ("Cleanup: popping",
-		  yystos[*yyssp], yyvsp);
+                  YY_ACCESSING_SYMBOL (+*yyssp), yyvsp);
       YYPOPSTACK (1);
     }
 #ifndef yyoverflow
   if (yyss != yyssa)
     YYSTACK_FREE (yyss);
 #endif
-#if YYERROR_VERBOSE
-  if (yymsg != yymsgbuf)
-    YYSTACK_FREE (yymsg);
-#endif
-  /* Make sure YYID is used.  */
-  return YYID (yyresult);
+
+  return yyresult;
 }
-
-
 

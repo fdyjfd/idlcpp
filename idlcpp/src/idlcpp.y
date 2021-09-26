@@ -349,7 +349,7 @@ delegate_1				: typeName delegate_0									{$$ = $2; setDelegateResult($$, $1, 
 						| typeName '+' '[' ']' delegate_0						{$$ = $5; setDelegateResult($$, $1, $2); setDelegateResultArray($$);}
 ;
 
-delegate				: DELEGATE delegate_1									{$$ = $2; setDelegateKeyword($$, $1)}
+delegate				: DELEGATE delegate_1									{$$ = $2; setDelegateKeyword($$, $1);}
 						| DELEGATE CONST delegate_1								{$$ = $3; setDelegateKeyword($$, $1); setDelegateResultConst($$, $2);}
 ;
 
