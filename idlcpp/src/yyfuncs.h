@@ -114,7 +114,7 @@ enum SyntaxNodeType
 
 	snt_end_output,
 
-	snt_keyword_primitive,
+	snt_keyword_typename,
 	snt_keyword_export,
 	snt_keyword_override,
 	snt_keyword_candidate,

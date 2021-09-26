@@ -80,7 +80,7 @@
      CONST = 296,
      OPERATOR = 297,
      TYPEDEF = 298,
-     PRIMITIVE = 299,
+     TYPENAME = 299,
      ABSTRACT = 300,
      GET = 301,
      SET = 302,
@@ -105,14 +105,14 @@ typedef union YYSTYPE
 {
 
 /* Line 1676 of yacc.c  */
-#line 6 "G:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 6 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
 
 	struct SyntaxNode* sn;
 
 
 
 /* Line 1676 of yacc.c  */
-#line 116 "G:\\idlcpp\\idlcpp\\src\\idlcpp.y.h"
+#line 116 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.h"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */

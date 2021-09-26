@@ -11,7 +11,7 @@
 %token <sn> ADD_ASSIGN SUB_ASSIGN MUL_ASSIGN DIV_ASSIGN MOD_ASSIGN BIT_XOR_ASSIGN BIT_AND_ASSIGN BIT_OR_ASSIGN LEFT_SHIFT_ASSIGN RIGHT_SHIFT_ASSIGN
 %token <sn> LEFT_SHIFT RIGHT_SHIFT EQUAL NOT_EQUAL LESS_EQUAL GREATER_EQUAL AND OR INC DEC
 %token <sn> BOOL CHAR WCHAR_T SHORT LONG INT FLOAT DOUBLE SIGNED UNSIGNED STRING_T
-%token <sn> NAMESPACE ENUM CLASS STRUCT STATIC VIRTUAL VOID CONST OPERATOR TYPEDEF PRIMITIVE
+%token <sn> NAMESPACE ENUM CLASS STRUCT STATIC VIRTUAL VOID CONST OPERATOR TYPEDEF TYPENAME
 %token <sn> ABSTRACT GET SET CANDIDATE NOMETA NOCODE EXPORT OVERRIDE SCOPE IDENTIFY STRING U8STRING TEMPLATE DELEGATE
 %type <sn> identifyList enumerator enumeratorList enum_0 enum 
 %type <sn> field_0 field_1 field_2 field getter_0 getter_1 getter setter_0 setter_1 setter_2 setter candidate property_0 property_1 property_2 property
@@ -127,11 +127,11 @@ typeNameList			: typeName											{$$ = newTypeNameList(NULL, NULL, $1);}
 ;
 
 typeAlias				: TYPEDEF typeName IDENTIFY ';'						{$$ = newTypedef($1, $3, $2);}
-						| PRIMITIVE IDENTIFY ';'							{$$ = newTypeDeclaration($2, primitive_type);}
+						| TYPENAME IDENTIFY ';'								{$$ = newTypeDeclaration($2, primitive_type);}
 						| ENUM IDENTIFY ';'									{$$ = newTypeDeclaration($2, enum_type);}
 						| STRUCT IDENTIFY ';'								{$$ = newTypeDeclaration($2, value_type);}
 						| CLASS IDENTIFY ';'								{$$ = newTypeDeclaration($2, reference_type);}
-						| PRIMITIVE IDENTIFY '=' STRING ';'					{$$ = newTypeDeclaration($2, primitive_type); setNativeName($$, $4);}
+						| TYPENAME IDENTIFY '=' STRING ';'					{$$ = newTypeDeclaration($2, primitive_type); setNativeName($$, $4);}
 						| ENUM IDENTIFY '=' STRING ';'						{$$ = newTypeDeclaration($2, enum_type); setNativeName($$, $4);}
 						| STRUCT IDENTIFY '=' STRING ';'					{$$ = newTypeDeclaration($2, value_type); setNativeName($$, $4);}
 						| CLASS IDENTIFY '=' STRING ';'						{$$ = newTypeDeclaration($2, reference_type); setNativeName($$, $4);}

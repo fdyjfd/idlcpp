@@ -2972,7 +2972,14 @@ void writeMetaConstructor_Attributes_Method(std::vector<AttributeOffsetAndCount>
 			AttributeNode* attributeNode = attributeNodes[i];
 			writeStringToFile("{ \"", file, indentation);
 			writeStringToFile(attributeNode->m_name->m_str.c_str(), file);
-			writeStringToFile("\", u8\"", file);
+			if (attributeNode->m_u8content)
+			{
+				writeStringToFile("\", u8\"", file);
+			}
+			else
+			{
+				writeStringToFile("\", \"", file);
+			}
 			if (attributeNode->m_content)
 			{
 				writeStringToFile(attributeNode->m_content->m_str.c_str(), file);

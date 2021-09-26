@@ -123,7 +123,7 @@ int yyHasDelegate = 0;
 "const"			{yylval.sn = newToken(snt_keyword_const);					yycolumnno += strlen(yytext); yytokenno++; return CONST;}
 "operator"		{yylval.sn = newToken(snt_keyword_operator);				yycolumnno += strlen(yytext); yytokenno++; return OPERATOR;}
 "typedef"		{yylval.sn = newToken(snt_keyword_typedef);					yycolumnno += strlen(yytext); yytokenno++; return TYPEDEF;}
-"primitive"		{yylval.sn = newToken(snt_keyword_primitive);				yycolumnno += strlen(yytext); yytokenno++; return PRIMITIVE;}
+"typename"		{yylval.sn = newToken(snt_keyword_typename);				yycolumnno += strlen(yytext); yytokenno++; return TYPENAME;}
 "get"			{yylval.sn = newToken(snt_keyword_get);						yycolumnno += strlen(yytext); yytokenno++; return GET;}
 "set"			{yylval.sn = newToken(snt_keyword_set);						yycolumnno += strlen(yytext); yytokenno++; return SET;}
 "candidate"		{yylval.sn = newToken(snt_keyword_candidate);				yycolumnno += strlen(yytext); yytokenno++; return CANDIDATE;}
