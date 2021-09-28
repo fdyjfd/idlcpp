@@ -2,7 +2,7 @@
 #include "AttributeNode.h"
 #include "IdentifyNode.h"
 #include "ErrorList.h"
-
+#include <stdio.h>
 
 AttributeListNode::AttributeListNode(AttributeListNode* attributeList, AttributeNode* attribute)
 {
@@ -39,7 +39,7 @@ void checkAttributeNames(std::vector<AttributeNode*>& attributeNodes)
 		if (!res.second)
 		{
 			char buf[4096];
-			sprintf_s(buf, "\'%s\' : attribute already defined at line %d, column %d", identify->m_str.c_str(),
+			sprintf(buf, "\'%s\' : attribute already defined at line %d, column %d", identify->m_str.c_str(),
 				(*res.first)->m_lineNo, (*res.first)->m_columnNo);
 			ErrorList_AddItem_CurrentFile(identify->m_lineNo,
 				identify->m_columnNo, semantic_error_attribute_redefined, buf);

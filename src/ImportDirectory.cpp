@@ -1,6 +1,8 @@
 #include "ImportDirectory.h"
 #include "Platform.h"
-#include <Windows.h>
+#include <string.h>
+#include <filesystem>
+namespace fs = std::filesystem;
 ImportDirectories g_importDirectories;
 
 ImportDirectories::ImportDirectories()
@@ -16,7 +18,8 @@ void ImportDirectories::calcImportDirectories(const char* fileName)
 		return;
 	}
 	std::string path(fileName, lastSlash + 1);
-	::SetCurrentDirectory(path.c_str());
+	fs::current_path(path.c_str());
+
 	auto it = m_directories.begin();
 	auto end = m_directories.end();
 	for (; it != end; ++it)

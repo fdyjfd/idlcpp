@@ -68,7 +68,7 @@ void writeDelegateImpl_InitResult(DelegateNode* delegateNode, FILE* file, int in
 	{
 		sign = "*";
 	}
-	sprintf_s(buf, "%s%s __res__;\n", typeName.c_str(), sign);
+	sprintf(buf, "%s%s __res__;\n", typeName.c_str(), sign);
 	writeStringToFile(buf, file, indentation);
 }
 
@@ -97,16 +97,16 @@ void writeDelegateImpl_CastResult(DelegateNode* delegateNode, FILE* file, int in
 		{
 			//case void_type: impossible
 		case primitive_type:
-			sprintf_s(buf, "__result__.castToPrimitive(RuntimeTypeOf<%s>::RuntimeType::GetSingleton(), &__res__);\n", typeName.c_str());
+			sprintf(buf, "__result__.castToPrimitive(RuntimeTypeOf<%s>::RuntimeType::GetSingleton(), &__res__);\n", typeName.c_str());
 			break;
 		case enum_type:
-			sprintf_s(buf, "__result__.castToEnum(RuntimeTypeOf<%s>::RuntimeType::GetSingleton(), &__res__);\n", typeName.c_str());
+			sprintf(buf, "__result__.castToEnum(RuntimeTypeOf<%s>::RuntimeType::GetSingleton(), &__res__);\n", typeName.c_str());
 			break;
 		case value_type:
-			sprintf_s(buf, "__result__.castToValue(RuntimeTypeOf<%s>::RuntimeType::GetSingleton(), &__res__);\n", typeName.c_str());
+			sprintf(buf, "__result__.castToValue(RuntimeTypeOf<%s>::RuntimeType::GetSingleton(), &__res__);\n", typeName.c_str());
 			break;
 		case reference_type:
-			sprintf_s(buf, "__result__.castToReference(RuntimeTypeOf<%s>::RuntimeType::GetSingleton(), &__res__);\n", typeName.c_str());
+			sprintf(buf, "__result__.castToReference(RuntimeTypeOf<%s>::RuntimeType::GetSingleton(), &__res__);\n", typeName.c_str());
 			break;
 		default:
 			assert(false);
@@ -118,19 +118,19 @@ void writeDelegateImpl_CastResult(DelegateNode* delegateNode, FILE* file, int in
 		switch (typeCategory)
 		{
 		case void_type:
-			sprintf_s(buf, "__result__.castToVoidPtr(&__res__);\n");
+			sprintf(buf, "__result__.castToVoidPtr(&__res__);\n");
 			break;
 		case primitive_type:
-			sprintf_s(buf, "__result__.castToPrimitivePtr(RuntimeTypeOf<%s>::RuntimeType::GetSingleton(), (void**)&__res__);\n", typeName.c_str());
+			sprintf(buf, "__result__.castToPrimitivePtr(RuntimeTypeOf<%s>::RuntimeType::GetSingleton(), (void**)&__res__);\n", typeName.c_str());
 			break;
 		case enum_type:
-			sprintf_s(buf, "__result__.castToEnumPtr(RuntimeTypeOf<%s>::RuntimeType::GetSingleton(), (void**)&__res__);\n", typeName.c_str());
+			sprintf(buf, "__result__.castToEnumPtr(RuntimeTypeOf<%s>::RuntimeType::GetSingleton(), (void**)&__res__);\n", typeName.c_str());
 			break;
 		case value_type:
-			sprintf_s(buf, "__result__.castToValuePtr(RuntimeTypeOf<%s>::RuntimeType::GetSingleton(), (void**)&__res__);\n", typeName.c_str());
+			sprintf(buf, "__result__.castToValuePtr(RuntimeTypeOf<%s>::RuntimeType::GetSingleton(), (void**)&__res__);\n", typeName.c_str());
 			break;
 		case reference_type:
-			sprintf_s(buf, "__result__.castToReferencePtr(RuntimeTypeOf<%s>::RuntimeType::GetSingleton(), (void**)&__res__);\n", typeName.c_str());
+			sprintf(buf, "__result__.castToReferencePtr(RuntimeTypeOf<%s>::RuntimeType::GetSingleton(), (void**)&__res__);\n", typeName.c_str());
 			break;
 		default:
 			assert(false);
@@ -153,16 +153,16 @@ void writeDelegateImpl_SetResultType(DelegateNode* delegateNode, FILE* file, int
 	{
 		if (primitive_type == typeCategory)
 		{
-			sprintf_s(buf, "__result__.assignNullPrimitive(RuntimeTypeOf<%s>::RuntimeType::GetSingleton());\n", typeName.c_str());
+			sprintf(buf, "__result__.assignNullPrimitive(RuntimeTypeOf<%s>::RuntimeType::GetSingleton());\n", typeName.c_str());
 		}
 		else
 		{
-			sprintf_s(buf, "__result__.assignNullEnum(RuntimeTypeOf<%s>::RuntimeType::GetSingleton());\n", typeName.c_str());
+			sprintf(buf, "__result__.assignNullEnum(RuntimeTypeOf<%s>::RuntimeType::GetSingleton());\n", typeName.c_str());
 		}
 	}
 	else
 	{
-		sprintf_s(buf, "__result__.assignNullPtr(RuntimeTypeOf<%s>::RuntimeType::GetSingleton());\n", typeName.c_str());
+		sprintf(buf, "__result__.assignNullPtr(RuntimeTypeOf<%s>::RuntimeType::GetSingleton());\n", typeName.c_str());
 	}
 	writeStringToFile(buf, file, indentation);
 }
@@ -181,13 +181,13 @@ void SourceFileGenerator::generateCode_Program(FILE* file, ProgramNode* programN
 
 	writeStringToFile("#pragma once\n\n", file);
 
-	sprintf_s(buf, "#include \"%s.h\"\n", cppName);
+	sprintf(buf, "#include \"%s.h\"\n", cppName);
 	writeStringToFile(buf, file);
 
-	sprintf_s(buf, "#include \"%s%s\"\n", cppName, g_options.m_metaHeaderFilePostfix.c_str());
+	sprintf(buf, "#include \"%s%s\"\n", cppName, g_options.m_metaHeaderFilePostfix.c_str());
 	writeStringToFile(buf, file);
 
-	sprintf_s(buf, "#include \"%sRefCountImpl.h\"\n\n", pafcorePath.c_str());
+	sprintf(buf, "#include \"%sRefCountImpl.h\"\n\n", pafcorePath.c_str());
 	writeStringToFile(buf, file);
 
 	generateCode_Namespace(file, programNode, -1);
@@ -203,7 +203,7 @@ void SourceFileGenerator::generateCode_Namespace(FILE* file, NamespaceNode* name
 	char buf[4096];
 	if(!namespaceNode->isGlobalNamespace())
 	{
-		sprintf_s(buf, "namespace %s\n", namespaceNode->m_name->m_str.c_str());
+		sprintf(buf, "namespace %s\n", namespaceNode->m_name->m_str.c_str());
 		writeStringToFile(buf, file, indentation);
 		writeStringToFile("{\n\n", file, indentation);
 	}
@@ -401,14 +401,14 @@ void SourceFileGenerator::generateCode_Delegate(FILE* file, DelegateNode* delega
 	writeStringToFile("pafcore::Variant __result__;\n", file, indentation + 1);
 	if (0 < paramCount)
 	{
-		sprintf_s(buf, "::pafcore::Variant __arguments__[%d];\n", paramCount);
+		sprintf(buf, "::pafcore::Variant __arguments__[%d];\n", paramCount);
 		writeStringToFile(buf, file, indentation + 1);
 	}
-	sprintf_s(buf, "::pafcore::Variant* __args__[%d] = {0", paramCount + 1);
+	sprintf(buf, "::pafcore::Variant* __args__[%d] = {0", paramCount + 1);
 	writeStringToFile(buf, file, indentation + 1);
 	for (size_t i = 0; i < paramCount; ++i)
 	{
-		sprintf_s(buf, ", &__arguments__[%d]", i);
+		sprintf(buf, ", &__arguments__[%d]", i);
 		writeStringToFile(buf, file, 0);
 	}
 	writeStringToFile("};\n", file, 0);
@@ -425,7 +425,7 @@ void SourceFileGenerator::generateCode_Delegate(FILE* file, DelegateNode* delega
 	writeStringToFile("(*(CallBackFunction)__functionCallBack__->m_function)(__functionCallBack__->m_userData", file, 0);
 	for (size_t i = 0; i < paramCount; ++i)
 	{
-		sprintf_s(buf, ", %s", parameterNodes[i]->m_name->m_str.c_str());
+		sprintf(buf, ", %s", parameterNodes[i]->m_name->m_str.c_str());
 		writeStringToFile(buf, file, 0);
 	}
 	writeStringToFile(");\n", file, 0);
@@ -455,7 +455,7 @@ void SourceFileGenerator::generateCode_Delegate(FILE* file, DelegateNode* delega
 	}
 	writeStringToFile("}\n", file, indentation + 3);
 
-	sprintf_s(buf, "__callBack__->invoke(&__result__, __args__, %d);\n", paramCount + 1);
+	sprintf(buf, "__callBack__->invoke(&__result__, __args__, %d);\n", paramCount + 1);
 	writeStringToFile(buf, file, indentation + 3);
 
 	if (!isVoid)
@@ -601,29 +601,29 @@ void SourceFileGenerator::generateCode_AdditionalMethod(FILE* file, MethodNode* 
 	{
 		if (classNode->isValueType())
 		{
-			sprintf_s(buf, "return paf_new %s(", typeName.c_str());
+			sprintf(buf, "return paf_new %s(", typeName.c_str());
 		}
 		else
 		{
 			if (classNode->m_category && classNode->m_category->m_str == "atomic_reference_object")
 			{
-				sprintf_s(buf, "return paf_new ::pafcore::AtomicRefCountImpl<%s>(", typeName.c_str());
+				sprintf(buf, "return paf_new ::pafcore::AtomicRefCountImpl<%s>(", typeName.c_str());
 			}
 			else
 			{
-				sprintf_s(buf, "return paf_new ::pafcore::RefCountImpl<%s>(", typeName.c_str());
+				sprintf(buf, "return paf_new ::pafcore::RefCountImpl<%s>(", typeName.c_str());
 			}
 		}
 	}
 	//else if ("NewARC" == methodNode->m_name->m_str)
 	//{
-	//	sprintf_s(buf, "return paf_new ::pafcore::AtomicRefCountImpl<%s>(", typeName.c_str());
+	//	sprintf(buf, "return paf_new ::pafcore::AtomicRefCountImpl<%s>(", typeName.c_str());
 	//}
 	else
 	{
 		assert("NewArray" == methodNode->m_name->m_str);
 		assert(classNode->isValueType());
-		sprintf_s(buf, "return paf_new_array<%s>(", typeName.c_str());
+		sprintf(buf, "return paf_new_array<%s>(", typeName.c_str());
 	}
 
 	writeStringToFile(buf, file, indentation + 1);

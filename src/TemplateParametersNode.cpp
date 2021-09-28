@@ -3,6 +3,7 @@
 #include "IdentifyNode.h"
 #include "RaiseError.h"
 #include <set>
+#include <algorithm>
 
 TemplateParametersNode::TemplateParametersNode(TokenNode* keyword, TokenNode* leftBracket, TemplateParameterListNode* parameterList, TokenNode* rightBracket)
 {

@@ -9,7 +9,14 @@
       "installRoot": "${projectDir}\\bin",
       "cmakeCommandArgs": "",
       "buildCommandArgs": "",
-      "ctestCommandArgs": ""
+      "ctestCommandArgs": "",
+      "variables": [
+        {
+          "name": "CMAKE_CXX_STANDARD",
+          "value": "17",
+          "type": "STRING"
+        }
+      ]
     },
     {
       "name": "x64-Release",
@@ -21,7 +28,49 @@
       "buildCommandArgs": "",
       "ctestCommandArgs": "",
       "inheritEnvironments": [ "msvc_x64_x64" ],
-      "variables": []
+      "variables": [
+        {
+          "name": "CMAKE_CXX_STANDARD",
+          "value": "17",
+          "type": "STRING"
+        }
+      ]
+    },
+    {
+      "name": "Linux-GCC-Debug",
+      "generator": "Ninja",
+      "configurationType": "Debug",
+      "cmakeExecutable": "cmake",
+      "remoteCopySourcesExclusionList": [ ".vs", ".git", "out", "winflexbison" ],
+      "cmakeCommandArgs": "",
+      "buildCommandArgs": "",
+      "ctestCommandArgs": "",
+      "inheritEnvironments": [ "linux_x64" ],
+      "remoteMachineName": "${defaultRemoteMachineName}",
+      "remoteCMakeListsRoot": "$HOME/build",
+      "remoteBuildRoot": "$HOME/build",
+      "remoteInstallRoot": "$HOME/bin",
+      "remoteCopySources": true,
+      "rsyncCommandArgs": "-t --delete  --delete-excluded",
+      "remoteCopyBuildOutput": false,
+      "remoteCopySourcesMethod": "rsync",
+      "variables": [
+        {
+          "name": "CMAKE_CXX_COMPILER",
+          "value": "/opt/rh/devtoolset-10/root/usr/bin/g++",
+          "type": "FILEPATH"
+        },
+        {
+          "name": "CMAKE_C_COMPILER",
+          "value": "/opt/rh/devtoolset-10/root/usr/bin/gcc",
+          "type": "FILEPATH"
+        },
+        {
+          "name": "CMAKE_CXX_STANDARD",
+          "value": "17",
+          "type": "STRING"
+        }
+      ]
     }
   ]
 }

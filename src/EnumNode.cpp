@@ -63,7 +63,7 @@ void EnumNode::checkSemantic(TemplateArguments* templateArguments)
 		if(!res.second)
 		{
 			char buf[4096];
-			sprintf_s(buf, "\'%s\' : enumerator already defined at line %d, column %d", enumerator->m_name->m_str.c_str(),
+			sprintf(buf, "\'%s\' : enumerator already defined at line %d, column %d", enumerator->m_name->m_str.c_str(),
 				(*res.first)->m_name->m_lineNo, (*res.first)->m_name->m_columnNo);
 			ErrorList_AddItem_CurrentFile(enumerator->m_name->m_lineNo,
 				enumerator->m_name->m_columnNo, semantic_error_enumerator_redefined, buf);

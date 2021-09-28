@@ -1,4 +1,5 @@
 #include "TokenListNode.h"
+#include <algorithm>
 
 TokenListNode::TokenListNode(TokenListNode* tokenList, TokenNode* token)
 {

@@ -67,11 +67,12 @@
 
 
 /* First part of user prologue.  */
-#line 1 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 1 "D:/idlcpp/src/idlcpp.y"
 
 #include "yyfuncs.h"
+#include <stddef.h>
 
-#line 75 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 76 "D:/idlcpp/src/idlcpp.y.c"
 
 # ifndef YY_CAST
 #  ifdef __cplusplus
@@ -627,35 +628,35 @@ static const yytype_int8 yytranslate[] =
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_int16 yyrline[] =
 {
-       0,    30,    30,    31,    32,    33,    34,    35,    36,    37,
-      38,    39,    40,    41,    42,    43,    44,    45,    46,    47,
-      48,    49,    50,    51,    52,    53,    54,    55,    56,    57,
-      58,    59,    60,    61,    62,    65,    66,    67,    70,    71,
-      74,    75,    76,    79,    80,    83,    84,    87,    88,    92,
-      93,    94,    95,    96,    97,   100,   101,   104,   105,   108,
-     109,   112,   113,   116,   117,   120,   121,   122,   125,   126,
-     129,   130,   131,   132,   133,   134,   135,   136,   137,   140,
-     141,   142,   145,   146,   149,   150,   153,   154,   158,   161,
-     162,   165,   166,   169,   172,   173,   176,   177,   180,   181,
-     184,   187,   188,   189,   190,   191,   192,   195,   196,   197,
-     200,   201,   202,   203,   204,   205,   206,   207,   208,   211,
-     212,   216,   217,   218,   219,   220,   221,   222,   223,   224,
-     225,   228,   229,   232,   233,   236,   237,   240,   241,   242,
-     243,   244,   245,   248,   249,   250,   251,   252,   253,   256,
-     257,   260,   261,   262,   263,   266,   267,   270,   271,   274,
-     275,   276,   277,   278,   279,   280,   281,   282,   283,   284,
-     285,   286,   287,   288,   289,   290,   291,   292,   293,   294,
-     295,   296,   297,   298,   299,   300,   301,   302,   303,   304,
-     305,   306,   307,   308,   309,   313,   314,   315,   316,   320,
-     321,   322,   323,   324,   327,   328,   331,   332,   333,   336,
-     337,   340,   341,   342,   345,   346,   347,   348,   349,   352,
-     353,   356,   357,   358,   359,   360,   361,   362,   363,   364,
-     365,   368,   369,   372,   373,   374,   375,   378,   379,   382,
-     385,   386,   387,   388,   391,   392,   395,   396,   399,   400,
-     403,   404,   407,   408,   411,   412,   416,   417,   418,   419,
-     422,   425,   426,   427,   428,   432,   433,   434,   435,   436,
-     437,   438,   439,   442,   443,   446,   447,   448,   449,   452,
-     453,   456,   457
+       0,    31,    31,    32,    33,    34,    35,    36,    37,    38,
+      39,    40,    41,    42,    43,    44,    45,    46,    47,    48,
+      49,    50,    51,    52,    53,    54,    55,    56,    57,    58,
+      59,    60,    61,    62,    63,    66,    67,    68,    71,    72,
+      75,    76,    77,    80,    81,    84,    85,    88,    89,    93,
+      94,    95,    96,    97,    98,   101,   102,   105,   106,   109,
+     110,   113,   114,   117,   118,   121,   122,   123,   126,   127,
+     130,   131,   132,   133,   134,   135,   136,   137,   138,   141,
+     142,   143,   146,   147,   150,   151,   154,   155,   159,   162,
+     163,   166,   167,   170,   173,   174,   177,   178,   181,   182,
+     185,   188,   189,   190,   191,   192,   193,   196,   197,   198,
+     201,   202,   203,   204,   205,   206,   207,   208,   209,   212,
+     213,   217,   218,   219,   220,   221,   222,   223,   224,   225,
+     226,   229,   230,   233,   234,   237,   238,   241,   242,   243,
+     244,   245,   246,   249,   250,   251,   252,   253,   254,   257,
+     258,   261,   262,   263,   264,   267,   268,   271,   272,   275,
+     276,   277,   278,   279,   280,   281,   282,   283,   284,   285,
+     286,   287,   288,   289,   290,   291,   292,   293,   294,   295,
+     296,   297,   298,   299,   300,   301,   302,   303,   304,   305,
+     306,   307,   308,   309,   310,   314,   315,   316,   317,   321,
+     322,   323,   324,   325,   328,   329,   332,   333,   334,   337,
+     338,   341,   342,   343,   346,   347,   348,   349,   350,   353,
+     354,   357,   358,   359,   360,   361,   362,   363,   364,   365,
+     366,   369,   370,   373,   374,   375,   376,   379,   380,   383,
+     386,   387,   388,   389,   392,   393,   396,   397,   400,   401,
+     404,   405,   408,   409,   412,   413,   417,   418,   419,   420,
+     423,   426,   427,   428,   429,   433,   434,   435,   436,   437,
+     438,   439,   440,   443,   444,   447,   448,   449,   450,   453,
+     454,   457,   458
 };
 #endif
 
@@ -1702,1477 +1703,1477 @@ yyreduce:
   switch (yyn)
     {
   case 2: /* primitive: VOID  */
-#line 30 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 31 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                         {(yyval.sn) = newPrimitiveType((yyvsp[0].sn), pt_void);}
-#line 1708 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 1709 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 3: /* primitive: BOOL  */
-#line 31 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 32 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                                 {(yyval.sn) = newPrimitiveType((yyvsp[0].sn), pt_bool);}
-#line 1714 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 1715 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 4: /* primitive: CHAR  */
-#line 32 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 33 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                                 {(yyval.sn) = newPrimitiveType((yyvsp[0].sn), pt_char);}
-#line 1720 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 1721 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 5: /* primitive: SIGNED CHAR  */
-#line 33 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 34 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                         {(yyval.sn) = newPrimitiveType((yyvsp[-1].sn), pt_schar);}
-#line 1726 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 1727 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 6: /* primitive: UNSIGNED CHAR  */
-#line 34 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 35 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                         {(yyval.sn) = newPrimitiveType((yyvsp[-1].sn), pt_uchar);}
-#line 1732 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 1733 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 7: /* primitive: WCHAR_T  */
-#line 35 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 36 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                                 {(yyval.sn) = newPrimitiveType((yyvsp[0].sn), pt_wchar_t);}
-#line 1738 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 1739 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 8: /* primitive: SHORT  */
-#line 36 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 37 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                                 {(yyval.sn) = newPrimitiveType((yyvsp[0].sn), pt_short);}
-#line 1744 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 1745 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 9: /* primitive: SHORT INT  */
-#line 37 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 38 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                                 {(yyval.sn) = newPrimitiveType((yyvsp[-1].sn), pt_short);}
-#line 1750 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 1751 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 10: /* primitive: SIGNED SHORT  */
-#line 38 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 39 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                         {(yyval.sn) = newPrimitiveType((yyvsp[-1].sn), pt_short);}
-#line 1756 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 1757 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 11: /* primitive: SIGNED SHORT INT  */
-#line 39 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 40 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                         {(yyval.sn) = newPrimitiveType((yyvsp[-2].sn), pt_short);}
-#line 1762 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 1763 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 12: /* primitive: UNSIGNED SHORT  */
-#line 40 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 41 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                         {(yyval.sn) = newPrimitiveType((yyvsp[-1].sn), pt_ushort);}
-#line 1768 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 1769 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 13: /* primitive: UNSIGNED SHORT INT  */
-#line 41 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 42 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                 {(yyval.sn) = newPrimitiveType((yyvsp[-2].sn), pt_ushort);}
-#line 1774 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 1775 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 14: /* primitive: LONG  */
-#line 42 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 43 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                                 {(yyval.sn) = newPrimitiveType((yyvsp[0].sn), pt_long);}
-#line 1780 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 1781 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 15: /* primitive: LONG INT  */
-#line 43 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 44 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                                 {(yyval.sn) = newPrimitiveType((yyvsp[-1].sn), pt_long);}
-#line 1786 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 1787 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 16: /* primitive: SIGNED LONG  */
-#line 44 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 45 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                         {(yyval.sn) = newPrimitiveType((yyvsp[-1].sn), pt_long);}
-#line 1792 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 1793 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 17: /* primitive: SIGNED LONG INT  */
-#line 45 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 46 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                         {(yyval.sn) = newPrimitiveType((yyvsp[-2].sn), pt_long);}
-#line 1798 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 1799 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 18: /* primitive: UNSIGNED LONG  */
-#line 46 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 47 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                         {(yyval.sn) = newPrimitiveType((yyvsp[-1].sn), pt_ulong);}
-#line 1804 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 1805 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 19: /* primitive: UNSIGNED LONG INT  */
-#line 47 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 48 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                         {(yyval.sn) = newPrimitiveType((yyvsp[-2].sn), pt_ulong);}
-#line 1810 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 1811 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 20: /* primitive: LONG LONG  */
-#line 48 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 49 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                                 {(yyval.sn) = newPrimitiveType((yyvsp[-1].sn), pt_longlong);}
-#line 1816 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 1817 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 21: /* primitive: LONG LONG INT  */
-#line 49 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 50 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                         {(yyval.sn) = newPrimitiveType((yyvsp[-2].sn), pt_longlong);}
-#line 1822 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 1823 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 22: /* primitive: SIGNED LONG LONG  */
-#line 50 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 51 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                         {(yyval.sn) = newPrimitiveType((yyvsp[-2].sn), pt_longlong);}
-#line 1828 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 1829 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 23: /* primitive: SIGNED LONG LONG INT  */
-#line 51 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 52 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                 {(yyval.sn) = newPrimitiveType((yyvsp[-3].sn), pt_longlong);}
-#line 1834 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 1835 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 24: /* primitive: UNSIGNED LONG LONG  */
-#line 52 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 53 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                 {(yyval.sn) = newPrimitiveType((yyvsp[-2].sn), pt_ulonglong);}
-#line 1840 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 1841 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 25: /* primitive: UNSIGNED LONG LONG INT  */
-#line 53 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 54 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                 {(yyval.sn) = newPrimitiveType((yyvsp[-3].sn), pt_ulonglong);}
-#line 1846 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 1847 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 26: /* primitive: INT  */
-#line 54 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 55 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                                 {(yyval.sn) = newPrimitiveType((yyvsp[0].sn), pt_int);}
-#line 1852 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 1853 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 27: /* primitive: SIGNED INT  */
-#line 55 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 56 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                         {(yyval.sn) = newPrimitiveType((yyvsp[-1].sn), pt_int);}
-#line 1858 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 1859 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 28: /* primitive: SIGNED  */
-#line 56 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 57 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                                 {(yyval.sn) = newPrimitiveType((yyvsp[0].sn), pt_int);}
-#line 1864 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 1865 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 29: /* primitive: UNSIGNED INT  */
-#line 57 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 58 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                         {(yyval.sn) = newPrimitiveType((yyvsp[-1].sn), pt_uint);}
-#line 1870 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 1871 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 30: /* primitive: UNSIGNED  */
-#line 58 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 59 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                                 {(yyval.sn) = newPrimitiveType((yyvsp[0].sn), pt_uint);}
-#line 1876 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 1877 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 31: /* primitive: FLOAT  */
-#line 59 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 60 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                                 {(yyval.sn) = newPrimitiveType((yyvsp[0].sn), pt_float);}
-#line 1882 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 1883 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 32: /* primitive: DOUBLE  */
-#line 60 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 61 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                                 {(yyval.sn) = newPrimitiveType((yyvsp[0].sn), pt_double);}
-#line 1888 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 1889 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 33: /* primitive: LONG DOUBLE  */
-#line 61 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 62 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                         {(yyval.sn) = newPrimitiveType((yyvsp[-1].sn), pt_long_double);}
-#line 1894 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 1895 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 34: /* primitive: STRING_T  */
-#line 62 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 63 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                                 {(yyval.sn) = newPrimitiveType((yyvsp[0].sn), pt_string_t);}
-#line 1900 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 1901 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 35: /* attribute: IDENTIFY  */
-#line 65 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 66 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                         {(yyval.sn) = newAttribute((yyvsp[0].sn), NULL, 0);}
-#line 1906 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 1907 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 36: /* attribute: IDENTIFY '=' STRING  */
-#line 66 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 67 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                 {(yyval.sn) = newAttribute((yyvsp[-2].sn), (yyvsp[0].sn), 0);}
-#line 1912 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 1913 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 37: /* attribute: IDENTIFY '=' U8STRING  */
-#line 67 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 68 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                 {(yyval.sn) = newAttribute((yyvsp[-2].sn), (yyvsp[0].sn), 1);}
-#line 1918 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 1919 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 38: /* attributeList: attribute  */
-#line 70 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 71 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                 {(yyval.sn) = newAttributeList(NULL, (yyvsp[0].sn));}
-#line 1924 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 1925 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 39: /* attributeList: attributeList ',' attribute  */
-#line 71 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 72 "D:/idlcpp/src/idlcpp.y"
                                                                                                                         {(yyval.sn) = newAttributeList((yyvsp[-2].sn), (yyvsp[0].sn));}
-#line 1930 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 1931 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 40: /* attributes: '[' attributeList ']'  */
-#line 74 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 75 "D:/idlcpp/src/idlcpp.y"
                                                                                                                         {(yyval.sn) = (yyvsp[-1].sn);}
-#line 1936 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 1937 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 41: /* attributes: '[' attributeList ',' ']'  */
-#line 75 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 76 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                 {(yyval.sn) = (yyvsp[-2].sn);}
-#line 1942 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 1943 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 42: /* attributes: '[' ']'  */
-#line 76 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 77 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                                 {(yyval.sn) = NULL;}
-#line 1948 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 1949 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 43: /* identifyList: IDENTIFY  */
-#line 79 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 80 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                 {(yyval.sn) = newIdentifyList(NULL, NULL, (yyvsp[0].sn));}
-#line 1954 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 1955 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 44: /* identifyList: identifyList ',' IDENTIFY  */
-#line 80 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 81 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                 {(yyval.sn) = newIdentifyList((yyvsp[-2].sn), (yyvsp[-1].sn), (yyvsp[0].sn));}
-#line 1960 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 1961 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 45: /* enumerator: IDENTIFY  */
-#line 83 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 84 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                         {(yyval.sn) = newEnumerator(NULL, (yyvsp[0].sn));}
-#line 1966 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 1967 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 46: /* enumerator: attributes IDENTIFY  */
-#line 84 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 85 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                 {(yyval.sn) = newEnumerator((yyvsp[-1].sn), (yyvsp[0].sn));}
-#line 1972 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 1973 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 47: /* enumeratorList: enumerator  */
-#line 87 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 88 "D:/idlcpp/src/idlcpp.y"
                                                                                                                         {(yyval.sn) = newEnumeratorList(NULL, NULL, (yyvsp[0].sn));}
-#line 1978 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 1979 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 48: /* enumeratorList: enumeratorList ',' enumerator  */
-#line 88 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 89 "D:/idlcpp/src/idlcpp.y"
                                                                                                                         {(yyval.sn) = newEnumeratorList((yyvsp[-2].sn), (yyvsp[-1].sn), (yyvsp[0].sn));}
-#line 1984 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 1985 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 49: /* enum_0: ENUM IDENTIFY '{' enumeratorList '}'  */
-#line 92 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 93 "D:/idlcpp/src/idlcpp.y"
                                                                                                         {(yyval.sn) = newEnum((yyvsp[-4].sn), NULL, (yyvsp[-3].sn), (yyvsp[-2].sn), (yyvsp[-1].sn), (yyvsp[0].sn));}
-#line 1990 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 1991 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 50: /* enum_0: ENUM IDENTIFY '{' enumeratorList ',' '}'  */
-#line 93 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 94 "D:/idlcpp/src/idlcpp.y"
                                                                                                                 {(yyval.sn) = newEnum((yyvsp[-5].sn), NULL, (yyvsp[-4].sn), (yyvsp[-3].sn), (yyvsp[-2].sn), (yyvsp[0].sn));}
-#line 1996 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 1997 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 51: /* enum_0: ENUM IDENTIFY '{' '}'  */
-#line 94 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 95 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                 {(yyval.sn) = newEnum((yyvsp[-3].sn), NULL, (yyvsp[-2].sn), (yyvsp[-1].sn), NULL, (yyvsp[0].sn));}
-#line 2002 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 2003 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 52: /* enum_0: ENUM CLASS IDENTIFY '{' enumeratorList '}'  */
-#line 95 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 96 "D:/idlcpp/src/idlcpp.y"
                                                                                                         {(yyval.sn) = newEnum((yyvsp[-5].sn), (yyvsp[-4].sn), (yyvsp[-3].sn), (yyvsp[-2].sn), (yyvsp[-1].sn), (yyvsp[0].sn));}
-#line 2008 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 2009 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 53: /* enum_0: ENUM CLASS IDENTIFY '{' enumeratorList ',' '}'  */
-#line 96 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 97 "D:/idlcpp/src/idlcpp.y"
                                                                                                         {(yyval.sn) = newEnum((yyvsp[-6].sn), (yyvsp[-5].sn), (yyvsp[-4].sn), (yyvsp[-3].sn), (yyvsp[-2].sn), (yyvsp[0].sn));}
-#line 2014 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 2015 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 54: /* enum_0: ENUM CLASS IDENTIFY '{' '}'  */
-#line 97 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 98 "D:/idlcpp/src/idlcpp.y"
                                                                                                                         {(yyval.sn) = newEnum((yyvsp[-4].sn), (yyvsp[-3].sn), (yyvsp[-2].sn), (yyvsp[-1].sn), NULL, (yyvsp[0].sn));}
-#line 2020 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 2021 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 55: /* enum: enum_0 ';'  */
-#line 100 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 101 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                 {(yyval.sn) = (yyvsp[-1].sn); setEnumSemicolon((yyval.sn), (yyvsp[0].sn));}
-#line 2026 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 2027 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 56: /* enum: enum_0 '=' STRING ';'  */
-#line 101 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 102 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                 {(yyval.sn) = (yyvsp[-3].sn); setNativeName((yyval.sn), (yyvsp[-1].sn)); setEnumSemicolon((yyval.sn), (yyvsp[0].sn));}
-#line 2032 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 2033 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 57: /* scopeName: IDENTIFY  */
-#line 104 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 105 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                         {(yyval.sn) = newScopeName((yyvsp[0].sn), NULL, NULL, NULL);}
-#line 2038 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 2039 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 58: /* scopeName: IDENTIFY '<' typeNameList '>'  */
-#line 105 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 106 "D:/idlcpp/src/idlcpp.y"
                                                                                                                         {(yyval.sn) = newScopeName((yyvsp[-3].sn), (yyvsp[-2].sn), (yyvsp[-1].sn), (yyvsp[0].sn));}
-#line 2044 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 2045 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 59: /* scopeNameList_0: scopeName  */
-#line 108 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 109 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                 {(yyval.sn) = newScopeNameList(NULL, (yyvsp[0].sn));}
-#line 2050 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 2051 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 60: /* scopeNameList_0: scopeNameList_0 SCOPE scopeName  */
-#line 109 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 110 "D:/idlcpp/src/idlcpp.y"
                                                                                                                         {(yyval.sn) = newScopeNameList((yyvsp[-2].sn), (yyvsp[0].sn));}
-#line 2056 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 2057 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 61: /* scopeNameList: scopeNameList_0  */
-#line 112 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 113 "D:/idlcpp/src/idlcpp.y"
                                                                                                                         {(yyval.sn) = (yyvsp[0].sn);}
-#line 2062 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 2063 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 62: /* scopeNameList: SCOPE scopeNameList_0  */
-#line 113 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 114 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                 {(yyval.sn) = (yyvsp[0].sn); setScopeNameListGlobal((yyval.sn));}
-#line 2068 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 2069 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 63: /* typeName_0: primitive  */
-#line 116 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 117 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                         {(yyval.sn) = (yyvsp[0].sn);}
-#line 2074 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 2075 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 64: /* typeName_0: scopeNameList  */
-#line 117 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 118 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                         {(yyval.sn) = newTypeName((yyvsp[0].sn));}
-#line 2080 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 2081 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 65: /* typeName: typeName_0  */
-#line 120 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 121 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                 {(yyval.sn) = (yyvsp[0].sn);}
-#line 2086 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 2087 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 66: /* typeName: NOCODE typeName_0  */
-#line 121 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 122 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                         {(yyval.sn) = (yyvsp[0].sn); setTypeNameFilter((yyval.sn), (yyvsp[-1].sn));}
-#line 2092 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 2093 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 67: /* typeName: NOMETA typeName_0  */
-#line 122 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 123 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                         {(yyval.sn) = (yyvsp[0].sn); setTypeNameFilter((yyval.sn), (yyvsp[-1].sn));}
-#line 2098 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 2099 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 68: /* typeNameList: typeName  */
-#line 125 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 126 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                 {(yyval.sn) = newTypeNameList(NULL, NULL, (yyvsp[0].sn));}
-#line 2104 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 2105 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 69: /* typeNameList: typeNameList ',' typeName  */
-#line 126 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 127 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                 {(yyval.sn) = newTypeNameList((yyvsp[-2].sn), (yyvsp[-1].sn), (yyvsp[0].sn));}
-#line 2110 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 2111 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 70: /* typeAlias: TYPEDEF typeName IDENTIFY ';'  */
-#line 129 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 130 "D:/idlcpp/src/idlcpp.y"
                                                                                                                 {(yyval.sn) = newTypedef((yyvsp[-3].sn), (yyvsp[-1].sn), (yyvsp[-2].sn));}
-#line 2116 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 2117 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 71: /* typeAlias: TYPENAME IDENTIFY ';'  */
-#line 130 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 131 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                 {(yyval.sn) = newTypeDeclaration((yyvsp[-1].sn), primitive_type);}
-#line 2122 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 2123 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 72: /* typeAlias: ENUM IDENTIFY ';'  */
-#line 131 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 132 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                         {(yyval.sn) = newTypeDeclaration((yyvsp[-1].sn), enum_type);}
-#line 2128 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 2129 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 73: /* typeAlias: STRUCT IDENTIFY ';'  */
-#line 132 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 133 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                 {(yyval.sn) = newTypeDeclaration((yyvsp[-1].sn), value_type);}
-#line 2134 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 2135 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 74: /* typeAlias: CLASS IDENTIFY ';'  */
-#line 133 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 134 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                 {(yyval.sn) = newTypeDeclaration((yyvsp[-1].sn), reference_type);}
-#line 2140 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 2141 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 75: /* typeAlias: TYPENAME IDENTIFY '=' STRING ';'  */
-#line 134 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 135 "D:/idlcpp/src/idlcpp.y"
                                                                                                                         {(yyval.sn) = newTypeDeclaration((yyvsp[-3].sn), primitive_type); setNativeName((yyval.sn), (yyvsp[-1].sn));}
-#line 2146 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 2147 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 76: /* typeAlias: ENUM IDENTIFY '=' STRING ';'  */
-#line 135 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 136 "D:/idlcpp/src/idlcpp.y"
                                                                                                                         {(yyval.sn) = newTypeDeclaration((yyvsp[-3].sn), enum_type); setNativeName((yyval.sn), (yyvsp[-1].sn));}
-#line 2152 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 2153 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 77: /* typeAlias: STRUCT IDENTIFY '=' STRING ';'  */
-#line 136 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 137 "D:/idlcpp/src/idlcpp.y"
                                                                                                                         {(yyval.sn) = newTypeDeclaration((yyvsp[-3].sn), value_type); setNativeName((yyval.sn), (yyvsp[-1].sn));}
-#line 2158 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 2159 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 78: /* typeAlias: CLASS IDENTIFY '=' STRING ';'  */
-#line 137 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 138 "D:/idlcpp/src/idlcpp.y"
                                                                                                                         {(yyval.sn) = newTypeDeclaration((yyvsp[-3].sn), reference_type); setNativeName((yyval.sn), (yyvsp[-1].sn));}
-#line 2164 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 2165 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 79: /* field_0: typeName IDENTIFY  */
-#line 140 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 141 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                 {(yyval.sn) = newField((yyvsp[-1].sn), NULL, (yyvsp[0].sn), NULL, NULL);}
-#line 2170 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 2171 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 80: /* field_0: typeName IDENTIFY '[' ']'  */
-#line 141 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 142 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                 {(yyval.sn) = newField((yyvsp[-3].sn), NULL, (yyvsp[-2].sn), (yyvsp[-1].sn), (yyvsp[0].sn));}
-#line 2176 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 2177 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 81: /* field_0: typeName '*' IDENTIFY  */
-#line 142 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 143 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                 {(yyval.sn) = newField((yyvsp[-2].sn), (yyvsp[-1].sn), (yyvsp[0].sn), NULL, NULL);}
-#line 2182 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 2183 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 82: /* field_1: field_0  */
-#line 145 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 146 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                         {(yyval.sn) = (yyvsp[0].sn);}
-#line 2188 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 2189 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 83: /* field_1: CONST field_0  */
-#line 146 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 147 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                         {(yyval.sn) = (yyvsp[0].sn); setFieldConstant((yyval.sn), (yyvsp[-1].sn));}
-#line 2194 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 2195 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 84: /* field_2: field_1  */
-#line 149 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 150 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                         {(yyval.sn) = (yyvsp[0].sn);}
-#line 2200 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 2201 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 85: /* field_2: STATIC field_1  */
-#line 150 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 151 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                         {(yyval.sn) = (yyvsp[0].sn); setFieldStatic((yyval.sn), (yyvsp[-1].sn));}
-#line 2206 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 2207 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 86: /* field: field_2 ';'  */
-#line 153 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 154 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                 {(yyval.sn) = (yyvsp[-1].sn); setFieldSemicolon((yyval.sn), (yyvsp[0].sn));}
-#line 2212 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 2213 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 87: /* field: field_2 '=' STRING ';'  */
-#line 154 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 155 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                 {(yyval.sn) = (yyvsp[-3].sn); setNativeName((yyval.sn), (yyvsp[-1].sn)); setFieldSemicolon((yyval.sn), (yyvsp[0].sn));}
-#line 2218 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 2219 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 88: /* getter_0: GET  */
-#line 158 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 159 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                         {(yyval.sn) = newGetterSetter((yyvsp[0].sn));}
-#line 2224 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 2225 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 89: /* getter_1: getter_0  */
-#line 161 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 162 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                         {(yyval.sn) = (yyvsp[0].sn);}
-#line 2230 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 2231 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 90: /* getter_1: getter_0 '+'  */
-#line 162 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 163 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                         {(yyval.sn) = (yyvsp[-1].sn); setGetterIncRef((yyval.sn));}
-#line 2236 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 2237 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 91: /* getter: getter_1  */
-#line 165 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 166 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                         {(yyval.sn) = (yyvsp[0].sn);}
-#line 2242 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 2243 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 92: /* getter: getter_1 '=' STRING  */
-#line 166 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 167 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                 {(yyval.sn) = (yyvsp[-2].sn); setGetterSetterNativeName((yyval.sn), (yyvsp[0].sn));}
-#line 2248 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 2249 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 93: /* setter_0: SET  */
-#line 169 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 170 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                         {(yyval.sn) = newGetterSetter((yyvsp[0].sn));}
-#line 2254 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 2255 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 94: /* setter_1: setter_0  */
-#line 172 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 173 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                         {(yyval.sn) = (yyvsp[0].sn);}
-#line 2260 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 2261 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 95: /* setter_1: setter_0 '-'  */
-#line 173 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 174 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                         {(yyval.sn) = (yyvsp[-1].sn); setSetterDecRef((yyval.sn));}
-#line 2266 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 2267 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 96: /* setter_2: setter_1  */
-#line 176 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 177 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                         {(yyval.sn) = (yyvsp[0].sn);}
-#line 2272 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 2273 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 97: /* setter_2: setter_1 '?'  */
-#line 177 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 178 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                         {(yyval.sn) = (yyvsp[-1].sn); setSetterAllowNull((yyval.sn));}
-#line 2278 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 2279 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 98: /* setter: setter_2  */
-#line 180 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 181 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                         {(yyval.sn) = (yyvsp[0].sn);}
-#line 2284 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 2285 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 99: /* setter: setter_2 '=' STRING  */
-#line 181 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 182 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                 {(yyval.sn) = (yyvsp[-2].sn); setGetterSetterNativeName((yyval.sn), (yyvsp[0].sn));}
-#line 2290 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 2291 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 100: /* candidate: CANDIDATE  */
-#line 184 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 185 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                         {(yyval.sn) = (yyvsp[0].sn);}
-#line 2296 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 2297 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 101: /* property_0: IDENTIFY  */
-#line 187 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 188 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                         {(yyval.sn) = newProperty((yyvsp[0].sn), simple_property);}
-#line 2302 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 2303 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 102: /* property_0: IDENTIFY '[' ']'  */
-#line 188 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 189 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                         {(yyval.sn) = newProperty((yyvsp[-2].sn), fixed_array_property);}
-#line 2308 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 2309 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 103: /* property_0: IDENTIFY '[' '?' ']'  */
-#line 189 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 190 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                 {(yyval.sn) = newProperty((yyvsp[-3].sn), dynamic_array_property);}
-#line 2314 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 2315 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 104: /* property_0: IDENTIFY '[' '*' ']'  */
-#line 190 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 191 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                 {(yyval.sn) = newProperty((yyvsp[-3].sn), list_property);}
-#line 2320 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 2321 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 105: /* property_0: IDENTIFY '[' typeName ']'  */
-#line 191 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 192 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                 {(yyval.sn) = newProperty((yyvsp[-3].sn), map_property); setMapPropertyKeyType((yyval.sn), (yyvsp[-1].sn), NULL);}
-#line 2326 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 2327 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 106: /* property_0: IDENTIFY '[' typeName '*' ']'  */
-#line 192 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 193 "D:/idlcpp/src/idlcpp.y"
                                                                                                                         {(yyval.sn) = newProperty((yyvsp[-4].sn), map_property); setMapPropertyKeyType((yyval.sn), (yyvsp[-2].sn), (yyvsp[-1].sn));}
-#line 2332 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 2333 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 107: /* property_1: typeName property_0  */
-#line 195 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 196 "D:/idlcpp/src/idlcpp.y"
                                                                                                                         {(yyval.sn) = (yyvsp[0].sn); setPropertyType((yyval.sn), (yyvsp[-1].sn), NULL);}
-#line 2338 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 2339 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 108: /* property_1: typeName '*' property_0  */
-#line 196 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 197 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                 {(yyval.sn) = (yyvsp[0].sn); setPropertyType((yyval.sn), (yyvsp[-2].sn), (yyvsp[-1].sn));}
-#line 2344 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 2345 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 109: /* property_1: typeName '&' property_0  */
-#line 197 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 198 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                 {(yyval.sn) = (yyvsp[0].sn); setPropertyType((yyval.sn), (yyvsp[-2].sn), (yyvsp[-1].sn));}
-#line 2350 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 2351 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 110: /* property_2: property_1 '{' '}' ';'  */
-#line 200 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 201 "D:/idlcpp/src/idlcpp.y"
                                                                                                                         {(yyval.sn) = (yyvsp[-3].sn);}
-#line 2356 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 2357 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 111: /* property_2: property_1 '{' getter '}' ';'  */
-#line 201 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 202 "D:/idlcpp/src/idlcpp.y"
                                                                                                                         {(yyval.sn) = (yyvsp[-4].sn); setPropertyGetter((yyval.sn), (yyvsp[-2].sn));}
-#line 2362 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 2363 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 112: /* property_2: property_1 '{' setter '}' ';'  */
-#line 202 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 203 "D:/idlcpp/src/idlcpp.y"
                                                                                                                         {(yyval.sn) = (yyvsp[-4].sn); setPropertySetter((yyval.sn), (yyvsp[-2].sn));}
-#line 2368 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 2369 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 113: /* property_2: property_1 '{' getter setter '}' ';'  */
-#line 203 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 204 "D:/idlcpp/src/idlcpp.y"
                                                                                                                 {(yyval.sn) = (yyvsp[-5].sn); setPropertyGetter((yyval.sn), (yyvsp[-3].sn)); setPropertySetter((yyvsp[-5].sn), (yyvsp[-2].sn));}
-#line 2374 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 2375 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 114: /* property_2: property_1 '{' setter getter '}' ';'  */
-#line 204 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 205 "D:/idlcpp/src/idlcpp.y"
                                                                                                                 {(yyval.sn) = (yyvsp[-5].sn); setPropertyGetter((yyval.sn), (yyvsp[-2].sn)); setPropertySetter((yyvsp[-5].sn), (yyvsp[-3].sn));}
-#line 2380 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 2381 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 115: /* property_2: property_1 '{' getter candidate '}' ';'  */
-#line 205 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 206 "D:/idlcpp/src/idlcpp.y"
                                                                                                                 {(yyval.sn) = (yyvsp[-5].sn); setPropertyGetter((yyval.sn), (yyvsp[-3].sn)); setPropertyCandidate((yyval.sn));}
-#line 2386 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 2387 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 116: /* property_2: property_1 '{' setter candidate '}' ';'  */
-#line 206 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 207 "D:/idlcpp/src/idlcpp.y"
                                                                                                                 {(yyval.sn) = (yyvsp[-5].sn); setPropertySetter((yyval.sn), (yyvsp[-3].sn)); setPropertyCandidate((yyval.sn));}
-#line 2392 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 2393 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 117: /* property_2: property_1 '{' getter setter candidate '}' ';'  */
-#line 207 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 208 "D:/idlcpp/src/idlcpp.y"
                                                                                                         {(yyval.sn) = (yyvsp[-6].sn); setPropertyGetter((yyval.sn), (yyvsp[-4].sn)); setPropertySetter((yyvsp[-6].sn), (yyvsp[-3].sn)); setPropertyCandidate((yyval.sn));}
-#line 2398 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 2399 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 118: /* property_2: property_1 '{' setter getter candidate '}' ';'  */
-#line 208 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 209 "D:/idlcpp/src/idlcpp.y"
                                                                                                         {(yyval.sn) = (yyvsp[-6].sn); setPropertyGetter((yyval.sn), (yyvsp[-3].sn)); setPropertySetter((yyvsp[-6].sn), (yyvsp[-4].sn)); setPropertyCandidate((yyval.sn));}
-#line 2404 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 2405 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 119: /* property: property_2  */
-#line 211 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 212 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                 {(yyval.sn) = (yyvsp[0].sn);}
-#line 2410 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 2411 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 120: /* property: STATIC property_2  */
-#line 212 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 213 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                         {(yyval.sn) = (yyvsp[0].sn); setPropertyModifier((yyval.sn), (yyvsp[-1].sn));}
-#line 2416 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 2417 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 121: /* parameter_0: typeName IDENTIFY  */
-#line 216 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 217 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                 {(yyval.sn) = newParameter((yyvsp[-1].sn), NULL, NULL, (yyvsp[0].sn));}
-#line 2422 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 2423 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 122: /* parameter_0: typeName '&' IDENTIFY  */
-#line 217 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 218 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                 {(yyval.sn) = newParameter((yyvsp[-2].sn), (yyvsp[-1].sn), NULL, (yyvsp[0].sn));}
-#line 2428 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 2429 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 123: /* parameter_0: typeName '*' IDENTIFY  */
-#line 218 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 219 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                 {(yyval.sn) = newParameter((yyvsp[-2].sn), (yyvsp[-1].sn), NULL, (yyvsp[0].sn));}
-#line 2434 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 2435 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 124: /* parameter_0: typeName '-' IDENTIFY  */
-#line 219 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 220 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                 {(yyval.sn) = newParameter((yyvsp[-2].sn), (yyvsp[-1].sn), NULL, (yyvsp[0].sn));}
-#line 2440 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 2441 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 125: /* parameter_0: typeName '*' '&' IDENTIFY  */
-#line 220 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 221 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                 {(yyval.sn) = newParameter((yyvsp[-3].sn), (yyvsp[-2].sn), (yyvsp[-1].sn), (yyvsp[0].sn));}
-#line 2446 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 2447 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 126: /* parameter_0: typeName '*' '*' IDENTIFY  */
-#line 221 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 222 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                 {(yyval.sn) = newParameter((yyvsp[-3].sn), (yyvsp[-2].sn), (yyvsp[-1].sn), (yyvsp[0].sn));}
-#line 2452 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 2453 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 127: /* parameter_0: typeName '+' '&' IDENTIFY  */
-#line 222 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 223 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                 {(yyval.sn) = newParameter((yyvsp[-3].sn), (yyvsp[-2].sn), (yyvsp[-1].sn), (yyvsp[0].sn));}
-#line 2458 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 2459 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 128: /* parameter_0: typeName '+' '*' IDENTIFY  */
-#line 223 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 224 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                 {(yyval.sn) = newParameter((yyvsp[-3].sn), (yyvsp[-2].sn), (yyvsp[-1].sn), (yyvsp[0].sn));}
-#line 2464 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 2465 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 129: /* parameter_0: typeName '+' '[' ']' '&' IDENTIFY  */
-#line 224 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 225 "D:/idlcpp/src/idlcpp.y"
                                                                                                                         {(yyval.sn) = newParameter((yyvsp[-5].sn), (yyvsp[-4].sn), (yyvsp[-1].sn), (yyvsp[0].sn)); setParameterArray((yyval.sn));}
-#line 2470 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 2471 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 130: /* parameter_0: typeName '+' '[' ']' '*' IDENTIFY  */
-#line 225 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 226 "D:/idlcpp/src/idlcpp.y"
                                                                                                                         {(yyval.sn) = newParameter((yyvsp[-5].sn), (yyvsp[-4].sn), (yyvsp[-1].sn), (yyvsp[0].sn)); setParameterArray((yyval.sn));}
-#line 2476 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 2477 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 131: /* parameter_1: parameter_0  */
-#line 228 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 229 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                 {(yyval.sn) = (yyvsp[0].sn);}
-#line 2482 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 2483 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 132: /* parameter_1: CONST parameter_0  */
-#line 229 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 230 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                         {(yyval.sn) = (yyvsp[0].sn); setParameterConst((yyval.sn), (yyvsp[-1].sn));}
-#line 2488 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 2489 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 133: /* parameter: parameter_1  */
-#line 232 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 233 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                 {(yyval.sn) = (yyvsp[0].sn);}
-#line 2494 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 2495 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 134: /* parameter: parameter_1 '?'  */
-#line 233 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 234 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                         {(yyval.sn) = (yyvsp[-1].sn); setParameterAllowNull((yyval.sn));}
-#line 2500 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 2501 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 135: /* parameterList: parameter  */
-#line 236 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 237 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                 {(yyval.sn) = newParameterList(NULL, NULL, (yyvsp[0].sn));}
-#line 2506 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 2507 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 136: /* parameterList: parameterList ',' parameter  */
-#line 237 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 238 "D:/idlcpp/src/idlcpp.y"
                                                                                                                         {(yyval.sn) = newParameterList((yyvsp[-2].sn), (yyvsp[-1].sn), (yyvsp[0].sn));}
-#line 2512 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 2513 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 137: /* method_0: IDENTIFY '(' ')'  */
-#line 240 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 241 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                 {(yyval.sn) = newMethod((yyvsp[-2].sn), (yyvsp[-1].sn), NULL, (yyvsp[0].sn), NULL);}
-#line 2518 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 2519 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 138: /* method_0: IDENTIFY '(' VOID ')'  */
-#line 241 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 242 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                 {(yyval.sn) = newMethod((yyvsp[-3].sn), (yyvsp[-2].sn), NULL, (yyvsp[0].sn), NULL);}
-#line 2524 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 2525 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 139: /* method_0: IDENTIFY '(' parameterList ')'  */
-#line 242 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 243 "D:/idlcpp/src/idlcpp.y"
                                                                                                                         {(yyval.sn) = newMethod((yyvsp[-3].sn), (yyvsp[-2].sn), (yyvsp[-1].sn), (yyvsp[0].sn), NULL);}
-#line 2530 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 2531 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 140: /* method_0: IDENTIFY '(' ')' CONST  */
-#line 243 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 244 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                 {(yyval.sn) = newMethod((yyvsp[-3].sn), (yyvsp[-2].sn), NULL, (yyvsp[-1].sn), (yyvsp[0].sn));}
-#line 2536 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 2537 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 141: /* method_0: IDENTIFY '(' VOID ')' CONST  */
-#line 244 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 245 "D:/idlcpp/src/idlcpp.y"
                                                                                                                         {(yyval.sn) = newMethod((yyvsp[-4].sn), (yyvsp[-3].sn), NULL, (yyvsp[-1].sn), (yyvsp[0].sn));}
-#line 2542 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 2543 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 142: /* method_0: IDENTIFY '(' parameterList ')' CONST  */
-#line 245 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 246 "D:/idlcpp/src/idlcpp.y"
                                                                                                                 {(yyval.sn) = newMethod((yyvsp[-4].sn), (yyvsp[-3].sn), (yyvsp[-2].sn), (yyvsp[-1].sn), (yyvsp[0].sn));}
-#line 2548 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 2549 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 143: /* method_1: method_0  */
-#line 248 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 249 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                         {(yyval.sn) = (yyvsp[0].sn);}
-#line 2554 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 2555 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 144: /* method_1: typeName method_0  */
-#line 249 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 250 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                         {(yyval.sn) = (yyvsp[0].sn); setMethodResult((yyval.sn), (yyvsp[-1].sn), NULL);}
-#line 2560 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 2561 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 145: /* method_1: typeName '&' method_0  */
-#line 250 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 251 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                 {(yyval.sn) = (yyvsp[0].sn); setMethodResult((yyval.sn), (yyvsp[-2].sn), (yyvsp[-1].sn));}
-#line 2566 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 2567 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 146: /* method_1: typeName '*' method_0  */
-#line 251 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 252 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                 {(yyval.sn) = (yyvsp[0].sn); setMethodResult((yyval.sn), (yyvsp[-2].sn), (yyvsp[-1].sn));}
-#line 2572 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 2573 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 147: /* method_1: typeName '+' method_0  */
-#line 252 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 253 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                 {(yyval.sn) = (yyvsp[0].sn); setMethodResult((yyval.sn), (yyvsp[-2].sn), (yyvsp[-1].sn));}
-#line 2578 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 2579 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 148: /* method_1: typeName '+' '[' ']' method_0  */
-#line 253 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 254 "D:/idlcpp/src/idlcpp.y"
                                                                                                                         {(yyval.sn) = (yyvsp[0].sn); setMethodResult((yyval.sn), (yyvsp[-4].sn), (yyvsp[-3].sn)); setMethodResultArray((yyval.sn));}
-#line 2584 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 2585 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 149: /* method_2: method_1  */
-#line 256 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 257 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                         {(yyval.sn) = (yyvsp[0].sn);}
-#line 2590 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 2591 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 150: /* method_2: CONST method_1  */
-#line 257 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 258 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                         {(yyval.sn) = (yyvsp[0].sn); setMethodResultConst((yyval.sn), (yyvsp[-1].sn));}
-#line 2596 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 2597 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 151: /* method_3: method_2  */
-#line 260 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 261 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                         {(yyval.sn) = (yyvsp[0].sn);}
-#line 2602 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 2603 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 152: /* method_3: ABSTRACT method_2  */
-#line 261 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 262 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                         {(yyval.sn) = (yyvsp[0].sn); setMethodModifier((yyval.sn), (yyvsp[-1].sn));}
-#line 2608 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 2609 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 153: /* method_3: VIRTUAL method_2  */
-#line 262 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 263 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                         {(yyval.sn) = (yyvsp[0].sn); setMethodModifier((yyval.sn), (yyvsp[-1].sn));}
-#line 2614 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 2615 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 154: /* method_3: STATIC method_2  */
-#line 263 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 264 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                         {(yyval.sn) = (yyvsp[0].sn); setMethodModifier((yyval.sn), (yyvsp[-1].sn));}
-#line 2620 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 2621 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 155: /* method_4: method_3  */
-#line 266 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 267 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                         {(yyval.sn) = (yyvsp[0].sn);}
-#line 2626 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 2627 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 156: /* method_4: OVERRIDE method_3  */
-#line 267 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 268 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                         {(yyval.sn) = (yyvsp[0].sn); setMethodOverride((yyval.sn));}
-#line 2632 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 2633 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 157: /* method: method_4 ';'  */
-#line 270 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 271 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                 {(yyval.sn) = (yyvsp[-1].sn); setMethodSemicolon((yyval.sn), (yyvsp[0].sn));}
-#line 2638 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 2639 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 158: /* method: method_4 '=' STRING ';'  */
-#line 271 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 272 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                 {(yyval.sn) = (yyvsp[-3].sn); setNativeName((yyval.sn), (yyvsp[-1].sn)); setMethodSemicolon((yyval.sn), (yyvsp[0].sn));}
-#line 2644 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 2645 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 195: /* operator_0: OPERATOR operatorSign '(' ')' ';'  */
-#line 313 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 314 "D:/idlcpp/src/idlcpp.y"
                                                                                                                         {(yyval.sn) = newOperator((yyvsp[-4].sn), (yyvsp[-3].sn), (yyvsp[-2].sn), NULL, (yyvsp[-1].sn), NULL, (yyvsp[0].sn));}
-#line 2650 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 2651 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 196: /* operator_0: OPERATOR operatorSign '(' parameterList ')' ';'  */
-#line 314 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 315 "D:/idlcpp/src/idlcpp.y"
                                                                                                                 {(yyval.sn) = newOperator((yyvsp[-5].sn), (yyvsp[-4].sn), (yyvsp[-3].sn), (yyvsp[-2].sn), (yyvsp[-1].sn), NULL, (yyvsp[0].sn));}
-#line 2656 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 2657 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 197: /* operator_0: OPERATOR operatorSign '(' ')' CONST ';'  */
-#line 315 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 316 "D:/idlcpp/src/idlcpp.y"
                                                                                                                         {(yyval.sn) = newOperator((yyvsp[-5].sn), (yyvsp[-4].sn), (yyvsp[-3].sn), NULL, (yyvsp[-2].sn), (yyvsp[-1].sn), (yyvsp[0].sn));}
-#line 2662 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 2663 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 198: /* operator_0: OPERATOR operatorSign '(' parameterList ')' CONST ';'  */
-#line 316 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 317 "D:/idlcpp/src/idlcpp.y"
                                                                                                         {(yyval.sn) = newOperator((yyvsp[-6].sn), (yyvsp[-5].sn), (yyvsp[-4].sn), (yyvsp[-3].sn), (yyvsp[-2].sn), (yyvsp[-1].sn), (yyvsp[0].sn));}
-#line 2668 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 2669 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 199: /* operator_1: typeName operator_0  */
-#line 320 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 321 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                 {(yyval.sn) = (yyvsp[0].sn); setOperatorResult((yyval.sn), (yyvsp[-1].sn), NULL);}
-#line 2674 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 2675 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 200: /* operator_1: typeName '&' operator_0  */
-#line 321 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 322 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                         {(yyval.sn) = (yyvsp[0].sn); setOperatorResult((yyval.sn), (yyvsp[-2].sn), (yyvsp[-1].sn));}
-#line 2680 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 2681 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 201: /* operator_1: typeName '*' operator_0  */
-#line 322 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 323 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                         {(yyval.sn) = (yyvsp[0].sn); setOperatorResult((yyval.sn), (yyvsp[-2].sn), (yyvsp[-1].sn));}
-#line 2686 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 2687 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 202: /* operator_1: typeName '+' operator_0  */
-#line 323 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 324 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                         {(yyval.sn) = (yyvsp[0].sn); setOperatorResult((yyval.sn), (yyvsp[-2].sn), (yyvsp[-1].sn));}
-#line 2692 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 2693 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 203: /* operator_1: typeName '+' '[' ']' operator_0  */
-#line 324 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 325 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                 {(yyval.sn) = (yyvsp[0].sn); setOperatorResult((yyval.sn), (yyvsp[-4].sn), (yyvsp[-3].sn)); setOperatorResultArray((yyval.sn));}
-#line 2698 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 2699 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 204: /* operator_2: operator_1  */
-#line 327 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 328 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                         {(yyval.sn) = (yyvsp[0].sn);}
-#line 2704 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 2705 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 205: /* operator_2: CONST operator_1  */
-#line 328 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 329 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                                 {(yyval.sn) = (yyvsp[0].sn); setOperatorResultConst((yyval.sn), (yyvsp[-1].sn));}
-#line 2710 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 2711 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 206: /* operator_3: operator_2  */
-#line 331 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 332 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                         {(yyval.sn) = (yyvsp[0].sn);}
-#line 2716 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 2717 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 207: /* operator_3: ABSTRACT operator_2  */
-#line 332 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 333 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                         {(yyval.sn) = (yyvsp[0].sn); setOperatorModifier((yyval.sn), (yyvsp[-1].sn));}
-#line 2722 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 2723 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 208: /* operator_3: VIRTUAL operator_2  */
-#line 333 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 334 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                         {(yyval.sn) = (yyvsp[0].sn); setOperatorModifier((yyval.sn), (yyvsp[-1].sn));}
-#line 2728 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 2729 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 209: /* operator: operator_3  */
-#line 336 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 337 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                         {(yyval.sn) = (yyvsp[0].sn);}
-#line 2734 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 2735 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 210: /* operator: OVERRIDE operator_3  */
-#line 337 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 338 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                         {(yyval.sn) = (yyvsp[0].sn); setOperatorOverride((yyval.sn));}
-#line 2740 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 2741 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 211: /* delegate_0: IDENTIFY '(' ')' ';'  */
-#line 340 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 341 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                 {(yyval.sn) = newDelegate((yyvsp[-3].sn), (yyvsp[-2].sn), NULL, (yyvsp[-1].sn), (yyvsp[0].sn));}
-#line 2746 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 2747 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 212: /* delegate_0: IDENTIFY '(' VOID ')' ';'  */
-#line 341 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 342 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                         {(yyval.sn) = newDelegate((yyvsp[-4].sn), (yyvsp[-3].sn), NULL, (yyvsp[-1].sn), (yyvsp[0].sn));}
-#line 2752 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 2753 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 213: /* delegate_0: IDENTIFY '(' parameterList ')' ';'  */
-#line 342 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 343 "D:/idlcpp/src/idlcpp.y"
                                                                                                                         {(yyval.sn) = newDelegate((yyvsp[-4].sn), (yyvsp[-3].sn), (yyvsp[-2].sn), (yyvsp[-1].sn), (yyvsp[0].sn));}
-#line 2758 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 2759 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 214: /* delegate_1: typeName delegate_0  */
-#line 345 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 346 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                 {(yyval.sn) = (yyvsp[0].sn); setDelegateResult((yyval.sn), (yyvsp[-1].sn), NULL);}
-#line 2764 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 2765 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 215: /* delegate_1: typeName '&' delegate_0  */
-#line 346 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 347 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                         {(yyval.sn) = (yyvsp[0].sn); setDelegateResult((yyval.sn), (yyvsp[-2].sn), (yyvsp[-1].sn));}
-#line 2770 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 2771 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 216: /* delegate_1: typeName '*' delegate_0  */
-#line 347 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 348 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                         {(yyval.sn) = (yyvsp[0].sn); setDelegateResult((yyval.sn), (yyvsp[-2].sn), (yyvsp[-1].sn));}
-#line 2776 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 2777 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 217: /* delegate_1: typeName '+' delegate_0  */
-#line 348 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 349 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                         {(yyval.sn) = (yyvsp[0].sn); setDelegateResult((yyval.sn), (yyvsp[-2].sn), (yyvsp[-1].sn));}
-#line 2782 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 2783 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 218: /* delegate_1: typeName '+' '[' ']' delegate_0  */
-#line 349 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 350 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                 {(yyval.sn) = (yyvsp[0].sn); setDelegateResult((yyval.sn), (yyvsp[-4].sn), (yyvsp[-3].sn)); setDelegateResultArray((yyval.sn));}
-#line 2788 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 2789 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 219: /* delegate: DELEGATE delegate_1  */
-#line 352 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 353 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                 {(yyval.sn) = (yyvsp[0].sn); setDelegateKeyword((yyval.sn), (yyvsp[-1].sn));}
-#line 2794 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 2795 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 220: /* delegate: DELEGATE CONST delegate_1  */
-#line 353 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 354 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                         {(yyval.sn) = (yyvsp[0].sn); setDelegateKeyword((yyval.sn), (yyvsp[-2].sn)); setDelegateResultConst((yyval.sn), (yyvsp[-1].sn));}
-#line 2800 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 2801 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 221: /* classMember_0: field  */
-#line 356 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 357 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                         {(yyval.sn) = (yyvsp[0].sn);}
-#line 2806 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 2807 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 222: /* classMember_0: property  */
-#line 357 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 358 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                                         {(yyval.sn) = (yyvsp[0].sn);}
-#line 2812 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 2813 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 223: /* classMember_0: method  */
-#line 358 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 359 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                                         {(yyval.sn) = (yyvsp[0].sn);}
-#line 2818 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 2819 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 224: /* classMember_0: operator  */
-#line 359 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 360 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                                         {(yyval.sn) = (yyvsp[0].sn);}
-#line 2824 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 2825 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 225: /* classMember_0: class  */
-#line 360 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 361 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                                         {(yyval.sn) = (yyvsp[0].sn);}
-#line 2830 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 2831 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 226: /* classMember_0: delegate  */
-#line 361 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 362 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                                         {(yyval.sn) = (yyvsp[0].sn);}
-#line 2836 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 2837 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 227: /* classMember_0: enum  */
-#line 362 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 363 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                                         {(yyval.sn) = (yyvsp[0].sn);}
-#line 2842 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 2843 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 228: /* classMember_0: typeAlias  */
-#line 363 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 364 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                                         {(yyval.sn) = (yyvsp[0].sn);}
-#line 2848 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 2849 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 229: /* classMember_0: NOCODE classMember_0  */
-#line 364 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 365 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                         {(yyval.sn) = (yyvsp[0].sn); setMemberFilter((yyval.sn), (yyvsp[-1].sn));}
-#line 2854 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 2855 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 230: /* classMember_0: NOMETA classMember_0  */
-#line 365 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 366 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                         {(yyval.sn) = (yyvsp[0].sn); setMemberFilter((yyval.sn), (yyvsp[-1].sn));}
-#line 2860 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 2861 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 231: /* classMember: classMember_0  */
-#line 368 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 369 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                         {(yyval.sn) = (yyvsp[0].sn);}
-#line 2866 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 2867 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 232: /* classMember: attributes classMember_0  */
-#line 369 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 370 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                         {(yyval.sn) = (yyvsp[0].sn); setAttributeList((yyval.sn), (yyvsp[-1].sn));}
-#line 2872 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 2873 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 233: /* classMemberList: classMember  */
-#line 372 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 373 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                 {(yyval.sn) = newClassMemberList(NULL, (yyvsp[0].sn));}
-#line 2878 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 2879 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 234: /* classMemberList: ';'  */
-#line 373 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 374 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                                         {(yyval.sn) = NULL;}
-#line 2884 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 2885 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 235: /* classMemberList: classMemberList classMember  */
-#line 374 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 375 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                 {(yyval.sn) = newClassMemberList((yyvsp[-1].sn), (yyvsp[0].sn));}
-#line 2890 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 2891 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 236: /* classMemberList: classMemberList ';'  */
-#line 375 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 376 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                         {(yyval.sn) = (yyvsp[-1].sn);}
-#line 2896 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 2897 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 237: /* templateParameterList: IDENTIFY  */
-#line 378 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 379 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                 {(yyval.sn) = newTemplateParameterList(NULL, NULL, (yyvsp[0].sn));}
-#line 2902 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 2903 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 238: /* templateParameterList: templateParameterList ',' IDENTIFY  */
-#line 379 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 380 "D:/idlcpp/src/idlcpp.y"
                                                                                                                         {(yyval.sn) = newTemplateParameterList((yyvsp[-2].sn), (yyvsp[-1].sn), (yyvsp[0].sn));}
-#line 2908 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 2909 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 239: /* templateParameters: TEMPLATE '<' templateParameterList '>'  */
-#line 382 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 383 "D:/idlcpp/src/idlcpp.y"
                                                                                                         {(yyval.sn) = newTemplateParameters((yyvsp[-3].sn), (yyvsp[-2].sn), (yyvsp[-1].sn), (yyvsp[0].sn));}
-#line 2914 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 2915 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 240: /* class_0: CLASS IDENTIFY  */
-#line 385 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 386 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                         {(yyval.sn) = newClass((yyvsp[-1].sn), NULL, (yyvsp[0].sn));}
-#line 2920 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 2921 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 241: /* class_0: CLASS '(' identifyList ')' IDENTIFY  */
-#line 386 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 387 "D:/idlcpp/src/idlcpp.y"
                                                                                                                         {(yyval.sn) = newClass((yyvsp[-4].sn), (yyvsp[-2].sn), (yyvsp[0].sn));}
-#line 2926 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 2927 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 242: /* class_0: STRUCT IDENTIFY  */
-#line 387 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 388 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                                 {(yyval.sn) = newClass((yyvsp[-1].sn), NULL, (yyvsp[0].sn));}
-#line 2932 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 2933 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 243: /* class_0: STRUCT '(' identifyList ')' IDENTIFY  */
-#line 388 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 389 "D:/idlcpp/src/idlcpp.y"
                                                                                                                         {(yyval.sn) = newClass((yyvsp[-4].sn), (yyvsp[-2].sn), (yyvsp[0].sn));}
-#line 2938 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 2939 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 244: /* class_1: class_0  */
-#line 391 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 392 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                                 {(yyval.sn) = (yyvsp[0].sn);}
-#line 2944 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 2945 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 245: /* class_1: class_0 ':' typeNameList  */
-#line 392 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 393 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                         {(yyval.sn) = (yyvsp[-2].sn); setClassBaseList((yyval.sn), (yyvsp[-1].sn), (yyvsp[0].sn));}
-#line 2950 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 2951 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 246: /* class_2: class_1 '{' '}'  */
-#line 395 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 396 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                         {(yyval.sn) = (yyvsp[-2].sn); setClassMemberList((yyval.sn), (yyvsp[-1].sn), NULL, (yyvsp[0].sn));}
-#line 2956 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 2957 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 247: /* class_2: class_1 '{' classMemberList '}'  */
-#line 396 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 397 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                 {(yyval.sn) = (yyvsp[-3].sn); setClassMemberList((yyval.sn), (yyvsp[-2].sn), (yyvsp[-1].sn), (yyvsp[0].sn));}
-#line 2962 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 2963 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 248: /* class_3: class_2 ';'  */
-#line 399 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 400 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                         {(yyval.sn) = (yyvsp[-1].sn); setClassSemicolon((yyval.sn), (yyvsp[0].sn));}
-#line 2968 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 2969 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 249: /* class_3: class_2 '=' STRING ';'  */
-#line 400 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 401 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                         {(yyval.sn) = (yyvsp[-3].sn); setNativeName((yyval.sn), (yyvsp[-1].sn)); setClassSemicolon((yyval.sn), (yyvsp[0].sn));}
-#line 2974 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 2975 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 250: /* class_4: class_3  */
-#line 403 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 404 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                                 {(yyval.sn) = (yyvsp[0].sn);}
-#line 2980 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 2981 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 251: /* class_4: ABSTRACT class_3  */
-#line 404 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 405 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                                 {(yyval.sn) = (yyvsp[0].sn); setClassModifier((yyval.sn), (yyvsp[-1].sn));}
-#line 2986 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 2987 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 252: /* class_5: class_4  */
-#line 407 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 408 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                                 {(yyval.sn) = (yyvsp[0].sn);}
-#line 2992 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 2993 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 253: /* class_5: OVERRIDE class_4  */
-#line 408 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 409 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                                 {(yyval.sn) = (yyvsp[0].sn); setClassOverride((yyval.sn));}
-#line 2998 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 2999 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 254: /* class: class_5  */
-#line 411 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 412 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                                 {(yyval.sn) = (yyvsp[0].sn);}
-#line 3004 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 3005 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 255: /* class: templateParameters class_5  */
-#line 412 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 413 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                 {(yyval.sn) = (yyvsp[0].sn); setClassTemplateParameters((yyval.sn), (yyvsp[-1].sn));}
-#line 3010 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 3011 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 256: /* tokenList: IDENTIFY  */
-#line 416 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 417 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                                 {(yyval.sn) = newTokenList(NULL, (yyvsp[0].sn));}
-#line 3016 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 3017 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 257: /* tokenList: operatorSign  */
-#line 417 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 418 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                                 {(yyval.sn) = newTokenList(NULL, (yyvsp[0].sn));}
-#line 3022 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 3023 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 258: /* tokenList: tokenList ',' IDENTIFY  */
-#line 418 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 419 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                         {(yyval.sn) = newTokenList((yyvsp[-2].sn), (yyvsp[0].sn));}
-#line 3028 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 3029 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 259: /* tokenList: tokenList ',' operatorSign  */
-#line 419 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 420 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                 {(yyval.sn) = newTokenList((yyvsp[-2].sn), (yyvsp[0].sn));}
-#line 3034 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 3035 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 260: /* templateClassInstance_0: EXPORT IDENTIFY '<' typeNameList '>'  */
-#line 422 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 423 "D:/idlcpp/src/idlcpp.y"
                                                                                                 {(yyval.sn) = newTemplateClassInstance((yyvsp[-3].sn), (yyvsp[-1].sn));}
-#line 3040 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 3041 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 261: /* templateClassInstance: templateClassInstance_0 ';'  */
-#line 425 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 426 "D:/idlcpp/src/idlcpp.y"
                                                                                                         {(yyval.sn) = (yyvsp[-1].sn);}
-#line 3046 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 3047 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 262: /* templateClassInstance: templateClassInstance_0 '{' '}' ';'  */
-#line 426 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 427 "D:/idlcpp/src/idlcpp.y"
                                                                                                                         {(yyval.sn) = (yyvsp[-3].sn);}
-#line 3052 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 3053 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 263: /* templateClassInstance: templateClassInstance_0 '{' tokenList '}' ';'  */
-#line 427 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 428 "D:/idlcpp/src/idlcpp.y"
                                                                                                                 {(yyval.sn) = (yyvsp[-4].sn); setTemplateClassInstanceTokenList((yyvsp[-4].sn), (yyvsp[-2].sn));}
-#line 3058 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 3059 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 264: /* templateClassInstance: templateClassInstance_0 '{' tokenList ',' '}' ';'  */
-#line 428 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 429 "D:/idlcpp/src/idlcpp.y"
                                                                                                                 {(yyval.sn) = (yyvsp[-5].sn); setTemplateClassInstanceTokenList((yyvsp[-5].sn), (yyvsp[-3].sn));}
-#line 3064 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 3065 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 265: /* namespaceMember_0: class  */
-#line 432 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 433 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                         {(yyval.sn) = (yyvsp[0].sn);}
-#line 3070 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 3071 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 266: /* namespaceMember_0: delegate  */
-#line 433 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 434 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                                         {(yyval.sn) = (yyvsp[0].sn);}
-#line 3076 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 3077 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 267: /* namespaceMember_0: enum  */
-#line 434 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 435 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                                         {(yyval.sn) = (yyvsp[0].sn);}
-#line 3082 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 3083 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 268: /* namespaceMember_0: templateClassInstance  */
-#line 435 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 436 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                         {(yyval.sn) = (yyvsp[0].sn);}
-#line 3088 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 3089 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 269: /* namespaceMember_0: typeAlias  */
-#line 436 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 437 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                                         {(yyval.sn) = (yyvsp[0].sn);}
-#line 3094 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 3095 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 270: /* namespaceMember_0: namespace  */
-#line 437 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 438 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                                         {(yyval.sn) = (yyvsp[0].sn);}
-#line 3100 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 3101 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 271: /* namespaceMember_0: NOCODE namespaceMember_0  */
-#line 438 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 439 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                         {(yyval.sn) = (yyvsp[0].sn); setMemberFilter((yyval.sn), (yyvsp[-1].sn));}
-#line 3106 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 3107 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 272: /* namespaceMember_0: NOMETA namespaceMember_0  */
-#line 439 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 440 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                         {(yyval.sn) = (yyvsp[0].sn); setMemberFilter((yyval.sn), (yyvsp[-1].sn));}
-#line 3112 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 3113 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 273: /* namespaceMember: namespaceMember_0  */
-#line 442 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 443 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                 {(yyval.sn) = (yyvsp[0].sn);}
-#line 3118 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 3119 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 274: /* namespaceMember: attributes namespaceMember_0  */
-#line 443 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 444 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                 {(yyval.sn) = (yyvsp[0].sn); setAttributeList((yyval.sn), (yyvsp[-1].sn));}
-#line 3124 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 3125 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 275: /* namespaceMemberList: namespaceMember  */
-#line 446 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 447 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                 {(yyval.sn) = newNamespaceMemberList(NULL, (yyvsp[0].sn));}
-#line 3130 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 3131 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 276: /* namespaceMemberList: ';'  */
-#line 447 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 448 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                                         {(yyval.sn) = NULL;}
-#line 3136 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 3137 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 277: /* namespaceMemberList: namespaceMemberList namespaceMember  */
-#line 448 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 449 "D:/idlcpp/src/idlcpp.y"
                                                                                                                         {(yyval.sn) = newNamespaceMemberList((yyvsp[-1].sn), (yyvsp[0].sn));}
-#line 3142 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 3143 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 278: /* namespaceMemberList: namespaceMemberList ';'  */
-#line 449 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 450 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                         {(yyval.sn) = (yyvsp[-1].sn);}
-#line 3148 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 3149 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 279: /* namespace: NAMESPACE IDENTIFY '{' '}'  */
-#line 452 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 453 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                 {(yyval.sn) = newNamespace((yyvsp[-3].sn), (yyvsp[-2].sn), (yyvsp[-1].sn), NULL, (yyvsp[0].sn));}
-#line 3154 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 3155 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 280: /* namespace: NAMESPACE IDENTIFY '{' namespaceMemberList '}'  */
-#line 453 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 454 "D:/idlcpp/src/idlcpp.y"
                                                                                                                 {(yyval.sn) = newNamespace((yyvsp[-4].sn), (yyvsp[-3].sn), (yyvsp[-2].sn), (yyvsp[-1].sn), (yyvsp[0].sn));}
-#line 3160 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 3161 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 281: /* program: %empty  */
-#line 456 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 457 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                                         {(yyval.sn) = newProgram(NULL); attachSyntaxTree((yyval.sn));}
-#line 3166 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 3167 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
   case 282: /* program: namespaceMemberList  */
-#line 457 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y"
+#line 458 "D:/idlcpp/src/idlcpp.y"
                                                                                                                                         {(yyval.sn) = newProgram((yyvsp[0].sn)); attachSyntaxTree((yyval.sn));}
-#line 3172 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 3173 "D:/idlcpp/src/idlcpp.y.c"
     break;
 
 
-#line 3176 "D:\\idlcpp\\idlcpp\\src\\idlcpp.y.c"
+#line 3177 "D:/idlcpp/src/idlcpp.y.c"
 
       default: break;
     }

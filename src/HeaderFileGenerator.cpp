@@ -392,7 +392,7 @@ void HeaderFileGenerator::generateCode_Class(FILE* file, ClassNode* classNode, i
 			ClassNode* nestedClassNode = static_cast<ClassNode*>(memberNode);
 			if (0 == nestedClassNode->m_nativeName)
 			{
-				sprintf_s(buf, "%s%s;\n", g_keywordTokens[nestedClassNode->m_keyword->m_nodeType - snt_begin_output - 1],
+				sprintf(buf, "%s%s;\n", g_keywordTokens[nestedClassNode->m_keyword->m_nodeType - snt_begin_output - 1],
 					nestedClassNode->m_name->m_str.c_str());
 				writeStringToFile(buf, file, indentation + 1);
 			}
@@ -403,7 +403,7 @@ void HeaderFileGenerator::generateCode_Class(FILE* file, ClassNode* classNode, i
 			EnumNode* nestedEnumNode = static_cast<EnumNode*>(memberNode);
 			if (0 == nestedEnumNode->m_nativeName)
 			{
-				sprintf_s(buf, "%s%s%s;\n", g_keywordTokens[nestedEnumNode->m_keyword->m_nodeType - snt_begin_output - 1],
+				sprintf(buf, "%s%s%s;\n", g_keywordTokens[nestedEnumNode->m_keyword->m_nodeType - snt_begin_output - 1],
 					nestedEnumNode->m_keyword2 ? "class " : "",
 					nestedEnumNode->m_name->m_str.c_str());
 				writeStringToFile(buf, file, indentation + 1);

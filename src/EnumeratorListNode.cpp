@@ -1,5 +1,5 @@
 #include "EnumeratorListNode.h"
-
+#include <algorithm>
 EnumeratorListNode::EnumeratorListNode(EnumeratorListNode* enumeratorList, TokenNode* delimiter, EnumeratorNode* enumerator)
 {
 	m_nodeType = snt_enumerator_list;

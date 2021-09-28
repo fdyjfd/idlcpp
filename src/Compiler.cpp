@@ -26,6 +26,8 @@
 #include <string>
 #include <algorithm>
 #include <vector>
+#include <cstring>
+#include <limits>
 #include <assert.h>
 
 
@@ -324,7 +326,7 @@ void Compiler::outputUsedTypes(FILE* file, SourceFile* sourceFile)
 		{
 			TypeNode* scopeNode = enclosings[i];
 			assert(scopeNode->isNamespace());
-			sprintf_s(buf, "namespace %s{ ", scopeNode->m_name.c_str());
+			sprintf(buf, "namespace %s{ ", scopeNode->m_name.c_str());
 			writeStringToFile(buf, file);
 		}
 
@@ -346,7 +348,7 @@ void Compiler::outputUsedTypes(FILE* file, SourceFile* sourceFile)
 			}
 			std::vector<TemplateParameterTypeNode*> m_parameterNodes;
 
-			sprintf_s(buf, "template<%s>%s%s;", paramNames.c_str(), 
+			sprintf(buf, "template<%s>%s%s;", paramNames.c_str(), 
 				g_keywordTokens[classNode->m_keyword->m_nodeType - snt_begin_output - 1], typeNode->m_name.c_str());
 		}
 		else if (typeNode->isClass())
@@ -354,7 +356,7 @@ void Compiler::outputUsedTypes(FILE* file, SourceFile* sourceFile)
 			ClassNode* classNode = static_cast<ClassTypeNode*>(typeNode)->m_classNode;
 			if (0 == classNode->m_nativeName)
 			{
-				sprintf_s(buf, "%s%s;", g_keywordTokens[classNode->m_keyword->m_nodeType - snt_begin_output - 1], typeNode->m_name.c_str());
+				sprintf(buf, "%s%s;", g_keywordTokens[classNode->m_keyword->m_nodeType - snt_begin_output - 1], typeNode->m_name.c_str());
 			}
 		}
 		else if (typeNode->isEnum())
@@ -362,7 +364,7 @@ void Compiler::outputUsedTypes(FILE* file, SourceFile* sourceFile)
 			EnumNode* enumNode = static_cast<EnumTypeNode*>(typeNode)->m_enumNode;
 			if (0 == enumNode->m_nativeName)
 			{
-				sprintf_s(buf, "%s%s;", g_keywordTokens[snt_keyword_enum - snt_begin_output - 1], typeNode->m_name.c_str());
+				sprintf(buf, "%s%s;", g_keywordTokens[snt_keyword_enum - snt_begin_output - 1], typeNode->m_name.c_str());
 			}
 		}
 		writeStringToFile(buf, file, indentation);
@@ -548,14 +550,14 @@ void Compiler::outputEmbededCodes(FILE* file, TokenNode* tokenNode)
 {
 	assert(0 != m_mainSourceFile);
 
-	m_mainSourceFile->outputEmbededCodes(file, tokenNode ? tokenNode->m_tokenNo : INT_MAX);
+	m_mainSourceFile->outputEmbededCodes(file, tokenNode ? tokenNode->m_tokenNo : std::numeric_limits<int>::max());
 	if (m_outputLineDirective && tokenNode && m_currentLineNo < tokenNode->m_lineNo)
 	{
 		m_currentLineNo = tokenNode->m_lineNo;
 		char buf[4096];
 		std::string fileName = m_mainSourceFile->m_fileName;
 		FormatPathForInclude(fileName);
-		sprintf_s(buf, "\n#line %d \"%s\"\n", m_currentLineNo, fileName.c_str());
+		sprintf(buf, "\n#line %d \"%s\"\n", m_currentLineNo, fileName.c_str());
 		writeStringToFile(buf, file);
 	}
 }

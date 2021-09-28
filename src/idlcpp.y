@@ -1,5 +1,6 @@
 %{
 #include "yyfuncs.h"
+#include <stddef.h>
 %}
 
 %union

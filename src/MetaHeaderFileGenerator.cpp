@@ -14,7 +14,7 @@
 #include "TemplateClassInstanceNode.h"
 #include "TemplateParametersNode.h"
 #include "TypedefNode.h"
-#include "typeDeclarationNode.h"
+#include "TypeDeclarationNode.h"
 #include "TypeNameListNode.h"
 #include "TypeNameNode.h"
 #include "FieldNode.h"
@@ -55,7 +55,7 @@ void writeMetaMethodDecls(ClassNode* classNode, std::vector<MethodNode*> methodN
 			{
 				continue;
 			}
-			sprintf_s(funcName, "%s_%s", classNode->m_name->m_str.c_str(), methodNodes[i]->m_name->m_str.c_str());
+			sprintf(funcName, "%s_%s", classNode->m_name->m_str.c_str(), methodNodes[i]->m_name->m_str.c_str());
 			writeMetaMethodDecl(funcName, file, indentation + 1);
 		}
 	}
@@ -144,12 +144,12 @@ void writeMetaPropertyDecl(ClassNode* classNode, PropertyNode* propertyNode, FIL
 	char funcName[256];
 	if(0 != propertyNode->m_get)
 	{
-		sprintf_s(funcName, "%s_get_%s", classNode->m_name->m_str.c_str(), propertyNode->m_name->m_str.c_str());
+		sprintf(funcName, "%s_get_%s", classNode->m_name->m_str.c_str(), propertyNode->m_name->m_str.c_str());
 		writeMetaPropertyDeclGetSet(funcName, propertyNode->isStatic(), propertyNode->getCategory(), file, indentation + 1);
 	}		
 	if(0 != propertyNode->m_set)
 	{
-		sprintf_s(funcName, "%s_set_%s", classNode->m_name->m_str.c_str(), propertyNode->m_name->m_str.c_str());
+		sprintf(funcName, "%s_set_%s", classNode->m_name->m_str.c_str(), propertyNode->m_name->m_str.c_str());
 		writeMetaPropertyDeclGetSet(funcName, propertyNode->isStatic(), propertyNode->getCategory(), file, indentation + 1);
 	}
 	if (propertyNode->isSimple())
@@ -158,24 +158,24 @@ void writeMetaPropertyDecl(ClassNode* classNode, PropertyNode* propertyNode, FIL
 		{
 			if (propertyNode->isStatic())
 			{
-				sprintf_s(funcName, "%s_candidateCount_%s", classNode->m_name->m_str.c_str(), propertyNode->m_name->m_str.c_str());
+				sprintf(funcName, "%s_candidateCount_%s", classNode->m_name->m_str.c_str(), propertyNode->m_name->m_str.c_str());
 				writeStringToFile(g_metaPropertyDeclPrefix, sizeof(g_metaPropertyDeclPrefix) - 1, file, indentation + 1);
 				writeStringToFile(funcName, file);
 				writeStringToFile(g_metaStaticPropertyDeclCandidateCountPostfix, sizeof(g_metaStaticPropertyDeclCandidateCountPostfix) - 1, file);
 
-				sprintf_s(funcName, "%s_getCandidate_%s", classNode->m_name->m_str.c_str(), propertyNode->m_name->m_str.c_str());
+				sprintf(funcName, "%s_getCandidate_%s", classNode->m_name->m_str.c_str(), propertyNode->m_name->m_str.c_str());
 				writeStringToFile(g_metaPropertyDeclPrefix, sizeof(g_metaPropertyDeclPrefix) - 1, file, indentation + 1);
 				writeStringToFile(funcName, file);
 				writeStringToFile(g_metaStaticPropertyDeclGetCandidatePostfix, sizeof(g_metaStaticPropertyDeclGetCandidatePostfix) - 1, file);
 			}
 			else
 			{
-				sprintf_s(funcName, "%s_candidateCount_%s", classNode->m_name->m_str.c_str(), propertyNode->m_name->m_str.c_str());
+				sprintf(funcName, "%s_candidateCount_%s", classNode->m_name->m_str.c_str(), propertyNode->m_name->m_str.c_str());
 				writeStringToFile(g_metaPropertyDeclPrefix, sizeof(g_metaPropertyDeclPrefix) - 1, file, indentation + 1);
 				writeStringToFile(funcName, file);
 				writeStringToFile(g_metaPropertyDeclCandidateCountPostfix, sizeof(g_metaPropertyDeclCandidateCountPostfix) - 1, file);
 
-				sprintf_s(funcName, "%s_getCandidate_%s", classNode->m_name->m_str.c_str(), propertyNode->m_name->m_str.c_str());
+				sprintf(funcName, "%s_getCandidate_%s", classNode->m_name->m_str.c_str(), propertyNode->m_name->m_str.c_str());
 				writeStringToFile(g_metaPropertyDeclPrefix, sizeof(g_metaPropertyDeclPrefix) - 1, file, indentation + 1);
 				writeStringToFile(funcName, file);
 				writeStringToFile(g_metaPropertyDeclGetCandidatePostfix, sizeof(g_metaPropertyDeclGetCandidatePostfix) - 1, file);
@@ -184,7 +184,7 @@ void writeMetaPropertyDecl(ClassNode* classNode, PropertyNode* propertyNode, FIL
 	}
 	else if(propertyNode->isFixedArray() || propertyNode->isDynamicArray())
 	{
-		sprintf_s(funcName, "%s_size_%s", classNode->m_name->m_str.c_str(), propertyNode->m_name->m_str.c_str());
+		sprintf(funcName, "%s_size_%s", classNode->m_name->m_str.c_str(), propertyNode->m_name->m_str.c_str());
 		writeStringToFile(g_metaPropertyDeclPrefix, sizeof(g_metaPropertyDeclPrefix) - 1, file, indentation + 1);
 		writeStringToFile(funcName, file);
 		if (propertyNode->isStatic())
@@ -197,7 +197,7 @@ void writeMetaPropertyDecl(ClassNode* classNode, PropertyNode* propertyNode, FIL
 		}
 		if (propertyNode->isDynamicArray())
 		{
-			sprintf_s(funcName, "%s_resize_%s", classNode->m_name->m_str.c_str(), propertyNode->m_name->m_str.c_str());
+			sprintf(funcName, "%s_resize_%s", classNode->m_name->m_str.c_str(), propertyNode->m_name->m_str.c_str());
 			writeStringToFile(g_metaPropertyDeclPrefix, sizeof(g_metaPropertyDeclPrefix) - 1, file, indentation + 1);
 			writeStringToFile(funcName, file);
 			if (propertyNode->isStatic())
@@ -211,24 +211,24 @@ void writeMetaPropertyDecl(ClassNode* classNode, PropertyNode* propertyNode, FIL
 		}
 		if (propertyNode->isStatic())
 		{
-			sprintf_s(funcName, "%s_getIterator_%s", classNode->m_name->m_str.c_str(), propertyNode->m_name->m_str.c_str());
+			sprintf(funcName, "%s_getIterator_%s", classNode->m_name->m_str.c_str(), propertyNode->m_name->m_str.c_str());
 			writeStringToFile(g_metaPropertyDeclPrefix, sizeof(g_metaPropertyDeclPrefix) - 1, file, indentation + 1);
 			writeStringToFile(funcName, file);
 			writeStringToFile(g_metaStaticPropertyDeclGetIteratorPostfix, sizeof(g_metaStaticPropertyDeclGetIteratorPostfix) - 1, file);
 
-			sprintf_s(funcName, "%s_getValue_%s", classNode->m_name->m_str.c_str(), propertyNode->m_name->m_str.c_str());
+			sprintf(funcName, "%s_getValue_%s", classNode->m_name->m_str.c_str(), propertyNode->m_name->m_str.c_str());
 			writeStringToFile(g_metaPropertyDeclPrefix, sizeof(g_metaPropertyDeclPrefix) - 1, file, indentation + 1);
 			writeStringToFile(funcName, file);
 			writeStringToFile(g_metaStaticPropertyDeclGetValuePostfix, sizeof(g_metaStaticPropertyDeclGetValuePostfix) - 1, file);
 		}
 		else
 		{
-			sprintf_s(funcName, "%s_getIterator_%s", classNode->m_name->m_str.c_str(), propertyNode->m_name->m_str.c_str());
+			sprintf(funcName, "%s_getIterator_%s", classNode->m_name->m_str.c_str(), propertyNode->m_name->m_str.c_str());
 			writeStringToFile(g_metaPropertyDeclPrefix, sizeof(g_metaPropertyDeclPrefix) - 1, file, indentation + 1);
 			writeStringToFile(funcName, file);
 			writeStringToFile(g_metaPropertyDeclGetIteratorPostfix, sizeof(g_metaPropertyDeclGetIteratorPostfix) - 1, file);
 
-			sprintf_s(funcName, "%s_getValue_%s", classNode->m_name->m_str.c_str(), propertyNode->m_name->m_str.c_str());
+			sprintf(funcName, "%s_getValue_%s", classNode->m_name->m_str.c_str(), propertyNode->m_name->m_str.c_str());
 			writeStringToFile(g_metaPropertyDeclPrefix, sizeof(g_metaPropertyDeclPrefix) - 1, file, indentation + 1);
 			writeStringToFile(funcName, file);
 			writeStringToFile(g_metaPropertyDeclGetValuePostfix, sizeof(g_metaPropertyDeclGetValuePostfix) - 1, file);
@@ -238,54 +238,54 @@ void writeMetaPropertyDecl(ClassNode* classNode, PropertyNode* propertyNode, FIL
 	{
 		if (propertyNode->isStatic())
 		{
-			sprintf_s(funcName, "%s_pushBack_%s", classNode->m_name->m_str.c_str(), propertyNode->m_name->m_str.c_str());
+			sprintf(funcName, "%s_pushBack_%s", classNode->m_name->m_str.c_str(), propertyNode->m_name->m_str.c_str());
 			writeStringToFile(g_metaPropertyDeclPrefix, sizeof(g_metaPropertyDeclPrefix) - 1, file, indentation + 1);
 			writeStringToFile(funcName, file);
 			writeStringToFile(g_metaStaticPropertyDeclPushBackPostfix, sizeof(g_metaStaticPropertyDeclPushBackPostfix) - 1, file);
 
-			sprintf_s(funcName, "%s_getIterator_%s", classNode->m_name->m_str.c_str(), propertyNode->m_name->m_str.c_str());
+			sprintf(funcName, "%s_getIterator_%s", classNode->m_name->m_str.c_str(), propertyNode->m_name->m_str.c_str());
 			writeStringToFile(g_metaPropertyDeclPrefix, sizeof(g_metaPropertyDeclPrefix) - 1, file, indentation + 1);
 			writeStringToFile(funcName, file);
 			writeStringToFile(g_metaStaticPropertyDeclGetIteratorPostfix, sizeof(g_metaStaticPropertyDeclGetIteratorPostfix) - 1, file);
 
-			sprintf_s(funcName, "%s_getValue_%s", classNode->m_name->m_str.c_str(), propertyNode->m_name->m_str.c_str());
+			sprintf(funcName, "%s_getValue_%s", classNode->m_name->m_str.c_str(), propertyNode->m_name->m_str.c_str());
 			writeStringToFile(g_metaPropertyDeclPrefix, sizeof(g_metaPropertyDeclPrefix) - 1, file, indentation + 1);
 			writeStringToFile(funcName, file);
 			writeStringToFile(g_metaStaticPropertyDeclGetValuePostfix, sizeof(g_metaStaticPropertyDeclGetValuePostfix) - 1, file);
 
-			sprintf_s(funcName, "%s_insert_%s", classNode->m_name->m_str.c_str(), propertyNode->m_name->m_str.c_str());
+			sprintf(funcName, "%s_insert_%s", classNode->m_name->m_str.c_str(), propertyNode->m_name->m_str.c_str());
 			writeStringToFile(g_metaPropertyDeclPrefix, sizeof(g_metaPropertyDeclPrefix) - 1, file, indentation + 1);
 			writeStringToFile(funcName, file);
 			writeStringToFile(g_metaStaticPropertyDeclInsertPostfix, sizeof(g_metaStaticPropertyDeclInsertPostfix) - 1, file);
 
-			sprintf_s(funcName, "%s_erase_%s", classNode->m_name->m_str.c_str(), propertyNode->m_name->m_str.c_str());
+			sprintf(funcName, "%s_erase_%s", classNode->m_name->m_str.c_str(), propertyNode->m_name->m_str.c_str());
 			writeStringToFile(g_metaPropertyDeclPrefix, sizeof(g_metaPropertyDeclPrefix) - 1, file, indentation + 1);
 			writeStringToFile(funcName, file);
 			writeStringToFile(g_metaStaticPropertyDeclErasePostfix, sizeof(g_metaStaticPropertyDeclErasePostfix) - 1, file);
 		}
 		else
 		{
-			sprintf_s(funcName, "%s_pushBack_%s", classNode->m_name->m_str.c_str(), propertyNode->m_name->m_str.c_str());
+			sprintf(funcName, "%s_pushBack_%s", classNode->m_name->m_str.c_str(), propertyNode->m_name->m_str.c_str());
 			writeStringToFile(g_metaPropertyDeclPrefix, sizeof(g_metaPropertyDeclPrefix) - 1, file, indentation + 1);
 			writeStringToFile(funcName, file);
 			writeStringToFile(g_metaPropertyDeclPushBackPostfix, sizeof(g_metaPropertyDeclPushBackPostfix) - 1, file);
 
-			sprintf_s(funcName, "%s_getIterator_%s", classNode->m_name->m_str.c_str(), propertyNode->m_name->m_str.c_str());
+			sprintf(funcName, "%s_getIterator_%s", classNode->m_name->m_str.c_str(), propertyNode->m_name->m_str.c_str());
 			writeStringToFile(g_metaPropertyDeclPrefix, sizeof(g_metaPropertyDeclPrefix) - 1, file, indentation + 1);
 			writeStringToFile(funcName, file);
 			writeStringToFile(g_metaPropertyDeclGetIteratorPostfix, sizeof(g_metaPropertyDeclGetIteratorPostfix) - 1, file);
 
-			sprintf_s(funcName, "%s_getValue_%s", classNode->m_name->m_str.c_str(), propertyNode->m_name->m_str.c_str());
+			sprintf(funcName, "%s_getValue_%s", classNode->m_name->m_str.c_str(), propertyNode->m_name->m_str.c_str());
 			writeStringToFile(g_metaPropertyDeclPrefix, sizeof(g_metaPropertyDeclPrefix) - 1, file, indentation + 1);
 			writeStringToFile(funcName, file);
 			writeStringToFile(g_metaPropertyDeclGetValuePostfix, sizeof(g_metaPropertyDeclGetValuePostfix) - 1, file);
 
-			sprintf_s(funcName, "%s_insert_%s", classNode->m_name->m_str.c_str(), propertyNode->m_name->m_str.c_str());
+			sprintf(funcName, "%s_insert_%s", classNode->m_name->m_str.c_str(), propertyNode->m_name->m_str.c_str());
 			writeStringToFile(g_metaPropertyDeclPrefix, sizeof(g_metaPropertyDeclPrefix) - 1, file, indentation + 1);
 			writeStringToFile(funcName, file);
 			writeStringToFile(g_metaPropertyDeclInsertPostfix, sizeof(g_metaPropertyDeclInsertPostfix) - 1, file);
 
-			sprintf_s(funcName, "%s_erase_%s", classNode->m_name->m_str.c_str(), propertyNode->m_name->m_str.c_str());
+			sprintf(funcName, "%s_erase_%s", classNode->m_name->m_str.c_str(), propertyNode->m_name->m_str.c_str());
 			writeStringToFile(g_metaPropertyDeclPrefix, sizeof(g_metaPropertyDeclPrefix) - 1, file, indentation + 1);
 			writeStringToFile(funcName, file);
 			writeStringToFile(g_metaPropertyDeclErasePostfix, sizeof(g_metaPropertyDeclErasePostfix) - 1, file);
@@ -295,34 +295,34 @@ void writeMetaPropertyDecl(ClassNode* classNode, PropertyNode* propertyNode, FIL
 	{
 		if (propertyNode->isStatic())
 		{
-			sprintf_s(funcName, "%s_getIterator_%s", classNode->m_name->m_str.c_str(), propertyNode->m_name->m_str.c_str());
+			sprintf(funcName, "%s_getIterator_%s", classNode->m_name->m_str.c_str(), propertyNode->m_name->m_str.c_str());
 			writeStringToFile(g_metaPropertyDeclPrefix, sizeof(g_metaPropertyDeclPrefix) - 1, file, indentation + 1);
 			writeStringToFile(funcName, file);
 			writeStringToFile(g_metaStaticPropertyDeclGetIteratorPostfix, sizeof(g_metaStaticPropertyDeclGetIteratorPostfix) - 1, file);
 
-			sprintf_s(funcName, "%s_getKey_%s", classNode->m_name->m_str.c_str(), propertyNode->m_name->m_str.c_str());
+			sprintf(funcName, "%s_getKey_%s", classNode->m_name->m_str.c_str(), propertyNode->m_name->m_str.c_str());
 			writeStringToFile(g_metaPropertyDeclPrefix, sizeof(g_metaPropertyDeclPrefix) - 1, file, indentation + 1);
 			writeStringToFile(funcName, file);
 			writeStringToFile(g_metaStaticPropertyDeclGetKeyPostfix, sizeof(g_metaStaticPropertyDeclGetKeyPostfix) - 1, file);
 
-			sprintf_s(funcName, "%s_getValue_%s", classNode->m_name->m_str.c_str(), propertyNode->m_name->m_str.c_str());
+			sprintf(funcName, "%s_getValue_%s", classNode->m_name->m_str.c_str(), propertyNode->m_name->m_str.c_str());
 			writeStringToFile(g_metaPropertyDeclPrefix, sizeof(g_metaPropertyDeclPrefix) - 1, file, indentation + 1);
 			writeStringToFile(funcName, file);
 			writeStringToFile(g_metaStaticPropertyDeclGetValuePostfix, sizeof(g_metaStaticPropertyDeclGetValuePostfix) - 1, file);
 		}
 		else
 		{
-			sprintf_s(funcName, "%s_getIterator_%s", classNode->m_name->m_str.c_str(), propertyNode->m_name->m_str.c_str());
+			sprintf(funcName, "%s_getIterator_%s", classNode->m_name->m_str.c_str(), propertyNode->m_name->m_str.c_str());
 			writeStringToFile(g_metaPropertyDeclPrefix, sizeof(g_metaPropertyDeclPrefix) - 1, file, indentation + 1);
 			writeStringToFile(funcName, file);
 			writeStringToFile(g_metaPropertyDeclGetIteratorPostfix, sizeof(g_metaPropertyDeclGetIteratorPostfix) - 1, file);
 
-			sprintf_s(funcName, "%s_getKey_%s", classNode->m_name->m_str.c_str(), propertyNode->m_name->m_str.c_str());
+			sprintf(funcName, "%s_getKey_%s", classNode->m_name->m_str.c_str(), propertyNode->m_name->m_str.c_str());
 			writeStringToFile(g_metaPropertyDeclPrefix, sizeof(g_metaPropertyDeclPrefix) - 1, file, indentation + 1);
 			writeStringToFile(funcName, file);
 			writeStringToFile(g_metaPropertyDeclGetKeyPostfix, sizeof(g_metaPropertyDeclGetKeyPostfix) - 1, file);
 
-			sprintf_s(funcName, "%s_getValue_%s", classNode->m_name->m_str.c_str(), propertyNode->m_name->m_str.c_str());
+			sprintf(funcName, "%s_getValue_%s", classNode->m_name->m_str.c_str(), propertyNode->m_name->m_str.c_str());
 			writeStringToFile(g_metaPropertyDeclPrefix, sizeof(g_metaPropertyDeclPrefix) - 1, file, indentation + 1);
 			writeStringToFile(funcName, file);
 			writeStringToFile(g_metaPropertyDeclGetValuePostfix, sizeof(g_metaPropertyDeclGetValuePostfix) - 1, file);
@@ -363,17 +363,17 @@ void MetaHeaderFileGenerator::generateCode_Program(FILE* file, SourceFile* sourc
 	}
 
 	g_compiler.outputUsedTypesForMetaHeader(file, sourceFile);
-	sprintf_s(buf, "#include \"%s.h\"\n", cppName);
+	sprintf(buf, "#include \"%s.h\"\n", cppName);
 	writeStringToFile(buf, file);
-	sprintf_s(buf, "#include \"%sClassType.h\"\n", pafcorePath.c_str());
+	sprintf(buf, "#include \"%sClassType.h\"\n", pafcorePath.c_str());
 	writeStringToFile(buf, file);
-	sprintf_s(buf, "#include \"%sEnumType.h\"\n", pafcorePath.c_str());
+	sprintf(buf, "#include \"%sEnumType.h\"\n", pafcorePath.c_str());
 	writeStringToFile(buf, file);
-	sprintf_s(buf, "#include \"%sTypeAlias.h\"\n", pafcorePath.c_str());
+	sprintf(buf, "#include \"%sTypeAlias.h\"\n", pafcorePath.c_str());
 	writeStringToFile(buf, file);
-	sprintf_s(buf, "#include \"%sVariant.h\"\n", pafcorePath.c_str());
+	sprintf(buf, "#include \"%sVariant.h\"\n", pafcorePath.c_str());
 	writeStringToFile(buf, file);
-	sprintf_s(buf, "#include \"%sSubclassInvoker.h\"\n", pafcorePath.c_str());
+	sprintf(buf, "#include \"%sSubclassInvoker.h\"\n", pafcorePath.c_str());
 	writeStringToFile(buf, file);
 
 	writeStringToFile("\nnamespace idlcpp\n{\n\n", file);
@@ -414,7 +414,7 @@ void MetaHeaderFileGenerator::generateCode_Program(FILE* file, SourceFile* sourc
 			typeNode->getNativeName(typeName);
 			std::string metaTypeName;
 			GetMetaTypeFullName(metaTypeName, typeNode);
-			sprintf_s(buf, "template<>\n"
+			sprintf(buf, "template<>\n"
 				"struct RuntimeTypeOf<%s>\n"
 				"{\n"
 				"\ttypedef ::idlcpp::%s RuntimeType;\n"
@@ -482,7 +482,7 @@ void MetaHeaderFileGenerator::generateCode_Enum(FILE* file, EnumNode* enumNode, 
 	std::string metaTypeName;
 	GetMetaTypeFullName(metaTypeName, enumNode, templateArguments);
 
-	sprintf_s(buf, "class %s : public ::pafcore::EnumType\n",
+	sprintf(buf, "class %s : public ::pafcore::EnumType\n",
 		metaTypeName.c_str());
 	writeStringToFile(buf, file, indentation);
 	writeStringToFile("{\n", file, indentation);
@@ -493,7 +493,7 @@ void MetaHeaderFileGenerator::generateCode_Enum(FILE* file, EnumNode* enumNode, 
 	writeStringToFile("();\n", file);
 
 	writeStringToFile("public:\n", file, indentation);
-	sprintf_s(buf, "%s static %s* GetSingleton();\n", 
+	sprintf(buf, "%s static %s* GetSingleton();\n", 
 		g_options.m_exportMacro.c_str(), metaTypeName.c_str());
 	writeStringToFile(buf, file, indentation + 1);
 	writeStringToFile("};\n\n", file, indentation);
@@ -530,7 +530,7 @@ void MetaHeaderFileGenerator::generateCode_Class(FILE* file, ClassNode* classNod
 	std::string metaClassName;
 	GetMetaTypeFullName(metaClassName, classNode, templateArguments);
 
-	sprintf_s(buf, "class %s : public ::pafcore::ClassType\n",
+	sprintf(buf, "class %s : public ::pafcore::ClassType\n",
 		metaClassName.c_str());
 	writeStringToFile(buf, file, indentation);
 	writeStringToFile("{\n", file, indentation);
@@ -673,7 +673,7 @@ void MetaHeaderFileGenerator::generateCode_Class(FILE* file, ClassNode* classNod
 
 
 	writeStringToFile("public:\n", file, indentation);
-	sprintf_s(buf, "%s static %s* GetSingleton();\n", 
+	sprintf(buf, "%s static %s* GetSingleton();\n", 
 		g_options.m_exportMacro.c_str(), metaClassName.c_str());
 	writeStringToFile(buf, file, indentation + 1);
 	writeStringToFile("};\n\n", file, indentation);
@@ -765,7 +765,7 @@ void writeInterfaceMethodDecl(MethodNode* methodNode, FILE* file, int indentatio
 		resultName += "*";
 	}
 
-	sprintf_s(buf, "%s %s( ", resultName.c_str(), methodNode->m_name->m_str.c_str());
+	sprintf(buf, "%s %s( ", resultName.c_str(), methodNode->m_name->m_str.c_str());
 	writeStringToFile(buf, file, indentation);
 
 	std::vector<ParameterNode*> parameterNodes;
@@ -809,15 +809,15 @@ void MetaHeaderFileGenerator::generateCode_SubclassProxy(FILE* file, ClassNode* 
 	std::string subclassProxyName;
 	GetSubclassProxyFullName(subclassProxyName, classNode, templateArguments);
 	
-	sprintf_s(buf, "class %s : public %s\n", subclassProxyName.c_str(), className.c_str());
+	sprintf(buf, "class %s : public %s\n", subclassProxyName.c_str(), className.c_str());
 	writeStringToFile(buf, file, indentation);
 	writeStringToFile("{\n", file, indentation);
 	writeStringToFile("public:\n", file, indentation);
 	writeStringToFile("::pafcore::SubclassInvoker* m_subclassInvoker;\n", file, indentation + 1);
 	writeStringToFile("public:\n", file, indentation);
-	sprintf_s(buf, "%s(::pafcore::SubclassInvoker* subclassInvoker);\n", subclassProxyName.c_str());
+	sprintf(buf, "%s(::pafcore::SubclassInvoker* subclassInvoker);\n", subclassProxyName.c_str());
 	writeStringToFile(buf, file, indentation + 1);
-	sprintf_s(buf, "~%s();\n", subclassProxyName.c_str());
+	sprintf(buf, "~%s();\n", subclassProxyName.c_str());
 	writeStringToFile(buf, file, indentation + 1);
 	writeInterfaceMethodsDecl(file, classNode, templateArguments, indentation + 1);
 	writeStringToFile("};\n\n", file, indentation);
@@ -847,7 +847,7 @@ void MetaHeaderFileGenerator::generateCode_Typedef(FILE* file, TypedefNode* type
 	std::string metaTypeName;
 	GetMetaTypeFullName(metaTypeName, typedefNode, templateArguments);
 
-	sprintf_s(buf, "class %s : public ::pafcore::TypeAlias\n",
+	sprintf(buf, "class %s : public ::pafcore::TypeAlias\n",
 		metaTypeName.c_str());
 	writeStringToFile(buf, file, indentation);
 	writeStringToFile("{\n", file, indentation);
@@ -858,7 +858,7 @@ void MetaHeaderFileGenerator::generateCode_Typedef(FILE* file, TypedefNode* type
 	writeStringToFile("();\n", file);
 
 	writeStringToFile("public:\n", file, indentation);
-	sprintf_s(buf, "%s static %s* GetSingleton();\n", 
+	sprintf(buf, "%s static %s* GetSingleton();\n", 
 		g_options.m_exportMacro.c_str(), metaTypeName.c_str());
 	writeStringToFile(buf, file, indentation + 1);
 	writeStringToFile("};\n\n", file, indentation);
@@ -875,7 +875,7 @@ void MetaHeaderFileGenerator::generateCode_TypeDeclaration(FILE* file, TypeDecla
 	std::string metaTypeName;
 	GetMetaTypeFullName(metaTypeName, typeDeclarationNode, templateArguments);
 
-	sprintf_s(buf, "class %s : public ::pafcore::TypeAlias\n",
+	sprintf(buf, "class %s : public ::pafcore::TypeAlias\n",
 		metaTypeName.c_str());
 	writeStringToFile(buf, file, indentation);
 	writeStringToFile("{\n", file, indentation);
@@ -886,7 +886,7 @@ void MetaHeaderFileGenerator::generateCode_TypeDeclaration(FILE* file, TypeDecla
 	writeStringToFile("();\n", file);
 
 	writeStringToFile("public:\n", file, indentation);
-	sprintf_s(buf, "%s static %s* GetSingleton();\n",
+	sprintf(buf, "%s static %s* GetSingleton();\n",
 		g_options.m_exportMacro.c_str(), metaTypeName.c_str());
 	writeStringToFile(buf, file, indentation + 1);
 	writeStringToFile("};\n\n", file, indentation);

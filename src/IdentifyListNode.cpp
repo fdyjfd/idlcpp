@@ -1,5 +1,5 @@
 #include "IdentifyListNode.h"
-
+#include <algorithm>
 IdentifyListNode::IdentifyListNode(IdentifyListNode* identifyList, TokenNode* delimiter, IdentifyNode* identify)
 {
 	m_nodeType = snt_identify_list;

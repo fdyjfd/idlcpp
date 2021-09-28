@@ -38,13 +38,23 @@ target_compile_definitions(${PROJECT_NAME} PRIVATE "_CONSOLE")
 
 target_include_directories(${PROJECT_NAME} PRIVATE "src")
 
-target_link_libraries(${PROJECT_NAME} kernel32.lib user32.lib Ws2_32.lib)
+
 
 set(FAKE_TARGET fakeTarget)     
 set(FLEX_FILE ${CMAKE_SOURCE_DIR}/src/idlcpp.l)
 set(BISON_FILE ${CMAKE_SOURCE_DIR}/src/idlcpp.y)
+
+if(UNIX)
+ set(FLEX_EXE flex)
+ set(BISON_EXE bison)
+else()
+ set(FLEX_EXE ${CMAKE_SOURCE_DIR}/winflexbison/bin/Release/flex.exe)
+ set(BISON_EXE ${CMAKE_SOURCE_DIR}/winflexbison/bin/Release/bison.exe)
+ target_link_libraries(${PROJECT_NAME} kernel32.lib user32.lib Ws2_32.lib)
+endif()
+
 add_custom_target(fakeTarget 
-  COMMAND ${CMAKE_SOURCE_DIR}/winflexbison/bin/Release/flex.exe -o${FLEX_FILE}.c ${FLEX_FILE}
-  COMMAND ${CMAKE_SOURCE_DIR}/winflexbison/bin/Release/bison.exe -o${BISON_FILE}.c -d ${BISON_FILE}
+  COMMAND ${FLEX_EXE} -o${FLEX_FILE}.c ${FLEX_FILE}
+  COMMAND ${BISON_EXE} -o${BISON_FILE}.c -d ${BISON_FILE}
 )
 add_dependencies(${PROJECT_NAME} ${FAKE_TARGET})

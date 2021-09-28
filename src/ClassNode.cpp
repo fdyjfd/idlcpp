@@ -50,7 +50,7 @@ void checkBaseTypes(ClassNode* classNode, std::vector<TypeNameNode*>& baseTypeNa
 			if (value_type != baseTypeCategory)
 			{
 				char buf[4096];
-				sprintf_s(buf, "\'%s\' : base type must be value type", typeNameNode->m_scopeNameList->m_scopeName->m_name->m_str.c_str());
+				sprintf(buf, "\'%s\' : base type must be value type", typeNameNode->m_scopeNameList->m_scopeName->m_name->m_str.c_str());
 				ErrorList_AddItem_CurrentFile(typeNameNode->m_scopeNameList->m_scopeName->m_name->m_lineNo,
 					typeNameNode->m_scopeNameList->m_scopeName->m_name->m_columnNo, semantic_error_base_type, buf);
 			}
@@ -62,7 +62,7 @@ void checkBaseTypes(ClassNode* classNode, std::vector<TypeNameNode*>& baseTypeNa
 				if (reference_type != baseTypeCategory)
 				{
 					char buf[4096];
-					sprintf_s(buf, "\'%s\' : first base type must be reference type", typeNameNode->m_scopeNameList->m_scopeName->m_name->m_str.c_str());
+					sprintf(buf, "\'%s\' : first base type must be reference type", typeNameNode->m_scopeNameList->m_scopeName->m_name->m_str.c_str());
 					ErrorList_AddItem_CurrentFile(typeNameNode->m_scopeNameList->m_scopeName->m_name->m_lineNo,
 						typeNameNode->m_scopeNameList->m_scopeName->m_name->m_columnNo, semantic_error_base_type, buf);
 				}
@@ -72,7 +72,7 @@ void checkBaseTypes(ClassNode* classNode, std::vector<TypeNameNode*>& baseTypeNa
 				if (reference_type != baseTypeCategory && value_type != baseTypeCategory)
 				{
 					char buf[4096];
-					sprintf_s(buf, "\'%s\' : base type must be reference type or value type", typeNameNode->m_scopeNameList->m_scopeName->m_name->m_str.c_str());
+					sprintf(buf, "\'%s\' : base type must be reference type or value type", typeNameNode->m_scopeNameList->m_scopeName->m_name->m_str.c_str());
 					ErrorList_AddItem_CurrentFile(typeNameNode->m_scopeNameList->m_scopeName->m_name->m_lineNo,
 						typeNameNode->m_scopeNameList->m_scopeName->m_name->m_columnNo, semantic_error_base_type, buf);
 				}
@@ -83,7 +83,7 @@ void checkBaseTypes(ClassNode* classNode, std::vector<TypeNameNode*>& baseTypeNa
 		{
 			size_t index = it - baseTypeNodes.begin();
 			char buf[4096];
-			sprintf_s(buf, "\'%s\' : is already a direct base class, the previous declaration is at line %d, column %d", 
+			sprintf(buf, "\'%s\' : is already a direct base class, the previous declaration is at line %d, column %d", 
 				typeNameNode->m_scopeNameList->m_scopeName->m_name->m_str.c_str(),
 				baseTypeNameNodes[index]->m_scopeNameList->m_scopeName->m_name->m_lineNo,
 				baseTypeNameNodes[index]->m_scopeNameList->m_scopeName->m_name->m_columnNo);
@@ -153,7 +153,7 @@ void checkMemberNames(ClassNode* classNode, std::vector<MemberNode*>& memberNode
 				if(0 != methodNode->m_resultTypeName)
 				{
 					char buf[4096];
-					sprintf_s(buf, "\'%s\' : constructor with return type", identify->m_str.c_str());
+					sprintf(buf, "\'%s\' : constructor with return type", identify->m_str.c_str());
 					ErrorList_AddItem_CurrentFile(identify->m_lineNo,
 						identify->m_columnNo, semantic_error_constructor_with_return_type, buf);
 					continue;
@@ -161,7 +161,7 @@ void checkMemberNames(ClassNode* classNode, std::vector<MemberNode*>& memberNode
 				if(0 != methodNode->m_modifier)
 				{
 					char buf[4096];
-					sprintf_s(buf, "\'%s\' : constructor cannot be declared %s", identify->m_str.c_str(), 
+					sprintf(buf, "\'%s\' : constructor cannot be declared %s", identify->m_str.c_str(), 
 						g_keywordTokens[methodNode->m_modifier->m_nodeType - snt_begin_output - 1]);
 					ErrorList_AddItem_CurrentFile(identify->m_lineNo,
 						identify->m_columnNo, semantic_error_constructor_with_modifier, buf);
@@ -173,7 +173,7 @@ void checkMemberNames(ClassNode* classNode, std::vector<MemberNode*>& memberNode
 				if(0 == methodNode->m_resultTypeName)
 				{
 					char buf[4096];
-					sprintf_s(buf, "\'%s\' : missing type specifier", identify->m_str.c_str());
+					sprintf(buf, "\'%s\' : missing type specifier", identify->m_str.c_str());
 					ErrorList_AddItem_CurrentFile(identify->m_lineNo,
 						identify->m_columnNo, semantic_error_missing_type_specifier, buf);
 					continue;
@@ -246,7 +246,7 @@ void checkMemberNames(ClassNode* classNode, std::vector<MemberNode*>& memberNode
 			if(identify->m_str == classNode->m_name->m_str)
 			{
 				char buf[4096];
-				sprintf_s(buf, "\'%s\' : class member name cannot equal to class name", identify->m_str.c_str());
+				sprintf(buf, "\'%s\' : class member name cannot equal to class name", identify->m_str.c_str());
 				ErrorList_AddItem_CurrentFile(identify->m_lineNo,
 					identify->m_columnNo, semantic_error_member_name_equal_to_class_name, buf);
 			}
@@ -274,7 +274,7 @@ void checkMemberNames(ClassNode* classNode, std::vector<MemberNode*>& memberNode
 		if(nameCollision)
 		{
 			char buf[4096];
-			sprintf_s(buf, "\'%s\' : member already defined at line %d, column %d", identify->m_str.c_str(), 
+			sprintf(buf, "\'%s\' : member already defined at line %d, column %d", identify->m_str.c_str(), 
 				collisionNode->m_lineNo, collisionNode->m_columnNo);
 			ErrorList_AddItem_CurrentFile(identify->m_lineNo,
 				identify->m_columnNo, semantic_error_member_redefined, buf);
@@ -430,9 +430,9 @@ void ClassNode::extendInternalCode(TypeNode* enclosingTypeNode, TemplateArgument
 
 }
 
-extern "C" extern int yytokenno;
-extern "C" extern int yylineno;
-extern "C" extern int yycolumnno;
+extern "C" int yytokenno;
+extern "C" int yylineno;
+extern "C" int yycolumnno;
 
 void ClassNode::GenerateCreateInstanceMethod(const char* methodName, MethodNode* constructor)
 {

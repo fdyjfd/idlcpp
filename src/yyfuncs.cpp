@@ -40,6 +40,7 @@
 #include "NamespaceNode.h"
 #include "ProgramNode.h"
 #include "Compiler.h"
+#include "string.h"
 
 extern "C"
 {

@@ -1,4 +1,5 @@
 #include "ParameterListNode.h"
+#include <algorithm>
 #include "ParameterNode.h"
 #include "IdentifyNode.h"
 #include "ErrorList.h"
@@ -46,7 +47,7 @@ void checkParameterNames(std::vector<ParameterNode*>& parameterNodes)
 		if (!res.second)
 		{
 			char buf[4096];
-			sprintf_s(buf, "\'%s\' : parameter already defined at line %d, column %d", identify->m_str.c_str(),
+			sprintf(buf, "\'%s\' : parameter already defined at line %d, column %d", identify->m_str.c_str(),
 				(*res.first)->m_lineNo, (*res.first)->m_columnNo);
 			ErrorList_AddItem_CurrentFile(identify->m_lineNo,
 				identify->m_columnNo, semantic_error_member_redefined, buf);

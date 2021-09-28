@@ -1,6 +1,6 @@
-#line 1 "D:\\idlcpp\\idlcpp\\src\\idlcpp.l.c"
+#line 1 "D:/idlcpp/src/idlcpp.l.c"
 
-#line 3 "D:\\idlcpp\\idlcpp\\src\\idlcpp.l.c"
+#line 3 "D:/idlcpp/src/idlcpp.l.c"
 
 #define  YY_INT_ALIGNED short int
 
@@ -762,10 +762,10 @@ int yy_flex_debug = 0;
 #define YY_MORE_ADJ 0
 #define YY_RESTORE_YY_MORE_OFFSET
 char *yytext;
-#line 1 "D:\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 1 "D:/idlcpp/src/idlcpp.l"
 #define YY_NO_UNISTD_H 1
 
-#line 5 "D:\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 5 "D:/idlcpp/src/idlcpp.l"
 #include <stdlib.h>
 #include <string.h>
 #include "idlcpp.y.h"
@@ -778,8 +778,8 @@ int yyHasArrayProperty = 0;
 int yyHasListProperty = 0;
 int yyHasMapProperty = 0;
 int yyHasDelegate = 0;
-#line 781 "D:\\idlcpp\\idlcpp\\src\\idlcpp.l.c"
-#line 782 "D:\\idlcpp\\idlcpp\\src\\idlcpp.l.c"
+#line 781 "D:/idlcpp/src/idlcpp.l.c"
+#line 782 "D:/idlcpp/src/idlcpp.l.c"
 
 #define INITIAL 0
 #define IFILE 1
@@ -999,10 +999,10 @@ YY_DECL
 		}
 
 	{
-#line 19 "D:\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 19 "D:/idlcpp/src/idlcpp.l"
 
 
-#line 1005 "D:\\idlcpp\\idlcpp\\src\\idlcpp.l.c"
+#line 1005 "D:/idlcpp/src/idlcpp.l.c"
 
 	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
 		{
@@ -1067,12 +1067,12 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 21 "D:\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 21 "D:/idlcpp/src/idlcpp.l"
 {BEGIN IFILE;}
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 22 "D:\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 22 "D:/idlcpp/src/idlcpp.l"
 {
 						{
 							int c;
@@ -1087,448 +1087,448 @@ YY_RULE_SETUP
 case 3:
 /* rule 3 can match eol */
 YY_RULE_SETUP
-#line 32 "D:\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 32 "D:/idlcpp/src/idlcpp.l"
 {fprintf(stderr, "%d bad import line\n", yylineno); yyterminate();}
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 34 "D:\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 34 "D:/idlcpp/src/idlcpp.l"
 {yycolumnno += 2; BEGIN CODEBLOCK;}
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 35 "D:\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 35 "D:/idlcpp/src/idlcpp.l"
 {yycolumnno += 2; BEGIN INITIAL;}
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 36 "D:\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 36 "D:/idlcpp/src/idlcpp.l"
 {newCodeBlock(yytext); yycolumnno += strlen(yytext); yytokenno++;}
 	YY_BREAK
 case 7:
 /* rule 7 can match eol */
 YY_RULE_SETUP
-#line 37 "D:\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 37 "D:/idlcpp/src/idlcpp.l"
 {newCodeBlock(yytext); yycolumnno = 1; yytokenno++;}
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 38 "D:\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 38 "D:/idlcpp/src/idlcpp.l"
 {newCodeBlock(yytext); yycolumnno++; yytokenno++;}
 	YY_BREAK
 case YY_STATE_EOF(CODEBLOCK):
-#line 39 "D:\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 39 "D:/idlcpp/src/idlcpp.l"
 {unterminatedCode();yyterminate();}
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 41 "D:\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 41 "D:/idlcpp/src/idlcpp.l"
 {yycolumnno += 2; BEGIN COMMENT;}
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 42 "D:\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 42 "D:/idlcpp/src/idlcpp.l"
 {yycolumnno += 2; BEGIN INITIAL;}
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 43 "D:\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 43 "D:/idlcpp/src/idlcpp.l"
 {yycolumnno += strlen(yytext); }
 	YY_BREAK
 case 12:
 /* rule 12 can match eol */
 YY_RULE_SETUP
-#line 44 "D:\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 44 "D:/idlcpp/src/idlcpp.l"
 {newCodeBlock("\n"); yycolumnno = 1; }
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 45 "D:\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 45 "D:/idlcpp/src/idlcpp.l"
 {yycolumnno++;}
 	YY_BREAK
 case YY_STATE_EOF(COMMENT):
-#line 46 "D:\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 46 "D:/idlcpp/src/idlcpp.l"
 {unterminatedComment();yyterminate();}
 	YY_BREAK
 case 14:
 /* rule 14 can match eol */
 YY_RULE_SETUP
-#line 50 "D:\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 50 "D:/idlcpp/src/idlcpp.l"
 {newCodeBlock("\n"); yycolumnno = 1;}
 	YY_BREAK
 case YY_STATE_EOF(INITIAL):
 case YY_STATE_EOF(IFILE):
-#line 52 "D:\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 52 "D:/idlcpp/src/idlcpp.l"
 {yyterminate();}
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 54 "D:\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 54 "D:/idlcpp/src/idlcpp.l"
 {newCodeBlock(yytext + 2); yycolumnno += strlen(yytext); yytokenno++;}
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 56 "D:\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 56 "D:/idlcpp/src/idlcpp.l"
 {newCodeBlock(yytext + 1); yycolumnno += strlen(yytext); yytokenno++;}
 	YY_BREAK
 case 17:
-#line 59 "D:\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 59 "D:/idlcpp/src/idlcpp.l"
 case 18:
-#line 60 "D:\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 60 "D:/idlcpp/src/idlcpp.l"
 case 19:
-#line 61 "D:\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 61 "D:/idlcpp/src/idlcpp.l"
 case 20:
-#line 62 "D:\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 62 "D:/idlcpp/src/idlcpp.l"
 case 21:
-#line 63 "D:\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 63 "D:/idlcpp/src/idlcpp.l"
 case 22:
-#line 64 "D:\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 64 "D:/idlcpp/src/idlcpp.l"
 case 23:
-#line 65 "D:\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 65 "D:/idlcpp/src/idlcpp.l"
 case 24:
-#line 66 "D:\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 66 "D:/idlcpp/src/idlcpp.l"
 case 25:
-#line 67 "D:\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 67 "D:/idlcpp/src/idlcpp.l"
 case 26:
-#line 68 "D:\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 68 "D:/idlcpp/src/idlcpp.l"
 case 27:
-#line 69 "D:\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 69 "D:/idlcpp/src/idlcpp.l"
 case 28:
-#line 70 "D:\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 70 "D:/idlcpp/src/idlcpp.l"
 case 29:
-#line 71 "D:\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 71 "D:/idlcpp/src/idlcpp.l"
 case 30:
-#line 72 "D:\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 72 "D:/idlcpp/src/idlcpp.l"
 case 31:
-#line 73 "D:\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 73 "D:/idlcpp/src/idlcpp.l"
 case 32:
-#line 74 "D:\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 74 "D:/idlcpp/src/idlcpp.l"
 case 33:
-#line 75 "D:\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 75 "D:/idlcpp/src/idlcpp.l"
 case 34:
-#line 76 "D:\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 76 "D:/idlcpp/src/idlcpp.l"
 case 35:
-#line 77 "D:\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 77 "D:/idlcpp/src/idlcpp.l"
 case 36:
-#line 78 "D:\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 78 "D:/idlcpp/src/idlcpp.l"
 case 37:
-#line 79 "D:\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 79 "D:/idlcpp/src/idlcpp.l"
 case 38:
-#line 80 "D:\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 80 "D:/idlcpp/src/idlcpp.l"
 case 39:
 YY_RULE_SETUP
-#line 80 "D:\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 80 "D:/idlcpp/src/idlcpp.l"
 {yylval.sn = newToken(yytext[0]);				yycolumnno++; yytokenno++; return yytext[0];}
 	YY_BREAK
 case 40:
 YY_RULE_SETUP
-#line 82 "D:\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 82 "D:/idlcpp/src/idlcpp.l"
 {yylval.sn = newToken(snt_operator_scope);					yycolumnno += strlen(yytext); yytokenno++; return SCOPE;}
 	YY_BREAK
 case 41:
 YY_RULE_SETUP
-#line 83 "D:\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 83 "D:/idlcpp/src/idlcpp.l"
 {yylval.sn = newToken(snt_operator_add_assign);				yycolumnno += strlen(yytext); yytokenno++; return ADD_ASSIGN;}
 	YY_BREAK
 case 42:
 YY_RULE_SETUP
-#line 84 "D:\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 84 "D:/idlcpp/src/idlcpp.l"
 {yylval.sn = newToken(snt_operator_sub_assign);				yycolumnno += strlen(yytext); yytokenno++; return SUB_ASSIGN;}
 	YY_BREAK
 case 43:
 YY_RULE_SETUP
-#line 85 "D:\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 85 "D:/idlcpp/src/idlcpp.l"
 {yylval.sn = newToken(snt_operator_mul_assign);				yycolumnno += strlen(yytext); yytokenno++; return MUL_ASSIGN;}
 	YY_BREAK
 case 44:
 YY_RULE_SETUP
-#line 86 "D:\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 86 "D:/idlcpp/src/idlcpp.l"
 {yylval.sn = newToken(snt_operator_div_assign);				yycolumnno += strlen(yytext); yytokenno++; return DIV_ASSIGN;}
 	YY_BREAK
 case 45:
 YY_RULE_SETUP
-#line 87 "D:\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 87 "D:/idlcpp/src/idlcpp.l"
 {yylval.sn = newToken(snt_operator_mod_assign);				yycolumnno += strlen(yytext); yytokenno++; return MOD_ASSIGN;}
 	YY_BREAK
 case 46:
 YY_RULE_SETUP
-#line 88 "D:\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 88 "D:/idlcpp/src/idlcpp.l"
 {yylval.sn = newToken(snt_operator_bit_xor_assign);			yycolumnno += strlen(yytext); yytokenno++; return BIT_XOR_ASSIGN;}
 	YY_BREAK
 case 47:
 YY_RULE_SETUP
-#line 89 "D:\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 89 "D:/idlcpp/src/idlcpp.l"
 {yylval.sn = newToken(snt_operator_bit_and_assign);			yycolumnno += strlen(yytext); yytokenno++; return BIT_AND_ASSIGN;}
 	YY_BREAK
 case 48:
 YY_RULE_SETUP
-#line 90 "D:\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 90 "D:/idlcpp/src/idlcpp.l"
 {yylval.sn = newToken(snt_operator_bit_or_assign);			yycolumnno += strlen(yytext); yytokenno++; return BIT_OR_ASSIGN;}
 	YY_BREAK
 case 49:
 YY_RULE_SETUP
-#line 91 "D:\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 91 "D:/idlcpp/src/idlcpp.l"
 {yylval.sn = newToken(snt_operator_left_shift);				yycolumnno += strlen(yytext); yytokenno++; return LEFT_SHIFT;}
 	YY_BREAK
 case 50:
 YY_RULE_SETUP
-#line 92 "D:\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 92 "D:/idlcpp/src/idlcpp.l"
 {yylval.sn = newToken(snt_operator_right_shift);			yycolumnno += strlen(yytext); yytokenno++; return RIGHT_SHIFT;}
 	YY_BREAK
 case 51:
 YY_RULE_SETUP
-#line 93 "D:\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 93 "D:/idlcpp/src/idlcpp.l"
 {yylval.sn = newToken(snt_operator_left_shift_assign);		yycolumnno += strlen(yytext); yytokenno++; return LEFT_SHIFT_ASSIGN;}
 	YY_BREAK
 case 52:
 YY_RULE_SETUP
-#line 94 "D:\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 94 "D:/idlcpp/src/idlcpp.l"
 {yylval.sn = newToken(snt_operator_right_shift_assign);		yycolumnno += strlen(yytext); yytokenno++; return RIGHT_SHIFT_ASSIGN;}
 	YY_BREAK
 case 53:
 YY_RULE_SETUP
-#line 95 "D:\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 95 "D:/idlcpp/src/idlcpp.l"
 {yylval.sn = newToken(snt_operator_equal);					yycolumnno += strlen(yytext); yytokenno++; return EQUAL;}
 	YY_BREAK
 case 54:
 YY_RULE_SETUP
-#line 96 "D:\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 96 "D:/idlcpp/src/idlcpp.l"
 {yylval.sn = newToken(snt_operator_not_equal);				yycolumnno += strlen(yytext); yytokenno++; return NOT_EQUAL;}
 	YY_BREAK
 case 55:
 YY_RULE_SETUP
-#line 97 "D:\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 97 "D:/idlcpp/src/idlcpp.l"
 {yylval.sn = newToken(snt_operator_less_equal);				yycolumnno += strlen(yytext); yytokenno++; return LESS_EQUAL;}
 	YY_BREAK
 case 56:
 YY_RULE_SETUP
-#line 98 "D:\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 98 "D:/idlcpp/src/idlcpp.l"
 {yylval.sn = newToken(snt_operator_greater_equal);			yycolumnno += strlen(yytext); yytokenno++; return GREATER_EQUAL;}
 	YY_BREAK
 case 57:
 YY_RULE_SETUP
-#line 99 "D:\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 99 "D:/idlcpp/src/idlcpp.l"
 {yylval.sn = newToken(snt_operator_and);					yycolumnno += strlen(yytext); yytokenno++; return AND;}
 	YY_BREAK
 case 58:
 YY_RULE_SETUP
-#line 100 "D:\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 100 "D:/idlcpp/src/idlcpp.l"
 {yylval.sn = newToken(snt_operator_or);						yycolumnno += strlen(yytext); yytokenno++; return OR;}
 	YY_BREAK
 case 59:
 YY_RULE_SETUP
-#line 101 "D:\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 101 "D:/idlcpp/src/idlcpp.l"
 {yylval.sn = newToken(snt_operator_inc);					yycolumnno += strlen(yytext); yytokenno++; return INC;}
 	YY_BREAK
 case 60:
 YY_RULE_SETUP
-#line 102 "D:\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 102 "D:/idlcpp/src/idlcpp.l"
 {yylval.sn = newToken(snt_operator_dec);					yycolumnno += strlen(yytext); yytokenno++; return DEC;}
 	YY_BREAK
 case 61:
 YY_RULE_SETUP
-#line 104 "D:\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 104 "D:/idlcpp/src/idlcpp.l"
 {yylval.sn = newToken(snt_keyword_bool);					yycolumnno += strlen(yytext); yytokenno++; return BOOL;}
 	YY_BREAK
 case 62:
 YY_RULE_SETUP
-#line 105 "D:\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 105 "D:/idlcpp/src/idlcpp.l"
 {yylval.sn = newToken(snt_keyword_char);					yycolumnno += strlen(yytext); yytokenno++; return CHAR;}
 	YY_BREAK
 case 63:
 YY_RULE_SETUP
-#line 106 "D:\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 106 "D:/idlcpp/src/idlcpp.l"
 {yylval.sn = newToken(snt_keyword_wchar_t);					yycolumnno += strlen(yytext); yytokenno++; return WCHAR_T;}
 	YY_BREAK
 case 64:
 YY_RULE_SETUP
-#line 107 "D:\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 107 "D:/idlcpp/src/idlcpp.l"
 {yylval.sn = newToken(snt_keyword_short);					yycolumnno += strlen(yytext); yytokenno++; return SHORT;}
 	YY_BREAK
 case 65:
 YY_RULE_SETUP
-#line 108 "D:\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 108 "D:/idlcpp/src/idlcpp.l"
 {yylval.sn = newToken(snt_keyword_long);					yycolumnno += strlen(yytext); yytokenno++; return LONG;}
 	YY_BREAK
 case 66:
 YY_RULE_SETUP
-#line 109 "D:\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 109 "D:/idlcpp/src/idlcpp.l"
 {yylval.sn = newToken(snt_keyword_int);						yycolumnno += strlen(yytext); yytokenno++; return INT;}
 	YY_BREAK
 case 67:
 YY_RULE_SETUP
-#line 110 "D:\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 110 "D:/idlcpp/src/idlcpp.l"
 {yylval.sn = newToken(snt_keyword_signed);					yycolumnno += strlen(yytext); yytokenno++; return SIGNED;}
 	YY_BREAK
 case 68:
 YY_RULE_SETUP
-#line 111 "D:\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 111 "D:/idlcpp/src/idlcpp.l"
 {yylval.sn = newToken(snt_keyword_unsigned);				yycolumnno += strlen(yytext); yytokenno++; return UNSIGNED;}
 	YY_BREAK
 case 69:
 YY_RULE_SETUP
-#line 112 "D:\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 112 "D:/idlcpp/src/idlcpp.l"
 {yylval.sn = newToken(snt_keyword_float);					yycolumnno += strlen(yytext); yytokenno++; return FLOAT;}
 	YY_BREAK
 case 70:
 YY_RULE_SETUP
-#line 113 "D:\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 113 "D:/idlcpp/src/idlcpp.l"
 {yylval.sn = newToken(snt_keyword_double);					yycolumnno += strlen(yytext); yytokenno++; return DOUBLE;}
 	YY_BREAK
 case 71:
 YY_RULE_SETUP
-#line 114 "D:\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 114 "D:/idlcpp/src/idlcpp.l"
 {yylval.sn = newToken(snt_keyword_void);					yycolumnno += strlen(yytext); yytokenno++; return VOID;}
 	YY_BREAK
 case 72:
 YY_RULE_SETUP
-#line 115 "D:\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 115 "D:/idlcpp/src/idlcpp.l"
 {yylval.sn = newToken(snt_keyword_string_t);				yycolumnno += strlen(yytext); yytokenno++; return STRING_T;}
 	YY_BREAK
 case 73:
 YY_RULE_SETUP
-#line 116 "D:\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 116 "D:/idlcpp/src/idlcpp.l"
 {yylval.sn = newToken(snt_keyword_abstract);				yycolumnno += strlen(yytext); yytokenno++; return ABSTRACT;}
 	YY_BREAK
 case 74:
 YY_RULE_SETUP
-#line 117 "D:\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 117 "D:/idlcpp/src/idlcpp.l"
 {yylval.sn = newToken(snt_keyword_namespace);				yycolumnno += strlen(yytext); yytokenno++; return NAMESPACE;}
 	YY_BREAK
 case 75:
 YY_RULE_SETUP
-#line 118 "D:\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 118 "D:/idlcpp/src/idlcpp.l"
 {yylval.sn = newToken(snt_keyword_enum);					yycolumnno += strlen(yytext); yytokenno++; return ENUM;}
 	YY_BREAK
 case 76:
 YY_RULE_SETUP
-#line 119 "D:\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 119 "D:/idlcpp/src/idlcpp.l"
 {yylval.sn = newToken(snt_keyword_class);					yycolumnno += strlen(yytext); yytokenno++; return CLASS;}
 	YY_BREAK
 case 77:
 YY_RULE_SETUP
-#line 120 "D:\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 120 "D:/idlcpp/src/idlcpp.l"
 {yylval.sn = newToken(snt_keyword_struct);					yycolumnno += strlen(yytext); yytokenno++; return STRUCT;}
 	YY_BREAK
 case 78:
 YY_RULE_SETUP
-#line 121 "D:\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 121 "D:/idlcpp/src/idlcpp.l"
 {yylval.sn = newToken(snt_keyword_virtual);					yycolumnno += strlen(yytext); yytokenno++; return VIRTUAL;}
 	YY_BREAK
 case 79:
 YY_RULE_SETUP
-#line 122 "D:\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 122 "D:/idlcpp/src/idlcpp.l"
 {yylval.sn = newToken(snt_keyword_static);					yycolumnno += strlen(yytext); yytokenno++; return STATIC;}
 	YY_BREAK
 case 80:
 YY_RULE_SETUP
-#line 123 "D:\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 123 "D:/idlcpp/src/idlcpp.l"
 {yylval.sn = newToken(snt_keyword_const);					yycolumnno += strlen(yytext); yytokenno++; return CONST;}
 	YY_BREAK
 case 81:
 YY_RULE_SETUP
-#line 124 "D:\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 124 "D:/idlcpp/src/idlcpp.l"
 {yylval.sn = newToken(snt_keyword_operator);				yycolumnno += strlen(yytext); yytokenno++; return OPERATOR;}
 	YY_BREAK
 case 82:
 YY_RULE_SETUP
-#line 125 "D:\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 125 "D:/idlcpp/src/idlcpp.l"
 {yylval.sn = newToken(snt_keyword_typedef);					yycolumnno += strlen(yytext); yytokenno++; return TYPEDEF;}
 	YY_BREAK
 case 83:
 YY_RULE_SETUP
-#line 126 "D:\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 126 "D:/idlcpp/src/idlcpp.l"
 {yylval.sn = newToken(snt_keyword_typename);				yycolumnno += strlen(yytext); yytokenno++; return TYPENAME;}
 	YY_BREAK
 case 84:
 YY_RULE_SETUP
-#line 127 "D:\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 127 "D:/idlcpp/src/idlcpp.l"
 {yylval.sn = newToken(snt_keyword_get);						yycolumnno += strlen(yytext); yytokenno++; return GET;}
 	YY_BREAK
 case 85:
 YY_RULE_SETUP
-#line 128 "D:\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 128 "D:/idlcpp/src/idlcpp.l"
 {yylval.sn = newToken(snt_keyword_set);						yycolumnno += strlen(yytext); yytokenno++; return SET;}
 	YY_BREAK
 case 86:
 YY_RULE_SETUP
-#line 129 "D:\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 129 "D:/idlcpp/src/idlcpp.l"
 {yylval.sn = newToken(snt_keyword_candidate);				yycolumnno += strlen(yytext); yytokenno++; return CANDIDATE;}
 	YY_BREAK
 case 87:
 YY_RULE_SETUP
-#line 130 "D:\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 130 "D:/idlcpp/src/idlcpp.l"
 {yylval.sn = newToken(snt_keyword_nocode);					yycolumnno += strlen(yytext); yytokenno++; return NOCODE;}
 	YY_BREAK
 case 88:
 YY_RULE_SETUP
-#line 131 "D:\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 131 "D:/idlcpp/src/idlcpp.l"
 {yylval.sn = newToken(snt_keyword_nometa);					yycolumnno += strlen(yytext); yytokenno++; return NOMETA;}
 	YY_BREAK
 case 89:
 YY_RULE_SETUP
-#line 132 "D:\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 132 "D:/idlcpp/src/idlcpp.l"
 {yylval.sn = newToken(snt_keyword_export);					yycolumnno += strlen(yytext); yytokenno++; return EXPORT;}
 	YY_BREAK
 case 90:
 YY_RULE_SETUP
-#line 133 "D:\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 133 "D:/idlcpp/src/idlcpp.l"
 {yylval.sn = newToken(snt_keyword_override);				yycolumnno += strlen(yytext); yytokenno++; return OVERRIDE;}
 	YY_BREAK
 case 91:
 YY_RULE_SETUP
-#line 134 "D:\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 134 "D:/idlcpp/src/idlcpp.l"
 {yylval.sn = newToken(snt_keyword_template);				yycolumnno += strlen(yytext); yytokenno++; return TEMPLATE;}
 	YY_BREAK
 case 92:
 YY_RULE_SETUP
-#line 135 "D:\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 135 "D:/idlcpp/src/idlcpp.l"
 {yylval.sn = newToken(snt_keyword_delegate);				yycolumnno += strlen(yytext); yytokenno++; return DELEGATE;}
 	YY_BREAK
 case 93:
 YY_RULE_SETUP
-#line 138 "D:\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 138 "D:/idlcpp/src/idlcpp.l"
 {yylval.sn = newIdentify(yytext);					yycolumnno += strlen(yytext); yytokenno++; return IDENTIFY;}
 	YY_BREAK
 case 94:
 /* rule 94 can match eol */
 YY_RULE_SETUP
-#line 140 "D:\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 140 "D:/idlcpp/src/idlcpp.l"
 {yylval.sn = newString(yytext + 1);					yycolumnno += strlen(yytext); yytokenno++; return STRING;}
 	YY_BREAK
 case 95:
 /* rule 95 can match eol */
 YY_RULE_SETUP
-#line 141 "D:\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 141 "D:/idlcpp/src/idlcpp.l"
 {yylval.sn = newString(yytext + 3);					yycolumnno += strlen(yytext); yytokenno++; return U8STRING;}
 	YY_BREAK
 case 96:
 YY_RULE_SETUP
-#line 143 "D:\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 143 "D:/idlcpp/src/idlcpp.l"
 {++yycolumnno;}
 	YY_BREAK
 case 97:
 /* rule 97 can match eol */
 YY_RULE_SETUP
-#line 144 "D:\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 144 "D:/idlcpp/src/idlcpp.l"
 {newCodeBlock(yytext); yycolumnno = 1;}
 	YY_BREAK
 case 98:
 YY_RULE_SETUP
-#line 146 "D:\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 146 "D:/idlcpp/src/idlcpp.l"
 {invalidString(yytext); yycolumnno += strlen(yytext);}
 	YY_BREAK
 case 99:
 YY_RULE_SETUP
-#line 147 "D:\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 147 "D:/idlcpp/src/idlcpp.l"
 {invalidString(yytext); yycolumnno += strlen(yytext);}
 	YY_BREAK
 case 100:
 YY_RULE_SETUP
-#line 149 "D:\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 149 "D:/idlcpp/src/idlcpp.l"
 YY_FATAL_ERROR( "flex scanner jammed" );
 	YY_BREAK
-#line 1531 "D:\\idlcpp\\idlcpp\\src\\idlcpp.l.c"
+#line 1531 "D:/idlcpp/src/idlcpp.l.c"
 
 	case YY_END_OF_BUFFER:
 		{
@@ -2544,7 +2544,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 149 "D:\\idlcpp\\idlcpp\\src\\idlcpp.l"
+#line 149 "D:/idlcpp/src/idlcpp.l"
 
 
 YY_BUFFER_STATE createBufferState(FILE* file)

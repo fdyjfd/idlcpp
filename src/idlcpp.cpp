@@ -9,7 +9,6 @@
 #include "ImportDirectory.h"
 #include "Options.h"
 #include <string>
-#include <tchar.h>
 #include <assert.h>
 #include "Compiler.h"
 
@@ -127,7 +126,7 @@ void ParseOption(const char* arg)
 	}
 }
 
-int _tmain(int argc, _TCHAR* argv[])
+int main(int argc, char* argv[])
 {
 	if(argc < 2)
 	{

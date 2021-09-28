@@ -1,6 +1,7 @@
 #include "ScopeNameListNode.h"
 #include "ScopeNameNode.h"
 #include <vector>
+#include <algorithm>
 
 ScopeNameListNode::ScopeNameListNode(ScopeNameListNode* scopeNameList, ScopeNameNode* scopeName)
 {

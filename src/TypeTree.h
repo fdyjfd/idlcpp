@@ -3,6 +3,7 @@
 #include <string>
 #include <set>
 #include <vector>
+#include "yyfuncs.h"
 
 struct IdentifyNode;
 struct MemberNode;
@@ -17,9 +18,6 @@ struct ScopeNameListNode;
 class SourceFile;
 struct TemplateArguments;
 class TypeTreeNode;
-enum TypeCategory;
-
-enum PredefinedType;
 
 enum TypeNodeCategory
 {

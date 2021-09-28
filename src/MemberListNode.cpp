@@ -1,5 +1,6 @@
 #include "MemberListNode.h"
 #include "MemberNode.h"
+#include <algorithm>
 #include <assert.h>
 
 MemberListNode::MemberListNode(MemberListNode* memberList, MemberNode* member)

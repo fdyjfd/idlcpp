@@ -1,14 +1,13 @@
 #include "Platform.h"
-#include <Windows.h>
-#include <shlwapi.h>
 #include <algorithm>
-
-#pragma comment(lib, "shlwapi.lib")
+#include <filesystem>
+#include <string.h>
+namespace fs = std::filesystem;
 
 bool fileExisting(const char* fileName)
 {
-	DWORD attr = GetFileAttributes(fileName);
-	return ((attr != INVALID_FILE_ATTRIBUTES) && ((attr & FILE_ATTRIBUTE_DIRECTORY) == 0));
+	fs::file_status s = fs::status(fileName);
+	return fs::is_regular_file(s);
 }
 
 bool isAbsolutePath(const char* fileName)
@@ -23,20 +22,11 @@ bool isAbsolutePath(const char* fileName)
 
 void normalizeFileName(std::string& str, const char* fileName)
 {
-	char buf[MAX_PATH];
-	*buf = 0;
-	char* fp;
-	if(0 != GetFullPathName(fileName, MAX_PATH, buf, &fp))
-	{
-		str = buf;
-	}
-	else
-	{
-		str = fileName;
-	}
+	auto path = fs::absolute(fileName);
+	str = path.u8string();
+
 	std::replace(str.begin(), str.end(), '/', '\\');
 	//std::transform(str.begin(), str.end(), str.begin(), ::tolower);
-
 }
 
 const char* getExtNameBegin(const char* normalizedFileName)
@@ -58,15 +48,10 @@ const char* getDirNameEnd(const char* normalizedFileName)
 
 void GetRelativePath(std::string& str, const char* fileFrom, const char* fileTo)
 {
-	char buf[MAX_PATH];
-	if(PathRelativePathTo(buf, fileFrom, 0, fileTo, 0))
-	{
-		str = buf;
-	}
-	else
-	{
-		str = fileTo;
-	}
+	fs::path pathFrom(fileFrom);
+	pathFrom.remove_filename();
+	auto path = fs::relative(fileTo, pathFrom);
+	str = path.u8string();
 }
 
 void FormatPathForInclude(std::string& str)
@@ -81,5 +66,5 @@ void FormatPathForLine(std::string& str)
 
 bool compareFileName(const std::string& str1, const std::string& str2)
 {
-	return stricmp(str1.c_str(), str2.c_str()) < 0;
+	return strcmp(str1.c_str(), str2.c_str()) < 0;
 }

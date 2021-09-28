@@ -1,4 +1,3 @@
-#pragma once
 #include "CommonFuncs.h"
 #include "IdentifyNode.h"
 #include "MemberNode.h"

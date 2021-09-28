@@ -2,10 +2,10 @@
 #include <string>
 #include <vector>
 #include <map>
-
+#include "yyfuncs.h"
 struct MemberNode;
 struct TypeNameNode;
-enum TypeCategory;
+
 struct TemplateArguments;
 struct TypeNode;
 struct ClassNode;

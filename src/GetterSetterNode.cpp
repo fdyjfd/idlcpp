@@ -1,5 +1,3 @@
-#pragma once
-
 #include "GetterSetterNode.h"
 #include "TokenNode.h"
 
