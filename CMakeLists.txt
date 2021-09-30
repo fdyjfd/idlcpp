@@ -21,9 +21,8 @@ file(GLOB SOURCE_FILES
 #list(REMOVE_ITEM SOURCE_FILES "${CMAKE_CURRENT_SOURCE_DIR}/src/libmain.c")
 #list(REMOVE_ITEM SOURCE_FILES "${CMAKE_CURRENT_SOURCE_DIR}/src/libyywrap.c")
 
+
 # Add executable to build.
-
-
 add_executable(${PROJECT_NAME} 
    ${SOURCE_FILES}
 )
@@ -33,12 +32,8 @@ install(
     RUNTIME DESTINATION "."
     CONFIGURATIONS ${CMAKE_CONFIGURATION_TYPES}
 )
-
-target_compile_definitions(${PROJECT_NAME} PRIVATE "_CONSOLE")
-
 target_include_directories(${PROJECT_NAME} PRIVATE "src")
-
-
+target_compile_definitions(${PROJECT_NAME} PRIVATE "_CONSOLE")
 
 set(FAKE_TARGET fakeTarget)     
 set(FLEX_FILE ${CMAKE_SOURCE_DIR}/src/idlcpp.l)

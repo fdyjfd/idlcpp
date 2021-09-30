@@ -52,6 +52,10 @@ void GetRelativePath(std::string& str, const char* fileFrom, const char* fileTo)
 	pathFrom.remove_filename();
 	auto path = fs::relative(fileTo, pathFrom);
 	str = path.u8string();
+	//判断是file 还是directory, 目前通过名字判断，应该通过file metadata 判断
+	if (!path.empty() && !path.has_extension()) {
+		str += u8'/';
+	}
 }
 
 void FormatPathForInclude(std::string& str)
