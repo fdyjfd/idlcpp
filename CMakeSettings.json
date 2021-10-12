@@ -47,8 +47,8 @@
       "ctestCommandArgs": "",
       "inheritEnvironments": [ "linux_x64" ],
       "remoteMachineName": "${defaultRemoteMachineName}",
-      "remoteCMakeListsRoot": "$HOME/build",
-      "remoteBuildRoot": "$HOME/build",
+      "remoteCMakeListsRoot": "$HOME/idlcpp",
+      "remoteBuildRoot": "$HOME/idlcppBuild",
       "remoteInstallRoot": "$HOME/bin",
       "remoteCopySources": true,
       "rsyncCommandArgs": "-t --delete  --delete-excluded",
@@ -59,6 +59,11 @@
           "name": "CMAKE_CXX_COMPILER",
           "value": "/opt/rh/devtoolset-10/root/usr/bin/g++",
           "type": "FILEPATH"
+        },
+        {
+          "name": "nonsense",
+          "type": "FILEPATH",
+          "value": "/opt/rh/devtoolset-10/root/usr/bin/g++"
         },
         {
           "name": "CMAKE_C_COMPILER",

@@ -9,18 +9,11 @@ endif()
 project(${PROJECT_NAME} C CXX)
 
 
-include(PrintVariables.cmake)
-print_variables()
-
 file(GLOB SOURCE_FILES
     "src/*.cpp"
     "src/*.c"
     "src/*.h"
 )
-# exclude some source files
-#list(REMOVE_ITEM SOURCE_FILES "${CMAKE_CURRENT_SOURCE_DIR}/src/libmain.c")
-#list(REMOVE_ITEM SOURCE_FILES "${CMAKE_CURRENT_SOURCE_DIR}/src/libyywrap.c")
-
 
 # Add executable to build.
 add_executable(${PROJECT_NAME} 
