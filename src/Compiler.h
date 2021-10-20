@@ -3,6 +3,7 @@
 #include <set>
 #include <map>
 #include <vector>
+#include <filesystem>
 
 const char* getCurrentSourceFileName();
 
@@ -47,22 +48,12 @@ struct UsedType
 };
 
 
-bool compareFileName(const std::string& str1, const std::string& str2);
-
-struct CompareFileName
-{
-	bool operator () (const std::string& str1, const std::string& str2) const
-	{
-		return compareFileName(str1, str2);
-	}
-};
-
 class Compiler
 {
 public:
 	Compiler();
 public:
-	int addSourceFile(const char* fileName);
+	int addSourceFile(const std::filesystem::path& file);
 	SourceFile* popSourceFile();
 	void prepareParse(SourceFile* sourceFile, bool main);
 	void attachSyntaxTree(ProgramNode* programNode);
@@ -82,7 +73,7 @@ public:
 	bool generateMetaSourceFile(const char* fileName, const char* cppName);
 	void outputEmbededCodes(FILE* file, TokenNode* tokenNode);
 private:
-	void insertUnParsedSourceFile(const std::string& fileName);
+	void insertUnParsedSourceFile(const std::filesystem::path& file);
 public:
 	SourceFile* m_currentSourceFile;
 	SourceFile* m_mainSourceFile;
@@ -90,7 +81,7 @@ public:
 	bool m_outputLineDirective;
 	size_t m_insertSourceFilePosition;
 	std::vector<SourceFile*> m_unParsedSourceFiles;
-	std::set<std::string, CompareFileName> m_sourceFileNames;
+	std::set<std::filesystem::path> m_sourceFileNames;
 	std::vector<UsedType> m_usedTypes;
 };
 

@@ -2,6 +2,7 @@
 
 #include <vector>
 #include <string>
+#include <filesystem>
 struct ProgramNode;
 
 struct EmbededCode
@@ -27,7 +28,7 @@ public:
 	void addEmbededCodeBlock(const char* str, int tokenNo);
 	void outputEmbededCodes(FILE* file, int tokenNo);
 public:
-	std::string m_fileName;
+	std::filesystem::path m_file;
 	ProgramNode* m_syntaxTree;
 	std::vector<EmbededCode*> m_embededCodes;
 	size_t m_currentEmbededCode;

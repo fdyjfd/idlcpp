@@ -1,13 +1,14 @@
 #pragma once
 
 #include <string>
+#include <filesystem>
 
-bool fileExisting(const char* fileName);
+bool fileExisting(const std::filesystem::path& file);
 bool isAbsolutePath(const char* fileName);
 void normalizeFileName(std::string& str, const char* fileName);
 const char* getExtNameBegin(const char* normalizedFileName);
 const char* getDirNameEnd(const char* normalizedFileName);
-void GetRelativePath(std::string& str, const char* fileFrom, const char* fileTo);
+void GetRelativePath(std::string& str, std::filesystem::path pathFrom, const std::filesystem::path& fileTo);
 void FormatPathForInclude(std::string& str);
 void FormatPathForLine(std::string& str);
 bool compareFileName(const std::string& str1, const std::string& str2);

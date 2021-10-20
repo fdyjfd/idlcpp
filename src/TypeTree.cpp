@@ -125,7 +125,7 @@ T* TypeNode::TypeNodeContainer::addTypeNode(TypeNode* enclosing, const std::stri
 	{
 		char buf[4096];
 		sprintf(buf, "\'%s\' : already defined in %s(%d,%d)",
-			name.c_str(), child->m_sourceFile->m_fileName.c_str(),
+			name.c_str(), child->m_sourceFile->m_file.c_str(),
 			child->m_identifyNode->m_lineNo, child->m_identifyNode->m_columnNo);
 		ErrorList_AddItem(getCurrentSourceFileName(), identifyNode->m_lineNo,
 			identifyNode->m_columnNo, semantic_error_type_redefined, buf);
@@ -489,7 +489,7 @@ NamespaceTypeNode* NamespaceTypeNode::addNamespace(NamespaceNode* node)
 	{
 		char buf[4096];
 		sprintf(buf, "\'%s\' : already defined in %s(%d,%d)",
-			node->m_name->m_str.c_str(), child->m_sourceFile->m_fileName.c_str(),
+			node->m_name->m_str.c_str(), child->m_sourceFile->m_file.c_str(),
 			child->m_identifyNode->m_lineNo, child->m_identifyNode->m_columnNo);
 		ErrorList_AddItem(getCurrentSourceFileName(), node->m_name->m_lineNo,
 			node->m_name->m_columnNo, semantic_error_namespace_redefined, buf);
@@ -732,10 +732,10 @@ bool TypeTree::checkTypeNameNode(TypeNode*& initialTypeTreeNode, TypeNode*& fina
 				scopeNameListNode->getString(str);
 				sprintf(buf, "\'%s\' : ambiguous type name could be %s(%d, %d) or %s(%d, %d)",
 					str.c_str(),
-					finalTypeTreeNode->m_sourceFile->m_fileName.c_str(), 
+					finalTypeTreeNode->m_sourceFile->m_file.c_str(), 
 					finalTypeTreeNode->m_identifyNode->m_lineNo, 
 					finalTypeTreeNode->m_identifyNode->m_columnNo,
-					tempFinalTypeTreeNode->m_sourceFile->m_fileName.c_str(), 
+					tempFinalTypeTreeNode->m_sourceFile->m_file.c_str(), 
 					tempFinalTypeTreeNode->m_identifyNode->m_lineNo,
 					tempFinalTypeTreeNode->m_identifyNode->m_columnNo);
 				ErrorList_AddItem_CurrentFile(scopeNameNodes.back()->m_name->m_lineNo,

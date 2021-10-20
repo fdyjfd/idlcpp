@@ -80,7 +80,7 @@ void ErrorList::addItem(const char* fileName, int lineNo, int columnNo, ErrorCod
 	{
 		std::string error = ": " + m_templateClassInstanceNode->getTypeNode()->m_name;
 		SourceFile* sourceFile = m_templateClassInstanceNode->getSourceFile();
-		addItem_(sourceFile->m_fileName.c_str(),
+		addItem_(sourceFile->m_file.u8string().c_str(),
 			m_templateClassInstanceNode->m_name->m_lineNo,
 			m_templateClassInstanceNode->m_name->m_columnNo,
 			semantic_error_template_class_instance_internal,

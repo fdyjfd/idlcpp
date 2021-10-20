@@ -525,7 +525,7 @@ void HeaderFileGenerator::generateCode_Delegate(FILE* file, DelegateNode* delega
 	generateCode_ParameterList(file, delegateNode->m_parameterList, delegateNode->m_enclosing);
 	writeStringToFile(");\n", file);
 	writeStringToFile("::pafcore::FunctionCallBack* addFunction(CallBackFunction function, void* userData)\n", file, indentation + 1);
-	writeStringToFile("{return Delegate::addFunction(function, userData);}\n", file, indentation + 1);
+	writeStringToFile("{return Delegate::addFunction(reinterpret_cast<void*>(function), userData);}\n", file, indentation + 1);
 	writeStringToFile("};\n", file, indentation);
 }
 

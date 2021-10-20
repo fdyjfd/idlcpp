@@ -1,0 +1,30 @@
+{
+  "version": "0.2.1",
+  "defaults": {},
+  "configurations": [
+    {
+      "args": [
+        "emDEEPEYECORE_EXPORT",
+        "-pc../../paf/pafcore/",
+        "D:\\kernel\\external\\EngineCore\\deepeye\\src\\paf\\pafcore\\Delegate.i"
+      ],
+      "name": "idlcppd.exe (Install)",
+      "project": "CMakeLists.txt",
+      "projectTarget": "idlcppd.exe (Install)",
+      "type": "default"
+    },
+    {
+      "args": [
+        "-emDEEPEYECORE_EXPORT",
+        "-pc../../paf/pafcore/",
+        "/home/li/top/DeepEyeCore/Math/AxisAlignedBox3.i"
+      ],
+      "comment": "Learn how to configure remote debugging. For more info, see http://aka.ms/vslinuxdebug",
+      "debuggerConfiguration": "gdb",
+      "name": "idlcpp (Install)",
+      "project": "CMakeLists.txt",
+      "projectTarget": "idlcpp (Install)",
+      "type": "cppgdb"
+    }
+  ]
+}

@@ -2,59 +2,61 @@
 #include "Platform.h"
 #include <string.h>
 #include <filesystem>
-namespace fs = std::filesystem;
+#include <assert.h>
+#include <iostream>
+using namespace std::filesystem;
+using namespace std;
 ImportDirectories g_importDirectories;
-
-ImportDirectories::ImportDirectories()
-{
-	m_hasCurrentDirectory = false;
-}
-
-void ImportDirectories::calcImportDirectories(const char* fileName)
-{
-	const char* lastSlash = strrchr(fileName, '\\');
-	if (0 == lastSlash)
-	{
-		return;
-	}
-	std::string path(fileName, lastSlash + 1);
-	fs::current_path(path.c_str());
-
-	auto it = m_directories.begin();
-	auto end = m_directories.end();
-	for (; it != end; ++it)
-	{
-		std::string fullName;
-		normalizeFileName(fullName, it->c_str());
-		if(fullName.length() > 0 && fullName.back() != '\\')
-		{ 
-			fullName.push_back('\\');
-		}
-		*it = fullName;
-	}
-}
 
 void ImportDirectories::addImportDirectory(const char* dir)
 {
-	m_directories.insert(m_directories.begin(), dir);
+	path path(dir);
+	m_directories.push_back(path);
 }
 
-void ImportDirectories::setCurrentDirectory(const char* dir)
+void ImportDirectories::convertToAbsoluteDirectory()
 {
-	std::string str;
-	normalizeFileName(str, dir);
-	if(str.length() > 0)
-	{
-		if(str.at(str.length() - 1) != '\\')
-		{
-			str += '\\';
+	path currentPath = current_path();
+	for (size_t i = 0; i < m_directories.size(); i++) {
+		path& oldPath = m_directories[i];
+		path absolutePath = currentPath / oldPath;
+		path absolutePathNormal = absolutePath.lexically_normal();
+		file_status s = status(absolutePathNormal);
+		if (!is_directory(s) || !exists(s)) {
+			cerr << oldPath << " not exist." << endl;
+			exit(0);
 		}
-		if(m_hasCurrentDirectory)
-		{
-			m_directories.pop_back();
-		}
-		m_directories.push_back(str);
-		m_hasCurrentDirectory = true;
+
+		oldPath = absolutePathNormal;
 	}
 }
 
+//传入文件的绝对路径
+void ImportDirectories::setCurrentDirectory(path file)
+{
+	file.remove_filename();
+	current_path(file);
+}
+
+bool ImportDirectories::find(const path& file, path&absFile) const
+{
+	if (file.is_absolute()) {
+		absFile = file;
+		return fileExisting(absFile);
+	}
+
+	path current_dir = current_path();
+	path tryfile = current_dir / file;
+	absFile = tryfile.lexically_normal();
+	if(fileExisting(absFile))
+		return true;
+
+	for (const auto& dir : m_directories) {
+		path tryfile = dir / file;
+		absFile = tryfile.lexically_normal();
+		if (fileExisting(absFile))
+			return true;
+	}
+	cerr << file << " not exist." << endl;
+	return false;
+}

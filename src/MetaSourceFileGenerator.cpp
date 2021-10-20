@@ -155,7 +155,7 @@ void MetaSourceFileGenerator::generateCode_Program(FILE* file, SourceFile* sourc
 				}
 				std::string typeName;
 				typeNode->getNativeName(typeName);
-				sprintf(buf, "static_assert(RuntimeTypeOf<%s>::type_category == ::pafcore::%s, \"type category error\");\n",
+				sprintf(buf, "static_assert((int)RuntimeTypeOf<%s>::type_category == (int)::pafcore::%s, \"type category error\");\n",
 					typeName.c_str(), typeCategoryName);
 				writeStringToFile(buf, file);
 			}

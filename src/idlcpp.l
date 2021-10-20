@@ -1,6 +1,6 @@
 %option noyywrap nodefault yylineno nounistd never-interactive
 %x IFILE CODEBLOCK COMMENT
-
+EOL        (\n|\r\n)
 %{
 #include <stdlib.h>
 #include <string.h>
@@ -33,15 +33,15 @@ int yyHasDelegate = 0;
 
 "#{"						{yycolumnno += 2; BEGIN CODEBLOCK;}
 <CODEBLOCK>"#}"				{yycolumnno += 2; BEGIN INITIAL;}
-<CODEBLOCK>[^#\n]+			{newCodeBlock(yytext); yycolumnno += strlen(yytext); yytokenno++;}
-<CODEBLOCK>\n				{newCodeBlock(yytext); yycolumnno = 1; yytokenno++;}
+<CODEBLOCK>[^#\r\n]+			{newCodeBlock(yytext); yycolumnno += strlen(yytext); yytokenno++;}
+<CODEBLOCK>{EOL}				{newCodeBlock(yytext); yycolumnno = 1; yytokenno++;}
 <CODEBLOCK>.				{newCodeBlock(yytext); yycolumnno++; yytokenno++;}
 <CODEBLOCK><<EOF>>			{unterminatedCode();yyterminate();}
 
 "/*"						{yycolumnno += 2; BEGIN COMMENT;}
 <COMMENT>"*/"				{yycolumnno += 2; BEGIN INITIAL;}
-<COMMENT>[^*\n]+			{yycolumnno += strlen(yytext); }
-<COMMENT>\n					{newCodeBlock("\n"); yycolumnno = 1; }
+<COMMENT>[^*\r\n]+			{yycolumnno += strlen(yytext); }
+<COMMENT>{EOL}					{newCodeBlock("\n"); yycolumnno = 1; }
 <COMMENT>.					{yycolumnno++;}
 <COMMENT><<EOF>>			{unterminatedComment();yyterminate();}
 
@@ -141,9 +141,9 @@ int yyHasDelegate = 0;
 u8\"[^\"]*\"			{yylval.sn = newString(yytext + 3);					yycolumnno += strlen(yytext); yytokenno++; return U8STRING;}
 
 [ \t]							{++yycolumnno;}
-"\n"							{newCodeBlock(yytext); yycolumnno = 1;}
+{EOL}							{newCodeBlock(yytext); yycolumnno = 1;}
 
-[^ ,;:{}\[\]<>()&*^$"/+%^|!~=?\-\t\n]*		{invalidString(yytext); yycolumnno += strlen(yytext);}
+[^ ,;:{}\[\]<>()&*^$"/+%^|!~=?\-\t\r\n]*		{invalidString(yytext); yycolumnno += strlen(yytext);}
 .								{invalidString(yytext); yycolumnno += strlen(yytext);}
 
 %%

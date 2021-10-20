@@ -29,7 +29,7 @@
 #include <cstring>
 #include <limits>
 #include <assert.h>
-
+using namespace std::filesystem;
 
 
 Compiler::Compiler()
@@ -40,12 +40,12 @@ Compiler::Compiler()
 	m_currentLineNo = 0;
 }
 
-void Compiler::insertUnParsedSourceFile(const std::string& fileName)
+void Compiler::insertUnParsedSourceFile(const path& file)
 {
-	m_sourceFileNames.insert(fileName);
+	m_sourceFileNames.insert(file);
 	assert(m_insertSourceFilePosition <= m_unParsedSourceFiles.size());
 	SourceFile* sourceFile = new SourceFile;
-	sourceFile->m_fileName = fileName;
+	sourceFile->m_file = file;
 	m_unParsedSourceFiles.insert(m_unParsedSourceFiles.begin() + m_insertSourceFilePosition, sourceFile);
 	m_insertSourceFilePosition++;
 	if (m_currentSourceFile)
@@ -54,49 +54,22 @@ void Compiler::insertUnParsedSourceFile(const std::string& fileName)
 	}
 }
 
-int Compiler::addSourceFile(const char* fileName)
+int Compiler::addSourceFile(const path& file)
 {
-	if (strlen(fileName) == 0)
-	{
-		return import_file_failed;
-	}
-	std::string fullName;
-	if (isAbsolutePath(fileName))
-	{
-		normalizeFileName(fullName, fileName);
-		if (m_sourceFileNames.find(fullName) != m_sourceFileNames.end())
+	path absFile;
+	bool found = g_importDirectories.find(file, absFile);
+	if (found) {
+		if (m_sourceFileNames.find(absFile) != m_sourceFileNames.end())
 		{
 			return import_file_already_import;
 		}
-		if (fileExisting(fullName.c_str()))
-		{
-			insertUnParsedSourceFile(fullName);
-			return import_file_succeeded;
-		}
 		else
 		{
-			return import_file_failed;
+			insertUnParsedSourceFile(absFile);
+			return import_file_succeeded;
 		}
 	}
-	else
-	{
-		ImportDirectories::DirectoryContainer::iterator it = g_importDirectories.m_directories.begin();
-		ImportDirectories::DirectoryContainer::iterator end = g_importDirectories.m_directories.end();
-		for (; it != end; ++it)
-		{
-			std::string str = *it + fileName;
-			normalizeFileName(fullName, str.c_str());
-			if (m_sourceFileNames.find(fullName) != m_sourceFileNames.end())
-			{
-				return import_file_already_import;
-			}
-			if (fileExisting(fullName.c_str()))
-			{
-				insertUnParsedSourceFile(fullName);
-				return import_file_succeeded;
-			}
-		}
-	}
+
 	return import_file_failed;
 }
 
@@ -296,9 +269,9 @@ void Compiler::outputUsedTypes(FILE* file, SourceFile* sourceFile)
 	for (auto it2 = begin2; it2 != end2; ++it2)
 	{
 		std::string fileName;
-		GetRelativePath(fileName, m_mainSourceFile->m_fileName.c_str(), (*it2)->m_fileName.c_str());
+		GetRelativePath(fileName, m_mainSourceFile->m_file, (*it2)->m_file);
 		size_t dotPos = fileName.find_last_of('.');
-		size_t slashPos = fileName.find_last_of("\\/");
+		size_t slashPos = fileName.find_last_of("/");
 		if (std::string::npos == slashPos || slashPos < dotPos)
 		{
 			fileName.erase(dotPos);
@@ -401,9 +374,9 @@ void Compiler::outputUsedTypesForMetaHeader(FILE* file, SourceFile* sourceFile)
 	for (auto it2 = begin2; it2 != end2; ++it2)
 	{
 		std::string fileName;
-		GetRelativePath(fileName, m_mainSourceFile->m_fileName.c_str(), (*it2)->m_fileName.c_str());
+		GetRelativePath(fileName, m_mainSourceFile->m_file, (*it2)->m_file);
 		size_t dotPos = fileName.find_last_of('.');
-		size_t slashPos = fileName.find_last_of('\\');
+		size_t slashPos = fileName.find_last_of('/');
 		if (std::string::npos == slashPos || slashPos < dotPos)
 		{
 			fileName.erase(dotPos);
@@ -439,9 +412,9 @@ void Compiler::outputUsedTypesForMetaSource(FILE* file, SourceFile* sourceFile)
 	for (auto it2 = begin2; it2 != end2; ++it2)
 	{
 		std::string fileName;
-		GetRelativePath(fileName, m_mainSourceFile->m_fileName.c_str(), (*it2)->m_fileName.c_str());
+		GetRelativePath(fileName, m_mainSourceFile->m_file, (*it2)->m_file);
 		size_t dotPos = fileName.find_last_of('.');
-		size_t slashPos = fileName.find_last_of('\\');
+		size_t slashPos = fileName.find_last_of('/');
 		if (std::string::npos == slashPos || slashPos < dotPos)
 		{
 			fileName.erase(dotPos);
@@ -555,7 +528,7 @@ void Compiler::outputEmbededCodes(FILE* file, TokenNode* tokenNode)
 	{
 		m_currentLineNo = tokenNode->m_lineNo;
 		char buf[4096];
-		std::string fileName = m_mainSourceFile->m_fileName;
+		std::string fileName = m_mainSourceFile->m_file.u8string();
 		FormatPathForInclude(fileName);
 		sprintf(buf, "\n#line %d \"%s\"\n", m_currentLineNo, fileName.c_str());
 		writeStringToFile(buf, file);
@@ -578,7 +551,7 @@ const char* getCurrentSourceFileName()
 	const char* res = "";
 	if (g_compiler.m_currentSourceFile)
 	{
-		res = g_compiler.m_currentSourceFile->m_fileName.c_str();
+		res = g_compiler.m_currentSourceFile->m_file.u8string().c_str();
 	}
 	return res;
 }

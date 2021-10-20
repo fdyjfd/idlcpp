@@ -2,37 +2,34 @@
 #include <algorithm>
 #include <filesystem>
 #include <string.h>
-namespace fs = std::filesystem;
+using namespace std;
+using namespace std::filesystem;
 
-bool fileExisting(const char* fileName)
+bool fileExisting(const path& file)
 {
-	fs::file_status s = fs::status(fileName);
-	return fs::is_regular_file(s);
+	file_status s = status(file);
+	return is_regular_file(s) && exists(s);
 }
 
 bool isAbsolutePath(const char* fileName)
 {
-	size_t len = strlen(fileName);
-	if(len > 2 && fileName[1] == ':')
-	{
-		return true;
-	}
-	return false;
+	path path(fileName);
+	return path.is_absolute();
 }
 
-void normalizeFileName(std::string& str, const char* fileName)
+void normalizeFileName(string& str, const char* fileName)
 {
-	auto path = fs::absolute(fileName);
+	auto path = absolute(fileName);
 	str = path.u8string();
 
-	std::replace(str.begin(), str.end(), '/', '\\');
+	//std::replace(str.begin(), str.end(), '/', '\\');
 	//std::transform(str.begin(), str.end(), str.begin(), ::tolower);
 }
 
 const char* getExtNameBegin(const char* normalizedFileName)
 {
 	const char* lastDot = strrchr(normalizedFileName, '.');
-	const char* lastBackSlash = strrchr(normalizedFileName, '\\');
+	const char* lastBackSlash = strrchr(normalizedFileName, '/');
 	if(lastDot < lastBackSlash)
 	{
 		return 0;
@@ -42,15 +39,14 @@ const char* getExtNameBegin(const char* normalizedFileName)
 
 const char* getDirNameEnd(const char* normalizedFileName)
 {
-	const char* lastBackSlash = strrchr(normalizedFileName, '\\');
+	const char* lastBackSlash = strrchr(normalizedFileName, '/');
 	return lastBackSlash;
 }
 
-void GetRelativePath(std::string& str, const char* fileFrom, const char* fileTo)
+void GetRelativePath(std::string& str, path pathFrom, const path& fileTo)
 {
-	fs::path pathFrom(fileFrom);
 	pathFrom.remove_filename();
-	auto path = fs::relative(fileTo, pathFrom);
+	auto path = relative(fileTo, pathFrom);
 	str = path.u8string();
 	//判断是file 还是directory, 目前通过名字判断，应该通过file metadata 判断
 	if (!path.empty() && !path.has_extension()) {
@@ -66,9 +62,4 @@ void FormatPathForInclude(std::string& str)
 void FormatPathForLine(std::string& str)
 {
 	std::replace(str.begin(), str.end(), '\\', '/');
-}
-
-bool compareFileName(const std::string& str1, const std::string& str2)
-{
-	return strcmp(str1.c_str(), str2.c_str()) < 0;
 }

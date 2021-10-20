@@ -165,7 +165,7 @@ SourceFile* MemberNode::getSourceFile()
 std::string MemberNode::getSourceFilePath()
 {
 	std::string str;
-	str = getSourceFile()->m_fileName;
+	str = getSourceFile()->m_file.u8string();
 	std::replace(str.begin(), str.end(), '\\', '/');
 	return str;
 }

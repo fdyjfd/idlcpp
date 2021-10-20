@@ -18,10 +18,10 @@ Options::Options()
 void Options::setPafcorePath(const char* path)
 {
 	m_pafcorePath = path;
-	std::replace(m_pafcorePath.begin(), m_pafcorePath.end(), '/', '\\');
-	if(m_pafcorePath.length() > 0 && m_pafcorePath.back() != '\\')
+	//std::replace(m_pafcorePath.begin(), m_pafcorePath.end(), '/', '\\');
+	if(m_pafcorePath.length() > 0 && m_pafcorePath.back() != '/')
 	{
-		m_pafcorePath += '\\';
+		m_pafcorePath += '/';
 	}
 }
 

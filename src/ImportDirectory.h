@@ -1,19 +1,20 @@
 #pragma once
 #include <string>
 #include <vector>
-
+#include <filesystem>
 class ImportDirectories
 {
 public:
-	ImportDirectories();
+	ImportDirectories() = default;
 public:
 	void addImportDirectory(const char* dir);
-	void calcImportDirectories(const char* fileName);
-	void setCurrentDirectory(const char* dir);
+	void convertToAbsoluteDirectory();
+	void setCurrentDirectory(std::filesystem::path file);
+	bool find(const std::filesystem::path& file, std::filesystem::path& absFile) const;
 public:
-	typedef std::vector<std::string> DirectoryContainer;
+	typedef std::vector<std::filesystem::path> DirectoryContainer;
+	//°üº¬-pc -IÄ¿Â¼
 	DirectoryContainer m_directories;
-	bool m_hasCurrentDirectory;
 };
 
 extern ImportDirectories g_importDirectories;
