@@ -2,6 +2,7 @@
 #include <algorithm>
 #include <filesystem>
 #include <string.h>
+#include <iostream>
 using namespace std;
 using namespace std::filesystem;
 
@@ -39,8 +40,9 @@ const char* getExtNameBegin(const char* normalizedFileName)
 
 const char* getDirNameEnd(const char* normalizedFileName)
 {
-	const char* lastBackSlash = strrchr(normalizedFileName, '/');
-	return lastBackSlash;
+	const char* lastBackSlash1 = strrchr(normalizedFileName, '/');
+	const char* lastBackSlash2 = strrchr(normalizedFileName, '\\');
+	return max(lastBackSlash1, lastBackSlash2);
 }
 
 void GetRelativePath(std::string& str, path pathFrom, const path& fileTo)
@@ -62,4 +64,16 @@ void FormatPathForInclude(std::string& str)
 void FormatPathForLine(std::string& str)
 {
 	std::replace(str.begin(), str.end(), '\\', '/');
+}
+
+path convertToAbsoluteDirectory(const path& currentPath, const path& relativePath)
+{
+	path absolutePath = currentPath / relativePath;
+	path absolutePathNormal = absolutePath.lexically_normal();
+	file_status s = status(absolutePathNormal);
+	if (!is_directory(s) || !exists(s)) {
+		cerr << relativePath << " not exist." << endl;
+		exit(0);
+	}
+	return absolutePathNormal;
 }

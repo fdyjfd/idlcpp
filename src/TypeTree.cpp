@@ -491,7 +491,8 @@ NamespaceTypeNode* NamespaceTypeNode::addNamespace(NamespaceNode* node)
 		sprintf(buf, "\'%s\' : already defined in %s(%d,%d)",
 			node->m_name->m_str.c_str(), child->m_sourceFile->m_file.c_str(),
 			child->m_identifyNode->m_lineNo, child->m_identifyNode->m_columnNo);
-		ErrorList_AddItem(getCurrentSourceFileName(), node->m_name->m_lineNo,
+		const std::filesystem::path& fileName = getCurrentSourceFileName();
+		ErrorList_AddItem(fileName, node->m_name->m_lineNo,
 			node->m_name->m_columnNo, semantic_error_namespace_redefined, buf);
 		return 0;
 	}

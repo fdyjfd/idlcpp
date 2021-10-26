@@ -155,7 +155,7 @@ int main(int argc, char* argv[])
 
   g_importDirectories.setCurrentDirectory(file);
   g_importDirectories.convertToAbsoluteDirectory();
-
+  g_options.convertToAbsoluteDirectory();
   path fileWithoutExt = file;
   fileWithoutExt.replace_extension();
 

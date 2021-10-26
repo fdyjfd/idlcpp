@@ -109,7 +109,7 @@ SyntaxNode* newIdentifyList(SyntaxNode* identifyList, SyntaxNode* delimiter, Syn
 SyntaxNode* newAttribute(SyntaxNode* name, SyntaxNode* content, int u8content)
 {
 	assert(0 != name && snt_identify == name->m_nodeType);
-	assert(0 != content && snt_identify == content->m_nodeType);
+	//assert(0 != content && snt_identify == content->m_nodeType);
 	AttributeNode* res = new AttributeNode((IdentifyNode*)name, (IdentifyNode*)content, u8content);
 	g_syntaxNodes.push_back(res);
 	return res;

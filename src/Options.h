@@ -2,7 +2,7 @@
 
 #include <string>
 #include <set>
-
+#include <filesystem>
 class Options
 {
 public:
@@ -13,7 +13,7 @@ public:
 	std::string m_internalSourceFilePostfix;
 	std::string m_metaHeaderFilePostfix;
 	std::string m_metaSourceFilePostfix;
-	std::string m_pafcorePath;
+	std::filesystem::path m_pafcorePath;
 	std::string m_exportMacro;
 	bool m_outputLineDirective;
 	bool m_strictArgumentsCount;
@@ -21,6 +21,7 @@ public:
 	//bool m_forceU8AttributeContent;
 public:
 	void setPafcorePath(const char* path);
+	void convertToAbsoluteDirectory();
 };
 
 extern Options g_options;

@@ -51,8 +51,8 @@ enum ErrorCode
 };
 
 typedef enum ErrorCode ErrorCode;
-
-void ErrorList_AddItem(const char* fileName, int lineNo, int columnNo, ErrorCode errorCode, const char* errorText);
+#include <filesystem>
+void ErrorList_AddItem(const std::filesystem::path& fileName, int lineNo, int columnNo, ErrorCode errorCode, const char* errorText);
 void ErrorList_AddItem_CurrentFile(ErrorCode errorCode, const char* errorText);
 void ErrorList_AddItem_CurrentFile(int lineNo, int columnNo, ErrorCode errorCode, const char* errorText);
 size_t ErrorList_ErrorCount();
@@ -74,7 +74,7 @@ class ErrorList
 public:
 	struct ErrorInfo
 	{
-		const char* fileName;
+		std::set<std::filesystem::path>::iterator fileName;
 		int lineNo;
 		int columnNo;
 		ErrorCode errorCode;
@@ -82,12 +82,12 @@ public:
 	};
 public:
 	ErrorList();
-	void addItem(const char* fileName, int lineNo, int columnNo, ErrorCode errorCode, const char* errorText);
+	void addItem(const std::filesystem::path& fileName, int lineNo, int columnNo, ErrorCode errorCode, const char* errorText);
 	void setTemplateClassInstance(TemplateClassInstanceNode* templateClassInstanceNode);
 private:
-	void addItem_(const char* fileName, int lineNo, int columnNo, ErrorCode errorCode, const char* errorText);
+	void ErrorList::addItem_(const std::filesystem::path& fileName, int lineNo, int columnNo, ErrorCode errorCode, const char* errorText);
 public:
-	std::set<std::string> m_fileNames;
+	std::set<std::filesystem::path> m_fileNames;
 	typedef std::vector<ErrorInfo> ErrorInfoContainer;
 	ErrorInfoContainer m_errorInfos;
 	TemplateClassInstanceNode* m_templateClassInstanceNode;

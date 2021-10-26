@@ -14,20 +14,15 @@ void ImportDirectories::addImportDirectory(const char* dir)
 	m_directories.push_back(path);
 }
 
+
+
 void ImportDirectories::convertToAbsoluteDirectory()
 {
 	path currentPath = current_path();
 	for (size_t i = 0; i < m_directories.size(); i++) {
 		path& oldPath = m_directories[i];
-		path absolutePath = currentPath / oldPath;
-		path absolutePathNormal = absolutePath.lexically_normal();
-		file_status s = status(absolutePathNormal);
-		if (!is_directory(s) || !exists(s)) {
-			cerr << oldPath << " not exist." << endl;
-			exit(0);
-		}
 
-		oldPath = absolutePathNormal;
+		oldPath = ::convertToAbsoluteDirectory(currentPath, oldPath);
 	}
 }
 

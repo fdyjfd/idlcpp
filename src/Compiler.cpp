@@ -29,6 +29,7 @@
 #include <cstring>
 #include <limits>
 #include <assert.h>
+#include <cassert>
 using namespace std::filesystem;
 
 
@@ -546,13 +547,10 @@ void addSourceFile(const char* fileName)
 	}
 }
 
-const char* getCurrentSourceFileName()
+const path& getCurrentSourceFileName()
 {
-	const char* res = "";
-	if (g_compiler.m_currentSourceFile)
-	{
-		res = g_compiler.m_currentSourceFile->m_file.u8string().c_str();
-	}
-	return res;
+	assert(g_compiler.m_currentSourceFile);
+	return g_compiler.m_currentSourceFile->m_file;
+
 }
 

@@ -1,13 +1,8 @@
 cmake_minimum_required(VERSION 3.0.0 FATAL_ERROR)
 
-if (CMAKE_CONFIGURATION_TYPES STREQUAL "Debug")
-  set(PROJECT_NAME "idlcppd")
-else()
-  set(PROJECT_NAME "idlcpp")
-endif()
-
+set(CMAKE_DEBUG_POSTFIX d)
+set(PROJECT_NAME "idlcpp")
 project(${PROJECT_NAME} C CXX)
-
 
 file(GLOB SOURCE_FILES
     "src/*.cpp"
@@ -22,9 +17,12 @@ add_executable(${PROJECT_NAME}
 
 install(
     TARGETS ${PROJECT_NAME}  
-    RUNTIME DESTINATION "."
+    RUNTIME DESTINATION "." 
     CONFIGURATIONS ${CMAKE_CONFIGURATION_TYPES}
 )
+
+install(TARGETS ${PROJECT_NAME}  DESTINATION "D:/kernel/external/Engine/bin")
+
 target_include_directories(${PROJECT_NAME} PRIVATE "src")
 target_compile_definitions(${PROJECT_NAME} PRIVATE "_CONSOLE")
 

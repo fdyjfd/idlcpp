@@ -12,3 +12,4 @@ void GetRelativePath(std::string& str, std::filesystem::path pathFrom, const std
 void FormatPathForInclude(std::string& str);
 void FormatPathForLine(std::string& str);
 bool compareFileName(const std::string& str1, const std::string& str2);
+std::filesystem::path convertToAbsoluteDirectory(const std::filesystem::path & currentPath, const std::filesystem::path & relativePath);

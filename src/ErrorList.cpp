@@ -5,6 +5,7 @@
 #include "TemplateClassInstanceNode.h"
 #include "TypeTree.h"
 
+using namespace std::filesystem;
 const char* g_errorStrings[] =
 {
 	"",
@@ -62,10 +63,10 @@ ErrorList::ErrorList()
 	m_templateClassInstanceNode = 0;
 }
 
-void ErrorList::addItem_(const char* fileName, int lineNo, int columnNo, ErrorCode errorCode, const char* errorText)
+void ErrorList::addItem_(const path& fileName, int lineNo, int columnNo, ErrorCode errorCode, const char* errorText)
 {
 	ErrorInfo errorInfo;
-	errorInfo.fileName = m_fileNames.insert(fileName).first->c_str();
+	errorInfo.fileName = m_fileNames.insert(fileName).first;
 	errorInfo.lineNo = lineNo;
 	errorInfo.columnNo = columnNo;
 	errorInfo.errorCode = errorCode;
@@ -73,14 +74,14 @@ void ErrorList::addItem_(const char* fileName, int lineNo, int columnNo, ErrorCo
 	m_errorInfos.push_back(errorInfo);
 }
 
-void ErrorList::addItem(const char* fileName, int lineNo, int columnNo, ErrorCode errorCode, const char* errorText)
+void ErrorList::addItem(const path& fileName, int lineNo, int columnNo, ErrorCode errorCode, const char* errorText)
 {
 	addItem_(fileName, lineNo, columnNo, errorCode, errorText);
 	if (m_templateClassInstanceNode)
 	{
 		std::string error = ": " + m_templateClassInstanceNode->getTypeNode()->m_name;
 		SourceFile* sourceFile = m_templateClassInstanceNode->getSourceFile();
-		addItem_(sourceFile->m_file.u8string().c_str(),
+		addItem_(sourceFile->m_file,
 			m_templateClassInstanceNode->m_name->m_lineNo,
 			m_templateClassInstanceNode->m_name->m_columnNo,
 			semantic_error_template_class_instance_internal,
@@ -102,19 +103,21 @@ extern int yylineno;
 extern int yycolumnno;
 }
 
-void ErrorList_AddItem(const char* fileName, int lineNo, int columnNo, ErrorCode errorCode, const char* errorText)
+void ErrorList_AddItem(const path& fileName, int lineNo, int columnNo, ErrorCode errorCode, const char* errorText)
 {
 	g_errorList.addItem(fileName, lineNo, columnNo, errorCode, errorText);
 }
 
 void ErrorList_AddItem_CurrentFile(ErrorCode errorCode, const char* errorText)
 {
-	g_errorList.addItem(getCurrentSourceFileName(), yylineno, yycolumnno, errorCode, errorText);
+	const path& fileName = getCurrentSourceFileName();
+	g_errorList.addItem(fileName, yylineno, yycolumnno, errorCode, errorText);
 }
 
 void ErrorList_AddItem_CurrentFile(int lineNo, int columnNo, ErrorCode errorCode, const char* errorText)
 {
-	g_errorList.addItem(getCurrentSourceFileName(), lineNo, columnNo, errorCode, errorText);
+	const path& fileName = getCurrentSourceFileName();
+	g_errorList.addItem(fileName, lineNo, columnNo, errorCode, errorText);
 }
 
 size_t ErrorList_ErrorCount()
@@ -128,7 +131,7 @@ void ErrorList_Output()
 	for(size_t i = 0; i < count; ++i)
 	{
 		ErrorList::ErrorInfo& err = g_errorList.m_errorInfos[i];
-		fprintf(stderr, "%s(%d,%d): error %.4d : %s, %s\n", err.fileName, err.lineNo, err.columnNo, err.errorCode, 
+		fprintf(stderr, "%s(%d,%d): error %.4d : %s, %s\n", err.fileName->u8string().c_str(), err.lineNo, err.columnNo, err.errorCode, 
 			g_errorStrings[err.errorCode], err.errorText.c_str());
 	}
 }

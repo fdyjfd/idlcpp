@@ -5,7 +5,7 @@
 #include <vector>
 #include <filesystem>
 
-const char* getCurrentSourceFileName();
+const std::filesystem::path& getCurrentSourceFileName();
 
 const int import_file_failed = -1;
 const int import_file_succeeded = 0;

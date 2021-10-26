@@ -1,6 +1,8 @@
 #include "Options.h"
 #include <algorithm>
-
+#include "Platform.h"
+using namespace std;
+using namespace std::filesystem;
 Options::Options()
 {
 	m_metaTypePostfix = "_Type";
@@ -18,11 +20,12 @@ Options::Options()
 void Options::setPafcorePath(const char* path)
 {
 	m_pafcorePath = path;
-	//std::replace(m_pafcorePath.begin(), m_pafcorePath.end(), '/', '\\');
-	if(m_pafcorePath.length() > 0 && m_pafcorePath.back() != '/')
-	{
-		m_pafcorePath += '/';
-	}
+}
+
+void Options::convertToAbsoluteDirectory()
+{
+	path currentPath = current_path();
+	m_pafcorePath = ::convertToAbsoluteDirectory(currentPath, m_pafcorePath);
 }
 
 Options g_options;

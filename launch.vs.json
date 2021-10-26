@@ -4,13 +4,14 @@
   "configurations": [
     {
       "args": [
-        "emDEEPEYECORE_EXPORT",
-        "-pc../../paf/pafcore/",
-        "D:\\kernel\\external\\EngineCore\\deepeye\\src\\paf\\pafcore\\Delegate.i"
+        "-ld",
+        "-emTERRAINHELPER_EXPORT",
+        "-pc../../../deepeye/src/paf/pafcore/",
+        "D:\\kernel\\external\\Engine\\Editor\\TerrainHelper\\TerrainHelper\\EarthScene.i"
       ],
-      "name": "idlcppd.exe (Install)",
+      "name": "idlcpp.exe (Install)",
       "project": "CMakeLists.txt",
-      "projectTarget": "idlcppd.exe (Install)",
+      "projectTarget": "idlcpp.exe (Install)",
       "type": "default"
     },
     {
