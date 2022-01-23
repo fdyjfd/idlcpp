@@ -85,7 +85,7 @@ public:
 	void addItem(const std::filesystem::path& fileName, int lineNo, int columnNo, ErrorCode errorCode, const char* errorText);
 	void setTemplateClassInstance(TemplateClassInstanceNode* templateClassInstanceNode);
 private:
-	void ErrorList::addItem_(const std::filesystem::path& fileName, int lineNo, int columnNo, ErrorCode errorCode, const char* errorText);
+	void addItem_(const std::filesystem::path& fileName, int lineNo, int columnNo, ErrorCode errorCode, const char* errorText);
 public:
 	std::set<std::filesystem::path> m_fileNames;
 	typedef std::vector<ErrorInfo> ErrorInfoContainer;
